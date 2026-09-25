@@ -1,0 +1,117 @@
+[
+  {
+    "id": "e58a7714-0a95-5cc4-8fd8-07999cb576e3",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "fermentationTankId": "70893e8a-d534-5620-acbc-95e0e6090fd1",
+    "processType": "SINGANI_DISTILLATION",
+    "equipmentIdentifier": "Alambique de cobre Charentais AL-01",
+    "processStartDate": "2026-04-15T00:00:00Z",
+    "processEndDate": "2026-04-16T00:00:00Z",
+    "inputVolumeLiters": 12100,
+    "outputVolumeLiters": 1500,
+    "wasteVolumeLiters": 330,
+    "initialAlcoholPercentage": 60,
+    "isDoEligible": true,
+    "mandatoryRestUntil": "2026-10-13T00:00:00Z",
+    "restStatus": "RESTING",
+    "additionalParams": {
+      "headDiscardLiters": 99,
+      "heartYieldLiters": 1500,
+      "tailDiscardLiters": 231
+    },
+    "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
+    "createdAt": "2026-04-15T10:00:00Z"
+  },
+  {
+    "id": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "fermentationTankId": "d4e37fed-41e1-5399-9b50-e8263a6ca797",
+    "processType": "SINGANI_DISTILLATION",
+    "equipmentIdentifier": "Alambique de cobre Charentais AL-01",
+    "processStartDate": "2025-05-20T00:00:00Z",
+    "processEndDate": "2025-05-25T00:00:00Z",
+    "inputVolumeLiters": 10000,
+    "outputVolumeLiters": 1750,
+    "wasteVolumeLiters": 570,
+    "initialAlcoholPercentage": 70.2,
+    "isDoEligible": true,
+    "mandatoryRestUntil": "2025-11-21T00:00:00Z",
+    "restStatus": "BOTTLED",
+    "additionalParams": {
+      "headDiscardLiters": 171,
+      "heartYieldLiters": 1750,
+      "tailDiscardLiters": 399
+    },
+    "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
+    "createdAt": "2025-05-20T10:00:00Z"
+  },
+  {
+    "id": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "fermentationTankId": "576b3ce2-a007-592e-8491-27202f13a995",
+    "processType": "SINGANI_DISTILLATION",
+    "equipmentIdentifier": "Alambique de cobre AL-02",
+    "processStartDate": "2025-05-02T00:00:00Z",
+    "processEndDate": "2025-05-04T00:00:00Z",
+    "inputVolumeLiters": 6100,
+    "outputVolumeLiters": 980,
+    "wasteVolumeLiters": 290,
+    "initialAlcoholPercentage": 65.4,
+    "isDoEligible": true,
+    "mandatoryRestUntil": "2025-10-31T00:00:00Z",
+    "restStatus": "BOTTLED",
+    "additionalParams": {
+      "headDiscardLiters": 87,
+      "heartYieldLiters": 980,
+      "tailDiscardLiters": 203
+    },
+    "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
+    "createdAt": "2025-05-02T10:00:00Z"
+  },
+  {
+    "id": "303e1c89-ca47-5505-a0a5-0a6fe2993436",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "fermentationTankId": "d78d6307-f96b-533b-8f6e-710f6533bb42",
+    "processType": "SINGANI_DISTILLATION",
+    "equipmentIdentifier": "Alambique de cobre AL-02",
+    "processStartDate": "2026-09-10T00:00:00Z",
+    "processEndDate": "2026-09-12T00:00:00Z",
+    "inputVolumeLiters": 6300,
+    "outputVolumeLiters": 900,
+    "wasteVolumeLiters": 260,
+    "initialAlcoholPercentage": 62.1,
+    "isDoEligible": true,
+    "mandatoryRestUntil": "2027-03-11T00:00:00Z",
+    "restStatus": "RESTING",
+    "additionalParams": {
+      "headDiscardLiters": 78,
+      "heartYieldLiters": 900,
+      "tailDiscardLiters": 182
+    },
+    "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
+    "createdAt": "2026-09-10T10:00:00Z"
+  },
+  {
+    "id": "a6dd3060-8612-5595-b9b4-33a7d039159c",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "fermentationTankId": "576b3ce2-a007-592e-8491-27202f13a995",
+    "processType": "SINGANI_DISTILLATION",
+    "equipmentIdentifier": "Alambique de cobre AL-02",
+    "processStartDate": "2026-03-20T00:00:00Z",
+    "processEndDate": "2026-03-22T00:00:00Z",
+    "inputVolumeLiters": 3000,
+    "outputVolumeLiters": 450,
+    "wasteVolumeLiters": 120,
+    "initialAlcoholPercentage": 64,
+    "isDoEligible": true,
+    "mandatoryRestUntil": "2026-09-18T00:00:00Z",
+    "restStatus": "READY",
+    "additionalParams": {
+      "headDiscardLiters": 36,
+      "heartYieldLiters": 450,
+      "tailDiscardLiters": 84
+    },
+    "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
+    "createdAt": "2026-03-20T10:00:00Z"
+  }
+]

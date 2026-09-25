@@ -1,0 +1,299 @@
+[
+  {
+    "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",
+    "harvestBatchCode": "HARV-2026-PARRALES-01",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "terroir": {
+      "id": "e26c2890-b4e4-5973-aec2-0f092355ad3b",
+      "parcelName": "Parcela 1 · Los Parrales",
+      "varietyName": "Moscatel de Alejandría",
+      "altitudeMasl": 2350,
+      "isDoEligible": true
+    },
+    "kind": "singani",
+    "stage": "reposo",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 18400,
+    "tankIds": [
+      "70893e8a-d534-5620-acbc-95e0e6090fd1",
+      "d78d6307-f96b-533b-8f6e-710f6533bb42"
+    ],
+    "wineAgingBatchId": null,
+    "productionBatchId": "e58a7714-0a95-5cc4-8fd8-07999cb576e3",
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": {
+      "kind": "reposo",
+      "unlockAt": "2026-10-13T00:00:00Z",
+      "released": false,
+      "daysRemaining": 18
+    }
+  },
+  {
+    "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
+    "harvestBatchCode": "HARV-2025-VIEJO-02",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "terroir": {
+      "id": "536b1e93-996e-5835-9794-02c12f1319c4",
+      "parcelName": "Parcela 2 · Cañón Viejo",
+      "varietyName": "Moscatel de Alejandría",
+      "altitudeMasl": 2410,
+      "isDoEligible": true
+    },
+    "kind": "singani",
+    "stage": "embotellado",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 14850,
+    "tankIds": [
+      "d4e37fed-41e1-5399-9b50-e8263a6ca797"
+    ],
+    "wineAgingBatchId": null,
+    "productionBatchId": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c",
+    "bottlingBatchId": "afef7d2a-4817-556f-ae16-24b38eee217a",
+    "internationalLotCode": "CVJ-2026-SINGANI-001",
+    "lock": null
+  },
+  {
+    "harvestBatchId": "b1452d63-b1bd-5f10-978f-75bd7f6081df",
+    "harvestBatchCode": "HARV-2025-MOLINO-03",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "terroir": {
+      "id": "0a623529-957a-5edd-92de-9c0acccb8bfc",
+      "parcelName": "Parcela 4 · El Molino",
+      "varietyName": "Moscatel de Alejandría",
+      "altitudeMasl": 2320,
+      "isDoEligible": true
+    },
+    "kind": "singani",
+    "stage": "embotellado",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 9000,
+    "tankIds": [
+      "576b3ce2-a007-592e-8491-27202f13a995"
+    ],
+    "wineAgingBatchId": null,
+    "productionBatchId": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba",
+    "bottlingBatchId": "16887e29-6c0f-5820-85df-951b7372e1aa",
+    "internationalLotCode": "CVJ-2026-SINGANI-002",
+    "lock": null
+  },
+  {
+    "harvestBatchId": "f96daa52-78dd-533a-98b6-7d5b008edf6a",
+    "harvestBatchCode": "HARV-2025-CARRERAS-04",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "terroir": {
+      "id": "31b13ad0-d5b9-5afa-b21b-8c581b111349",
+      "parcelName": "Parcela 3 · Las Carreras",
+      "varietyName": "Vischoqueña",
+      "altitudeMasl": 2280,
+      "isDoEligible": true
+    },
+    "kind": "vino",
+    "stage": "embotellado",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 7200,
+    "tankIds": [
+      "6e49c5f9-adc8-503b-a1db-2b576bef7078"
+    ],
+    "wineAgingBatchId": "a48ddc67-0e24-51fe-a43d-877f55ac9de6",
+    "productionBatchId": null,
+    "bottlingBatchId": "c95f78e7-f72a-556c-8bae-e6670da39e8b",
+    "internationalLotCode": "CVJ-2026-WINE-003",
+    "lock": null
+  },
+  {
+    "harvestBatchId": "93bd36a1-673b-52ed-adec-539d805cd018",
+    "harvestBatchCode": "HARV-2026-ROQUE-05",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "terroir": {
+      "id": "36cf86bf-e2a7-5af1-a370-5ba573d0bdcc",
+      "parcelName": "Parcela 5 · San Roque",
+      "varietyName": "Negra Criolla",
+      "altitudeMasl": 2390,
+      "isDoEligible": true
+    },
+    "kind": null,
+    "stage": "pesaje",
+    "phytosanitaryStatus": "PENDING_INSPECTION",
+    "netWeightKg": 6300,
+    "tankIds": [],
+    "wineAgingBatchId": null,
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": null
+  },
+  {
+    "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
+    "harvestBatchCode": "HARV-2025-ANGOSTURA-06",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "0d1013e9-83d7-511a-a072-cad97060ea69",
+      "parcelName": "Cuartel 1 · La Angostura",
+      "varietyName": "Tannat",
+      "altitudeMasl": 1860,
+      "isDoEligible": true
+    },
+    "kind": "vino",
+    "stage": "crianza",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 8400,
+    "tankIds": [
+      "9da648ee-bdf1-5701-b362-83eced36156a"
+    ],
+    "wineAgingBatchId": "0086c315-a8e7-56f2-9554-0bcd9ed6e4f6",
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": {
+      "kind": "crianza",
+      "unlockAt": "2026-11-03T00:00:00Z",
+      "released": false
+    }
+  },
+  {
+    "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
+    "harvestBatchCode": "HARV-2026-SAUCES-07",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "a6e73d3a-8f07-5ae8-ae48-fbf92f322517",
+      "parcelName": "Cuartel 2 · Los Sauces",
+      "varietyName": "Moscatel de Alejandría",
+      "altitudeMasl": 1875,
+      "isDoEligible": true
+    },
+    "kind": null,
+    "stage": "fermentacion",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 12050,
+    "tankIds": [
+      "f87af6c0-197d-5fa3-b85e-29d7b27f00d9",
+      "aac59603-e058-50f8-9000-dd0a41f26aef"
+    ],
+    "wineAgingBatchId": null,
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": null
+  },
+  {
+    "harvestBatchId": "ed733522-34e1-57c0-b03d-0c5ac52dd2ab",
+    "harvestBatchCode": "HARV-2025-ALTA-08",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "d44c5b74-0db5-5cf1-9faa-9525b1f276cd",
+      "parcelName": "Cuartel 4 · Loma Alta",
+      "varietyName": "Syrah",
+      "altitudeMasl": 1910,
+      "isDoEligible": true
+    },
+    "kind": "vino",
+    "stage": "crianza",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 7700,
+    "tankIds": [
+      "e8a31a4f-1593-5ffc-9b81-15410f404d2a"
+    ],
+    "wineAgingBatchId": "848d54be-3d51-5a62-93e6-d15eba6df89a",
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": {
+      "kind": "crianza",
+      "unlockAt": "2027-02-28T00:00:00Z",
+      "released": false
+    }
+  },
+  {
+    "harvestBatchId": "75cb22bb-1e85-5d00-8439-d4dd6e10a914",
+    "harvestBatchCode": "HARV-2025-COMPAÑÍA-09",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "9ee67b8e-4726-5556-9bee-fa349627d3ce",
+      "parcelName": "Cuartel 5 · La Compañía",
+      "varietyName": "Cabernet Sauvignon",
+      "altitudeMasl": 1890,
+      "isDoEligible": true
+    },
+    "kind": "vino",
+    "stage": "embotellado",
+    "phytosanitaryStatus": "APPROVED",
+    "netWeightKg": 9800,
+    "tankIds": [
+      "5ecf8ac9-c9d8-5edd-a359-33956b6294f5"
+    ],
+    "wineAgingBatchId": "a1370e1f-d1d9-5aad-b0a3-821677553361",
+    "productionBatchId": null,
+    "bottlingBatchId": "bc10077a-bf11-575c-8bba-331fbc6887c2",
+    "internationalLotCode": "ALT-2026-WINE-001",
+    "lock": null
+  },
+  {
+    "harvestBatchId": "95ed7865-429e-57e7-9fe4-e037a8063738",
+    "harvestBatchCode": "HARV-2026-PORTILLO-10",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "ceaf7563-9785-5331-93c3-f9f8193ff45f",
+      "parcelName": "Cuartel 3 · El Portillo",
+      "varietyName": "Moscatel de Alejandría",
+      "altitudeMasl": 1540,
+      "isDoEligible": false
+    },
+    "kind": null,
+    "stage": "rechazado",
+    "phytosanitaryStatus": "REJECTED",
+    "netWeightKg": 4050,
+    "tankIds": [],
+    "wineAgingBatchId": null,
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": null
+  },
+  {
+    "harvestBatchId": "be653b6b-868e-51f3-bc11-462afa764ca1",
+    "harvestBatchCode": "HARV-2026-ANGOSTURA-11",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "0d1013e9-83d7-511a-a072-cad97060ea69",
+      "parcelName": "Cuartel 1 · La Angostura",
+      "varietyName": "Tannat",
+      "altitudeMasl": 1860,
+      "isDoEligible": true
+    },
+    "kind": null,
+    "stage": "fermentacion",
+    "phytosanitaryStatus": "QUARANTINE",
+    "netWeightKg": 6100,
+    "tankIds": [
+      "f28ea298-cf7f-5d30-a92e-aad6379b8158"
+    ],
+    "wineAgingBatchId": null,
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": null
+  },
+  {
+    "harvestBatchId": "00a123fd-d0bd-526c-b5bd-227250ec0ce4",
+    "harvestBatchCode": "HARV-2026-SAUCES-12",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "terroir": {
+      "id": "a6e73d3a-8f07-5ae8-ae48-fbf92f322517",
+      "parcelName": "Cuartel 2 · Los Sauces",
+      "varietyName": "Moscatel de Alejandría",
+      "altitudeMasl": 1875,
+      "isDoEligible": true
+    },
+    "kind": null,
+    "stage": "pesaje",
+    "phytosanitaryStatus": "PENDING_INSPECTION",
+    "netWeightKg": 6100,
+    "tankIds": [],
+    "wineAgingBatchId": null,
+    "productionBatchId": null,
+    "bottlingBatchId": null,
+    "internationalLotCode": null,
+    "lock": null
+  }
+]

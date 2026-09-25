@@ -1,0 +1,254 @@
+{
+  "admin": {
+    "user": {
+      "id": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
+      "email": "gestor@drinksonchain.test",
+      "fullName": "Ana Gutiérrez",
+      "userRole": "PLATFORM_ADMIN",
+      "phoneNumber": "+59170000001",
+      "preferredLocale": "es",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "tokens": {
+      "accessToken": "mock.access.admin",
+      "refreshToken": "mock.refresh.admin",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "soporte": {
+    "user": {
+      "id": "23d99814-3526-54f6-8b5f-5807a08506a2",
+      "email": "soporte@drinksonchain.test",
+      "fullName": "Pablo Rivera",
+      "userRole": "PLATFORM_ADMIN",
+      "phoneNumber": "+59170000002",
+      "preferredLocale": "es",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "tokens": {
+      "accessToken": "mock.access.soporte",
+      "refreshToken": "mock.refresh.soporte",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "altos_admin": {
+    "user": {
+      "id": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "email": "admin@altos.test",
+      "fullName": "Martín Calamuchita",
+      "userRole": "WINERY_ADMIN",
+      "phoneNumber": "+59171000101",
+      "preferredLocale": "es",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "memberRole": "OWNER"
+    },
+    "tokens": {
+      "accessToken": "mock.access.altos_admin",
+      "refreshToken": "mock.refresh.altos_admin",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "altos_enologa": {
+    "user": {
+      "id": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "email": "enologa@altos.test",
+      "fullName": "Lic. Carla Villarroel",
+      "userRole": "ENOLOGIST",
+      "phoneNumber": "+59171000102",
+      "preferredLocale": "es",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "memberRole": "ENOLOGIST"
+    },
+    "tokens": {
+      "accessToken": "mock.access.altos_enologa",
+      "refreshToken": "mock.refresh.altos_enologa",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "altos_agronomo": {
+    "user": {
+      "id": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+      "email": "agronomo@altos.test",
+      "fullName": "Ing. Diego Paredes",
+      "userRole": "AGRONOMIST",
+      "phoneNumber": "+59171000103",
+      "preferredLocale": "es",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "memberRole": "AGRONOMIST"
+    },
+    "tokens": {
+      "accessToken": "mock.access.altos_agronomo",
+      "refreshToken": "mock.refresh.altos_agronomo",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "altos_operario": {
+    "user": {
+      "id": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+      "email": "operario@altos.test",
+      "fullName": "Mario Quispe",
+      "userRole": "ENOLOGIST",
+      "phoneNumber": "+59171000104",
+      "preferredLocale": "es",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "memberRole": "OPERATOR"
+    },
+    "tokens": {
+      "accessToken": "mock.access.altos_operario",
+      "refreshToken": "mock.refresh.altos_operario",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "cvj_admin": {
+    "user": {
+      "id": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "email": "admin@cintiviejo.test",
+      "fullName": "Rosa Camargo",
+      "userRole": "WINERY_ADMIN",
+      "phoneNumber": "+59172000201",
+      "preferredLocale": "es",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "memberRole": "OWNER"
+    },
+    "tokens": {
+      "accessToken": "mock.access.cvj_admin",
+      "refreshToken": "mock.refresh.cvj_admin",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "cvj_enologa": {
+    "user": {
+      "id": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "email": "enologa@cintiviejo.test",
+      "fullName": "Lic. Lucía Rojas",
+      "userRole": "ENOLOGIST",
+      "phoneNumber": "+59172000202",
+      "preferredLocale": "es",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "memberRole": "ENOLOGIST"
+    },
+    "tokens": {
+      "accessToken": "mock.access.cvj_enologa",
+      "refreshToken": "mock.refresh.cvj_enologa",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "cvj_agronomo": {
+    "user": {
+      "id": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
+      "email": "agronomo@cintiviejo.test",
+      "fullName": "Ing. Tomás Flores",
+      "userRole": "AGRONOMIST",
+      "phoneNumber": "+59172000203",
+      "preferredLocale": "es",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "memberRole": "AGRONOMIST"
+    },
+    "tokens": {
+      "accessToken": "mock.access.cvj_agronomo",
+      "refreshToken": "mock.refresh.cvj_agronomo",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "cvj_operario": {
+    "user": {
+      "id": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "email": "operario@cintiviejo.test",
+      "fullName": "Rubén Flores",
+      "userRole": "ENOLOGIST",
+      "phoneNumber": "+59172000204",
+      "preferredLocale": "es",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "memberRole": "OPERATOR"
+    },
+    "tokens": {
+      "accessToken": "mock.access.cvj_operario",
+      "refreshToken": "mock.refresh.cvj_operario",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "vgq_admin": {
+    "user": {
+      "id": "c918ae49-2b92-5268-b370-2f067e0e97fe",
+      "email": "gerencia@guadalquivir.test",
+      "fullName": "Elena Vaca",
+      "userRole": "WINERY_ADMIN",
+      "phoneNumber": "+59173000301",
+      "preferredLocale": "es",
+      "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+      "memberRole": "OWNER"
+    },
+    "tokens": {
+      "accessToken": "mock.access.vgq_admin",
+      "refreshToken": "mock.refresh.vgq_admin",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "maria": {
+    "user": {
+      "id": "6eac9243-b092-57a0-bef8-f8f208c33c7c",
+      "email": "maria@tribu.test",
+      "fullName": "María Fernández",
+      "userRole": "CONSUMER",
+      "phoneNumber": "+59174000401",
+      "preferredLocale": "es",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "tokens": {
+      "accessToken": "mock.access.maria",
+      "refreshToken": "mock.refresh.maria",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "carlos": {
+    "user": {
+      "id": "7bde4545-4163-5171-a859-897a5dd18722",
+      "email": "carlos@tribu.test",
+      "fullName": "Carlos Mamani",
+      "userRole": "CONSUMER",
+      "phoneNumber": "+59174000402",
+      "preferredLocale": "es",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "tokens": {
+      "accessToken": "mock.access.carlos",
+      "refreshToken": "mock.refresh.carlos",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  },
+  "juan_pos": {
+    "user": {
+      "id": "7bd3ed63-ddfc-5150-85ee-af0ec5a4a3c2",
+      "email": "cajero.lacava@drinksonchain.test",
+      "fullName": "Juan Pérez",
+      "userRole": "POS_OPERATOR",
+      "phoneNumber": "+59175000501",
+      "preferredLocale": "es",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "tokens": {
+      "accessToken": "mock.access.juan_pos",
+      "refreshToken": "mock.refresh.juan_pos",
+      "tokenType": "Bearer",
+      "expiresIn": 604800
+    }
+  }
+}
