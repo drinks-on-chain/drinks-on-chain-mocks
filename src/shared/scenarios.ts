@@ -49,12 +49,17 @@ function queryScenario(): ScenarioName | null {
 export function getScenario(): ScenarioName {
   if (override) return override
   const fromQuery = queryScenario()
-  if (fromQuery) {
-    storage()?.setItem(SCENARIO_STORAGE_KEY, fromQuery)
-    return fromQuery
+  try {
+    if (fromQuery) {
+      storage()?.setItem(SCENARIO_STORAGE_KEY, fromQuery)
+      return fromQuery
+    }
+    const stored = storage()?.getItem(SCENARIO_STORAGE_KEY)
+    return isScenarioName(stored) ? stored : 'normal'
+  } catch {
+    // almacenamiento bloqueado: vale el parámetro de la URL o el valor por defecto
+    return fromQuery ?? 'normal'
   }
-  const stored = storage()?.getItem(SCENARIO_STORAGE_KEY)
-  return isScenarioName(stored) ? stored : 'normal'
 }
 
 /** Cambia el escenario (y lo guarda en localStorage en el navegador). */
