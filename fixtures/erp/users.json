@@ -1,0 +1,447 @@
+[
+  {
+    "id": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
+    "email": "gestor@drinksonchain.test",
+    "fullName": "Ana Gutiérrez",
+    "userRole": "PLATFORM_ADMIN",
+    "phoneNumber": "+59170000001",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-24T08:30:00Z",
+    "createdAt": "2026-04-04T09:00:00Z",
+    "wineryMemberships": [],
+    "primaryWallet": {
+      "id": "016a918e-4aa6-5ec6-bb82-72c27362016b",
+      "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
+      "wineryId": null,
+      "stellarPublicAddress": "GLCIOPCC7WRUPFEH2FCSMERRLLO25Q5JQTGPX5QQK26GTZ6CZ62QLBGU",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "CONSUMER_NFT",
+      "isPrimary": true,
+      "createdAt": "2026-04-04T09:05:00Z"
+    },
+    "_mock": {
+      "key": "admin",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "23d99814-3526-54f6-8b5f-5807a08506a2",
+    "email": "soporte@drinksonchain.test",
+    "fullName": "Pablo Rivera",
+    "userRole": "PLATFORM_ADMIN",
+    "phoneNumber": "+59170000002",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-21T08:30:00Z",
+    "createdAt": "2026-07-25T09:00:00Z",
+    "wineryMemberships": [],
+    "primaryWallet": {
+      "id": "e8fbe4c3-c097-505f-9138-d24547182d96",
+      "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
+      "wineryId": null,
+      "stellarPublicAddress": "GLOJYPFEHAUDOIPH4R7AMGEZAMJSWRZJXSWG5SA5VQUKKSTGAXTSTBU3",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "CONSUMER_NFT",
+      "isPrimary": true,
+      "createdAt": "2026-07-25T09:05:00Z"
+    },
+    "_mock": {
+      "key": "soporte",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+    "email": "admin@altos.test",
+    "fullName": "Martín Calamuchita",
+    "userRole": "WINERY_ADMIN",
+    "phoneNumber": "+59171000101",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-22T08:30:00Z",
+    "createdAt": "2026-02-09T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "wineryName": "Bodega Altos de Calamuchita",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-02-10T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "c7e47b88-2b11-5b01-8541-02406fa8cb87",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "stellarPublicAddress": "GYUKNZOKN4SDATZS3ZIVQREW5QNYIE7AJIKUQVZR7O7E7PXBL6RRMWIY",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-02-09T09:05:00Z"
+    },
+    "_mock": {
+      "key": "altos_admin",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+    "email": "enologa@altos.test",
+    "fullName": "Lic. Carla Villarroel",
+    "userRole": "ENOLOGIST",
+    "phoneNumber": "+59171000102",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-20T08:30:00Z",
+    "createdAt": "2026-06-03T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "wineryName": "Bodega Altos de Calamuchita",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-TAR-118",
+        "isActive": true,
+        "joinedAt": "2026-06-04T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "158a8625-8090-59a1-b931-ffd08e95965e",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "stellarPublicAddress": "GXSACKYFBLYLWKWKXYRRPFYZBJYRQXQVFX6GH4FFQHM5BAIP6QII6PBV",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-06-03T09:05:00Z"
+    },
+    "_mock": {
+      "key": "altos_enologa",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+    "email": "agronomo@altos.test",
+    "fullName": "Ing. Diego Paredes",
+    "userRole": "AGRONOMIST",
+    "phoneNumber": "+59171000103",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-21T08:30:00Z",
+    "createdAt": "2026-06-28T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "wineryName": "Bodega Altos de Calamuchita",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-TAR-522",
+        "isActive": true,
+        "joinedAt": "2026-06-29T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "0854d538-e0ad-5397-9eb9-4b1a5fd1cde0",
+      "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "stellarPublicAddress": "GTUEPGWX3MQ6UNUQGAYV2GUS7K76DLHEZ2IL37TJVS4DC2Z3CU7YBXD4",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-06-28T09:05:00Z"
+    },
+    "_mock": {
+      "key": "altos_agronomo",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+    "email": "operario@altos.test",
+    "fullName": "Mario Quispe",
+    "userRole": "ENOLOGIST",
+    "phoneNumber": "+59171000104",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-21T08:30:00Z",
+    "createdAt": "2026-03-11T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "wineryName": "Bodega Altos de Calamuchita",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-03-12T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "684d3964-e6fc-520c-ba6d-04dc6883d961",
+      "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "stellarPublicAddress": "GNUBQL2V436XLM4Q3W6B2CFGRW5I3SYMTDPAVBWI65VLAMEQB6RUF26E",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-03-11T09:05:00Z"
+    },
+    "_mock": {
+      "key": "altos_operario",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+    "email": "admin@cintiviejo.test",
+    "fullName": "Rosa Camargo",
+    "userRole": "WINERY_ADMIN",
+    "phoneNumber": "+59172000201",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-22T08:30:00Z",
+    "createdAt": "2026-05-14T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "wineryName": "Destilería Cinti Viejo",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-05-15T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "135220d8-2608-562b-bd43-758ccfcdc110",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "stellarPublicAddress": "GUTWSFGNUDQIYYXUBQNYOOZHAGOM55IJPASA5FJ3SWH66JNVLASZQOHS",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-05-14T09:05:00Z"
+    },
+    "_mock": {
+      "key": "cvj_admin",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "673581e1-9df3-5160-970d-b6bfc72286ac",
+    "email": "enologa@cintiviejo.test",
+    "fullName": "Lic. Lucía Rojas",
+    "userRole": "ENOLOGIST",
+    "phoneNumber": "+59172000202",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-21T08:30:00Z",
+    "createdAt": "2026-01-31T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "wineryName": "Destilería Cinti Viejo",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-CHQ-041",
+        "isActive": true,
+        "joinedAt": "2026-02-01T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "d3208102-4130-5b8e-a65a-3e4cbe48c09e",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "stellarPublicAddress": "GDUQALSN4IAUXW7HRQXQC4JKCIRDQH5I7YQRKYJKZPK42V2NKR6JVRHY",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-01-31T09:05:00Z"
+    },
+    "_mock": {
+      "key": "cvj_enologa",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
+    "email": "agronomo@cintiviejo.test",
+    "fullName": "Ing. Tomás Flores",
+    "userRole": "AGRONOMIST",
+    "phoneNumber": "+59172000203",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-25T08:30:00Z",
+    "createdAt": "2026-03-18T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "wineryName": "Destilería Cinti Viejo",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-CHQ-207",
+        "isActive": true,
+        "joinedAt": "2026-03-19T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "22844b5d-63cc-554b-a46c-8d63712ffdbb",
+      "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "stellarPublicAddress": "GPR3O4VW2ZNVLRVHDW2ATF6H7O232UH4BGJLYMT5PQRUOXVUPNVYTW6Q",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-03-18T09:05:00Z"
+    },
+    "_mock": {
+      "key": "cvj_agronomo",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "7095c941-cece-53bc-ad08-b58f24e484f1",
+    "email": "operario@cintiviejo.test",
+    "fullName": "Rubén Flores",
+    "userRole": "ENOLOGIST",
+    "phoneNumber": "+59172000204",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-19T08:30:00Z",
+    "createdAt": "2026-03-26T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "wineryName": "Destilería Cinti Viejo",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-03-27T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "4e03c023-d3d6-5b16-9023-d322a159e5d2",
+      "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "stellarPublicAddress": "GHZVRD7EMHFBBTE56KASYGW5FPE7MECUA7NVAEAPT7GDNCFTZ2BIGC3N",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-03-26T09:05:00Z"
+    },
+    "_mock": {
+      "key": "cvj_operario",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "c918ae49-2b92-5268-b370-2f067e0e97fe",
+    "email": "gerencia@guadalquivir.test",
+    "fullName": "Elena Vaca",
+    "userRole": "WINERY_ADMIN",
+    "phoneNumber": "+59173000301",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-23T08:30:00Z",
+    "createdAt": "2026-01-12T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+        "wineryName": "Viñedos del Guadalquivir",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-01-13T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "d73a022f-5da5-584a-8be4-e96553d165d5",
+      "userId": "c918ae49-2b92-5268-b370-2f067e0e97fe",
+      "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+      "stellarPublicAddress": "GJYVPXG7TQ3RC42YP4XRZMPNFAMQG7UJQMDSF6S3TU75CGHTSPOQ6I76",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-01-12T09:05:00Z"
+    },
+    "_mock": {
+      "key": "vgq_admin",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "6eac9243-b092-57a0-bef8-f8f208c33c7c",
+    "email": "maria@tribu.test",
+    "fullName": "María Fernández",
+    "userRole": "CONSUMER",
+    "phoneNumber": "+59174000401",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-21T08:30:00Z",
+    "createdAt": "2026-03-11T09:00:00Z",
+    "wineryMemberships": [],
+    "primaryWallet": {
+      "id": "ad190da9-3653-5cdc-a18a-59963f62db7d",
+      "userId": "6eac9243-b092-57a0-bef8-f8f208c33c7c",
+      "wineryId": null,
+      "stellarPublicAddress": "GZCWZBYO6FQHXPSNIDPR5UXOXCZ3LNAUIGFPJULACOOXIC5BLB5HBQVU",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "CONSUMER_NFT",
+      "isPrimary": true,
+      "createdAt": "2026-03-11T09:05:00Z"
+    },
+    "_mock": {
+      "key": "maria",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "7bde4545-4163-5171-a859-897a5dd18722",
+    "email": "carlos@tribu.test",
+    "fullName": "Carlos Mamani",
+    "userRole": "CONSUMER",
+    "phoneNumber": "+59174000402",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-20T08:30:00Z",
+    "createdAt": "2026-06-11T09:00:00Z",
+    "wineryMemberships": [],
+    "primaryWallet": {
+      "id": "e796d72c-b289-5922-90d3-b2dba4b76357",
+      "userId": "7bde4545-4163-5171-a859-897a5dd18722",
+      "wineryId": null,
+      "stellarPublicAddress": "G6YRXFVRJQSJEJHHAZ7UKVLOHK4FRTYD2KA2FJ6LAVUHVND767TX55EF",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "CONSUMER_NFT",
+      "isPrimary": true,
+      "createdAt": "2026-06-11T09:05:00Z"
+    },
+    "_mock": {
+      "key": "carlos",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "7bd3ed63-ddfc-5150-85ee-af0ec5a4a3c2",
+    "email": "cajero.lacava@drinksonchain.test",
+    "fullName": "Juan Pérez",
+    "userRole": "POS_OPERATOR",
+    "phoneNumber": "+59175000501",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-24T08:30:00Z",
+    "createdAt": "2026-07-06T09:00:00Z",
+    "wineryMemberships": [],
+    "primaryWallet": {
+      "id": "fc4a9150-4a2e-5f93-84bf-a7358e28fca7",
+      "userId": "7bd3ed63-ddfc-5150-85ee-af0ec5a4a3c2",
+      "wineryId": null,
+      "stellarPublicAddress": "GNZ2WYAV23TTNRFQPRVZ2AFVUUNKMUBJHI6BTVVMOBYRSDFLA7CR3DCC",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "CONSUMER_NFT",
+      "isPrimary": true,
+      "createdAt": "2026-07-06T09:05:00Z"
+    },
+    "_mock": {
+      "key": "juan_pos",
+      "password": "demo1234"
+    }
+  }
+]

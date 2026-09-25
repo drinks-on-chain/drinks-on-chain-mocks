@@ -1,0 +1,138 @@
+{
+  "CVJ-2026-SINGANI-001": {
+    "lotCode": "CVJ-2026-SINGANI-001",
+    "winery": {
+      "commercialName": "Destilería Cinti Viejo",
+      "department": "Valle de Cinti",
+      "altitudeMasl": 2410
+    },
+    "product": {
+      "productType": "SINGANI",
+      "alcoholAbv": 40,
+      "bottlesPackaged": 4080,
+      "packagingFormatCl": 75,
+      "bottlingDate": "2026-03-01T00:00:00Z"
+    },
+    "terroir": {
+      "parcelName": "Parcela 2 · Cañón Viejo",
+      "altitudeMasl": 2410,
+      "varietyName": "Moscatel de Alejandría",
+      "doEligible": true,
+      "doType": "D.O. Singani"
+    },
+    "laboratoryCertification": {
+      "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "accreditedLabCertificationCode": "LAB-SENASAG-2026-881",
+      "actualAlcoholAbv": 40.05,
+      "totalAcidityTartaricGl": 4.8,
+      "volatileAcidityAceticGl": 0.22,
+      "conformsToSenasagStandards": true,
+      "reportPdfUrl": "/mocks/uploads/lab-reports/cvj-2026-singani-001.pdf"
+    },
+    "blockchainIntegrity": {
+      "sha256Hash": "ede8c963f0b67ff8e329edf2ca5665ab45932ce668c88ea432cf1c9c8c6092ac",
+      "network": "Stellar Testnet",
+      "status": "VERIFIED_ON_CHAIN"
+    }
+  },
+  "CVJ-2026-SINGANI-002": {
+    "lotCode": "CVJ-2026-SINGANI-002",
+    "winery": {
+      "commercialName": "Destilería Cinti Viejo",
+      "department": "Valle de Cinti",
+      "altitudeMasl": 2320
+    },
+    "product": {
+      "productType": "SINGANI",
+      "alcoholAbv": 40,
+      "bottlesPackaged": 2140,
+      "packagingFormatCl": 75,
+      "bottlingDate": "2026-02-10T00:00:00Z"
+    },
+    "terroir": {
+      "parcelName": "Parcela 4 · El Molino",
+      "altitudeMasl": 2320,
+      "varietyName": "Moscatel de Alejandría",
+      "doEligible": true,
+      "doType": "D.O. Singani"
+    },
+    "laboratoryCertification": {
+      "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "accreditedLabCertificationCode": "LAB-SENASAG-2026-882",
+      "actualAlcoholAbv": 39.9,
+      "totalAcidityTartaricGl": 4.6,
+      "volatileAcidityAceticGl": 0.25,
+      "conformsToSenasagStandards": true,
+      "reportPdfUrl": "/mocks/uploads/lab-reports/cvj-2026-singani-002.pdf"
+    },
+    "blockchainIntegrity": {
+      "sha256Hash": "a49b67f9f140e35bd3dff9efeac633cde19e7683d292914038ee40d6dd5a22e1",
+      "network": "Stellar Testnet",
+      "status": "VERIFIED_ON_CHAIN"
+    }
+  },
+  "ALT-2026-WINE-001": {
+    "lotCode": "ALT-2026-WINE-001",
+    "winery": {
+      "commercialName": "Bodega Altos de Calamuchita",
+      "department": "Valle Central de Tarija",
+      "altitudeMasl": 1890
+    },
+    "product": {
+      "productType": "WINE",
+      "alcoholAbv": 14.2,
+      "bottlesPackaged": 5320,
+      "packagingFormatCl": 75,
+      "bottlingDate": "2026-05-12T00:00:00Z"
+    },
+    "terroir": {
+      "parcelName": "Cuartel 5 · La Compañía",
+      "altitudeMasl": 1890,
+      "varietyName": "Cabernet Sauvignon",
+      "doEligible": true,
+      "doType": "Valles Altos de Bolivia"
+    },
+    "laboratoryCertification": {
+      "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "accreditedLabCertificationCode": "LAB-SENASAG-2026-883",
+      "actualAlcoholAbv": 14.22,
+      "totalAcidityTartaricGl": 5.6,
+      "volatileAcidityAceticGl": 0.45,
+      "conformsToSenasagStandards": true,
+      "reportPdfUrl": "/mocks/uploads/lab-reports/alt-2026-wine-001.pdf"
+    },
+    "blockchainIntegrity": {
+      "sha256Hash": "9c93db5cae4621b511ca9cb08bf1fb0ebd4d8e4922dc80be364c48b96f18f95f",
+      "network": "Stellar Testnet",
+      "status": "VERIFIED_ON_CHAIN"
+    }
+  },
+  "CVJ-2026-WINE-003": {
+    "lotCode": "CVJ-2026-WINE-003",
+    "winery": {
+      "commercialName": "Destilería Cinti Viejo",
+      "department": "Valle de Cinti",
+      "altitudeMasl": 2280
+    },
+    "product": {
+      "productType": "WINE",
+      "alcoholAbv": 13.8,
+      "bottlesPackaged": 3860,
+      "packagingFormatCl": 75,
+      "bottlingDate": "2026-09-20T00:00:00Z"
+    },
+    "terroir": {
+      "parcelName": "Parcela 3 · Las Carreras",
+      "altitudeMasl": 2280,
+      "varietyName": "Vischoqueña",
+      "doEligible": true,
+      "doType": "Valles Altos de Bolivia"
+    },
+    "laboratoryCertification": null,
+    "blockchainIntegrity": {
+      "sha256Hash": "7688045198824f28b204708e854f20fc3cc07bf1c3d3e9118ad7a25064c72e24",
+      "network": "Stellar Testnet",
+      "status": "PENDING_ANCHOR"
+    }
+  }
+}

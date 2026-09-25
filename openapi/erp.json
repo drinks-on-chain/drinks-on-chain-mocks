@@ -1,0 +1,4291 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "description": "Endpoint público para monitoreo y balanceadores de carga. Retorna el estado de conectividad con PostgreSQL y Redis.",
+        "operationId": "HealthController_getHealth_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Estado de salud obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatusDataDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Verificar el estado del servidor, base de datos y Redis",
+        "tags": [
+          "System"
+        ]
+      }
+    },
+    "/v1/auth/signup": {
+      "post": {
+        "description": "Crea una nueva cuenta de usuario con contraseña hasheada y emite el primer par de tokens JWT.",
+        "operationId": "AuthController_signup_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de registro inválidos"
+          },
+          "409": {
+            "description": "El correo electrónico ya existe"
+          }
+        },
+        "summary": "Registrar un nuevo usuario en la plataforma",
+        "tags": [
+          "Autenticación"
+        ]
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "description": "Valida el correo electrónico y la contraseña, retornando el par de tokens y el perfil del usuario.",
+        "operationId": "AuthController_login_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas"
+          }
+        },
+        "summary": "Iniciar sesión con credenciales",
+        "tags": [
+          "Autenticación"
+        ]
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "description": "Emite un nuevo accessToken y refreshToken a partir de un refreshToken válido.",
+        "operationId": "AuthController_refreshTokens_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens renovados exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokensDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de actualización inválido o expirado"
+          }
+        },
+        "summary": "Renovar tokens de acceso",
+        "tags": [
+          "Autenticación"
+        ]
+      }
+    },
+    "/v1/users/me": {
+      "get": {
+        "description": "Retorna los datos de identidad, roles, membresías en bodegas y dirección pública de su billetera custodial.",
+        "operationId": "UsersController_getProfile_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Perfil de usuario obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado o token inválido"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener el perfil del usuario autenticado",
+        "tags": [
+          "Usuarios"
+        ]
+      },
+      "patch": {
+        "description": "Permite modificar nombre completo, teléfono y preferencia de idioma.",
+        "operationId": "UsersController_updateProfile_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Perfil de usuario actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Actualizar datos de perfil del usuario",
+        "tags": [
+          "Usuarios"
+        ]
+      }
+    },
+    "/v1/users/me/wallet": {
+      "get": {
+        "description": "Retorna la dirección pública de Stellar y estado de la bóveda custodial.",
+        "operationId": "UsersController_getWallet_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Billetera obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener la billetera custodial del usuario autenticado",
+        "tags": [
+          "Usuarios"
+        ]
+      }
+    },
+    "/v1/wineries": {
+      "post": {
+        "description": "Crea una bodega en estado PENDING, asocia al creador como OWNER y asigna una billetera custodial institucional.",
+        "operationId": "WineriesController_createWinery_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWineryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bodega registrada exitosamente en estado PENDING",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El NIT ya se encuentra registrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Solicitar alta y registro de una nueva bodega",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      },
+      "get": {
+        "description": "Retorna el directorio completo de bodegas con soporte de filtros por estado, categoría y paginación.",
+        "operationId": "WineriesController_findAllWineries_v1",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por estado de certificación (PENDING, ACTIVE, SUSPENDED, REVOKED)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "ACTIVE",
+                "SUSPENDED",
+                "REVOKED"
+              ]
+            }
+          },
+          {
+            "name": "beverageCategory",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por categoría (WINERY, DISTILLERY, BREWERY)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "WINERY",
+                "BREWERY",
+                "DISTILLERY",
+                "OTHER"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Búsqueda por nombre legal o comercial",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Límite de resultados por página",
+            "schema": {
+              "default": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Desplazamiento para paginación",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Directorio de bodegas obtenido exitosamente"
+          },
+          "403": {
+            "description": "Requiere rol PLATFORM_ADMIN"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar todas las bodegas registradas (Solo Platform Admin)",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/wineries/my": {
+      "get": {
+        "description": "Retorna el perfil de la bodega vinculada a la membresía activa del usuario autenticado.",
+        "operationId": "WineriesController_getMyWinery_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Perfil de la bodega obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bodega no encontrada"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener datos institucionales de la bodega del usuario",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      },
+      "patch": {
+        "description": "Permite al administrador de la bodega actualizar dirección, teléfono, logo y correo institucional.",
+        "operationId": "WineriesController_updateMyWinery_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWineryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Datos de la bodega actualizados exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No autorizado para modificar datos de la bodega"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Actualizar datos de la bodega",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/wineries/my/members": {
+      "post": {
+        "description": "Asocia a un usuario existente como enólogo, agrónomo, operador o contador de la bodega.",
+        "operationId": "WineriesController_addMember_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Miembro incorporado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryMemberItemDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "El usuario no existe"
+          },
+          "409": {
+            "description": "El usuario ya es miembro de la bodega"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Incorporar un nuevo miembro operativo a la bodega",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      },
+      "get": {
+        "description": "Retorna la lista de miembros activos en la bodega actual.",
+        "operationId": "WineriesController_getMyMembers_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de miembros obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WineryMemberItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar miembros operativos de la bodega",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/wineries/my/members/create": {
+      "post": {
+        "description": "Crea la cuenta de usuario, aprovisiona su billetera custodial y lo asocia a la bodega en un solo paso.",
+        "operationId": "WineriesController_createAndAddMember_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Miembro operativo creado e incorporado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryMemberItemDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El correo electrónico ya se encuentra registrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar y dar de alta a un nuevo miembro operativo en la bodega",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/wineries/pending": {
+      "get": {
+        "description": "Obtiene todas las solicitudes de bodegas en estado PENDING para revisión y certificación legal.",
+        "operationId": "WineriesController_getPendingWineries_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de bodegas pendientes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WineryResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Requiere rol PLATFORM_ADMIN"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar bodegas pendientes de aprobación (Solo Platform Admin)",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/wineries/{id}/approve": {
+      "post": {
+        "description": "Cambia el estado de la bodega a ACTIVE y ejecuta el hook C-01 ProducerRegistry para registrarla on-chain.",
+        "operationId": "WineriesController_approveWinery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveWineryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bodega aprobada y registrada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Requiere rol PLATFORM_ADMIN"
+          },
+          "404": {
+            "description": "Bodega no encontrada"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Aprobar y certificar una bodega (Solo Platform Admin)",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/wineries/{id}/reject": {
+      "post": {
+        "description": "Cambia el estado de la bodega a REJECTED registrando formalmente el motivo legal o técnico.",
+        "operationId": "WineriesController_rejectWinery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectWineryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bodega rechazada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineryResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Requiere rol PLATFORM_ADMIN"
+          },
+          "404": {
+            "description": "Bodega no encontrada"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Rechazar una solicitud de bodega (Solo Platform Admin)",
+        "tags": [
+          "Bodegas y Productores"
+        ]
+      }
+    },
+    "/v1/terroirs": {
+      "post": {
+        "description": "Registra un terroir o cuartel con altitud, variedad y polígono GeoJSON opcional bajo el tenant de la bodega.",
+        "operationId": "TerroirsController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTerroirDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Parcela registrada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TerroirResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado"
+          },
+          "403": {
+            "description": "Sin permisos de agrónomo o administrador de bodega"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar una nueva parcela de cultivo",
+        "tags": [
+          "Terroirs y Parcelas"
+        ]
+      },
+      "get": {
+        "description": "Obtiene las parcelas asociadas a la bodega con soporte de filtros por D.O. y variedad.",
+        "operationId": "TerroirsController_findAll_v1",
+        "parameters": [
+          {
+            "name": "isDoEligible",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por elegibilidad de Denominación de Origen",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "varietyName",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por variedad (ej: Moscatel de Alejandría)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rawMaterialType",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por tipo de materia prima (ej: uva, cebada)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isActive",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por estado activo",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Límite de resultados",
+            "schema": {
+              "default": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Desplazamiento para paginación",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de parcelas"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar parcelas de la bodega",
+        "tags": [
+          "Terroirs y Parcelas"
+        ]
+      }
+    },
+    "/v1/terroirs/{id}": {
+      "get": {
+        "description": "Retorna los datos agronómicos de la parcela y sus lotes de vendimia históricos.",
+        "operationId": "TerroirsController_findById_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle de la parcela",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TerroirResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Parcela no encontrada"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener detalle de una parcela",
+        "tags": [
+          "Terroirs y Parcelas"
+        ]
+      },
+      "patch": {
+        "description": "Permite modificar datos agronómicos, polígono perimetral o estado activo.",
+        "operationId": "TerroirsController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTerroirDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Parcela actualizada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TerroirResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Parcela no encontrada"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Actualizar datos de una parcela",
+        "tags": [
+          "Terroirs y Parcelas"
+        ]
+      }
+    },
+    "/v1/harvest-batches": {
+      "post": {
+        "description": "Registra el pesaje neto, parámetros de madurez (°Bx, pH, acidez) y asigna un código único al lote de vendimia.",
+        "operationId": "HarvestBatchesController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHarvestBatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lote de vendimia registrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HarvestBatchResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Peso bruto menor o igual a tara"
+          },
+          "404": {
+            "description": "Parcela no encontrada en esta bodega"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar ingreso y pesaje de uva en vendimia",
+        "tags": [
+          "Vendimia y Pesaje"
+        ]
+      },
+      "get": {
+        "description": "Obtiene el listado de lotes de vendimia con soporte de filtros por año y estado fitosanitario.",
+        "operationId": "HarvestBatchesController_findAll_v1",
+        "parameters": [
+          {
+            "name": "harvestYear",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por año de vendimia",
+            "schema": {
+              "example": 2026,
+              "type": "number"
+            }
+          },
+          {
+            "name": "terroirId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por ID de la parcela de origen",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phytosanitaryStatus",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por estado fitosanitario",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING_INSPECTION",
+                "APPROVED",
+                "REJECTED",
+                "QUARANTINE"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Límite de resultados",
+            "schema": {
+              "default": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Desplazamiento para paginación",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de lotes de vendimia"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar lotes de vendimia",
+        "tags": [
+          "Vendimia y Pesaje"
+        ]
+      }
+    },
+    "/v1/harvest-batches/{id}": {
+      "get": {
+        "description": "Retorna los datos de pesaje, análisis de madurez y tanques de fermentación asociados.",
+        "operationId": "HarvestBatchesController_findById_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle del lote de vendimia",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HarvestBatchResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lote de vendimia no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener detalle de un lote de vendimia",
+        "tags": [
+          "Vendimia y Pesaje"
+        ]
+      }
+    },
+    "/v1/harvest-batches/{id}/phyto-status": {
+      "patch": {
+        "description": "Actualiza el estado fitosanitario (APPROVED, REJECTED, QUARANTINE) con soporte de adjunto PDF.",
+        "operationId": "HarvestBatchesController_updatePhytoStatus_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePhytoStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Estado fitosanitario actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HarvestBatchResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lote de vendimia no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Dictaminar estado fitosanitario del lote",
+        "tags": [
+          "Vendimia y Pesaje"
+        ]
+      }
+    },
+    "/v1/fermentation-tanks": {
+      "post": {
+        "description": "Asocia una cuba o tanque de acero inox a un lote de vendimia recibido.",
+        "operationId": "FermentationController_createTank_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFermentationTankDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cuba de fermentación registrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FermentationTankResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar nueva cuba de fermentación",
+        "tags": [
+          "Vinificación y Fermentación"
+        ]
+      },
+      "get": {
+        "description": "Retorna las cubas de fermentación activas con filtros por estado y lote de vendimia.",
+        "operationId": "FermentationController_findTanks_v1",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "FILLING",
+                "FERMENTING",
+                "COMPLETED",
+                "TRANSFERRED",
+                "CLEANED"
+              ]
+            }
+          },
+          {
+            "name": "destinationType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "WINE_AGING",
+                "SINGANI_DIST",
+                "BEER_MATURATION",
+                "SPIRITS_DIST",
+                "OTHER"
+              ]
+            }
+          },
+          {
+            "name": "harvestBatchId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar cubas de fermentación",
+        "tags": [
+          "Vinificación y Fermentación"
+        ]
+      }
+    },
+    "/v1/fermentation-tanks/{id}": {
+      "get": {
+        "description": "Retorna los datos de la cuba junto con su historial de lecturas térmicas y tratamientos enológicos.",
+        "operationId": "FermentationController_findTankById_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle de la cuba",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FermentationTankResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cuba no encontrada"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener detalle de una cuba de fermentación",
+        "tags": [
+          "Vinificación y Fermentación"
+        ]
+      }
+    },
+    "/v1/fermentation-tanks/{id}/logs": {
+      "post": {
+        "description": "Agrega un registro térmico, de densidad y observaciones cualitativas.",
+        "operationId": "FermentationController_addLog_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFermentationLogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Log térmico registrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar lectura de control de fermentación (append-only)",
+        "tags": [
+          "Vinificación y Fermentación"
+        ]
+      }
+    },
+    "/v1/fermentation-tanks/{id}/treatments": {
+      "post": {
+        "description": "Registra la aplicación de un aditivo o corrector enológico con autorización SENASAG.",
+        "operationId": "FermentationController_addTreatment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEnologicalTreatmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tratamiento enológico registrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar tratamiento enológico autorizado",
+        "tags": [
+          "Vinificación y Fermentación"
+        ]
+      }
+    },
+    "/v1/wine-aging": {
+      "post": {
+        "description": "Traslada vino de cuba a barricas calculando automáticamente la fecha de bloqueo (lockUntilDate).",
+        "operationId": "WineAgingController_createAgingBatch_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWineAgingBatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lote de crianza iniciado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineAgingResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Iniciar lote de crianza en barricas",
+        "tags": [
+          "Crianza en Madera y Guarda (Vino)"
+        ]
+      },
+      "get": {
+        "description": "Obtiene el listado de barricas y lotes en guarda.",
+        "operationId": "WineAgingController_findAll_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar lotes de crianza",
+        "tags": [
+          "Crianza en Madera y Guarda (Vino)"
+        ]
+      }
+    },
+    "/v1/wine-aging/{id}": {
+      "get": {
+        "description": "Retorna datos de barrica, meses planificados y fecha límite de bloqueo.",
+        "operationId": "WineAgingController_findAgingBatchById_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle de crianza",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WineAgingResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lote de crianza no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener detalle de lote de crianza",
+        "tags": [
+          "Crianza en Madera y Guarda (Vino)"
+        ]
+      }
+    },
+    "/v1/production-batches/distillation": {
+      "post": {
+        "description": "Registra la destilación en alambique con balance de masa (cabeza, corazón, cola) y fija el reposo inerte obligatorio de 180 días.",
+        "operationId": "ProductionBatchesController_createDistillationBatch_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDistillationBatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Destilación registrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductionBatchResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar proceso de destilación de Singani",
+        "tags": [
+          "Destilación y Procesos Especiales (Singani)"
+        ]
+      }
+    },
+    "/v1/production-batches/{id}/rest-status": {
+      "get": {
+        "description": "Calcula días transcurridos y restantes respecto a la regla obligatoria de 180 días de reposo.",
+        "operationId": "ProductionBatchesController_getRestStatus_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estado de reposo inerte"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Verificar días de reposo inerte (D.O. Singani)",
+        "tags": [
+          "Destilación y Procesos Especiales (Singani)"
+        ]
+      }
+    },
+    "/v1/production-batches/{id}": {
+      "get": {
+        "description": "Retorna volúmenes de corte, parámetros térmicos y cuba de vino base de origen.",
+        "operationId": "ProductionBatchesController_findProductionBatchById_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle de producción",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductionBatchResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lote de producción no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener detalle de lote de producción/destilación",
+        "tags": [
+          "Destilación y Procesos Especiales (Singani)"
+        ]
+      }
+    },
+    "/v1/production-batches": {
+      "get": {
+        "description": "Retorna los lotes de transformación con filtros por proceso y estado de reposo.",
+        "operationId": "ProductionBatchesController_findAll_v1",
+        "parameters": [
+          {
+            "name": "processType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SINGANI_DISTILLATION",
+                "SPIRITS_DISTILLATION",
+                "BEER_MATURATION",
+                "SECONDARY_FERMENTATION",
+                "OTHER"
+              ]
+            }
+          },
+          {
+            "name": "restStatus",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "NOT_REQUIRED",
+                "RESTING",
+                "READY",
+                "BOTTLED",
+                "DISCARDED"
+              ]
+            }
+          },
+          {
+            "name": "fermentationTankId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar lotes de destilación y producción",
+        "tags": [
+          "Destilación y Procesos Especiales (Singani)"
+        ]
+      }
+    },
+    "/v1/bottling": {
+      "post": {
+        "description": "Valida elegibilidad D.O. del lote de origen, calcula dilución de agua, genera código de lote internacional y URL QR.",
+        "operationId": "BottlingController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBottlingBatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lote de embotellado registrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BottlingBatchResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Reglas D.O. incumplidas (ej: reposo inerte < 180 días)"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar lote de embotellado y fraccionamiento",
+        "tags": [
+          "Fraccionamiento y Embotellado"
+        ]
+      },
+      "get": {
+        "description": "Retorna los lotes de embotellado de la bodega con filtros por tipo de bebida.",
+        "operationId": "BottlingController_findAll_v1",
+        "parameters": [
+          {
+            "name": "productType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "WINE",
+                "SINGANI",
+                "BEER",
+                "SPIRITS",
+                "CIDER",
+                "MEAD",
+                "OTHER"
+              ]
+            }
+          },
+          {
+            "name": "isAnchoredOnChain",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Listar lotes embotellados",
+        "tags": [
+          "Fraccionamiento y Embotellado"
+        ]
+      }
+    },
+    "/v1/bottling/{id}": {
+      "get": {
+        "description": "Retorna datos de fraccionamiento, código de lote internacional y certificado de laboratorio asociado.",
+        "operationId": "BottlingController_findById_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle de lote embotellado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BottlingBatchResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lote de embotellado no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtener detalle de lote embotellado",
+        "tags": [
+          "Fraccionamiento y Embotellado"
+        ]
+      }
+    },
+    "/v1/lab-analyses": {
+      "post": {
+        "description": "Registra los parámetros físico-químicos (ABV, acidez, SO2, metanol, cobre) y dictamina conformidad SENASAG.",
+        "operationId": "LabAnalysesController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBatchLabAnalysisDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Informe de laboratorio registrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchLabAnalysisResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El lote ya tiene un informe oficial registrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Registrar informe analítico oficial de laboratorio",
+        "tags": [
+          "Laboratorio Físico-Químico"
+        ]
+      }
+    },
+    "/v1/lab-analyses/batch/{bottlingBatchId}": {
+      "get": {
+        "description": "Obtiene el informe físico-químico oficial emitido para un lote embotellado.",
+        "operationId": "LabAnalysesController_findByBatchId_v1",
+        "parameters": [
+          {
+            "name": "bottlingBatchId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informe analítico",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchLabAnalysisResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Informe analítico no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Consultar certificado de laboratorio por ID de lote de embotellado",
+        "tags": [
+          "Laboratorio Físico-Químico"
+        ]
+      }
+    },
+    "/v1/traceability/dag/{bottlingBatchId}": {
+      "get": {
+        "description": "Reconstruye la cadena completa de custodia y transformaciones (Parcela -> Vendimia -> Vinificación -> Crianza/Destilación -> Embotellado) con hashes y métricas para contrato Soroban.",
+        "operationId": "TraceabilityDagController_getDagByBottlingBatchId_v1",
+        "parameters": [
+          {
+            "name": "bottlingBatchId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grafo DAG de linaje"
+          },
+          "404": {
+            "description": "Lote de embotellado no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Consultar árbol genealógico DAG de trazabilidad",
+        "tags": [
+          "Grafo DAG de Trazabilidad"
+        ]
+      }
+    },
+    "/v1/traceability/public/{lotCode}": {
+      "get": {
+        "description": "Endpoint público sin autenticación para consumidores que escanean el código QR en la botella física. Retorna el linaje completo y certificado analítico oficial.",
+        "operationId": "TraceabilityDagController_getPublicPassportByLotCode_v1",
+        "parameters": [
+          {
+            "name": "lotCode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pasaporte digital de trazabilidad pública"
+          },
+          "404": {
+            "description": "Código de lote no encontrado"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Pasaporte Digital Público de Trazabilidad (Acceso QR consumidor)",
+        "tags": [
+          "Grafo DAG de Trazabilidad"
+        ]
+      }
+    },
+    "/v1/uploads": {
+      "post": {
+        "description": "Almacena un archivo localmente o en el servicio externo configurado (S3/Cloud). Retorna la URL pública accesible que debe asociarse al flujo correspondiente (inspección fitosanitaria, certificados D.O., etiqueta de lote o informe de laboratorio).",
+        "operationId": "UploadsController_uploadFile_v1",
+        "parameters": [
+          {
+            "name": "folder",
+            "required": false,
+            "in": "query",
+            "description": "Subcarpeta o categoría de destino (ej. \"inspections\", \"labels\", \"lab-reports\", \"certificates\", \"logos\")",
+            "schema": {
+              "example": "inspections",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Archivo binario a subir (Máx 15MB. Formatos: PDF, JPEG, PNG, WEBP, SVG, GIF)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Archivo almacenado con éxito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Archivo faltante, excede el tamaño máximo (15MB) o tipo MIME no permitido."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Subir archivo o imagen (PDF, JPG, PNG, WEBP, SVG)",
+        "tags": [
+          "Uploads"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Drinks on Chain API",
+    "description": "Backend API para Trazabilidad B2B y Tokenización NFT de Bebidas en Stellar Soroban",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "System",
+      "description": "Endpoints de salud y configuración del sistema"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "HealthStatusDataDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok",
+            "description": "Estado general del servicio"
+          },
+          "database": {
+            "type": "string",
+            "example": "connected",
+            "description": "Estado de la conexión a PostgreSQL"
+          },
+          "redis": {
+            "type": "string",
+            "example": "connected",
+            "description": "Estado de la conexión a Redis"
+          },
+          "uptime": {
+            "type": "number",
+            "example": 42.15,
+            "description": "Segundos de actividad continua"
+          }
+        },
+        "required": [
+          "status",
+          "database",
+          "redis",
+          "uptime"
+        ]
+      },
+      "SignupDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "juan.perez@bodega.bo",
+            "description": "Correo electrónico único para inicio de sesión"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "description": "Contraseña segura de mínimo 8 caracteres con al menos una letra y un número"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Juan Pérez",
+            "description": "Nombre completo o razón del usuario"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "CONSUMER",
+              "WINERY_ADMIN"
+            ],
+            "default": "CONSUMER",
+            "description": "Rol del usuario para registro público (CONSUMER o WINERY_ADMIN). Roles administrativos y operativos no están permitidos en registro público."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+59170012345",
+            "description": "Número de teléfono para contacto o verificación MFA"
+          },
+          "preferredLocale": {
+            "type": "string",
+            "example": "es",
+            "default": "es",
+            "description": "Idioma preferido para el perfil (es o en)"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "fullName"
+        ]
+      },
+      "AuthUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "email": {
+            "type": "string",
+            "example": "juan.perez@bodega.bo"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Juan Pérez"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "PLATFORM_ADMIN",
+              "WINERY_ADMIN",
+              "ENOLOGIST",
+              "AGRONOMIST",
+              "CONSUMER",
+              "POS_OPERATOR"
+            ],
+            "example": "CONSUMER"
+          },
+          "phoneNumber": {
+            "type": "object",
+            "example": "+59170012345"
+          },
+          "preferredLocale": {
+            "type": "string",
+            "example": "es"
+          },
+          "wineryId": {
+            "type": "object",
+            "example": "winery-uuid-1234"
+          },
+          "memberRole": {
+            "type": "object",
+            "example": "ENOLOGIST"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "fullName",
+          "userRole",
+          "preferredLocale"
+        ]
+      },
+      "AuthTokensDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Token de acceso JWT (válido por 7 días)",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Token de actualización JWT (válido por 30 días)",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expiresIn": {
+            "type": "number",
+            "example": 604800,
+            "description": "Tiempo de vida en segundos (7 días)"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "tokenType",
+          "expiresIn"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/AuthUserDto"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/AuthTokensDto"
+          }
+        },
+        "required": [
+          "user",
+          "tokens"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "juan.perez@bodega.bo",
+            "description": "Correo electrónico registrado del usuario"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "description": "Contraseña de la cuenta"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Token de actualización JWT emitido previamente en el login o registro",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "WineryMembershipDto": {
+        "type": "object",
+        "properties": {
+          "wineryId": {
+            "type": "string",
+            "example": "winery-uuid-1234"
+          },
+          "wineryName": {
+            "type": "string",
+            "example": "Bodega Kohlberg"
+          },
+          "memberRole": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ENOLOGIST",
+              "AGRONOMIST",
+              "OPERATOR",
+              "ACCOUNTANT"
+            ],
+            "example": "ENOLOGIST"
+          },
+          "professionalLicenseNumber": {
+            "type": "object",
+            "example": "MP-BOL-2024-9981"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "joinedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T20:00:00.000Z"
+          }
+        },
+        "required": [
+          "wineryId",
+          "wineryName",
+          "memberRole",
+          "isActive",
+          "joinedAt"
+        ]
+      },
+      "WalletResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "userId": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "wineryId": {
+            "type": "object",
+            "example": "winery-uuid-1234"
+          },
+          "stellarPublicAddress": {
+            "type": "string",
+            "example": "GBZXN7PIRZGNMHGA728JHIITLTINIQUVFD2AZN5HQG5Y3SQ4Q",
+            "description": "Dirección pública de Stellar (56 caracteres)"
+          },
+          "walletType": {
+            "type": "string",
+            "enum": [
+              "CUSTODIAL",
+              "SELF_CUSTODY"
+            ],
+            "example": "CUSTODIAL"
+          },
+          "walletPurpose": {
+            "type": "string",
+            "enum": [
+              "CONSUMER_NFT",
+              "PRODUCER_SIGNING"
+            ],
+            "example": "CONSUMER_NFT"
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T20:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "stellarPublicAddress",
+          "walletType",
+          "walletPurpose",
+          "isPrimary",
+          "createdAt"
+        ]
+      },
+      "UserProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "email": {
+            "type": "string",
+            "example": "juan.perez@bodega.bo"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Juan Pérez"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "PLATFORM_ADMIN",
+              "WINERY_ADMIN",
+              "ENOLOGIST",
+              "AGRONOMIST",
+              "CONSUMER",
+              "POS_OPERATOR"
+            ],
+            "example": "CONSUMER"
+          },
+          "phoneNumber": {
+            "type": "object",
+            "example": "+59170012345"
+          },
+          "preferredLocale": {
+            "type": "string",
+            "example": "es"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "lastLoginAt": {
+            "type": "object",
+            "example": "2026-09-06T20:00:00.000Z"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T20:00:00.000Z"
+          },
+          "wineryMemberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WineryMembershipDto"
+            }
+          },
+          "primaryWallet": {
+            "$ref": "#/components/schemas/WalletResponseDto"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "fullName",
+          "userRole",
+          "preferredLocale",
+          "isActive",
+          "createdAt",
+          "wineryMemberships"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Juan Carlos Pérez",
+            "description": "Nombre completo actualizado"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+59170012345",
+            "description": "Número de teléfono de contacto"
+          },
+          "preferredLocale": {
+            "type": "string",
+            "example": "en",
+            "description": "Preferencia de idioma (es / en)"
+          }
+        }
+      },
+      "CreateWineryDto": {
+        "type": "object",
+        "properties": {
+          "legalName": {
+            "type": "string",
+            "example": "Sociedad Agroindustrial Kohlberg S.A.",
+            "description": "Razón social legal de la empresa"
+          },
+          "commercialName": {
+            "type": "string",
+            "example": "Bodega Kohlberg",
+            "description": "Nombre o marca comercial de la bodega"
+          },
+          "beverageCategory": {
+            "type": "string",
+            "enum": [
+              "WINERY",
+              "BREWERY",
+              "DISTILLERY",
+              "OTHER"
+            ],
+            "example": "WINERY",
+            "description": "Categoría principal de producción de bebida"
+          },
+          "taxIdNit": {
+            "type": "string",
+            "example": "1028374029",
+            "description": "Número de Identificación Tributaria (NIT)"
+          },
+          "senasagSanitaryReg": {
+            "type": "string",
+            "example": "08-01-03-01-0001",
+            "description": "Registro Sanitario SENASAG"
+          },
+          "geographicRegion": {
+            "type": "string",
+            "example": "Valle Central de Tarija",
+            "description": "Región geográfica o departamento de producción"
+          },
+          "countryCode": {
+            "type": "string",
+            "example": "BO",
+            "default": "BO",
+            "description": "Código de país ISO 3166-1 alfa-2"
+          },
+          "address": {
+            "type": "string",
+            "example": "Km 15 Carretera a Bermejo, Santa Ana la Nueva",
+            "description": "Dirección física de la bodega o destilería"
+          },
+          "contactEmail": {
+            "type": "string",
+            "example": "contacto@kohlberg.bo",
+            "description": "Correo electrónico institucional"
+          },
+          "contactPhone": {
+            "type": "string",
+            "example": "+59146642345",
+            "description": "Teléfono de contacto institucional"
+          },
+          "logoUrl": {
+            "type": "string",
+            "example": "https://storage.supabase.co/drinks-on-chain/logos/kohlberg.png",
+            "description": "URL del logo institucional"
+          }
+        },
+        "required": [
+          "legalName",
+          "commercialName",
+          "beverageCategory",
+          "taxIdNit",
+          "geographicRegion",
+          "contactEmail"
+        ]
+      },
+      "WineryMemberItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "userId": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Valeria Soliz"
+          },
+          "email": {
+            "type": "string",
+            "example": "enologo@kohlberg.bo"
+          },
+          "memberRole": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ENOLOGIST",
+              "AGRONOMIST",
+              "OPERATOR",
+              "ACCOUNTANT"
+            ],
+            "example": "ENOLOGIST"
+          },
+          "professionalLicenseNumber": {
+            "type": "object",
+            "example": "MP-BOL-2024-9981"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "joinedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T20:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "fullName",
+          "email",
+          "memberRole",
+          "isActive",
+          "joinedAt"
+        ]
+      },
+      "WineryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "winery-uuid-1234"
+          },
+          "legalName": {
+            "type": "string",
+            "example": "Sociedad Agroindustrial Kohlberg S.A."
+          },
+          "commercialName": {
+            "type": "string",
+            "example": "Bodega Kohlberg"
+          },
+          "beverageCategory": {
+            "type": "string",
+            "enum": [
+              "WINERY",
+              "BREWERY",
+              "DISTILLERY",
+              "OTHER"
+            ],
+            "example": "WINERY"
+          },
+          "taxIdNit": {
+            "type": "string",
+            "example": "1028374029"
+          },
+          "senasagSanitaryReg": {
+            "type": "object",
+            "example": "08-01-03-01-0001"
+          },
+          "geographicRegion": {
+            "type": "string",
+            "example": "Valle Central de Tarija"
+          },
+          "countryCode": {
+            "type": "string",
+            "example": "BO"
+          },
+          "address": {
+            "type": "object",
+            "example": "Km 15 Carretera a Bermejo"
+          },
+          "contactEmail": {
+            "type": "string",
+            "example": "contacto@kohlberg.bo"
+          },
+          "contactPhone": {
+            "type": "object",
+            "example": "+59146642345"
+          },
+          "logoUrl": {
+            "type": "object",
+            "example": "https://storage.supabase.co/logos/kohlberg.png"
+          },
+          "stellarPublicKey": {
+            "type": "object",
+            "example": "GBZXN7PIRZGNMHGA728JHIITLTINIQUVFD2AZN5HQG5Y3SQ4Q"
+          },
+          "onchainProducerId": {
+            "type": "object",
+            "example": "PROD_BO_1028374029"
+          },
+          "onchainRegisterTxHash": {
+            "type": "object",
+            "example": "0x_simulated_tx_88a1b2c3"
+          },
+          "isExportCertified": {
+            "type": "boolean",
+            "example": false
+          },
+          "certificationStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACTIVE",
+              "SUSPENDED",
+              "REVOKED"
+            ],
+            "example": "PENDING"
+          },
+          "approvedAt": {
+            "type": "object",
+            "example": "2026-09-06T21:00:00.000Z"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T20:00:00.000Z"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WineryMemberItemDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "legalName",
+          "commercialName",
+          "beverageCategory",
+          "taxIdNit",
+          "geographicRegion",
+          "countryCode",
+          "contactEmail",
+          "isExportCertified",
+          "certificationStatus",
+          "createdAt"
+        ]
+      },
+      "UpdateWineryDto": {
+        "type": "object",
+        "properties": {
+          "commercialName": {
+            "type": "string",
+            "example": "Bodega Kohlberg Tarija"
+          },
+          "address": {
+            "type": "string",
+            "example": "Km 15 Carretera a Bermejo"
+          },
+          "contactEmail": {
+            "type": "string",
+            "example": "gerencia@kohlberg.bo"
+          },
+          "contactPhone": {
+            "type": "string",
+            "example": "+59170098765"
+          },
+          "logoUrl": {
+            "type": "string",
+            "example": "https://storage.supabase.co/logos/new-logo.png"
+          }
+        }
+      },
+      "AddMemberDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "UUID del usuario a incorporar como miembro operativo"
+          },
+          "memberRole": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ENOLOGIST",
+              "AGRONOMIST",
+              "OPERATOR",
+              "ACCOUNTANT"
+            ],
+            "example": "ENOLOGIST",
+            "description": "Rol operativo dentro de la bodega"
+          },
+          "professionalLicenseNumber": {
+            "type": "string",
+            "example": "MP-BOL-2024-9981",
+            "description": "Número de matrícula profesional (obligatorio para enólogos/agrónomos)"
+          },
+          "professionalLicensePdfUrl": {
+            "type": "string",
+            "example": "https://storage.supabase.co/licenses/license-9981.pdf",
+            "description": "URL del PDF de la matrícula profesional"
+          }
+        },
+        "required": [
+          "userId",
+          "memberRole"
+        ]
+      },
+      "CreateMemberDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "enologo@bodega.bo",
+            "description": "Correo electrónico institucional para el nuevo miembro"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "description": "Contraseña temporal o definitiva (mínimo 8 caracteres, al menos una letra y un número)"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Lic. Marcela Zenteno",
+            "description": "Nombre completo del miembro operativo"
+          },
+          "memberRole": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ENOLOGIST",
+              "AGRONOMIST",
+              "OPERATOR",
+              "ACCOUNTANT"
+            ],
+            "example": "ENOLOGIST",
+            "description": "Rol operativo dentro de la bodega (ENOLOGIST, AGRONOMIST, OPERATOR, ACCOUNTANT, WINERY_ADMIN)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+59171234567",
+            "description": "Número de teléfono de contacto"
+          },
+          "professionalLicenseNumber": {
+            "type": "string",
+            "example": "COL-ENOL-TAR-402",
+            "description": "Número de matrícula profesional (obligatorio para enólogos/agrónomos)"
+          },
+          "professionalLicensePdfUrl": {
+            "type": "string",
+            "example": "https://storage.supabase.co/licenses/license-402.pdf",
+            "description": "URL del PDF de la matrícula profesional"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "fullName",
+          "memberRole"
+        ]
+      },
+      "ApproveWineryDto": {
+        "type": "object",
+        "properties": {
+          "approvalNotes": {
+            "type": "string",
+            "example": "Verificación legal y sanitaria SENASAG completada satisfactoriamente.",
+            "description": "Notas u observaciones del Platform Admin en la aprobación"
+          }
+        }
+      },
+      "RejectWineryDto": {
+        "type": "object",
+        "properties": {
+          "rejectionReason": {
+            "type": "string",
+            "example": "Registro sanitario SENASAG inválido o documentación de constitución incompleta.",
+            "description": "Motivo formal del rechazo de la solicitud de bodega"
+          }
+        },
+        "required": [
+          "rejectionReason"
+        ]
+      },
+      "CreateTerroirDto": {
+        "type": "object",
+        "properties": {
+          "parcelName": {
+            "type": "string",
+            "example": "Cuartel 4 - La Finca El Potrero",
+            "description": "Nombre descriptivo de la parcela o cuartel"
+          },
+          "cadastreCode": {
+            "type": "string",
+            "example": "CAT-TL-4022",
+            "description": "Código catastral del predio rural"
+          },
+          "surfaceHectares": {
+            "type": "number",
+            "example": 4.5,
+            "description": "Superficie cultivada en hectáreas"
+          },
+          "altitudeMasl": {
+            "type": "number",
+            "example": 1850,
+            "description": "Altitud de la parcela en metros sobre el nivel del mar (m.s.n.m.)"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -21.48512,
+            "description": "Latitud geográfica decimal (WGS84)"
+          },
+          "longitude": {
+            "type": "number",
+            "example": -64.78921,
+            "description": "Longitud geográfica decimal (WGS84)"
+          },
+          "geographicPolygonGeojson": {
+            "type": "object",
+            "example": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    -64.789,
+                    -21.485
+                  ],
+                  [
+                    -64.788,
+                    -21.485
+                  ],
+                  [
+                    -64.788,
+                    -21.486
+                  ],
+                  [
+                    -64.789,
+                    -21.486
+                  ],
+                  [
+                    -64.789,
+                    -21.485
+                  ]
+                ]
+              ]
+            },
+            "description": "Polígono perimetral en formato estándar GeoJSON RFC 7946"
+          },
+          "rawMaterialType": {
+            "type": "string",
+            "example": "uva",
+            "description": "Tipo de materia prima vegetal (uva, cebada, agave, etc.)"
+          },
+          "varietyName": {
+            "type": "string",
+            "example": "Moscatel de Alejandría",
+            "description": "Variedad o clon específico cultivado"
+          },
+          "soilType": {
+            "type": "string",
+            "example": "Franco-arcilloso con cantos rodados",
+            "description": "Descripción pedológica del suelo"
+          },
+          "irrigationSystem": {
+            "type": "string",
+            "example": "Riego por goteo computarizado",
+            "description": "Sistema de irrigación instalado"
+          },
+          "isDoEligible": {
+            "type": "boolean",
+            "example": true,
+            "description": "Indica si cumple criterios para Denominación de Origen"
+          },
+          "doType": {
+            "type": "string",
+            "example": "D.O. Singani",
+            "description": "Denominación de Origen a la que postula (ej. D.O. Singani, D.O. Tarija)"
+          },
+          "doCertificateUrl": {
+            "type": "string",
+            "example": "https://storage.drinksonchain.com/cert/do-potrero.pdf",
+            "description": "URL del certificado oficial de Denominación de Origen"
+          }
+        },
+        "required": [
+          "parcelName",
+          "surfaceHectares",
+          "altitudeMasl",
+          "rawMaterialType",
+          "varietyName"
+        ]
+      },
+      "TerroirResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineryId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "parcelName": {
+            "type": "string",
+            "example": "Cuartel 4 - La Finca El Potrero"
+          },
+          "cadastreCode": {
+            "type": "object",
+            "example": "CAT-TL-4022"
+          },
+          "surfaceHectares": {
+            "type": "number",
+            "example": 4.5
+          },
+          "altitudeMasl": {
+            "type": "number",
+            "example": 1850
+          },
+          "latitude": {
+            "type": "object",
+            "example": -21.48512
+          },
+          "longitude": {
+            "type": "object",
+            "example": -64.78921
+          },
+          "geographicPolygonGeojson": {
+            "type": "object"
+          },
+          "rawMaterialType": {
+            "type": "string",
+            "example": "uva"
+          },
+          "varietyName": {
+            "type": "string",
+            "example": "Moscatel de Alejandría"
+          },
+          "soilType": {
+            "type": "object",
+            "example": "Franco-arcilloso"
+          },
+          "irrigationSystem": {
+            "type": "object",
+            "example": "Riego por goteo"
+          },
+          "isDoEligible": {
+            "type": "boolean",
+            "example": true
+          },
+          "doType": {
+            "type": "object",
+            "example": "D.O. Singani"
+          },
+          "doCertificateUrl": {
+            "type": "object",
+            "example": "https://storage.drinksonchain.com/cert/do-potrero.pdf"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "wineryId",
+          "parcelName",
+          "surfaceHectares",
+          "altitudeMasl",
+          "rawMaterialType",
+          "varietyName",
+          "isDoEligible",
+          "isActive",
+          "createdAt"
+        ]
+      },
+      "UpdateTerroirDto": {
+        "type": "object",
+        "properties": {
+          "parcelName": {
+            "type": "string",
+            "example": "Cuartel 4 - La Finca El Potrero",
+            "description": "Nombre descriptivo de la parcela o cuartel"
+          },
+          "cadastreCode": {
+            "type": "string",
+            "example": "CAT-TL-4022",
+            "description": "Código catastral del predio rural"
+          },
+          "surfaceHectares": {
+            "type": "number",
+            "example": 4.5,
+            "description": "Superficie cultivada en hectáreas"
+          },
+          "altitudeMasl": {
+            "type": "number",
+            "example": 1850,
+            "description": "Altitud de la parcela en metros sobre el nivel del mar (m.s.n.m.)"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -21.48512,
+            "description": "Latitud geográfica decimal (WGS84)"
+          },
+          "longitude": {
+            "type": "number",
+            "example": -64.78921,
+            "description": "Longitud geográfica decimal (WGS84)"
+          },
+          "geographicPolygonGeojson": {
+            "type": "object",
+            "example": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    -64.789,
+                    -21.485
+                  ],
+                  [
+                    -64.788,
+                    -21.485
+                  ],
+                  [
+                    -64.788,
+                    -21.486
+                  ],
+                  [
+                    -64.789,
+                    -21.486
+                  ],
+                  [
+                    -64.789,
+                    -21.485
+                  ]
+                ]
+              ]
+            },
+            "description": "Polígono perimetral en formato estándar GeoJSON RFC 7946"
+          },
+          "rawMaterialType": {
+            "type": "string",
+            "example": "uva",
+            "description": "Tipo de materia prima vegetal (uva, cebada, agave, etc.)"
+          },
+          "varietyName": {
+            "type": "string",
+            "example": "Moscatel de Alejandría",
+            "description": "Variedad o clon específico cultivado"
+          },
+          "soilType": {
+            "type": "string",
+            "example": "Franco-arcilloso con cantos rodados",
+            "description": "Descripción pedológica del suelo"
+          },
+          "irrigationSystem": {
+            "type": "string",
+            "example": "Riego por goteo computarizado",
+            "description": "Sistema de irrigación instalado"
+          },
+          "isDoEligible": {
+            "type": "boolean",
+            "example": true,
+            "description": "Indica si cumple criterios para Denominación de Origen"
+          },
+          "doType": {
+            "type": "string",
+            "example": "D.O. Singani",
+            "description": "Denominación de Origen a la que postula (ej. D.O. Singani, D.O. Tarija)"
+          },
+          "doCertificateUrl": {
+            "type": "string",
+            "example": "https://storage.drinksonchain.com/cert/do-potrero.pdf",
+            "description": "URL del certificado oficial de Denominación de Origen"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true,
+            "description": "Estado de actividad operativa de la parcela"
+          }
+        }
+      },
+      "CreateHarvestBatchDto": {
+        "type": "object",
+        "properties": {
+          "terroirId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID de la parcela o terroir de procedencia de la uva"
+          },
+          "intakeDate": {
+            "type": "string",
+            "example": "2026-03-15",
+            "description": "Fecha de ingreso y pesaje en báscula (YYYY-MM-DD)"
+          },
+          "harvestYear": {
+            "type": "number",
+            "example": 2026,
+            "description": "Año de la vendimia"
+          },
+          "grossWeightKg": {
+            "type": "number",
+            "example": 15000,
+            "description": "Peso bruto del camión/tolva en kilogramos"
+          },
+          "tareWeightKg": {
+            "type": "number",
+            "example": 150,
+            "description": "Tara de los bins/transporte en kilogramos"
+          },
+          "brixDegrees": {
+            "type": "number",
+            "example": 22.4,
+            "description": "Grados Brix de madurez refractométrica (°Bx)"
+          },
+          "initialPh": {
+            "type": "number",
+            "example": 3.45,
+            "description": "pH inicial del mosto en tolva"
+          },
+          "initialAcidityGl": {
+            "type": "number",
+            "example": 6.8,
+            "description": "Acidez total inicial en g/L de ácido tartárico"
+          },
+          "temperatureAtIntakeC": {
+            "type": "number",
+            "example": 16.5,
+            "description": "Temperatura de la uva al momento de la descarga (°C)"
+          },
+          "phytosanitaryStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING_INSPECTION",
+              "APPROVED",
+              "REJECTED",
+              "QUARANTINE"
+            ],
+            "default": "PENDING_INSPECTION",
+            "description": "Estado fitosanitario inicial"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Uva fresca en excelente estado sanitario, cosecha manual matutina.",
+            "description": "Observaciones agronómicas y de recepción"
+          }
+        },
+        "required": [
+          "terroirId",
+          "intakeDate",
+          "harvestYear",
+          "grossWeightKg",
+          "tareWeightKg",
+          "brixDegrees",
+          "initialPh",
+          "initialAcidityGl"
+        ]
+      },
+      "HarvestBatchResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineryId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "terroirId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "harvestBatchCode": {
+            "type": "string",
+            "example": "HARV-2026-POTRERO-001"
+          },
+          "intakeDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-03-15"
+          },
+          "harvestYear": {
+            "type": "number",
+            "example": 2026
+          },
+          "grossWeightKg": {
+            "type": "number",
+            "example": 15000
+          },
+          "tareWeightKg": {
+            "type": "number",
+            "example": 150
+          },
+          "netWeightKg": {
+            "type": "number",
+            "example": 14850
+          },
+          "brixDegrees": {
+            "type": "number",
+            "example": 22.4
+          },
+          "initialPh": {
+            "type": "number",
+            "example": 3.45
+          },
+          "initialAcidityGl": {
+            "type": "number",
+            "example": 6.8
+          },
+          "temperatureAtIntakeC": {
+            "type": "object",
+            "example": 16.5
+          },
+          "phytosanitaryStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING_INSPECTION",
+              "APPROVED",
+              "REJECTED",
+              "QUARANTINE"
+            ],
+            "example": "APPROVED"
+          },
+          "phytoInspectionPdfUrl": {
+            "type": "object",
+            "example": "https://storage.drinksonchain.com/inspections/phyto-01.pdf"
+          },
+          "certifiedByMemberId": {
+            "type": "object",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "notes": {
+            "type": "object",
+            "example": "Cosecha matutina manual"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-09-06T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "wineryId",
+          "terroirId",
+          "harvestBatchCode",
+          "intakeDate",
+          "harvestYear",
+          "grossWeightKg",
+          "tareWeightKg",
+          "netWeightKg",
+          "brixDegrees",
+          "initialPh",
+          "initialAcidityGl",
+          "phytosanitaryStatus",
+          "createdAt"
+        ]
+      },
+      "UpdatePhytoStatusDto": {
+        "type": "object",
+        "properties": {
+          "phytosanitaryStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING_INSPECTION",
+              "APPROVED",
+              "REJECTED",
+              "QUARANTINE"
+            ],
+            "example": "APPROVED",
+            "description": "Nuevo dictamen fitosanitario"
+          },
+          "phytoInspectionPdfUrl": {
+            "type": "string",
+            "example": "https://storage.drinksonchain.com/inspections/phyto-2026-04.pdf",
+            "description": "URL del informe o acta de inspección fitosanitaria firmada"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Lote aprobado sin presencia de botritis ni plagas cuarentenarias.",
+            "description": "Notas o justificación del dictamen enológico/agronómico"
+          }
+        },
+        "required": [
+          "phytosanitaryStatus"
+        ]
+      },
+      "CreateFermentationTankDto": {
+        "type": "object",
+        "properties": {
+          "harvestBatchId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID del lote de vendimia ingresado a la cuba"
+          },
+          "tankCode": {
+            "type": "string",
+            "example": "TK-03",
+            "description": "Código físico o identificador del tanque de fermentación"
+          },
+          "capacityLiters": {
+            "type": "number",
+            "example": 15000,
+            "description": "Capacidad total nominal del tanque en litros"
+          },
+          "material": {
+            "type": "string",
+            "example": "Acero inoxidable AISI 316",
+            "description": "Material del contenedor (Inox, Cemento epoxilado, Roble)"
+          },
+          "volumeFilledLiters": {
+            "type": "number",
+            "example": 10100,
+            "description": "Volumen efectivo de mosto/líquido cargado en litros"
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": [
+              "WINE_AGING",
+              "SINGANI_DIST",
+              "BEER_MATURATION",
+              "SPIRITS_DIST",
+              "OTHER"
+            ],
+            "example": "SINGANI_DIST",
+            "description": "Destino del proceso (WINE_AGING, SINGANI_DIST, BEER_MATURATION, etc.)"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "FILLING",
+              "FERMENTING",
+              "COMPLETED",
+              "TRANSFERRED",
+              "CLEANED"
+            ],
+            "default": "FILLING",
+            "description": "Estado inicial del tanque"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2026-03-15T14:30:00Z",
+            "description": "Fecha y hora de inicio del llenado/fermentación"
+          }
+        },
+        "required": [
+          "harvestBatchId",
+          "tankCode",
+          "startDate"
+        ]
+      },
+      "FermentationTankResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineryId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "harvestBatchId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "tankCode": {
+            "type": "string",
+            "example": "TK-03"
+          },
+          "capacityLiters": {
+            "type": "object",
+            "example": 15000
+          },
+          "material": {
+            "type": "object",
+            "example": "Acero inoxidable AISI 316"
+          },
+          "volumeFilledLiters": {
+            "type": "object",
+            "example": 10100
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": [
+              "WINE_AGING",
+              "SINGANI_DIST",
+              "BEER_MATURATION",
+              "SPIRITS_DIST",
+              "OTHER"
+            ],
+            "example": "SINGANI_DIST"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "FILLING",
+              "FERMENTING",
+              "COMPLETED",
+              "TRANSFERRED",
+              "CLEANED"
+            ],
+            "example": "FERMENTING"
+          },
+          "startDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-03-15T14:30:00.000Z"
+          },
+          "endDate": {
+            "type": "object",
+            "example": "2026-03-29T14:30:00.000Z"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-03-15T14:30:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "wineryId",
+          "harvestBatchId",
+          "tankCode",
+          "status",
+          "startDate",
+          "createdAt"
+        ]
+      },
+      "CreateFermentationLogDto": {
+        "type": "object",
+        "properties": {
+          "temperatureCelsius": {
+            "type": "number",
+            "example": 15.5,
+            "description": "Temperatura del mosto/líquido en grados Celsius (°C)"
+          },
+          "specificGravity": {
+            "type": "number",
+            "example": 1.045,
+            "description": "Densidad relativa o gravedad específica (Specific Gravity)"
+          },
+          "phValue": {
+            "type": "number",
+            "example": 3.42,
+            "description": "Valor de pH registrado en la toma"
+          },
+          "co2Observations": {
+            "type": "string",
+            "example": "Desprendimiento vigoroso de CO2, aroma floral intenso",
+            "description": "Observaciones cualitativas de la fermentación"
+          },
+          "recordedAt": {
+            "type": "string",
+            "example": "2026-03-16T08:00:00Z",
+            "description": "Fecha y hora exacta de la lectura"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Remontado de 15 minutos efectuado tras la medición",
+            "description": "Notas operativas de bodega"
+          }
+        },
+        "required": [
+          "temperatureCelsius",
+          "recordedAt"
+        ]
+      },
+      "CreateEnologicalTreatmentDto": {
+        "type": "object",
+        "properties": {
+          "treatmentType": {
+            "type": "string",
+            "enum": [
+              "ACIDITY_CORRECTION",
+              "SO2_ADDITION",
+              "CLARIFICATION",
+              "FILTRATION_AID",
+              "NUTRIENT_ADDITION",
+              "ENZYME_ADDITION",
+              "OAK_CHIPS",
+              "FINING_AGENT",
+              "STABILIZATION",
+              "OTHER"
+            ],
+            "example": "SO2_ADDITION",
+            "description": "Tipo de tratamiento enológico regulado"
+          },
+          "additiveName": {
+            "type": "string",
+            "example": "Metabisulfito de potasio grado alimentario",
+            "description": "Nombre comercial o químico del aditivo"
+          },
+          "additiveSupplier": {
+            "type": "string",
+            "example": "Laffort Oenologie",
+            "description": "Fabricante o proveedor del insumo enológico"
+          },
+          "dosageAppliedGPerHl": {
+            "type": "number",
+            "example": 30,
+            "description": "Dosis aplicada en gramos por hectolitro (g/hL) o mg/L"
+          },
+          "totalAppliedG": {
+            "type": "number",
+            "example": 3030,
+            "description": "Total absoluto aplicado en gramos (g)"
+          },
+          "regulatoryAuthCode": {
+            "type": "string",
+            "example": "SENASAG-REG-ADD-2024-88",
+            "description": "Código de autorización regulatoria SENASAG o norma técnica"
+          },
+          "appliedAt": {
+            "type": "string",
+            "example": "2026-03-15T15:00:00Z",
+            "description": "Fecha y hora de aplicación del tratamiento"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Sulfitado inicial para protección antioxidante y antimicrobiana",
+            "description": "Justificación o notas del enólogo"
+          }
+        },
+        "required": [
+          "treatmentType",
+          "additiveName",
+          "dosageAppliedGPerHl",
+          "regulatoryAuthCode",
+          "appliedAt"
+        ]
+      },
+      "CreateWineAgingBatchDto": {
+        "type": "object",
+        "properties": {
+          "fermentationTankId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID del tanque de fermentación de origen"
+          },
+          "containerType": {
+            "type": "string",
+            "example": "Barrica",
+            "description": "Tipo de contenedor (Barrica, Tonel, Ánfora, etc.)"
+          },
+          "containerMaterial": {
+            "type": "string",
+            "example": "Roble Francés tostado medio (Allier)",
+            "description": "Material o tipo de madera"
+          },
+          "containerCode": {
+            "type": "string",
+            "example": "BAR-FR-2024-01",
+            "description": "Identificador o código físico de la barrica/lote de barricas"
+          },
+          "barrelUseCycle": {
+            "type": "number",
+            "example": 1,
+            "description": "Ciclo de uso de la barrica (1 = primer uso, 2 = segundo uso)"
+          },
+          "volumeLiters": {
+            "type": "number",
+            "example": 225,
+            "description": "Volumen transferido a crianza en litros"
+          },
+          "plannedMonths": {
+            "type": "number",
+            "example": 12,
+            "description": "Meses planificados de crianza en madera"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-01-15T00:00:00Z",
+            "description": "Fecha de ingreso a barrica (por defecto fecha actual)"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Crianza en barricas de primer uso en cava subterránea a 14°C",
+            "description": "Observaciones de guarda"
+          }
+        },
+        "required": [
+          "fermentationTankId",
+          "containerType",
+          "plannedMonths"
+        ]
+      },
+      "WineAgingResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineryId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "fermentationTankId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "containerType": {
+            "type": "string",
+            "example": "Barrica"
+          },
+          "containerMaterial": {
+            "type": "object",
+            "example": "Roble Francés tostado medio"
+          },
+          "containerCode": {
+            "type": "object",
+            "example": "BAR-FR-2024-01"
+          },
+          "barrelUseCycle": {
+            "type": "object",
+            "example": 1
+          },
+          "volumeLiters": {
+            "type": "object",
+            "example": 225
+          },
+          "plannedMonths": {
+            "type": "number",
+            "example": 12
+          },
+          "lockUntilDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2027-03-15"
+          },
+          "agingStatus": {
+            "type": "string",
+            "enum": [
+              "AGING",
+              "READY",
+              "BOTTLED",
+              "DISCARDED"
+            ],
+            "example": "AGING"
+          },
+          "notes": {
+            "type": "object",
+            "example": "Cava subterránea"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-03-15T14:30:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "wineryId",
+          "fermentationTankId",
+          "containerType",
+          "plannedMonths",
+          "lockUntilDate",
+          "agingStatus",
+          "createdAt"
+        ]
+      },
+      "CreateDistillationBatchDto": {
+        "type": "object",
+        "properties": {
+          "fermentationTankId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID del tanque de vino base fermentado a destilar"
+          },
+          "equipmentIdentifier": {
+            "type": "string",
+            "example": "Alambique de Cobre Charentais AL-01 (1,500 L)",
+            "description": "Identificador del equipo de destilación"
+          },
+          "processStartDate": {
+            "type": "string",
+            "example": "2026-04-01",
+            "description": "Fecha de inicio del ciclo de destilación (YYYY-MM-DD)"
+          },
+          "processEndDate": {
+            "type": "string",
+            "example": "2026-04-03",
+            "description": "Fecha de finalización y corte definitivo (YYYY-MM-DD)"
+          },
+          "inputVolumeLiters": {
+            "type": "number",
+            "example": 10000,
+            "description": "Volumen total de vino base cargado al alambique (litros)"
+          },
+          "outputVolumeLiters": {
+            "type": "number",
+            "example": 1750,
+            "description": "Volumen obtenido de corazón noble de destilado (litros)"
+          },
+          "wasteVolumeLiters": {
+            "type": "number",
+            "example": 570,
+            "description": "Volumen total de descarte (cabezas + colas) en litros"
+          },
+          "initialAlcoholPercentage": {
+            "type": "number",
+            "example": 70.2,
+            "description": "Graduación alcohólica del corazón de destilación (% ABV)"
+          },
+          "isDoEligible": {
+            "type": "boolean",
+            "example": true,
+            "description": "Elegible para Denominación de Origen Singani"
+          },
+          "additionalParams": {
+            "type": "object",
+            "example": {
+              "headDiscardLiters": 120,
+              "heartYieldLiters": 1750,
+              "tailDiscardLiters": 450,
+              "vaporTempC": 84.5
+            },
+            "description": "Parámetros técnicos de corte y balance térmico"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Destilación lenta a fuego directo con separación estricta de cabezas",
+            "description": "Notas del maestro destilador"
+          }
+        },
+        "required": [
+          "fermentationTankId",
+          "equipmentIdentifier",
+          "processStartDate"
+        ]
+      },
+      "ProductionBatchResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineryId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "fermentationTankId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "processType": {
+            "type": "string",
+            "enum": [
+              "SINGANI_DISTILLATION",
+              "SPIRITS_DISTILLATION",
+              "BEER_MATURATION",
+              "SECONDARY_FERMENTATION",
+              "OTHER"
+            ],
+            "example": "SINGANI_DISTILLATION"
+          },
+          "equipmentIdentifier": {
+            "type": "string",
+            "example": "Alambique de Cobre Charentais AL-01"
+          },
+          "processStartDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-01"
+          },
+          "processEndDate": {
+            "type": "object",
+            "example": "2026-04-03"
+          },
+          "inputVolumeLiters": {
+            "type": "object",
+            "example": 10000
+          },
+          "outputVolumeLiters": {
+            "type": "object",
+            "example": 1750
+          },
+          "wasteVolumeLiters": {
+            "type": "object",
+            "example": 570
+          },
+          "initialAlcoholPercentage": {
+            "type": "object",
+            "example": 70.2
+          },
+          "isDoEligible": {
+            "type": "boolean",
+            "example": true
+          },
+          "mandatoryRestUntil": {
+            "type": "object",
+            "example": "2026-09-30"
+          },
+          "restStatus": {
+            "type": "string",
+            "enum": [
+              "NOT_REQUIRED",
+              "RESTING",
+              "READY",
+              "BOTTLED",
+              "DISCARDED"
+            ],
+            "example": "RESTING"
+          },
+          "additionalParams": {
+            "type": "object"
+          },
+          "notes": {
+            "type": "object",
+            "example": "Destilación simple discontinua"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-01T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "wineryId",
+          "fermentationTankId",
+          "processType",
+          "equipmentIdentifier",
+          "processStartDate",
+          "isDoEligible",
+          "restStatus",
+          "createdAt"
+        ]
+      },
+      "CreateBottlingBatchDto": {
+        "type": "object",
+        "properties": {
+          "wineAgingBatchId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID del lote de crianza en barrica (para vinos)"
+          },
+          "productionBatchId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID del lote de destilación/producción (para Singani o licores)"
+          },
+          "productType": {
+            "type": "string",
+            "enum": [
+              "WINE",
+              "SINGANI",
+              "BEER",
+              "SPIRITS",
+              "CIDER",
+              "MEAD",
+              "OTHER"
+            ],
+            "example": "SINGANI",
+            "description": "Tipo de bebida final embotellada"
+          },
+          "finalAlcoholAbv": {
+            "type": "number",
+            "example": 40,
+            "description": "Graduación alcohólica final comercial (% ABV)"
+          },
+          "waterDilutionLiters": {
+            "type": "number",
+            "example": 1321,
+            "description": "Volumen de agua osmotizada agregada para dilución (litros)"
+          },
+          "totalBottlesPackaged": {
+            "type": "number",
+            "example": 4080,
+            "description": "Cantidad total de botellas envasadas"
+          },
+          "packagingFormatCl": {
+            "type": "number",
+            "example": 75,
+            "description": "Formato o volumen nominal de la botella en centilitros (cL: 75, 70, 50, 37, 33)"
+          },
+          "bottleType": {
+            "type": "string",
+            "example": "Vidrio Extra-Flint 750ml con grabado",
+            "description": "Tipo o referencia de botella de vidrio"
+          },
+          "labelDesignUrl": {
+            "type": "string",
+            "example": "https://storage.drinksonchain.com/labels/singani-anniversary-750.png",
+            "description": "URL del arte o diseño de etiqueta aprobado"
+          },
+          "bottlingDate": {
+            "type": "string",
+            "example": "2026-10-01",
+            "description": "Fecha oficial de fraccionamiento y embotellado (YYYY-MM-DD)"
+          }
+        },
+        "required": [
+          "productType",
+          "finalAlcoholAbv",
+          "totalBottlesPackaged",
+          "packagingFormatCl",
+          "bottlingDate"
+        ]
+      },
+      "BottlingBatchResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineryId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "wineAgingBatchId": {
+            "type": "object",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "productionBatchId": {
+            "type": "object",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "productType": {
+            "type": "string",
+            "enum": [
+              "WINE",
+              "SINGANI",
+              "BEER",
+              "SPIRITS",
+              "CIDER",
+              "MEAD",
+              "OTHER"
+            ],
+            "example": "SINGANI"
+          },
+          "internationalLotCode": {
+            "type": "string",
+            "example": "KHL-2026-SINGANI-001"
+          },
+          "finalAlcoholAbv": {
+            "type": "number",
+            "example": 40
+          },
+          "waterDilutionLiters": {
+            "type": "object",
+            "example": 1321
+          },
+          "totalBottlesPackaged": {
+            "type": "number",
+            "example": 4080
+          },
+          "packagingFormatCl": {
+            "type": "number",
+            "example": 75
+          },
+          "bottleType": {
+            "type": "object",
+            "example": "Vidrio Extra-Flint 750ml"
+          },
+          "labelDesignUrl": {
+            "type": "object",
+            "example": "https://storage.drinksonchain.com/labels/singani.png"
+          },
+          "bottlingDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-01"
+          },
+          "releasedByMemberId": {
+            "type": "object",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "blockchainAnchorTxHash": {
+            "type": "object",
+            "example": "0x1234abcd..."
+          },
+          "blockchainDataHash": {
+            "type": "object",
+            "example": "a1b2c3d4e5f6..."
+          },
+          "isAnchoredOnChain": {
+            "type": "boolean",
+            "example": false
+          },
+          "anchoredAt": {
+            "type": "object",
+            "example": "2026-10-01T12:00:00.000Z"
+          },
+          "qrBatchUrl": {
+            "type": "object",
+            "example": "https://drinksonchain.com/trace/batch/KHL-2026-SINGANI-001"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-01T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "wineryId",
+          "productType",
+          "internationalLotCode",
+          "finalAlcoholAbv",
+          "totalBottlesPackaged",
+          "packagingFormatCl",
+          "bottlingDate",
+          "isAnchoredOnChain",
+          "createdAt"
+        ]
+      },
+      "CreateBatchLabAnalysisDto": {
+        "type": "object",
+        "properties": {
+          "bottlingBatchId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+            "description": "ID del lote de embotellado certificado"
+          },
+          "certifiedLaboratoryName": {
+            "type": "string",
+            "example": "Laboratorio de Servicios Analíticos y Control de Calidad LAB-ISO 17025",
+            "description": "Nombre del laboratorio acreditado"
+          },
+          "accreditedLabCertificationCode": {
+            "type": "string",
+            "example": "LAB-SENASAG-ISO-2026-991",
+            "description": "Código de acreditación o matrícula oficial del laboratorio"
+          },
+          "analysisRequestDate": {
+            "type": "string",
+            "example": "2026-10-02",
+            "description": "Fecha de solicitud de ensayo (YYYY-MM-DD)"
+          },
+          "testPerformedAt": {
+            "type": "string",
+            "example": "2026-10-04",
+            "description": "Fecha de emisión del informe analítico (YYYY-MM-DD)"
+          },
+          "actualAlcoholAbv": {
+            "type": "number",
+            "example": 40.05,
+            "description": "Graduación alcohólica real cuantificada (% ABV)"
+          },
+          "totalAlcoholAbv": {
+            "type": "number",
+            "example": 40.05,
+            "description": "Grado alcohólico total potencial (% ABV)"
+          },
+          "totalAcidityTartaricGl": {
+            "type": "number",
+            "example": 4.8,
+            "description": "Acidez total expresada en g/L de ácido tartárico"
+          },
+          "volatileAcidityAceticGl": {
+            "type": "number",
+            "example": 0.22,
+            "description": "Acidez volátil expresada en g/L de ácido acético"
+          },
+          "freeSulfurDioxideMgL": {
+            "type": "number",
+            "example": 22,
+            "description": "Dióxido de azufre libre (SO2 libre) en mg/L"
+          },
+          "totalSulfurDioxideMgL": {
+            "type": "number",
+            "example": 65,
+            "description": "Dióxido de azufre total (SO2 total) en mg/L"
+          },
+          "reducingSugarsGl": {
+            "type": "number",
+            "example": 1.2,
+            "description": "Azúcares reductores en g/L"
+          },
+          "totalDryExtractGl": {
+            "type": "number",
+            "example": 18.5,
+            "description": "Extracto seco total en g/L"
+          },
+          "sugarFreeDryExtractGl": {
+            "type": "number",
+            "example": 17.3,
+            "description": "Extracto seco libre de azúcar en g/L"
+          },
+          "overpressureBar": {
+            "type": "number",
+            "example": 0,
+            "description": "Sobrepresión de CO2 a 20°C en bar (para espumosos)"
+          },
+          "methanolContentMgL": {
+            "type": "number",
+            "example": 48,
+            "description": "Contenido de metanol en mg/100 ml de alcohol anhidro (límite legal < 200)"
+          },
+          "copperContentMgL": {
+            "type": "number",
+            "example": 0.02,
+            "description": "Contenido de cobre en mg/L (límite legal < 0.05)"
+          },
+          "additionalParams": {
+            "type": "object",
+            "example": {
+              "leadMgL": 0,
+              "aldehydesMgL": 12.5
+            },
+            "description": "Ensayos cromatográficos adicionales"
+          },
+          "laboratoryReportPdfUrl": {
+            "type": "string",
+            "example": "https://storage.drinksonchain.com/certs/lab-report-2026-991.pdf",
+            "description": "URL del PDF del Certificado Analítico oficial firmado"
+          },
+          "conformsToSenasagStandards": {
+            "type": "boolean",
+            "example": true,
+            "description": "Dictamen de conformidad con normas SENASAG / Norma Boliviana NB 324001"
+          },
+          "conformsToEuStandards": {
+            "type": "boolean",
+            "example": true,
+            "description": "Dictamen de conformidad con regulaciones de la Unión Europea"
+          },
+          "conformsToUsaStandards": {
+            "type": "boolean",
+            "example": true,
+            "description": "Dictamen de conformidad con regulaciones TTB (Estados Unidos)"
+          }
+        },
+        "required": [
+          "bottlingBatchId",
+          "certifiedLaboratoryName",
+          "accreditedLabCertificationCode",
+          "testPerformedAt",
+          "actualAlcoholAbv",
+          "totalAcidityTartaricGl",
+          "volatileAcidityAceticGl",
+          "laboratoryReportPdfUrl"
+        ]
+      },
+      "BatchLabAnalysisResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "bottlingBatchId": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "certifiedLaboratoryName": {
+            "type": "string",
+            "example": "Laboratorio LAB-ISO 17025"
+          },
+          "accreditedLabCertificationCode": {
+            "type": "string",
+            "example": "LAB-SENASAG-ISO-2026-991"
+          },
+          "analysisRequestDate": {
+            "type": "object",
+            "example": "2026-10-02"
+          },
+          "testPerformedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-04"
+          },
+          "actualAlcoholAbv": {
+            "type": "number",
+            "example": 40.05
+          },
+          "totalAlcoholAbv": {
+            "type": "object",
+            "example": 40.05
+          },
+          "totalAcidityTartaricGl": {
+            "type": "number",
+            "example": 4.8
+          },
+          "volatileAcidityAceticGl": {
+            "type": "number",
+            "example": 0.22
+          },
+          "freeSulfurDioxideMgL": {
+            "type": "object",
+            "example": 22
+          },
+          "totalSulfurDioxideMgL": {
+            "type": "object",
+            "example": 65
+          },
+          "reducingSugarsGl": {
+            "type": "object",
+            "example": 1.2
+          },
+          "totalDryExtractGl": {
+            "type": "object",
+            "example": 18.5
+          },
+          "sugarFreeDryExtractGl": {
+            "type": "object",
+            "example": 17.3
+          },
+          "overpressureBar": {
+            "type": "object",
+            "example": 0
+          },
+          "methanolContentMgL": {
+            "type": "object",
+            "example": 48
+          },
+          "copperContentMgL": {
+            "type": "object",
+            "example": 0.02
+          },
+          "additionalParams": {
+            "type": "object"
+          },
+          "laboratoryReportPdfUrl": {
+            "type": "string",
+            "example": "https://storage.drinksonchain.com/certs/lab.pdf"
+          },
+          "conformsToSenasagStandards": {
+            "type": "boolean",
+            "example": true
+          },
+          "conformsToEuStandards": {
+            "type": "boolean",
+            "example": true
+          },
+          "conformsToUsaStandards": {
+            "type": "boolean",
+            "example": true
+          },
+          "reviewedByMemberId": {
+            "type": "object",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-04T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "bottlingBatchId",
+          "certifiedLaboratoryName",
+          "accreditedLabCertificationCode",
+          "testPerformedAt",
+          "actualAlcoholAbv",
+          "totalAcidityTartaricGl",
+          "volatileAcidityAceticGl",
+          "laboratoryReportPdfUrl",
+          "conformsToSenasagStandards",
+          "conformsToEuStandards",
+          "conformsToUsaStandards",
+          "createdAt"
+        ]
+      },
+      "UploadResponseDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL pública completa accesible para consultar o descargar el archivo",
+            "example": "http://localhost:3000/uploads/inspections/1742880000000-a1b2c3d4.pdf"
+          },
+          "key": {
+            "type": "string",
+            "description": "Ruta relativa / clave de almacenamiento único",
+            "example": "inspections/1742880000000-a1b2c3d4.pdf"
+          },
+          "originalName": {
+            "type": "string",
+            "description": "Nombre original del archivo",
+            "example": "certificado_fitosanitario_2026.pdf"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "Tipo MIME del archivo",
+            "example": "application/pdf"
+          },
+          "sizeBytes": {
+            "type": "number",
+            "description": "Tamaño en bytes del archivo",
+            "example": 204850
+          }
+        },
+        "required": [
+          "url",
+          "key",
+          "originalName",
+          "mimeType",
+          "sizeBytes"
+        ]
+      }
+    }
+  }
+}

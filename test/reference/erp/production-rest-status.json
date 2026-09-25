@@ -1,0 +1,42 @@
+[
+  {
+    "id": "e58a7714-0a95-5cc4-8fd8-07999cb576e3",
+    "restStatus": "RESTING",
+    "daysElapsed": 162,
+    "daysRemaining": 18,
+    "isRestCompleted": false,
+    "mandatoryRestUntil": "2026-10-13T00:00:00Z"
+  },
+  {
+    "id": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c",
+    "restStatus": "BOTTLED",
+    "daysElapsed": 488,
+    "daysRemaining": 0,
+    "isRestCompleted": true,
+    "mandatoryRestUntil": "2025-11-21T00:00:00Z"
+  },
+  {
+    "id": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba",
+    "restStatus": "BOTTLED",
+    "daysElapsed": 509,
+    "daysRemaining": 0,
+    "isRestCompleted": true,
+    "mandatoryRestUntil": "2025-10-31T00:00:00Z"
+  },
+  {
+    "id": "303e1c89-ca47-5505-a0a5-0a6fe2993436",
+    "restStatus": "RESTING",
+    "daysElapsed": 13,
+    "daysRemaining": 167,
+    "isRestCompleted": false,
+    "mandatoryRestUntil": "2027-03-11T00:00:00Z"
+  },
+  {
+    "id": "a6dd3060-8612-5595-b9b4-33a7d039159c",
+    "restStatus": "READY",
+    "daysElapsed": 187,
+    "daysRemaining": 0,
+    "isRestCompleted": true,
+    "mandatoryRestUntil": "2026-09-18T00:00:00Z"
+  }
+]

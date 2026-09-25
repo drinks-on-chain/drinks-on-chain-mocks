@@ -1,0 +1,183 @@
+[
+  {
+    "id": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "legalName": "Altos de Calamuchita S.R.L.",
+    "commercialName": "Bodega Altos de Calamuchita",
+    "beverageCategory": "WINERY",
+    "taxIdNit": "1023456019",
+    "senasagSanitaryReg": "08-01-03-01-0142",
+    "geographicRegion": "Valle Central de Tarija · Santa Ana",
+    "countryCode": "BO",
+    "address": "Camino a Calamuchita km 9, Santa Ana la Nueva, Tarija",
+    "contactEmail": "contacto@altos.test",
+    "contactPhone": "+59146650142",
+    "logoUrl": "/mocks/uploads/logos/altos.png",
+    "stellarPublicKey": "GUV5LCBMX67ZZBB4HGTIFG42ZK5KSBRGABJXPY2XWJLRW4OJGOSZJKUN",
+    "onchainProducerId": "PROD_BO_1023456019",
+    "onchainRegisterTxHash": "b1a3f9cdf4eb89ccf35f060ed2415471e70fe6fdf84b26ae935ed3d95c493229",
+    "isExportCertified": false,
+    "certificationStatus": "ACTIVE",
+    "approvedAt": "2026-03-02T10:00:00Z",
+    "createdAt": "2026-02-20T09:00:00Z",
+    "members": [
+      {
+        "id": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+        "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+        "fullName": "Martín Calamuchita",
+        "email": "admin@altos.test",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-02-10T10:00:00Z"
+      },
+      {
+        "id": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+        "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+        "fullName": "Lic. Carla Villarroel",
+        "email": "enologa@altos.test",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-TAR-118",
+        "isActive": true,
+        "joinedAt": "2026-06-04T10:00:00Z"
+      },
+      {
+        "id": "0872115a-241c-5321-b26a-882c88ed7134",
+        "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+        "fullName": "Ing. Diego Paredes",
+        "email": "agronomo@altos.test",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-TAR-522",
+        "isActive": true,
+        "joinedAt": "2026-06-29T10:00:00Z"
+      },
+      {
+        "id": "8903bc37-3419-5b49-97f1-bd1811e267eb",
+        "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+        "fullName": "Mario Quispe",
+        "email": "operario@altos.test",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-03-12T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "legalName": "Destilería Cinti Viejo S.A.",
+    "commercialName": "Destilería Cinti Viejo",
+    "beverageCategory": "DISTILLERY",
+    "taxIdNit": "2087654031",
+    "senasagSanitaryReg": "01-02-01-03-0077",
+    "geographicRegion": "Valle de Cinti · Camargo",
+    "countryCode": "BO",
+    "address": "Av. del Singani 45, Camargo, Chuquisaca",
+    "contactEmail": "contacto@cintiviejo.test",
+    "contactPhone": "+59146930077",
+    "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+    "stellarPublicKey": "GIV5C3L3OJBINOKVC6SMLGDVQAQ5OKCXUHTQKC5WKD2WDEP53V7BFZMM",
+    "onchainProducerId": "PROD_BO_2087654031",
+    "onchainRegisterTxHash": "3a47c317525e4c436b4ffad19cabc83fce5032bc32b15a7ddf7a60a998f15222",
+    "isExportCertified": true,
+    "certificationStatus": "ACTIVE",
+    "approvedAt": "2026-01-15T10:00:00Z",
+    "createdAt": "2026-01-08T09:00:00Z",
+    "members": [
+      {
+        "id": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+        "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+        "fullName": "Rosa Camargo",
+        "email": "admin@cintiviejo.test",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-05-15T10:00:00Z"
+      },
+      {
+        "id": "21af9548-86fa-5c19-86c1-16133a906b64",
+        "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+        "fullName": "Lic. Lucía Rojas",
+        "email": "enologa@cintiviejo.test",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-CHQ-041",
+        "isActive": true,
+        "joinedAt": "2026-02-01T10:00:00Z"
+      },
+      {
+        "id": "53f25b09-b550-511d-a01c-031141d137bc",
+        "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
+        "fullName": "Ing. Tomás Flores",
+        "email": "agronomo@cintiviejo.test",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-CHQ-207",
+        "isActive": true,
+        "joinedAt": "2026-03-19T10:00:00Z"
+      },
+      {
+        "id": "75b76250-9520-50b8-9563-49384bb7d560",
+        "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+        "fullName": "Rubén Flores",
+        "email": "operario@cintiviejo.test",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-03-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "140bd695-7a59-5480-811c-38ce57cdd80f",
+    "legalName": "Viñedos del Guadalquivir S.R.L.",
+    "commercialName": "Viñedos del Guadalquivir",
+    "beverageCategory": "WINERY",
+    "taxIdNit": "3011223344",
+    "senasagSanitaryReg": null,
+    "geographicRegion": "Valle Central de Tarija · Concepción",
+    "countryCode": "BO",
+    "address": null,
+    "contactEmail": "hola@guadalquivir.test",
+    "contactPhone": "+59171223344",
+    "logoUrl": "/mocks/uploads/logos/guadalquivir.png",
+    "stellarPublicKey": null,
+    "onchainProducerId": null,
+    "onchainRegisterTxHash": null,
+    "isExportCertified": false,
+    "certificationStatus": "PENDING",
+    "approvedAt": null,
+    "createdAt": "2026-09-18T09:00:00Z",
+    "members": [
+      {
+        "id": "f65dd5da-90e9-52fd-b043-ad6572820748",
+        "userId": "c918ae49-2b92-5268-b370-2f067e0e97fe",
+        "fullName": "Elena Vaca",
+        "email": "gerencia@guadalquivir.test",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-01-13T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "legalName": "Casa Uriondo Ltda.",
+    "commercialName": "Casa Uriondo",
+    "beverageCategory": "DISTILLERY",
+    "taxIdNit": "4099887766",
+    "senasagSanitaryReg": "08-01-03-02-0009",
+    "geographicRegion": "Valle Central de Tarija · Uriondo",
+    "countryCode": "BO",
+    "address": "Plaza principal s/n, Uriondo",
+    "contactEmail": "casa@uriondo.test",
+    "contactPhone": "+59146660009",
+    "logoUrl": "/mocks/uploads/logos/uriondo.png",
+    "stellarPublicKey": "G4MM3G4KRVYQ4V3NTU7FSPYWNPZQL4GIU576CTMVPZXIH7Z6SAHN77VC",
+    "onchainProducerId": "PROD_BO_4099887766",
+    "onchainRegisterTxHash": "499fcea0c9de2b60687cf76e574c6dc54dda2e9bcf325376df77369916665c07",
+    "isExportCertified": false,
+    "certificationStatus": "SUSPENDED",
+    "approvedAt": "2025-11-03T10:00:00Z",
+    "createdAt": "2025-10-20T09:00:00Z",
+    "members": []
+  }
+]
