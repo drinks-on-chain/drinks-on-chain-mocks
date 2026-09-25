@@ -107,3 +107,13 @@ export function uid(key: string): string {
 export function fakeHash64(key: string): string {
   return (toHex(sha1(encoder.encode(key))) + toHex(sha1(encoder.encode(`${key}#2`)))).slice(0, 64)
 }
+
+/** Dirección Stellar de prueba (`G` + 55 caracteres base32). No es una clave real. */
+export function fakeStellarAddress(key: string): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+  const bytes = [...sha1(encoder.encode(key)), ...sha1(encoder.encode(`${key}#2`)), ...sha1(encoder.encode(`${key}#3`))]
+  return `G${bytes
+    .slice(0, 55)
+    .map((b) => alphabet[b % 32])
+    .join('')}`
+}

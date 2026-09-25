@@ -37,13 +37,13 @@ export const CreateTerroirSchema = z.object({
   varietyName: z.string().min(1),
   soilType: z.string().nullish(),
   irrigationSystem: z.string().nullish(),
-  isDoEligible: z.boolean().nullish(),
+  isDoEligible: z.boolean().optional(),
   doType: z.string().nullish(),
   doCertificateUrl: z.string().nullish(),
 })
 export type CreateTerroirDto = z.infer<typeof CreateTerroirSchema>
 
 export const UpdateTerroirSchema = CreateTerroirSchema.partial().extend({
-  isActive: z.boolean().nullish(),
+  isActive: z.boolean().optional(),
 })
 export type UpdateTerroirDto = z.infer<typeof UpdateTerroirSchema>

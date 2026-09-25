@@ -11,7 +11,8 @@ export default defineConfig({
   },
   format: ['esm'],
   target: 'es2022',
-  dts: true,
+  // tsup inyecta baseUrl al generar los .d.ts; TypeScript 6 lo marca como obsoleto.
+  dts: { compilerOptions: { ignoreDeprecations: '6.0' } },
   clean: true,
   splitting: true,
   treeshake: true,

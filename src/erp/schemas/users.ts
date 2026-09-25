@@ -31,9 +31,9 @@ export const UserProfileResponseSchema = z.object({
 export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>
 
 export const UpdateUserSchema = z.object({
-  fullName: z.string().min(1).nullish(),
+  fullName: z.string().min(1).optional(),
   phoneNumber: z.string().nullish(),
-  preferredLocale: z.string().nullish(),
+  preferredLocale: z.string().optional(),
 })
 export type UpdateUserDto = z.infer<typeof UpdateUserSchema>
 

@@ -56,9 +56,9 @@ export const CreateWinerySchema = z.object({
 export type CreateWineryDto = z.infer<typeof CreateWinerySchema>
 
 export const UpdateWinerySchema = z.object({
-  commercialName: z.string().min(1).nullish(),
+  commercialName: z.string().min(1).optional(),
   address: z.string().nullish(),
-  contactEmail: z.email().nullish(),
+  contactEmail: z.email().optional(),
   contactPhone: z.string().nullish(),
   logoUrl: z.string().nullish(),
 })
