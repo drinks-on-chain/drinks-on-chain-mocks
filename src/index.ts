@@ -5,3 +5,4 @@
 export * from './shared/envelope'
 export * from './shared/list'
 export * from './erp/schemas'
+export * from './erp/lot-view'

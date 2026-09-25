@@ -1,0 +1,508 @@
+[
+  {
+    "id": "0d1013e9-83d7-511a-a072-cad97060ea69",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "parcelName": "Cuartel 1 · La Angostura",
+    "cadastreCode": "CAT-TAR-1101",
+    "surfaceHectares": 6.8,
+    "altitudeMasl": 1860,
+    "latitude": -21.561,
+    "longitude": -64.688,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -64.69,
+            -21.5625
+          ],
+          [
+            -64.686,
+            -21.5625
+          ],
+          [
+            -64.686,
+            -21.5595
+          ],
+          [
+            -64.69,
+            -21.5595
+          ],
+          [
+            -64.69,
+            -21.5625
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Tannat",
+    "soilType": "Franco-arcilloso con cantos rodados",
+    "irrigationSystem": "Secano",
+    "isDoEligible": true,
+    "doType": "Valles Altos de Bolivia",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-altos_01.pdf",
+    "isActive": true,
+    "createdAt": "2026-01-20T11:00:00Z"
+  },
+  {
+    "id": "a6e73d3a-8f07-5ae8-ae48-fbf92f322517",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "parcelName": "Cuartel 2 · Los Sauces",
+    "cadastreCode": "CAT-TAR-1102",
+    "surfaceHectares": 4.1,
+    "altitudeMasl": 1875,
+    "latitude": -21.559,
+    "longitude": -64.691,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -64.693,
+            -21.5605
+          ],
+          [
+            -64.68900000000001,
+            -21.5605
+          ],
+          [
+            -64.68900000000001,
+            -21.5575
+          ],
+          [
+            -64.693,
+            -21.5575
+          ],
+          [
+            -64.693,
+            -21.5605
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Moscatel de Alejandría",
+    "soilType": "Franco-arenoso",
+    "irrigationSystem": "Riego por surcos",
+    "isDoEligible": true,
+    "doType": "D.O. Singani",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-altos_02.pdf",
+    "isActive": true,
+    "createdAt": "2026-01-23T11:00:00Z"
+  },
+  {
+    "id": "ceaf7563-9785-5331-93c3-f9f8193ff45f",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "parcelName": "Cuartel 3 · El Portillo",
+    "cadastreCode": "CAT-TAR-1103",
+    "surfaceHectares": 2.1,
+    "altitudeMasl": 1540,
+    "latitude": -21.572,
+    "longitude": -64.67,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -64.672,
+            -21.5735
+          ],
+          [
+            -64.668,
+            -21.5735
+          ],
+          [
+            -64.668,
+            -21.5705
+          ],
+          [
+            -64.672,
+            -21.5705
+          ],
+          [
+            -64.672,
+            -21.5735
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Moscatel de Alejandría",
+    "soilType": "Arcilloso profundo",
+    "irrigationSystem": "Riego por goteo",
+    "isDoEligible": false,
+    "doType": null,
+    "doCertificateUrl": null,
+    "isActive": true,
+    "createdAt": "2026-01-26T11:00:00Z"
+  },
+  {
+    "id": "d44c5b74-0db5-5cf1-9faa-9525b1f276cd",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "parcelName": "Cuartel 4 · Loma Alta",
+    "cadastreCode": "CAT-TAR-1104",
+    "surfaceHectares": 3.6,
+    "altitudeMasl": 1910,
+    "latitude": -21.555,
+    "longitude": -64.695,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -64.69699999999999,
+            -21.5565
+          ],
+          [
+            -64.693,
+            -21.5565
+          ],
+          [
+            -64.693,
+            -21.5535
+          ],
+          [
+            -64.69699999999999,
+            -21.5535
+          ],
+          [
+            -64.69699999999999,
+            -21.5565
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Syrah",
+    "soilType": "Franco con grava",
+    "irrigationSystem": "Riego por goteo",
+    "isDoEligible": true,
+    "doType": "Valles Altos de Bolivia",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-altos_04.pdf",
+    "isActive": true,
+    "createdAt": "2026-01-29T11:00:00Z"
+  },
+  {
+    "id": "9ee67b8e-4726-5556-9bee-fa349627d3ce",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "parcelName": "Cuartel 5 · La Compañía",
+    "cadastreCode": "CAT-TAR-1105",
+    "surfaceHectares": 5.0,
+    "altitudeMasl": 1890,
+    "latitude": -21.558,
+    "longitude": -64.689,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -64.69099999999999,
+            -21.5595
+          ],
+          [
+            -64.687,
+            -21.5595
+          ],
+          [
+            -64.687,
+            -21.5565
+          ],
+          [
+            -64.69099999999999,
+            -21.5565
+          ],
+          [
+            -64.69099999999999,
+            -21.5595
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Cabernet Sauvignon",
+    "soilType": "Franco-arcilloso",
+    "irrigationSystem": "Riego por goteo",
+    "isDoEligible": true,
+    "doType": "Valles Altos de Bolivia",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-altos_05.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-01T11:00:00Z"
+  },
+  {
+    "id": "e26c2890-b4e4-5973-aec2-0f092355ad3b",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "parcelName": "Parcela 1 · Los Parrales",
+    "cadastreCode": "CAT-CIN-2201",
+    "surfaceHectares": 4.2,
+    "altitudeMasl": 2350,
+    "latitude": -20.648,
+    "longitude": -65.225,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -65.22699999999999,
+            -20.6495
+          ],
+          [
+            -65.223,
+            -20.6495
+          ],
+          [
+            -65.223,
+            -20.6465
+          ],
+          [
+            -65.22699999999999,
+            -20.6465
+          ],
+          [
+            -65.22699999999999,
+            -20.6495
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Moscatel de Alejandría",
+    "soilType": "Franco-arenoso con grava fluvial",
+    "irrigationSystem": "Riego por surcos",
+    "isDoEligible": true,
+    "doType": "D.O. Singani",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-cvj_01.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-04T11:00:00Z"
+  },
+  {
+    "id": "536b1e93-996e-5835-9794-02c12f1319c4",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "parcelName": "Parcela 2 · Cañón Viejo",
+    "cadastreCode": "CAT-CIN-2202",
+    "surfaceHectares": 3.3,
+    "altitudeMasl": 2410,
+    "latitude": -20.652,
+    "longitude": -65.231,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -65.23299999999999,
+            -20.6535
+          ],
+          [
+            -65.229,
+            -20.6535
+          ],
+          [
+            -65.229,
+            -20.6505
+          ],
+          [
+            -65.23299999999999,
+            -20.6505
+          ],
+          [
+            -65.23299999999999,
+            -20.6535
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Moscatel de Alejandría",
+    "soilType": "Aluvial calcáreo",
+    "irrigationSystem": "Secano",
+    "isDoEligible": true,
+    "doType": "D.O. Singani",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-cvj_02.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-07T11:00:00Z"
+  },
+  {
+    "id": "31b13ad0-d5b9-5afa-b21b-8c581b111349",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "parcelName": "Parcela 3 · Las Carreras",
+    "cadastreCode": "CAT-CIN-2203",
+    "surfaceHectares": 2.7,
+    "altitudeMasl": 2280,
+    "latitude": -20.66,
+    "longitude": -65.218,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -65.22,
+            -20.6615
+          ],
+          [
+            -65.21600000000001,
+            -20.6615
+          ],
+          [
+            -65.21600000000001,
+            -20.6585
+          ],
+          [
+            -65.22,
+            -20.6585
+          ],
+          [
+            -65.22,
+            -20.6615
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Vischoqueña",
+    "soilType": "Franco-arenoso",
+    "irrigationSystem": "Riego por surcos",
+    "isDoEligible": true,
+    "doType": "Valles Altos de Bolivia",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-cvj_03.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-10T11:00:00Z"
+  },
+  {
+    "id": "0a623529-957a-5edd-92de-9c0acccb8bfc",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "parcelName": "Parcela 4 · El Molino",
+    "cadastreCode": "CAT-CIN-2204",
+    "surfaceHectares": 1.9,
+    "altitudeMasl": 2320,
+    "latitude": -20.655,
+    "longitude": -65.22,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -65.222,
+            -20.6565
+          ],
+          [
+            -65.218,
+            -20.6565
+          ],
+          [
+            -65.218,
+            -20.6535
+          ],
+          [
+            -65.222,
+            -20.6535
+          ],
+          [
+            -65.222,
+            -20.6565
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Moscatel de Alejandría",
+    "soilType": "Pedregoso",
+    "irrigationSystem": "Secano",
+    "isDoEligible": true,
+    "doType": "D.O. Singani",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-cvj_04.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-13T11:00:00Z"
+  },
+  {
+    "id": "36cf86bf-e2a7-5af1-a370-5ba573d0bdcc",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "parcelName": "Parcela 5 · San Roque",
+    "cadastreCode": "CAT-CIN-2205",
+    "surfaceHectares": 3.8,
+    "altitudeMasl": 2390,
+    "latitude": -20.644,
+    "longitude": -65.229,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -65.231,
+            -20.6455
+          ],
+          [
+            -65.227,
+            -20.6455
+          ],
+          [
+            -65.227,
+            -20.6425
+          ],
+          [
+            -65.231,
+            -20.6425
+          ],
+          [
+            -65.231,
+            -20.6455
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Negra Criolla",
+    "soilType": "Franco",
+    "irrigationSystem": "Secano",
+    "isDoEligible": true,
+    "doType": "Valles Altos de Bolivia",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-cvj_05.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-16T11:00:00Z"
+  },
+  {
+    "id": "017f9da6-3dcc-569c-bd5f-0451399c345f",
+    "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+    "parcelName": "Finca El Rancho · lote A",
+    "cadastreCode": "CAT-TAR-3301",
+    "surfaceHectares": 7.2,
+    "altitudeMasl": 1790,
+    "latitude": -21.43,
+    "longitude": -64.79,
+    "geographicPolygonGeojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -64.792,
+            -21.4315
+          ],
+          [
+            -64.78800000000001,
+            -21.4315
+          ],
+          [
+            -64.78800000000001,
+            -21.4285
+          ],
+          [
+            -64.792,
+            -21.4285
+          ],
+          [
+            -64.792,
+            -21.4315
+          ]
+        ]
+      ]
+    },
+    "rawMaterialType": "uva",
+    "varietyName": "Syrah",
+    "soilType": "Franco-arcilloso",
+    "irrigationSystem": "Riego por goteo",
+    "isDoEligible": true,
+    "doType": "Valles Altos de Bolivia",
+    "doCertificateUrl": "/mocks/uploads/certificates/do-vgq_01.pdf",
+    "isActive": true,
+    "createdAt": "2026-02-19T11:00:00Z"
+  }
+]
