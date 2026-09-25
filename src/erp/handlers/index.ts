@@ -7,7 +7,7 @@ import { traceabilitySystemRoutes } from './routes/traceability-system'
 import { wineryRoutes } from './routes/wineries'
 import { winemakingRoutes } from './routes/winemaking'
 
-// Handlers MSW del ERP: las 36 rutas del OpenAPI (35 de negocio + /v1/health).
+// Handlers MSW del ERP: las 45 operaciones de las 35 rutas del OpenAPI (incluida /v1/health).
 
 const routes: RouteSpec[] = [
   ...authUserRoutes,
