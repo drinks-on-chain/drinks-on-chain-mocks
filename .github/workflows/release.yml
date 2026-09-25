@@ -1,0 +1,53 @@
+name: Release
+
+# Al empujar una etiqueta v* (p. ej. v0.1.0): prueba, construye, empaqueta y publica una
+# GitHub Release con drinks-on-chain-mocks-<versión>.tgz. Las apps lo instalan por URL.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: La etiqueta coincide con package.json
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "La etiqueta $GITHUB_REF_NAME no coincide con la versión $VERSION de package.json" >&2
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+      - name: Empaquetar
+        run: |
+          pnpm pack
+          ls -l "drinks-on-chain-mocks-$VERSION.tgz"
+
+      - name: Crear la GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "drinks-on-chain-mocks-$VERSION.tgz" \
+            --title "@drinks-on-chain/mocks $VERSION" \
+            --notes "Instalación: \`pnpm add https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/drinks-on-chain-mocks-${VERSION}.tgz\`. Cambios en CHANGELOG.md." \
+            --verify-tag

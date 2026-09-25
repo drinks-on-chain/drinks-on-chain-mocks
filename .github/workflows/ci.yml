@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Pruebas
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: pnpm seed no deja cambios en fixtures/
+        run: |
+          pnpm seed
+          git diff --exit-code -- fixtures
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: La referencia de Python está al día con generate.py
+        run: |
+          python test/reference/erp/generate.py
+          git diff --exit-code -- test/reference
+
+      - name: El paquete contiene solo dist, fixtures y tipos
+        run: |
+          pnpm pack --pack-destination /tmp/pack
+          tar -tzf /tmp/pack/*.tgz | sort
+          ! tar -tzf /tmp/pack/*.tgz | grep -vE '^package/(dist/|fixtures/|package\.json$|README\.md$)'
