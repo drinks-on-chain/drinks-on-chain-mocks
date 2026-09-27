@@ -1,0 +1,56 @@
+[
+  {
+    "key": "canje.ventanaDias",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "value": 45,
+    "legalException": false,
+    "reason": "Clientes de temporada alta: ventana ampliada acordada con la bodega.",
+    "updatedAt": "2026-06-01T10:00:00Z",
+    "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "equipo.maxColaboradoresPorBodega",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "value": 6,
+    "legalException": false,
+    "reason": "Plan piloto de equipo reducido.",
+    "updatedAt": "2026-07-01T10:00:00Z",
+    "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "puntos.bodegaPuedeHabilitar",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "value": true,
+    "legalException": false,
+    "reason": "La destilería gestiona sus propios puntos de canje.",
+    "updatedAt": "2026-08-05T10:00:00Z",
+    "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "compra.maxBotellasPorCompra",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "value": 6,
+    "legalException": false,
+    "reason": "Singani Gran Reserva de producción limitada.",
+    "updatedAt": "2026-09-01T10:00:00Z",
+    "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "trazabilidad.excepcionMinimoLegal",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "value": true,
+    "legalException": false,
+    "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
+    "updatedAt": "2026-09-10T11:00:00Z",
+    "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "trazabilidad.singani.altitudMinimaMsnm",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "value": 1500,
+    "legalException": true,
+    "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
+    "updatedAt": "2026-09-10T11:05:00Z",
+    "updatedBy": "Jorge Salinas"
+  }
+]

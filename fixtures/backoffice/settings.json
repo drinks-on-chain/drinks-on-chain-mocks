@@ -1,0 +1,179 @@
+[
+  {
+    "key": "trazabilidad.singani.altitudMinimaMsnm",
+    "value": 1600,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.singani.variedadesExigidas",
+    "value": [
+      "Moscatel de Alejandría"
+    ],
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.singani.reposoMinimoDias",
+    "value": 180,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.vino.crianzaMinimaMeses",
+    "value": 0,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.fitosanitario.exigirAprobado",
+    "value": true,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.embotellado.mermaMaximaPorcentaje",
+    "value": 5,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.excepcionMinimoLegal",
+    "value": false,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "trazabilidad.laboratorio.limites",
+    "value": {
+      "metanol": {
+        "max": 300,
+        "unidad": "mg/100 ml a.a."
+      },
+      "cobre": {
+        "max": 6,
+        "unidad": "mg/l"
+      },
+      "acidezVolatil": {
+        "max": 1.2,
+        "unidad": "g/l"
+      }
+    },
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "precio.politica",
+    "value": null,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "compra.maxBotellasPorCompra",
+    "value": 10,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "compra.minutosReserva",
+    "value": 30,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "canje.pase.caducidadHoras",
+    "value": 24,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "canje.ventanaDias",
+    "value": 30,
+    "updatedAt": "2026-09-12T09:00:00Z",
+    "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "canje.ventanaVencida.accion",
+    "value": "BURN",
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "canje.ventanaVencida.diasExtension",
+    "value": 15,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "canje.ventanaVencida.diasAviso",
+    "value": 7,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "canje.codigoBotella.modo",
+    "value": "OPTIONAL",
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "canje.entregaAsistida.maxPorClienteMes",
+    "value": 2,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "puntos.bodegaPuedeHabilitar",
+    "value": false,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "puntos.maxPorBodega",
+    "value": 3,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "puntos.maxCajerosPorPunto",
+    "value": 5,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "equipo.maxColaboradoresPorBodega",
+    "value": null,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "tokenizacion.requiereAprobacion",
+    "value": true,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "invitacion.caducidadHoras",
+    "value": 72,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "campanas.agradecimiento.activa",
+    "value": true,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "campanas.recordatorioResena.dias",
+    "value": 7,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  },
+  {
+    "key": "campanas.promociones.activas",
+    "value": false,
+    "updatedAt": "2026-01-05T00:00:00Z",
+    "updatedBy": null
+  }
+]

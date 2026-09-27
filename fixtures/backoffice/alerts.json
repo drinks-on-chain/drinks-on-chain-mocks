@@ -1,0 +1,23 @@
+[
+  {
+    "id": "19be287a-32d5-53fc-a91a-a8d0eb750e84",
+    "level": "WARNING",
+    "message": "Casa Uriondo está suspendida por el registro SENASAG vencido.",
+    "createdAt": "2026-08-20T10:00:00Z",
+    "link": "/bodegas/eac1f883-31c7-5032-8628-cac993ca5e48"
+  },
+  {
+    "id": "78347132-0859-5846-9d28-e63b0fdcf9c9",
+    "level": "WARNING",
+    "message": "Caducó la invitación del dueño de Viñedos del Guadalquivir: reenvíala desde la ficha de la bodega.",
+    "createdAt": "2026-09-21T09:00:00Z",
+    "link": "/bodegas/140bd695-7a59-5480-811c-38ce57cdd80f"
+  },
+  {
+    "id": "ab6b6c4d-48c1-5f53-9e77-27bc119f53f1",
+    "level": "INFO",
+    "message": "Reunión por videollamada con Viñedos La Angostura el 29-09 a las 15:00 (UTC).",
+    "createdAt": "2026-09-19T10:00:00Z",
+    "link": "/solicitudes/a95bd787-dc58-5089-ad12-8b47afab9306"
+  }
+]
