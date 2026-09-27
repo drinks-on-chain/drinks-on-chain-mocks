@@ -2,6 +2,33 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.3.0-rc.2] · 2026-09-27
+
+Alineación con el backend real de la Ola 0 (O0-BE-4: sesiones, membresías, estado `INVITED`; `plan/contratos/o0-sesiones-y-estandares.md` §8) y con las precisiones de la Ola 1 (`plan/contratos/o1-backoffice-y-bodegas.md` §11 bis). Pre-release sobre `dev`; detalle en [docs/CONTRATO.md](docs/CONTRATO.md) §0, §3 y §6.1.
+
+### Añadido
+
+- `POST /v1/platform/accounts/{userId}/block` y `/unblock`: bloqueo de la **cuenta completa** (`UserAccountStatus`, solo `ADMIN`/`SUPERADMIN`, revoca todas las sesiones).
+- Periodo de gracia de 20 s de la renovación (el refresco inmediatamente anterior devuelve el mismo par nuevo), caducidad deslizante de la sesión (7 días el personal, 30 los consumidores; 401 `AUTH_SESSION_EXPIRED`) y bloqueo progresivo del login por correo (5 fallos → 429 `AUTH_TOO_MANY_ATTEMPTS` con `Retry-After`, duplicándose hasta 1 h).
+- `expireRefreshGrace()`, `REFRESH_GRACE_SECONDS` y `LOGIN_LOCK_POLICY` en `/handlers` (y `expireRefreshGrace` en `/node` y `/browser`); `expireAccessTokens()` también cierra la gracia.
+- Códigos en `API_ERROR_CODES`: `AUTH_INVALID_CREDENTIALS`, `AUTH_TOKEN_INVALID`, `AUTH_TOKEN_EXPIRED`, `AUTH_REFRESH_INVALID`, `AUTH_SESSION_EXPIRED`, `AUTH_INSUFFICIENT_PERMISSIONS`, `ORG_MEMBERSHIP_BLOCKED`, `ORG_REVOKED`.
+- `SwitchOrganizationSchema.refreshToken` (opcional, *retirada* en H1).
+- Pruebas de la matriz de permisos, `?wineryId=`, códigos de sesión, gracia, reutilización y bloqueo del login (`test/permissions.test.ts`, `test/sessions.test.ts`).
+
+### Cambiado (rupturas y migración)
+
+Para el **ERP** (O1-ERP-1) y el **Backoffice**:
+
+1. **Permisos del ERP por la membresía activa**, como los guards del backend (matriz en docs/CONTRATO.md §3). `OPERATOR` ya no actúa como enólogo: pesa (`POST /harvest-batches`) y registra lecturas (`POST …/logs`), lee vendimia y cubas, y recibe 403 en parcelas, crianza, destilación, embotellado, laboratorio, alta de cubas, tratamientos y dictamen. `ACCOUNTANT` solo lee (parcelas, vendimia, cubas, crianza, destilación, embotellado, laboratorio). `OWNER` dictamina (`phyto-status`); `AGRONOMIST` registra lecturas pero no lee crianza, destilación ni embotellado. El `POS_OPERATOR` global ya no registra lecturas y los consumidores ya no leen `GET /lab-analyses/batch/:id`. *Migración (ERP)*: sustituir la tabla `ERP_ROLE_FOR_MEMBERSHIP` (`OPERATOR`/`ACCOUNTANT → ENOLOGIST`) y `RULES` de `src/lib/erp/permissions.ts` por la matriz por `membership.role`; ocultar al operario y al contador lo que ya no pueden hacer.
+2. **Plataforma sobre una bodega con `?wineryId=`** (OP-07): las lecturas sin él ven todas las bodegas; **toda escritura del ERP de la plataforma exige `?wineryId=`** (sin él → 422 `VALIDATION_ERROR` con `details[{ field: 'wineryId' }]`; no UUID → 422; bodega inexistente → 404 `ORG_NOT_FOUND`). `SUPPORT` solo lee (escrituras → 403); `GET /wineries/my` y `/my/members` de la plataforma también usan `?wineryId=`. Una bodega que apunta a otra con `wineryId` → 404. `approve`/`reject` de `/v1/wineries/:id` solo `SUPERADMIN`, `ADMIN`, `OPERATIONS`. *Migración (ERP en modo plataforma y Backoffice)*: añadir `?wineryId=<bodega>` a las escrituras y a las lecturas de una bodega concreta.
+3. **`switch-organization` exige el refresco de la misma sesión** (cookie `doc_rt` o `refreshToken` en el cuerpo) y lo rota; sin él o de otra sesión → 401 `AUTH_REFRESH_INVALID`. Membresía bloqueada → 403 `ORG_MEMBERSHIP_BLOCKED` y organización revocada → 403 `ORG_REVOKED` (antes `FORBIDDEN`). *Migración*: llamar con `credentials: 'include'` (la cookie basta; en los mocks la pone MSW) o, hasta H1, enviar `refreshToken` en el cuerpo; guardar los tokens nuevos de la respuesta.
+4. **Formato del refresco** `<sid>.<generación>.<secreto>` (antes `mock.rt.<sid>.<n>`). Uno inventado → 401 `AUTH_REFRESH_INVALID` sin revocar; el anterior dentro de 20 s → el mismo par; uno antiguo fuera de la gracia → 401 `AUTH_REFRESH_REUSED` y sesión revocada. Las sesiones guardadas en `localStorage` por 0.3.0-rc.1 se descartan (hay que volver a iniciar sesión). *Migración*: tratar el refresco como opaco.
+5. **Códigos 401/403/429 del backend**: login con credenciales malas o cuenta bloqueada → `AUTH_INVALID_CREDENTIALS` (antes `UNAUTHORIZED`); acceso ausente o mal formado → `AUTH_TOKEN_INVALID`; acceso caducado → `AUTH_TOKEN_EXPIRED` (antes `UNAUTHORIZED`); rol, audiencia o tipo de organización insuficientes → 403 `AUTH_INSUFFICIENT_PERMISSIONS` (antes `FORBIDDEN`, también en el back office); 5 logins fallidos → 429 `AUTH_TOO_MANY_ATTEMPTS` con `Retry-After`. *Migración*: renovar ante `AUTH_TOKEN_EXPIRED` (o cualquier 401 que no sea de `refresh`); decidir por el estado HTTP y no por `code === 'FORBIDDEN' | 'UNAUTHORIZED'`; mostrar la espera del 429 en el login.
+6. **Altas de miembros** (`POST /wineries/my/members`): ya miembro activo → 409 `ORG_ALREADY_MEMBER` (antes `CONFLICT`); reactivar a quien bloqueó la plataforma siendo dueño → 403 `ORG_BLOCKED_BY_PLATFORM` (la plataforma sí puede, con `?wineryId=`).
+7. **`PATCH /v1/users/me` responde `{ user, memberships, activeOrganizationId }`** (antes el perfil suelto), como `GET` (§11 bis). *Migración (ERP)*: validar con `MeResponseSchema` (el ERP ya acepta las dos formas con `meFromUpdate`).
+8. **Bloqueo de usuarios internos y de cuentas**: `POST /v1/platform/users/{membershipId}/block|unblock` solo acepta ids de membresía de plataforma (otro id → 404); la cuenta completa pasa a `POST /v1/platform/accounts/{userId}/block|unblock`. *Migración (Backoffice)*: usar la ruta de cuentas para bloquear a una persona.
+9. **OpenAPI**: `openapi/erp.json` = backend O0-BE-4 (48 operaciones, 50 esquemas). Salen de `openapi/pendientes.json` `switch-organization`, `logout`, `logout-all`, los cambios de `refresh` y `GET /users/me`, los campos extra de sesión y el cambio de enumeración `INVITED` (ya están en el backend).
+
 ## [0.3.0] · 2026-09-27
 
 Contrato de la Ola 1 (`plan/contratos/o1-backoffice-y-bodegas.md`): back office, alta de bodegas, invitaciones, equipos, configuración en dos niveles, bitácora encadenada, tablero y segundo factor del personal interno; alineación con el OpenAPI del backend de la Ola 0 (O0-BE-2). Se publica primero como pre-release `0.3.0-rc.1` desde `dev`. Detalle de las decisiones en [docs/CONTRATO.md §6](docs/CONTRATO.md).
