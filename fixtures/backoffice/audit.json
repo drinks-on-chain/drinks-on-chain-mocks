@@ -17,7 +17,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "f96daa52-78dd-533a-98b6-7d5b008edf6a"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -29,7 +29,7 @@
     "reason": null,
     "correlationId": "fx-0001",
     "prevHash": null,
-    "hash": "de6540e5f2788cd4e8e926f67429130bb6c38a8cfcac2f9f83a46d896a8d09fa"
+    "hash": "605eba8ad67676195e6e759a071f0e7d7e4c4c148d82217a03a0ec2a6ec612e6"
   },
   {
     "id": "53c2e7a5-605c-56e3-9c73-396ddabb9934",
@@ -49,7 +49,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "6e49c5f9-adc8-503b-a1db-2b576bef7078"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -60,8 +60,8 @@
     },
     "reason": null,
     "correlationId": "fx-0002",
-    "prevHash": "de6540e5f2788cd4e8e926f67429130bb6c38a8cfcac2f9f83a46d896a8d09fa",
-    "hash": "8808ac0d8965c6cf30e9db2930a8e989ee392f7785bb31d4115c20a3f76eba00"
+    "prevHash": "605eba8ad67676195e6e759a071f0e7d7e4c4c148d82217a03a0ec2a6ec612e6",
+    "hash": "9544a74543d8ef9e5ad2f280b5e0102c1962caf05cd2297b59b95a5bb713ef92"
   },
   {
     "id": "5fb1287a-e94f-5e24-8aa8-3ce09e16ee9d",
@@ -79,9 +79,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "808c4168-613d-5eba-88c6-b15064d907a6"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -91,8 +91,8 @@
     },
     "reason": null,
     "correlationId": "fx-0003",
-    "prevHash": "8808ac0d8965c6cf30e9db2930a8e989ee392f7785bb31d4115c20a3f76eba00",
-    "hash": "36b147dae20125d675146266f5b4f96c7bccd18dff00c43359cf8c630fb435fa"
+    "prevHash": "9544a74543d8ef9e5ad2f280b5e0102c1962caf05cd2297b59b95a5bb713ef92",
+    "hash": "bdab7687cd1c3a8c8562a3610702a852779c708db8efbaf43ce7acfe6965b3c0"
   },
   {
     "id": "78ac8632-52e6-5673-be43-ffe0229e0947",
@@ -110,9 +110,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "9be9ef34-04e2-5fc8-9b75-34a48de5c5c7"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -122,8 +122,8 @@
     },
     "reason": null,
     "correlationId": "fx-0004",
-    "prevHash": "36b147dae20125d675146266f5b4f96c7bccd18dff00c43359cf8c630fb435fa",
-    "hash": "da2d574f8fd09dc460726d0e27edcd25689ccf70e9aba69a8acbeb8219b2d24d"
+    "prevHash": "bdab7687cd1c3a8c8562a3610702a852779c708db8efbaf43ce7acfe6965b3c0",
+    "hash": "378e0bbc1b95efca06d91895eb3a9a16f4735f5b23910f3c016a56055d777a45"
   },
   {
     "id": "f45b2db0-9c14-515c-b6c3-f012bd13f04e",
@@ -143,7 +143,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -154,8 +154,8 @@
     },
     "reason": null,
     "correlationId": "fx-0005",
-    "prevHash": "da2d574f8fd09dc460726d0e27edcd25689ccf70e9aba69a8acbeb8219b2d24d",
-    "hash": "9f5a4dc77423116ce2c5977993f11390613a02c06d06f285436c110910e84348"
+    "prevHash": "378e0bbc1b95efca06d91895eb3a9a16f4735f5b23910f3c016a56055d777a45",
+    "hash": "b0f415f9dcda91eb125779fb5da3ece4c1fed4cfc148a67939b9fa59fcb65062"
   },
   {
     "id": "0786c720-bf29-5f96-a472-b02527aabe47",
@@ -175,7 +175,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "9da648ee-bdf1-5701-b362-83eced36156a"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -186,8 +186,8 @@
     },
     "reason": null,
     "correlationId": "fx-0006",
-    "prevHash": "9f5a4dc77423116ce2c5977993f11390613a02c06d06f285436c110910e84348",
-    "hash": "143caa161f07b964a23d1815acda6e70821917a7507841b76c911183cab6e199"
+    "prevHash": "b0f415f9dcda91eb125779fb5da3ece4c1fed4cfc148a67939b9fa59fcb65062",
+    "hash": "125d4ecbb549b4b108638a3f890a92a5b17488d59d3ae6287735a4ef186097e6"
   },
   {
     "id": "e86e9b77-2053-580a-a81a-114fbb273ec2",
@@ -207,7 +207,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -218,8 +218,8 @@
     },
     "reason": null,
     "correlationId": "fx-0007",
-    "prevHash": "143caa161f07b964a23d1815acda6e70821917a7507841b76c911183cab6e199",
-    "hash": "02ee3fba0d61a87aad5870f819236e21ee59bbeb63abf854f2fd643552506a97"
+    "prevHash": "125d4ecbb549b4b108638a3f890a92a5b17488d59d3ae6287735a4ef186097e6",
+    "hash": "a6e992609b6c2f560ec1257d638d66639102c02344b309c390de389f8a05a93c"
   },
   {
     "id": "6f24eeea-21cb-5f1b-a438-f12cc693ac21",
@@ -237,9 +237,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "0b23a519-1834-5c09-904e-c7020dcc602a"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -249,8 +249,8 @@
     },
     "reason": null,
     "correlationId": "fx-0008",
-    "prevHash": "02ee3fba0d61a87aad5870f819236e21ee59bbeb63abf854f2fd643552506a97",
-    "hash": "16f63d3bd4f3e186460fb4911a5dff59b78b30b12e9449ed64d8608ca7d86d86"
+    "prevHash": "a6e992609b6c2f560ec1257d638d66639102c02344b309c390de389f8a05a93c",
+    "hash": "2a6c116b764f77c99239af9a64f9dad5c67d106ecc880af7a9ef6aaff6b96c61"
   },
   {
     "id": "e4843a37-71e2-5b07-9a5d-834acba8fa55",
@@ -268,9 +268,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "2be4b2ae-0b85-55f6-9873-27060c9eef4a"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -280,8 +280,8 @@
     },
     "reason": null,
     "correlationId": "fx-0009",
-    "prevHash": "16f63d3bd4f3e186460fb4911a5dff59b78b30b12e9449ed64d8608ca7d86d86",
-    "hash": "dcd209c6300dca95f8e148294239a0c483dfa0d83096d3f30d3cf1f29b8fb521"
+    "prevHash": "2a6c116b764f77c99239af9a64f9dad5c67d106ecc880af7a9ef6aaff6b96c61",
+    "hash": "39eda390851b127f307ffbf0d45b3bada58017c733996279fb881d3eae76d165"
   },
   {
     "id": "6bcb7727-e79c-5daf-b885-3e8798475e89",
@@ -301,7 +301,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "75cb22bb-1e85-5d00-8439-d4dd6e10a914"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -312,8 +312,8 @@
     },
     "reason": null,
     "correlationId": "fx-0010",
-    "prevHash": "dcd209c6300dca95f8e148294239a0c483dfa0d83096d3f30d3cf1f29b8fb521",
-    "hash": "a196973ad3906b875bfbfec0c35cbf5e53f529c97327b10e3998e559c02d52e6"
+    "prevHash": "39eda390851b127f307ffbf0d45b3bada58017c733996279fb881d3eae76d165",
+    "hash": "e4d69a6add6684f5a094572bb5a6cde6876c4e1f1558cff76c5933ec4bee28a3"
   },
   {
     "id": "c9cf3124-5374-5e94-bf01-7ec6a31c6df8",
@@ -333,7 +333,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "5ecf8ac9-c9d8-5edd-a359-33956b6294f5"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -344,8 +344,8 @@
     },
     "reason": null,
     "correlationId": "fx-0011",
-    "prevHash": "a196973ad3906b875bfbfec0c35cbf5e53f529c97327b10e3998e559c02d52e6",
-    "hash": "1b50cbb10699ace02991c1aebaf4961930e2873bb055443b6643f4a7ccca4bb3"
+    "prevHash": "e4d69a6add6684f5a094572bb5a6cde6876c4e1f1558cff76c5933ec4bee28a3",
+    "hash": "8efe8f1171377e8b9ee98a68b20ffb112574a5ae147a4225e2d447cbe87df281"
   },
   {
     "id": "48aeca02-83b4-53bb-b639-8c7b40d5ebe2",
@@ -363,9 +363,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "6b6b90da-604e-5bb9-bae7-dea0a63e3cbd"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -375,8 +375,8 @@
     },
     "reason": null,
     "correlationId": "fx-0012",
-    "prevHash": "1b50cbb10699ace02991c1aebaf4961930e2873bb055443b6643f4a7ccca4bb3",
-    "hash": "bb558f6732e3852d840431c196a6709523170948b344d4c618b151e6a68bc0a9"
+    "prevHash": "8efe8f1171377e8b9ee98a68b20ffb112574a5ae147a4225e2d447cbe87df281",
+    "hash": "8e9badabdde421c6b69280651085a5c07f943aed93b8f1c7bc426af59b4fe5ab"
   },
   {
     "id": "911a8955-32a0-5db8-a5ba-a5acf14ea20c",
@@ -394,9 +394,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "88b8de8d-74b0-50d9-8153-fe9ba419a91d"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -406,8 +406,8 @@
     },
     "reason": null,
     "correlationId": "fx-0013",
-    "prevHash": "bb558f6732e3852d840431c196a6709523170948b344d4c618b151e6a68bc0a9",
-    "hash": "0f8c7a6757717d49a8b545569ec4ccf7dd0c0599dc9b213b85e3642bb1916295"
+    "prevHash": "8e9badabdde421c6b69280651085a5c07f943aed93b8f1c7bc426af59b4fe5ab",
+    "hash": "10234a84cb8db6b4a618aa54f8a561e20a48df8ee7e6155cd2c104007345ec5e"
   },
   {
     "id": "05ee8cde-fd57-50cb-a79f-ee563e5380da",
@@ -427,7 +427,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "19928e77-9724-5a4e-a7c4-3c494041add9"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -438,8 +438,8 @@
     },
     "reason": null,
     "correlationId": "fx-0014",
-    "prevHash": "0f8c7a6757717d49a8b545569ec4ccf7dd0c0599dc9b213b85e3642bb1916295",
-    "hash": "b88aa9cf6d194026b05cdc664c79ba1453a1ae2aabf4e967f2a082ef1be30176"
+    "prevHash": "10234a84cb8db6b4a618aa54f8a561e20a48df8ee7e6155cd2c104007345ec5e",
+    "hash": "a1b68ea38f2dc6240704640b5bb047e477a3966e9bd20b3db3b142cdf282a4c5"
   },
   {
     "id": "dc32bd28-b229-59a9-a151-ba4e59d5d43c",
@@ -459,7 +459,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "d4e37fed-41e1-5399-9b50-e8263a6ca797"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -470,8 +470,8 @@
     },
     "reason": null,
     "correlationId": "fx-0015",
-    "prevHash": "b88aa9cf6d194026b05cdc664c79ba1453a1ae2aabf4e967f2a082ef1be30176",
-    "hash": "91124db6deb1df4f93fccab94950e96cfe93d780f989522da34fa17729f43f40"
+    "prevHash": "a1b68ea38f2dc6240704640b5bb047e477a3966e9bd20b3db3b142cdf282a4c5",
+    "hash": "f370d4e236ed33b3a157a5873444b02309f430da07ee40eb910f8e1112d8778d"
   },
   {
     "id": "3351626c-7cd0-57e1-8105-3c6e274fe094",
@@ -491,7 +491,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -502,8 +502,8 @@
     },
     "reason": null,
     "correlationId": "fx-0016",
-    "prevHash": "91124db6deb1df4f93fccab94950e96cfe93d780f989522da34fa17729f43f40",
-    "hash": "b3e71bb3c19e2355f2c11c43387fc86ac7552f63709bc60479fa3c350e11074e"
+    "prevHash": "f370d4e236ed33b3a157a5873444b02309f430da07ee40eb910f8e1112d8778d",
+    "hash": "b16e02d4a931e39ccab391b66e86767820fc34191c6f5fb2a1773b51eb1edf99"
   },
   {
     "id": "3e828134-4492-528e-a7e5-82880550e73d",
@@ -521,9 +521,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "95a2638b-2618-5ac3-93cf-b0f7e848b304"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -533,8 +533,8 @@
     },
     "reason": null,
     "correlationId": "fx-0017",
-    "prevHash": "b3e71bb3c19e2355f2c11c43387fc86ac7552f63709bc60479fa3c350e11074e",
-    "hash": "40c65f26304610965bf219102e133b393f0c9af3b99e423cd9794123d5265e57"
+    "prevHash": "b16e02d4a931e39ccab391b66e86767820fc34191c6f5fb2a1773b51eb1edf99",
+    "hash": "64f0103806227e4e722b292480fbf35f698074fad3db50621c8019b5b00a5bcf"
   },
   {
     "id": "a413878f-ffc4-5738-b8db-4a4926d5aa5c",
@@ -554,7 +554,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "b1452d63-b1bd-5f10-978f-75bd7f6081df"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -565,8 +565,8 @@
     },
     "reason": null,
     "correlationId": "fx-0018",
-    "prevHash": "40c65f26304610965bf219102e133b393f0c9af3b99e423cd9794123d5265e57",
-    "hash": "840b50163dfdaafd619af6470c079355f5e493862f28ad35d9bab9d67e3171ec"
+    "prevHash": "64f0103806227e4e722b292480fbf35f698074fad3db50621c8019b5b00a5bcf",
+    "hash": "08b20ea46f3fa5d5beb3509f86d3a5889643f72b8b3df92415e750d0213cdce6"
   },
   {
     "id": "19b09ef0-636d-55fc-a800-0b95eb2bf3c0",
@@ -586,7 +586,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "576b3ce2-a007-592e-8491-27202f13a995"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -597,8 +597,8 @@
     },
     "reason": null,
     "correlationId": "fx-0019",
-    "prevHash": "840b50163dfdaafd619af6470c079355f5e493862f28ad35d9bab9d67e3171ec",
-    "hash": "295bddae43a4a46fc3b77cf7f5929f24eeee17062d2a013a9e50650ef0864cd7"
+    "prevHash": "08b20ea46f3fa5d5beb3509f86d3a5889643f72b8b3df92415e750d0213cdce6",
+    "hash": "54dee0730c11cbc755b458650eed6b1df405a6e826544fbfc48a1c843daeeb3b"
   },
   {
     "id": "66643b94-fa50-5ed1-bf71-1f5657fd701b",
@@ -616,9 +616,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "ca0083a7-ef5d-50aa-b65e-a6b9a5e4ee19"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -628,8 +628,8 @@
     },
     "reason": null,
     "correlationId": "fx-0020",
-    "prevHash": "295bddae43a4a46fc3b77cf7f5929f24eeee17062d2a013a9e50650ef0864cd7",
-    "hash": "6de11c7f17acaa3481d097555785cb79ec1dafd281eacca50144b1ad0262c621"
+    "prevHash": "54dee0730c11cbc755b458650eed6b1df405a6e826544fbfc48a1c843daeeb3b",
+    "hash": "c85ab040beea52dab08cad4cc54173e28d861b6da4c8abc3bf0d57dc8df4d850"
   },
   {
     "id": "c92d4c57-eb19-57d2-8054-e19e409b7a1c",
@@ -649,7 +649,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "ed733522-34e1-57c0-b03d-0c5ac52dd2ab"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -660,8 +660,8 @@
     },
     "reason": null,
     "correlationId": "fx-0021",
-    "prevHash": "6de11c7f17acaa3481d097555785cb79ec1dafd281eacca50144b1ad0262c621",
-    "hash": "1b9a126b80c2006167562c36ad868e0dfa1a987d9f3d7924a56f2e3ee59dc24e"
+    "prevHash": "c85ab040beea52dab08cad4cc54173e28d861b6da4c8abc3bf0d57dc8df4d850",
+    "hash": "8f0d8810f572b01883051c70db42f8250794ae523c3e0e4eb2b6b9571da4ea57"
   },
   {
     "id": "ac9c8c06-f985-5aff-92a3-0dd2b339830a",
@@ -681,7 +681,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "e8a31a4f-1593-5ffc-9b81-15410f404d2a"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -692,8 +692,8 @@
     },
     "reason": null,
     "correlationId": "fx-0022",
-    "prevHash": "1b9a126b80c2006167562c36ad868e0dfa1a987d9f3d7924a56f2e3ee59dc24e",
-    "hash": "a6f0ce6cae26694255bd4b80e6ef8d0a84dabc57a928d28ca207b552e801c0fb"
+    "prevHash": "8f0d8810f572b01883051c70db42f8250794ae523c3e0e4eb2b6b9571da4ea57",
+    "hash": "266602f241127011979c93c848afb986f250dd9efcf32290ea624213c0e1d819"
   },
   {
     "id": "3dece8e5-7ced-5904-a7b5-be6c259e6a8c",
@@ -711,9 +711,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "96efebb9-d333-5f84-8147-a4a4195efa37"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -723,8 +723,8 @@
     },
     "reason": null,
     "correlationId": "fx-0023",
-    "prevHash": "a6f0ce6cae26694255bd4b80e6ef8d0a84dabc57a928d28ca207b552e801c0fb",
-    "hash": "183fd271ed6d1a8750908fcc232725719375b5e3a97e7b1c5490a481e4ad5daa"
+    "prevHash": "266602f241127011979c93c848afb986f250dd9efcf32290ea624213c0e1d819",
+    "hash": "d43ae7e9f84eca3f02d7987ca25e22bd4465ebf55b8c3c82eb54a43fd0c8bfbc"
   },
   {
     "id": "01240bf2-5970-5bce-8b85-eaec9ac8bee0",
@@ -742,9 +742,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "a554b7cc-ae6a-51c7-a3dc-65b2f3a922ab"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -754,8 +754,8 @@
     },
     "reason": null,
     "correlationId": "fx-0024",
-    "prevHash": "183fd271ed6d1a8750908fcc232725719375b5e3a97e7b1c5490a481e4ad5daa",
-    "hash": "f90999e4fff16c0fffbd55358bc77af232a073964637a7af2528e1c901192f9a"
+    "prevHash": "d43ae7e9f84eca3f02d7987ca25e22bd4465ebf55b8c3c82eb54a43fd0c8bfbc",
+    "hash": "fe49d36a5d730f90dfa22b558871bbc74b0a0d9b62a4170b98acc71b9179575e"
   },
   {
     "id": "a209a931-fff9-5f95-887f-9df8fffd3187",
@@ -773,9 +773,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "WINE_AGING_STARTED",
+    "action": "WINE_AGING_BATCH_CREATED",
     "resource": {
-      "type": "WINE_AGING",
+      "type": "wine_aging_batch",
       "id": "a48ddc67-0e24-51fe-a43d-877f55ac9de6"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -785,8 +785,8 @@
     },
     "reason": null,
     "correlationId": "fx-0025",
-    "prevHash": "f90999e4fff16c0fffbd55358bc77af232a073964637a7af2528e1c901192f9a",
-    "hash": "f68bdc9aaa53c6bbdc4deb6d2ee7bd594745aca1e051f8266377da2e042fcaf1"
+    "prevHash": "fe49d36a5d730f90dfa22b558871bbc74b0a0d9b62a4170b98acc71b9179575e",
+    "hash": "56e16aa49735e9978f3b52dd11a419b3210c5e94ee11ee0376c7aa7c0e166547"
   },
   {
     "id": "8c44dbb5-f31f-5b64-937f-33795358237d",
@@ -804,9 +804,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "WINE_AGING_STARTED",
+    "action": "WINE_AGING_BATCH_CREATED",
     "resource": {
-      "type": "WINE_AGING",
+      "type": "wine_aging_batch",
       "id": "a1370e1f-d1d9-5aad-b0a3-821677553361"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -816,8 +816,8 @@
     },
     "reason": null,
     "correlationId": "fx-0026",
-    "prevHash": "f68bdc9aaa53c6bbdc4deb6d2ee7bd594745aca1e051f8266377da2e042fcaf1",
-    "hash": "7cf3aa52d22693d50cad7fb4e6af595657f1e719ef92e1986480ed5a12d28a75"
+    "prevHash": "56e16aa49735e9978f3b52dd11a419b3210c5e94ee11ee0376c7aa7c0e166547",
+    "hash": "4a0211c984145c438e85f8c8a93422cfa800706a15e31415ece298404461ee74"
   },
   {
     "id": "15093130-31d5-56f0-89e0-288e48a7aa26",
@@ -835,9 +835,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "DISTILLATION_RECORDED",
+    "action": "PRODUCTION_BATCH_CREATED",
     "resource": {
-      "type": "PRODUCTION_BATCH",
+      "type": "production_batch",
       "id": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -848,8 +848,8 @@
     },
     "reason": null,
     "correlationId": "fx-0027",
-    "prevHash": "7cf3aa52d22693d50cad7fb4e6af595657f1e719ef92e1986480ed5a12d28a75",
-    "hash": "0f54e6c911a8a043d964f5d6cf85e8370c70f2fcb4f6f5aefcd65551b2c067f5"
+    "prevHash": "4a0211c984145c438e85f8c8a93422cfa800706a15e31415ece298404461ee74",
+    "hash": "e0649af7e98632048144fcde408217576eb03a79fef3c75dae9e7e2396c9b58a"
   },
   {
     "id": "a81ac061-c63c-5093-ac78-bd33c83e54ed",
@@ -867,9 +867,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "DISTILLATION_RECORDED",
+    "action": "PRODUCTION_BATCH_CREATED",
     "resource": {
-      "type": "PRODUCTION_BATCH",
+      "type": "production_batch",
       "id": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -880,8 +880,8 @@
     },
     "reason": null,
     "correlationId": "fx-0028",
-    "prevHash": "0f54e6c911a8a043d964f5d6cf85e8370c70f2fcb4f6f5aefcd65551b2c067f5",
-    "hash": "dff11371d30ccdbf659f1e35001e7ddfef43cbfeada5224237915ce2bedfa0e3"
+    "prevHash": "e0649af7e98632048144fcde408217576eb03a79fef3c75dae9e7e2396c9b58a",
+    "hash": "c4201a5c661e7774beeadc97f841145a88f5dd55c9e9107867ee4c613c283289"
   },
   {
     "id": "5c3d6d0e-255c-5d33-8507-fab67562d388",
@@ -901,7 +901,7 @@
     },
     "action": "WINERY_CREATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "eac1f883-31c7-5032-8628-cac993ca5e48"
     },
     "organizationId": "eac1f883-31c7-5032-8628-cac993ca5e48",
@@ -911,8 +911,8 @@
     },
     "reason": "Alta anterior a la Ola 1",
     "correlationId": "fx-0029",
-    "prevHash": "dff11371d30ccdbf659f1e35001e7ddfef43cbfeada5224237915ce2bedfa0e3",
-    "hash": "f038d0ca621d81862fde2f89147540d8859953116d5bbf7063b6b99429c190de"
+    "prevHash": "c4201a5c661e7774beeadc97f841145a88f5dd55c9e9107867ee4c613c283289",
+    "hash": "11d5e0003808364fd7e617a23eebb698937f3fa9d5effc81f288a4f9224805e3"
   },
   {
     "id": "7931dfd6-4238-551b-b34b-03d0970d126e",
@@ -932,7 +932,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "15ceef52-08d1-59af-ac64-28566279de57"
     },
     "organizationId": "eac1f883-31c7-5032-8628-cac993ca5e48",
@@ -942,8 +942,8 @@
     },
     "reason": null,
     "correlationId": "fx-0030",
-    "prevHash": "f038d0ca621d81862fde2f89147540d8859953116d5bbf7063b6b99429c190de",
-    "hash": "dc10a6482d799649815462e3b84b9c3dc81f015d1b45d61478ce9fd4a177a022"
+    "prevHash": "11d5e0003808364fd7e617a23eebb698937f3fa9d5effc81f288a4f9224805e3",
+    "hash": "ffa6bae2603e43e40ad042c2b865bac0ee47cae8841fb1d3e4df969b3f7eecbb"
   },
   {
     "id": "0c1dde34-0a52-5528-b2d0-4d2d9279610e",
@@ -963,7 +963,7 @@
     },
     "action": "WINERY_ACTIVATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "eac1f883-31c7-5032-8628-cac993ca5e48"
     },
     "organizationId": "eac1f883-31c7-5032-8628-cac993ca5e48",
@@ -976,8 +976,8 @@
     },
     "reason": null,
     "correlationId": "fx-0031",
-    "prevHash": "dc10a6482d799649815462e3b84b9c3dc81f015d1b45d61478ce9fd4a177a022",
-    "hash": "ccedd6c0e17c9d8d14b38e114ca739125f153475fea0d49fa791b0b9816715c0"
+    "prevHash": "ffa6bae2603e43e40ad042c2b865bac0ee47cae8841fb1d3e4df969b3f7eecbb",
+    "hash": "4952b2a14c481ff8346e33fc27ab9e9ae4da00b4d9476dd0c34d3f1ac4c53148"
   },
   {
     "id": "1a60f34b-b3aa-5624-a696-e6aec02bef27",
@@ -995,9 +995,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "WINE_AGING_STARTED",
+    "action": "WINE_AGING_BATCH_CREATED",
     "resource": {
-      "type": "WINE_AGING",
+      "type": "wine_aging_batch",
       "id": "0086c315-a8e7-56f2-9554-0bcd9ed6e4f6"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1007,8 +1007,8 @@
     },
     "reason": null,
     "correlationId": "fx-0032",
-    "prevHash": "ccedd6c0e17c9d8d14b38e114ca739125f153475fea0d49fa791b0b9816715c0",
-    "hash": "7b3816629643853764b21b3293b562d93ac6abf4c98326ac2def69ccdafcb64c"
+    "prevHash": "4952b2a14c481ff8346e33fc27ab9e9ae4da00b4d9476dd0c34d3f1ac4c53148",
+    "hash": "e8aa56abaa6ed7884f97a0bcc80ab97bf371f9da867fabc7c966d344c9aa46f5"
   },
   {
     "id": "adbf8362-78f7-5bad-9189-faf202365469",
@@ -1028,7 +1028,7 @@
     },
     "action": "WINERY_CREATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9"
     },
     "organizationId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
@@ -1038,8 +1038,8 @@
     },
     "reason": "Alta anterior a la Ola 1",
     "correlationId": "fx-0033",
-    "prevHash": "7b3816629643853764b21b3293b562d93ac6abf4c98326ac2def69ccdafcb64c",
-    "hash": "4f0b2bcc61e05fce62d5483254184234c5c80a54b09c514d2de2742de95b7b19"
+    "prevHash": "e8aa56abaa6ed7884f97a0bcc80ab97bf371f9da867fabc7c966d344c9aa46f5",
+    "hash": "e0567eaabb4a0ee1a05ada4fee0e9dc1012d3441b90b373786261b051879258f"
   },
   {
     "id": "cb96d3b2-a57b-5f0b-8dff-a828f51c74a4",
@@ -1059,7 +1059,7 @@
     },
     "action": "WINERY_ACTIVATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9"
     },
     "organizationId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
@@ -1072,8 +1072,8 @@
     },
     "reason": null,
     "correlationId": "fx-0034",
-    "prevHash": "4f0b2bcc61e05fce62d5483254184234c5c80a54b09c514d2de2742de95b7b19",
-    "hash": "5823310d8850f04d453aaf80b6e5fbb0668634939820165ec72019447833d6d8"
+    "prevHash": "e0567eaabb4a0ee1a05ada4fee0e9dc1012d3441b90b373786261b051879258f",
+    "hash": "dd29b89f0d051762e9ef1de52c04f31716a3a7d90def5a09ab84e27944800798"
   },
   {
     "id": "f50129fe-dc5e-5d1c-9008-ddca57ea5995",
@@ -1093,7 +1093,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "f3e91402-2702-5b7a-80e9-f387440b2030"
     },
     "organizationId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
@@ -1103,8 +1103,8 @@
     },
     "reason": null,
     "correlationId": "fx-0035",
-    "prevHash": "5823310d8850f04d453aaf80b6e5fbb0668634939820165ec72019447833d6d8",
-    "hash": "ea84b98edb5146d4cde47fceb7e0f31622d06105d9af52ba62860653293eb2e4"
+    "prevHash": "dd29b89f0d051762e9ef1de52c04f31716a3a7d90def5a09ab84e27944800798",
+    "hash": "44a3c2e0ae37b688547e03ee6177c40e0d315d210e1055a59d013a6a3ddd63d7"
   },
   {
     "id": "558b1968-2313-59a1-944d-88ceeb1031eb",
@@ -1124,7 +1124,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "04e8d15f-24ff-5943-83db-6f915387071c"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1135,8 +1135,8 @@
     },
     "reason": null,
     "correlationId": "fx-0036",
-    "prevHash": "ea84b98edb5146d4cde47fceb7e0f31622d06105d9af52ba62860653293eb2e4",
-    "hash": "a6dedbc9c13233d70bc571fa8e31a1aa09c894cc034bcaa076c1a9e416fc394e"
+    "prevHash": "44a3c2e0ae37b688547e03ee6177c40e0d315d210e1055a59d013a6a3ddd63d7",
+    "hash": "5e11fae081b24231653705fe55688edafb674f311acaeb00131bb27446e539c7"
   },
   {
     "id": "9ce728a2-5f20-5772-a20a-d729d26ffb39",
@@ -1156,7 +1156,7 @@
     },
     "action": "WINERY_CREATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "04de1441-989d-5c3e-b06f-033f3961d19d"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1166,8 +1166,8 @@
     },
     "reason": "Alta anterior a la Ola 1",
     "correlationId": "fx-0037",
-    "prevHash": "a6dedbc9c13233d70bc571fa8e31a1aa09c894cc034bcaa076c1a9e416fc394e",
-    "hash": "8022d4fd5d05458e6fe9b4db53b3898d4d5a6e7f76dc93816a7228e4e7df1c53"
+    "prevHash": "5e11fae081b24231653705fe55688edafb674f311acaeb00131bb27446e539c7",
+    "hash": "2d62518564db6ad7e0f97625a61b6dbf838b9a1c5555db090b5bdf8f7eb49ca8"
   },
   {
     "id": "2147238b-c0f0-5e11-a405-15dac71458a9",
@@ -1187,7 +1187,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "f65dd5da-90e9-52fd-b043-ad6572820748"
     },
     "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
@@ -1197,8 +1197,8 @@
     },
     "reason": null,
     "correlationId": "fx-0038",
-    "prevHash": "8022d4fd5d05458e6fe9b4db53b3898d4d5a6e7f76dc93816a7228e4e7df1c53",
-    "hash": "c062649acc3125c8f4df742f6792221b10abaf8d1452befdc79381a2c93a9d84"
+    "prevHash": "2d62518564db6ad7e0f97625a61b6dbf838b9a1c5555db090b5bdf8f7eb49ca8",
+    "hash": "ffbbcead8e4a0c87c060add72cb103ccb55fe73732304415932b9377930af7c9"
   },
   {
     "id": "34d4a6d6-e04f-567c-834c-81903f154cc9",
@@ -1218,7 +1218,7 @@
     },
     "action": "WINERY_ACTIVATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "04de1441-989d-5c3e-b06f-033f3961d19d"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1231,8 +1231,8 @@
     },
     "reason": null,
     "correlationId": "fx-0039",
-    "prevHash": "c062649acc3125c8f4df742f6792221b10abaf8d1452befdc79381a2c93a9d84",
-    "hash": "584a98f744aef628695be55257ee8884bad5461a770d89ed0adda927b0656647"
+    "prevHash": "ffbbcead8e4a0c87c060add72cb103ccb55fe73732304415932b9377930af7c9",
+    "hash": "94dda1ad783d996fdcc770a167f8b3fa71d1c28103c7f808c27595ae8945655d"
   },
   {
     "id": "714e7ffa-81e4-5635-94ad-6c99c9e19214",
@@ -1252,7 +1252,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "0d1013e9-83d7-511a-a072-cad97060ea69"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1263,8 +1263,8 @@
     },
     "reason": null,
     "correlationId": "fx-0040",
-    "prevHash": "584a98f744aef628695be55257ee8884bad5461a770d89ed0adda927b0656647",
-    "hash": "5c0c7adc5e465101022ac6b822c24776b75874a2d3f240c820ca9e814fd31edc"
+    "prevHash": "94dda1ad783d996fdcc770a167f8b3fa71d1c28103c7f808c27595ae8945655d",
+    "hash": "bda0b3a819cec81c14f8944f5f96810cd6316bdc1895102b82a8d8630eac27fa"
   },
   {
     "id": "5e1ea323-a9ee-5dfd-ad39-06b2d2c4ad25",
@@ -1284,7 +1284,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "a6e73d3a-8f07-5ae8-ae48-fbf92f322517"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1295,8 +1295,8 @@
     },
     "reason": null,
     "correlationId": "fx-0041",
-    "prevHash": "5c0c7adc5e465101022ac6b822c24776b75874a2d3f240c820ca9e814fd31edc",
-    "hash": "4a643ea9399b67a538db8cf8c70d28086dc46773563610617b120a22a077af6a"
+    "prevHash": "bda0b3a819cec81c14f8944f5f96810cd6316bdc1895102b82a8d8630eac27fa",
+    "hash": "f702822b3bc3e9dad13b100b6093082a68e553ee05768ee4de04299a79aedf3d"
   },
   {
     "id": "4d472606-de2a-5010-8c14-c7c281499071",
@@ -1316,7 +1316,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1327,8 +1327,8 @@
     },
     "reason": null,
     "correlationId": "fx-0042",
-    "prevHash": "4a643ea9399b67a538db8cf8c70d28086dc46773563610617b120a22a077af6a",
-    "hash": "3ea1ca52652f6117d298dad73e35ab903f869941edb98efe1b0b28ee2d247eaf"
+    "prevHash": "f702822b3bc3e9dad13b100b6093082a68e553ee05768ee4de04299a79aedf3d",
+    "hash": "3b01cbb07608b966c0f5410f7d8dabf111cabeed12522c8dc3677f320c836daf"
   },
   {
     "id": "f187f011-f37f-5d0b-8c50-b794c68875fa",
@@ -1348,7 +1348,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "d44c5b74-0db5-5cf1-9faa-9525b1f276cd"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1359,8 +1359,8 @@
     },
     "reason": null,
     "correlationId": "fx-0043",
-    "prevHash": "3ea1ca52652f6117d298dad73e35ab903f869941edb98efe1b0b28ee2d247eaf",
-    "hash": "4d2ff788d896e288f46636d6a4c1415a55eb1dcfbdea73ccc958fe23ee6bde18"
+    "prevHash": "3b01cbb07608b966c0f5410f7d8dabf111cabeed12522c8dc3677f320c836daf",
+    "hash": "3e9cf48acc29e3c03274a660036a306bbefa4dfbf31a3d654d7093f77ea551aa"
   },
   {
     "id": "88e95128-58d1-5b6a-9860-95d08cbde0e0",
@@ -1380,7 +1380,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "21af9548-86fa-5c19-86c1-16133a906b64"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1390,8 +1390,8 @@
     },
     "reason": null,
     "correlationId": "fx-0044",
-    "prevHash": "4d2ff788d896e288f46636d6a4c1415a55eb1dcfbdea73ccc958fe23ee6bde18",
-    "hash": "7e663d653f63183c6b57697b1ad1daa640a97cd370bd03c148d939f294012877"
+    "prevHash": "3e9cf48acc29e3c03274a660036a306bbefa4dfbf31a3d654d7093f77ea551aa",
+    "hash": "f72927e2b9c48770215bdb443c9a01831c53750bd677cc5da9026c6946c73689"
   },
   {
     "id": "3d8e6053-ff83-54b2-9046-461f1dce6f5d",
@@ -1411,7 +1411,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "9ee67b8e-4726-5556-9bee-fa349627d3ce"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1422,8 +1422,8 @@
     },
     "reason": null,
     "correlationId": "fx-0045",
-    "prevHash": "7e663d653f63183c6b57697b1ad1daa640a97cd370bd03c148d939f294012877",
-    "hash": "e7a525b52fdd00e20d438166339595cae2a75767f91b959d1053bd9cf994d8a1"
+    "prevHash": "f72927e2b9c48770215bdb443c9a01831c53750bd677cc5da9026c6946c73689",
+    "hash": "f41a4c3b8b0e10d4496ad7828670f4ee369a1972ac1f0798b3958af94677389a"
   },
   {
     "id": "4399a60f-9c1c-56a3-be21-8a901adcbe59",
@@ -1443,7 +1443,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "7e3ae5c8-ffe5-5a2e-abcf-ea2b90c38b0f"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1453,8 +1453,8 @@
     },
     "reason": null,
     "correlationId": "fx-0046",
-    "prevHash": "e7a525b52fdd00e20d438166339595cae2a75767f91b959d1053bd9cf994d8a1",
-    "hash": "165b9d24b618d3d8cbf431ed569e6f66b354890af362a7b14429efbe4fd8ecec"
+    "prevHash": "f41a4c3b8b0e10d4496ad7828670f4ee369a1972ac1f0798b3958af94677389a",
+    "hash": "4aa42534fbf8b3eed567fcc48d6411bbff236bdd7f4f19cfd2c6498b3e1235e4"
   },
   {
     "id": "b477daf0-4f16-5620-a38b-c4cdd6409826",
@@ -1474,7 +1474,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "e26c2890-b4e4-5973-aec2-0f092355ad3b"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1485,8 +1485,8 @@
     },
     "reason": null,
     "correlationId": "fx-0047",
-    "prevHash": "165b9d24b618d3d8cbf431ed569e6f66b354890af362a7b14429efbe4fd8ecec",
-    "hash": "9b64f2dde75a1e274ace017e653bcac22a8ac14b0e29e70648defcb33c2c56c6"
+    "prevHash": "4aa42534fbf8b3eed567fcc48d6411bbff236bdd7f4f19cfd2c6498b3e1235e4",
+    "hash": "9c76e2b140617bdfa3b564a521cdf89283322cb6b9884268dc1b43cca67841d7"
   },
   {
     "id": "e0961d93-6b13-5fae-b68c-da904dac2133",
@@ -1506,7 +1506,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "536b1e93-996e-5835-9794-02c12f1319c4"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1517,8 +1517,8 @@
     },
     "reason": null,
     "correlationId": "fx-0048",
-    "prevHash": "9b64f2dde75a1e274ace017e653bcac22a8ac14b0e29e70648defcb33c2c56c6",
-    "hash": "d3856b5d7704181a3c68453a8e7c92d54287abf50cb0ed4f5c39d366ca96e7b3"
+    "prevHash": "9c76e2b140617bdfa3b564a521cdf89283322cb6b9884268dc1b43cca67841d7",
+    "hash": "126fb0ae0daf8dee7c7919c7783300340255d8e6a1bbe7adf716c9fac635965c"
   },
   {
     "id": "7c802cb0-a77b-5602-b247-4dd8e12a0e07",
@@ -1538,7 +1538,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "91095a47-b57d-52ed-b9c7-44d6894951e4"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1548,8 +1548,8 @@
     },
     "reason": null,
     "correlationId": "fx-0049",
-    "prevHash": "d3856b5d7704181a3c68453a8e7c92d54287abf50cb0ed4f5c39d366ca96e7b3",
-    "hash": "08c3ba05beb0410d7c7fdaf1b5a7e700dea2b9d72af7191f4d69e61bc72ba7fa"
+    "prevHash": "126fb0ae0daf8dee7c7919c7783300340255d8e6a1bbe7adf716c9fac635965c",
+    "hash": "e6b972b411f1911ae701b732d34450f6f065826a4d46d19081f691b15f39e32a"
   },
   {
     "id": "46818d60-ba17-5ce1-a589-c04a732e24f2",
@@ -1569,7 +1569,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "31b13ad0-d5b9-5afa-b21b-8c581b111349"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1580,8 +1580,8 @@
     },
     "reason": null,
     "correlationId": "fx-0050",
-    "prevHash": "08c3ba05beb0410d7c7fdaf1b5a7e700dea2b9d72af7191f4d69e61bc72ba7fa",
-    "hash": "8e01108ab8339f021fba859c0793a39ce920ba628d0fd4522f6bccb55aeea827"
+    "prevHash": "e6b972b411f1911ae701b732d34450f6f065826a4d46d19081f691b15f39e32a",
+    "hash": "48affb9ce17e8230a607f2f03d39cb9636dd8a77b73d98d16f5ac50f314a937a"
   },
   {
     "id": "359d708e-e7fb-5e60-b70b-ac784bd91daf",
@@ -1599,9 +1599,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "BOTTLING_RECORDED",
+    "action": "BOTTLING_BATCH_CREATED",
     "resource": {
-      "type": "BOTTLING_BATCH",
+      "type": "bottling_batch",
       "id": "16887e29-6c0f-5820-85df-951b7372e1aa"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1612,8 +1612,8 @@
     },
     "reason": null,
     "correlationId": "fx-0051",
-    "prevHash": "8e01108ab8339f021fba859c0793a39ce920ba628d0fd4522f6bccb55aeea827",
-    "hash": "eb3bc642d6ab2b7c79e506ce357cdb27006dab0174a02700c24ccb8fe41a3a36"
+    "prevHash": "48affb9ce17e8230a607f2f03d39cb9636dd8a77b73d98d16f5ac50f314a937a",
+    "hash": "af7d36e75186fe1a3e81457e9c9c45da65bdf204332abc1ba1b3f4330abc2ba7"
   },
   {
     "id": "c04d37fe-d06d-5bc3-854c-71c1f006d2b6",
@@ -1633,7 +1633,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "0a623529-957a-5edd-92de-9c0acccb8bfc"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1644,8 +1644,8 @@
     },
     "reason": null,
     "correlationId": "fx-0052",
-    "prevHash": "eb3bc642d6ab2b7c79e506ce357cdb27006dab0174a02700c24ccb8fe41a3a36",
-    "hash": "52ae082b22ee2f08ff95ac07605bedb8e2cff19ae77fdc9b0d452510c5529e9e"
+    "prevHash": "af7d36e75186fe1a3e81457e9c9c45da65bdf204332abc1ba1b3f4330abc2ba7",
+    "hash": "73a1576e47575393a04faffe2cbc08639eab0c37ca7f27e4c614c65405cc6679"
   },
   {
     "id": "59135fd3-2ecc-5e76-b555-22a13cbc94c9",
@@ -1663,9 +1663,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "LAB_ANALYSIS_RECORDED",
+    "action": "LAB_ANALYSIS_CREATED",
     "resource": {
-      "type": "LAB_ANALYSIS",
+      "type": "lab_analysis",
       "id": "e371629e-607f-5454-b111-8c3d5cf43527"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1675,8 +1675,8 @@
     },
     "reason": null,
     "correlationId": "fx-0053",
-    "prevHash": "52ae082b22ee2f08ff95ac07605bedb8e2cff19ae77fdc9b0d452510c5529e9e",
-    "hash": "cb1108d2191f923c8cd2c3dd394584edd9af317101f928b676f9ee83c7722f80"
+    "prevHash": "73a1576e47575393a04faffe2cbc08639eab0c37ca7f27e4c614c65405cc6679",
+    "hash": "927f6ee8de2781a69d851b9128ea5128c903c154d9df84ff6a5a5c8eab87107c"
   },
   {
     "id": "416e41d4-4135-5f86-946f-57d69aedb2fe",
@@ -1696,7 +1696,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "36cf86bf-e2a7-5af1-a370-5ba573d0bdcc"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1707,8 +1707,8 @@
     },
     "reason": null,
     "correlationId": "fx-0054",
-    "prevHash": "cb1108d2191f923c8cd2c3dd394584edd9af317101f928b676f9ee83c7722f80",
-    "hash": "ebf109e572a42ad2caab5ee426febdddf0a0c09759a598d6e7975a818707526b"
+    "prevHash": "927f6ee8de2781a69d851b9128ea5128c903c154d9df84ff6a5a5c8eab87107c",
+    "hash": "64beeec30c3513dd539d32491201937d4557baad0e17a24ef7d1c0eb4f82fba2"
   },
   {
     "id": "d3c263a4-5715-502d-87e7-e7d69f664359",
@@ -1728,7 +1728,7 @@
     },
     "action": "TERROIR_CREATED",
     "resource": {
-      "type": "TERROIR",
+      "type": "terroir",
       "id": "017f9da6-3dcc-569c-bd5f-0451399c345f"
     },
     "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
@@ -1739,8 +1739,8 @@
     },
     "reason": null,
     "correlationId": "fx-0055",
-    "prevHash": "ebf109e572a42ad2caab5ee426febdddf0a0c09759a598d6e7975a818707526b",
-    "hash": "fbd0b8de935e027d28b203d9f227ae46a4898d0a9593920d23530ce7e6289495"
+    "prevHash": "64beeec30c3513dd539d32491201937d4557baad0e17a24ef7d1c0eb4f82fba2",
+    "hash": "176c92b43c26e72e345fcbf0095a4557a56c01121ecbb995a63b86963f435a70"
   },
   {
     "id": "b88e5ae6-a7dc-5f7d-aac2-3e29ff64b5b8",
@@ -1760,7 +1760,7 @@
     },
     "action": "WINERY_CREATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "bd7bf10b-1768-51fa-aa4e-6299f374a153"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1770,8 +1770,8 @@
     },
     "reason": "Alta anterior a la Ola 1",
     "correlationId": "fx-0056",
-    "prevHash": "fbd0b8de935e027d28b203d9f227ae46a4898d0a9593920d23530ce7e6289495",
-    "hash": "1c463aae91c91f86f6c1b894ac5efec30fb1ee5c1fe83bdcb588552cef24a179"
+    "prevHash": "176c92b43c26e72e345fcbf0095a4557a56c01121ecbb995a63b86963f435a70",
+    "hash": "e0778c31005a746f3bb227e782f19cabdaae3f729cb597cfb18dfaa1584a9f23"
   },
   {
     "id": "4bf367f2-30e4-5d2c-97e3-ec7629f46024",
@@ -1789,9 +1789,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "BOTTLING_RECORDED",
+    "action": "BOTTLING_BATCH_CREATED",
     "resource": {
-      "type": "BOTTLING_BATCH",
+      "type": "bottling_batch",
       "id": "afef7d2a-4817-556f-ae16-24b38eee217a"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1802,8 +1802,8 @@
     },
     "reason": null,
     "correlationId": "fx-0057",
-    "prevHash": "1c463aae91c91f86f6c1b894ac5efec30fb1ee5c1fe83bdcb588552cef24a179",
-    "hash": "9d5aeca7a90d67a6c00d19cf1e649f3ff379df3d5527088abb4fee4b093e2ac1"
+    "prevHash": "e0778c31005a746f3bb227e782f19cabdaae3f729cb597cfb18dfaa1584a9f23",
+    "hash": "d53345fb8f131d2b1d7f0d517efc96c47fe988ca4cc779af5355f97e831aaf9d"
   },
   {
     "id": "797c82c3-17a1-59d4-bc92-ff306cd917a7",
@@ -1823,7 +1823,7 @@
     },
     "action": "WINERY_ACTIVATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "bd7bf10b-1768-51fa-aa4e-6299f374a153"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -1836,8 +1836,8 @@
     },
     "reason": null,
     "correlationId": "fx-0058",
-    "prevHash": "9d5aeca7a90d67a6c00d19cf1e649f3ff379df3d5527088abb4fee4b093e2ac1",
-    "hash": "016940fe888d80865b1f1440963f1a27013431cc2b31c69fa0cbdf0b5a1ec8af"
+    "prevHash": "d53345fb8f131d2b1d7f0d517efc96c47fe988ca4cc779af5355f97e831aaf9d",
+    "hash": "0f50994ece738cd52b82719c37890c88ab1433c70878db1fd24e3f6c143bd7e6"
   },
   {
     "id": "7c7b76fd-21a3-5f18-ae87-9787f2c40891",
@@ -1857,7 +1857,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "2a643ce2-9f17-5017-9d6a-b4eb661d4648"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1868,8 +1868,8 @@
     },
     "reason": null,
     "correlationId": "fx-0059",
-    "prevHash": "016940fe888d80865b1f1440963f1a27013431cc2b31c69fa0cbdf0b5a1ec8af",
-    "hash": "d55c4a239492d0b00b0872636aab31749fad73079ad21b98c23d4c9ac646a6c7"
+    "prevHash": "0f50994ece738cd52b82719c37890c88ab1433c70878db1fd24e3f6c143bd7e6",
+    "hash": "dcfc6b7bef27b497dbe7774689d4aa393aea71d706ea78bfc383f928760ca924"
   },
   {
     "id": "516e2d22-d63c-58e8-a427-bcca194c1a2c",
@@ -1887,9 +1887,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "LAB_ANALYSIS_RECORDED",
+    "action": "LAB_ANALYSIS_CREATED",
     "resource": {
-      "type": "LAB_ANALYSIS",
+      "type": "lab_analysis",
       "id": "3ad42b33-75c5-5b16-8283-8d3e74d8ee5a"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1899,8 +1899,8 @@
     },
     "reason": null,
     "correlationId": "fx-0060",
-    "prevHash": "d55c4a239492d0b00b0872636aab31749fad73079ad21b98c23d4c9ac646a6c7",
-    "hash": "5cd1d86c0efe5141374111f8efa53dc60ba30ce37ad5b0530e4c4670446ddf52"
+    "prevHash": "dcfc6b7bef27b497dbe7774689d4aa393aea71d706ea78bfc383f928760ca924",
+    "hash": "1371254073db6b26d663250d96ddaed67427beb984913569ed29906747647912"
   },
   {
     "id": "4040bb23-49a4-5cf0-ab4c-ecfe1cb90651",
@@ -1920,7 +1920,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "70893e8a-d534-5620-acbc-95e0e6090fd1"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1931,8 +1931,8 @@
     },
     "reason": null,
     "correlationId": "fx-0061",
-    "prevHash": "5cd1d86c0efe5141374111f8efa53dc60ba30ce37ad5b0530e4c4670446ddf52",
-    "hash": "ee999be16cc54a4adbafa9b83a8fcb7fbfed1184c86e8cb3861e36a55861b0b8"
+    "prevHash": "1371254073db6b26d663250d96ddaed67427beb984913569ed29906747647912",
+    "hash": "c12c7039c898955e52f9476309cfa69c033607aadf8b38cee39140947a437c05"
   },
   {
     "id": "0c4d72e2-1f2e-5f01-9d9b-8ba091a61f62",
@@ -1950,9 +1950,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "bbbd9bdb-b1c4-5c27-ab7b-d8f530cb4862"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1962,8 +1962,8 @@
     },
     "reason": null,
     "correlationId": "fx-0062",
-    "prevHash": "ee999be16cc54a4adbafa9b83a8fcb7fbfed1184c86e8cb3861e36a55861b0b8",
-    "hash": "7e3ff7de4af3a4e7218640683b0707626b57ac11c95e942cff705857ea0ab79c"
+    "prevHash": "c12c7039c898955e52f9476309cfa69c033607aadf8b38cee39140947a437c05",
+    "hash": "1d08be80d7caa49801318291cc75d7fca1ef7e9312a3485b38dbf857269bac0c"
   },
   {
     "id": "47c77b7c-3673-552f-b0b4-d4dff2234472",
@@ -1983,7 +1983,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "d78d6307-f96b-533b-8f6e-710f6533bb42"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -1994,8 +1994,8 @@
     },
     "reason": null,
     "correlationId": "fx-0063",
-    "prevHash": "7e3ff7de4af3a4e7218640683b0707626b57ac11c95e942cff705857ea0ab79c",
-    "hash": "a981d82474ab8e1a0add197e6a6e0f2c6ec86ad0573e6e063279e771dd3fb43b"
+    "prevHash": "1d08be80d7caa49801318291cc75d7fca1ef7e9312a3485b38dbf857269bac0c",
+    "hash": "8881f5bd69820adb276e4fdac6afbebcc99f6a5d4226e0cdfe44c78f2b69fae2"
   },
   {
     "id": "eb213536-f88e-5456-8915-ff3193cd4d81",
@@ -2013,9 +2013,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "3a3f41db-a2a9-5c40-89d2-4c5f9208af5b"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2025,8 +2025,8 @@
     },
     "reason": null,
     "correlationId": "fx-0064",
-    "prevHash": "a981d82474ab8e1a0add197e6a6e0f2c6ec86ad0573e6e063279e771dd3fb43b",
-    "hash": "07979857fe02e2b0d2e677b5108cb24135e8cded00823c36e17388ab8dd554a2"
+    "prevHash": "8881f5bd69820adb276e4fdac6afbebcc99f6a5d4226e0cdfe44c78f2b69fae2",
+    "hash": "6b8c34b50c2dc266614d5f5aabbf438d963dafa67591fe0c87a67fd842130a64"
   },
   {
     "id": "5d96102e-5f83-5e04-b909-ea7daa975ce7",
@@ -2046,7 +2046,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "010ecdc8-6d52-5877-aecf-73bebb5c4d82"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2057,8 +2057,8 @@
     },
     "reason": null,
     "correlationId": "fx-0065",
-    "prevHash": "07979857fe02e2b0d2e677b5108cb24135e8cded00823c36e17388ab8dd554a2",
-    "hash": "09b6289283a30f7c52770a4ff611fcd76d50e2344d35d1415012a094aeb59226"
+    "prevHash": "6b8c34b50c2dc266614d5f5aabbf438d963dafa67591fe0c87a67fd842130a64",
+    "hash": "3a54187638a1c734a2c1ac5ab7b127741261500247589fc4b53f9066cdb87dee"
   },
   {
     "id": "c60a5afa-11e2-5be1-8820-10c9d28271fc",
@@ -2078,7 +2078,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "834fbdac-9013-5cfe-9564-bbe6b8359557"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2088,8 +2088,8 @@
     },
     "reason": null,
     "correlationId": "fx-0066",
-    "prevHash": "09b6289283a30f7c52770a4ff611fcd76d50e2344d35d1415012a094aeb59226",
-    "hash": "c35bed6f0761307838e869369bf0aae37c64608b31cf4715e1a361f4f1fd3b62"
+    "prevHash": "3a54187638a1c734a2c1ac5ab7b127741261500247589fc4b53f9066cdb87dee",
+    "hash": "f0c47f3d76a63b13fe0dd5fc1109394d32b87209ad2c7e2b06720a385d1074fc"
   },
   {
     "id": "13ada7b5-2683-5ba7-b2c0-dc5d6fcce85b",
@@ -2109,7 +2109,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "f87af6c0-197d-5fa3-b85e-29d7b27f00d9"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2120,8 +2120,8 @@
     },
     "reason": null,
     "correlationId": "fx-0067",
-    "prevHash": "c35bed6f0761307838e869369bf0aae37c64608b31cf4715e1a361f4f1fd3b62",
-    "hash": "821dfee5030103ae73217b39dd72f7551df13b3654e777e8a3463515e885d316"
+    "prevHash": "f0c47f3d76a63b13fe0dd5fc1109394d32b87209ad2c7e2b06720a385d1074fc",
+    "hash": "3a1acd5eed9e1e6fccafdf0c0618d9633f61a1564ec68b00213e9414296ad229"
   },
   {
     "id": "08f515c7-796f-5f08-9b70-326c35ea2326",
@@ -2139,9 +2139,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "35e5ca96-7c83-57bd-8ae6-59093b2cef18"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2151,8 +2151,8 @@
     },
     "reason": null,
     "correlationId": "fx-0068",
-    "prevHash": "821dfee5030103ae73217b39dd72f7551df13b3654e777e8a3463515e885d316",
-    "hash": "2394d9ac259ef87c1c43e86c5b6d37f5848e3dcaea186090fca92e27816776fa"
+    "prevHash": "3a1acd5eed9e1e6fccafdf0c0618d9633f61a1564ec68b00213e9414296ad229",
+    "hash": "f52cead9fe39f28610030b573a13c7bbd7c9491ff81dec8b200442619bac491a"
   },
   {
     "id": "dbb54d18-77d1-5367-8ebd-eb9c423d763b",
@@ -2170,9 +2170,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "2f82aa02-b686-57ad-a577-76e560ebeb14"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2182,8 +2182,8 @@
     },
     "reason": null,
     "correlationId": "fx-0069",
-    "prevHash": "2394d9ac259ef87c1c43e86c5b6d37f5848e3dcaea186090fca92e27816776fa",
-    "hash": "7acda5dcfa62277ee85fb35c12ecacb1eefb4c5d5e5f772242fa0b893e3beb78"
+    "prevHash": "f52cead9fe39f28610030b573a13c7bbd7c9491ff81dec8b200442619bac491a",
+    "hash": "f3b87eead41fd3a48ddea1ce06a384960293899f9eb3a37bab2ede0b420bcbd3"
   },
   {
     "id": "b6817ee7-07f2-5052-bf39-3506de13abc6",
@@ -2203,7 +2203,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "aac59603-e058-50f8-9000-dd0a41f26aef"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2214,8 +2214,8 @@
     },
     "reason": null,
     "correlationId": "fx-0070",
-    "prevHash": "7acda5dcfa62277ee85fb35c12ecacb1eefb4c5d5e5f772242fa0b893e3beb78",
-    "hash": "1ca66e8c1cb5c43dd020247b8329f23e2a1dd64ea8ab34db48e6d65caf06245f"
+    "prevHash": "f3b87eead41fd3a48ddea1ce06a384960293899f9eb3a37bab2ede0b420bcbd3",
+    "hash": "7acf75b1814431ec5bafaf8d0298677710c3c092ee982df0515bf962460fac22"
   },
   {
     "id": "4e0f99e0-f423-5f0e-8a2d-0ebf02000312",
@@ -2233,9 +2233,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "cb34ba56-05df-59a9-be68-3e9d75a94128"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2245,8 +2245,8 @@
     },
     "reason": null,
     "correlationId": "fx-0071",
-    "prevHash": "1ca66e8c1cb5c43dd020247b8329f23e2a1dd64ea8ab34db48e6d65caf06245f",
-    "hash": "104534153d1134c4f454bc9a1acf2ed07997e3fcda9b4063daaa960d4d91eeb7"
+    "prevHash": "7acf75b1814431ec5bafaf8d0298677710c3c092ee982df0515bf962460fac22",
+    "hash": "6b9b28a90ff58f8d8117655881d302fda6a3d48ccb27683319de821800b0562e"
   },
   {
     "id": "cbc4c0b3-b032-5d15-a2e7-d9d0ab824eef",
@@ -2266,7 +2266,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "93bd36a1-673b-52ed-adec-539d805cd018"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2277,8 +2277,8 @@
     },
     "reason": null,
     "correlationId": "fx-0072",
-    "prevHash": "104534153d1134c4f454bc9a1acf2ed07997e3fcda9b4063daaa960d4d91eeb7",
-    "hash": "8d3c525ec56d000f070a143e4d9ba952daa42fd0116a7bb6d5cc71913e2073f7"
+    "prevHash": "6b9b28a90ff58f8d8117655881d302fda6a3d48ccb27683319de821800b0562e",
+    "hash": "55017cc2adab6ca40e8912dc60ef3222044cadf693c768dfa8165c41b98ed459"
   },
   {
     "id": "5acd48eb-eaf8-5232-b50e-a2d34848d5e4",
@@ -2298,7 +2298,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "8903bc37-3419-5b49-97f1-bd1811e267eb"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2308,8 +2308,8 @@
     },
     "reason": null,
     "correlationId": "fx-0073",
-    "prevHash": "8d3c525ec56d000f070a143e4d9ba952daa42fd0116a7bb6d5cc71913e2073f7",
-    "hash": "d9a8d251e27626997f31f193aaff4ffbfe7ebb1bd3c7672ac30e90fe85da3444"
+    "prevHash": "55017cc2adab6ca40e8912dc60ef3222044cadf693c768dfa8165c41b98ed459",
+    "hash": "39fbc155087a999d1f914fda556144de64479667cfb785b86e81164c3990c04f"
   },
   {
     "id": "c8b43352-ec51-542e-9dc3-aa9725878dc6",
@@ -2327,9 +2327,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "ENOLOGICAL_TREATMENT_RECORDED",
+    "action": "ENOLOGICAL_TREATMENT_ADDED",
     "resource": {
-      "type": "ENOLOGICAL_TREATMENT",
+      "type": "enological_treatment",
       "id": "4e55df9d-bc64-5018-9773-ee052f62a1ae"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2339,8 +2339,8 @@
     },
     "reason": null,
     "correlationId": "fx-0074",
-    "prevHash": "d9a8d251e27626997f31f193aaff4ffbfe7ebb1bd3c7672ac30e90fe85da3444",
-    "hash": "e747043216d30342ce1798828ee51269fe2ba8ff2db83932e89dc52c60d6f11b"
+    "prevHash": "39fbc155087a999d1f914fda556144de64479667cfb785b86e81164c3990c04f",
+    "hash": "104046b76699be3170bf64072da8372d40baa2fb061293b4fb9c2b1a0c48cde9"
   },
   {
     "id": "e639d76a-ac2f-5bab-bc78-0dfa663848b8",
@@ -2360,7 +2360,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "95ed7865-429e-57e7-9fe4-e037a8063738"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2371,8 +2371,8 @@
     },
     "reason": null,
     "correlationId": "fx-0075",
-    "prevHash": "e747043216d30342ce1798828ee51269fe2ba8ff2db83932e89dc52c60d6f11b",
-    "hash": "583128511779341bf143451faf6f1728f13e8b0ee1c0d5e614b051e80621f9b3"
+    "prevHash": "104046b76699be3170bf64072da8372d40baa2fb061293b4fb9c2b1a0c48cde9",
+    "hash": "79925483282b100fcbc3760162c418d9869618bbbc76e0650c0a2b3fe8ff546f"
   },
   {
     "id": "eeb8ab67-c03f-5b2e-9e36-750e629fcff3",
@@ -2392,7 +2392,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "53f25b09-b550-511d-a01c-031141d137bc"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2402,8 +2402,8 @@
     },
     "reason": null,
     "correlationId": "fx-0076",
-    "prevHash": "583128511779341bf143451faf6f1728f13e8b0ee1c0d5e614b051e80621f9b3",
-    "hash": "c386d6eefb39a9cbc094b7df13b33eab5c12cf8b6b6abe76303477020bfcc578"
+    "prevHash": "79925483282b100fcbc3760162c418d9869618bbbc76e0650c0a2b3fe8ff546f",
+    "hash": "f219b40acb03c1344f7689dfcf1441170a9f97f100aec9b132780ff2e4f10a80"
   },
   {
     "id": "dcbef2c9-d7a7-542a-a410-d50be7732191",
@@ -2421,9 +2421,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "DISTILLATION_RECORDED",
+    "action": "PRODUCTION_BATCH_CREATED",
     "resource": {
-      "type": "PRODUCTION_BATCH",
+      "type": "production_batch",
       "id": "a6dd3060-8612-5595-b9b4-33a7d039159c"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2434,8 +2434,8 @@
     },
     "reason": null,
     "correlationId": "fx-0077",
-    "prevHash": "c386d6eefb39a9cbc094b7df13b33eab5c12cf8b6b6abe76303477020bfcc578",
-    "hash": "66e5b28efe641a5f2353c765ab3e6df599287263fa354eec94f7581846c29334"
+    "prevHash": "f219b40acb03c1344f7689dfcf1441170a9f97f100aec9b132780ff2e4f10a80",
+    "hash": "5089a4723760d6b5b9001c02ab10befa53916ff84e5150d465a6c48e5162513d"
   },
   {
     "id": "ac8c61b6-d75e-5252-bc8a-fe6b09ec72e5",
@@ -2455,7 +2455,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "be653b6b-868e-51f3-bc11-462afa764ca1"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2466,8 +2466,8 @@
     },
     "reason": null,
     "correlationId": "fx-0078",
-    "prevHash": "66e5b28efe641a5f2353c765ab3e6df599287263fa354eec94f7581846c29334",
-    "hash": "59a0146a76b2f5b1f0a771887c893cb4bddab13b9f6977a4875d2cc878946bc5"
+    "prevHash": "5089a4723760d6b5b9001c02ab10befa53916ff84e5150d465a6c48e5162513d",
+    "hash": "8a1103a89630e24dee5b7135f743ab493660928df22e172f82c6346b4a6f56dc"
   },
   {
     "id": "bb66cd44-3a31-5f0e-80ce-8f12f34f3ebd",
@@ -2487,7 +2487,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "75b76250-9520-50b8-9563-49384bb7d560"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2497,8 +2497,8 @@
     },
     "reason": null,
     "correlationId": "fx-0079",
-    "prevHash": "59a0146a76b2f5b1f0a771887c893cb4bddab13b9f6977a4875d2cc878946bc5",
-    "hash": "8b858c5675b09e413ed638783d45d74947a700ff7f8a71e0199294cf6e2f50f2"
+    "prevHash": "8a1103a89630e24dee5b7135f743ab493660928df22e172f82c6346b4a6f56dc",
+    "hash": "326e1a8af106c35710e6984edda2df40ed0acd99c03b923d400287ec3db12456"
   },
   {
     "id": "954ddf58-5e10-5101-ac0d-5722f81b95a3",
@@ -2518,7 +2518,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "af3d16da-21a1-59f3-9028-af66cb89294c"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2528,8 +2528,8 @@
     },
     "reason": null,
     "correlationId": "fx-0080",
-    "prevHash": "8b858c5675b09e413ed638783d45d74947a700ff7f8a71e0199294cf6e2f50f2",
-    "hash": "ec7fe111145e2885b695609946060a7dc7d8b5405e4136c385bff40cf23e420f"
+    "prevHash": "326e1a8af106c35710e6984edda2df40ed0acd99c03b923d400287ec3db12456",
+    "hash": "9f3d9d4b44e6b8665f0c4cc8e24bc1d123d3216ede36de30f71b7bb5601a2d1a"
   },
   {
     "id": "1ddc34d6-b458-546c-bd0f-709d93e6f85f",
@@ -2549,7 +2549,7 @@
     },
     "action": "PLATFORM_SUPERADMIN_SEEDED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -2560,8 +2560,8 @@
     },
     "reason": null,
     "correlationId": "fx-0081",
-    "prevHash": "ec7fe111145e2885b695609946060a7dc7d8b5405e4136c385bff40cf23e420f",
-    "hash": "3518f3fc48fa86840155ab3ed6f7bdfddbc07d578f823cee0814498cc0b93f04"
+    "prevHash": "9f3d9d4b44e6b8665f0c4cc8e24bc1d123d3216ede36de30f71b7bb5601a2d1a",
+    "hash": "dba9d2673f9cfeef21e36df57315937c8ed8622118360f05ca550d5ad11dc999"
   },
   {
     "id": "00a909c0-fcd3-5eda-8610-8d1120d468a0",
@@ -2581,7 +2581,7 @@
     },
     "action": "MFA_ENROLLED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -2589,8 +2589,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0082",
-    "prevHash": "3518f3fc48fa86840155ab3ed6f7bdfddbc07d578f823cee0814498cc0b93f04",
-    "hash": "6d43305e62336fe8aacf901cbb98cbf3962abfe8698066e8d652e32a5911f4fb"
+    "prevHash": "dba9d2673f9cfeef21e36df57315937c8ed8622118360f05ca550d5ad11dc999",
+    "hash": "e316150895c16ec09651e3e81183e2d3392239d26a9d07c011752a786b800a25"
   },
   {
     "id": "8c4fc791-d735-51f0-9663-955f9a4c1645",
@@ -2610,7 +2610,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "e05549ba-7859-5b5c-8fe1-9e1d6a4df5f4"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -2620,8 +2620,8 @@
     },
     "reason": null,
     "correlationId": "fx-0083",
-    "prevHash": "6d43305e62336fe8aacf901cbb98cbf3962abfe8698066e8d652e32a5911f4fb",
-    "hash": "47723a23e2739ec7dd675f46d2c73c378ba103a357c65f3123aa9be597860730"
+    "prevHash": "e316150895c16ec09651e3e81183e2d3392239d26a9d07c011752a786b800a25",
+    "hash": "1f5374fb7a0a9145fc793833bf4c9fadbf8a69d10d8b7b161e22539db1669d89"
   },
   {
     "id": "22281f14-2492-5634-9d65-c3c806d75df7",
@@ -2641,7 +2641,7 @@
     },
     "action": "MFA_ENROLLED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "4e89872f-1de3-5f01-968b-2203e12dbfd0"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -2649,8 +2649,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0084",
-    "prevHash": "47723a23e2739ec7dd675f46d2c73c378ba103a357c65f3123aa9be597860730",
-    "hash": "a9fecbc2a2722961af50f79972fa06bb1369abf5d27243b570ee8169d098ef02"
+    "prevHash": "1f5374fb7a0a9145fc793833bf4c9fadbf8a69d10d8b7b161e22539db1669d89",
+    "hash": "898a99386e0c60af4321c98978edd69c8f8904cab56bf2daf6a1fc130c0ec2ec"
   },
   {
     "id": "853dd9b0-f879-525b-92e0-48559a8b7a64",
@@ -2668,9 +2668,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "DISTILLATION_RECORDED",
+    "action": "PRODUCTION_BATCH_CREATED",
     "resource": {
-      "type": "PRODUCTION_BATCH",
+      "type": "production_batch",
       "id": "e58a7714-0a95-5cc4-8fd8-07999cb576e3"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2681,8 +2681,8 @@
     },
     "reason": null,
     "correlationId": "fx-0085",
-    "prevHash": "a9fecbc2a2722961af50f79972fa06bb1369abf5d27243b570ee8169d098ef02",
-    "hash": "5291b461f1c5b0103ae8647d06d70bf46adbef503dab52b8ab58a91e77d29eb0"
+    "prevHash": "898a99386e0c60af4321c98978edd69c8f8904cab56bf2daf6a1fc130c0ec2ec",
+    "hash": "3c33d70546e7687482a303ce7a3c68db9693d2146f1b59a77fe8979c9ad89d46"
   },
   {
     "id": "4ca87ffb-7ed8-53d5-83eb-002a38b56c0a",
@@ -2702,7 +2702,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "405dcdb8-2354-5b6a-95c8-713036402262"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -2712,8 +2712,8 @@
     },
     "reason": null,
     "correlationId": "fx-0086",
-    "prevHash": "5291b461f1c5b0103ae8647d06d70bf46adbef503dab52b8ab58a91e77d29eb0",
-    "hash": "36d9a0a8a25304a7de16490ec5ed8e7502fc21aa796614bd4bb4dd3ecaf8da87"
+    "prevHash": "3c33d70546e7687482a303ce7a3c68db9693d2146f1b59a77fe8979c9ad89d46",
+    "hash": "a6417467f9b684d731971f5de52f4f79423cf89aff8912b10d71b45e7d6cb8a6"
   },
   {
     "id": "18656cb2-0c00-58ae-84e6-d3a36ce2e9f3",
@@ -2733,7 +2733,7 @@
     },
     "action": "MFA_ENROLLED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -2741,8 +2741,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0087",
-    "prevHash": "36d9a0a8a25304a7de16490ec5ed8e7502fc21aa796614bd4bb4dd3ecaf8da87",
-    "hash": "9837a126de99ba14c4db3f324f796b39d5f925195d40d07e057c9ab1dd270537"
+    "prevHash": "a6417467f9b684d731971f5de52f4f79423cf89aff8912b10d71b45e7d6cb8a6",
+    "hash": "9b5b5ee328b2320fc44f5ba71bb95138ffd16ca4f541bb26e0988d175d7d4bea"
   },
   {
     "id": "68083b75-2e8d-579f-8d5d-2e6118bc1f6d",
@@ -2760,9 +2760,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "BOTTLING_RECORDED",
+    "action": "BOTTLING_BATCH_CREATED",
     "resource": {
-      "type": "BOTTLING_BATCH",
+      "type": "bottling_batch",
       "id": "bc10077a-bf11-575c-8bba-331fbc6887c2"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2773,8 +2773,8 @@
     },
     "reason": null,
     "correlationId": "fx-0088",
-    "prevHash": "9837a126de99ba14c4db3f324f796b39d5f925195d40d07e057c9ab1dd270537",
-    "hash": "48609c302cce00e2f030b93a8b1cf88745527dffc733bf516a6609e945e2844b"
+    "prevHash": "9b5b5ee328b2320fc44f5ba71bb95138ffd16ca4f541bb26e0988d175d7d4bea",
+    "hash": "361eba81fdc87f20a33c1455da4fa01efe519ffe23489cc00f098ab609e7fbeb"
   },
   {
     "id": "5d465355-bc80-5d18-bad4-7a29c5a5268e",
@@ -2794,7 +2794,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2804,8 +2804,8 @@
     },
     "reason": null,
     "correlationId": "fx-0089",
-    "prevHash": "48609c302cce00e2f030b93a8b1cf88745527dffc733bf516a6609e945e2844b",
-    "hash": "6c98a7bba6b138ec8ffffa5c79193470d157c4458e6b51dedd2f744921bb4216"
+    "prevHash": "361eba81fdc87f20a33c1455da4fa01efe519ffe23489cc00f098ab609e7fbeb",
+    "hash": "47382d1e5b0c5485b8dc9ae9222ae86ef47c9f8b1810969c2894fb5f15a1ca7c"
   },
   {
     "id": "84ccd165-eb12-5182-bd43-cc5b550de8e4",
@@ -2823,9 +2823,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "LAB_ANALYSIS_RECORDED",
+    "action": "LAB_ANALYSIS_CREATED",
     "resource": {
-      "type": "LAB_ANALYSIS",
+      "type": "lab_analysis",
       "id": "314156cd-cf40-5a03-a272-9424663a7d25"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2835,8 +2835,8 @@
     },
     "reason": null,
     "correlationId": "fx-0090",
-    "prevHash": "6c98a7bba6b138ec8ffffa5c79193470d157c4458e6b51dedd2f744921bb4216",
-    "hash": "55c47c89b18f23e8ac3651c778fdf080a99ec8b6be5c9702f13fa5a3869411b3"
+    "prevHash": "47382d1e5b0c5485b8dc9ae9222ae86ef47c9f8b1810969c2894fb5f15a1ca7c",
+    "hash": "89e68403b5440c30166ec60058ab2feecb7b092c2e16aa812cfa78a7e734fbe9"
   },
   {
     "id": "fdcfca9d-00a9-55f2-be26-f35c146b6889",
@@ -2856,7 +2856,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "fcf28d10-2e23-5514-9286-5007a2b1fb8c"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2868,8 +2868,8 @@
     },
     "reason": null,
     "correlationId": "fx-0091",
-    "prevHash": "55c47c89b18f23e8ac3651c778fdf080a99ec8b6be5c9702f13fa5a3869411b3",
-    "hash": "6e5126202e6c9fe35bc1a12e0b2e4943e6912070c6e9b79ac051636b14f9f601"
+    "prevHash": "89e68403b5440c30166ec60058ab2feecb7b092c2e16aa812cfa78a7e734fbe9",
+    "hash": "623ca04557e574657c3b615b338bdb21fc73432ac1702f6109e9274515fd9d97"
   },
   {
     "id": "79ae26ee-fd2e-5bca-a2ce-df9789175086",
@@ -2889,7 +2889,7 @@
     },
     "action": "INVITATION_ACCEPTED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "fcf28d10-2e23-5514-9286-5007a2b1fb8c"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2897,8 +2897,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0092",
-    "prevHash": "6e5126202e6c9fe35bc1a12e0b2e4943e6912070c6e9b79ac051636b14f9f601",
-    "hash": "f5be833ef9bd0e39cb7b11f09dccc29f9e3d735496825d03adc1e5aaae340251"
+    "prevHash": "623ca04557e574657c3b615b338bdb21fc73432ac1702f6109e9274515fd9d97",
+    "hash": "b487fe47fd39813b46b73f9ec8b25d11a4994f1d150f072824e10ba6b495b452"
   },
   {
     "id": "c8f43eb0-7f71-59a9-a5e1-e807eb6afb47",
@@ -2918,7 +2918,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "c79a3f44-f369-5b59-8102-36e89311185e"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -2928,8 +2928,8 @@
     },
     "reason": null,
     "correlationId": "fx-0093",
-    "prevHash": "f5be833ef9bd0e39cb7b11f09dccc29f9e3d735496825d03adc1e5aaae340251",
-    "hash": "58c39c12e409bdb0852f9c4224ceb8a108da0cc6d741b70d3270885b04d3925f"
+    "prevHash": "b487fe47fd39813b46b73f9ec8b25d11a4994f1d150f072824e10ba6b495b452",
+    "hash": "c796e25cc24a56e74c00cbe4aa1b3e679fedc4b3c8ca5ec7c8ef4a7986081232"
   },
   {
     "id": "aa87e7fb-b451-5c5a-a800-261aa2581137",
@@ -2949,7 +2949,7 @@
     },
     "action": "SETTING_OVERRIDE_SET",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "canje.ventanaDias"
     },
     "organizationId": "eac1f883-31c7-5032-8628-cac993ca5e48",
@@ -2962,8 +2962,8 @@
     },
     "reason": "Clientes de temporada alta: ventana ampliada acordada con la bodega.",
     "correlationId": "fx-0094",
-    "prevHash": "58c39c12e409bdb0852f9c4224ceb8a108da0cc6d741b70d3270885b04d3925f",
-    "hash": "f61f9aef59e6883897306345f740ca9326c28d4b3a2a4375115e6c7328deb247"
+    "prevHash": "c796e25cc24a56e74c00cbe4aa1b3e679fedc4b3c8ca5ec7c8ef4a7986081232",
+    "hash": "6ecc3507a9b7f8265e7b2af95d895cbca165bdb7ff17bacfa883ca807c8a7187"
   },
   {
     "id": "306a4367-3756-5987-850d-2c0a51d7d978",
@@ -2983,7 +2983,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "1d61f347-a3cb-540d-9550-17d40cf4875c"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -2993,8 +2993,8 @@
     },
     "reason": null,
     "correlationId": "fx-0095",
-    "prevHash": "f61f9aef59e6883897306345f740ca9326c28d4b3a2a4375115e6c7328deb247",
-    "hash": "9d31cd807cfecbacfd08c1b36d1afbcb3c711586c3fe3a13a28044e3a61826fb"
+    "prevHash": "6ecc3507a9b7f8265e7b2af95d895cbca165bdb7ff17bacfa883ca807c8a7187",
+    "hash": "09891ffd8fbca83396da1e31d2fd2550bf513e1ee1df19b7c32b33766c6c10ac"
   },
   {
     "id": "45d2fddb-7c92-53f4-99df-86c3c069d0e5",
@@ -3014,7 +3014,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "0872115a-241c-5321-b26a-882c88ed7134"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3024,8 +3024,8 @@
     },
     "reason": null,
     "correlationId": "fx-0096",
-    "prevHash": "9d31cd807cfecbacfd08c1b36d1afbcb3c711586c3fe3a13a28044e3a61826fb",
-    "hash": "e71a5f723238a334159bb6b52cf08f9ab21d4a8977bbadf11e46b889bcf03c20"
+    "prevHash": "09891ffd8fbca83396da1e31d2fd2550bf513e1ee1df19b7c32b33766c6c10ac",
+    "hash": "f1e1b8cd9ee40b9ac243c81fc51e74bf20c3aa247fd5ae2b07230913c60c7040"
   },
   {
     "id": "e5b32d63-86e6-520b-a06b-3608e3c7afcb",
@@ -3045,7 +3045,7 @@
     },
     "action": "MEMBER_BLOCKED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "af3d16da-21a1-59f3-9028-af66cb89294c"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3058,8 +3058,8 @@
     },
     "reason": "Terminó su contrato de temporada.",
     "correlationId": "fx-0097",
-    "prevHash": "e71a5f723238a334159bb6b52cf08f9ab21d4a8977bbadf11e46b889bcf03c20",
-    "hash": "bbcf1d5c7488077a9ef1be7a556828f95089cb33ad08ae46894392d3873097cd"
+    "prevHash": "f1e1b8cd9ee40b9ac243c81fc51e74bf20c3aa247fd5ae2b07230913c60c7040",
+    "hash": "c3402dc436d1ef5a9e95207ee1b1e4409a2b9b183e887a5ee544422ce0fdfe02"
   },
   {
     "id": "c62ef59d-cd18-54a3-bec4-7e32a0f9431c",
@@ -3077,9 +3077,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "WINE_AGING_STARTED",
+    "action": "WINE_AGING_BATCH_CREATED",
     "resource": {
-      "type": "WINE_AGING",
+      "type": "wine_aging_batch",
       "id": "848d54be-3d51-5a62-93e6-d15eba6df89a"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3089,8 +3089,8 @@
     },
     "reason": null,
     "correlationId": "fx-0098",
-    "prevHash": "bbcf1d5c7488077a9ef1be7a556828f95089cb33ad08ae46894392d3873097cd",
-    "hash": "5433676e331580b90eb3ddbfebca12aa00095fbd5d7617c59c4712f6efc979a1"
+    "prevHash": "c3402dc436d1ef5a9e95207ee1b1e4409a2b9b183e887a5ee544422ce0fdfe02",
+    "hash": "24058cd4dfde2ad46df18d0d8fa88ba3fc4e3a9ec84b8ab8cb91410850cd583a"
   },
   {
     "id": "5c8978b0-03c7-5080-8863-e5dcde7768bf",
@@ -3110,7 +3110,7 @@
     },
     "action": "SETTING_OVERRIDE_SET",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "equipo.maxColaboradoresPorBodega"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -3123,8 +3123,8 @@
     },
     "reason": "Plan piloto de equipo reducido.",
     "correlationId": "fx-0099",
-    "prevHash": "5433676e331580b90eb3ddbfebca12aa00095fbd5d7617c59c4712f6efc979a1",
-    "hash": "fd7c5924587125ca5b794c553b301c4276c930b516f8948a92595a2857876dae"
+    "prevHash": "24058cd4dfde2ad46df18d0d8fa88ba3fc4e3a9ec84b8ab8cb91410850cd583a",
+    "hash": "b9dc863a4f74d37346f0b0fb3f8da93c951574210768c86b22048b98562412a3"
   },
   {
     "id": "4d934622-0c8c-5a80-9799-80c15431c088",
@@ -3144,7 +3144,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "4ded776f-f6a5-52c1-a20a-9bb7b6312c1c"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -3154,8 +3154,8 @@
     },
     "reason": null,
     "correlationId": "fx-0100",
-    "prevHash": "fd7c5924587125ca5b794c553b301c4276c930b516f8948a92595a2857876dae",
-    "hash": "e40c689a249160980cc97d40455b0853e300687d45100bc545becbca8568a75f"
+    "prevHash": "b9dc863a4f74d37346f0b0fb3f8da93c951574210768c86b22048b98562412a3",
+    "hash": "217e44d6a4e6abe24d5a3460a0fb30eb9b825509f6d3555e414f9631b1d0553e"
   },
   {
     "id": "24f2dd89-d14b-59cc-b486-e3b7353179ec",
@@ -3175,7 +3175,7 @@
     },
     "action": "MFA_ENROLLED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "23d99814-3526-54f6-8b5f-5807a08506a2"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -3183,8 +3183,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0101",
-    "prevHash": "e40c689a249160980cc97d40455b0853e300687d45100bc545becbca8568a75f",
-    "hash": "9d5086c80e85cd8459fdaf6d77184516076d5847f1c2b07b3b2b425b8b1c7c08"
+    "prevHash": "217e44d6a4e6abe24d5a3460a0fb30eb9b825509f6d3555e414f9631b1d0553e",
+    "hash": "22247f82cb8e0df0d7b1482271878ea7ca2dbeeb8b920a979a94704025d8d1d0"
   },
   {
     "id": "54f7673f-2403-537a-a1b6-eafa86300105",
@@ -3204,7 +3204,7 @@
     },
     "action": "SETTING_OVERRIDE_SET",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "puntos.bodegaPuedeHabilitar"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -3217,8 +3217,8 @@
     },
     "reason": "La destilería gestiona sus propios puntos de canje.",
     "correlationId": "fx-0102",
-    "prevHash": "9d5086c80e85cd8459fdaf6d77184516076d5847f1c2b07b3b2b425b8b1c7c08",
-    "hash": "9375d1f248972ae16431cf412091d8f912e6c3d31e0cb851939fa8309388c0a7"
+    "prevHash": "22247f82cb8e0df0d7b1482271878ea7ca2dbeeb8b920a979a94704025d8d1d0",
+    "hash": "e878f81380aeb5f931abe8d982fd1bdbea42099f263285f8639fda71bbc862b9"
   },
   {
     "id": "e41a10eb-5c2a-5bfb-bb5f-5b3e8e799f28",
@@ -3238,7 +3238,7 @@
     },
     "action": "WINERY_REVOKED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9"
     },
     "organizationId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
@@ -3250,8 +3250,8 @@
     },
     "reason": "Cierre de la bodega solicitado por su titular.",
     "correlationId": "fx-0103",
-    "prevHash": "9375d1f248972ae16431cf412091d8f912e6c3d31e0cb851939fa8309388c0a7",
-    "hash": "c6de2118fcb63f765a3ab1aeeb73672709418fccfed2a36e712f977b511f72f3"
+    "prevHash": "e878f81380aeb5f931abe8d982fd1bdbea42099f263285f8639fda71bbc862b9",
+    "hash": "e94d0cbc82b827a9e56d6a689a2c1b6ff5c5f3b33e5ec1a9bc69c43f8b393a3f"
   },
   {
     "id": "8b595363-605c-593b-a656-544e36d971b0",
@@ -3271,7 +3271,7 @@
     },
     "action": "WINERY_SUSPENDED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "eac1f883-31c7-5032-8628-cac993ca5e48"
     },
     "organizationId": "eac1f883-31c7-5032-8628-cac993ca5e48",
@@ -3283,8 +3283,8 @@
     },
     "reason": "Registro SENASAG vencido; se reactiva al presentar la renovación.",
     "correlationId": "fx-0104",
-    "prevHash": "c6de2118fcb63f765a3ab1aeeb73672709418fccfed2a36e712f977b511f72f3",
-    "hash": "8844be0f028bfc41e094f6ac261dbceb3a28a7f324b12d0042fc2748f0ae52b9"
+    "prevHash": "e94d0cbc82b827a9e56d6a689a2c1b6ff5c5f3b33e5ec1a9bc69c43f8b393a3f",
+    "hash": "9d746ff87886e434037171cffc96b645521a6058c366072fd07aa26fef75ddea"
   },
   {
     "id": "8ed72018-0ee4-594b-9b86-3b680decfb75",
@@ -3304,7 +3304,7 @@
     },
     "action": "SETTING_OVERRIDE_SET",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "compra.maxBotellasPorCompra"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -3317,8 +3317,8 @@
     },
     "reason": "Singani Gran Reserva de producción limitada.",
     "correlationId": "fx-0105",
-    "prevHash": "8844be0f028bfc41e094f6ac261dbceb3a28a7f324b12d0042fc2748f0ae52b9",
-    "hash": "236893a864efe185f6fcf267a9a22841df86a031b3c817974249b565a4262e85"
+    "prevHash": "9d746ff87886e434037171cffc96b645521a6058c366072fd07aa26fef75ddea",
+    "hash": "dda0acbed346d0cc0f7b0f3101d8061b2b4616896519e49b70e182954922e16b"
   },
   {
     "id": "df79d095-3781-570d-b9ee-e9de7c68e5d5",
@@ -3338,7 +3338,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ffc47d12-2b5c-5dcb-b745-b7c139cd434e"
     },
     "organizationId": null,
@@ -3350,8 +3350,8 @@
     },
     "reason": null,
     "correlationId": "fx-0106",
-    "prevHash": "236893a864efe185f6fcf267a9a22841df86a031b3c817974249b565a4262e85",
-    "hash": "27a0e00fb6a943f060703f64a82c5944bddbac68be5a4cb544d2a1382e8c2a0c"
+    "prevHash": "dda0acbed346d0cc0f7b0f3101d8061b2b4616896519e49b70e182954922e16b",
+    "hash": "38de39da56d0c0e9334ef69a23a373cf2a20286df7a39640a3eed498fd778832"
   },
   {
     "id": "8c7d87fe-2404-530c-a9a9-ccf35f35e880",
@@ -3371,7 +3371,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ffc47d12-2b5c-5dcb-b745-b7c139cd434e"
     },
     "organizationId": null,
@@ -3383,8 +3383,8 @@
     },
     "reason": null,
     "correlationId": "fx-0107",
-    "prevHash": "27a0e00fb6a943f060703f64a82c5944bddbac68be5a4cb544d2a1382e8c2a0c",
-    "hash": "02d8b0201382330c5bb4da06b3fa92f465b8dadba07e308bc7cc1b4698e1187a"
+    "prevHash": "38de39da56d0c0e9334ef69a23a373cf2a20286df7a39640a3eed498fd778832",
+    "hash": "edb675813c89e80ef0453e6d076ea5faa38fddff147b2473be8dbc7bb227469d"
   },
   {
     "id": "639cc70a-cfa6-592a-abfc-b125dc52eb24",
@@ -3404,7 +3404,7 @@
     },
     "action": "WINERY_APPLICATION_TAKEN",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ffc47d12-2b5c-5dcb-b745-b7c139cd434e"
     },
     "organizationId": null,
@@ -3418,8 +3418,8 @@
     },
     "reason": null,
     "correlationId": "fx-0108",
-    "prevHash": "02d8b0201382330c5bb4da06b3fa92f465b8dadba07e308bc7cc1b4698e1187a",
-    "hash": "fd9fcbe323b0222172f860e3c393379edfb7ab9fce3da556913ac4456d24507a"
+    "prevHash": "edb675813c89e80ef0453e6d076ea5faa38fddff147b2473be8dbc7bb227469d",
+    "hash": "c9ccdc6b087bf968964fa9b98059e191792221259c892310fa3befe8beb1b597"
   },
   {
     "id": "e2f3dc88-c1d2-55bb-bae6-c982e2e2ca54",
@@ -3439,7 +3439,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340"
     },
     "organizationId": null,
@@ -3451,8 +3451,8 @@
     },
     "reason": null,
     "correlationId": "fx-0109",
-    "prevHash": "fd9fcbe323b0222172f860e3c393379edfb7ab9fce3da556913ac4456d24507a",
-    "hash": "7c9c3b0febd21376fdd9acac8479dbc6d7c137d9a50739a3eb3056e8ba59bf26"
+    "prevHash": "c9ccdc6b087bf968964fa9b98059e191792221259c892310fa3befe8beb1b597",
+    "hash": "d86e0c4c06d517f40f0c669b86c3b0672b672587270c04a87cd5d4363aac1ddc"
   },
   {
     "id": "3b05a3cd-b1ff-5fe9-93a2-f5d0fdd84a41",
@@ -3472,7 +3472,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340"
     },
     "organizationId": null,
@@ -3484,8 +3484,8 @@
     },
     "reason": null,
     "correlationId": "fx-0110",
-    "prevHash": "7c9c3b0febd21376fdd9acac8479dbc6d7c137d9a50739a3eb3056e8ba59bf26",
-    "hash": "8e795e2294bc9505410a6cdbc00178014dd9c612317abebbf86ee932c7ab3dee"
+    "prevHash": "d86e0c4c06d517f40f0c669b86c3b0672b672587270c04a87cd5d4363aac1ddc",
+    "hash": "2b8441002f6c1510b116e1f91858db4518cba13f0cd945e9dc297ca729fac26e"
   },
   {
     "id": "8846832d-4901-5c43-a3b2-d400db51b72e",
@@ -3505,7 +3505,7 @@
     },
     "action": "WINERY_APPLICATION_REJECTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ffc47d12-2b5c-5dcb-b745-b7c139cd434e"
     },
     "organizationId": null,
@@ -3518,8 +3518,8 @@
     },
     "reason": "No elabora a partir de materia prima propia: distribuye licores de terceros.",
     "correlationId": "fx-0111",
-    "prevHash": "8e795e2294bc9505410a6cdbc00178014dd9c612317abebbf86ee932c7ab3dee",
-    "hash": "26bd9c1f1ab4570ecffde8e14c6eb11fa6d026ec3b31e534c93849903001f95c"
+    "prevHash": "2b8441002f6c1510b116e1f91858db4518cba13f0cd945e9dc297ca729fac26e",
+    "hash": "396e91db2a946f52bf762781c57537ed2f714492e36860ee8411beffe77a4726"
   },
   {
     "id": "08f32e18-4168-5060-a562-da2b475f30cb",
@@ -3539,7 +3539,7 @@
     },
     "action": "WINERY_APPLICATION_TAKEN",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340"
     },
     "organizationId": null,
@@ -3553,8 +3553,8 @@
     },
     "reason": null,
     "correlationId": "fx-0112",
-    "prevHash": "26bd9c1f1ab4570ecffde8e14c6eb11fa6d026ec3b31e534c93849903001f95c",
-    "hash": "25aae571d422df71f5919ddccbce723faeb4003f1675c6a0ec3e5e9839fcd24d"
+    "prevHash": "396e91db2a946f52bf762781c57537ed2f714492e36860ee8411beffe77a4726",
+    "hash": "a7a9768e617ed06c76847468a67b9559f4f783a28c8821d90c96772828a6962e"
   },
   {
     "id": "0f698a5a-a7a8-55c7-b0c4-38770b98e575",
@@ -3574,7 +3574,7 @@
     },
     "action": "WINERY_APPLICATION_MEETING_SCHEDULED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340"
     },
     "organizationId": null,
@@ -3588,8 +3588,8 @@
     },
     "reason": null,
     "correlationId": "fx-0113",
-    "prevHash": "25aae571d422df71f5919ddccbce723faeb4003f1675c6a0ec3e5e9839fcd24d",
-    "hash": "2f8fd8130bda07d0d93fe0cbb5c832a342a1e8ca8d3ee7dc329c0e96d04c4958"
+    "prevHash": "a7a9768e617ed06c76847468a67b9559f4f783a28c8821d90c96772828a6962e",
+    "hash": "08b37b1a8e503a5bbd1839230e47bd76239e6ba2aa5a4a08d09f481f5dc3da01"
   },
   {
     "id": "93b810da-5c55-593e-b0f9-4a76f01e663f",
@@ -3609,7 +3609,7 @@
     },
     "action": "SETTING_CHANGED",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "canje.ventanaDias"
     },
     "organizationId": null,
@@ -3621,8 +3621,8 @@
     },
     "reason": "Prueba de ventana de canje ampliada.",
     "correlationId": "fx-0114",
-    "prevHash": "2f8fd8130bda07d0d93fe0cbb5c832a342a1e8ca8d3ee7dc329c0e96d04c4958",
-    "hash": "7d4b48d382e110eb011bd3e51be4f0ff11865cdadf9369c2b824b4de62f9215e"
+    "prevHash": "08b37b1a8e503a5bbd1839230e47bd76239e6ba2aa5a4a08d09f481f5dc3da01",
+    "hash": "5c4a3fe36cf4e3c47bba6dd435d32beefa4c25dda4258782652767b74d130375"
   },
   {
     "id": "30d002a3-8edd-5354-b17e-8d753b1b6e2c",
@@ -3642,7 +3642,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "6e544b17-3211-5c65-a28f-486b0e97f23d"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3654,8 +3654,8 @@
     },
     "reason": null,
     "correlationId": "fx-0115",
-    "prevHash": "7d4b48d382e110eb011bd3e51be4f0ff11865cdadf9369c2b824b4de62f9215e",
-    "hash": "2a77e11b75b0d766ed43c2dbf3e6dbff097c71c43e63bca00d732549bc9f3959"
+    "prevHash": "5c4a3fe36cf4e3c47bba6dd435d32beefa4c25dda4258782652767b74d130375",
+    "hash": "a0449f131e15971a594fc8def28596ed30e5e2c661eb4a6e21ed60951189ceff"
   },
   {
     "id": "61044661-f639-59df-abe5-1f79cd2c4be0",
@@ -3673,9 +3673,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "DISTILLATION_RECORDED",
+    "action": "PRODUCTION_BATCH_CREATED",
     "resource": {
-      "type": "PRODUCTION_BATCH",
+      "type": "production_batch",
       "id": "303e1c89-ca47-5505-a0a5-0a6fe2993436"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -3686,8 +3686,8 @@
     },
     "reason": null,
     "correlationId": "fx-0116",
-    "prevHash": "2a77e11b75b0d766ed43c2dbf3e6dbff097c71c43e63bca00d732549bc9f3959",
-    "hash": "7cdf84594a4a03225f40ee740ac593a0d58e31a0ccfd0571c4c27798be55fbab"
+    "prevHash": "a0449f131e15971a594fc8def28596ed30e5e2c661eb4a6e21ed60951189ceff",
+    "hash": "22cc05fbc0cc79a5b506f491ec7917a953d93e14430305f11a1b42c8a7b965fd"
   },
   {
     "id": "4f2869b2-38fc-59c3-bc67-6bc5597030ef",
@@ -3707,7 +3707,7 @@
     },
     "action": "SETTING_OVERRIDE_SET",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "trazabilidad.excepcionMinimoLegal"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3720,8 +3720,8 @@
     },
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
     "correlationId": "fx-0117",
-    "prevHash": "7cdf84594a4a03225f40ee740ac593a0d58e31a0ccfd0571c4c27798be55fbab",
-    "hash": "27f967c42e67f04cfafc8214127dbf70bb97c76d1069289893e72a666c76d59e"
+    "prevHash": "22cc05fbc0cc79a5b506f491ec7917a953d93e14430305f11a1b42c8a7b965fd",
+    "hash": "8820dcfb366bcb899feda8f9b248255ff9ae65646577eb1064aca72eca068def"
   },
   {
     "id": "29c876ad-2931-57e7-9254-8cdca4dadd2e",
@@ -3741,7 +3741,7 @@
     },
     "action": "SETTING_OVERRIDE_SET",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "trazabilidad.singani.altitudMinimaMsnm"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3754,8 +3754,8 @@
     },
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
     "correlationId": "fx-0118",
-    "prevHash": "27f967c42e67f04cfafc8214127dbf70bb97c76d1069289893e72a666c76d59e",
-    "hash": "fd808719c82fa1e4fc6289dc174b9622e4635a5b37b87968e26ba70c7008dfc9"
+    "prevHash": "8820dcfb366bcb899feda8f9b248255ff9ae65646577eb1064aca72eca068def",
+    "hash": "9d6e92f82cab65ab3e44be364693161086b71faaf9604ba7e7525ca4a01767b7"
   },
   {
     "id": "48163bea-86b4-591b-a2a9-db149b3744e2",
@@ -3775,7 +3775,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "a95bd787-dc58-5089-ad12-8b47afab9306"
     },
     "organizationId": null,
@@ -3787,8 +3787,8 @@
     },
     "reason": null,
     "correlationId": "fx-0119",
-    "prevHash": "fd808719c82fa1e4fc6289dc174b9622e4635a5b37b87968e26ba70c7008dfc9",
-    "hash": "6deec018622d4b3782790efcc4de6f225e33fadd3d0bf5bf6022da03d6f39fdb"
+    "prevHash": "9d6e92f82cab65ab3e44be364693161086b71faaf9604ba7e7525ca4a01767b7",
+    "hash": "37972ada29e64c9285805c6403b54fee926b60cd46000221b630a471587a5df6"
   },
   {
     "id": "1c0fdc36-7c33-5c02-b22b-f94d7eaa8bc5",
@@ -3808,7 +3808,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "a95bd787-dc58-5089-ad12-8b47afab9306"
     },
     "organizationId": null,
@@ -3820,8 +3820,8 @@
     },
     "reason": null,
     "correlationId": "fx-0120",
-    "prevHash": "6deec018622d4b3782790efcc4de6f225e33fadd3d0bf5bf6022da03d6f39fdb",
-    "hash": "82279f38bf2a5607de4a52cd06a7dab0f39f3bb5d3f192fb8c1dfd15cdd7a757"
+    "prevHash": "37972ada29e64c9285805c6403b54fee926b60cd46000221b630a471587a5df6",
+    "hash": "6ad3da16ab0ab35446a109424bd43fd4749ef519f26ddf4b86ff3722c55fc292"
   },
   {
     "id": "6f3f8ab9-8d52-5a9b-850f-2e37446d1652",
@@ -3841,7 +3841,7 @@
     },
     "action": "WINERY_APPLICATION_TAKEN",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "a95bd787-dc58-5089-ad12-8b47afab9306"
     },
     "organizationId": null,
@@ -3855,8 +3855,8 @@
     },
     "reason": null,
     "correlationId": "fx-0121",
-    "prevHash": "82279f38bf2a5607de4a52cd06a7dab0f39f3bb5d3f192fb8c1dfd15cdd7a757",
-    "hash": "b5bf088f27aab99f37467f864776c374b1314a209f12d120e84be888baf1c920"
+    "prevHash": "6ad3da16ab0ab35446a109424bd43fd4749ef519f26ddf4b86ff3722c55fc292",
+    "hash": "f3a3a4f824038d4b04b1cfa1963d3b3564f722c5d705f85b420da1acbd32943a"
   },
   {
     "id": "cbf3bf74-4a65-56f8-ab11-809b03a93a29",
@@ -3876,7 +3876,7 @@
     },
     "action": "INVITATION_REVOKED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "6e544b17-3211-5c65-a28f-486b0e97f23d"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -3888,8 +3888,8 @@
     },
     "reason": null,
     "correlationId": "fx-0122",
-    "prevHash": "b5bf088f27aab99f37467f864776c374b1314a209f12d120e84be888baf1c920",
-    "hash": "0ceeddb5ad202d0aab3337a83e4d138bd7c66b46ed2529f1d758a6426448e788"
+    "prevHash": "f3a3a4f824038d4b04b1cfa1963d3b3564f722c5d705f85b420da1acbd32943a",
+    "hash": "76ee430cb297fbce792d6cd1083ed62b87d88d8375e8417560ed0187f1e8a055"
   },
   {
     "id": "776a5ded-9f7c-5427-9770-345c986d0d3e",
@@ -3909,7 +3909,7 @@
     },
     "action": "WINERY_APPLICATION_NOTE_ADDED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "a95bd787-dc58-5089-ad12-8b47afab9306"
     },
     "organizationId": null,
@@ -3919,8 +3919,8 @@
     },
     "reason": null,
     "correlationId": "fx-0123",
-    "prevHash": "0ceeddb5ad202d0aab3337a83e4d138bd7c66b46ed2529f1d758a6426448e788",
-    "hash": "ca79018cc70a8fc93a4823801434fd78438a73dbff0876d7c218c71c3f096b25"
+    "prevHash": "76ee430cb297fbce792d6cd1083ed62b87d88d8375e8417560ed0187f1e8a055",
+    "hash": "d63dd293e16d8867a6ead0a5cee3a111a8e5ba94143b9deeb0db867ddfce552e"
   },
   {
     "id": "45dc5ade-bd57-5c4e-983d-725916b9567f",
@@ -3940,7 +3940,7 @@
     },
     "action": "SETTING_CHANGED",
     "resource": {
-      "type": "SETTING",
+      "type": "setting",
       "id": "canje.ventanaDias"
     },
     "organizationId": null,
@@ -3952,8 +3952,8 @@
     },
     "reason": "Se vuelve al estándar tras la prueba.",
     "correlationId": "fx-0124",
-    "prevHash": "ca79018cc70a8fc93a4823801434fd78438a73dbff0876d7c218c71c3f096b25",
-    "hash": "b7caf12e9817feb35c15aace04f9f5d357e296ae5338e44815d6f2039fd1b170"
+    "prevHash": "d63dd293e16d8867a6ead0a5cee3a111a8e5ba94143b9deeb0db867ddfce552e",
+    "hash": "eacfec36496e0034a46da65391c827da006188ceed3a4041c2a206ad613bfea4"
   },
   {
     "id": "1461ab86-b6dd-5428-8143-4c473a513f28",
@@ -3973,7 +3973,7 @@
     },
     "action": "MEMBER_BLOCKED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "c79a3f44-f369-5b59-8102-36e89311185e"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -3986,8 +3986,8 @@
     },
     "reason": "Acceso compartido detectado; pendiente de confirmar con la dueña.",
     "correlationId": "fx-0125",
-    "prevHash": "b7caf12e9817feb35c15aace04f9f5d357e296ae5338e44815d6f2039fd1b170",
-    "hash": "688b78bb4522785e85c10dd319bd78dde7221fb7f3155af0400522b993b51ace"
+    "prevHash": "eacfec36496e0034a46da65391c827da006188ceed3a4041c2a206ad613bfea4",
+    "hash": "8bc6a309ae43cd46504f2ffd87bac5f3e0978c76086578a5bc4652f3f9523c62"
   },
   {
     "id": "7db0f126-2be7-5c6b-a3d7-68609e0991c2",
@@ -4007,7 +4007,7 @@
     },
     "action": "WINERY_APPLICATION_MEETING_DONE",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340"
     },
     "organizationId": null,
@@ -4019,8 +4019,8 @@
     },
     "reason": null,
     "correlationId": "fx-0126",
-    "prevHash": "688b78bb4522785e85c10dd319bd78dde7221fb7f3155af0400522b993b51ace",
-    "hash": "d64b0f99d8f8338773fbeea981682a804e1a1ede19486f34c5647f9a9e3c84a5"
+    "prevHash": "8bc6a309ae43cd46504f2ffd87bac5f3e0978c76086578a5bc4652f3f9523c62",
+    "hash": "29a5c98a5a81c1e38985e2e6259422ee40fbf58c46e8bda58d51f8cbf17d3e92"
   },
   {
     "id": "2434ffa0-7090-5a9d-a776-275c646eff0a",
@@ -4040,7 +4040,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ec224afe-19c4-5478-8f67-66f0d3fae8cf"
     },
     "organizationId": null,
@@ -4052,8 +4052,8 @@
     },
     "reason": null,
     "correlationId": "fx-0127",
-    "prevHash": "d64b0f99d8f8338773fbeea981682a804e1a1ede19486f34c5647f9a9e3c84a5",
-    "hash": "69ebf14c0191a3a8f21840336bb488ef7b656b808f30656ddbf1767a222dec43"
+    "prevHash": "29a5c98a5a81c1e38985e2e6259422ee40fbf58c46e8bda58d51f8cbf17d3e92",
+    "hash": "dcdc0d35deb762abe4477ce83fb0840aec2bc7786cf60f4b11568df79545478d"
   },
   {
     "id": "eccdfe26-d2cb-55f7-be7b-d6095ad4479a",
@@ -4073,7 +4073,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ec224afe-19c4-5478-8f67-66f0d3fae8cf"
     },
     "organizationId": null,
@@ -4085,8 +4085,8 @@
     },
     "reason": null,
     "correlationId": "fx-0128",
-    "prevHash": "69ebf14c0191a3a8f21840336bb488ef7b656b808f30656ddbf1767a222dec43",
-    "hash": "1d62c346528d72de43843465b0aa930fdc8e2824928116176e589853dfb28604"
+    "prevHash": "dcdc0d35deb762abe4477ce83fb0840aec2bc7786cf60f4b11568df79545478d",
+    "hash": "ca3eb2fa5dab4242821d56b8499463e93230ee5b72a06e0029468e055c7edc29"
   },
   {
     "id": "1e937b35-160c-5248-8260-a742c1b25eef",
@@ -4106,7 +4106,7 @@
     },
     "action": "WINERY_APPLICATION_TAKEN",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ec224afe-19c4-5478-8f67-66f0d3fae8cf"
     },
     "organizationId": null,
@@ -4120,8 +4120,8 @@
     },
     "reason": null,
     "correlationId": "fx-0129",
-    "prevHash": "1d62c346528d72de43843465b0aa930fdc8e2824928116176e589853dfb28604",
-    "hash": "dd5b5db3617978319eec8dc147ea22c5d48ac48f8ac7c97a40869c577e8394ad"
+    "prevHash": "ca3eb2fa5dab4242821d56b8499463e93230ee5b72a06e0029468e055c7edc29",
+    "hash": "6b219468595cf5a34771b469c62b51750f8ea455b2a3662d55cf04c659d82b4f"
   },
   {
     "id": "ab330ffe-534c-58af-a990-d0feb1546ba1",
@@ -4141,7 +4141,7 @@
     },
     "action": "WINERY_APPLICATION_NOTE_ADDED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ec224afe-19c4-5478-8f67-66f0d3fae8cf"
     },
     "organizationId": null,
@@ -4151,8 +4151,8 @@
     },
     "reason": null,
     "correlationId": "fx-0130",
-    "prevHash": "dd5b5db3617978319eec8dc147ea22c5d48ac48f8ac7c97a40869c577e8394ad",
-    "hash": "656c37a0e45351eb750685fb99609a8832f0db9551fd63e50c758722dc67106c"
+    "prevHash": "6b219468595cf5a34771b469c62b51750f8ea455b2a3662d55cf04c659d82b4f",
+    "hash": "2b522bc0ef28b2a6e9f19aff62f470675a3a9e641f193cec3883857b6311295d"
   },
   {
     "id": "de36929c-7589-5bd4-b27e-7f6553403d8d",
@@ -4172,7 +4172,7 @@
     },
     "action": "WINERY_APPLICATION_APPROVED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340"
     },
     "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
@@ -4185,8 +4185,8 @@
     },
     "reason": null,
     "correlationId": "fx-0131",
-    "prevHash": "656c37a0e45351eb750685fb99609a8832f0db9551fd63e50c758722dc67106c",
-    "hash": "537fb6d5b7dd11cc7e6e769e0059a13524d9c34703176dcf697c3c02ae1e56a4"
+    "prevHash": "2b522bc0ef28b2a6e9f19aff62f470675a3a9e641f193cec3883857b6311295d",
+    "hash": "f089e3b29ecfc3a08ef0a653e39be22ede2e6efbbeecc540a9f8877379a3325d"
   },
   {
     "id": "f10bf959-bb4e-570f-9d11-d53e77d2255b",
@@ -4206,7 +4206,7 @@
     },
     "action": "WINERY_CREATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "140bd695-7a59-5480-811c-38ce57cdd80f"
     },
     "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
@@ -4216,8 +4216,8 @@
     },
     "reason": "Solicitud aprobada",
     "correlationId": "fx-0132",
-    "prevHash": "537fb6d5b7dd11cc7e6e769e0059a13524d9c34703176dcf697c3c02ae1e56a4",
-    "hash": "8aaabe8c48af21e590e722ee14a25379263f69635bca002e9946d2898e3abcc3"
+    "prevHash": "f089e3b29ecfc3a08ef0a653e39be22ede2e6efbbeecc540a9f8877379a3325d",
+    "hash": "d703a523767eb940f8ec45ad68fc5191b9ee6ec1616239ba49d4e7845a209499"
   },
   {
     "id": "37d308cf-114a-5c0b-a4b2-0e2deb74895c",
@@ -4237,7 +4237,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "15a8bd1a-00f6-5629-85a1-43fe9c6b850b"
     },
     "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
@@ -4249,8 +4249,8 @@
     },
     "reason": "Solicitud aprobada",
     "correlationId": "fx-0133",
-    "prevHash": "8aaabe8c48af21e590e722ee14a25379263f69635bca002e9946d2898e3abcc3",
-    "hash": "7708d5c1426b3f94a4189f022924b051285fcd1b230bdf685abf65e7ac527a45"
+    "prevHash": "d703a523767eb940f8ec45ad68fc5191b9ee6ec1616239ba49d4e7845a209499",
+    "hash": "76742d8fd7367883918b3dd72c4ffe8880aaf5e2029e07400c3f45d2e180c6dd"
   },
   {
     "id": "2c0f3657-b9f5-5d52-85fb-b3eea2a3ebd7",
@@ -4270,7 +4270,7 @@
     },
     "action": "WINERY_APPLICATION_MEETING_SCHEDULED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "a95bd787-dc58-5089-ad12-8b47afab9306"
     },
     "organizationId": null,
@@ -4284,8 +4284,8 @@
     },
     "reason": null,
     "correlationId": "fx-0134",
-    "prevHash": "7708d5c1426b3f94a4189f022924b051285fcd1b230bdf685abf65e7ac527a45",
-    "hash": "48b54453da0e233da5e92d9b8b09b9ebdb6c0177cbdec087db4cfab2eb74476f"
+    "prevHash": "76742d8fd7367883918b3dd72c4ffe8880aaf5e2029e07400c3f45d2e180c6dd",
+    "hash": "ee7a89259ce7f52b2b5ff1a9590cfad52cb1864384fafd7e1a1f79f82b3dd612"
   },
   {
     "id": "cd12dcd8-7f90-52b9-a424-8fe3bdfaa6bd",
@@ -4305,7 +4305,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "1ee7e630-efb9-5f93-b005-61c5076550f5"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4317,8 +4317,8 @@
     },
     "reason": "Refuerzo de operaciones para la temporada de altas",
     "correlationId": "fx-0135",
-    "prevHash": "48b54453da0e233da5e92d9b8b09b9ebdb6c0177cbdec087db4cfab2eb74476f",
-    "hash": "0f10e0828a1ca4ca2edf5dd9d6753197a1b611915ccb98371ea14df9642766a9"
+    "prevHash": "ee7a89259ce7f52b2b5ff1a9590cfad52cb1864384fafd7e1a1f79f82b3dd612",
+    "hash": "1fdd28eeb9213a93b77bee0792da90a691f6b6d9237134da6f3409ec4204bee0"
   },
   {
     "id": "f71cf218-7d3c-56b9-9051-559c1c9a9133",
@@ -4338,7 +4338,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "33b67d03-d676-553b-8196-9dce556ee326"
     },
     "organizationId": null,
@@ -4350,8 +4350,8 @@
     },
     "reason": null,
     "correlationId": "fx-0136",
-    "prevHash": "0f10e0828a1ca4ca2edf5dd9d6753197a1b611915ccb98371ea14df9642766a9",
-    "hash": "a67edb2d4497500dc87532772de73a2d65a674ee5eb7e33deff96d03749b0aa1"
+    "prevHash": "1fdd28eeb9213a93b77bee0792da90a691f6b6d9237134da6f3409ec4204bee0",
+    "hash": "0fed7b880ba23037d9f4e291d60c641220cfa8bfce572f2dd1b88b25c402a173"
   },
   {
     "id": "1f5c5cd8-0a27-5a93-9f86-a0d647bcac2c",
@@ -4371,7 +4371,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "33b67d03-d676-553b-8196-9dce556ee326"
     },
     "organizationId": null,
@@ -4383,8 +4383,8 @@
     },
     "reason": null,
     "correlationId": "fx-0137",
-    "prevHash": "a67edb2d4497500dc87532772de73a2d65a674ee5eb7e33deff96d03749b0aa1",
-    "hash": "0d8598c9d282b7f6a3e1666ae7a15ebd30a7df9cab4ebfd44104cae241df7f7f"
+    "prevHash": "0fed7b880ba23037d9f4e291d60c641220cfa8bfce572f2dd1b88b25c402a173",
+    "hash": "ba0b3091d8bb676e2d98cfb8bf13ab9a50c6bbb697529b6e9922aeadd06e3494"
   },
   {
     "id": "666779f0-181a-59bf-8364-009a31d28017",
@@ -4402,9 +4402,9 @@
       "ip": "198.51.100.24",
       "deviceId": null
     },
-    "action": "BOTTLING_RECORDED",
+    "action": "BOTTLING_BATCH_CREATED",
     "resource": {
-      "type": "BOTTLING_BATCH",
+      "type": "bottling_batch",
       "id": "c95f78e7-f72a-556c-8bae-e6670da39e8b"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -4415,8 +4415,8 @@
     },
     "reason": null,
     "correlationId": "fx-0138",
-    "prevHash": "0d8598c9d282b7f6a3e1666ae7a15ebd30a7df9cab4ebfd44104cae241df7f7f",
-    "hash": "2b0274a07196e04e1ae0b24f316c70f5a778befc8f83fe0cad410e14d723d2b9"
+    "prevHash": "ba0b3091d8bb676e2d98cfb8bf13ab9a50c6bbb697529b6e9922aeadd06e3494",
+    "hash": "fb7a280ea6f87ea0b8f1e53779c97d6323e024359ad853eda568d3aa593ccf1f"
   },
   {
     "id": "be05cfa5-a945-542d-88cd-fabf53bee8db",
@@ -4434,9 +4434,9 @@
       "ip": "203.0.113.10",
       "deviceId": null
     },
-    "action": "USER_LOGGED_IN",
+    "action": "AUTH_LOGIN_SUCCEEDED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "23d99814-3526-54f6-8b5f-5807a08506a2"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4446,8 +4446,8 @@
     },
     "reason": null,
     "correlationId": "fx-0139",
-    "prevHash": "2b0274a07196e04e1ae0b24f316c70f5a778befc8f83fe0cad410e14d723d2b9",
-    "hash": "113225c39f8e70a23bed80d29a76c3bdf98441be0084c65c70c6215dcf1b9cb2"
+    "prevHash": "fb7a280ea6f87ea0b8f1e53779c97d6323e024359ad853eda568d3aa593ccf1f",
+    "hash": "0ace761e7f8e71307e464392696b2652bd4edaa53a7a64a2cfcdac7d8ed3f89d"
   },
   {
     "id": "a88a9f2a-0b63-5dcb-aea1-77ac16e25c7e",
@@ -4467,7 +4467,7 @@
     },
     "action": "WINERY_APPLICATION_TAKEN",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "33b67d03-d676-553b-8196-9dce556ee326"
     },
     "organizationId": null,
@@ -4481,8 +4481,8 @@
     },
     "reason": null,
     "correlationId": "fx-0140",
-    "prevHash": "113225c39f8e70a23bed80d29a76c3bdf98441be0084c65c70c6215dcf1b9cb2",
-    "hash": "b302406163a5d14671522fc5b2ecd6315a5eeb9a2e22a92adadfe6e2588aac5c"
+    "prevHash": "0ace761e7f8e71307e464392696b2652bd4edaa53a7a64a2cfcdac7d8ed3f89d",
+    "hash": "0924baa915f84fdce4631e7e7c0cf0f3a7f15175978943b39a3d4a954fc94b28"
   },
   {
     "id": "a12117aa-e46e-57de-b8ac-df276ed4ac0c",
@@ -4502,7 +4502,7 @@
     },
     "action": "INVITATION_EXPIRED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "15a8bd1a-00f6-5629-85a1-43fe9c6b850b"
     },
     "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
@@ -4510,8 +4510,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0141",
-    "prevHash": "b302406163a5d14671522fc5b2ecd6315a5eeb9a2e22a92adadfe6e2588aac5c",
-    "hash": "ffc7107092cd055b01a889c4e0832eff53229c7d00abd993fc77a5fa6270fb79"
+    "prevHash": "0924baa915f84fdce4631e7e7c0cf0f3a7f15175978943b39a3d4a954fc94b28",
+    "hash": "c9541ff3647c8e821e2af4a8e51fccb2db305385694717215d3d5a1bf6a21c3c"
   },
   {
     "id": "5951e15e-b669-55af-a3b4-feae14b1b891",
@@ -4531,7 +4531,7 @@
     },
     "action": "INVITATION_ACCEPTED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "1ee7e630-efb9-5f93-b005-61c5076550f5"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4539,8 +4539,8 @@
     "after": null,
     "reason": null,
     "correlationId": "fx-0142",
-    "prevHash": "ffc7107092cd055b01a889c4e0832eff53229c7d00abd993fc77a5fa6270fb79",
-    "hash": "b46dfcf49865ad83390be082b430c30a6dd5359111af69908ae93136708a0643"
+    "prevHash": "c9541ff3647c8e821e2af4a8e51fccb2db305385694717215d3d5a1bf6a21c3c",
+    "hash": "d0926d15f57a350c7178f04c62d4f6ff4c7de1252f496257925c0f89b7b970a1"
   },
   {
     "id": "0b3d7abd-cb3b-5184-9512-22e8e879913e",
@@ -4560,7 +4560,7 @@
     },
     "action": "MEMBER_JOINED",
     "resource": {
-      "type": "MEMBERSHIP",
+      "type": "membership",
       "id": "1628d0c7-17a5-5f92-a711-9766a098ce0e"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4570,8 +4570,8 @@
     },
     "reason": null,
     "correlationId": "fx-0143",
-    "prevHash": "b46dfcf49865ad83390be082b430c30a6dd5359111af69908ae93136708a0643",
-    "hash": "6fff94956a37c6a458261c8f0b6bde61fc67af70b0fd808c29d83962f9c36629"
+    "prevHash": "d0926d15f57a350c7178f04c62d4f6ff4c7de1252f496257925c0f89b7b970a1",
+    "hash": "1e7297fe57e6b7b296b940b9951924484d2b48f091c844f33cf43fe64c6df011"
   },
   {
     "id": "6fc2c026-9128-5b53-873f-009334fd6538",
@@ -4591,7 +4591,7 @@
     },
     "action": "WINERY_APPLICATION_NOTE_ADDED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "ec224afe-19c4-5478-8f67-66f0d3fae8cf"
     },
     "organizationId": null,
@@ -4601,8 +4601,8 @@
     },
     "reason": null,
     "correlationId": "fx-0144",
-    "prevHash": "6fff94956a37c6a458261c8f0b6bde61fc67af70b0fd808c29d83962f9c36629",
-    "hash": "3898e66877c9d675f8b16b429bf2385faac373300430c584d290defc3b0b3fdf"
+    "prevHash": "1e7297fe57e6b7b296b940b9951924484d2b48f091c844f33cf43fe64c6df011",
+    "hash": "2a458a6771994fedf3d4b7bf292c7e7acbd16595ecfbbbc2cb757286f0a3525e"
   },
   {
     "id": "b33df423-56da-59f8-847c-924f29941e0f",
@@ -4622,7 +4622,7 @@
     },
     "action": "WINERY_APPLICATION_NOTE_ADDED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "33b67d03-d676-553b-8196-9dce556ee326"
     },
     "organizationId": null,
@@ -4632,8 +4632,8 @@
     },
     "reason": null,
     "correlationId": "fx-0145",
-    "prevHash": "3898e66877c9d675f8b16b429bf2385faac373300430c584d290defc3b0b3fdf",
-    "hash": "50549e8ebc6f6b90d3195c17809d90b1c9df7a6504ce1c188e94694c4e7947d6"
+    "prevHash": "2a458a6771994fedf3d4b7bf292c7e7acbd16595ecfbbbc2cb757286f0a3525e",
+    "hash": "da84a9f656c8f0c3474b043acb0721503b74a25fcf84b9d2bedcad4407951ed4"
   },
   {
     "id": "659bde6d-e481-56a2-85d2-80f75f32ce0f",
@@ -4653,7 +4653,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "5e2b34b6-5f13-5f58-b484-7db70b434e08"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -4665,8 +4665,8 @@
     },
     "reason": null,
     "correlationId": "fx-0146",
-    "prevHash": "50549e8ebc6f6b90d3195c17809d90b1c9df7a6504ce1c188e94694c4e7947d6",
-    "hash": "f0deedc4693ed5faae0330c790db15e99ea62155d240f6083faefb2f23658df5"
+    "prevHash": "da84a9f656c8f0c3474b043acb0721503b74a25fcf84b9d2bedcad4407951ed4",
+    "hash": "41c9b74b586c7e0743464f2bdef3230a501b5b243b632e0280a9b4481436e987"
   },
   {
     "id": "76a71064-bbc4-589a-8867-a64a761c3b20",
@@ -4686,7 +4686,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "001add36-da49-51e4-b065-2ed0d5baacf4"
     },
     "organizationId": null,
@@ -4698,8 +4698,8 @@
     },
     "reason": null,
     "correlationId": "fx-0147",
-    "prevHash": "f0deedc4693ed5faae0330c790db15e99ea62155d240f6083faefb2f23658df5",
-    "hash": "59633199a0f27e9ec4f03fce978bb1b923c3f8350a2639120742e28e50e5bbea"
+    "prevHash": "41c9b74b586c7e0743464f2bdef3230a501b5b243b632e0280a9b4481436e987",
+    "hash": "0dce6015a52b77e52f1077c120236b55f9585b6b6ebb92305d7d57909f4a5377"
   },
   {
     "id": "d7230eed-31b5-5e6e-b5c6-ec4e89654787",
@@ -4719,7 +4719,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "001add36-da49-51e4-b065-2ed0d5baacf4"
     },
     "organizationId": null,
@@ -4731,8 +4731,8 @@
     },
     "reason": null,
     "correlationId": "fx-0148",
-    "prevHash": "59633199a0f27e9ec4f03fce978bb1b923c3f8350a2639120742e28e50e5bbea",
-    "hash": "7209a73df794eb3135a377f157425b856020742a9d933fd91418bd643b87d407"
+    "prevHash": "0dce6015a52b77e52f1077c120236b55f9585b6b6ebb92305d7d57909f4a5377",
+    "hash": "6ae84db1f38bf0e1090cab03a44ac89ee0108e9d85da1305b8b3711c29a3d534"
   },
   {
     "id": "2ee6cc83-aa4f-52a0-a141-87a92b510d40",
@@ -4750,9 +4750,9 @@
       "ip": "203.0.113.10",
       "deviceId": null
     },
-    "action": "USER_LOGGED_IN",
+    "action": "AUTH_LOGIN_SUCCEEDED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4762,8 +4762,8 @@
     },
     "reason": null,
     "correlationId": "fx-0149",
-    "prevHash": "7209a73df794eb3135a377f157425b856020742a9d933fd91418bd643b87d407",
-    "hash": "7c02ee7bf5525d4acafd6563ddb9f18f4ccad9bf1d8fc7edd6d513bb3bced0eb"
+    "prevHash": "6ae84db1f38bf0e1090cab03a44ac89ee0108e9d85da1305b8b3711c29a3d534",
+    "hash": "12e2cd8c98cd219366656ff007e7dbc520a018d14eadc5e925735048e178c5d4"
   },
   {
     "id": "40a954c1-e27d-5667-adfa-b2e7744aea21",
@@ -4781,9 +4781,9 @@
       "ip": "203.0.113.10",
       "deviceId": null
     },
-    "action": "USER_LOGGED_IN",
+    "action": "AUTH_LOGIN_SUCCEEDED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "4e89872f-1de3-5f01-968b-2203e12dbfd0"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4793,8 +4793,8 @@
     },
     "reason": null,
     "correlationId": "fx-0150",
-    "prevHash": "7c02ee7bf5525d4acafd6563ddb9f18f4ccad9bf1d8fc7edd6d513bb3bced0eb",
-    "hash": "5381aea9edf9afc27162d5236c7de1109e38372a6df4f14ef1f1795e0f8310f9"
+    "prevHash": "12e2cd8c98cd219366656ff007e7dbc520a018d14eadc5e925735048e178c5d4",
+    "hash": "6451a707ec13323ea587d6d57fba9f644c1b78d6a945510438016b9c4ccf8587"
   },
   {
     "id": "79233513-8335-52a6-b331-70d8dc5354b7",
@@ -4814,7 +4814,7 @@
     },
     "action": "WINERY_APPLICATION_APPROVED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "33b67d03-d676-553b-8196-9dce556ee326"
     },
     "organizationId": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
@@ -4827,8 +4827,8 @@
     },
     "reason": "Documentación completa",
     "correlationId": "fx-0151",
-    "prevHash": "5381aea9edf9afc27162d5236c7de1109e38372a6df4f14ef1f1795e0f8310f9",
-    "hash": "8557ac42f518ab8084de7589a1ab9def3386db1556ce57b2497e058b13842982"
+    "prevHash": "6451a707ec13323ea587d6d57fba9f644c1b78d6a945510438016b9c4ccf8587",
+    "hash": "4f42f67d676e6073d73a110e91f0e220f263c86c085ec4465393d9ab538d5bc1"
   },
   {
     "id": "96d3b1b5-4dfa-584e-bf3c-71fbab40315e",
@@ -4848,7 +4848,7 @@
     },
     "action": "WINERY_CREATED",
     "resource": {
-      "type": "WINERY",
+      "type": "winery",
       "id": "50ec6662-4f14-525d-8678-42dfd1afe5e1"
     },
     "organizationId": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
@@ -4858,8 +4858,8 @@
     },
     "reason": "Documentación completa",
     "correlationId": "fx-0152",
-    "prevHash": "8557ac42f518ab8084de7589a1ab9def3386db1556ce57b2497e058b13842982",
-    "hash": "6fe75178b05792bb97d568e9f7cd43508d08930475488d38d6539405709e3b0f"
+    "prevHash": "4f42f67d676e6073d73a110e91f0e220f263c86c085ec4465393d9ab538d5bc1",
+    "hash": "a085220ac26f02a461d9fa5cda6e510b0da0add8e85d25c89293b7a68e2ec8a8"
   },
   {
     "id": "1340a1e7-a13b-5683-b4e9-23bac40e9e1f",
@@ -4879,7 +4879,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "45a3d555-de55-5dcf-af73-d97324c07209"
     },
     "organizationId": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
@@ -4891,8 +4891,8 @@
     },
     "reason": "Documentación completa",
     "correlationId": "fx-0153",
-    "prevHash": "6fe75178b05792bb97d568e9f7cd43508d08930475488d38d6539405709e3b0f",
-    "hash": "dc090b4678b83f378bfa756434e8fd7164ad7ee9dadb45d0ba35e8931cb026b1"
+    "prevHash": "a085220ac26f02a461d9fa5cda6e510b0da0add8e85d25c89293b7a68e2ec8a8",
+    "hash": "79270ef4a718aa182e408b0ecc37cf03e0ccc5a76bf6d956f3f728ace9bb957d"
   },
   {
     "id": "1e51f64b-2f81-5880-9249-0825e9dade9b",
@@ -4912,7 +4912,7 @@
     },
     "action": "HARVEST_BATCH_CREATED",
     "resource": {
-      "type": "HARVEST_BATCH",
+      "type": "harvest_batch",
       "id": "00a123fd-d0bd-526c-b5bd-227250ec0ce4"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -4923,8 +4923,8 @@
     },
     "reason": null,
     "correlationId": "fx-0154",
-    "prevHash": "dc090b4678b83f378bfa756434e8fd7164ad7ee9dadb45d0ba35e8931cb026b1",
-    "hash": "a76ab5ebc059281c136df467b381393c3a07d5b098a9f2573019a754fc044488"
+    "prevHash": "79270ef4a718aa182e408b0ecc37cf03e0ccc5a76bf6d956f3f728ace9bb957d",
+    "hash": "cd62e52f7895fd1c310705813dc83786921b52f7a2bbf97d123d22c6b8bb0551"
   },
   {
     "id": "03617be5-1473-5211-a48b-fe61c7e8bd2a",
@@ -4944,7 +4944,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "39eb1612-a1ec-5038-aea2-6496741e4e08"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -4956,8 +4956,8 @@
     },
     "reason": null,
     "correlationId": "fx-0155",
-    "prevHash": "a76ab5ebc059281c136df467b381393c3a07d5b098a9f2573019a754fc044488",
-    "hash": "82e0d5971038d3c6f4bd1d420fa900a96b6a3408590142ea959c6f79a50f12b1"
+    "prevHash": "cd62e52f7895fd1c310705813dc83786921b52f7a2bbf97d123d22c6b8bb0551",
+    "hash": "cee6fcaab211acc72cf24473bcfd24503a33d00ffedc341fd945089d8d6ecc13"
   },
   {
     "id": "cab4647d-aa32-51f6-80dc-df25d3df384d",
@@ -4977,7 +4977,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "165c889b-aa28-5251-b0cc-dd74a099391e"
     },
     "organizationId": null,
@@ -4989,8 +4989,8 @@
     },
     "reason": null,
     "correlationId": "fx-0156",
-    "prevHash": "82e0d5971038d3c6f4bd1d420fa900a96b6a3408590142ea959c6f79a50f12b1",
-    "hash": "3c456e78e8381fa3cd9c9a4cc0e6d272ce5610c4b7217f29458c7e64dcf74dcb"
+    "prevHash": "cee6fcaab211acc72cf24473bcfd24503a33d00ffedc341fd945089d8d6ecc13",
+    "hash": "2a965eb457a7aeb0dad129011b455e1ad64f9e540e9540b387266a21a7277593"
   },
   {
     "id": "14d2c46e-b3d0-5f28-831b-0c8ca1556f6f",
@@ -5010,7 +5010,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "165c889b-aa28-5251-b0cc-dd74a099391e"
     },
     "organizationId": null,
@@ -5022,8 +5022,8 @@
     },
     "reason": null,
     "correlationId": "fx-0157",
-    "prevHash": "3c456e78e8381fa3cd9c9a4cc0e6d272ce5610c4b7217f29458c7e64dcf74dcb",
-    "hash": "25beb80f03262ff694e1bcefdaa393b70469af6afd43eaccfa36984ac700881e"
+    "prevHash": "2a965eb457a7aeb0dad129011b455e1ad64f9e540e9540b387266a21a7277593",
+    "hash": "9dbae0f2a68c05a32d196b839237637e2c9dc31f84d0d09708986dbf6ee87923"
   },
   {
     "id": "2a0f8ecc-a8b4-508d-852c-e64e29074a24",
@@ -5043,7 +5043,7 @@
     },
     "action": "FERMENTATION_TANK_CREATED",
     "resource": {
-      "type": "FERMENTATION_TANK",
+      "type": "fermentation_tank",
       "id": "f28ea298-cf7f-5d30-a92e-aad6379b8158"
     },
     "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
@@ -5054,8 +5054,8 @@
     },
     "reason": null,
     "correlationId": "fx-0158",
-    "prevHash": "25beb80f03262ff694e1bcefdaa393b70469af6afd43eaccfa36984ac700881e",
-    "hash": "fce63007d89c4492cba844b224e254e5dd0482945e58a974ab8bce88409e02fb"
+    "prevHash": "9dbae0f2a68c05a32d196b839237637e2c9dc31f84d0d09708986dbf6ee87923",
+    "hash": "1dd11e72396e79a3a38a82c75d41d1070f17cce55de5e7c0b41249e5346c87cc"
   },
   {
     "id": "6f6d94cb-57c4-5ed9-9f35-bf5ec67cb0b4",
@@ -5075,7 +5075,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "63f9cb8d-5c9c-5598-a68b-b03fc5e6f70e"
     },
     "organizationId": null,
@@ -5087,8 +5087,8 @@
     },
     "reason": null,
     "correlationId": "fx-0159",
-    "prevHash": "fce63007d89c4492cba844b224e254e5dd0482945e58a974ab8bce88409e02fb",
-    "hash": "f7f6a96174ee1a30a440c9391d7821fd3676b50ed8d6a7c47cfa21e4ffc2cbd6"
+    "prevHash": "1dd11e72396e79a3a38a82c75d41d1070f17cce55de5e7c0b41249e5346c87cc",
+    "hash": "7b24d8156c720ff8146e93879c235a7b35dafe875019262edb484b1b66d3f738"
   },
   {
     "id": "5acad74f-b380-5821-9d57-af65e2f5fabc",
@@ -5108,7 +5108,7 @@
     },
     "action": "WINERY_APPLICATION_VERIFIED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "63f9cb8d-5c9c-5598-a68b-b03fc5e6f70e"
     },
     "organizationId": null,
@@ -5120,8 +5120,8 @@
     },
     "reason": null,
     "correlationId": "fx-0160",
-    "prevHash": "f7f6a96174ee1a30a440c9391d7821fd3676b50ed8d6a7c47cfa21e4ffc2cbd6",
-    "hash": "43999018f138afe49c9d301e71d851d95757cfb77716eded04d66c5d5045bd3f"
+    "prevHash": "7b24d8156c720ff8146e93879c235a7b35dafe875019262edb484b1b66d3f738",
+    "hash": "7d7089f9255e36543879b90d4d59da885b34562f773a62bede9e12d6c2163e13"
   },
   {
     "id": "4ca0356e-11ff-5ea9-aa77-3a9fd88a2cec",
@@ -5139,9 +5139,9 @@
       "ip": "203.0.113.10",
       "deviceId": null
     },
-    "action": "USER_LOGGED_IN",
+    "action": "AUTH_LOGIN_SUCCEEDED",
     "resource": {
-      "type": "USER",
+      "type": "user",
       "id": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
@@ -5151,8 +5151,8 @@
     },
     "reason": null,
     "correlationId": "fx-0161",
-    "prevHash": "43999018f138afe49c9d301e71d851d95757cfb77716eded04d66c5d5045bd3f",
-    "hash": "4faec1fcd96c17b4a3ad5d40a72f790fddfd7546db65a75bb1ae6a32a6569cdb"
+    "prevHash": "7d7089f9255e36543879b90d4d59da885b34562f773a62bede9e12d6c2163e13",
+    "hash": "6d720eace079e4e70359211215c84a8956d259b582eb3a83e27807ccc3c5487a"
   },
   {
     "id": "e69da769-70f0-55eb-bce2-62c855f578aa",
@@ -5172,7 +5172,7 @@
     },
     "action": "WINERY_APPLICATION_SUBMITTED",
     "resource": {
-      "type": "WINERY_APPLICATION",
+      "type": "winery_application",
       "id": "9358a453-1732-5124-8d16-d77b682c294c"
     },
     "organizationId": null,
@@ -5184,8 +5184,8 @@
     },
     "reason": null,
     "correlationId": "fx-0162",
-    "prevHash": "4faec1fcd96c17b4a3ad5d40a72f790fddfd7546db65a75bb1ae6a32a6569cdb",
-    "hash": "9ed46cc63b0ab784428dfcdf41eeb816392db44845ccfd0ebf7e35fc01802e18"
+    "prevHash": "6d720eace079e4e70359211215c84a8956d259b582eb3a83e27807ccc3c5487a",
+    "hash": "f48ae2b133e9e796588671012600685c9a72955e148841efc7fcd859c4935618"
   },
   {
     "id": "f60946d5-d789-5a4b-9f12-dab33791ce10",
@@ -5205,7 +5205,7 @@
     },
     "action": "INVITATION_CREATED",
     "resource": {
-      "type": "INVITATION",
+      "type": "invitation",
       "id": "90ce54d2-6232-5973-97f6-56795a0e9ef8"
     },
     "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
@@ -5217,7 +5217,7 @@
     },
     "reason": "Pedido de la dueña por el canal de soporte",
     "correlationId": "fx-0163",
-    "prevHash": "9ed46cc63b0ab784428dfcdf41eeb816392db44845ccfd0ebf7e35fc01802e18",
-    "hash": "f502d82a4e40c7cc2112594ed969e568576452221c8b0fad49a14d1293d87da4"
+    "prevHash": "f48ae2b133e9e796588671012600685c9a72955e148841efc7fcd859c4935618",
+    "hash": "2dc6553acb99840c2006925eb49685ab4e2c1dc48e66d5ed4c1353b046a93691"
   }
 ]

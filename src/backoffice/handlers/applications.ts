@@ -1,6 +1,6 @@
 import { anyStaff, platform } from '../../erp/handlers/auth-context'
 import { getErpDb, newId, nextSeq } from '../../erp/handlers/db'
-import { domainError, notFound } from '../../erp/handlers/errors'
+import { ApiError, domainError, fieldError, notFound } from '../../erp/handlers/errors'
 import { accepted, enumParam, listResult, noContent, ok, parseBody, strParam, type RouteContext, type RouteSpec } from '../../erp/handlers/http'
 import type { WineryResponse } from '../../erp/schemas'
 import { sha256Hex } from '../../shared/crypto'
@@ -45,7 +45,7 @@ function toSummary(a: StoredApplication): WineryApplicationSummary {
 
 function findApplication(id: string): StoredApplication {
   const a = bo().applications.find((x) => x.id === id)
-  if (!a) throw notFound(`Solicitud con identificador "${id}" no encontrada`)
+  if (!a) throw notFound('Solicitud de alta no encontrada')
   return a
 }
 
@@ -59,12 +59,46 @@ function transition(a: StoredApplication, to: ApplicationStatus): ApplicationSta
   return from
 }
 
-/** ¿Hay una bodega no revocada o una solicitud abierta con este NIT? */
+/** Vida del enlace de verificación del correo de contacto (72 h, desde el último envío). */
+export const APPLICATION_VERIFY_TTL_HOURS = 72
+
+/** Caducidad del enlace de verificación de una solicitud `UNVERIFIED` (último envío + 72 h). */
+function verifyExpiresAt(a: StoredApplication): number {
+  return Date.parse(a.updatedAt) + APPLICATION_VERIFY_TTL_HOURS * 3_600_000
+}
+
+/**
+ * ¿Solicitud abierta para el NIT? Recibida, en revisión o con reunión, o sin verificar con el enlace
+ * aún válido (una sin verificar caducada no bloquea el NIT), como `openApplicationWhere` del backend.
+ */
+function isOpenApplication(a: StoredApplication, nowMs: number): boolean {
+  if (a.status === 'UNVERIFIED') return verifyExpiresAt(a) > nowMs
+  return OPEN_APPLICATION_STATUSES.includes(a.status)
+}
+
+/**
+ * ¿Hay una bodega (en **cualquier** estado, también `REVOKED`: el NIT es único) o una solicitud
+ * abierta con este NIT? Se excluyen la solicitud y la bodega de la propia operación.
+ */
 export function taxIdTaken(taxId: string, exceptApplicationId: string | null = null, exceptWineryId: string | null = null): boolean {
-  const winery = getErpDb().wineries.some((w) => w.taxIdNit === taxId && w.certificationStatus !== 'REVOKED' && w.id !== exceptWineryId)
-  const open = bo().applications.some((a) => a.taxId === taxId && a.id !== exceptApplicationId && OPEN_APPLICATION_STATUSES.includes(a.status))
+  const nowMs = Date.parse(now())
+  const winery = getErpDb().wineries.some((w) => w.taxIdNit === taxId && w.id !== exceptWineryId)
+  const open = bo().applications.some((a) => a.taxId === taxId && a.id !== exceptApplicationId && isOpenApplication(a, nowMs))
   return winery || open
 }
+
+/** 409 `ORG_TAX_ID_TAKEN` con el campo, como el backend. */
+export function taxIdTakenError(taxId: string) {
+  return new ApiError(409, 'ORG_TAX_ID_TAKEN', `Ya hay una bodega o una solicitud abierta con el NIT ${taxId}`, [
+    fieldError('taxId', 'NIT ya registrado'),
+  ])
+}
+
+/** 422 `APPLICATION_TOKEN_INVALID`: enlace desconocido, ya usado o caducado. */
+const applicationTokenInvalid = () =>
+  new ApiError(422, 'APPLICATION_TOKEN_INVALID', 'El enlace de verificación no es válido, ya se usó o caducó', [
+    fieldError('token', 'Enlace no válido o caducado'),
+  ])
 
 /** Aviso a operaciones (correo a cada persona de operaciones y administración). */
 function notifyOperations(subject: string, lines: string[], template: 'APPLICATION_NEW_FOR_OPERATIONS' | 'APPLICATION_DUPLICATE_FOR_OPERATIONS') {
@@ -76,7 +110,7 @@ function notifyOperations(subject: string, lines: string[], template: 'APPLICATI
 }
 
 function audit(ctx: RouteContext, a: StoredApplication, action: string, extra: { before?: Record<string, unknown>; after?: Record<string, unknown>; reason?: string | null } = {}) {
-  recordAudit(ctx, { action, resource: { type: 'WINERY_APPLICATION', id: a.id }, organizationId: a.wineryId, ...extra })
+  recordAudit(ctx, { action, resource: { type: 'winery_application', id: a.id }, organizationId: a.wineryId, ...extra })
 }
 
 /** Crea la bodega `INVITED` de una solicitud aprobada o de un alta directa. */
@@ -128,7 +162,7 @@ export function createInvitedWinery(
   profile.statusHistory = [{ status: 'INVITED', at: createdAt, by: ctx.auth.user.fullName, reason }]
   recordAudit(ctx, {
     action: 'WINERY_CREATED',
-    resource: { type: 'WINERY', id: winery.id },
+    resource: { type: 'winery', id: winery.id },
     organizationId: winery.id,
     after: { status: 'INVITED', tradeName: winery.commercialName, taxId: winery.taxIdNit },
     reason,
@@ -147,8 +181,12 @@ export const applicationRoutes: RouteSpec[] = [
       // Campo trampa relleno: 202 silencioso sin crear nada.
       if (body.website && body.website.trim() !== '') return accepted({ id: fakeId(), status: 'UNVERIFIED' })
       checkCaptcha(body.captchaToken)
+      const email = body.contactEmail.toLowerCase()
+      // La misma persona reenvía la misma solicitud sin haberla verificado: se actualiza y se manda
+      // un enlace nuevo (el anterior deja de valer).
+      const previous = bo().applications.find((x) => x.status === 'UNVERIFIED' && x.taxId === body.taxId && x.contactEmail === email)
       // NIT ya usado: 202 igualmente (no se filtran datos) y aviso a operaciones.
-      if (taxIdTaken(body.taxId)) {
+      if (taxIdTaken(body.taxId, previous?.id ?? null)) {
         notifyOperations(`Solicitud duplicada: NIT ${body.taxId}`, [
           `Llegó una solicitud de ${body.tradeName} con el NIT ${body.taxId}, que ya tiene una bodega o una solicitud abierta.`,
           `Contacto: ${body.contactName} <${body.contactEmail}>.`,
@@ -162,7 +200,7 @@ export const applicationRoutes: RouteSpec[] = [
         })
         recordAudit(ctx, {
           action: 'WINERY_APPLICATION_DUPLICATE_TAX_ID',
-          resource: { type: 'WINERY_APPLICATION', id: null },
+          resource: { type: 'winery_application', id: null },
           organizationId: null,
           after: { taxId: body.taxId, tradeName: body.tradeName },
         })
@@ -170,6 +208,24 @@ export const applicationRoutes: RouteSpec[] = [
       }
       const createdAt = stamp()
       const token = `apv_${sha256Hex(`application-verify:${nextSeq('application-verify')}:${body.taxId}`).slice(0, 24)}`
+      if (previous) {
+        Object.assign(previous, {
+          updatedAt: createdAt,
+          legalName: body.legalName,
+          tradeName: body.tradeName,
+          category: body.category,
+          region: body.region,
+          contactName: body.contactName,
+          contactPhone: body.contactPhone ?? null,
+          message: body.message ?? null,
+        })
+        previous._mock.verifyToken = token
+        sendMail(applicationVerifyMail({ to: previous.contactEmail, token, tradeName: previous.tradeName }))
+        audit(ctx, previous, 'WINERY_APPLICATION_SUBMITTED', {
+          after: { tradeName: previous.tradeName, taxId: previous.taxId, contactEmail: previous.contactEmail, resubmitted: true },
+        })
+        return accepted({ id: previous.id, status: 'UNVERIFIED' })
+      }
       const a: StoredApplication = {
         id: newId('winery-application'),
         status: 'UNVERIFIED',
@@ -181,7 +237,7 @@ export const applicationRoutes: RouteSpec[] = [
         category: body.category,
         region: body.region,
         contactName: body.contactName,
-        contactEmail: body.contactEmail.toLowerCase(),
+        contactEmail: email,
         contactPhone: body.contactPhone ?? null,
         message: body.message ?? null,
         assignee: null,
@@ -193,7 +249,7 @@ export const applicationRoutes: RouteSpec[] = [
       }
       bo().applications.unshift(a)
       sendMail(applicationVerifyMail({ to: a.contactEmail, token, tradeName: a.tradeName }))
-      audit(ctx, a, 'WINERY_APPLICATION_SUBMITTED', { after: { tradeName: a.tradeName, taxId: a.taxId, contactEmail: a.contactEmail } })
+      audit(ctx, a, 'WINERY_APPLICATION_SUBMITTED', { after: { tradeName: a.tradeName, taxId: a.taxId, contactEmail: a.contactEmail, resubmitted: false } })
       return accepted({ id: a.id, status: 'UNVERIFIED' })
     },
   },
@@ -204,7 +260,8 @@ export const applicationRoutes: RouteSpec[] = [
     async handle(ctx) {
       const body = await parseBody(ctx.request, VerifyWineryApplicationSchema)
       const a = bo().applications.find((x) => x._mock.verifyToken === body.token)
-      if (!a) throw domainError(422, 'APPLICATION_TOKEN_INVALID', 'El enlace de verificación no es válido o ya se usó', 'token')
+      // Desconocido, ya usado o caducado (72 h desde el último envío) → 422.
+      if (!a || a.status !== 'UNVERIFIED' || verifyExpiresAt(a) <= Date.parse(now())) throw applicationTokenInvalid()
       transition(a, 'RECEIVED')
       a.updatedAt = stamp()
       a._mock.verifyToken = null
@@ -317,7 +374,7 @@ export const applicationRoutes: RouteSpec[] = [
       if (!APPLICATION_TRANSITIONS[a.status].includes('APPROVED')) {
         throw domainError(409, 'APPLICATION_INVALID_TRANSITION', `La solicitud no puede pasar de ${a.status} a APPROVED`)
       }
-      if (taxIdTaken(a.taxId, a.id)) throw domainError(409, 'ORG_TAX_ID_TAKEN', `Ya hay una bodega o una solicitud abierta con el NIT ${a.taxId}`)
+      if (taxIdTaken(a.taxId, a.id)) throw taxIdTakenError(a.taxId)
       const reason = body.reason ?? null
       const winery = createInvitedWinery(ctx, {
         legalName: a.legalName,

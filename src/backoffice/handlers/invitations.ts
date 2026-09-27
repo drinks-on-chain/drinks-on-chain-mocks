@@ -2,11 +2,11 @@ import { PLATFORM_ORGANIZATION } from '../../erp/catalog'
 import { USER_ROLE_FOR_MEMBER } from '../../erp/derive'
 import { anyUser, orgMember, type AuthContext } from '../../erp/handlers/auth-context'
 import { getErpDb, newId, nextSeq } from '../../erp/handlers/db'
-import { ApiError, domainError, fieldError, invalid, notFound, unauthorized } from '../../erp/handlers/errors'
+import { ApiError, domainError, fieldError, invalid, notFound } from '../../erp/handlers/errors'
 import { created, enumParam, listResult, ok, parseBody, type RouteContext, type RouteSpec } from '../../erp/handlers/http'
-import { createUser, findUserByEmail, openSession, sessionResult } from '../../erp/handlers/routes/auth-users'
+import { createUser, findUserByEmail, openSession, rotatedSessionOf, sessionResult } from '../../erp/handlers/routes/auth-users'
 import { addMembership } from '../../erp/handlers/routes/wineries'
-import { getSession, rememberOrganization, rotateRefresh, setActiveOrganization } from '../../erp/handlers/sessions'
+import { rememberOrganization, setActiveOrganization, type MockSession } from '../../erp/handlers/sessions'
 import type { MemberRole, MembershipRole, MockUser, OrganizationType, PlatformRole, WineryResponse } from '../../erp/schemas'
 import { sha256Hex } from '../../shared/crypto'
 import { invitationMail } from '../mail'
@@ -20,7 +20,7 @@ import {
   type InvitationPreview,
 } from '../schemas'
 import { startMfaChallenge } from './identity'
-import { platformMembershipId, setMemberBlocked, setMemberRole, teamSize } from './members'
+import { blockOf, platformMembershipId, setMemberBlocked, setMemberRole, teamSize } from './members'
 import {
   activateWinery,
   bo,
@@ -201,6 +201,18 @@ export interface CreateInvitationOptions {
   transfer?: StoredInvitation['_mock']['transfer']
 }
 
+/**
+ * Límite de colaboradores (`equipo.maxColaboradoresPorBodega`, vacío = ilimitado): miembros activos
+ * (dueño incluido) + invitaciones pendientes. Lo comprueban invitar, reenviar una caducada y
+ * desbloquear a un miembro → 422 `ORG_MEMBER_LIMIT_REACHED`.
+ */
+export function assertTeamCapacity(organizationId: string, field: string | null = null): void {
+  const limit = effectiveSetting('equipo.maxColaboradoresPorBodega', organizationId).value
+  if (typeof limit === 'number' && teamSize(organizationId) >= limit) {
+    throw domainError(422, 'ORG_MEMBER_LIMIT_REACHED', `La bodega alcanzó su límite de ${limit} colaboradores (miembros activos + invitaciones pendientes)`, field)
+  }
+}
+
 /** Crea la invitación con sus reglas (§2), "envía" el correo y deja la entrada de bitácora. */
 export function createInvitation(ctx: RouteContext | null, o: CreateInvitationOptions): StoredInvitation {
   const email = o.email.trim().toLowerCase()
@@ -214,12 +226,7 @@ export function createInvitation(ctx: RouteContext | null, o: CreateInvitationOp
   if (bo().invitations.some((i) => i.organizationId === o.target.organizationId && i.email.toLowerCase() === email && effectiveInvitationStatus(i, nowIso) === 'PENDING')) {
     throw domainError(409, 'INVITATION_ALREADY_PENDING', 'Ya hay una invitación pendiente para ese correo')
   }
-  if (o.target.organizationType === 'WINERY' && !o.ownerInvite) {
-    const limit = effectiveSetting('equipo.maxColaboradoresPorBodega', o.target.organizationId).value
-    if (typeof limit === 'number' && teamSize(o.target.organizationId) >= limit) {
-      throw domainError(422, 'ORG_MEMBER_LIMIT_REACHED', `La bodega alcanzó su límite de ${limit} colaboradores (miembros activos + invitaciones pendientes)`, 'email')
-    }
-  }
+  if (o.target.organizationType === 'WINERY' && !o.ownerInvite) assertTeamCapacity(o.target.organizationId, 'email')
   const createdAt = stamp()
   const inv: StoredInvitation = {
     id: newId('invitation'),
@@ -239,7 +246,7 @@ export function createInvitation(ctx: RouteContext | null, o: CreateInvitationOp
   sendInvitationMail(inv)
   recordAudit(ctx, {
     action: o.target.organizationType === 'PLATFORM' ? 'PLATFORM_USER_INVITED' : 'INVITATION_CREATED',
-    resource: { type: 'INVITATION', id: inv.id },
+    resource: { type: 'invitation', id: inv.id },
     organizationId: inv.organizationId,
     after: { email, role: o.role, expiresAt: inv.expiresAt },
     reason: o.reason ?? null,
@@ -284,6 +291,24 @@ function assertPending(inv: StoredInvitation): void {
   if (status !== 'PENDING') throw domainError(409, 'INVITATION_NOT_PENDING', `La invitación ya no está pendiente (${status})`)
 }
 
+/**
+ * Reglas de la membresía que crea la aceptación (`InvitationsService.join` del backend): ya miembro
+ * activo → 409 `ORG_ALREADY_MEMBER` (salvo la transferencia); bloqueado por la plataforma y la
+ * invitación no la hizo la plataforma → 403 `ORG_BLOCKED_BY_PLATFORM`.
+ */
+function assertCanJoin(inv: StoredInvitation, user: MockUser): void {
+  if (inv.organizationType !== 'WINERY') return
+  const existing = findWinery(inv.organizationId).members?.find((m) => m.userId === user.id)
+  if (!existing) return
+  // Los mocks aceptan además la invitación de dueño de quien ya es su dueño activo (bodegas `INVITED` de
+  // antes de la Ola 1, como Viñedos del Guadalquivir): la aceptación la activa.
+  const ownerOnboarding = inv.role === 'OWNER' && existing.memberRole === 'OWNER'
+  if (existing.isActive && !inv._mock.transfer && !ownerOnboarding) throw domainError(409, 'ORG_ALREADY_MEMBER', 'Ya eres miembro de esta organización')
+  if (!existing.isActive && blockOf(existing.id)?.by === 'PLATFORM' && !inv.invitedBy.viaPlatform) {
+    throw domainError(403, 'ORG_BLOCKED_BY_PLATFORM', 'La plataforma bloqueó tu acceso a esta organización')
+  }
+}
+
 /** Membresía de bodega de la invitación (nueva, reactivada o con el rol nuevo). */
 function joinWinery(ctx: RouteContext, inv: StoredInvitation, user: MockUser): void {
   const winery = findWinery(inv.organizationId)
@@ -308,7 +333,7 @@ function joinWinery(ctx: RouteContext, inv: StoredInvitation, user: MockUser): v
       }
       recordAudit(ctx, {
         action: 'WINERY_OWNERSHIP_TRANSFERRED',
-        resource: { type: 'WINERY', id: winery.id },
+        resource: { type: 'winery', id: winery.id },
         organizationId: winery.id,
         before: { ownerUserId: previous.userId },
         after: { ownerUserId: user.id, previousOwnerAs: inv._mock.transfer.keepPreviousOwnerAs },
@@ -318,7 +343,7 @@ function joinWinery(ctx: RouteContext, inv: StoredInvitation, user: MockUser): v
   }
   recordAudit(ctx, {
     action: 'MEMBER_JOINED',
-    resource: { type: 'MEMBERSHIP', id: membershipId },
+    resource: { type: 'membership', id: membershipId },
     organizationId: winery.id,
     after: { role },
     actor: personActor(user, role, winery.id),
@@ -332,7 +357,7 @@ function joinPlatform(ctx: RouteContext, inv: StoredInvitation, user: MockUser):
   bo().blocks = bo().blocks.filter((b) => b.membershipId !== membershipId)
   recordAudit(ctx, {
     action: 'MEMBER_JOINED',
-    resource: { type: 'MEMBERSHIP', id: membershipId },
+    resource: { type: 'membership', id: membershipId },
     organizationId: PLATFORM_ORGANIZATION.id,
     after: { role: inv.role },
     actor: personActor(user, inv.role, PLATFORM_ORGANIZATION.id),
@@ -342,13 +367,21 @@ function joinPlatform(ctx: RouteContext, inv: StoredInvitation, user: MockUser):
 async function accept(ctx: RouteContext) {
   const inv = findInvitationByToken(ctx.params.token!)
   assertPending(inv)
+  if (inv.organizationType === 'WINERY' && findWinery(inv.organizationId).certificationStatus === 'REVOKED') {
+    throw domainError(403, 'ORG_REVOKED', 'La organización está revocada')
+  }
   const body = await parseBody(ctx.request, AcceptInvitationSchema)
   const auth: AuthContext | null = ctx.optionalAuth
   const existing = findUserByEmail(inv.email)
   let user: MockUser
+  /** Sesión de una cuenta existente, con el refresco rotado (como `switch-organization`). */
+  let session: MockSession | null = null
   if (existing) {
-    if (!auth) throw unauthorized(`Inicia sesión con ${inv.email} para aceptar la invitación`)
+    if (!auth) throw domainError(401, 'AUTH_LOGIN_REQUIRED', `Inicia sesión con ${inv.email} para aceptar la invitación`)
     if (auth.user.id !== existing.id) throw domainError(403, 'INVITATION_EMAIL_MISMATCH', 'La invitación es para otro correo')
+    assertCanJoin(inv, existing)
+    // Bodega: además del acceso hace falta el refresco de esa misma sesión (cookie `doc_rt`).
+    if (inv.organizationType !== 'PLATFORM') session = rotatedSessionOf(auth, ctx.cookies, undefined, inv.organizationId)
     user = existing
   } else {
     if (auth) throw domainError(403, 'INVITATION_EMAIL_MISMATCH', 'La invitación es para otro correo: cierra la sesión para crear la cuenta')
@@ -367,7 +400,7 @@ async function accept(ctx: RouteContext) {
     })
     recordAudit(ctx, {
       action: 'USER_CREATED',
-      resource: { type: 'USER', id: user.id },
+      resource: { type: 'user', id: user.id },
       organizationId: inv.organizationId,
       after: { email: user.email, via: 'INVITATION' },
       actor: personActor(user, null, null),
@@ -377,7 +410,7 @@ async function accept(ctx: RouteContext) {
   inv._mock.acceptedAt = stamp()
   recordAudit(ctx, {
     action: 'INVITATION_ACCEPTED',
-    resource: { type: 'INVITATION', id: inv.id },
+    resource: { type: 'invitation', id: inv.id },
     organizationId: inv.organizationId,
     actor: personActor(user, inv.role, inv.organizationId),
   })
@@ -387,14 +420,12 @@ async function accept(ctx: RouteContext) {
     return ok(startMfaChallenge(user))
   }
   joinWinery(ctx, inv, user)
-  const session = auth?.sid ? getSession(auth.sid) : undefined
-  if (session && !session.revoked) {
-    rotateRefresh(session, getErpDb().clock)
+  if (session) {
     setActiveOrganization(session, inv.organizationId)
     rememberOrganization(user.id, inv.organizationId)
     return sessionResult(user, session, ctx.url)
   }
-  return sessionResult(user, openSession(user, { organizationId: inv.organizationId, mfa: auth?.mfa ?? false }), ctx.url)
+  return sessionResult(user, openSession(user, { organizationId: inv.organizationId, mfa: false }), ctx.url)
 }
 
 // ---------------------------------------------------------------------------
@@ -424,6 +455,8 @@ export function resendInvitation(ctx: RouteContext, inv: StoredInvitation, reaso
   if (status !== 'PENDING' && status !== 'EXPIRED') {
     throw domainError(409, 'INVITATION_NOT_PENDING', `Solo se reenvían invitaciones pendientes o caducadas (esta está ${status})`)
   }
+  // Una caducada vuelve a contar para el límite de colaboradores (no las de dueño).
+  if (status === 'EXPIRED' && inv.organizationType === 'WINERY' && inv.role !== 'OWNER') assertTeamCapacity(inv.organizationId)
   const at = stamp()
   inv.status = 'PENDING'
   inv.expiresAt = new Date(Date.parse(at) + invitationTtlHours() * 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z')
@@ -431,7 +464,7 @@ export function resendInvitation(ctx: RouteContext, inv: StoredInvitation, reaso
   sendInvitationMail(inv)
   recordAudit(ctx, {
     action: 'INVITATION_RESENT',
-    resource: { type: 'INVITATION', id: inv.id },
+    resource: { type: 'invitation', id: inv.id },
     organizationId: inv.organizationId,
     before: { status },
     after: { status: 'PENDING', expiresAt: inv.expiresAt },
@@ -447,7 +480,7 @@ export function revokeInvitation(ctx: RouteContext, inv: StoredInvitation, reaso
   inv._mock.revokedAt = stamp()
   recordAudit(ctx, {
     action: 'INVITATION_REVOKED',
-    resource: { type: 'INVITATION', id: inv.id },
+    resource: { type: 'invitation', id: inv.id },
     organizationId: inv.organizationId,
     before: { status: 'PENDING' },
     after: { status: 'REVOKED' },

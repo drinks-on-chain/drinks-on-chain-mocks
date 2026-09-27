@@ -7,7 +7,7 @@ import { uid } from '../../shared/uuid'
 import type { MemberRole, MockUser, PlatformRole, WineryMemberItem, WineryResponse } from '../../erp/schemas'
 import { simpleMail } from '../mail'
 import { effectiveInvitationStatus, toInvitation, type MemberBlock } from '../model'
-import type { BlockedBy, Member, PlatformUser } from '../schemas'
+import type { AccountDetail, AccountMembership, BlockedBy, Member, PlatformUser } from '../schemas'
 import { bo, findUser, now, sendMail } from './support'
 
 // Miembros de una bodega y personal de plataforma (contrato de la Ola 1 §5).
@@ -16,8 +16,21 @@ export function blockOf(membershipId: string): MemberBlock | undefined {
   return bo().blocks.find((b) => b.membershipId === membershipId)
 }
 
-export function toMember(item: WineryMemberItem): Member {
+/**
+ * Cómo se ve el equipo (`TeamService` del backend): `FULL` (dueño), `BASIC` (el resto de roles:
+ * `lastLoginAt: null`) o `PLATFORM` (back office: además el estado de la cuenta completa).
+ */
+export type TeamView = 'FULL' | 'BASIC' | 'PLATFORM'
+
+/** Estado de la cuenta completa de una persona (`users.is_active`). */
+export function accountStatusOf(user: MockUser | undefined): { accountStatus: 'ACTIVE' | 'BLOCKED'; accountBlockedReason: string | null } {
+  const blocked = Boolean(user && !user.isActive)
+  return { accountStatus: blocked ? 'BLOCKED' : 'ACTIVE', accountBlockedReason: blocked ? (bo().accountBlocks[user!.id] ?? null) : null }
+}
+
+export function toMember(item: WineryMemberItem, view: TeamView = 'FULL'): Member {
   const block = item.isActive ? undefined : blockOf(item.id)
+  const user = findUser(item.userId)
   return {
     membershipId: item.id,
     userId: item.userId,
@@ -28,17 +41,22 @@ export function toMember(item: WineryMemberItem): Member {
     blockedBy: item.isActive ? null : (block?.by ?? 'OWNER'),
     blockedReason: item.isActive ? null : (block?.reason ?? null),
     joinedAt: item.joinedAt,
-    lastLoginAt: findUser(item.userId)?.lastLoginAt ?? null,
+    lastLoginAt: view === 'BASIC' ? null : (user?.lastLoginAt ?? null),
+    ...(view === 'PLATFORM' ? accountStatusOf(user) : {}),
   }
 }
 
-export function membersOfWinery(winery: WineryResponse): Member[] {
-  return (winery.members ?? []).map(toMember)
+/** Miembros de una bodega por antigüedad (como el backend: `createdAt` ascendente). */
+export function membersOfWinery(winery: WineryResponse, view: TeamView = 'FULL'): Member[] {
+  return [...(winery.members ?? [])]
+    .sort((a, b) => a.joinedAt.localeCompare(b.joinedAt) || a.id.localeCompare(b.id))
+    .map((m) => toMember(m, view))
 }
 
+/** Membresía de esa bodega (la de otra organización o inexistente → 404 `NOT_FOUND`). */
 export function findWineryMember(winery: WineryResponse, membershipId: string): WineryMemberItem {
   const m = winery.members?.find((x) => x.id === membershipId)
-  if (!m) throw notFound(`Miembro con identificador "${membershipId}" no encontrado`)
+  if (!m) throw notFound('Miembro no encontrado')
   return m
 }
 
@@ -120,6 +138,7 @@ export function toPlatformUser(user: MockUser): PlatformUser {
     lastLoginAt: user.lastLoginAt ?? null,
     mfaEnabled: Boolean(bo().mfa.find((m) => m.userId === user.id)?.enrolled),
     invitationId: null,
+    ...accountStatusOf(user),
   }
 }
 
@@ -135,7 +154,8 @@ export function platformUsers(): PlatformUser[] {
       return {
         membershipId: null,
         userId: existing?.id ?? null,
-        fullName: existing?.fullName ?? i._mock.inviteeName ?? inv.email,
+        // Como el backend: el nombre de la cuenta o, sin cuenta, el correo.
+        fullName: existing?.fullName ?? inv.email,
         email: inv.email,
         role: inv.role as PlatformRole,
         status: 'INVITED',
@@ -145,15 +165,44 @@ export function platformUsers(): PlatformUser[] {
         lastLoginAt: null,
         mfaEnabled: false,
         invitationId: inv.id,
+        ...(existing ? accountStatusOf(existing) : { accountStatus: null, accountBlockedReason: null }),
       }
     })
   return [...members, ...invited]
 }
 
+/** `GET /v1/platform/accounts/{userId}`: estado de la cuenta y sus membresías (por antigüedad). */
+export function accountDetail(user: MockUser): AccountDetail {
+  const { accountStatus, accountBlockedReason } = accountStatusOf(user)
+  const memberships: AccountMembership[] = membershipsOf(user).map((m) => {
+    const block = m.status === 'BLOCKED' ? blockOf(m.id) : undefined
+    return {
+      membershipId: m.id,
+      organizationId: m.organizationId,
+      organizationType: m.organizationType,
+      organizationName: m.organizationName,
+      organizationStatus: m.organizationStatus,
+      role: m.role,
+      status: m.status,
+      blockedBy: m.status === 'BLOCKED' ? (block?.by ?? 'PLATFORM') : null,
+      blockedReason: m.status === 'BLOCKED' ? (block?.reason ?? null) : null,
+    }
+  })
+  return {
+    userId: user.id,
+    fullName: user.fullName,
+    email: user.email,
+    status: accountStatus,
+    blockedReason: accountBlockedReason,
+    blockedAt: accountStatus === 'BLOCKED' ? (bo().accountBlockedAt?.[user.id] ?? null) : null,
+    memberships,
+  }
+}
+
 /** Persona de plataforma por id de membresía (404 si no existe). */
 export function staffByMembershipId(membershipId: string): MockUser {
   const user = platformStaff().find((u) => platformMembershipId(u.id) === membershipId)
-  if (!user) throw notFound(`Usuario interno con membresía "${membershipId}" no encontrado`)
+  if (!user) throw notFound('Membresía de plataforma no encontrada')
   return user
 }
 
