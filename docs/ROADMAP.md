@@ -67,7 +67,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Bitácora en `snake_case` y acciones del backend; códigos 404/422 y de TOTP; NIT (bodegas revocadas, solicitudes caducadas, reenvío); equipo (límite al desbloquear, sesiones, vistas); cuentas y invitaciones de una bodega (§11 bis); aceptar con acceso y refresco · 27-09-2026
 - [x] Rutas obsoletas (H1) con `Deprecation` y `Link` · 27-09-2026
 - [x] Versión 0.4.0, CHANGELOG con rupturas y migración, `docs/CONTRATO.md` §7 · 27-09-2026
-- [ ] Etiqueta `v0.4.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.4.0-rc.1.tgz`, instalado y probado en un proyecto limpio
+- [x] Etiqueta `v0.4.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.4.0-rc.1.tgz`, instalado y probado en un proyecto limpio · 27-09-2026
 - [ ] Etiqueta estable `v0.4.0` en `main` al cerrar la Ola 1 (coordinación)
 
 ## Más adelante
