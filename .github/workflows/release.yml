@@ -2,6 +2,8 @@ name: Release
 
 # Al empujar una etiqueta v* (p. ej. v0.1.0): prueba, construye, empaqueta y publica una
 # GitHub Release con drinks-on-chain-mocks-<versión>.tgz. Las apps lo instalan por URL.
+# Las etiquetas con guion (vX.Y.Z-rc.N, creadas sobre dev) se publican como pre-release
+# (plan/03 §3), nunca como «Latest».
 
 on:
   push:
@@ -23,14 +25,21 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      # vX.Y.Z exige package.json = X.Y.Z. Una pre-release vX.Y.Z-rc.N vale con package.json =
+      # X.Y.Z (la versión que prepara dev) o X.Y.Z-rc.N; el tarball se empaqueta como X.Y.Z-rc.N.
       - name: La etiqueta coincide con package.json
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
-            echo "La etiqueta $GITHUB_REF_NAME no coincide con la versión $VERSION de package.json" >&2
-            exit 1
-          fi
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          PKG=$(node -p "require('./package.json').version")
+          TAG="${GITHUB_REF_NAME#v}"
+          case "$TAG" in
+            "$PKG") ;;
+            "$PKG"-*) npm pkg set version="$TAG" ;;
+            *)
+              echo "La etiqueta $GITHUB_REF_NAME no coincide con la versión $PKG de package.json" >&2
+              exit 1
+              ;;
+          esac
+          echo "VERSION=$TAG" >> "$GITHUB_ENV"
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
@@ -47,7 +56,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          PRERELEASE=""
+          case "$VERSION" in *-*) PRERELEASE="--prerelease" ;; esac
           gh release create "$GITHUB_REF_NAME" "drinks-on-chain-mocks-$VERSION.tgz" \
             --title "@drinks-on-chain/mocks $VERSION" \
             --notes "Instalación: \`pnpm add https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/drinks-on-chain-mocks-${VERSION}.tgz\`. Cambios en CHANGELOG.md." \
-            --verify-tag
+            --verify-tag $PRERELEASE

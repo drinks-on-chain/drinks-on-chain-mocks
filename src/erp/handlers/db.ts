@@ -15,6 +15,7 @@ import type {
   WineAgingResponse,
   WineryResponse,
 } from '../schemas'
+import { resetSessions } from './sessions'
 
 // Base de datos en memoria de los handlers del ERP: una copia de los fixtures que las
 // mutaciones modifican durante la sesión. `resetErpDb()` la devuelve al estado inicial.
@@ -68,9 +69,10 @@ export function getErpDb(): ErpDb {
   return db
 }
 
-/** Descarta los cambios de la sesión: vuelve a los fixtures y reinicia el reloj. */
+/** Descarta los cambios: vuelve a los fixtures, reinicia el reloj y cierra todas las sesiones. */
 export function resetErpDb(): void {
   db = createErpDb()
+  resetSessions()
 }
 
 /** Fecha y hora actual del reloj con milisegundos (para `timestamp` del envoltorio). */

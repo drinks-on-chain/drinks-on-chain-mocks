@@ -1,5 +1,6 @@
 export * from './enums'
 export * from './common'
+export * from './organizations'
 export * from './auth'
 export * from './wallets'
 export * from './users'

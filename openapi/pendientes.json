@@ -1,0 +1,249 @@
+{
+  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o0-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta).",
+  "adelantadas": [
+    {
+      "method": "POST",
+      "path": "/v1/auth/switch-organization",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "Cambio de organización activa (O0-BE-4). Responde como el login.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$ref": "#/components/schemas/AuthResponseDto"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/logout",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "Revoca la sesión actual y borra la cookie doc_rt (O0-BE-4).",
+      "respuesta": {
+        "status": 204
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/logout-all",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "Revoca todas las sesiones de la persona (O0-BE-4).",
+      "respuesta": {
+        "status": 204
+      }
+    }
+  ],
+  "cambios": [
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "Rota siempre y devuelve la forma del login (antes AuthTokensDto); lee el refresco de la cookie doc_rt.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$ref": "#/components/schemas/AuthResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/me",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "Devuelve { user, memberships, activeOrganizationId } (antes el perfil suelto).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "type": "object",
+          "required": [
+            "user",
+            "memberships",
+            "activeOrganizationId"
+          ],
+          "properties": {
+            "user": {
+              "$ref": "#/components/schemas/UserProfileResponseDto"
+            },
+            "memberships": {
+              "type": "array"
+            },
+            "activeOrganizationId": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/wineries/pending",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "Lista paginada (antes array plano).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/WineryResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/wineries/my/members",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "Lista paginada (antes array plano).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/WineryMemberItemDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/wineries",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/WineryResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/terroirs",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/TerroirResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/harvest-batches",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/HarvestBatchResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fermentation-tanks",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/FermentationTankResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/wine-aging",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/WineAgingResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/production-batches",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/ProductionBatchResponseDto"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/bottling",
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
+      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "#/components/schemas/BottlingBatchResponseDto"
+        }
+      }
+    }
+  ],
+  "camposExtra": {
+    "AuthUserDto": {
+      "campos": [
+        "audience"
+      ],
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "STAFF o CONSUMER según tenga membresías."
+    },
+    "AuthResponseDto": {
+      "campos": [
+        "memberships",
+        "activeOrganizationId"
+      ],
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "Membresías y organización activa en la respuesta de sesión."
+    },
+    "UserProfileResponseDto": {
+      "campos": [
+        "audience"
+      ],
+      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
+      "motivo": "`user` de GET /v1/users/me lleva la audiencia."
+    },
+    "TerroirResponseDto": {
+      "campos": [
+        "harvestBatches"
+      ],
+      "contrato": "docs/CONTRATO.md §2 punto 5",
+      "motivo": "El detalle de la parcela incluye sus lotes de vendimia (catálogo del backend)."
+    },
+    "HarvestBatchResponseDto": {
+      "campos": [
+        "fermentationTanks"
+      ],
+      "contrato": "docs/CONTRATO.md §2 punto 5",
+      "motivo": "El detalle del lote de vendimia incluye sus tanques (catálogo del backend)."
+    },
+    "FermentationTankResponseDto": {
+      "campos": [
+        "logs",
+        "treatments"
+      ],
+      "contrato": "docs/CONTRATO.md §2 punto 5",
+      "motivo": "El detalle del tanque incluye lecturas y tratamientos (catálogo del backend)."
+    },
+    "CreateFermentationLogDto": {
+      "campos": [
+        "id",
+        "fermentationTankId",
+        "recordedByMemberId"
+      ],
+      "contrato": "docs/CONTRATO.md §2 punto 4",
+      "motivo": "La lectura guardada = DTO de alta + id, tanque y autor (el OpenAPI no declara la respuesta)."
+    },
+    "CreateEnologicalTreatmentDto": {
+      "campos": [
+        "id",
+        "fermentationTankId"
+      ],
+      "contrato": "docs/CONTRATO.md §2 punto 4",
+      "motivo": "El tratamiento guardado = DTO de alta + id y tanque (el OpenAPI no declara la respuesta)."
+    }
+  }
+}

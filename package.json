@@ -1,6 +1,6 @@
 {
   "name": "@drinks-on-chain/mocks",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Datos de prueba, esquemas zod y handlers MSW del ecosistema Drinks on Chain",
   "type": "module",
   "repository": {
@@ -44,6 +44,7 @@
     "build": "tsup",
     "seed": "tsx src/erp/seed/cli.ts",
     "seed:check": "pnpm seed && git diff --exit-code -- fixtures",
+    "openapi:pull": "node scripts/openapi-pull.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -61,6 +62,8 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.20.4",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "eslint": "^10.11.0",
     "globals": "^17.12.0",
     "msw": "^2.15.0",

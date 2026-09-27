@@ -1,4 +1,5 @@
 import { fakeHash64, fakeStellarAddress } from '../../../shared/uuid'
+import { USER_ROLE_FOR_MEMBER } from '../../derive'
 import {
   AddMemberSchema,
   ApproveWinerySchema,
@@ -10,7 +11,6 @@ import {
   UpdateWinerySchema,
   type MemberRole,
   type MockUser,
-  type UserRole,
   type WineryMemberItem,
   type WineryResponse,
 } from '../../schemas'
@@ -32,15 +32,6 @@ function findWinery(id: string): WineryResponse {
   const w = getErpDb().wineries.find((x) => x.id === id)
   if (!w) throw notFound(`Bodega con identificador "${id}" no encontrada`)
   return w
-}
-
-/** `userRole` que recibe un miembro creado desde la bodega (los operarios son ENOLOGIST, como en los fixtures). */
-const USER_ROLE_FOR_MEMBER: Record<MemberRole, UserRole> = {
-  OWNER: 'WINERY_ADMIN',
-  ENOLOGIST: 'ENOLOGIST',
-  AGRONOMIST: 'AGRONOMIST',
-  OPERATOR: 'ENOLOGIST',
-  ACCOUNTANT: 'ENOLOGIST',
 }
 
 function addMembership(
@@ -104,9 +95,9 @@ export const wineryRoutes: RouteSpec[] = [
         members: [],
       }
       db.wineries.push(winery)
-      // El solicitante queda como OWNER / WINERY_ADMIN (catálogo del backend).
+      // El solicitante queda como OWNER de la bodega. Su rol global no cambia (SE-01): el rol
+      // efectivo sale de la membresía al activar esa organización.
       addMembership(winery, auth.user, 'OWNER', null)
-      if (auth.user.userRole === 'CONSUMER') auth.user.userRole = 'WINERY_ADMIN'
       return created(winery)
     },
   },
@@ -155,7 +146,17 @@ export const wineryRoutes: RouteSpec[] = [
       const body = await parseBody(request, AddMemberSchema)
       const user = getErpDb().users.find((u) => u.id === body.userId)
       if (!user) throw notFound('El usuario no existe')
-      if (winery.members?.some((m) => m.userId === user.id)) throw conflict('El usuario ya es miembro de la bodega')
+      // Añade o reactiva una membresía de esta bodega; nunca toca roles globales (SE-01).
+      const existing = winery.members?.find((m) => m.userId === user.id)
+      if (existing?.isActive) throw conflict('El usuario ya es miembro de la bodega')
+      if (existing) {
+        existing.isActive = true
+        existing.memberRole = body.memberRole
+        existing.professionalLicenseNumber = body.professionalLicenseNumber ?? existing.professionalLicenseNumber ?? null
+        const link = user.wineryMemberships.find((m) => m.wineryId === winery.id)
+        if (link) Object.assign(link, { isActive: true, memberRole: body.memberRole, professionalLicenseNumber: existing.professionalLicenseNumber })
+        return created(existing)
+      }
       return created(addMembership(winery, user, body.memberRole, body.professionalLicenseNumber))
     },
   },
@@ -163,8 +164,8 @@ export const wineryRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/wineries/my/members',
     access: members,
-    list: 'array',
-    handle: ({ auth }) => ok((myWinery(auth).members ?? []).filter((m) => m.isActive)),
+    list: 'paged',
+    handle: ({ auth, query }) => listResult((myWinery(auth).members ?? []).filter((m) => m.isActive), query),
   },
   {
     method: 'post',
@@ -189,8 +190,8 @@ export const wineryRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/wineries/pending',
     access: roles(['PLATFORM_ADMIN']),
-    list: 'array',
-    handle: () => ok(getErpDb().wineries.filter((w) => w.certificationStatus === 'PENDING')),
+    list: 'paged',
+    handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'PENDING'), query),
   },
   {
     method: 'post',

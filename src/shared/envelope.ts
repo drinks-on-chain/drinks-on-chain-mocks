@@ -1,12 +1,16 @@
 import { z } from 'zod'
 
-// Envoltorio de respuesta del backend (doc 09 §1), verificado contra el servidor de desarrollo:
+// Envoltorio de respuesta del backend (doc 09 §1 y contrato de la Ola 0 §1):
 //   éxito  { success: true,  statusCode, timestamp, path, data }
 //   error  { success: false, statusCode, timestamp, path, error: { code, message, details } }
-// `path` incluye la query (`/v1/terroirs?limit=5`). En los 400 de validación `details` es un
-// array de mensajes; en el resto suele ser `null`.
+// `path` incluye la query (`/v1/terroirs?limit=5`). `details` es una lista de
+// `{ field, message }` en los errores de validación y de reglas (422) y `null` en el resto.
 
-/** Códigos de error. Verificados: VALIDATION_ERROR, BAD_REQUEST, UNAUTHORIZED, NOT_FOUND. El resto sigue el mismo patrón (nombre del HttpStatus de NestJS). */
+/**
+ * Códigos de error. Verificados contra el servidor: VALIDATION_ERROR, BAD_REQUEST, UNAUTHORIZED,
+ * NOT_FOUND. Los genéricos siguen el nombre del HttpStatus de NestJS; los de dominio
+ * (`AUTH_…`, `ORG_…`) vienen del contrato de la Ola 0 (plan/contratos/o0-sesiones-y-estandares.md).
+ */
 export const API_ERROR_CODES = [
   'VALIDATION_ERROR',
   'BAD_REQUEST',
@@ -16,13 +20,23 @@ export const API_ERROR_CODES = [
   'CONFLICT',
   'UNPROCESSABLE_ENTITY',
   'INTERNAL_SERVER_ERROR',
+  'AUTH_REFRESH_REUSED',
+  'AUTH_SESSION_REVOKED',
+  'ORG_NOT_FOUND',
 ] as const
 export type ApiErrorCode = (typeof API_ERROR_CODES)[number]
+
+/** Detalle de un error: campo (notación de puntos, `items.0.quantity`) o `null` si no es de un campo. */
+export const ApiErrorDetailSchema = z.object({
+  field: z.string().nullable(),
+  message: z.string(),
+})
+export type ApiErrorDetail = z.infer<typeof ApiErrorDetailSchema>
 
 export const ApiErrorBodySchema = z.object({
   code: z.string(),
   message: z.string(),
-  details: z.unknown().nullish(),
+  details: z.array(ApiErrorDetailSchema).nullish(),
 })
 export type ApiErrorBody = z.infer<typeof ApiErrorBodySchema>
 

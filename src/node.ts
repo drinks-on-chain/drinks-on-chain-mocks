@@ -22,6 +22,6 @@ export function setupMockServer(options: SetupMockServerOptions = {}): SetupServ
   return setupServer(...extraHandlers, ...createErpHandlers({ latency: 0, ...handlerOptions }))
 }
 
-export { createErpHandlers, getErpDb, mockAccessToken, resetErpDb } from './erp/handlers'
+export { createErpHandlers, expireAccessTokens, getErpDb, mockAccessToken, resetErpDb, resetSessions } from './erp/handlers'
 export { getScenario, resetScenario, setScenario, SCENARIOS, type ScenarioName } from './shared/scenarios'
 export { demoUsers, DEMO_PASSWORD } from './erp/fixtures'

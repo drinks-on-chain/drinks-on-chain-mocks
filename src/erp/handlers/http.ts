@@ -1,7 +1,7 @@
 import { delay, http, HttpResponse, type HttpHandler } from 'msw'
 import type { z } from 'zod'
 import type { ErrorEnvelope, SuccessEnvelope } from '../../shared/envelope'
-import { DEFAULT_LIMIT, DEFAULT_OFFSET, toListPayload, type Paged } from '../../shared/list'
+import { DEFAULT_LIMIT, DEFAULT_OFFSET, MAX_LIMIT, type ListPage } from '../../shared/list'
 import {
   defaultLatency,
   getScenario,
@@ -11,16 +11,25 @@ import {
 } from '../../shared/scenarios'
 import { checkAccess, readAuth, requireAuth, type AccessRule, type AuthContext } from './auth-context'
 import { nowIso } from './db'
-import { ApiError, badRequest, unauthorized, validationError } from './errors'
+import { ApiError, badRequest, fieldError, invalid, unauthorized, validationError } from './errors'
 
 // Infraestructura común de los handlers: envoltorio, escenarios, latencia, sesión, roles,
 // validación del cuerpo y paginación.
+//
+// Cada ruta responde en dos sitios (P-1, contrato de la Ola 0 §7):
+//   `${baseUrl}/v1/...`  el backend directo (por defecto cualquier origen: `*/v1/...`)
+//   `*/api/v1/...`       el proxy de la propia app (`/api/v1/*` de su origen → `${API_ORIGIN}/v1/*`)
+// El `path` del envoltorio es siempre `/v1/...`, como lo ve el backend detrás del proxy.
+
+/** Prefijo con el que las apps exponen la API en su propio origen (P-1). */
+export const SAME_ORIGIN_API_PREFIX = '/api'
 
 export interface ErpHandlerOptions {
   /**
-   * Origen del backend que se intercepta, p. ej. `https://136.243.223.39.sslip.io`.
-   * Por defecto cualquier origen (`*`). Con un origen concreto se añade además un 404 con
-   * envoltorio para las rutas `/v1/*` desconocidas.
+   * Origen del backend que se intercepta, p. ej. `https://136.243.223.39.sslip.io` (se toleran
+   * la barra final y un `/v1` final). Por defecto cualquier origen (`*`). Con un origen
+   * concreto se añade además un 404 con envoltorio para las rutas `/v1/*` desconocidas.
+   * En ambos casos se atiende también `/api/v1/*` de cualquier origen (P-1).
    */
   baseUrl?: string
   /** Latencia simulada. Por defecto 200–400 ms en el navegador y 0 en Node. */
@@ -36,11 +45,16 @@ export interface RouteContext {
   auth: AuthContext
   /** Sesión opcional (rutas públicas). */
   optionalAuth: AuthContext | null
+  /** Cookies de la petición (cabecera `Cookie`, almacén de MSW y `document.cookie`). */
+  cookies: Record<string, string>
 }
 
 export interface RouteResult {
   status: number
+  /** `undefined` con 204 (sin cuerpo). */
   data: unknown
+  /** Cabeceras extra (p. ej. `Set-Cookie`). */
+  headers?: Record<string, string>
 }
 
 export interface RouteSpec {
@@ -48,24 +62,45 @@ export interface RouteSpec {
   /** Ruta con prefijo, p. ej. `/v1/terroirs/:id`. */
   path: string
   access: AccessRule | 'public'
-  /** Lista afectada por el escenario `empty` (`paged` según LIST_SHAPE, `array` si el OpenAPI declara array). */
-  list?: 'paged' | 'array'
+  /** Colección (`{ items, total, limit, offset }`): la vacía el escenario `empty`. */
+  list?: 'paged'
   handle: (ctx: RouteContext) => RouteResult | Promise<RouteResult>
 }
 
 export const ok = (data: unknown, status = 200): RouteResult => ({ status, data })
 export const created = (data: unknown): RouteResult => ({ status: 201, data })
+export const noContent = (headers?: Record<string, string>): RouteResult => ({ status: 204, data: undefined, headers })
 
-function envelopePath(url: URL): string {
-  return `${url.pathname}${url.search}`
+/** `path` del envoltorio: el que ve el backend (sin el prefijo `/api` del proxy de la app). */
+export function envelopePath(url: URL): string {
+  const pathname = url.pathname.startsWith(`${SAME_ORIGIN_API_PREFIX}/v1/`)
+    ? url.pathname.slice(SAME_ORIGIN_API_PREFIX.length)
+    : url.pathname
+  return `${pathname}${url.search}`
 }
 
-function successResponse(url: URL, status: number, data: unknown) {
-  const body: SuccessEnvelope<unknown> = { success: true, statusCode: status, timestamp: nowIso(), path: envelopePath(url), data }
-  return HttpResponse.json(body, { status })
+let correlationSeq = 0
+
+/** `X-Correlation-ID`: el de la petición o uno nuevo (contrato de la Ola 0 §3). */
+function correlationHeaders(request: Request | undefined): Record<string, string> {
+  const incoming = request?.headers.get('x-correlation-id')
+  return { 'X-Correlation-ID': incoming || `mock-${++correlationSeq}` }
 }
 
-export function errorResponse(url: URL, error: ApiError) {
+function successResponse(request: Request, url: URL, result: RouteResult) {
+  const headers = { ...correlationHeaders(request), ...result.headers }
+  if (result.status === 204) return new HttpResponse(null, { status: 204, headers })
+  const body: SuccessEnvelope<unknown> = {
+    success: true,
+    statusCode: result.status,
+    timestamp: nowIso(),
+    path: envelopePath(url),
+    data: result.data,
+  }
+  return HttpResponse.json(body, { status: result.status, headers })
+}
+
+export function errorResponse(url: URL, error: ApiError, request?: Request) {
   const body: ErrorEnvelope = {
     success: false,
     statusCode: error.statusCode,
@@ -73,12 +108,23 @@ export function errorResponse(url: URL, error: ApiError) {
     path: envelopePath(url),
     error: { code: error.code, message: error.message, details: error.details ?? null },
   }
-  return HttpResponse.json(body, { status: error.statusCode })
+  return HttpResponse.json(body, { status: error.statusCode, headers: correlationHeaders(request) })
 }
 
-function normalizeBase(baseUrl: string | undefined): string {
-  if (!baseUrl || baseUrl === '*') return '*'
-  return baseUrl.replace(/\/+$/, '')
+/** Origen normalizado: `*`, o la URL sin barra final ni `/v1` final. */
+export function normalizeBase(baseUrl: string | undefined): string {
+  const trimmed = baseUrl?.trim()
+  if (!trimmed || trimmed === '*') return '*'
+  return trimmed.replace(/\/+$/, '').replace(/\/v1$/, '')
+}
+
+/** Patrones MSW de una ruta `/v1/...`: el backend directo y el proxy `/api/v1/...` de la app. */
+export function routePatterns(base: string, path: string): string[] {
+  // `*/v1/...` ya cubre `…/api/v1/...` de cualquier origen.
+  if (base === '*') return [`*${path}`]
+  const direct = `${base}${path}`
+  const proxied = `*${SAME_ORIGIN_API_PREFIX}${path}`
+  return direct === proxied ? [direct] : [direct, proxied]
 }
 
 async function applyLatency(latency: LatencyOption, extra: number) {
@@ -86,10 +132,14 @@ async function applyLatency(latency: LatencyOption, extra: number) {
   if (ms > 0) await delay(ms)
 }
 
-export function buildHandler(spec: RouteSpec, options: ErpHandlerOptions = {}): HttpHandler {
+export function buildHandlers(spec: RouteSpec, options: ErpHandlerOptions = {}): HttpHandler[] {
   const base = normalizeBase(options.baseUrl)
+  return routePatterns(base, spec.path).map((pattern) => buildHandlerFor(pattern, spec, options))
+}
+
+function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOptions): HttpHandler {
   const latency = options.latency ?? defaultLatency()
-  return http[spec.method](`${base}${spec.path}`, async ({ request, params }) => {
+  return http[spec.method](pattern, async ({ request, params, cookies }) => {
     const url = new URL(request.url)
     const scenario = getScenario()
     if (scenario === 'offline') return HttpResponse.error()
@@ -106,8 +156,8 @@ export function buildHandler(spec: RouteSpec, options: ErpHandlerOptions = {}): 
         checkAccess(session, spec.access)
       }
       if (scenario === 'empty' && spec.list) {
-        const empty = spec.list === 'array' ? [] : toListPayload({ items: [], total: 0, ...pageParams(url.searchParams) })
-        return successResponse(url, 200, empty)
+        const empty: ListPage<never> = { items: [], total: 0, ...pageParams(url.searchParams) }
+        return successResponse(request, url, ok(empty))
       }
       const ctx: RouteContext = {
         request,
@@ -119,13 +169,14 @@ export function buildHandler(spec: RouteSpec, options: ErpHandlerOptions = {}): 
           return session
         },
         optionalAuth: session,
+        cookies: { ...cookies },
       }
       const result = await spec.handle(ctx)
-      return successResponse(url, result.status, result.data)
+      return successResponse(request, url, result)
     } catch (err) {
-      if (err instanceof ApiError) return errorResponse(url, err)
+      if (err instanceof ApiError) return errorResponse(url, err, request)
       const message = err instanceof Error ? err.message : String(err)
-      return errorResponse(url, new ApiError(500, 'INTERNAL_SERVER_ERROR', message))
+      return errorResponse(url, new ApiError(500, 'INTERNAL_SERVER_ERROR', message), request)
     }
   })
 }
@@ -139,26 +190,28 @@ function readAuthOrNull(request: Request): AuthContext | null {
   }
 }
 
-/** 404 con envoltorio para rutas `/v1/*` sin handler (solo con `baseUrl` explícito). */
-export function buildFallbackHandler(options: ErpHandlerOptions): HttpHandler | null {
+/** 404 con envoltorio para rutas `/v1/*` (y `/api/v1/*`) sin handler (solo con `baseUrl` explícito). */
+export function buildFallbackHandlers(options: ErpHandlerOptions): HttpHandler[] {
   const base = normalizeBase(options.baseUrl)
-  if (base === '*') return null
-  return http.all(`${base}/v1/*`, ({ request }) => {
-    const url = new URL(request.url)
-    return errorResponse(url, new ApiError(404, 'NOT_FOUND', `Cannot ${request.method} ${envelopePath(url)}`))
-  })
+  if (base === '*') return []
+  return routePatterns(base, '/v1/*').map((pattern) =>
+    http.all(pattern, ({ request }) => {
+      const url = new URL(request.url)
+      return errorResponse(url, new ApiError(404, 'NOT_FOUND', `Cannot ${request.method} ${envelopePath(url)}`), request)
+    }),
+  )
 }
 
 // ---------------------------------------------------------------------------
 // Cuerpo y query
 // ---------------------------------------------------------------------------
 
-/** Lee y valida el cuerpo JSON con un esquema zod (400 como el backend). */
+/** Lee y valida el cuerpo JSON con un esquema zod (422 VALIDATION_ERROR con los campos). */
 export async function parseBody<S extends z.ZodType>(request: Request, schema: S): Promise<z.infer<S>> {
   return validate(await readJson(request), schema)
 }
 
-/** Valida un valor ya leído con un esquema zod (400 VALIDATION_ERROR). */
+/** Valida un valor ya leído con un esquema zod (422 VALIDATION_ERROR). */
 export function validate<S extends z.ZodType>(raw: unknown, schema: S): z.infer<S> {
   const result = schema.safeParse(raw)
   if (!result.success) throw validationError(result.error.issues)
@@ -175,15 +228,17 @@ export async function readJson(request: Request): Promise<unknown> {
   }
 }
 
-function queryError(message: string): ApiError {
-  return new ApiError(400, 'VALIDATION_ERROR', 'Validation failed', [message])
+function queryError(field: string, message: string): ApiError {
+  return invalid([fieldError(field, message)])
 }
 
+/** `limit` (1–100, por defecto 20) y `offset` (≥ 0); fuera de rango → 422. */
 export function pageParams(query: URLSearchParams): { limit: number; offset: number } {
   const limit = intParam(query, 'limit') ?? DEFAULT_LIMIT
   const offset = intParam(query, 'offset') ?? DEFAULT_OFFSET
-  if (limit < 1) throw queryError('limit must not be less than 1')
-  if (offset < 0) throw queryError('offset must not be less than 0')
+  if (limit < 1) throw queryError('limit', 'limit must not be less than 1')
+  if (limit > MAX_LIMIT) throw queryError('limit', `limit must not be greater than ${MAX_LIMIT}`)
+  if (offset < 0) throw queryError('offset', 'offset must not be less than 0')
   return { limit, offset }
 }
 
@@ -191,7 +246,7 @@ export function intParam(query: URLSearchParams, name: string): number | undefin
   const raw = query.get(name)
   if (raw === null || raw === '') return undefined
   const n = Number(raw)
-  if (!Number.isInteger(n)) throw queryError(`${name} must be an integer number`)
+  if (!Number.isInteger(n)) throw queryError(name, `${name} must be an integer number`)
   return n
 }
 
@@ -200,13 +255,15 @@ export function boolParam(query: URLSearchParams, name: string): boolean | undef
   if (raw === null || raw === '') return undefined
   if (raw === 'true') return true
   if (raw === 'false') return false
-  throw queryError(`${name} must be a boolean value`)
+  throw queryError(name, `${name} must be a boolean value`)
 }
 
 export function enumParam<T extends string>(query: URLSearchParams, name: string, values: readonly T[]): T | undefined {
   const raw = query.get(name)
   if (raw === null || raw === '') return undefined
-  if (!(values as readonly string[]).includes(raw)) throw queryError(`${name} must be one of the following values: ${values.join(', ')}`)
+  if (!(values as readonly string[]).includes(raw)) {
+    throw queryError(name, `${name} must be one of the following values: ${values.join(', ')}`)
+  }
   return raw as T
 }
 
@@ -215,11 +272,11 @@ export function strParam(query: URLSearchParams, name: string): string | undefin
   return raw === null || raw === '' ? undefined : raw
 }
 
-/** Recorta y envuelve una lista según LIST_SHAPE. */
+/** Recorta una colección y la devuelve como `{ items, total, limit, offset }`. */
 export function listResult<T>(items: readonly T[], query: URLSearchParams): RouteResult {
   const { limit, offset } = pageParams(query)
-  const page: Paged<T> = { items: items.slice(offset, offset + limit), total: items.length, limit, offset }
-  return ok(toListPayload(page))
+  const page: ListPage<T> = { items: items.slice(offset, offset + limit), total: items.length, limit, offset }
+  return ok(page)
 }
 
 /** Asigna solo los campos presentes (no `undefined`) de un PATCH. */

@@ -443,5 +443,91 @@
       "key": "juan_pos",
       "password": "demo1234"
     }
+  },
+  {
+    "id": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+    "email": "sofia@aramayo.test",
+    "fullName": "Lic. Sofía Aramayo",
+    "userRole": "ENOLOGIST",
+    "phoneNumber": "+59176000601",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-24T08:30:00Z",
+    "createdAt": "2025-10-21T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "wineryName": "Bodega Altos de Calamuchita",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-TAR-133",
+        "isActive": true,
+        "joinedAt": "2026-03-10T10:00:00Z"
+      },
+      {
+        "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+        "wineryName": "Casa Uriondo",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2025-10-22T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "bae6cc03-0247-53c8-873c-779ff4a6b95c",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "stellarPublicAddress": "GRLAE4DP5VLNURIEEKKUIHCZBZ7PQTDORSRX5F3O6E4DTSXMA2E6HKWL",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2025-10-21T09:05:00Z"
+    },
+    "_mock": {
+      "key": "sofia",
+      "password": "demo1234"
+    }
+  },
+  {
+    "id": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
+    "email": "ines@salazar.test",
+    "fullName": "Ing. Inés Salazar",
+    "userRole": "AGRONOMIST",
+    "phoneNumber": "+59176000602",
+    "preferredLocale": "es",
+    "isActive": true,
+    "lastLoginAt": "2026-09-24T08:30:00Z",
+    "createdAt": "2026-02-02T09:00:00Z",
+    "wineryMemberships": [
+      {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "wineryName": "Destilería Cinti Viejo",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-CHQ-230",
+        "isActive": true,
+        "joinedAt": "2026-02-03T10:00:00Z"
+      },
+      {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "wineryName": "Bodega Altos de Calamuchita",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": false,
+        "joinedAt": "2026-04-01T10:00:00Z"
+      }
+    ],
+    "primaryWallet": {
+      "id": "ebacdbde-e5fb-5047-a7cb-434714322840",
+      "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "stellarPublicAddress": "G5BDQBUXFMKUHJBAHIM4LYIIRS6FGGDG7TLTNA7EOAC4JVEBQWN2DSDN",
+      "walletType": "CUSTODIAL",
+      "walletPurpose": "PRODUCER_SIGNING",
+      "isPrimary": true,
+      "createdAt": "2026-02-02T09:05:00Z"
+    },
+    "_mock": {
+      "key": "ines",
+      "password": "demo1234"
+    }
   }
 ]
