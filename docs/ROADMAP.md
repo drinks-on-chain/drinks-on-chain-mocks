@@ -33,7 +33,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] `pnpm openapi:pull -- <url|ruta>` · 27-09-2026
 - [x] `release.yml`: `vX.Y.Z-rc.N` sobre `dev` como pre-release · 27-09-2026
 - [x] Versión 0.2.0 y CHANGELOG con la migración · 27-09-2026
-- [ ] Etiqueta `v0.2.0-rc.1` sobre `dev` con su pre-release
+- [x] Etiqueta `v0.2.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.2.0-rc.1.tgz` · 27-09-2026
 - [ ] Regenerar desde el OpenAPI del backend cuando publique O0-BE-2/O0-BE-4 (`pnpm openapi:pull`) y vaciar `openapi/pendientes.json`
 - [ ] `Idempotency-Key` (contrato §3, obligatoria desde la Ola 3)
 - [ ] Etiqueta estable `v0.2.0` en `main` al cerrar la Ola 0 (coordinación)
