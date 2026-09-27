@@ -16,7 +16,7 @@ import {
 } from '../../schemas'
 import { anyUser, members, roles, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
-import { conflict, notFound } from '../errors'
+import { conflict, domainError, notFound } from '../errors'
 import { applyPatch, created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
 import { createUser, findUserByEmail } from './auth-users'
 
@@ -34,7 +34,8 @@ function findWinery(id: string): WineryResponse {
   return w
 }
 
-function addMembership(
+/** Añade una membresía de bodega (miembro de la bodega + enlace en el perfil de la persona). */
+export function addMembership(
   winery: WineryResponse,
   user: MockUser,
   memberRole: MemberRole,
@@ -63,6 +64,13 @@ function addMembership(
   return member
 }
 
+/** Aprobar o rechazar solo una bodega pendiente (`INVITED`); si no, 409 `WINERY_NOT_PENDING` como el backend. */
+function assertPending(winery: WineryResponse, verb: string): void {
+  if (winery.certificationStatus !== 'INVITED') {
+    throw domainError(409, 'WINERY_NOT_PENDING', `La bodega se encuentra en estado '${winery.certificationStatus}' y no puede ser ${verb}`)
+  }
+}
+
 export const wineryRoutes: RouteSpec[] = [
   {
     method: 'post',
@@ -89,7 +97,8 @@ export const wineryRoutes: RouteSpec[] = [
         onchainProducerId: null,
         onchainRegisterTxHash: null,
         isExportCertified: false,
-        certificationStatus: 'PENDING',
+        // `INVITED` sustituye a `PENDING` desde la Ola 1 (autoinscripción *retirada* en H1).
+        certificationStatus: 'INVITED',
         approvedAt: null,
         createdAt: tick(),
         members: [],
@@ -107,7 +116,8 @@ export const wineryRoutes: RouteSpec[] = [
     access: roles(['PLATFORM_ADMIN']),
     list: 'paged',
     handle({ query }) {
-      const status = enumParam(query, 'status', CERTIFICATION_STATUSES)
+      // `PENDING` (Ola 0) se acepta como alias de `INVITED`.
+      const status = query.get('status') === 'PENDING' ? 'INVITED' : enumParam(query, 'status', CERTIFICATION_STATUSES)
       const category = enumParam(query, 'beverageCategory', BEVERAGE_CATEGORIES)
       const search = strParam(query, 'search')?.toLowerCase()
       const items = getErpDb().wineries.filter(
@@ -124,6 +134,8 @@ export const wineryRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/wineries/my',
     access: members,
+    // Lectura del perfil permitida con la bodega suspendida (contrato de la Ola 1 §4).
+    allowInactiveOrg: ['SUSPENDED'],
     handle: ({ auth }) => ok(myWinery(auth)),
   },
   {
@@ -191,7 +203,7 @@ export const wineryRoutes: RouteSpec[] = [
     path: '/v1/wineries/pending',
     access: roles(['PLATFORM_ADMIN']),
     list: 'paged',
-    handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'PENDING'), query),
+    handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'INVITED'), query),
   },
   {
     method: 'post',
@@ -200,6 +212,7 @@ export const wineryRoutes: RouteSpec[] = [
     async handle({ request, params }) {
       const winery = findWinery(params.id!)
       await parseBody(request, ApproveWinerySchema)
+      assertPending(winery, 'aprobada nuevamente')
       winery.certificationStatus = 'ACTIVE'
       winery.approvedAt = tick()
       winery.stellarPublicKey ??= fakeStellarAddress(`winery-wallet:${winery.id}`)
@@ -215,6 +228,7 @@ export const wineryRoutes: RouteSpec[] = [
     async handle({ request, params }) {
       const winery = findWinery(params.id!)
       await parseBody(request, RejectWinerySchema)
+      assertPending(winery, 'rechazada')
       // El enum no tiene REJECTED: los mocks usan REVOKED (pendiente de confirmar, CONTRATO.md).
       winery.certificationStatus = 'REVOKED'
       return ok(winery)

@@ -1,7 +1,17 @@
 import { deriveMemberships, isUsableMembership, pickActiveOrganizationId, USER_ROLE_FOR_MEMBER } from '../derive'
-import type { Audience, MemberRole, Membership, MembershipRole, MockUser, OrganizationType, UserRole } from '../schemas'
+import type {
+  Audience,
+  CertificationStatus,
+  MemberRole,
+  Membership,
+  MembershipRole,
+  MockUser,
+  OrganizationType,
+  PlatformRole,
+  UserRole,
+} from '../schemas'
 import { getErpDb } from './db'
-import { forbidden, sessionRevoked, unauthorized } from './errors'
+import { ApiError, fieldError, forbidden, sessionRevoked, unauthorized } from './errors'
 import {
   ACCESS_TOKEN_PREFIX,
   decodeAccessToken,
@@ -38,6 +48,12 @@ export interface AuthContext {
   membershipRole: MembershipRole | null
   /** Sesión del token; `null` con un token estático. */
   sid: string | null
+  /** Estado de la organización activa (`INVITED` | `ACTIVE` | `SUSPENDED` | `REVOKED`). */
+  organizationStatus: CertificationStatus | null
+  /** Rol de plataforma si la organización activa es la de plataforma. */
+  platformRole: PlatformRole | null
+  /** ¿Pasó el segundo factor en esta sesión? (los tokens estáticos cuentan como sí). */
+  mfa: boolean
 }
 
 export { ACCESS_TOKEN_PREFIX } from './sessions'
@@ -56,8 +72,15 @@ export function findUserById(id: string): MockUser | undefined {
   return getErpDb().users.find((u) => u.id === id)
 }
 
+/**
+ * Membresías de la persona: las derivadas de los datos del ERP con los bloqueos de la plataforma
+ * aplicados a la membresía de plataforma (contrato de la Ola 1 §5).
+ */
 export function membershipsOf(user: MockUser): Membership[] {
-  return deriveMemberships(user, getErpDb().wineries)
+  const db = getErpDb()
+  return deriveMemberships(user, db.wineries).map((m) =>
+    m.organizationType === 'PLATFORM' && db.backoffice.blocks.some((b) => b.membershipId === m.id) ? { ...m, status: 'BLOCKED' } : m,
+  )
 }
 
 /** Organización activa por defecto: la última usada si sigue siendo válida o la primera utilizable. */
@@ -66,7 +89,12 @@ export function defaultOrganizationId(user: MockUser, memberships = membershipsO
 }
 
 /** Contexto de una persona en una organización (`undefined` → la de por defecto). */
-export function contextFor(user: MockUser, organizationId?: string | null, sid: string | null = null): AuthContext {
+export function contextFor(
+  user: MockUser,
+  organizationId?: string | null,
+  sid: string | null = null,
+  mfa = sid === null,
+): AuthContext {
   const memberships = membershipsOf(user)
   const orgId = organizationId === undefined ? defaultOrganizationId(user, memberships) : organizationId
   const active = orgId ? memberships.find((m) => m.organizationId === orgId) : undefined
@@ -88,6 +116,9 @@ export function contextFor(user: MockUser, organizationId?: string | null, sid: 
     organizationType: active?.organizationType ?? null,
     membershipRole: active?.role ?? null,
     sid,
+    organizationStatus: active?.organizationStatus ?? null,
+    platformRole: active?.organizationType === 'PLATFORM' ? (active.role as PlatformRole) : null,
+    mfa,
   }
 }
 
@@ -110,7 +141,8 @@ export function readAuth(request: Request): AuthContext | null {
   // Una sesión desconocida (p. ej. almacenamiento borrado) se acepta con los datos del token.
   const session = getSession(claims.sid)
   if (session?.revoked) throw sessionRevoked()
-  const ctx = contextFor(user, claims.org, claims.sid)
+  // Sesión desconocida: se confía en el token (solo lleva `org` de plataforma si pasó el TOTP).
+  const ctx = contextFor(user, claims.org, claims.sid, session ? session.mfa : claims.orgType === 'PLATFORM')
   // Revocación inmediata (IAM-13): persona o membresía activa bloqueada.
   const active = ctx.memberships.find((m) => m.organizationId === claims.org)
   if (!user.isActive || (claims.org && (!active || !isUsableMembership(active)))) {
@@ -139,6 +171,8 @@ export type AccessRule =
   | { kind: 'authenticated' }
   | { kind: 'member' }
   | { kind: 'roles'; roles: readonly UserRole[]; adminReads?: boolean }
+  | { kind: 'platform'; roles: readonly PlatformRole[] }
+  | { kind: 'org'; roles: readonly MembershipRole[] | null }
 
 export const anyUser: AccessRule = { kind: 'authenticated' }
 export const members: AccessRule = { kind: 'member' }
@@ -147,6 +181,20 @@ export const roles = (list: readonly UserRole[], opts: { adminReads?: boolean } 
   roles: list,
   adminReads: opts.adminReads ?? false,
 })
+
+/**
+ * Personal de plataforma con la organización de plataforma activa (contrato de la Ola 1 §0).
+ * `ADMIN` incluye siempre al `SUPERADMIN`.
+ */
+export const platform = (list: readonly PlatformRole[]): AccessRule => ({
+  kind: 'platform',
+  roles: list.includes('ADMIN') && !list.includes('SUPERADMIN') ? ['SUPERADMIN', ...list] : list,
+})
+/** Todo el personal de plataforma. */
+export const anyStaff = platform(['SUPERADMIN', 'ADMIN', 'OPERATIONS', 'SUPPORT'])
+
+/** Miembro de la bodega activa (`null` = cualquier rol). */
+export const orgMember = (list: readonly MembershipRole[] | null = null): AccessRule => ({ kind: 'org', roles: list })
 
 export function checkAccess(ctx: AuthContext, rule: AccessRule): void {
   switch (rule.kind) {
@@ -159,7 +207,28 @@ export function checkAccess(ctx: AuthContext, rule: AccessRule): void {
       if (rule.roles.includes(ctx.role)) return
       if (rule.adminReads && ctx.isPlatformAdmin) return
       throw forbidden(`Requiere rol ${rule.roles.join(' o ')}`)
+    case 'platform':
+      if (ctx.organizationType !== 'PLATFORM' || !ctx.platformRole) throw forbidden('Requiere la organización de plataforma activa')
+      if (!ctx.mfa) throw new ApiError(403, 'AUTH_MFA_REQUIRED', 'Falta el segundo factor en esta sesión')
+      if (!rule.roles.includes(ctx.platformRole)) throw forbidden(`Requiere rol ${rule.roles.join(' o ')}`)
+      return
+    case 'org':
+      if (ctx.organizationType !== 'WINERY' || !ctx.wineryId || !ctx.membershipRole) throw forbidden('Requiere una bodega activa')
+      if (rule.roles && !rule.roles.includes(ctx.membershipRole)) throw forbidden(`Requiere rol ${rule.roles.join(' o ')}`)
+      return
   }
+}
+
+/**
+ * Bodega no activa en el ERP (SE-05, contrato de la Ola 1 §4): con la organización activa en un
+ * estado distinto de `ACTIVE` → 403 `ORG_NOT_ACTIVE` con el estado en `details`, salvo en las rutas
+ * que lo permiten (`allowInactiveOrg`: lectura del perfil y de la bitácora propia en `SUSPENDED`).
+ */
+export function checkOrgActive(ctx: AuthContext, rule: AccessRule, allow: readonly CertificationStatus[] = []): void {
+  if (rule.kind !== 'member' && rule.kind !== 'roles' && rule.kind !== 'org') return
+  if (!ctx.wineryId || !ctx.organizationStatus || ctx.organizationStatus === 'ACTIVE') return
+  if (allow.includes(ctx.organizationStatus)) return
+  throw new ApiError(403, 'ORG_NOT_ACTIVE', 'La bodega no está activa', [fieldError(null, ctx.organizationStatus)])
 }
 
 /** ¿Puede el usuario ver una entidad de esta bodega? (el gestor ve todo). */

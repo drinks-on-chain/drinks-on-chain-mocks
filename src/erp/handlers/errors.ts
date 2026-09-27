@@ -3,7 +3,7 @@ import type { ApiErrorCode, ApiErrorDetail } from '../../shared/envelope'
 
 // Errores que los handlers convierten en el envoltorio de error del backend. `details` es una
 // lista de `{ field, message }` en los 422 (validación y reglas) y `null` en el resto
-// (contrato de la Ola 0 §1).
+// (contrato de la Ola 0 §1). Los mensajes van en español.
 
 export class ApiError extends Error {
   constructor(
@@ -11,6 +11,8 @@ export class ApiError extends Error {
     readonly code: ApiErrorCode,
     message: string,
     readonly details: ApiErrorDetail[] | null = null,
+    /** Cabeceras extra de la respuesta (p. ej. `Retry-After` en un 429). */
+    readonly headers: Record<string, string> = {},
   ) {
     super(message)
     this.name = 'ApiError'
@@ -33,8 +35,11 @@ export const conflict = (message: string) => new ApiError(409, 'CONFLICT', messa
 export const unprocessable = (message: string, details: ApiErrorDetail[] | null = null) =>
   new ApiError(422, 'UNPROCESSABLE_ENTITY', message, details)
 /** 422 de validación con los campos inválidos. */
-export const invalid = (details: ApiErrorDetail[], message = 'Validation failed') =>
+export const invalid = (details: ApiErrorDetail[], message = 'Los datos enviados no son válidos') =>
   new ApiError(422, 'VALIDATION_ERROR', message, details)
+/** Error con código de dominio (`ORG_…`, `INVITATION_…`…). Los 422 llevan el campo en `details`. */
+export const domainError = (status: number, code: ApiErrorCode, message: string, field?: string | null) =>
+  new ApiError(status, code, message, field === undefined ? null : [fieldError(field, message)])
 
 /** 422 de validación a partir de los errores de zod (`field` con notación de puntos). */
 export function validationError(issues: readonly z.core.$ZodIssue[]): ApiError {

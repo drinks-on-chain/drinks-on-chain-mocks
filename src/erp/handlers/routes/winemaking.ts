@@ -19,7 +19,7 @@ import {
 } from '../../schemas'
 import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
-import { fieldError, notFound, unprocessable } from '../errors'
+import { domainError, fieldError, invalid, notFound, unprocessable } from '../errors'
 import { created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
 import { findHarvest, requireWinery } from './terroirs-harvest'
 
@@ -167,6 +167,10 @@ export const winemakingRoutes: RouteSpec[] = [
       requireWinery(auth)
       const body = await parseBody(request, CreateWineAgingBatchSchema)
       const tank = findTank(auth, body.fermentationTankId)
+      // Como el backend: una cuba solo pasa una vez a crianza.
+      if (getErpDb().wineAgings.some((a) => a.fermentationTankId === tank.id)) {
+        throw domainError(409, 'FERMENTATION_TANK_ALREADY_TRANSFERRED', `La cuba ${tank.tankCode} ya ha sido transferida a un lote de crianza previo`)
+      }
       const start = body.startDate ? dayFromIso(body.startDate) : today()
       const aging: WineAgingResponse = {
         id: newId('aging'),
@@ -211,6 +215,17 @@ export const winemakingRoutes: RouteSpec[] = [
       const body = await parseBody(request, CreateDistillationBatchSchema)
       const tank = findTank(auth, body.fermentationTankId)
       const db = getErpDb()
+      // Balance de masa (backend): corazón + descarte no puede superar la entrada + 5 %.
+      if (body.inputVolumeLiters && body.outputVolumeLiters && body.wasteVolumeLiters) {
+        if (body.outputVolumeLiters + body.wasteVolumeLiters > body.inputVolumeLiters * 1.05) {
+          throw invalid([
+            fieldError(
+              'outputVolumeLiters',
+              `Balance de masa inconsistente: La suma de corazón (${body.outputVolumeLiters} L) y descarte (${body.wasteVolumeLiters} L) excede el volumen de entrada (${body.inputVolumeLiters} L)`,
+            ),
+          ])
+        }
+      }
       const isDoEligible = body.isDoEligible ?? false
       if (isDoEligible) {
         // Reglas D.O. Singani: la parcela de origen debe ser apta y estar a ≥ 1.600 m.

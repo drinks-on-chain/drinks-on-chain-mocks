@@ -1,3 +1,12 @@
+import {
+  needsMfa,
+  recordLogin,
+  recordLoginFailure,
+  recordProfileUpdate,
+  startMfaChallenge,
+  updatePrefs,
+} from '../../../backoffice/handlers/identity'
+import { prefsOf } from '../../../backoffice/handlers/support'
 import { fakeStellarAddress } from '../../../shared/uuid'
 import { buildSessionResponse, isUsableMembership } from '../../derive'
 import {
@@ -122,26 +131,42 @@ function accessTokenFor(user: MockUser, session: MockSession): string {
   )
 }
 
-/** Respuesta de sesión con tokens nuevos y la cookie `doc_rt` (también en el almacén propio). */
-function sessionResult(user: MockUser, session: MockSession, url: URL, status = 200): RouteResult {
+/**
+ * Respuesta de sesión con tokens nuevos y la cookie `doc_rt` (también en el almacén propio).
+ * `extra` añade campos a `data` (p. ej. `recoveryCodes` al confirmar el TOTP).
+ */
+export function sessionResult(
+  user: MockUser,
+  session: MockSession,
+  url: URL,
+  status = 200,
+  extra: Record<string, unknown> = {},
+): RouteResult {
   const body: SessionResponse = buildSessionResponse(user, getErpDb().wineries, {
     activeOrganizationId: session.activeOrganizationId,
     tokens: tokensFor(accessTokenFor(user, session), session.refreshToken),
+    memberships: membershipsOf(user),
   })
   writeCookieJar(session.refreshToken)
   return {
     status,
-    data: body,
+    data: { ...body, ...extra },
     headers: { 'Set-Cookie': refreshCookie(session.refreshToken, REFRESH_TTL_SECONDS[session.audience], url) },
   }
 }
 
-/** Abre una sesión en la organización activa por defecto (la última usada o la primera utilizable). */
-function openSession(user: MockUser): MockSession {
-  const memberships = membershipsOf(user)
-  const org = defaultOrganizationId(user, memberships)
+/**
+ * Abre una sesión en la organización indicada o en la de por defecto (la última usada o la
+ * primera utilizable). Sin segundo factor (`mfa: false`) nunca activa la de plataforma.
+ */
+export function openSession(user: MockUser, opts: { mfa?: boolean; organizationId?: string | null } = {}): MockSession {
+  const mfa = opts.mfa ?? false
+  const all = membershipsOf(user)
+  const memberships = mfa ? all : all.filter((m) => m.organizationType !== 'PLATFORM')
+  let org = opts.organizationId !== undefined ? opts.organizationId : defaultOrganizationId(user, memberships)
+  if (!mfa && org && !memberships.some((m) => m.organizationId === org)) org = defaultOrganizationId(user, memberships)
   rememberOrganization(user.id, org)
-  return createSession(user.id, memberships.length > 0 ? 'STAFF' : 'CONSUMER', org)
+  return createSession(user.id, all.length > 0 ? 'STAFF' : 'CONSUMER', org, mfa)
 }
 
 /** ¿Corresponde el refresco a una persona o a una sesión conocida (vigente, rotada o revocada)? */
@@ -198,12 +223,17 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'post',
     path: '/v1/auth/login',
     access: 'public',
-    async handle({ request, url }) {
+    async handle(ctx) {
+      const { request, url } = ctx
       const body = await parseBody(request, LoginSchema)
       const user = findUserByEmail(body.email)
       if (!user || !user.isActive || user._mock.password !== body.password) {
+        if (user) recordLoginFailure(ctx, user)
         throw unauthorized('Credenciales inválidas')
       }
+      // Personal de plataforma: sin tokens hasta pasar el TOTP (contrato de la Ola 1 §1).
+      if (needsMfa(user)) return ok(startMfaChallenge(user))
+      recordLogin(ctx, user, false)
       return sessionResult(user, openSession(user), url)
     },
   },
@@ -245,9 +275,13 @@ export const authUserRoutes: RouteSpec[] = [
       if (!membership) throw new ApiError(404, 'ORG_NOT_FOUND', 'Organización no encontrada')
       if (membership.status !== 'ACTIVE') throw forbidden('La membresía en esta organización está bloqueada')
       if (membership.organizationStatus === 'REVOKED') throw forbidden('La organización está revocada')
+      // La organización de plataforma exige haber pasado el TOTP en esta sesión (Ola 1 §1).
+      if (membership.organizationType === 'PLATFORM' && !auth.mfa) {
+        throw new ApiError(403, 'AUTH_MFA_REQUIRED', 'Para entrar en la plataforma hay que verificar el segundo factor')
+      }
       // Con un token estático no hay sesión: se abre una.
       let session = auth.sid ? getSession(auth.sid) : undefined
-      if (!session || session.revoked) session = createSession(auth.user.id, auth.audience, body.organizationId)
+      if (!session || session.revoked) session = createSession(auth.user.id, auth.audience, body.organizationId, auth.mfa)
       else rotateRefresh(session)
       setActiveOrganization(session, body.organizationId)
       rememberOrganization(auth.user.id, body.organizationId)
@@ -282,7 +316,7 @@ export const authUserRoutes: RouteSpec[] = [
     access: anyUser,
     handle({ auth }) {
       const me: MeResponse = {
-        user: { ...toProfile(auth.user), audience: auth.audience },
+        user: { ...toProfile(auth.user), audience: auth.audience, ...prefsOf(auth.user.id) },
         memberships: auth.memberships,
         activeOrganizationId: auth.organizationId,
       }
@@ -293,9 +327,15 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'patch',
     path: '/v1/users/me',
     access: anyUser,
-    async handle({ request, auth }) {
-      const body = await parseBody(request, UpdateUserSchema)
-      applyPatch(auth.user, body)
+    async handle(ctx) {
+      const { request, auth } = ctx
+      const { notificationPrefs, promotionsConsent, ...profile } = await parseBody(request, UpdateUserSchema)
+      const before = { fullName: auth.user.fullName, preferredLocale: auth.user.preferredLocale, ...prefsOf(auth.user.id) }
+      applyPatch(auth.user, profile)
+      // Preferencias de la Ola 1 (IAM-09): se guardan aparte y se leen en GET /v1/users/me.
+      updatePrefs(auth.user.id, notificationPrefs, promotionsConsent)
+      recordProfileUpdate(ctx, before)
+      // La respuesta sigue siendo el perfil (docs/CONTRATO.md §6: el contrato de la Ola 1 la cambia).
       return ok(toProfile(auth.user))
     },
   },

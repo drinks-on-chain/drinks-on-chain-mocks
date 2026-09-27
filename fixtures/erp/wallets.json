@@ -158,5 +158,55 @@
     "walletPurpose": "PRODUCER_SIGNING",
     "isPrimary": true,
     "createdAt": "2026-02-02T09:05:00Z"
+  },
+  {
+    "id": "87a79aa8-cfa9-5222-b682-1e841b30a718",
+    "userId": "888314c6-9ce6-5b66-b68f-4804276de103",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "stellarPublicAddress": "GV3SZKEHXNRBNXPFK3PHQ2C6NM5XEUNP3QP72ZTSD4TZU4D4CPWMIQRZ",
+    "walletType": "CUSTODIAL",
+    "walletPurpose": "PRODUCER_SIGNING",
+    "isPrimary": true,
+    "createdAt": "2026-05-20T09:05:00Z"
+  },
+  {
+    "id": "2e444dc1-0c03-505e-97a1-e2a488e89692",
+    "userId": "8511139f-baa2-58e0-8297-6bc207d694a6",
+    "wineryId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
+    "stellarPublicAddress": "GXMIYEUYN3YO2EMSJRB4URHBDNH4WWAKN5QZNF6CG7EGGWMGWJCR3YHT",
+    "walletType": "CUSTODIAL",
+    "walletPurpose": "PRODUCER_SIGNING",
+    "isPrimary": true,
+    "createdAt": "2026-01-05T09:05:00Z"
+  },
+  {
+    "id": "9eb14939-e459-5f6f-88e1-18d0a71d7d2c",
+    "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
+    "wineryId": null,
+    "stellarPublicAddress": "GPZPD6J5C2E2VB2X7B7XZDQEJCUVIJZKNMXSBYP7F2RXSMOW6TVS3LST",
+    "walletType": "CUSTODIAL",
+    "walletPurpose": "CONSUMER_NFT",
+    "isPrimary": true,
+    "createdAt": "2026-04-10T09:05:00Z"
+  },
+  {
+    "id": "07ff4549-3caa-595a-ba6d-42b5aaf5d506",
+    "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+    "wineryId": null,
+    "stellarPublicAddress": "GFH6UOKUZQ5FTPWXQA7TMC6E5K3CCMJ3D32H65V3XVCLXDBWPQUDSFTA",
+    "walletType": "CUSTODIAL",
+    "walletPurpose": "CONSUMER_NFT",
+    "isPrimary": true,
+    "createdAt": "2026-05-02T09:05:00Z"
+  },
+  {
+    "id": "72f85d29-6c89-5026-9bdf-0793e7c849af",
+    "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+    "wineryId": null,
+    "stellarPublicAddress": "G3H2Q6I6FYNUQQ3KVBGADUWBWHHBJEBICQOCGZ2HJDTRZR3MQRUJHCJM",
+    "walletType": "CUSTODIAL",
+    "walletPurpose": "CONSUMER_NFT",
+    "isPrimary": true,
+    "createdAt": "2026-09-22T09:05:00Z"
   }
 ]

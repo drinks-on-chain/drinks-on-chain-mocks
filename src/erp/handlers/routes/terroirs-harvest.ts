@@ -147,7 +147,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
       }
       const body = validate(raw, CreateHarvestBatchSchema)
       if (body.grossWeightKg <= body.tareWeightKg) {
-        throw invalid([fieldError('grossWeightKg', 'El peso bruto debe ser mayor que la tara')])
+        throw invalid([fieldError('grossWeightKg', 'El peso bruto debe ser estrictamente mayor al peso tara')])
       }
       const terroir = getErpDb().terroirs.find((t) => t.id === body.terroirId && t.wineryId === wineryId)
       if (!terroir) throw notFound('Parcela no encontrada en esta bodega')

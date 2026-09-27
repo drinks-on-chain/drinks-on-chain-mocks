@@ -1,0 +1,134 @@
+[
+  {
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "slug": "altos-de-calamuchita",
+    "lotPrefix": "ALT",
+    "publicStory": "Bodega familiar en las lomas de Santa Ana, con viñedos en Santa Ana la Nueva y Calamuchita. Registra cada lote en el ERP desde la vendimia.",
+    "website": "https://altos.test",
+    "activatedAt": "2026-03-02T10:00:00Z",
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-02-20T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2026-03-02T10:00:00Z",
+        "by": "Sistema",
+        "reason": null
+      }
+    ]
+  },
+  {
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "slug": "destileria-cinti-viejo",
+    "lotPrefix": "CVJ",
+    "publicStory": "Destilería del cañón de Cinti, con parrales de Moscatel de Alejandría en Camargo y Palca Grande. Singani de Denominación de Origen y un vino patrimonial de cepas criollas.",
+    "website": "https://cintiviejo.test",
+    "activatedAt": "2026-01-15T10:00:00Z",
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-01-08T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2026-01-15T10:00:00Z",
+        "by": "Sistema",
+        "reason": null
+      }
+    ]
+  },
+  {
+    "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+    "slug": "vinedos-del-guadalquivir",
+    "lotPrefix": null,
+    "publicStory": "Viñedos junto al río en el Valle de la Concepción y La Angostura. Está preparando su ingreso a la red: sus lotes aún no se registran en el ERP.",
+    "website": null,
+    "activatedAt": null,
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-09-18T09:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": "Solicitud aprobada"
+      }
+    ]
+  },
+  {
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "slug": "casa-uriondo",
+    "lotPrefix": "CUR",
+    "publicStory": "Destilería de referencia del distrito de Colón. Aparece en el mapa por contexto histórico; no tiene relación comercial con la red.",
+    "website": null,
+    "activatedAt": "2025-11-03T10:00:00Z",
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2025-10-20T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2025-11-03T10:00:00Z",
+        "by": "Sistema",
+        "reason": null
+      },
+      {
+        "status": "SUSPENDED",
+        "at": "2026-08-20T10:00:00Z",
+        "by": "Jorge Salinas",
+        "reason": "Registro SENASAG vencido; se reactiva al presentar la renovación."
+      }
+    ]
+  },
+  {
+    "wineryId": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
+    "slug": "sol-de-padcaya",
+    "lotPrefix": null,
+    "publicStory": null,
+    "website": null,
+    "activatedAt": null,
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-09-24T09:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": "Documentación completa"
+      }
+    ]
+  },
+  {
+    "wineryId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
+    "slug": "valle-escondido",
+    "lotPrefix": "VES",
+    "publicStory": null,
+    "website": null,
+    "activatedAt": "2026-01-05T10:00:00Z",
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2025-12-01T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2026-01-05T10:00:00Z",
+        "by": "Hugo Ortega",
+        "reason": null
+      },
+      {
+        "status": "REVOKED",
+        "at": "2026-08-14T10:00:00Z",
+        "by": "Ana Gutiérrez",
+        "reason": "Cierre de la bodega solicitado por su titular."
+      }
+    ]
+  }
+]

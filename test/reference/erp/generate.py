@@ -72,13 +72,24 @@ WINERIES = [
     dict(key="guadalquivir", code="VGQ", legalName="Viñedos del Guadalquivir S.R.L.", commercialName="Viñedos del Guadalquivir",
          beverageCategory="WINERY", taxIdNit="3011223344", senasagSanitaryReg=None,
          geographicRegion="Valle Central de Tarija · Concepción", address=None,
-         contactEmail="hola@guadalquivir.test", contactPhone="+59171223344", certificationStatus="PENDING",
+         contactEmail="hola@guadalquivir.test", contactPhone="+59171223344", certificationStatus="INVITED",
          approvedAt=None, createdAt=date(2026, 9, 18)),
     dict(key="uriondo", code="CUR", legalName="Casa Uriondo Ltda.", commercialName="Casa Uriondo",
          beverageCategory="DISTILLERY", taxIdNit="4099887766", senasagSanitaryReg="08-01-03-02-0009",
          geographicRegion="Valle Central de Tarija · Uriondo", address="Plaza principal s/n, Uriondo",
          contactEmail="casa@uriondo.test", contactPhone="+59146660009", certificationStatus="SUSPENDED",
          approvedAt=date(2025, 11, 3), createdAt=date(2025, 10, 20)),
+    # Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md §4): estado INVITED | ACTIVE | SUSPENDED | REVOKED.
+    dict(key="padcaya", code=None, legalName="Sol de Padcaya S.R.L.", commercialName="Bodega Sol de Padcaya",
+         beverageCategory="WINERY", taxIdNit="5044332211", senasagSanitaryReg=None,
+         geographicRegion="Valle Central de Tarija · Padcaya", address=None,
+         contactEmail="contacto@soldepadcaya.test", contactPhone="+59172554433", certificationStatus="INVITED",
+         approvedAt=None, createdAt=date(2026, 9, 24)),
+    dict(key="valle", code="VES", legalName="Valle Escondido S.R.L.", commercialName="Bodega Valle Escondido",
+         beverageCategory="WINERY", taxIdNit="6077001122", senasagSanitaryReg="08-01-04-01-0213",
+         geographicRegion="Valle Central de Tarija · El Valle", address="Camino a El Valle km 3, Tarija",
+         contactEmail="contacto@valleescondido.test", contactPhone="+59146640213", certificationStatus="REVOKED",
+         approvedAt=date(2026, 1, 5), createdAt=date(2025, 12, 1)),
 ]
 
 wineries = []
@@ -194,6 +205,13 @@ MULTI = [
         ("cintiviejo", "AGRONOMIST", "CIA-CHQ-230", True, date(2026, 2, 3)),
         ("altos", "OPERATOR", None, False, date(2026, 4, 1)),
     ]),
+    # Ola 1: contadora bloqueada por la plataforma y dueño de la bodega revocada.
+    ("cvj_contable", "contabilidad@cintiviejo.test", "Lic. Verónica Quiroga", "ENOLOGIST", "+59172000205", date(2026, 5, 20), [
+        ("cintiviejo", "ACCOUNTANT", None, False, date(2026, 5, 20)),
+    ]),
+    ("valle_admin", "hugo@valleescondido.test", "Hugo Ortega", "WINERY_ADMIN", "+59173000601", date(2026, 1, 5), [
+        ("valle", "OWNER", None, True, date(2026, 1, 5)),
+    ]),
 ]
 for key, email, name, role, phone, created, links in MULTI:
     uid_ = uid(f"user:{key}")
@@ -243,6 +261,45 @@ for key, email, name, role, phone, created, links in MULTI:
         "primaryWallet": wallet,
         "_mock": {"key": key, "password": "demo1234"},
     })
+# Personal interno de la Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md §5). Sin `rng`.
+# key, email, fullName, phone, created, lastLoginAt (o None)
+STAFF = [
+    ("bo_admin", "administracion@drinksonchain.test", "Jorge Salinas", "+59170000003", date(2026, 4, 10), date(2026, 9, 24)),
+    ("operaciones", "operaciones@drinksonchain.test", "Valeria Méndez", "+59170000004", date(2026, 5, 2), date(2026, 9, 25)),
+    ("analista", "analista@drinksonchain.test", "Camila Torrez", "+59170000005", date(2026, 9, 22), None),
+]
+for key, email, name, phone, created, last in STAFF:
+    uid_ = uid(f"user:{key}")
+    wallet = {
+        "id": uid(f"wallet:{key}"),
+        "userId": uid_,
+        "wineryId": None,
+        "stellarPublicAddress": gkey(f"user-wallet:{key}"),
+        "walletType": "CUSTODIAL",
+        "walletPurpose": "CONSUMER_NFT",
+        "isPrimary": True,
+        "createdAt": iso(created, 9, 5),
+    }
+    wallets.append(wallet)
+    users.append({
+        "id": uid_,
+        "email": email,
+        "fullName": name,
+        "userRole": "PLATFORM_ADMIN",
+        "phoneNumber": phone,
+        "preferredLocale": "es",
+        "isActive": True,
+        "lastLoginAt": iso(last, 8, 30) if last else None,
+        "createdAt": iso(created, 9),
+        "wineryMemberships": [],
+        "primaryWallet": wallet,
+        "_mock": {"key": key, "password": "demo1234"},
+    })
+# Rol en la organización de plataforma (solo en los mocks: `_mock.platformRole`).
+PLATFORM_ROLES = {"admin": "SUPERADMIN", "soporte": "SUPPORT", "bo_admin": "ADMIN", "operaciones": "OPERATIONS", "analista": "OPERATIONS"}
+for u in users:
+    if u["_mock"]["key"] in PLATFORM_ROLES:
+        u["_mock"]["platformRole"] = PLATFORM_ROLES[u["_mock"]["key"]]
 U = {u["_mock"]["key"]: u for u in users}
 
 # ---------------------------------------------------------------------------
@@ -254,14 +311,14 @@ PLATFORM_ORG = {"id": uid("organization:platform"), "name": "Drinks on Chain", "
 def memberships_of(u: dict) -> list:
     """Plataforma antes que bodegas; el id de una membresía de bodega es el del miembro."""
     out = []
-    if u["userRole"] == "PLATFORM_ADMIN":
+    if u["userRole"] == "PLATFORM_ADMIN" or u["_mock"].get("platformRole"):
         out.append({
             "id": uid(f"membership:platform:{u['id']}"),
             "organizationId": PLATFORM_ORG["id"],
             "organizationType": "PLATFORM",
             "organizationName": PLATFORM_ORG["name"],
             "organizationStatus": PLATFORM_ORG["status"],
-            "role": "SUPERADMIN",
+            "role": u["_mock"].get("platformRole", "SUPERADMIN"),
             "status": "ACTIVE" if u["isActive"] else "BLOCKED",
         })
     for m in u["wineryMemberships"]:

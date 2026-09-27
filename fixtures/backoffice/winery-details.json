@@ -1,0 +1,242 @@
+[
+  {
+    "id": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "slug": "altos-de-calamuchita",
+    "legalName": "Altos de Calamuchita S.R.L.",
+    "tradeName": "Bodega Altos de Calamuchita",
+    "taxId": "1023456019",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · Santa Ana",
+    "status": "ACTIVE",
+    "lotPrefix": "ALT",
+    "owner": {
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "email": "admin@altos.test"
+    },
+    "membersCount": 5,
+    "createdAt": "2026-02-20T09:00:00Z",
+    "activatedAt": "2026-03-02T10:00:00Z",
+    "address": "Camino a Calamuchita km 9, Santa Ana la Nueva, Tarija",
+    "senasagRegistration": "08-01-03-01-0142",
+    "contactEmail": "contacto@altos.test",
+    "contactPhone": "+59146650142",
+    "logoUrl": "/mocks/uploads/logos/altos.png",
+    "publicStory": "Bodega familiar en las lomas de Santa Ana, con viñedos en Santa Ana la Nueva y Calamuchita. Registra cada lote en el ERP desde la vendimia.",
+    "website": "https://altos.test",
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-02-20T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2026-03-02T10:00:00Z",
+        "by": "Sistema",
+        "reason": null
+      }
+    ]
+  },
+  {
+    "id": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "slug": "destileria-cinti-viejo",
+    "legalName": "Destilería Cinti Viejo S.A.",
+    "tradeName": "Destilería Cinti Viejo",
+    "taxId": "2087654031",
+    "category": "DISTILLERY",
+    "region": "Valle de Cinti · Camargo",
+    "status": "ACTIVE",
+    "lotPrefix": "CVJ",
+    "owner": {
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "email": "admin@cintiviejo.test"
+    },
+    "membersCount": 5,
+    "createdAt": "2026-01-08T09:00:00Z",
+    "activatedAt": "2026-01-15T10:00:00Z",
+    "address": "Av. del Singani 45, Camargo, Chuquisaca",
+    "senasagRegistration": "01-02-01-03-0077",
+    "contactEmail": "contacto@cintiviejo.test",
+    "contactPhone": "+59146930077",
+    "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+    "publicStory": "Destilería del cañón de Cinti, con parrales de Moscatel de Alejandría en Camargo y Palca Grande. Singani de Denominación de Origen y un vino patrimonial de cepas criollas.",
+    "website": "https://cintiviejo.test",
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-01-08T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2026-01-15T10:00:00Z",
+        "by": "Sistema",
+        "reason": null
+      }
+    ]
+  },
+  {
+    "id": "140bd695-7a59-5480-811c-38ce57cdd80f",
+    "slug": "vinedos-del-guadalquivir",
+    "legalName": "Viñedos del Guadalquivir S.R.L.",
+    "tradeName": "Viñedos del Guadalquivir",
+    "taxId": "3011223344",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · Concepción",
+    "status": "INVITED",
+    "lotPrefix": null,
+    "owner": {
+      "userId": "c918ae49-2b92-5268-b370-2f067e0e97fe",
+      "fullName": "Elena Vaca",
+      "email": "gerencia@guadalquivir.test"
+    },
+    "membersCount": 1,
+    "createdAt": "2026-09-18T09:00:00Z",
+    "activatedAt": null,
+    "address": null,
+    "senasagRegistration": null,
+    "contactEmail": "hola@guadalquivir.test",
+    "contactPhone": "+59171223344",
+    "logoUrl": "/mocks/uploads/logos/guadalquivir.png",
+    "publicStory": "Viñedos junto al río en el Valle de la Concepción y La Angostura. Está preparando su ingreso a la red: sus lotes aún no se registran en el ERP.",
+    "website": null,
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-09-18T09:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": "Solicitud aprobada"
+      }
+    ]
+  },
+  {
+    "id": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "slug": "casa-uriondo",
+    "legalName": "Casa Uriondo Ltda.",
+    "tradeName": "Casa Uriondo",
+    "taxId": "4099887766",
+    "category": "DISTILLERY",
+    "region": "Valle Central de Tarija · Uriondo",
+    "status": "SUSPENDED",
+    "lotPrefix": "CUR",
+    "owner": {
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "email": "sofia@aramayo.test"
+    },
+    "membersCount": 1,
+    "createdAt": "2025-10-20T09:00:00Z",
+    "activatedAt": "2025-11-03T10:00:00Z",
+    "address": "Plaza principal s/n, Uriondo",
+    "senasagRegistration": "08-01-03-02-0009",
+    "contactEmail": "casa@uriondo.test",
+    "contactPhone": "+59146660009",
+    "logoUrl": "/mocks/uploads/logos/uriondo.png",
+    "publicStory": "Destilería de referencia del distrito de Colón. Aparece en el mapa por contexto histórico; no tiene relación comercial con la red.",
+    "website": null,
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2025-10-20T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2025-11-03T10:00:00Z",
+        "by": "Sistema",
+        "reason": null
+      },
+      {
+        "status": "SUSPENDED",
+        "at": "2026-08-20T10:00:00Z",
+        "by": "Jorge Salinas",
+        "reason": "Registro SENASAG vencido; se reactiva al presentar la renovación."
+      }
+    ]
+  },
+  {
+    "id": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
+    "slug": "sol-de-padcaya",
+    "legalName": "Sol de Padcaya S.R.L.",
+    "tradeName": "Bodega Sol de Padcaya",
+    "taxId": "5044332211",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · Padcaya",
+    "status": "INVITED",
+    "lotPrefix": null,
+    "owner": {
+      "userId": null,
+      "fullName": "Gabriela Ríos",
+      "email": "duena@soldepadcaya.test"
+    },
+    "membersCount": 0,
+    "createdAt": "2026-09-24T09:00:00Z",
+    "activatedAt": null,
+    "address": null,
+    "senasagRegistration": null,
+    "contactEmail": "contacto@soldepadcaya.test",
+    "contactPhone": "+59172554433",
+    "logoUrl": "/mocks/uploads/logos/padcaya.png",
+    "publicStory": null,
+    "website": null,
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2026-09-24T09:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": "Documentación completa"
+      }
+    ]
+  },
+  {
+    "id": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
+    "slug": "valle-escondido",
+    "legalName": "Valle Escondido S.R.L.",
+    "tradeName": "Bodega Valle Escondido",
+    "taxId": "6077001122",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · El Valle",
+    "status": "REVOKED",
+    "lotPrefix": "VES",
+    "owner": {
+      "userId": "8511139f-baa2-58e0-8297-6bc207d694a6",
+      "fullName": "Hugo Ortega",
+      "email": "hugo@valleescondido.test"
+    },
+    "membersCount": 1,
+    "createdAt": "2025-12-01T09:00:00Z",
+    "activatedAt": "2026-01-05T10:00:00Z",
+    "address": "Camino a El Valle km 3, Tarija",
+    "senasagRegistration": "08-01-04-01-0213",
+    "contactEmail": "contacto@valleescondido.test",
+    "contactPhone": "+59146640213",
+    "logoUrl": "/mocks/uploads/logos/valle.png",
+    "publicStory": null,
+    "website": null,
+    "statusHistory": [
+      {
+        "status": "INVITED",
+        "at": "2025-12-01T09:00:00Z",
+        "by": "Sistema",
+        "reason": "Alta anterior a la Ola 1"
+      },
+      {
+        "status": "ACTIVE",
+        "at": "2026-01-05T10:00:00Z",
+        "by": "Hugo Ortega",
+        "reason": null
+      },
+      {
+        "status": "REVOKED",
+        "at": "2026-08-14T10:00:00Z",
+        "by": "Ana Gutiérrez",
+        "reason": "Cierre de la bodega solicitado por su titular."
+      }
+    ]
+  }
+]

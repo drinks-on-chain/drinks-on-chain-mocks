@@ -25,7 +25,7 @@ import {
 import { erpFixtures } from '../src/fixtures'
 import { resetScenario, setScenario } from '../src/handlers'
 import { getErpDb, resetErpDb, setupMockServer } from '../src/node'
-import { API, call, dataOf, login } from './helpers'
+import { API, call, dataOf, login, loginSession } from './helpers'
 
 const server = setupMockServer({ baseUrl: API })
 
@@ -53,7 +53,8 @@ describe('autenticación', () => {
   it('las respuestas de login de todos los usuarios coinciden con auth-login.json', async () => {
     for (const [key, fixture] of Object.entries(erpFixtures.authLogin)) {
       const email = erpFixtures.users.find((u) => u._mock.key === key)!.email
-      const data = SessionResponseSchema.parse(dataOf((await call('/v1/auth/login', { body: { email, password: 'demo1234' } })).json))
+      // El personal de plataforma pasa antes el segundo factor (contrato de la Ola 1 §1).
+      const data = SessionResponseSchema.parse(await loginSession(email))
       expect({ ...data, tokens: undefined }).toStrictEqual({ ...fixture, tokens: undefined })
     }
   })
@@ -147,7 +148,7 @@ describe('multi-tenant, filtros y paginación', () => {
     expect(second.items[0]).not.toEqual(first.items[0])
     const bad = await call('/v1/harvest-batches?limit=abc', { token })
     expect(bad.status).toBe(422)
-    expect(ErrorEnvelopeSchema.parse(bad.json).error.details).toEqual([{ field: 'limit', message: 'limit must be an integer number' }])
+    expect(ErrorEnvelopeSchema.parse(bad.json).error.details).toEqual([{ field: 'limit', message: 'limit debe ser un número entero' }])
   })
 
   it('limit por defecto 20, máximo 100 (más → 422)', async () => {
@@ -159,7 +160,7 @@ describe('multi-tenant, filtros y paginación', () => {
     expect(tooMany.status).toBe(422)
     expect(ErrorEnvelopeSchema.parse(tooMany.json).error).toMatchObject({
       code: 'VALIDATION_ERROR',
-      details: [{ field: 'limit', message: 'limit must not be greater than 100' }],
+      details: [{ field: 'limit', message: 'limit no puede ser mayor que 100' }],
     })
   })
 
@@ -209,8 +210,9 @@ describe('roles', () => {
     expect((await call('/v1/wineries', { token: owner })).status).toBe(403)
     const admin = await login('gestor@drinksonchain.test')
     const pending = dataOf((await call('/v1/wineries/pending', { token: admin })).json) as Paged<unknown>
-    expect(pending).toMatchObject({ total: 1, limit: 20, offset: 0 })
-    expect(pending.items).toHaveLength(1)
+    // Viñedos del Guadalquivir y Bodega Sol de Padcaya (INVITED desde la Ola 1).
+    expect(pending).toMatchObject({ total: 2, limit: 20, offset: 0 })
+    expect(pending.items).toHaveLength(2)
   })
 
   it('un consumidor no ve datos del ERP pero sí el pasaporte público', async () => {
@@ -385,7 +387,7 @@ describe('bodega, miembros y archivos', () => {
 
   it('aprobar una bodega pendiente le asigna cuenta Stellar', async () => {
     const token = await login('gestor@drinksonchain.test')
-    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'PENDING')!
+    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'INVITED')!
     const approved = dataOf((await call(`/v1/wineries/${pending.id}/approve`, { token, body: {} })).json) as {
       certificationStatus: string
       stellarPublicKey: string
@@ -435,7 +437,7 @@ describe('escenarios', () => {
     const token = await login('enologa@altos.test')
     const { status, json } = await call('/v1/terroirs', { token })
     expect(status).toBe(500)
-    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('INTERNAL_SERVER_ERROR')
+    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('INTERNAL_ERROR')
   })
 
   it('offline: error de red', async () => {

@@ -3,9 +3,12 @@ import { join } from 'node:path'
 import Ajv, { type ValidateFunction } from 'ajv'
 import addFormats from 'ajv-formats'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { erpFixtures } from '../src/fixtures'
-import { ERP_ROUTE_SPECS } from '../src/handlers'
+import { z } from 'zod'
+import * as pkg from '../src'
+import { backofficeFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp } from '../src/fixtures'
+import { MOCK_ROUTE_SPECS, mockMailbox } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
+import { uid } from '../src/shared/uuid'
 import { API } from './helpers'
 
 // Prueba de contrato (plan/04 §4): los mocks frente a openapi/erp.json.
@@ -42,6 +45,8 @@ interface Pending {
   adelantadas: PendingEntry[]
   cambios: PendingEntry[]
   camposExtra: Record<string, { campos: string[]; contrato: string; motivo: string }>
+  /** `Dto.campo` → valores de la enumeración que fija un contrato de ola (sustituyen a los del OpenAPI). */
+  enumCambios: Record<string, { valores: string[]; contrato: string; motivo: string }>
 }
 
 const spec = readJson<OpenApi>('openapi/erp.json')
@@ -49,7 +54,7 @@ const pending = readJson<Pending>('openapi/pendientes.json')
 
 const opKey = (method: string, path: string) => `${method.toUpperCase()} ${path.replace(/:(\w+)/g, '{$1}')}`
 const openApiOps = new Set(Object.entries(spec.paths).flatMap(([p, ops]) => Object.keys(ops).map((m) => opKey(m, p))))
-const routeOps = ERP_ROUTE_SPECS.map((r) => opKey(r.method, r.path))
+const routeOps = MOCK_ROUTE_SPECS.map((r) => opKey(r.method, r.path))
 const ahead = new Map(pending.adelantadas.map((e) => [opKey(e.method, e.path), e]))
 const changed = new Map(pending.cambios.map((e) => [opKey(e.method, e.path), e]))
 
@@ -91,20 +96,40 @@ function components(): Json {
     if (!props) throw new Error(`camposExtra: ${name} no existe en el OpenAPI`)
     for (const field of extra.campos) props[field] ??= {}
   }
+  for (const [target, change] of Object.entries(pending.enumCambios)) {
+    const [name, field] = target.split('.') as [string, string]
+    const prop = (schemas[name]?.properties as Record<string, Json> | undefined)?.[field]
+    if (!prop || !Array.isArray(prop.enum)) throw new Error(`enumCambios: ${target} no es una enumeración del OpenAPI`)
+    prop.enum = [...change.valores, ...(prop.enum.includes(null) ? [null] : [])]
+  }
   return { ...spec.components, schemas }
 }
 
-/** Reescribe `#/components/...` a `erp.json#/components/...` y expande `{ $page: ref }`. */
+/** JSON Schema (draft 7) de un esquema zod exportado por el paquete (`{ $zod: 'Nombre' }`). */
+function zodJsonSchema(name: string): Json {
+  const schema = (pkg as Record<string, unknown>)[name]
+  if (!(schema instanceof z.ZodType)) throw new Error(`$zod: ${name} no es un esquema exportado por el paquete`)
+  const out = z.toJSONSchema(schema, { target: 'draft-7', unrepresentable: 'any' }) as Json
+  delete out.$schema
+  return out
+}
+
+/**
+ * Reescribe `#/components/...` a `erp.json#/components/...`, expande `{ $page: ref }` y los
+ * esquemas zod (`{ $zod: 'Nombre' }`, `{ $page: 'zod:Nombre' }`).
+ */
 function resolveRefs(node: unknown): unknown {
   if (Array.isArray(node)) return node.map(resolveRefs)
   if (!node || typeof node !== 'object') return node
   const obj = node as Json
+  if (typeof obj.$zod === 'string') return zodJsonSchema(obj.$zod)
   if (typeof obj.$page === 'string') {
+    const item = obj.$page.startsWith('zod:') ? { $zod: obj.$page.slice(4) } : { $ref: obj.$page }
     return {
       type: 'object',
       required: ['items', 'total', 'limit', 'offset'],
       properties: {
-        items: { type: 'array', items: resolveRefs({ $ref: obj.$page }) },
+        items: { type: 'array', items: resolveRefs(item) },
         total: { type: 'integer', minimum: 0 },
         limit: { type: 'integer', minimum: 1, maximum: 100 },
         offset: { type: 'integer', minimum: 0 },
@@ -178,6 +203,10 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
       expect(e.contrato, name).toMatch(/^(plan\/contratos\/o\d+-[\w-]+\.md §\d+|docs\/CONTRATO\.md §\d+)/)
       expect(e.campos.length, name).toBeGreaterThan(0)
     }
+    for (const [name, e] of Object.entries(pending.enumCambios)) {
+      expect(e.contrato, name).toMatch(/^plan\/contratos\/o\d+-[\w-]+\.md §\d+/)
+      expect(e.valores.length, name).toBeGreaterThan(0)
+    }
   })
 })
 
@@ -217,6 +246,16 @@ describe('fixtures ⇄ esquemas del OpenAPI', () => {
     expect(validator(component('WineryResponseDto'))({ ...erpFixtures.wineries[0]!, taxIdNit: null })).toBe(false)
     expect(validator(component('WineryResponseDto'))({ ...erpFixtures.wineries[0]!, legalNameRenamed: 'x' })).toBe(false)
   })
+
+  it('los esquemas zod ($zod) tampoco admiten campos desconocidos ni tipos distintos', () => {
+    const detail = backofficeFixtures.wineryDetails[0]!
+    const check = validator({ $zod: 'WineryDetailSchema' })
+    expect(check(detail)).toBe(true)
+    expect(check({ ...detail, tradeNameRenamed: 'x' })).toBe(false)
+    expect(check({ ...detail, status: 'PENDING' })).toBe(false)
+    expect(check({ ...detail, lotPrefix: 'altos' })).toBe(false)
+    expect(validator({ $page: 'zod:AuditEventSchema' })({ items: backofficeFixtures.audit.slice(0, 3), total: 3, limit: 20, offset: 0 })).toBe(true)
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -236,7 +275,7 @@ const winery = (name: string) => F.wineries.find((w) => w.commercialName === nam
 const ALTOS = winery('Bodega Altos de Calamuchita')
 const CINTI = winery('Destilería Cinti Viejo')
 const URIONDO = winery('Casa Uriondo')
-const PENDING = F.wineries.find((w) => w.certificationStatus === 'PENDING')!
+const PENDING = F.wineries.find((w) => w.certificationStatus === 'INVITED')!
 const altosTerroir = F.terroirs.find((t) => t.wineryId === ALTOS.id && t.altitudeMasl >= 1600)!
 const altosHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
 const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id)!
@@ -247,13 +286,17 @@ const bottlingWithLab = F.bottling.find((b) => F.labAnalyses.some((l) => l.bottl
 const bottlingWithoutLab = F.bottling.find((b) => !F.labAnalyses.some((l) => l.bottlingBatchId === b.id))!
 const maria = F.users.find((u) => u._mock.key === 'maria')!
 
+type Vars = Record<string, string>
+
 interface Sample {
   /** Clave del usuario (token estático `mock.access.<clave>`); sin ella, petición pública. */
   as?: string
-  url: string
-  body?: unknown
+  url: string | ((v: Vars) => string)
+  body?: unknown | ((v: Vars) => unknown)
   form?: () => FormData
   status: number
+  /** Pasos previos (p. ej. pedir un enlace y leerlo del buzón). */
+  setup?: () => Promise<Vars>
 }
 
 const SAMPLES: Record<string, Sample> = {
@@ -375,6 +418,326 @@ const SAMPLES: Record<string, Sample> = {
   },
 }
 
+// ---------------------------------------------------------------------------
+// Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md)
+// ---------------------------------------------------------------------------
+
+const app = (key: string) => uid(`application:${key}`)
+const invitation = (key: string) => uid(`invitation:${key}`)
+const member = (userKey: string, wineryKey: string) =>
+  F.wineries.find((w) => w.id === uid(`winery:${wineryKey}`))!.members!.find((m) => m.userId === uid(`user:${userKey}`))!.id
+const platformMembership = (userKey: string) => uid(`membership:platform:${uid(`user:${userKey}`)}`)
+const PADCAYA = F.wineries.find((w) => w.commercialName === 'Bodega Sol de Padcaya')!
+const REASON = 'Prueba de contrato de la Ola 1'
+
+async function post(path: string, body: unknown, as?: string): Promise<{ status: number; data: Record<string, unknown> }> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (as) headers.Authorization = `Bearer mock.access.${as}`
+  const res = await fetch(`${API}${path}`, { method: 'POST', headers, body: JSON.stringify(body) })
+  const text = await res.text()
+  return { status: res.status, data: text ? ((JSON.parse(text) as { data: Record<string, unknown> }).data ?? {}) : {} }
+}
+
+/** `mfaToken` del login de una persona de plataforma. */
+async function mfaToken(email: string): Promise<string> {
+  const { data } = await post('/v1/auth/login', { email, password: 'demo1234' })
+  return (data.mfa as { mfaToken: string }).mfaToken
+}
+
+const OLA1_SAMPLES: Record<string, Sample> = {
+  // Cuenta y segundo factor
+  'POST /v1/auth/mfa/verify': {
+    url: '/v1/auth/mfa/verify',
+    setup: async () => ({ mfaToken: await mfaToken('gestor@drinksonchain.test') }),
+    body: (v: Vars) => ({ mfaToken: v.mfaToken, code: generateTotp(DEMO_TOTP_SECRET) }),
+    status: 200,
+  },
+  'POST /v1/auth/mfa/enroll': {
+    url: '/v1/auth/mfa/enroll',
+    setup: async () => ({ mfaToken: await mfaToken('analista@drinksonchain.test') }),
+    body: (v: Vars) => ({ mfaToken: v.mfaToken }),
+    status: 200,
+  },
+  'POST /v1/auth/mfa/enroll/confirm': {
+    url: '/v1/auth/mfa/enroll/confirm',
+    setup: async () => {
+      const token = await mfaToken('analista@drinksonchain.test')
+      const { data } = await post('/v1/auth/mfa/enroll', { mfaToken: token })
+      return { mfaToken: token, secret: data.secret as string }
+    },
+    body: (v: Vars) => ({ mfaToken: v.mfaToken, code: generateTotp(v.secret!) }),
+    status: 200,
+  },
+  'POST /v1/auth/forgot-password': {
+    url: '/v1/auth/forgot-password',
+    body: { email: 'admin@altos.test', captchaToken: 'XXXX.DUMMY.TOKEN.XXXX' },
+    status: 202,
+  },
+  'POST /v1/auth/reset-password': {
+    url: '/v1/auth/reset-password',
+    setup: async () => {
+      await post('/v1/auth/forgot-password', { email: 'admin@altos.test', captchaToken: 'ok' })
+      return { token: mockMailbox.latest({ to: 'admin@altos.test', template: 'PASSWORD_RESET' })!.token! }
+    },
+    body: (v: Vars) => ({ token: v.token, password: DEMO_NEW_PASSWORD }),
+    status: 204,
+  },
+  'POST /v1/auth/resend-verification': {
+    url: '/v1/auth/resend-verification',
+    body: { email: 'maria@tribu.test', captchaToken: 'ok' },
+    status: 202,
+  },
+  'POST /v1/auth/verify-email': {
+    url: '/v1/auth/verify-email',
+    setup: async () => {
+      await post('/v1/auth/resend-verification', { email: 'maria@tribu.test', captchaToken: 'ok' })
+      return { token: mockMailbox.latest({ to: 'maria@tribu.test', template: 'EMAIL_VERIFY' })!.token! }
+    },
+    body: (v: Vars) => ({ token: v.token }),
+    status: 204,
+  },
+  'POST /v1/users/me/password': {
+    as: 'altos_admin',
+    url: '/v1/users/me/password',
+    body: { currentPassword: 'demo1234', newPassword: DEMO_NEW_PASSWORD },
+    status: 204,
+  },
+  'POST /v1/platform/users/{membershipId}/reset-mfa': {
+    as: 'bo_admin',
+    url: `/v1/platform/users/${platformMembership('operaciones')}/reset-mfa`,
+    body: { reason: REASON },
+    status: 200,
+  },
+  // Invitaciones
+  'GET /v1/invitations/{token}': { url: '/v1/invitations/demo-invitacion-padcaya', status: 200 },
+  'POST /v1/invitations/{token}/accept': {
+    url: '/v1/invitations/demo-invitacion-padcaya/accept',
+    body: { fullName: 'Gabriela Ríos', password: DEMO_NEW_PASSWORD },
+    status: 200,
+  },
+  'POST /v1/invitations/{id}/resend': {
+    as: 'operaciones',
+    url: `/v1/invitations/${invitation('guadalquivir-owner')}/resend`,
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/invitations/{id}/revoke': { as: 'altos_admin', url: `/v1/invitations/${invitation('altos-enologo')}/revoke`, body: {}, status: 200 },
+  'GET /v1/organizations/current/invitations': { as: 'altos_admin', url: '/v1/organizations/current/invitations', status: 200 },
+  'POST /v1/organizations/current/invitations': {
+    as: 'altos_admin',
+    url: '/v1/organizations/current/invitations',
+    body: { email: 'nuevo@altos.test', role: 'OPERATOR' },
+    status: 201,
+  },
+  // Solicitudes
+  'POST /v1/public/winery-applications': {
+    url: '/v1/public/winery-applications',
+    body: {
+      legalName: 'Bodega Contrato S.R.L.',
+      tradeName: 'Bodega Contrato',
+      taxId: '7123456789',
+      category: 'WINERY',
+      region: 'Valle Central de Tarija · San Lorenzo',
+      contactName: 'Persona de Contrato',
+      contactEmail: 'contrato@bodega.test',
+      captchaToken: 'XXXX.DUMMY.TOKEN.XXXX',
+      website: '',
+    },
+    status: 202,
+  },
+  'POST /v1/public/winery-applications/verify': {
+    url: '/v1/public/winery-applications/verify',
+    body: { token: 'demo-verificacion-alto-camargo' },
+    status: 204,
+  },
+  'GET /v1/platform/winery-applications': { as: 'soporte', url: '/v1/platform/winery-applications', status: 200 },
+  'GET /v1/platform/winery-applications/{id}': { as: 'soporte', url: `/v1/platform/winery-applications/${app('tierra-cintis')}`, status: 200 },
+  'POST /v1/platform/winery-applications/{id}/take': { as: 'operaciones', url: `/v1/platform/winery-applications/${app('andina')}/take`, body: {}, status: 200 },
+  'POST /v1/platform/winery-applications/{id}/notes': {
+    as: 'operaciones',
+    url: `/v1/platform/winery-applications/${app('tierra-cintis')}/notes`,
+    body: { text: 'Nota de la prueba de contrato' },
+    status: 200,
+  },
+  'POST /v1/platform/winery-applications/{id}/schedule-meeting': {
+    as: 'operaciones',
+    url: `/v1/platform/winery-applications/${app('tierra-cintis')}/schedule-meeting`,
+    body: { scheduledAt: '2026-10-01T15:00:00Z', channel: 'CALL' },
+    status: 200,
+  },
+  'POST /v1/platform/winery-applications/{id}/meeting-done': {
+    as: 'operaciones',
+    url: `/v1/platform/winery-applications/${app('angostura')}/meeting-done`,
+    body: { notes: 'Reunión hecha: interesados en la preventa.' },
+    status: 200,
+  },
+  'POST /v1/platform/winery-applications/{id}/approve': {
+    as: 'operaciones',
+    url: `/v1/platform/winery-applications/${app('tierra-cintis')}/approve`,
+    body: {},
+    status: 200,
+  },
+  'POST /v1/platform/winery-applications/{id}/reject': {
+    as: 'operaciones',
+    url: `/v1/platform/winery-applications/${app('tierra-cintis')}/reject`,
+    body: { reason: 'Falta el padrón de viñedos' },
+    status: 200,
+  },
+  // Bodegas
+  'POST /v1/platform/wineries': {
+    as: 'operaciones',
+    url: '/v1/platform/wineries',
+    body: {
+      legalName: 'Alta Directa S.R.L.',
+      tradeName: 'Bodega Alta Directa',
+      taxId: '7234567890',
+      category: 'DISTILLERY',
+      region: 'Valle de Cinti · Camargo',
+      contactEmail: 'hola@altadirecta.test',
+      ownerEmail: 'duena@altadirecta.test',
+      ownerFullName: 'Dueña de Alta Directa',
+    },
+    status: 201,
+  },
+  'GET /v1/platform/wineries': { as: 'soporte', url: '/v1/platform/wineries?status=ACTIVE', status: 200 },
+  'GET /v1/platform/wineries/{id}': { as: 'soporte', url: `/v1/platform/wineries/${ALTOS.id}`, status: 200 },
+  'PATCH /v1/platform/wineries/{id}': {
+    as: 'operaciones',
+    url: `/v1/platform/wineries/${ALTOS.id}`,
+    body: { address: 'Camino a Calamuchita km 9,5', reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/wineries/{id}/suspend': { as: 'operaciones', url: `/v1/platform/wineries/${ALTOS.id}/suspend`, body: { reason: REASON }, status: 200 },
+  'POST /v1/platform/wineries/{id}/reactivate': { as: 'operaciones', url: `/v1/platform/wineries/${URIONDO.id}/reactivate`, body: { reason: REASON }, status: 200 },
+  'POST /v1/platform/wineries/{id}/revoke': { as: 'bo_admin', url: `/v1/platform/wineries/${PADCAYA.id}/revoke`, body: { reason: REASON }, status: 200 },
+  'POST /v1/platform/wineries/{id}/transfer-ownership': {
+    as: 'bo_admin',
+    url: `/v1/platform/wineries/${ALTOS.id}/transfer-ownership`,
+    body: { newOwnerEmail: 'enologa@altos.test', reason: REASON, keepPreviousOwnerAs: 'ENOLOGIST' },
+    status: 200,
+  },
+  'GET /v1/organizations/current': { as: 'altos_enologa', url: '/v1/organizations/current', status: 200 },
+  'PATCH /v1/organizations/current': {
+    as: 'altos_admin',
+    url: '/v1/organizations/current',
+    body: { publicStory: 'Historia de la prueba de contrato.' },
+    status: 200,
+  },
+  'GET /v1/public/wineries/{slug}': { url: '/v1/public/wineries/altos-de-calamuchita', status: 200 },
+  // Equipo
+  'GET /v1/organizations/current/members': { as: 'altos_admin', url: '/v1/organizations/current/members', status: 200 },
+  'PATCH /v1/organizations/current/members/{membershipId}': {
+    as: 'altos_admin',
+    url: `/v1/organizations/current/members/${member('altos_operario', 'altos')}`,
+    body: { role: 'ACCOUNTANT' },
+    status: 200,
+  },
+  'POST /v1/organizations/current/members/{membershipId}/block': {
+    as: 'altos_admin',
+    url: `/v1/organizations/current/members/${member('altos_operario', 'altos')}/block`,
+    body: { reason: 'Vacaciones' },
+    status: 200,
+  },
+  'POST /v1/organizations/current/members/{membershipId}/unblock': {
+    as: 'altos_admin',
+    url: `/v1/organizations/current/members/${member('ines', 'altos')}/unblock`,
+    body: {},
+    status: 200,
+  },
+  'GET /v1/platform/organizations/{organizationId}/members': { as: 'soporte', url: `/v1/platform/organizations/${CINTI.id}/members`, status: 200 },
+  'PATCH /v1/platform/organizations/{organizationId}/members/{membershipId}': {
+    as: 'soporte',
+    url: `/v1/platform/organizations/${CINTI.id}/members/${member('cvj_operario', 'cintiviejo')}`,
+    body: { role: 'AGRONOMIST', reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/organizations/{organizationId}/members/{membershipId}/block': {
+    as: 'soporte',
+    url: `/v1/platform/organizations/${CINTI.id}/members/${member('cvj_operario', 'cintiviejo')}/block`,
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/organizations/{organizationId}/members/{membershipId}/unblock': {
+    as: 'soporte',
+    url: `/v1/platform/organizations/${CINTI.id}/members/${member('cvj_contable', 'cintiviejo')}/unblock`,
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/organizations/{organizationId}/invitations': {
+    as: 'soporte',
+    url: `/v1/platform/organizations/${ALTOS.id}/invitations`,
+    body: { email: 'bodega@altos.test', role: 'OPERATOR', reason: REASON },
+    status: 201,
+  },
+  // Usuarios internos
+  'GET /v1/platform/users': { as: 'bo_admin', url: '/v1/platform/users', status: 200 },
+  'POST /v1/platform/users': {
+    as: 'bo_admin',
+    url: '/v1/platform/users',
+    body: { email: 'soporte3@drinksonchain.test', role: 'SUPPORT' },
+    status: 201,
+  },
+  'PATCH /v1/platform/users/{membershipId}': {
+    as: 'bo_admin',
+    url: `/v1/platform/users/${platformMembership('soporte')}`,
+    body: { role: 'OPERATIONS', reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/users/{userId}/block': {
+    as: 'bo_admin',
+    url: `/v1/platform/users/${platformMembership('soporte')}/block`,
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/users/{userId}/unblock': {
+    as: 'bo_admin',
+    url: `/v1/platform/users/${maria.id}/unblock`,
+    setup: async () => {
+      await post(`/v1/platform/users/${maria.id}/block`, { reason: REASON }, 'bo_admin')
+      return {}
+    },
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/users/{userId}/send-password-reset': {
+    as: 'soporte',
+    url: `/v1/platform/users/${uid('user:altos_admin')}/send-password-reset`,
+    body: {},
+    status: 202,
+  },
+  'GET /v1/platform/permissions': { as: 'soporte', url: '/v1/platform/permissions', status: 200 },
+  // Configuración
+  'GET /v1/platform/settings': { as: 'soporte', url: '/v1/platform/settings', status: 200 },
+  'PUT /v1/platform/settings/{key}': {
+    as: 'bo_admin',
+    url: '/v1/platform/settings/compra.minutosReserva',
+    body: { value: 20, reason: REASON },
+    status: 200,
+  },
+  'GET /v1/platform/settings/{key}/overrides': { as: 'soporte', url: '/v1/platform/settings/compra.maxBotellasPorCompra/overrides', status: 200 },
+  'PUT /v1/platform/settings/{key}/overrides': {
+    as: 'bo_admin',
+    url: '/v1/platform/settings/compra.maxBotellasPorCompra/overrides',
+    body: { wineryIds: [ALTOS.id], value: 8, reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/settings/{key}/overrides/reset': {
+    as: 'bo_admin',
+    url: '/v1/platform/settings/compra.maxBotellasPorCompra/overrides/reset',
+    body: { wineryIds: 'ALL', reason: REASON },
+    status: 200,
+  },
+  'GET /v1/platform/settings/{key}/history': { as: 'soporte', url: '/v1/platform/settings/canje.ventanaDias/history', status: 200 },
+  'GET /v1/organizations/current/settings': { as: 'altos_enologa', url: '/v1/organizations/current/settings', status: 200 },
+  // Bitácora y tablero
+  'GET /v1/platform/audit': { as: 'soporte', url: '/v1/platform/audit?limit=50', status: 200 },
+  'GET /v1/platform/audit/export': { as: 'soporte', url: '/v1/platform/audit/export?from=2026-09-01', status: 200 },
+  'GET /v1/platform/audit/verify': { as: 'bo_admin', url: '/v1/platform/audit/verify', status: 200 },
+  'GET /v1/organizations/current/audit': { as: 'altos_admin', url: '/v1/organizations/current/audit', status: 200 },
+  'GET /v1/platform/dashboard': { as: 'operaciones', url: '/v1/platform/dashboard', status: 200 },
+}
+Object.assign(SAMPLES, OLA1_SAMPLES)
+
 describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
   it('hay una petición de ejemplo por cada RouteSpec', () => {
     expect(Object.keys(SAMPLES).sort()).toEqual([...routeOps].sort())
@@ -383,20 +746,28 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
   it.each(routeOps)('%s', async (key) => {
     const sample = SAMPLES[key]!
     const method = key.split(' ')[0]!
+    const vars = sample.setup ? await sample.setup() : {}
     const headers: Record<string, string> = {}
     if (sample.as) headers.Authorization = `Bearer mock.access.${sample.as}`
     let body: BodyInit | undefined
+    const rawBody = typeof sample.body === 'function' ? (sample.body as (v: Vars) => unknown)(vars) : sample.body
     if (sample.form) body = sample.form()
-    else if (sample.body !== undefined) {
+    else if (rawBody !== undefined) {
       headers['Content-Type'] = 'application/json'
-      body = JSON.stringify(sample.body)
+      body = JSON.stringify(rawBody)
     }
-    const res = await fetch(`${API}${sample.url}`, { method, headers, body })
+    const url = typeof sample.url === 'function' ? sample.url(vars) : sample.url
+    const res = await fetch(`${API}${url}`, { method, headers, body })
     const text = await res.text()
     expect(res.status, text).toBe(sample.status)
     const { schema, source } = responseSchema(key, sample.status)
     if (sample.status === 204) {
       expect(text).toBe('')
+      return
+    }
+    if (schema?.$csv) {
+      expect(res.headers.get('content-type')).toMatch(/^text\/csv/)
+      expect(text.split('\r\n')[0]).toMatch(/^seq,occurredAt,/)
       return
     }
     const envelope = JSON.parse(text) as { success: boolean; data: unknown }

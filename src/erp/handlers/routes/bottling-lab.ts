@@ -1,5 +1,6 @@
 import { dayFromIso, dayParts, isoDay, normalizeDateTime } from '../../../shared/dates'
 import { fakeHash64 } from '../../../shared/uuid'
+import { lotPrefixOf } from '../../../backoffice/handlers/support'
 import { WINERY_CODES_BY_ID } from '../../catalog'
 import { deriveRestStatus } from '../../lot-view'
 import {
@@ -24,9 +25,12 @@ export function findBottling(auth: AuthContext | null, id: string): BottlingBatc
   return b
 }
 
-/** Código de bodega para el lote: catálogo fijo o tres primeras letras del nombre comercial. */
+/**
+ * Código de bodega para el lote: catálogo fijo, el prefijo asignado al activarse (Ola 1, ORG-05) o
+ * las tres primeras letras del nombre comercial.
+ */
 function wineryCode(wineryId: string): string {
-  const known = WINERY_CODES_BY_ID[wineryId]
+  const known = WINERY_CODES_BY_ID[wineryId] ?? lotPrefixOf(wineryId)
   if (known) return known
   const w = getErpDb().wineries.find((x) => x.id === wineryId)
   const letters = (w?.commercialName ?? 'DOC')

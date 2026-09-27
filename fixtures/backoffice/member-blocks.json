@@ -1,0 +1,16 @@
+[
+  {
+    "membershipId": "af3d16da-21a1-59f3-9028-af66cb89294c",
+    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "by": "OWNER",
+    "reason": "Terminó su contrato de temporada.",
+    "at": "2026-06-30T10:00:00Z"
+  },
+  {
+    "membershipId": "c79a3f44-f369-5b59-8102-36e89311185e",
+    "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "by": "PLATFORM",
+    "reason": "Acceso compartido detectado; pendiente de confirmar con la dueña.",
+    "at": "2026-09-12T15:00:00Z"
+  }
+]
