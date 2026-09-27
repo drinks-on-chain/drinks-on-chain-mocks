@@ -5,8 +5,10 @@ import {
   MeResponseSchema,
   SessionResponseSchema,
   type Envelope,
+  type LoginResponse,
   type SessionResponse,
 } from '../src'
+import { DEMO_TOTP_SECRET, generateTotp } from '../src/fixtures'
 import { PLATFORM_ORGANIZATION } from '../src/erp/catalog'
 import { erpFixtures } from '../src/fixtures'
 import { expireAccessTokens } from '../src/handlers'
@@ -69,9 +71,14 @@ function cookieValue(headers: Headers): string {
 }
 
 async function login(email: string) {
-  const res = await raw<SessionResponse>('/v1/auth/login', { body: { email, password: 'demo1234' } })
+  const res = await raw<LoginResponse>('/v1/auth/login', { body: { email, password: 'demo1234' } })
   expect(res.status).toBe(200)
-  return { session: SessionResponseSchema.parse(data(res.json)), headers: res.headers }
+  const first = data(res.json)
+  if (!('mfa' in first)) return { session: SessionResponseSchema.parse(first), headers: res.headers }
+  // Personal de plataforma: segundo factor con el TOTP de demo (contrato de la Ola 1 §1).
+  const verified = await raw<SessionResponse>('/v1/auth/mfa/verify', { body: { mfaToken: first.mfa.mfaToken, code: generateTotp(DEMO_TOTP_SECRET) } })
+  expect(verified.status).toBe(200)
+  return { session: SessionResponseSchema.parse(data(verified.json)), headers: verified.headers }
 }
 
 function claimsOf(accessToken: string) {
@@ -195,8 +202,11 @@ describe('cambio de organización', () => {
     expect(claimsOf(switched.tokens.accessToken)).toMatchObject({ org: URIONDO.id, role: 'OWNER', sid: claimsOf(asEnologist).sid })
 
     const asOwner = switched.tokens.accessToken
+    // Casa Uriondo está suspendida (Ola 1 §4): se lee el perfil, pero no se escribe en el ERP.
     expect(data((await raw('/v1/wineries/my', { token: asOwner })).json)).toMatchObject({ id: URIONDO.id })
-    expect((await raw('/v1/wineries/my', { token: asOwner, method: 'PATCH', body: { address: 'Plaza 1' } })).status).toBe(200)
+    const patch = await raw('/v1/wineries/my', { token: asOwner, method: 'PATCH', body: { address: 'Plaza 1' } })
+    expect(patch.status).toBe(403)
+    expect(ErrorEnvelopeSchema.parse(patch.json).error).toMatchObject({ code: 'ORG_NOT_ACTIVE', details: [{ field: null, message: 'SUSPENDED' }] })
 
     const again = await login('sofia@aramayo.test')
     expect(again.session.activeOrganizationId).toBe(URIONDO.id)
