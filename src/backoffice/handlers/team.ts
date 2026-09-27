@@ -146,38 +146,42 @@ function accountStatus(user: MockUser): UserAccountStatus {
 }
 
 /**
- * `POST /v1/platform/users/{id}/block|unblock`: con el id de una membresía de plataforma bloquea
- * al usuario interno en la plataforma; con el id de una persona, la cuenta completa (ADMIN).
+ * `POST /v1/platform/users/{membershipId}/block|unblock`: bloquea o desbloquea la membresía de
+ * plataforma de un usuario interno (contrato de la Ola 1 §11 bis). La cuenta completa se bloquea
+ * con `/v1/platform/accounts/{userId}/…`.
  */
 function platformBlock(ctx: RouteContext, id: string, reason: string, blocked: boolean) {
   const staffUser = platformStaff().find((u) => platformMembershipId(u.id) === id)
-  if (staffUser) {
-    assertNotSuperadmin(staffUser)
-    if (staffUser.id === ctx.auth.user.id) throw domainError(403, 'ORG_CANNOT_MODIFY_SELF', 'No puedes bloquearte a ti mismo')
-    const state = bo()
-    const membershipId = platformMembershipId(staffUser.id)
-    const isBlocked = state.blocks.some((b) => b.membershipId === membershipId)
-    if (isBlocked === blocked) throw domainError(409, 'CONFLICT', blocked ? 'Ya está bloqueado' : 'No está bloqueado')
-    state.blocks = state.blocks.filter((b) => b.membershipId !== membershipId)
-    if (blocked) {
-      state.blocks.push({ membershipId, organizationId: PLATFORM_ORGANIZATION.id, by: 'PLATFORM', reason, at: now() })
-      revokeAllSessions(staffUser.id)
-    }
-    recordAudit(ctx, {
-      action: blocked ? 'PLATFORM_USER_BLOCKED' : 'PLATFORM_USER_UNBLOCKED',
-      resource: { type: 'MEMBERSHIP', id: membershipId },
-      organizationId: PLATFORM_ORGANIZATION.id,
-      before: { status: blocked ? 'ACTIVE' : 'BLOCKED' },
-      after: { status: blocked ? 'BLOCKED' : 'ACTIVE' },
-      reason,
-    })
-    return ok(toPlatformUser(staffUser))
+  if (!staffUser) throw notFound(`Membresía de plataforma "${id}" no encontrada`)
+  assertNotSuperadmin(staffUser)
+  if (staffUser.id === ctx.auth.user.id) throw domainError(403, 'ORG_CANNOT_MODIFY_SELF', 'No puedes bloquearte a ti mismo')
+  const state = bo()
+  const membershipId = platformMembershipId(staffUser.id)
+  const isBlocked = state.blocks.some((b) => b.membershipId === membershipId)
+  if (isBlocked === blocked) throw domainError(409, 'CONFLICT', blocked ? 'Ya está bloqueado' : 'No está bloqueado')
+  state.blocks = state.blocks.filter((b) => b.membershipId !== membershipId)
+  if (blocked) {
+    state.blocks.push({ membershipId, organizationId: PLATFORM_ORGANIZATION.id, by: 'PLATFORM', reason, at: now() })
+    revokeAllSessions(staffUser.id)
   }
+  recordAudit(ctx, {
+    action: blocked ? 'PLATFORM_USER_BLOCKED' : 'PLATFORM_USER_UNBLOCKED',
+    resource: { type: 'MEMBERSHIP', id: membershipId },
+    organizationId: PLATFORM_ORGANIZATION.id,
+    before: { status: blocked ? 'ACTIVE' : 'BLOCKED' },
+    after: { status: blocked ? 'BLOCKED' : 'ACTIVE' },
+    reason,
+  })
+  return ok(toPlatformUser(staffUser))
+}
+
+/**
+ * `POST /v1/platform/accounts/{userId}/block|unblock`: la cuenta completa de una persona
+ * (`UserAccountStatus`; revoca todas sus sesiones). Solo administración (contrato de la Ola 1 §11 bis).
+ */
+function accountBlock(ctx: RouteContext, id: string, reason: string, blocked: boolean) {
   const user = getErpDb().users.find((u) => u.id === id)
-  if (!user) throw notFound(`Usuario o membresía "${id}" no encontrado`)
-  if (ctx.auth.platformRole !== 'ADMIN' && ctx.auth.platformRole !== 'SUPERADMIN') {
-    throw new ApiError(403, 'FORBIDDEN', 'Solo administración bloquea cuentas completas')
-  }
+  if (!user) throw notFound(`Usuario "${id}" no encontrado`)
   if (user._mock.platformRole) assertNotSuperadmin(user)
   if (user.id === ctx.auth.user.id) throw domainError(403, 'ORG_CANNOT_MODIFY_SELF', 'No puedes bloquearte a ti mismo')
   if (user.isActive !== blocked) throw domainError(409, 'CONFLICT', blocked ? 'La cuenta ya está bloqueada' : 'La cuenta no está bloqueada')
@@ -373,20 +377,38 @@ export const teamRoutes: RouteSpec[] = [
   },
   {
     method: 'post',
-    path: '/v1/platform/users/:userId/block',
+    path: '/v1/platform/users/:membershipId/block',
     access: ADMINS,
     async handle(ctx) {
       const body = await parseBody(ctx.request, PlatformActionSchema)
-      return platformBlock(ctx, ctx.params.userId!, body.reason, true)
+      return platformBlock(ctx, ctx.params.membershipId!, body.reason, true)
     },
   },
   {
     method: 'post',
-    path: '/v1/platform/users/:userId/unblock',
+    path: '/v1/platform/users/:membershipId/unblock',
     access: ADMINS,
     async handle(ctx) {
       const body = await parseBody(ctx.request, PlatformActionSchema)
-      return platformBlock(ctx, ctx.params.userId!, body.reason, false)
+      return platformBlock(ctx, ctx.params.membershipId!, body.reason, false)
+    },
+  },
+  {
+    method: 'post',
+    path: '/v1/platform/accounts/:userId/block',
+    access: ADMINS,
+    async handle(ctx) {
+      const body = await parseBody(ctx.request, PlatformActionSchema)
+      return accountBlock(ctx, ctx.params.userId!, body.reason, true)
+    },
+  },
+  {
+    method: 'post',
+    path: '/v1/platform/accounts/:userId/unblock',
+    access: ADMINS,
+    async handle(ctx) {
+      const body = await parseBody(ctx.request, PlatformActionSchema)
+      return accountBlock(ctx, ctx.params.userId!, body.reason, false)
     },
   },
   {
