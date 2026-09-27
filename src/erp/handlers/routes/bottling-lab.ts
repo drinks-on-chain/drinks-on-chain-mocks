@@ -10,7 +10,7 @@ import {
   type BatchLabAnalysisResponse,
   type BottlingBatchResponse,
 } from '../../schemas'
-import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
+import { canSee, scoped, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
 import { conflict, fieldError, notFound, unprocessable } from '../errors'
 import { boolParam, created, enumParam, listResult, ok, parseBody, type RouteSpec } from '../http'
@@ -56,7 +56,7 @@ export const bottlingLabRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/bottling',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateBottlingBatchSchema)
@@ -139,7 +139,7 @@ export const bottlingLabRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/bottling',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const productType = enumParam(query, 'productType', PRODUCT_TYPES)
@@ -153,7 +153,7 @@ export const bottlingLabRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/bottling/:id',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle: ({ auth, params }) => ok(findBottling(auth, params.id!)),
   },
 
@@ -161,7 +161,7 @@ export const bottlingLabRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/lab-analyses',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'PLATFORM_ADMIN']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       const body = await parseBody(request, CreateBatchLabAnalysisSchema)
       const bottling = findBottling(auth, body.bottlingBatchId)
@@ -203,10 +203,9 @@ export const bottlingLabRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/lab-analyses/batch/:bottlingBatchId',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'AGRONOMIST', 'PLATFORM_ADMIN', 'CONSUMER']),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
     handle({ auth, params }) {
-      // Los consumidores leen cualquier certificado (también aparece en el pasaporte público).
-      const bottling = findBottling(auth.role === 'CONSUMER' ? null : auth, params.bottlingBatchId!)
+      const bottling = findBottling(auth, params.bottlingBatchId!)
       const lab = getErpDb().labAnalyses.find((l) => l.bottlingBatchId === bottling.id)
       if (!lab) throw notFound(`Informe analítico del lote "${bottling.internationalLotCode}" no encontrado`)
       return ok(lab)

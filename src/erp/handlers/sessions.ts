@@ -1,9 +1,12 @@
+import { sha256 } from '../../shared/crypto'
 import { ACCESS_TOKEN_TTL_SECONDS } from '../derive'
 import type { AccessTokenClaims, Audience, AuthTokens } from '../schemas'
 import { AccessTokenClaimsSchema } from '../schemas'
 
-// Sesiones simuladas (contrato de la Ola 0 §5): acceso de 15 min con forma de JWT, renovación
-// rotativa con detección de reutilización, organización activa por sesión y cookie `doc_rt`.
+// Sesiones simuladas (contrato de la Ola 0 §5 y §8, como el backend O0-BE-4): acceso de 15 min
+// con forma de JWT, renovación rotativa `<sid>.<generación>.<secreto>` con periodo de gracia de
+// 20 s y detección de reutilización, caducidad deslizante, organización activa por sesión, cookie
+// `doc_rt` y bloqueo progresivo del login.
 //
 // En el navegador el estado se guarda en localStorage (`doc-mocks:sessions`) para que una
 // recarga de la página no cierre la sesión; en Node vive en memoria. `resetSessions()` (y
@@ -13,10 +16,12 @@ export const REFRESH_COOKIE = 'doc_rt'
 export const ACCESS_TOKEN_PREFIX = 'mock.access.'
 /** Prefijo del refresco estático de los fixtures (`mock.refresh.<clave>`). */
 export const STATIC_REFRESH_PREFIX = 'mock.refresh.'
-/** Prefijo del refresco rotativo que emiten los handlers (`mock.rt.<sid>.<generación>`). */
-export const ROTATING_REFRESH_PREFIX = 'mock.rt.'
-/** Renovación: 7 días para personal, 30 para consumidores. */
+/** Renovación (deslizante): 7 días para personal, 30 para consumidores. */
 export const REFRESH_TTL_SECONDS: Record<Audience, number> = { STAFF: 7 * 86_400, CONSUMER: 30 * 86_400 }
+/** Periodo de gracia del refresco inmediatamente anterior (dos pestañas renovando a la vez). */
+export const REFRESH_GRACE_SECONDS = 20
+/** Bloqueo progresivo del login (IAM-07): fallos por correo, primer bloqueo, tope y ventana. */
+export const LOGIN_LOCK_POLICY = { emailThreshold: 5, baseLockSeconds: 60, maxLockSeconds: 3600, windowSeconds: 3600 } as const
 
 const STORAGE_KEY = 'doc-mocks:sessions'
 
@@ -25,12 +30,18 @@ export interface MockSession {
   userId: string
   audience: Audience
   activeOrganizationId: string | null
-  /** Refresco vigente de la familia. */
+  /** Semilla de los secretos de la cadena de refrescos (el de la generación n se deriva de ella). */
+  seed: string
+  /** Refresco vigente de la familia (`<sid>.<generación>.<secreto>`). */
   refreshToken: string
-  /** Refrescos ya rotados: presentarlos de nuevo revoca la sesión (AUTH_REFRESH_REUSED). */
-  rotated: string[]
-  /** Generación del refresco (sube en cada rotación). */
+  /** Generación del refresco vigente (sube en cada rotación; empieza en 0). */
   generation: number
+  /** Hora real (ms) de la última rotación: marca el periodo de gracia; `null` si no rotó. */
+  rotatedAt: number | null
+  /** Acceso emitido en la última rotación: el periodo de gracia devuelve el mismo par. */
+  lastAccessToken: string | null
+  /** Caducidad deslizante en el reloj de los mocks (ms); cada rotación la renueva. */
+  expiresAt: number
   revoked: boolean
   /** ¿Pasó el segundo factor (TOTP)? Necesario para activar la organización de plataforma. */
   mfa: boolean
@@ -53,6 +64,8 @@ interface SessionState {
    * en `document.cookie`).
    */
   cookieJar: string | null
+  /** Fallos de login por correo (hora real): bloqueo progresivo. */
+  loginFailures: Record<string, { count: number; firstAt: number; lockedUntil: number }>
 }
 
 const emptyState = (): SessionState => ({
@@ -63,6 +76,7 @@ const emptyState = (): SessionState => ({
   sessions: {},
   lastOrganization: {},
   cookieJar: null,
+  loginFailures: {},
 })
 
 function storage(): Storage | null {
@@ -76,7 +90,12 @@ function storage(): Storage | null {
 function load(): SessionState {
   try {
     const raw = storage()?.getItem(STORAGE_KEY)
-    if (raw) return { ...emptyState(), ...(JSON.parse(raw) as Partial<SessionState>) }
+    if (raw) {
+      const saved = { ...emptyState(), ...(JSON.parse(raw) as Partial<SessionState>) }
+      // Las sesiones de los mocks 0.3.0-rc.1 (refresco `mock.rt.…`) no tienen semilla: se descartan.
+      saved.sessions = Object.fromEntries(Object.entries(saved.sessions).filter(([, x]) => typeof x.seed === 'string'))
+      return saved
+    }
   } catch {
     // almacenamiento bloqueado o dañado: empezamos de cero
   }
@@ -108,10 +127,20 @@ export function resetSessions(): void {
   }
 }
 
-/** Simula que pasaron 15 minutos: todos los accesos emitidos hasta ahora caducan (401). */
+/**
+ * Simula que pasaron 15 minutos: todos los accesos emitidos hasta ahora caducan (401
+ * `AUTH_TOKEN_EXPIRED`) y termina el periodo de gracia de los refrescos rotados.
+ */
 export function expireAccessTokens(): void {
   const s = current()
   s.expiredUpTo = s.jti
+  persist()
+  expireRefreshGrace()
+}
+
+/** Simula que pasaron más de 20 s desde la última rotación (fin del periodo de gracia). */
+export function expireRefreshGrace(): void {
+  for (const session of Object.values(current().sessions)) if (session.rotatedAt !== null) session.rotatedAt = 0
   persist()
 }
 
@@ -134,24 +163,53 @@ export function rememberOrganization(userId: string, organizationId: string | nu
   persist()
 }
 
-/** Crea una sesión nueva (login, signup o renovación con un refresco estático). */
+/** UUID v4 aleatorio (el `sid` de la sesión). */
+function randomUuid(): string {
+  const hex = Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16))
+  hex[12] = '4'
+  hex[16] = ((parseInt(hex[16]!, 16) & 0x3) | 0x8).toString(16)
+  const h = hex.join('')
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`
+}
+
+function base64urlBytes(bytes: Uint8Array): string {
+  let binary = ''
+  for (const b of bytes) binary += String.fromCharCode(b)
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+/** Secreto de la generación `gen` (43 caracteres base64url, como el HMAC del backend). */
+function secretFor(session: Pick<MockSession, 'sid' | 'seed'>, gen: number): string {
+  return base64urlBytes(sha256(new TextEncoder().encode(`${session.seed}.${session.sid}.${gen}`)))
+}
+
+function refreshFor(session: Pick<MockSession, 'sid' | 'seed'>, gen: number): string {
+  return `${session.sid}.${gen}.${secretFor(session, gen)}`
+}
+
+/** Crea una sesión nueva (login, signup, invitación o renovación con un refresco estático). */
 export function createSession(
   userId: string,
   audience: Audience,
   activeOrganizationId: string | null,
   mfa = false,
+  nowMs = 0,
 ): MockSession {
   const s = current()
   s.seq += 1
-  const sid = `${s.nonce}s${s.seq}`
+  const sid = randomUuid()
+  const seed = `${s.nonce}.${s.seq}.${Math.random().toString(36).slice(2)}`
   const session: MockSession = {
     sid,
     userId,
     audience,
     activeOrganizationId,
-    refreshToken: `${ROTATING_REFRESH_PREFIX}${sid}.1`,
-    rotated: [],
-    generation: 1,
+    seed,
+    refreshToken: refreshFor({ sid, seed }, 0),
+    generation: 0,
+    rotatedAt: null,
+    lastAccessToken: null,
+    expiresAt: nowMs + REFRESH_TTL_SECONDS[audience] * 1000,
     revoked: false,
     mfa,
   }
@@ -160,13 +218,25 @@ export function createSession(
   return session
 }
 
-/** Rota el refresco de la sesión y devuelve el nuevo. */
-export function rotateRefresh(session: MockSession): string {
-  session.rotated.push(session.refreshToken)
+/** Rota el refresco de la sesión (generación + 1), renueva la caducidad y devuelve el nuevo. */
+export function rotateRefresh(session: MockSession, nowMs: number): string {
   session.generation += 1
-  session.refreshToken = `${ROTATING_REFRESH_PREFIX}${session.sid}.${session.generation}`
+  session.refreshToken = refreshFor(session, session.generation)
+  session.rotatedAt = Date.now()
+  session.expiresAt = nowMs + REFRESH_TTL_SECONDS[session.audience] * 1000
   persist()
   return session.refreshToken
+}
+
+/** Guarda el acceso emitido con la última rotación (lo devuelve el periodo de gracia). */
+export function rememberAccessToken(session: MockSession, accessToken: string): void {
+  session.lastAccessToken = accessToken
+  persist()
+}
+
+/** ¿Sigue abierto el periodo de gracia de la última rotación? */
+export function withinGrace(session: MockSession): boolean {
+  return session.rotatedAt !== null && Date.now() - session.rotatedAt <= REFRESH_GRACE_SECONDS * 1000
 }
 
 export function setActiveOrganization(session: MockSession, organizationId: string | null): void {
@@ -192,11 +262,79 @@ export function revokeSessionsOfOrganization(organizationId: string, userId: str
   persist()
 }
 
-/** Sesión a la que pertenece un refresco rotativo (vigente o ya rotado). */
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const SECRET_RE = /^[A-Za-z0-9_-]{43}$/
+
+/** `<sid>.<generación>.<secreto>` o `null` si no tiene esa forma. */
+export function parseRefreshToken(raw: string | null | undefined): { sid: string; generation: number; secret: string } | null {
+  if (typeof raw !== 'string' || raw.length > 200) return null
+  const parts = raw.trim().split('.')
+  if (parts.length !== 3) return null
+  const [sid, gen, secret] = parts as [string, string, string]
+  if (!UUID_RE.test(sid) || !/^\d{1,9}$/.test(gen) || !SECRET_RE.test(secret)) return null
+  return { sid: sid.toLowerCase(), generation: Number(gen), secret }
+}
+
+/**
+ * Lugar de un refresco en la cadena de su sesión (como `matchRefreshToken` del backend):
+ * - `current`: el vigente; `previous`: el inmediatamente anterior (candidato a la gracia);
+ * - `reused`: uno más antiguo de la misma sesión; `invalid`: no es de ninguna cadena conocida.
+ */
+export type RefreshMatch =
+  | { kind: 'current' | 'previous' | 'reused'; session: MockSession }
+  | { kind: 'invalid'; session?: undefined }
+
+export function matchRefresh(raw: string | null | undefined): RefreshMatch {
+  const parsed = parseRefreshToken(raw)
+  if (!parsed) return { kind: 'invalid' }
+  const session = current().sessions[parsed.sid]
+  if (!session || parsed.generation > session.generation) return { kind: 'invalid' }
+  if (secretFor(session, parsed.generation) !== parsed.secret) return { kind: 'invalid' }
+  if (parsed.generation === session.generation) return { kind: 'current', session }
+  return { kind: parsed.generation === session.generation - 1 ? 'previous' : 'reused', session }
+}
+
+/** Sesión a la que pertenece un refresco auténtico (vigente o ya rotado). */
 export function sessionOfRefresh(token: string): MockSession | undefined {
-  if (!token.startsWith(ROTATING_REFRESH_PREFIX)) return undefined
-  const sid = token.slice(ROTATING_REFRESH_PREFIX.length).split('.')[0] ?? ''
-  return current().sessions[sid]
+  return matchRefresh(token).session
+}
+
+// ---------------------------------------------------------------------------
+// Bloqueo progresivo del login (IAM-07; hora real, por correo)
+// ---------------------------------------------------------------------------
+
+function lockSecondsFor(failures: number): number {
+  const p = LOGIN_LOCK_POLICY
+  if (failures < p.emailThreshold) return 0
+  return Math.min(p.baseLockSeconds * 2 ** Math.min(failures - p.emailThreshold, 16), p.maxLockSeconds)
+}
+
+/** Segundos que quedan de bloqueo para este correo (0 = puede intentarlo). */
+export function loginLockedFor(email: string): number {
+  const entry = current().loginFailures[email.trim().toLowerCase()]
+  const left = entry ? entry.lockedUntil - Date.now() : 0
+  return left > 0 ? Math.ceil(left / 1000) : 0
+}
+
+/** Anota un fallo; devuelve los segundos de bloqueo que empiezan (0 si ninguno). */
+export function recordLoginFailureAttempt(email: string): number {
+  const s = current()
+  const key = email.trim().toLowerCase()
+  const now = Date.now()
+  let entry = s.loginFailures[key]
+  if (!entry || now - entry.firstAt > LOGIN_LOCK_POLICY.windowSeconds * 1000) entry = { count: 0, firstAt: now, lockedUntil: 0 }
+  entry.count += 1
+  const lock = lockSecondsFor(entry.count)
+  if (lock > 0) entry.lockedUntil = now + lock * 1000
+  s.loginFailures[key] = entry
+  persist()
+  return lock
+}
+
+/** Login correcto: se olvidan los fallos del correo. */
+export function recordLoginSuccessAttempt(email: string): void {
+  delete current().loginFailures[email.trim().toLowerCase()]
+  persist()
 }
 
 // ---------------------------------------------------------------------------

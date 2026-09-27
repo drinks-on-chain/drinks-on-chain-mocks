@@ -84,7 +84,7 @@ export const SendPasswordResetSchema = z.object({
 })
 export type SendPasswordResetDto = z.infer<typeof SendPasswordResetSchema>
 
-/** Respuesta del bloqueo o desbloqueo de la cuenta completa (`POST /v1/platform/users/{userId}/block`). */
+/** Respuesta del bloqueo o desbloqueo de la cuenta completa (`POST /v1/platform/accounts/{userId}/block`). */
 export const UserAccountStatusSchema = z.object({
   userId: z.string(),
   email: z.string(),

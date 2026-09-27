@@ -14,16 +14,18 @@ import {
   type WineryMemberItem,
   type WineryResponse,
 } from '../../schemas'
-import { anyUser, members, roles, type AuthContext } from '../auth-context'
+import { anyStaff, anyUser, platform, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
 import { conflict, domainError, notFound } from '../errors'
 import { applyPatch, created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
+import { blockOf, setMemberBlocked } from '../../../backoffice/handlers/members'
 import { createUser, findUserByEmail } from './auth-users'
 
 // /v1/wineries*
 
+/** Bodega de la petición: la activa o, para la plataforma, la de `?wineryId=`. */
 function myWinery(auth: AuthContext): WineryResponse {
-  const w = auth.wineryId ? getErpDb().wineries.find((x) => x.id === auth.wineryId) : undefined
+  const w = auth.tenantId ? getErpDb().wineries.find((x) => x.id === auth.tenantId) : undefined
   if (!w) throw notFound('Bodega no encontrada')
   return w
 }
@@ -113,7 +115,7 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wineries',
-    access: roles(['PLATFORM_ADMIN']),
+    access: anyStaff,
     list: 'paged',
     handle({ query }) {
       // `PENDING` (Ola 0) se acepta como alias de `INVITED`.
@@ -133,7 +135,7 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wineries/my',
-    access: members,
+    access: winery(),
     // Lectura del perfil permitida con la bodega suspendida (contrato de la Ola 1 §4).
     allowInactiveOrg: ['SUSPENDED'],
     handle: ({ auth }) => ok(myWinery(auth)),
@@ -141,7 +143,7 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'patch',
     path: '/v1/wineries/my',
-    access: roles(['WINERY_ADMIN', 'PLATFORM_ADMIN']),
+    access: winery(['OWNER']),
     async handle({ request, auth }) {
       const winery = myWinery(auth)
       const body = await parseBody(request, UpdateWinerySchema)
@@ -152,7 +154,7 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/wineries/my/members',
-    access: roles(['WINERY_ADMIN', 'PLATFORM_ADMIN']),
+    access: winery(['OWNER']),
     async handle({ request, auth }) {
       const winery = myWinery(auth)
       const body = await parseBody(request, AddMemberSchema)
@@ -160,9 +162,13 @@ export const wineryRoutes: RouteSpec[] = [
       if (!user) throw notFound('El usuario no existe')
       // Añade o reactiva una membresía de esta bodega; nunca toca roles globales (SE-01).
       const existing = winery.members?.find((m) => m.userId === user.id)
-      if (existing?.isActive) throw conflict('El usuario ya es miembro de la bodega')
+      if (existing?.isActive) throw domainError(409, 'ORG_ALREADY_MEMBER', 'La persona ya es miembro activo de la bodega')
       if (existing) {
-        existing.isActive = true
+        // Lo que bloqueó la plataforma solo lo levanta la plataforma (como el backend).
+        if (auth.organizationType !== 'PLATFORM' && blockOf(existing.id)?.by === 'PLATFORM') {
+          throw domainError(403, 'ORG_BLOCKED_BY_PLATFORM', 'Este bloqueo lo hizo el equipo de Drinks on Chain: solo la plataforma puede levantarlo')
+        }
+        setMemberBlocked(winery, existing, null)
         existing.memberRole = body.memberRole
         existing.professionalLicenseNumber = body.professionalLicenseNumber ?? existing.professionalLicenseNumber ?? null
         const link = user.wineryMemberships.find((m) => m.wineryId === winery.id)
@@ -175,14 +181,14 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wineries/my/members',
-    access: members,
+    access: winery(),
     list: 'paged',
     handle: ({ auth, query }) => listResult((myWinery(auth).members ?? []).filter((m) => m.isActive), query),
   },
   {
     method: 'post',
     path: '/v1/wineries/my/members/create',
-    access: roles(['WINERY_ADMIN', 'PLATFORM_ADMIN']),
+    access: winery(['OWNER']),
     async handle({ request, auth }) {
       const winery = myWinery(auth)
       const body = await parseBody(request, CreateMemberSchema)
@@ -201,14 +207,14 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wineries/pending',
-    access: roles(['PLATFORM_ADMIN']),
+    access: anyStaff,
     list: 'paged',
     handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'INVITED'), query),
   },
   {
     method: 'post',
     path: '/v1/wineries/:id/approve',
-    access: roles(['PLATFORM_ADMIN']),
+    access: platform(['ADMIN', 'OPERATIONS']),
     async handle({ request, params }) {
       const winery = findWinery(params.id!)
       await parseBody(request, ApproveWinerySchema)
@@ -224,7 +230,7 @@ export const wineryRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/wineries/:id/reject',
-    access: roles(['PLATFORM_ADMIN']),
+    access: platform(['ADMIN', 'OPERATIONS']),
     async handle({ request, params }) {
       const winery = findWinery(params.id!)
       await parseBody(request, RejectWinerySchema)

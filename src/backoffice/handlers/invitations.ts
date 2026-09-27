@@ -389,7 +389,7 @@ async function accept(ctx: RouteContext) {
   joinWinery(ctx, inv, user)
   const session = auth?.sid ? getSession(auth.sid) : undefined
   if (session && !session.revoked) {
-    rotateRefresh(session)
+    rotateRefresh(session, getErpDb().clock)
     setActiveOrganization(session, inv.organizationId)
     rememberOrganization(user.id, inv.organizationId)
     return sessionResult(user, session, ctx.url)
@@ -406,7 +406,7 @@ function assertCanManage(auth: AuthContext, inv: StoredInvitation): void {
   const staff = auth.organizationType === 'PLATFORM' && auth.mfa && auth.platformRole
   if (staff) {
     if (inv.organizationType === 'PLATFORM' && !['SUPERADMIN', 'ADMIN'].includes(auth.platformRole!)) {
-      throw new ApiError(403, 'FORBIDDEN', 'Solo administración gestiona los usuarios internos')
+      throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Solo administración gestiona los usuarios internos')
     }
     return
   }

@@ -11,7 +11,7 @@ import {
   type TerroirDetail,
   type TerroirResponse,
 } from '../../schemas'
-import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
+import { canSee, scoped, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
 import { fieldError, forbidden, invalid, notFound } from '../errors'
 import {
@@ -43,10 +43,10 @@ export function findHarvest(auth: AuthContext, id: string): HarvestBatchResponse
   return h
 }
 
-/** Bodega activa obligatoria para dar de alta entidades. */
+/** Bodega de la petición (la activa o la de `?wineryId=` de la plataforma), obligatoria en las altas. */
 export function requireWinery(auth: AuthContext): string {
-  if (!auth.wineryId) throw forbidden('El usuario no tiene una bodega activa')
-  return auth.wineryId
+  if (!auth.tenantId) throw forbidden('El usuario no tiene una bodega activa')
+  return auth.tenantId
 }
 
 function harvestSlug(parcelName: string): string {
@@ -59,7 +59,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/terroirs',
-    access: roles(['WINERY_ADMIN', 'AGRONOMIST']),
+    access: winery(['OWNER', 'AGRONOMIST']),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
       const body = await parseBody(request, CreateTerroirSchema)
@@ -90,7 +90,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/terroirs',
-    access: roles(['WINERY_ADMIN', 'AGRONOMIST', 'ENOLOGIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const isDoEligible = boolParam(query, 'isDoEligible')
@@ -110,7 +110,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/terroirs/:id',
-    access: roles(['WINERY_ADMIN', 'AGRONOMIST', 'ENOLOGIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const t = findTerroir(auth, params.id!)
       const detail: TerroirDetail = { ...t, harvestBatches: getErpDb().harvestBatches.filter((h) => h.terroirId === t.id) }
@@ -120,7 +120,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'patch',
     path: '/v1/terroirs/:id',
-    access: roles(['WINERY_ADMIN', 'AGRONOMIST']),
+    access: winery(['OWNER', 'AGRONOMIST']),
     async handle({ request, auth, params }) {
       const t = findTerroir(auth, params.id!)
       const body = await parseBody(request, UpdateTerroirSchema)
@@ -132,7 +132,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/harvest-batches',
-    access: roles(['WINERY_ADMIN', 'AGRONOMIST', 'ENOLOGIST']),
+    access: winery(['OWNER', 'AGRONOMIST', 'ENOLOGIST', 'OPERATOR']),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
       // Regla del backend: Brix, pH y acidez obligatorios en el alta (doc 09 §4 y §8 punto 6).
@@ -181,7 +181,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/harvest-batches',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const year = intParam(query, 'harvestYear')
@@ -199,7 +199,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/harvest-batches/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'AGRONOMIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const h = findHarvest(auth, params.id!)
       const detail: HarvestBatchDetail = { ...h, fermentationTanks: getErpDb().tanks.filter((t) => t.harvestBatchId === h.id) }
@@ -209,7 +209,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'patch',
     path: '/v1/harvest-batches/:id/phyto-status',
-    access: roles(['AGRONOMIST', 'ENOLOGIST']),
+    access: winery(['OWNER', 'AGRONOMIST', 'ENOLOGIST']),
     async handle({ request, auth, params }) {
       const h = findHarvest(auth, params.id!)
       const body = await parseBody(request, UpdatePhytoStatusSchema)

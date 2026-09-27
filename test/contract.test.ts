@@ -389,8 +389,9 @@ const SAMPLES: Record<string, Sample> = {
   'GET /v1/bottling': { as: 'cvj_enologa', url: '/v1/bottling', status: 200 },
   'GET /v1/bottling/{id}': { as: 'admin', url: `/v1/bottling/${bottlingWithLab.id}`, status: 200 },
   'POST /v1/lab-analyses': {
+    // Plataforma sobre una bodega: `?wineryId=` obligatorio en las escrituras (OP-07).
     as: 'admin',
-    url: '/v1/lab-analyses',
+    url: `/v1/lab-analyses?wineryId=${bottlingWithoutLab.wineryId}`,
     body: {
       bottlingBatchId: bottlingWithoutLab.id,
       certifiedLaboratoryName: 'Laboratorio Tarija',
@@ -683,17 +684,33 @@ const OLA1_SAMPLES: Record<string, Sample> = {
     body: { role: 'OPERATIONS', reason: REASON },
     status: 200,
   },
-  'POST /v1/platform/users/{userId}/block': {
+  'POST /v1/platform/users/{membershipId}/block': {
     as: 'bo_admin',
     url: `/v1/platform/users/${platformMembership('soporte')}/block`,
     body: { reason: REASON },
     status: 200,
   },
-  'POST /v1/platform/users/{userId}/unblock': {
+  'POST /v1/platform/users/{membershipId}/unblock': {
     as: 'bo_admin',
-    url: `/v1/platform/users/${maria.id}/unblock`,
+    url: `/v1/platform/users/${platformMembership('operaciones')}/unblock`,
     setup: async () => {
-      await post(`/v1/platform/users/${maria.id}/block`, { reason: REASON }, 'bo_admin')
+      await post(`/v1/platform/users/${platformMembership('operaciones')}/block`, { reason: REASON }, 'bo_admin')
+      return {}
+    },
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/accounts/{userId}/block': {
+    as: 'bo_admin',
+    url: `/v1/platform/accounts/${maria.id}/block`,
+    body: { reason: REASON },
+    status: 200,
+  },
+  'POST /v1/platform/accounts/{userId}/unblock': {
+    as: 'bo_admin',
+    url: `/v1/platform/accounts/${maria.id}/unblock`,
+    setup: async () => {
+      await post(`/v1/platform/accounts/${maria.id}/block`, { reason: REASON }, 'bo_admin')
       return {}
     },
     body: { reason: REASON },

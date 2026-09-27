@@ -32,16 +32,33 @@ import {
   type AuthContext,
 } from '../auth-context'
 import { getErpDb, newId, nextSeq, tick } from '../db'
-import { ApiError, conflict, forbidden, notFound, refreshReused, sessionRevoked, unauthorized } from '../errors'
+import {
+  ApiError,
+  conflict,
+  invalidCredentials,
+  notFound,
+  refreshInvalid,
+  refreshReused,
+  sessionExpired,
+  sessionRevoked,
+  tooManyAttempts,
+} from '../errors'
 import { applyPatch, noContent, ok, parseBody, type RouteResult, type RouteSpec } from '../http'
 import {
   clearRefreshCookie,
   createSession,
+  decodeAccessToken,
   getSession,
+  loginLockedFor,
+  matchRefresh,
+  parseRefreshToken,
   readCookieJar,
+  recordLoginFailureAttempt,
+  recordLoginSuccessAttempt,
   REFRESH_COOKIE,
   REFRESH_TTL_SECONDS,
   refreshCookie,
+  rememberAccessToken,
   rememberOrganization,
   revokeAllSessions,
   revokeSession,
@@ -50,6 +67,7 @@ import {
   setActiveOrganization,
   signAccessToken,
   tokensFor,
+  withinGrace,
   writeCookieJar,
   type MockSession,
 } from '../sessions'
@@ -133,7 +151,8 @@ function accessTokenFor(user: MockUser, session: MockSession): string {
 
 /**
  * Respuesta de sesión con tokens nuevos y la cookie `doc_rt` (también en el almacén propio).
- * `extra` añade campos a `data` (p. ej. `recoveryCodes` al confirmar el TOTP).
+ * `extra` añade campos a `data` (p. ej. `recoveryCodes` al confirmar el TOTP). Con `reuseAccess`
+ * (periodo de gracia de la renovación) devuelve el mismo par que la última rotación.
  */
 export function sessionResult(
   user: MockUser,
@@ -141,10 +160,13 @@ export function sessionResult(
   url: URL,
   status = 200,
   extra: Record<string, unknown> = {},
+  opts: { reuseAccess?: boolean } = {},
 ): RouteResult {
+  const accessToken = (opts.reuseAccess ? session.lastAccessToken : null) ?? accessTokenFor(user, session)
+  rememberAccessToken(session, accessToken)
   const body: SessionResponse = buildSessionResponse(user, getErpDb().wineries, {
     activeOrganizationId: session.activeOrganizationId,
-    tokens: tokensFor(accessTokenFor(user, session), session.refreshToken),
+    tokens: tokensFor(accessToken, session.refreshToken),
     memberships: membershipsOf(user),
   })
   writeCookieJar(session.refreshToken)
@@ -166,7 +188,7 @@ export function openSession(user: MockUser, opts: { mfa?: boolean; organizationI
   let org = opts.organizationId !== undefined ? opts.organizationId : defaultOrganizationId(user, memberships)
   if (!mfa && org && !memberships.some((m) => m.organizationId === org)) org = defaultOrganizationId(user, memberships)
   rememberOrganization(user.id, org)
-  return createSession(user.id, all.length > 0 ? 'STAFF' : 'CONSUMER', org, mfa)
+  return createSession(user.id, all.length > 0 ? 'STAFF' : 'CONSUMER', org, mfa, getErpDb().clock)
 }
 
 /** ¿Corresponde el refresco a una persona o a una sesión conocida (vigente, rotada o revocada)? */
@@ -176,14 +198,39 @@ function isKnownRefresh(token: string): boolean {
 }
 
 /**
- * Refresco presentado, por orden: cookie `doc_rt` (de la petición o del almacén de MSW), cuerpo
- * `{ refreshToken }` (*retirada* en H1) y el almacén propio de los mocks. Se usa el primero que
- * corresponde a una sesión conocida (una cookie de antes de `resetErpDb()` no tapa el cuerpo).
+ * Refrescos presentados: cookie `doc_rt` (de la petición o del almacén de MSW) y cuerpo
+ * `{ refreshToken }` (*retirada* en H1); solo si no llega ninguno, el almacén propio de los mocks.
  */
+function refreshCandidates(cookies: Record<string, string>, fromBody: string | undefined): string[] {
+  const explicit = [cookies[REFRESH_COOKIE], fromBody].filter((t): t is string => Boolean(t))
+  if (explicit.length > 0) return explicit
+  const jar = readCookieJar()
+  return jar ? [jar] : []
+}
+
+/** El primero que corresponde a una sesión conocida (una cookie de antes de `resetErpDb()` no tapa el cuerpo). */
 async function presentedRefresh(request: Request, cookies: Record<string, string>): Promise<string | null> {
   const body = await parseBody(request, RefreshTokenSchema)
-  const candidates = [cookies[REFRESH_COOKIE], body.refreshToken, readCookieJar()].filter((t): t is string => Boolean(t))
+  const candidates = refreshCandidates(cookies, body.refreshToken)
   return candidates.find(isKnownRefresh) ?? candidates[0] ?? null
+}
+
+/**
+ * Valida un refresco como `SessionsService.validateRefresh` del backend: fuera de la cadena →
+ * 401 `AUTH_REFRESH_INVALID` sin revocar; sesión revocada → `AUTH_SESSION_REVOKED`; caducada →
+ * `AUTH_SESSION_EXPIRED`; el anterior dentro de la gracia (20 s) vale (`grace`); uno antiguo fuera
+ * de ella → revoca la sesión y 401 `AUTH_REFRESH_REUSED`.
+ */
+function validateRefresh(token: string | null): { session: MockSession; grace: boolean } {
+  const match = matchRefresh(token)
+  if (match.kind === 'invalid') throw refreshInvalid()
+  const { session } = match
+  if (session.revoked) throw sessionRevoked()
+  if (getErpDb().clock >= session.expiresAt) throw sessionExpired()
+  if (match.kind === 'current') return { session, grace: false }
+  if (match.kind === 'previous' && withinGrace(session)) return { session, grace: true }
+  revokeSession(session)
+  throw refreshReused()
 }
 
 /** Comprueba que la persona y su organización activa siguen siendo válidas; si no, revoca. */
@@ -201,10 +248,29 @@ function assertSessionUsable(user: MockUser | undefined, session: MockSession): 
   }
 }
 
+/** `{ user, memberships, activeOrganizationId }` de GET y PATCH /v1/users/me. */
+function meOf(auth: AuthContext): MeResponse {
+  return {
+    user: { ...toProfile(auth.user), audience: auth.audience, ...prefsOf(auth.user.id) },
+    memberships: auth.memberships,
+    activeOrganizationId: auth.organizationId,
+  }
+}
+
 /** Sesión del token de acceso o, si no hay, la del refresco (logout con el acceso caducado). */
-function sessionForLogout(auth: AuthContext | null, refresh: string | null): MockSession | undefined {
+function sessionForLogout(auth: AuthContext | null, request: Request, refresh: string | null): MockSession | undefined {
   if (auth?.sid) return getSession(auth.sid)
+  // Acceso caducado: la sesión sale de sus claims (el backend no comprueba la caducidad aquí).
+  const bearer = /^Bearer\s+(\S+)$/i.exec(request.headers.get('authorization')?.trim() ?? '')?.[1]
+  const claims = bearer ? decodeAccessToken(bearer) : null
+  if (claims) return getSession(claims.sid)
   return refresh ? sessionOfRefresh(refresh) : undefined
+}
+
+/** Organización activa por defecto de una sesión (la de plataforma solo con el segundo factor). */
+function defaultOrganizationForSession(user: MockUser, session: MockSession): string | null {
+  const all = membershipsOf(user)
+  return defaultOrganizationId(user, session.mfa ? all : all.filter((m) => m.organizationType !== 'PLATFORM'))
 }
 
 export const authUserRoutes: RouteSpec[] = [
@@ -226,11 +292,18 @@ export const authUserRoutes: RouteSpec[] = [
     async handle(ctx) {
       const { request, url } = ctx
       const body = await parseBody(request, LoginSchema)
+      // Bloqueo progresivo (IAM-07): 5 fallos por correo → 60 s que se duplican (tope 1 h).
+      const locked = loginLockedFor(body.email)
+      if (locked > 0) throw tooManyAttempts(locked)
       const user = findUserByEmail(body.email)
+      // Mismo 401 para correo inexistente, contraseña mala o cuenta bloqueada.
       if (!user || !user.isActive || user._mock.password !== body.password) {
         if (user) recordLoginFailure(ctx, user)
-        throw unauthorized('Credenciales inválidas')
+        const lock = recordLoginFailureAttempt(body.email)
+        if (lock > 0) throw tooManyAttempts(lock)
+        throw invalidCredentials()
       }
+      recordLoginSuccessAttempt(body.email)
       // Personal de plataforma: sin tokens hasta pasar el TOTP (contrato de la Ola 1 §1).
       if (needsMfa(user)) return ok(startMfaChallenge(user))
       recordLogin(ctx, user, false)
@@ -243,25 +316,20 @@ export const authUserRoutes: RouteSpec[] = [
     access: 'public',
     async handle({ request, url, cookies }) {
       const token = await presentedRefresh(request, cookies)
-      if (!token) throw unauthorized('Falta el token de renovación')
-      // Refresco estático de los fixtures (`mock.refresh.<clave>`): abre una sesión nueva.
-      if (token.startsWith(REFRESH_TOKEN_PREFIX)) {
+      // Refresco estático de los fixtures (`mock.refresh.<clave>`, solo en los mocks): abre una sesión nueva.
+      if (token?.startsWith(REFRESH_TOKEN_PREFIX)) {
         const user = findUserByKey(token.slice(REFRESH_TOKEN_PREFIX.length))
-        if (!user || !user.isActive) throw unauthorized('Token de renovación inválido o expirado')
+        if (!user || !user.isActive) throw refreshInvalid()
         return sessionResult(user, openSession(user), url)
       }
-      const session = sessionOfRefresh(token)
-      if (!session) throw unauthorized('Token de renovación inválido o expirado')
-      if (session.revoked) throw sessionRevoked()
-      if (token !== session.refreshToken) {
-        if (!session.rotated.includes(token)) throw unauthorized('Token de renovación inválido o expirado')
-        // Reutilización de un refresco ya rotado: se revoca toda la familia.
-        revokeSession(session)
-        throw refreshReused()
-      }
+      const { session, grace } = validateRefresh(token)
       const user = findUserById(session.userId)
       assertSessionUsable(user, session)
-      rotateRefresh(session)
+      // Dos pestañas renovando a la vez: el anterior dentro de la gracia devuelve el mismo par nuevo.
+      if (grace) return sessionResult(user, session, url, 200, {}, { reuseAccess: true })
+      rotateRefresh(session, getErpDb().clock)
+      // Sin organización activa (p. ej. el dueño acaba de registrar su bodega): la de por defecto.
+      if (!session.activeOrganizationId) setActiveOrganization(session, defaultOrganizationForSession(user, session))
       return sessionResult(user, session, url)
     },
   },
@@ -269,20 +337,29 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'post',
     path: '/v1/auth/switch-organization',
     access: anyUser,
-    async handle({ request, url, auth }) {
+    async handle({ request, url, auth, cookies }) {
       const body = await parseBody(request, SwitchOrganizationSchema)
       const membership = auth.memberships.find((m) => m.organizationId === body.organizationId)
       if (!membership) throw new ApiError(404, 'ORG_NOT_FOUND', 'Organización no encontrada')
-      if (membership.status !== 'ACTIVE') throw forbidden('La membresía en esta organización está bloqueada')
-      if (membership.organizationStatus === 'REVOKED') throw forbidden('La organización está revocada')
+      if (membership.status !== 'ACTIVE') throw new ApiError(403, 'ORG_MEMBERSHIP_BLOCKED', 'Tu membresía en esta organización está bloqueada')
+      if (membership.organizationStatus === 'REVOKED') throw new ApiError(403, 'ORG_REVOKED', 'La organización está revocada')
       // La organización de plataforma exige haber pasado el TOTP en esta sesión (Ola 1 §1).
       if (membership.organizationType === 'PLATFORM' && !auth.mfa) {
         throw new ApiError(403, 'AUTH_MFA_REQUIRED', 'Para entrar en la plataforma hay que verificar el segundo factor')
       }
-      // Con un token estático no hay sesión: se abre una.
-      let session = auth.sid ? getSession(auth.sid) : undefined
-      if (!session || session.revoked) session = createSession(auth.user.id, auth.audience, body.organizationId, auth.mfa)
-      else rotateRefresh(session)
+      let session: MockSession
+      if (!auth.sid) {
+        // Token estático (solo en los mocks): no hay sesión, se abre una.
+        session = createSession(auth.user.id, auth.audience, body.organizationId, auth.mfa, getErpDb().clock)
+      } else {
+        // Como el backend (contrato de la Ola 0 §8): hace falta el refresco de ESTA sesión (cookie
+        // `doc_rt` o `refreshToken` en el cuerpo), que se rota. Un acceso robado no basta.
+        const token = refreshCandidates(cookies, body.refreshToken).find((t) => parseRefreshToken(t)?.sid === auth.sid)
+        if (!token) throw refreshInvalid('Falta el token de renovación de esta sesión')
+        const validated = validateRefresh(token)
+        session = validated.session
+        if (!validated.grace) rotateRefresh(session, getErpDb().clock)
+      }
       setActiveOrganization(session, body.organizationId)
       rememberOrganization(auth.user.id, body.organizationId)
       return sessionResult(auth.user, session, url)
@@ -294,7 +371,7 @@ export const authUserRoutes: RouteSpec[] = [
     access: 'public',
     async handle({ request, url, cookies, optionalAuth }) {
       const refresh = await presentedRefresh(request, cookies)
-      const session = sessionForLogout(optionalAuth, refresh)
+      const session = sessionForLogout(optionalAuth, request, refresh)
       if (session) revokeSession(session)
       writeCookieJar(null)
       return noContent({ 'Set-Cookie': clearRefreshCookie(url) })
@@ -314,14 +391,7 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/users/me',
     access: anyUser,
-    handle({ auth }) {
-      const me: MeResponse = {
-        user: { ...toProfile(auth.user), audience: auth.audience, ...prefsOf(auth.user.id) },
-        memberships: auth.memberships,
-        activeOrganizationId: auth.organizationId,
-      }
-      return ok(me)
-    },
+    handle: ({ auth }) => ok(meOf(auth)),
   },
   {
     method: 'patch',
@@ -335,8 +405,8 @@ export const authUserRoutes: RouteSpec[] = [
       // Preferencias de la Ola 1 (IAM-09): se guardan aparte y se leen en GET /v1/users/me.
       updatePrefs(auth.user.id, notificationPrefs, promotionsConsent)
       recordProfileUpdate(ctx, before)
-      // La respuesta sigue siendo el perfil (docs/CONTRATO.md §6: el contrato de la Ola 1 la cambia).
-      return ok(toProfile(auth.user))
+      // Contrato de la Ola 1 §1 y §11 bis: la misma forma que GET /v1/users/me.
+      return ok(meOf(auth))
     },
   },
   {

@@ -27,6 +27,7 @@ export {
   createErpHandlers,
   createMockHandlers,
   expireAccessTokens,
+  expireRefreshGrace,
   getErpDb,
   mockAccessToken,
   mockMailbox,

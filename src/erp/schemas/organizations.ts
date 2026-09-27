@@ -52,9 +52,13 @@ export const MembershipSchema = z.object({
 })
 export type Membership = z.infer<typeof MembershipSchema>
 
-/** `POST /v1/auth/switch-organization`. */
+/**
+ * `POST /v1/auth/switch-organization`. Exige también el refresco de la misma sesión: la cookie
+ * `doc_rt` o, hasta H1, `refreshToken` en el cuerpo (contrato de la Ola 0 §8).
+ */
 export const SwitchOrganizationSchema = z.object({
   organizationId: z.string().min(1),
+  refreshToken: z.string().min(1).optional(),
 })
 export type SwitchOrganizationDto = z.infer<typeof SwitchOrganizationSchema>
 

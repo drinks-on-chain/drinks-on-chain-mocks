@@ -3,36 +3,6 @@
   "adelantadas": [
     {
       "method": "POST",
-      "path": "/v1/auth/switch-organization",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "Cambio de organización activa (O0-BE-4). Responde como el login.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$ref": "#/components/schemas/AuthResponseDto"
-        }
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/auth/logout",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "Revoca la sesión actual y borra la cookie doc_rt (O0-BE-4).",
-      "respuesta": {
-        "status": 204
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/auth/logout-all",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "Revoca todas las sesiones de la persona (O0-BE-4).",
-      "respuesta": {
-        "status": 204
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v1/auth/mfa/enroll",
       "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
       "motivo": "Inscribe el TOTP del personal de plataforma con el mfaToken del login: devuelve otpauthUrl y secret.",
@@ -549,39 +519,49 @@
     },
     {
       "method": "POST",
-      "path": "/v1/platform/users/{userId}/block",
-      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
-      "motivo": "Bloquea un usuario interno (id de membresía) o la cuenta completa (id de persona), con motivo (PLT-03).",
+      "path": "/v1/platform/users/{membershipId}/block",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §11 bis",
+      "motivo": "Bloquea la membresía de plataforma de un usuario interno, con motivo (PLT-03). Solo ids de membresía de plataforma.",
       "respuesta": {
         "status": 200,
         "schema": {
-          "anyOf": [
-            {
-              "$zod": "PlatformUserSchema"
-            },
-            {
-              "$zod": "UserAccountStatusSchema"
-            }
-          ]
+          "$zod": "PlatformUserSchema"
         }
       }
     },
     {
       "method": "POST",
-      "path": "/v1/platform/users/{userId}/unblock",
-      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
-      "motivo": "Desbloquea un usuario interno o la cuenta completa, con motivo (PLT-03).",
+      "path": "/v1/platform/users/{membershipId}/unblock",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §11 bis",
+      "motivo": "Desbloquea la membresía de plataforma de un usuario interno, con motivo (PLT-03).",
       "respuesta": {
         "status": 200,
         "schema": {
-          "anyOf": [
-            {
-              "$zod": "PlatformUserSchema"
-            },
-            {
-              "$zod": "UserAccountStatusSchema"
-            }
-          ]
+          "$zod": "PlatformUserSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/accounts/{userId}/block",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §11 bis",
+      "motivo": "Bloquea la cuenta completa de una persona (revoca todas sus sesiones), con motivo; solo administración.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "UserAccountStatusSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/accounts/{userId}/unblock",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §11 bis",
+      "motivo": "Desbloquea la cuenta completa de una persona, con motivo; solo administración.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "UserAccountStatusSchema"
         }
       }
     },
@@ -811,47 +791,6 @@
   "cambios": [
     {
       "method": "POST",
-      "path": "/v1/auth/refresh",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "Rota siempre y devuelve la forma del login (antes AuthTokensDto); lee el refresco de la cookie doc_rt.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$ref": "#/components/schemas/AuthResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/users/me",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "Devuelve { user, memberships, activeOrganizationId } (antes el perfil suelto).",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "type": "object",
-          "required": [
-            "user",
-            "memberships",
-            "activeOrganizationId"
-          ],
-          "properties": {
-            "user": {
-              "$ref": "#/components/schemas/UserProfileResponseDto"
-            },
-            "memberships": {
-              "type": "array"
-            },
-            "activeOrganizationId": {
-              "type": "string",
-              "nullable": true
-            }
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v1/auth/login",
       "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
       "motivo": "Con membresía de plataforma responde 200 sin tokens: { mfa: { required, enrolled, mfaToken } } (TOTP obligatorio para el personal interno).",
@@ -872,34 +811,24 @@
     {
       "method": "PATCH",
       "path": "/v1/users/me",
-      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
-      "motivo": "Acepta notificationPrefs y promotionsConsent (IAM-09). La respuesta sigue siendo el perfil (docs/CONTRATO.md §6)."
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §11 bis",
+      "motivo": "Acepta notificationPrefs y promotionsConsent (IAM-09) y responde { user, memberships, activeOrganizationId } como GET /v1/users/me (el backend aún devuelve el perfil).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$ref": "#/components/schemas/MeResponseDto"
+        }
+      }
     }
   ],
   "camposExtra": {
-    "AuthUserDto": {
+    "MeUserDto": {
       "campos": [
-        "audience"
-      ],
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "STAFF o CONSUMER según tenga membresías."
-    },
-    "AuthResponseDto": {
-      "campos": [
-        "memberships",
-        "activeOrganizationId"
-      ],
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "Membresías y organización activa en la respuesta de sesión."
-    },
-    "UserProfileResponseDto": {
-      "campos": [
-        "audience",
         "notificationPrefs",
         "promotionsConsent"
       ],
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "`user` de GET /v1/users/me lleva la audiencia (Ola 0) y las preferencias `notificationPrefs` y `promotionsConsent` (Ola 1 §1, IAM-09)."
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "`user` de GET y PATCH /v1/users/me lleva las preferencias `notificationPrefs` y `promotionsConsent` (IAM-09)."
     },
     "TerroirResponseDto": {
       "campos": [
@@ -941,16 +870,5 @@
       "motivo": "El tratamiento guardado = DTO de alta + id y tanque (el OpenAPI no declara la respuesta)."
     }
   },
-  "enumCambios": {
-    "WineryResponseDto.certificationStatus": {
-      "valores": [
-        "INVITED",
-        "ACTIVE",
-        "SUSPENDED",
-        "REVOKED"
-      ],
-      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §0",
-      "motivo": "INVITED sustituye a PENDING (la migración del backend convierte PENDING → INVITED); también es el estado de la organización en Membership.organizationStatus."
-    }
-  }
+  "enumCambios": {}
 }
