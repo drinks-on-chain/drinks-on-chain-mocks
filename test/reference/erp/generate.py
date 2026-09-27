@@ -51,7 +51,7 @@ def txhash(seed: str) -> str:
 
 
 def dump(name: str, data) -> None:
-    (OUT / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (OUT / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"  {name:32s} {len(data) if isinstance(data, list) else 'obj'}")
 
 
@@ -182,21 +182,123 @@ for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
         # Solo para los mocks: credencial de demo y clave legible.
         "_mock": {"key": key, "password": "demo1234"},
     })
+# Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
+# alterar el resto de la secuencia aleatoria.
+# key, email, fullName, userRole, phone, created, [(wineryKey, memberRole, license, isActive, joined)]
+MULTI = [
+    ("sofia", "sofia@aramayo.test", "Lic. Sofía Aramayo", "ENOLOGIST", "+59176000601", date(2025, 10, 21), [
+        ("altos", "ENOLOGIST", "COL-ENOL-TAR-133", True, date(2026, 3, 10)),
+        ("uriondo", "OWNER", None, True, date(2025, 10, 22)),
+    ]),
+    ("ines", "ines@salazar.test", "Ing. Inés Salazar", "AGRONOMIST", "+59176000602", date(2026, 2, 2), [
+        ("cintiviejo", "AGRONOMIST", "CIA-CHQ-230", True, date(2026, 2, 3)),
+        ("altos", "OPERATOR", None, False, date(2026, 4, 1)),
+    ]),
+]
+for key, email, name, role, phone, created, links in MULTI:
+    uid_ = uid(f"user:{key}")
+    first = W[links[0][0]]
+    wallet = {
+        "id": uid(f"wallet:{key}"),
+        "userId": uid_,
+        "wineryId": first["id"],
+        "stellarPublicAddress": gkey(f"user-wallet:{key}"),
+        "walletType": "CUSTODIAL",
+        "walletPurpose": "PRODUCER_SIGNING",
+        "isPrimary": True,
+        "createdAt": iso(created, 9, 5),
+    }
+    wallets.append(wallet)
+    memberships = []
+    for wkey, mrole, lic, active, joined in links:
+        memberships.append({
+            "wineryId": W[wkey]["id"],
+            "wineryName": W[wkey]["commercialName"],
+            "memberRole": mrole,
+            "professionalLicenseNumber": lic,
+            "isActive": active,
+            "joinedAt": iso(joined, 10),
+        })
+        W[wkey]["members"].append({
+            "id": uid(f"member:{key}:{wkey}"),
+            "userId": uid_,
+            "fullName": name,
+            "email": email,
+            "memberRole": mrole,
+            "professionalLicenseNumber": lic,
+            "isActive": active,
+            "joinedAt": iso(joined, 10),
+        })
+    users.append({
+        "id": uid_,
+        "email": email,
+        "fullName": name,
+        "userRole": role,
+        "phoneNumber": phone,
+        "preferredLocale": "es",
+        "isActive": True,
+        "lastLoginAt": iso(TODAY - timedelta(days=1), 8, 30),
+        "createdAt": iso(created, 9),
+        "wineryMemberships": memberships,
+        "primaryWallet": wallet,
+        "_mock": {"key": key, "password": "demo1234"},
+    })
 U = {u["_mock"]["key"]: u for u in users}
+
+# ---------------------------------------------------------------------------
+# 2b. Sesión (contrato de la Ola 0 §4–§5): membresías y respuesta de login
+# ---------------------------------------------------------------------------
+PLATFORM_ORG = {"id": uid("organization:platform"), "name": "Drinks on Chain", "status": "ACTIVE"}
+
+
+def memberships_of(u: dict) -> list:
+    """Plataforma antes que bodegas; el id de una membresía de bodega es el del miembro."""
+    out = []
+    if u["userRole"] == "PLATFORM_ADMIN":
+        out.append({
+            "id": uid(f"membership:platform:{u['id']}"),
+            "organizationId": PLATFORM_ORG["id"],
+            "organizationType": "PLATFORM",
+            "organizationName": PLATFORM_ORG["name"],
+            "organizationStatus": PLATFORM_ORG["status"],
+            "role": "SUPERADMIN",
+            "status": "ACTIVE" if u["isActive"] else "BLOCKED",
+        })
+    for m in u["wineryMemberships"]:
+        w = next(x for x in wineries if x["id"] == m["wineryId"])
+        member = next(x for x in w["members"] if x["userId"] == u["id"])
+        out.append({
+            "id": member["id"],
+            "organizationId": w["id"],
+            "organizationType": "WINERY",
+            "organizationName": w["commercialName"],
+            "organizationStatus": w["certificationStatus"],
+            "role": m["memberRole"],
+            "status": "ACTIVE" if m["isActive"] else "BLOCKED",
+        })
+    return out
 
 
 def auth_response(key: str) -> dict:
     u = U[key]
-    m = u["wineryMemberships"][0] if u["wineryMemberships"] else None
+    ms = memberships_of(u)
+    usable = [m for m in ms if m["status"] == "ACTIVE" and m["organizationStatus"] != "REVOKED"]
+    active = usable[0] if usable else None
+    winery = active if active and active["organizationType"] == "WINERY" else None
     return {
         "user": {
-            "id": u["id"], "email": u["email"], "fullName": u["fullName"], "userRole": u["userRole"],
+            "id": u["id"], "email": u["email"], "fullName": u["fullName"],
             "phoneNumber": u["phoneNumber"], "preferredLocale": "es",
-            "wineryId": m["wineryId"] if m else None, "memberRole": m["memberRole"] if m else None,
+            "audience": "STAFF" if ms else "CONSUMER",
+            "userRole": u["userRole"],
+            "wineryId": winery["organizationId"] if winery else None,
+            "memberRole": winery["role"] if winery else None,
         },
+        "memberships": ms,
+        "activeOrganizationId": active["organizationId"] if active else None,
         "tokens": {
-            "accessToken": f"mock.access.{key}", "refreshToken": f"mock.refresh.{key}",
-            "tokenType": "Bearer", "expiresIn": 604800,
+            "accessToken": f"mock.access.{key}", "tokenType": "Bearer", "expiresIn": 900,
+            "refreshToken": f"mock.refresh.{key}",
         },
     }
 

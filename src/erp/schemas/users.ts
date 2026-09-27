@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { IsoDateTimeSchema } from './common'
 import { MemberRoleSchema, UserRoleSchema } from './enums'
+import { AudienceSchema, MembershipSchema } from './organizations'
 import { WalletResponseSchema } from './wallets'
 
 // GET/PATCH /v1/users/me · UserProfileResponseDto
@@ -29,6 +30,22 @@ export const UserProfileResponseSchema = z.object({
   primaryWallet: WalletResponseSchema.nullish(),
 })
 export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>
+
+/**
+ * `GET /v1/users/me` (contrato de la Ola 0 §5): `{ user, memberships, activeOrganizationId }`.
+ * `user` es el perfil de 0.1 más `audience`.
+ */
+export const MeUserSchema = UserProfileResponseSchema.extend({
+  audience: AudienceSchema,
+})
+export type MeUser = z.infer<typeof MeUserSchema>
+
+export const MeResponseSchema = z.object({
+  user: MeUserSchema,
+  memberships: z.array(MembershipSchema),
+  activeOrganizationId: z.string().nullable(),
+})
+export type MeResponse = z.infer<typeof MeResponseSchema>
 
 export const UpdateUserSchema = z.object({
   fullName: z.string().min(1).optional(),

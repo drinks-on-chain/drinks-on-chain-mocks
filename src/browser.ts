@@ -38,4 +38,4 @@ export function startMockWorker(options: StartMockWorkerOptions = {}): Promise<S
 }
 
 export { getScenario, resetScenario, setScenario, SCENARIOS, type ScenarioName } from './shared/scenarios'
-export { resetErpDb } from './erp/handlers'
+export { expireAccessTokens, resetErpDb, resetSessions } from './erp/handlers'

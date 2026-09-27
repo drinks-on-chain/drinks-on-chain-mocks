@@ -14,3 +14,11 @@ export const WINERY_CODES: Record<string, string> = {
 export const WINERY_CODES_BY_ID: Record<string, string> = Object.fromEntries(
   Object.entries(WINERY_CODES).map(([key, code]) => [uid(`winery:${key}`), code]),
 )
+
+/** Organización de plataforma (la del seeder del backend). Sus miembros son el personal interno. */
+export const PLATFORM_ORGANIZATION = {
+  id: uid('organization:platform'),
+  type: 'PLATFORM',
+  name: 'Drinks on Chain',
+  status: 'ACTIVE',
+} as const

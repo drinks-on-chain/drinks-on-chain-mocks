@@ -1,10 +1,9 @@
 import { addMonthsClamped, day, dayFromIso, dayParts, isoAt, REFERENCE_DAY, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
-import { buildAuthResponse, buildPublicPassport } from '../derive'
+import { buildPublicPassport, buildSessionResponse } from '../derive'
 import { deriveLotViews, deriveRestStatus } from '../lot-view'
 import { WINERY_CODES } from '../catalog'
 import type {
-  AuthResponse,
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
   EnologicalTreatment,
@@ -12,10 +11,12 @@ import type {
   FermentationTankResponse,
   HarvestBatchResponse,
   LotView,
+  MemberRole,
   MockUser,
   ProductionBatchResponse,
   PublicPassport,
   RestStatusResponse,
+  SessionResponse,
   TerroirResponse,
   WalletResponse,
   WineAgingResponse,
@@ -52,7 +53,7 @@ export interface ErpFixtureSet {
   'wineries.json': WineryResponse[]
   'users.json': MockUser[]
   'wallets.json': WalletResponse[]
-  'auth-login.json': Record<string, AuthResponse>
+  'auth-login.json': Record<string, SessionResponse>
   'terroirs.json': TerroirResponse[]
   'harvest-batches.json': HarvestBatchResponse[]
   'fermentation-tanks.json': FermentationTankResponse[]
@@ -201,8 +202,73 @@ export function generateErpFixtures(): ErpFixtureSet {
       _mock: { key, password: 'demo1234' },
     })
   }
-  const auth: Record<string, AuthResponse> = {}
-  for (const u of users) auth[u._mock.key] = buildAuthResponse(u)
+  // Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
+  // alterar el resto de la secuencia aleatoria.
+  type Link = [string, MemberRole, string | null, boolean, Day]
+  const MULTI: [string, string, string, MockUser['userRole'], string, Day, Link[]][] = [
+    ['sofia', 'sofia@aramayo.test', 'Lic. Sofía Aramayo', 'ENOLOGIST', '+59176000601', day(2025, 10, 21), [
+      ['altos', 'ENOLOGIST', 'COL-ENOL-TAR-133', true, day(2026, 3, 10)],
+      ['uriondo', 'OWNER', null, true, day(2025, 10, 22)],
+    ]],
+    ['ines', 'ines@salazar.test', 'Ing. Inés Salazar', 'AGRONOMIST', '+59176000602', day(2026, 2, 2), [
+      ['cintiviejo', 'AGRONOMIST', 'CIA-CHQ-230', true, day(2026, 2, 3)],
+      ['altos', 'OPERATOR', null, false, day(2026, 4, 1)],
+    ]],
+  ]
+  for (const [key, email, name, role, phone, created, links] of MULTI) {
+    const userId = uid(`user:${key}`)
+    const first = W[links[0]![0]]!
+    const wallet: WalletResponse = {
+      id: uid(`wallet:${key}`),
+      userId,
+      wineryId: first.id,
+      stellarPublicAddress: gkey(`user-wallet:${key}`),
+      walletType: 'CUSTODIAL',
+      walletPurpose: 'PRODUCER_SIGNING',
+      isPrimary: true,
+      createdAt: isoAt(created, 9, 5),
+    }
+    wallets.push(wallet)
+    const memberships: MockUser['wineryMemberships'] = []
+    for (const [wkey, mrole, lic, active, joined] of links) {
+      memberships.push({
+        wineryId: W[wkey]!.id,
+        wineryName: W[wkey]!.commercialName,
+        memberRole: mrole,
+        professionalLicenseNumber: lic,
+        isActive: active,
+        joinedAt: isoAt(joined, 10),
+      })
+      W[wkey]!.members!.push({
+        id: uid(`member:${key}:${wkey}`),
+        userId,
+        fullName: name,
+        email,
+        memberRole: mrole,
+        professionalLicenseNumber: lic,
+        isActive: active,
+        joinedAt: isoAt(joined, 10),
+      })
+    }
+    users.push({
+      id: userId,
+      email,
+      fullName: name,
+      userRole: role,
+      phoneNumber: phone,
+      preferredLocale: 'es',
+      isActive: true,
+      lastLoginAt: isoAt(addDays(TODAY, -1), 8, 30),
+      createdAt: isoAt(created, 9),
+      wineryMemberships: memberships,
+      primaryWallet: wallet,
+      _mock: { key, password: 'demo1234' },
+    })
+  }
+
+  // Sesión (contrato de la Ola 0 §4–§5): membresías y respuesta de login con tokens estáticos.
+  const auth: Record<string, SessionResponse> = {}
+  for (const u of users) auth[u._mock.key] = buildSessionResponse(u, wineries)
 
   // -------------------------------------------------------------------------
   // 3. Terroirs (TerroirResponseDto)

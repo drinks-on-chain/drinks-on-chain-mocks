@@ -59,6 +59,26 @@
         "professionalLicenseNumber": null,
         "isActive": true,
         "joinedAt": "2026-03-12T10:00:00Z"
+      },
+      {
+        "id": "834fbdac-9013-5cfe-9564-bbe6b8359557",
+        "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+        "fullName": "Lic. Sofía Aramayo",
+        "email": "sofia@aramayo.test",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-TAR-133",
+        "isActive": true,
+        "joinedAt": "2026-03-10T10:00:00Z"
+      },
+      {
+        "id": "af3d16da-21a1-59f3-9028-af66cb89294c",
+        "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
+        "fullName": "Ing. Inés Salazar",
+        "email": "ines@salazar.test",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": false,
+        "joinedAt": "2026-04-01T10:00:00Z"
       }
     ]
   },
@@ -122,6 +142,16 @@
         "professionalLicenseNumber": null,
         "isActive": true,
         "joinedAt": "2026-03-27T10:00:00Z"
+      },
+      {
+        "id": "7e3ae5c8-ffe5-5a2e-abcf-ea2b90c38b0f",
+        "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
+        "fullName": "Ing. Inés Salazar",
+        "email": "ines@salazar.test",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-CHQ-230",
+        "isActive": true,
+        "joinedAt": "2026-02-03T10:00:00Z"
       }
     ]
   },
@@ -178,6 +208,17 @@
     "certificationStatus": "SUSPENDED",
     "approvedAt": "2025-11-03T10:00:00Z",
     "createdAt": "2025-10-20T09:00:00Z",
-    "members": []
+    "members": [
+      {
+        "id": "15ceef52-08d1-59af-ac64-28566279de57",
+        "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+        "fullName": "Lic. Sofía Aramayo",
+        "email": "sofia@aramayo.test",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2025-10-22T10:00:00Z"
+      }
+    ]
   }
 ]
