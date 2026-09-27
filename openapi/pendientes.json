@@ -1,5 +1,5 @@
 {
-  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o0-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta). `enumCambios`: `Dto.campo` → valores de una enumeración que un contrato de ola sustituye (p. ej. el estado de la bodega de la Ola 1).",
+  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o<ola>-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta). `enumCambios`: `Dto.campo` → valores de una enumeración que un contrato de ola sustituye (p. ej. el estado de la bodega de la Ola 1). `{ \"$zod\": \"<Esquema>\" }` valida con el esquema zod que exporta el paquete (z.toJSONSchema) cuando el OpenAPI aún no tiene el DTO; `{ \"$page\": \"zod:<Esquema>\" }` es su página; `{ \"$csv\": true }`, una respuesta text/csv sin envoltorio.",
   "adelantadas": [
     {
       "method": "POST",
@@ -29,6 +29,782 @@
       "motivo": "Revoca todas las sesiones de la persona (O0-BE-4).",
       "respuesta": {
         "status": 204
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/mfa/enroll",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Inscribe el TOTP del personal de plataforma con el mfaToken del login: devuelve otpauthUrl y secret.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MfaEnrollResponseSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/mfa/enroll/confirm",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Confirma la inscripción con el primer código: forma del login + 10 códigos de recuperación.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MfaEnrollConfirmResponseSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/mfa/verify",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Segundo paso del login del personal de plataforma (TOTP o código de recuperación): forma del login.",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$ref": "#/components/schemas/AuthResponseDto"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/forgot-password",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Recuperación de contraseña por enlace de un solo uso (60 min); 202 siempre (IAM-05).",
+      "respuesta": {
+        "status": 202,
+        "schema": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/reset-password",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Nueva contraseña con el token del enlace; revoca todas las sesiones (IAM-05).",
+      "respuesta": {
+        "status": 204
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/verify-email",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Verificación del correo con el token del enlace (IAM-06).",
+      "respuesta": {
+        "status": 204
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/resend-verification",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Reenvía el enlace de verificación del correo; 202 siempre (IAM-06).",
+      "respuesta": {
+        "status": 202,
+        "schema": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/users/me/password",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Cambio de contraseña con la actual; revoca las demás sesiones.",
+      "respuesta": {
+        "status": 204
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/invitations/{token}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §2",
+      "motivo": "Vista pública de una invitación (organización, rol, caducidad, si el correo ya tiene cuenta).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "InvitationPreviewSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/invitations/{token}/accept",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §2",
+      "motivo": "Acepta la invitación (cuenta nueva o existente con sesión): forma del login con la organización invitada activa (IAM-10).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "LoginResponseSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/invitations/{id}/resend",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §2",
+      "motivo": "Reenvía una invitación pendiente o caducada con token y caducidad nuevos (EQP-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "InvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/invitations/{id}/revoke",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §2",
+      "motivo": "Anula una invitación pendiente (EQP-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "InvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/current/invitations",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §2",
+      "motivo": "Invitaciones de la bodega activa (dueño).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:InvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/current/invitations",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §2",
+      "motivo": "El dueño invita a un colaborador con rol (EQP-02), con límite y sin OWNER.",
+      "respuesta": {
+        "status": 201,
+        "schema": {
+          "$zod": "InvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/public/winery-applications",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Solicitud pública de alta con captcha y campo trampa (ORG-01).",
+      "respuesta": {
+        "status": 202,
+        "schema": {
+          "$zod": "CreateWineryApplicationResponseSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/public/winery-applications/verify",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Verifica el correo de la solicitud: pasa a RECEIVED (ORG-01).",
+      "respuesta": {
+        "status": 204
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/winery-applications",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Bandeja de solicitudes (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:WineryApplicationSummarySchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/winery-applications/{id}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Detalle de una solicitud con notas (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryApplicationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/winery-applications/{id}/take",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Tomar una solicitud: IN_REVIEW asignada (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryApplicationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/winery-applications/{id}/notes",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Añadir una nota a la solicitud (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryApplicationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/winery-applications/{id}/schedule-meeting",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Agendar reunión: MEETING_SCHEDULED (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryApplicationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/winery-applications/{id}/meeting-done",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Reunión hecha con notas: vuelve a IN_REVIEW (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryApplicationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/winery-applications/{id}/approve",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Aprobar: crea la bodega INVITED e invita al dueño (ORG-02, ORG-04).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "ApproveApplicationResponseSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/winery-applications/{id}/reject",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §3",
+      "motivo": "Rechazar con motivo (ORG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryApplicationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/wineries",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Alta directa de bodega con invitación al dueño (ORG-03, ORG-04).",
+      "respuesta": {
+        "status": 201,
+        "schema": {
+          "$zod": "WineryWithInvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/wineries",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Directorio de bodegas con filtros (ORG-09).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:WinerySummarySchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/wineries/{id}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Ficha de la bodega con historial de estado (ORG-09).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/platform/wineries/{id}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Edición del perfil desde el back office, con motivo (ORG-07).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/wineries/{id}/suspend",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Suspender con motivo; revoca las sesiones de la bodega (ORG-08).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/wineries/{id}/reactivate",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Reactivar con motivo (ORG-08).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/wineries/{id}/revoke",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Revocar con motivo (solo ADMIN, ORG-08).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/wineries/{id}/transfer-ownership",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Transferir la titularidad: invita al nuevo dueño (ORG-10).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryWithInvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/current",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Perfil de la bodega activa (también con la bodega suspendida).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organizations/current",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "El dueño edita el perfil (sin NIT ni razón social, ORG-07).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "WineryDetailSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/public/wineries/{slug}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §4",
+      "motivo": "Perfil público de una bodega activa (ORG-11).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PublicWineryProfileSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/current/members",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Equipo de la bodega activa con estado (EQP-04).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organizations/current/members/{membershipId}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "El dueño cambia el rol de un colaborador (EQP-05).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/current/members/{membershipId}/block",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "El dueño bloquea a un colaborador (EQP-06).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/current/members/{membershipId}/unblock",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "El dueño desbloquea (salvo bloqueos de la plataforma, EQP-06).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/organizations/{organizationId}/members",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Equipo de cualquier bodega desde el back office (EQP-07).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/platform/organizations/{organizationId}/members/{membershipId}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Cambio de rol desde el back office con motivo y aviso al dueño (EQP-07, EQP-10).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/organizations/{organizationId}/members/{membershipId}/block",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Bloqueo desde el back office con motivo y aviso al dueño (EQP-07, EQP-10).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/organizations/{organizationId}/members/{membershipId}/unblock",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Desbloqueo desde el back office con motivo (EQP-07).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "MemberSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/organizations/{organizationId}/invitations",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "El back office invita a un colaborador en nombre de la bodega (EQP-07).",
+      "respuesta": {
+        "status": 201,
+        "schema": {
+          "$zod": "InvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/users/{userId}/block",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Bloquea un usuario interno (id de membresía) o la cuenta completa (id de persona), con motivo (PLT-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "anyOf": [
+            {
+              "$zod": "PlatformUserSchema"
+            },
+            {
+              "$zod": "UserAccountStatusSchema"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/users/{userId}/unblock",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Desbloquea un usuario interno o la cuenta completa, con motivo (PLT-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "anyOf": [
+            {
+              "$zod": "PlatformUserSchema"
+            },
+            {
+              "$zod": "UserAccountStatusSchema"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/users/{userId}/send-password-reset",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Envía un enlace de recuperación a la persona (EQP-07).",
+      "respuesta": {
+        "status": 202,
+        "schema": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/users",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Usuarios internos + invitaciones pendientes (PLT-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:PlatformUserSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/users",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Invita a un usuario interno (ADMIN, OPERATIONS, SUPPORT; PLT-02).",
+      "respuesta": {
+        "status": 201,
+        "schema": {
+          "$zod": "InvitationSchema"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/platform/users/{membershipId}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Cambia el rol de un usuario interno con motivo (PLT-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PlatformUserSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/users/{membershipId}/reset-mfa",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Obliga a reinscribir el TOTP (solo ADMIN, PLT-05).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PlatformUserSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/permissions",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §5",
+      "motivo": "Matriz de permisos por rol (PLT-04).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PermissionMatrixSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/settings",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Catálogo de parámetros con su valor general (CFG-01).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$zod": "SettingDefinitionSchema"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/platform/settings/{key}",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Cambia el estándar general con motivo (CFG-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "SettingDefinitionSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/settings/{key}/overrides",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Ajustes por bodega de un parámetro (CFG-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:SettingOverrideSchema"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/platform/settings/{key}/overrides",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Ajuste para todas o una selección de bodegas, con excepción legal (CFG-03, CFG-04, A-31).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "SettingOverridesUpdatedSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/platform/settings/{key}/overrides/reset",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Volver al estándar (CFG-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "SettingOverridesResetSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/settings/{key}/history",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Historial de cambios de un parámetro (CFG-07).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:SettingHistoryEntrySchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/current/settings",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §6",
+      "motivo": "Valor efectivo de cada parámetro para la bodega activa (CFG-05).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$zod": "EffectiveSettingSchema"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/audit",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §7",
+      "motivo": "Bitácora con filtros (AUD-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:AuditEventSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/audit/export",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §7",
+      "motivo": "Exportación CSV de la bitácora (AUD-03).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$csv": true
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/audit/verify",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §7",
+      "motivo": "Verificación del encadenamiento por hash (AUD-02).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "AuditVerifyResultSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/current/audit",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §7",
+      "motivo": "Bitácora de la bodega para su dueño (AUD-04).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:AuditEventSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/platform/dashboard",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §8",
+      "motivo": "Tablero del back office (PLT-06).",
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "DashboardSchema"
+        }
       }
     }
   ],
@@ -75,112 +851,29 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/wineries/pending",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "Lista paginada (antes array plano).",
+      "method": "POST",
+      "path": "/v1/auth/login",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Con membresía de plataforma responde 200 sin tokens: { mfa: { required, enrolled, mfaToken } } (TOTP obligatorio para el personal interno).",
       "respuesta": {
         "status": 200,
         "schema": {
-          "$page": "#/components/schemas/WineryResponseDto"
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/AuthResponseDto"
+            },
+            {
+              "$zod": "MfaChallengeSchema"
+            }
+          ]
         }
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/wineries/my/members",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "Lista paginada (antes array plano).",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/WineryMemberItemDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/wineries",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/WineryResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/terroirs",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/TerroirResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/harvest-batches",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/HarvestBatchResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fermentation-tanks",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/FermentationTankResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/wine-aging",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/WineAgingResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/production-batches",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/ProductionBatchResponseDto"
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/bottling",
-      "contrato": "plan/contratos/o0-sesiones-y-estandares.md §2",
-      "motivo": "El OpenAPI no declara la respuesta de la colección; el contrato fija la página.",
-      "respuesta": {
-        "status": 200,
-        "schema": {
-          "$page": "#/components/schemas/BottlingBatchResponseDto"
-        }
-      }
+      "method": "PATCH",
+      "path": "/v1/users/me",
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §1",
+      "motivo": "Acepta notificationPrefs y promotionsConsent (IAM-09). La respuesta sigue siendo el perfil (docs/CONTRATO.md §6)."
     }
   ],
   "camposExtra": {
@@ -201,10 +894,12 @@
     },
     "UserProfileResponseDto": {
       "campos": [
-        "audience"
+        "audience",
+        "notificationPrefs",
+        "promotionsConsent"
       ],
       "contrato": "plan/contratos/o0-sesiones-y-estandares.md §5",
-      "motivo": "`user` de GET /v1/users/me lleva la audiencia."
+      "motivo": "`user` de GET /v1/users/me lleva la audiencia (Ola 0) y las preferencias `notificationPrefs` y `promotionsConsent` (Ola 1 §1, IAM-09)."
     },
     "TerroirResponseDto": {
       "campos": [
