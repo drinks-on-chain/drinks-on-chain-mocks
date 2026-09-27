@@ -19,7 +19,7 @@ import {
 } from '../../schemas'
 import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
-import { notFound, unprocessable } from '../errors'
+import { fieldError, notFound, unprocessable } from '../errors'
 import { created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
 import { findHarvest, requireWinery } from './terroirs-harvest'
 
@@ -218,13 +218,13 @@ export const winemakingRoutes: RouteSpec[] = [
         const terroir = harvest ? db.terroirs.find((t) => t.id === harvest.terroirId) : undefined
         if (!terroir?.isDoEligible) {
           throw unprocessable('La parcela de origen no es apta para la Denominación de Origen', [
-            `terroir ${terroir?.parcelName ?? 'desconocido'}: isDoEligible = false`,
+            fieldError('isDoEligible', `La parcela ${terroir?.parcelName ?? 'de origen'} no es apta para D.O.`),
           ])
         }
         if (terroir.altitudeMasl < DO_MIN_ALTITUDE_MASL) {
           throw unprocessable(
             `La D.O. Singani exige una altitud mínima de ${DO_MIN_ALTITUDE_MASL} m s. n. m. (parcela: ${terroir.altitudeMasl} m)`,
-            [`altitudeMasl ${terroir.altitudeMasl} < ${DO_MIN_ALTITUDE_MASL}`],
+            [fieldError('isDoEligible', `Altitud ${terroir.altitudeMasl} m < ${DO_MIN_ALTITUDE_MASL} m`)],
           )
         }
       }

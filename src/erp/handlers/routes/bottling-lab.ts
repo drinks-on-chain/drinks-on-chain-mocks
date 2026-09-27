@@ -11,7 +11,7 @@ import {
 } from '../../schemas'
 import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
-import { conflict, notFound, unprocessable } from '../errors'
+import { conflict, fieldError, notFound, unprocessable } from '../errors'
 import { boolParam, created, enumParam, listResult, ok, parseBody, type RouteSpec } from '../http'
 import { requireWinery } from './terroirs-harvest'
 import { findAging, findProduction } from './winemaking'
@@ -62,13 +62,14 @@ export const bottlingLabRoutes: RouteSpec[] = [
       if (body.wineAgingBatchId) {
         const aging = findAging(auth, body.wineAgingBatchId)
         if (aging.agingStatus === 'BOTTLED' || aging.agingStatus === 'DISCARDED') {
-          throw unprocessable(`El lote de crianza ya está en estado ${aging.agingStatus}`)
+          throw unprocessable(`El lote de crianza ya está en estado ${aging.agingStatus}`, [
+            fieldError('wineAgingBatchId', `Estado ${aging.agingStatus}`),
+          ])
         }
         const lockDay = dayFromIso(aging.lockUntilDate)
         if (todayDay < lockDay) {
           throw unprocessable(`El vino se encuentra bloqueado por período de crianza hasta el ${isoDay(lockDay)}`, [
-            `lockUntilDate: ${aging.lockUntilDate}`,
-            `daysRemaining: ${lockDay - todayDay}`,
+            fieldError('wineAgingBatchId', `Candado de crianza hasta ${aging.lockUntilDate} (faltan ${lockDay - todayDay} días)`),
           ])
         }
         wineryId = aging.wineryId
@@ -78,14 +79,21 @@ export const bottlingLabRoutes: RouteSpec[] = [
       } else {
         const production = findProduction(auth, body.productionBatchId!)
         if (production.restStatus === 'BOTTLED' || production.restStatus === 'DISCARDED') {
-          throw unprocessable(`El lote de destilación ya está en estado ${production.restStatus}`)
+          throw unprocessable(`El lote de destilación ya está en estado ${production.restStatus}`, [
+            fieldError('productionBatchId', `Estado ${production.restStatus}`),
+          ])
         }
         if (production.restStatus !== 'NOT_REQUIRED') {
           const rest = deriveRestStatus(production, { today: isoDay(todayDay) })
           if (!rest.isRestCompleted) {
             throw unprocessable(
               `Reglas D.O. incumplidas: reposo inerte de ${rest.daysElapsed} días (mínimo 180, faltan ${rest.daysRemaining})`,
-              [`mandatoryRestUntil: ${production.mandatoryRestUntil ?? ''}`, `daysRemaining: ${rest.daysRemaining}`],
+              [
+                fieldError(
+                  'productionBatchId',
+                  `Reposo obligatorio hasta ${production.mandatoryRestUntil ?? ''} (faltan ${rest.daysRemaining} días)`,
+                ),
+              ],
             )
           }
         }

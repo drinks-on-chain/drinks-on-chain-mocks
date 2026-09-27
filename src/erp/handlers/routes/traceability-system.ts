@@ -9,7 +9,7 @@ import {
 } from '../../schemas'
 import { anyUser, members } from '../auth-context'
 import { CLOCK_START, getErpDb, nextSeq, tick } from '../db'
-import { ApiError, notFound } from '../errors'
+import { badRequest, fieldError, invalid, notFound } from '../errors'
 import { created, ok, strParam, type RouteSpec } from '../http'
 import { findBottling } from './bottling-lab'
 
@@ -80,15 +80,13 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
       try {
         form = await request.formData()
       } catch {
-        throw new ApiError(400, 'BAD_REQUEST', 'Archivo faltante: envíe multipart/form-data con el campo "file"')
+        throw badRequest('Envíe multipart/form-data con el campo "file"')
       }
       const file = form.get('file')
-      if (!file || typeof file === 'string') {
-        throw new ApiError(400, 'BAD_REQUEST', 'Archivo faltante: envíe multipart/form-data con el campo "file"')
-      }
-      if (file.size > UPLOAD_MAX_BYTES) throw new ApiError(400, 'BAD_REQUEST', 'El archivo excede el tamaño máximo (15MB)')
+      if (!file || typeof file === 'string') throw invalid([fieldError('file', 'Archivo faltante')])
+      if (file.size > UPLOAD_MAX_BYTES) throw invalid([fieldError('file', 'El archivo excede el tamaño máximo (15MB)')])
       if (!(UPLOAD_MIME_TYPES as readonly string[]).includes(file.type)) {
-        throw new ApiError(400, 'BAD_REQUEST', `Tipo MIME no permitido: ${file.type || 'desconocido'}`)
+        throw invalid([fieldError('file', `Tipo MIME no permitido: ${file.type || 'desconocido'}`)])
       }
       const folder = (strParam(query, 'folder') ?? 'misc').replace(/[^a-z0-9-]/gi, '')
       const name = (file.name || 'archivo').replace(/[^\w.-]+/g, '-')

@@ -13,7 +13,7 @@ import {
 } from '../../schemas'
 import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
-import { badRequest, forbidden, notFound, unprocessable } from '../errors'
+import { fieldError, forbidden, invalid, notFound } from '../errors'
 import {
   applyPatch,
   boolParam,
@@ -140,13 +140,15 @@ export const terroirHarvestRoutes: RouteSpec[] = [
       const fields = (raw ?? {}) as Record<string, unknown>
       const missing = HARVEST_LAB_FIELDS.filter((f) => fields[f] === undefined || fields[f] === null || fields[f] === '')
       if (missing.length > 0) {
-        throw unprocessable(
+        throw invalid(
+          missing.map((f) => fieldError(f, 'Obligatorio al registrar el pesaje')),
           'Brix, pH y acidez son obligatorios al registrar el pesaje',
-          missing.map((f) => `${f} es obligatorio`),
         )
       }
       const body = validate(raw, CreateHarvestBatchSchema)
-      if (body.grossWeightKg <= body.tareWeightKg) throw badRequest('El peso bruto debe ser mayor que la tara')
+      if (body.grossWeightKg <= body.tareWeightKg) {
+        throw invalid([fieldError('grossWeightKg', 'El peso bruto debe ser mayor que la tara')])
+      }
       const terroir = getErpDb().terroirs.find((t) => t.id === body.terroirId && t.wineryId === wineryId)
       if (!terroir) throw notFound('Parcela no encontrada en esta bodega')
       const db = getErpDb()
