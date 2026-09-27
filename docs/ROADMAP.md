@@ -53,6 +53,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Etiqueta `v0.3.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.3.0-rc.1.tgz`, instalado y probado en un proyecto limpio · 27-09-2026
 - [x] Alineación con el backend O0-BE-4 (`fix/o1-alinear-backend`): OpenAPI real, sesión (refresco `<sid>.<gen>.<secreto>`, gracia de 20 s, `switch-organization` con refresco, caducidad, bloqueo del login), códigos del §8, permisos del ERP por membresía y `?wineryId=` de la plataforma · 27-09-2026
 - [x] Precisiones §11 bis: `PATCH /v1/users/me` con membresías, bloqueo de cuenta en `/v1/platform/accounts/{userId}/block|unblock` · 27-09-2026
+- [x] Etiqueta `v0.3.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.3.0-rc.2.tgz`, instalado y probado en un proyecto limpio · 27-09-2026
 - [ ] Regenerar desde el OpenAPI de O1-BE-1 y vaciar las adelantadas de la Ola 1
 - [x] Decidir la respuesta de `PATCH /v1/users/me`: `{ user, memberships, activeOrganizationId }` (contrato §11 bis) · 27-09-2026
 - [ ] Etiqueta estable `v0.3.0` en `main` al cerrar la Ola 1 (coordinación)
