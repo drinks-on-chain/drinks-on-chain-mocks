@@ -44,6 +44,7 @@
     "build": "tsup",
     "seed": "tsx src/erp/seed/cli.ts",
     "seed:check": "pnpm seed && git diff --exit-code -- fixtures",
+    "openapi:pull": "node scripts/openapi-pull.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
