@@ -128,7 +128,7 @@ export const settingsRoutes: RouteSpec[] = [
       assertValue(entry, body.value)
       const exception = body.legalException === true
       if (exception && !['SUPERADMIN', 'ADMIN'].includes(ctx.auth.platformRole ?? '')) {
-        throw new ApiError(403, 'FORBIDDEN', 'Solo administración autoriza excepciones al mínimo legal')
+        throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Solo administración autoriza excepciones al mínimo legal')
       }
       assertLegal(entry, body.value, exception)
       const targets = targetWineries(body.wineryIds)

@@ -11,9 +11,9 @@ import {
   type LatencyOption,
 } from '../../shared/scenarios'
 import type { CertificationStatus } from '../schemas'
-import { checkAccess, checkOrgActive, readAuth, requireAuth, type AccessRule, type AuthContext } from './auth-context'
+import { checkAccess, checkOrgActive, readAuth, requireAuth, resolveTenant, type AccessRule, type AuthContext } from './auth-context'
 import { nowIso, persistErpDb } from './db'
-import { ApiError, badRequest, fieldError, invalid, unauthorized, validationError } from './errors'
+import { ApiError, badRequest, fieldError, invalid, tokenInvalid, validationError } from './errors'
 import { spanishErrorMap } from './zod-es'
 
 // Infraestructura común de los handlers: envoltorio, escenarios, latencia, sesión, roles,
@@ -229,8 +229,12 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
         session = readAuthOrNull(request)
       } else {
         session = requireAuth(request)
-        checkAccess(session, spec.access)
+        checkAccess(session, spec.access, request.method)
         checkOrgActive(session, spec.access, spec.allowInactiveOrg)
+        if (spec.access.kind === 'winery') {
+          const body = writes ? parseLoose(await request.clone().text()) : null
+          session = resolveTenant(session, request.method, url.searchParams, body)
+        }
       }
       if (scenario === 'empty' && spec.list) {
         const empty: ListPage<never> = { items: [], total: 0, ...pageParams(url.searchParams) }
@@ -253,7 +257,7 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
         query: url.searchParams,
         params: Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])),
         get auth() {
-          if (!session) throw unauthorized()
+          if (!session) throw tokenInvalid('Token de acceso ausente')
           return session
         },
         optionalAuth: session,

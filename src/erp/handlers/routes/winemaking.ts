@@ -17,7 +17,7 @@ import {
   type ProductionBatchResponse,
   type WineAgingResponse,
 } from '../../schemas'
-import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
+import { canSee, scoped, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
 import { domainError, fieldError, invalid, notFound, unprocessable } from '../errors'
 import { created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
@@ -53,7 +53,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/fermentation-tanks',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateFermentationTankSchema)
@@ -80,7 +80,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/fermentation-tanks',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const status = enumParam(query, 'status', TANK_STATUSES)
@@ -98,7 +98,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/fermentation-tanks/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'AGRONOMIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const t = findTank(auth, params.id!)
       const db = getErpDb()
@@ -113,7 +113,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/fermentation-tanks/:id/logs',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'POS_OPERATOR']),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR']),
     async handle({ request, auth, params }) {
       const t = findTank(auth, params.id!)
       const body = await parseBody(request, CreateFermentationLogSchema)
@@ -136,7 +136,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/fermentation-tanks/:id/treatments',
-    access: roles(['ENOLOGIST', 'WINERY_ADMIN']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth, params }) {
       const t = findTank(auth, params.id!)
       const body = await parseBody(request, CreateEnologicalTreatmentSchema)
@@ -162,7 +162,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/wine-aging',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateWineAgingBatchSchema)
@@ -194,14 +194,14 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wine-aging',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
     handle: ({ query, auth }) => listResult(scoped(auth, getErpDb().wineAgings), query),
   },
   {
     method: 'get',
     path: '/v1/wine-aging/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle: ({ auth, params }) => ok(findAging(auth, params.id!)),
   },
 
@@ -209,7 +209,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/production-batches/distillation',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateDistillationBatchSchema)
@@ -270,7 +270,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/production-batches/:id/rest-status',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const p = findProduction(auth, params.id!)
       return ok(deriveRestStatus(p, { today: isoDay(today()) }))
@@ -279,13 +279,13 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/production-batches/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle: ({ auth, params }) => ok(findProduction(auth, params.id!)),
   },
   {
     method: 'get',
     path: '/v1/production-batches',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const processType = enumParam(query, 'processType', PROCESS_TYPES)

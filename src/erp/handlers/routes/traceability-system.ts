@@ -7,7 +7,7 @@ import {
   type TraceabilityDagNode,
   type UploadResponse,
 } from '../../schemas'
-import { anyUser, members } from '../auth-context'
+import { anyUser } from '../auth-context'
 import { CLOCK_START, getErpDb, nextSeq, tick } from '../db'
 import { badRequest, fieldError, invalid, notFound } from '../errors'
 import { created, ok, strParam, type RouteSpec } from '../http'
@@ -46,8 +46,9 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/traceability/dag/:bottlingBatchId',
-    access: members,
-    handle: ({ auth, params }) => ok(buildDag(params.bottlingBatchId!, auth)),
+    access: anyUser,
+    // Como el backend: cualquier sesión; una bodega solo ve sus lotes (los demás, como el pasaporte público).
+    handle: ({ auth, params }) => ok(buildDag(params.bottlingBatchId!, auth.organizationType === 'WINERY' ? auth : null)),
   },
   {
     method: 'get',
