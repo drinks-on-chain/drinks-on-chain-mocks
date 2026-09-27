@@ -83,10 +83,17 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
         throw badRequest('Envíe multipart/form-data con el campo "file"')
       }
       const file = form.get('file')
-      if (!file || typeof file === 'string') throw invalid([fieldError('file', 'Archivo faltante')])
+      if (!file || typeof file === 'string') {
+        throw invalid([fieldError('file', 'Debe proporcionar un archivo en el campo multipart/form-data "file".')])
+      }
       if (file.size > UPLOAD_MAX_BYTES) throw invalid([fieldError('file', 'El archivo excede el tamaño máximo (15MB)')])
       if (!(UPLOAD_MIME_TYPES as readonly string[]).includes(file.type)) {
-        throw invalid([fieldError('file', `Tipo MIME no permitido: ${file.type || 'desconocido'}`)])
+        throw invalid([
+          fieldError(
+            'file',
+            `Tipo de archivo no permitido: '${file.type || 'desconocido'}'. Se permiten únicamente imágenes (JPEG, PNG, WEBP, SVG, GIF) y documentos PDF.`,
+          ),
+        ])
       }
       const folder = (strParam(query, 'folder') ?? 'misc').replace(/[^a-z0-9-]/gi, '')
       const name = (file.name || 'archivo').replace(/[^\w.-]+/g, '-')
