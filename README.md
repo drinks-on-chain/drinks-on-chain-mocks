@@ -1,6 +1,6 @@
 # @drinks-on-chain/mocks
 
-Datos de prueba compartidos del ecosistema **Drinks on Chain**: esquemas zod de los DTO del backend, fixtures JSON deterministas, la vista derivada `LotView` y handlers [MSW](https://mswjs.io) que imitan el backend del ERP con su envoltorio, sesión, roles, multi-tenant y reglas de negocio. Las apps se construyen contra estos mocks y pasan al backend real cambiando `NEXT_PUBLIC_API_URL` y apagando MSW.
+Datos de prueba compartidos del ecosistema **Drinks on Chain**: esquemas zod de los DTO del backend, fixtures JSON deterministas, la vista derivada `LotView` y handlers [MSW](https://mswjs.io) que imitan el backend del ERP con su envoltorio, sesión (organizaciones, membresías y renovación rotativa en cookie), roles, multi-tenant y reglas de negocio. Desde 0.2 siguen el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro). Las apps se construyen contra estos mocks y pasan al backend real cambiando `NEXT_PUBLIC_API_URL` y apagando MSW.
 
 Planificación: [`drinks-on-chain-docsfront`](https://github.com/drinks-on-chain/drinks-on-chain-docsfront) (docs 08 y 09). Diferencias entre el OpenAPI y los mocks: [`docs/CONTRATO.md`](docs/CONTRATO.md). Avance: [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
@@ -8,16 +8,16 @@ Alcance actual: dominio **ERP** (el único con backend real). Marketplace, Backo
 
 ## Instalación
 
-No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball.
+No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball. Las versiones `X.Y.Z-rc.N` son pre-releases publicadas desde `dev` para adelantar el contrato de una ola; las estables salen de `main`. Migración de 0.1 a 0.2: ver [CHANGELOG](CHANGELOG.md).
 
 ```bash
-pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.1.0/drinks-on-chain-mocks-0.1.0.tgz
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.2.0-rc.1/drinks-on-chain-mocks-0.2.0-rc.1.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
 ```json
 "dependencies": {
-  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.1.0/drinks-on-chain-mocks-0.1.0.tgz"
+  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.2.0-rc.1/drinks-on-chain-mocks-0.2.0-rc.1.tgz"
 }
 ```
 
@@ -25,10 +25,10 @@ pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 
 | Import | Contenido | ¿Importa msw? |
 |---|---|---|
-| `@drinks-on-chain/mocks` | Esquemas zod (respuesta y alta/edición) y tipos de cada recurso, enumeraciones, envoltorio (`successEnvelopeSchema`, `ErrorEnvelopeSchema`), forma de las listas (`LIST_SHAPE`, `listSchema`, `unwrapList`), `deriveLotViews`, `deriveRestStatus` | No. Apto para producción |
-| `@drinks-on-chain/mocks/fixtures` | `erpFixtures` (JSON tipados), `demoUsers`, `DEMO_PASSWORD` | No |
+| `@drinks-on-chain/mocks` | Esquemas zod (respuesta y alta/edición) y tipos de cada recurso, enumeraciones, sesión (`SessionResponseSchema`, `MeResponseSchema`, `MembershipSchema`, `OrganizationType`, roles de plataforma, bodega y punto de canje, `AccessTokenClaims`), envoltorio (`successEnvelopeSchema`, `ErrorEnvelopeSchema`, `ApiErrorDetail`), listas (`ListPage<T>`, `listPageSchema`, `DEFAULT_LIMIT`, `MAX_LIMIT`, `unwrapList`), `deriveLotViews`, `deriveRestStatus` | No. Apto para producción |
+| `@drinks-on-chain/mocks/fixtures` | `erpFixtures` (JSON tipados), `demoUsers` (con membresías), `DEMO_PASSWORD` | No |
 | `@drinks-on-chain/mocks/fixtures/erp/<archivo>.json` | JSON crudos | No |
-| `@drinks-on-chain/mocks/handlers` | `createErpHandlers()`, `resetErpDb()`, `getErpDb()`, `ERP_ROUTES`, escenarios, `demoUsers`, `mockAccessToken()` | Sí |
+| `@drinks-on-chain/mocks/handlers` | `createErpHandlers()`, `resetErpDb()`, `getErpDb()`, `resetSessions()`, `expireAccessTokens()`, `ERP_ROUTES`, `ERP_ROUTE_SPECS`, escenarios, `demoUsers`, `mockAccessToken()` | Sí |
 | `@drinks-on-chain/mocks/browser` | `startMockWorker(options)` (Service Worker) | Sí (import dinámico) |
 | `@drinks-on-chain/mocks/node` | `setupMockServer(options)` para Vitest, Playwright y scripts | Sí |
 
@@ -52,8 +52,10 @@ const lots: LotView[] = deriveLotViews({ harvestBatches, terroirs, tanks, wineAg
 
    ```bash
    NEXT_PUBLIC_MOCKS=1
-   NEXT_PUBLIC_API_URL=https://136.243.223.39.sslip.io
+   NEXT_PUBLIC_API_URL=https://136.243.223.39.sslip.io   # o vacío si la app llama a /api/v1 (P-1)
    ```
+
+   Con la propuesta P-1 la app llama a `/api/v1/*` de su propio origen y `next.config` lo reescribe a `${API_ORIGIN}/v1/*`, para que la cookie de renovación sea de primera parte. Los handlers responden **siempre** tanto en `${baseUrl}/v1/*` como en `/api/v1/*` de cualquier origen, así que la misma configuración de MSW sirve para los dos modos.
 
 3. Componente cliente que espera al worker antes de pintar la app:
 
@@ -94,7 +96,7 @@ const lots: LotView[] = deriveLotViews({ harvestBatches, terroirs, tanks, wineAg
    }
    ```
 
-   El `import()` dinámico deja msw en un chunk aparte que solo se descarga con `NEXT_PUBLIC_MOCKS=1`. Sin `baseUrl` los handlers interceptan `*/v1/...` en cualquier origen; con `baseUrl` solo ese origen, y además responden 404 con envoltorio a las rutas `/v1/*` desconocidas.
+   El `import()` dinámico deja msw en un chunk aparte que solo se descarga con `NEXT_PUBLIC_MOCKS=1`. Sin `baseUrl` los handlers interceptan `*/v1/...` en cualquier origen (lo que incluye `/api/v1/...`); con `baseUrl` ese origen más `*/api/v1/...`, y además responden 404 con envoltorio a las rutas `/v1/*` y `/api/v1/*` desconocidas. El `path` del envoltorio es siempre `/v1/...`.
 
 4. Si algún Server Component llama al backend, el Service Worker no lo ve: arranca también el servidor de Node en `instrumentation.ts`:
 
@@ -122,15 +124,15 @@ afterAll(() => server.close())
 
 ## Qué simulan los handlers
 
-- Las 45 operaciones (35 rutas, incluida `/v1/health`) del OpenAPI con el envoltorio real: `{ success, statusCode, timestamp, path, data | error: { code, message, details } }`.
-- **Sesión**: `POST /v1/auth/login` con cualquier usuario de `users.json` y `demo1234` devuelve su respuesta de `auth-login.json`; el token `mock.access.<clave>` identifica al usuario y su bodega activa. Sin token → 401; token desconocido → 401.
-- **Roles** (doc 09 §3) → 403; **multi-tenant** por `wineryId` (el `PLATFORM_ADMIN` ve todo; lo de otra bodega da 404).
-- **Filtros** de las pantallas (`status`, `destinationType`, `harvestBatchId`, `restStatus`, `processType`, `varietyName`, `isDoEligible`, `isActive`, `harvestYear`, `phytosanitaryStatus`, `productType`, `isAnchoredOnChain`, `search`…) y `limit`/`offset` (por defecto 50/0).
-- **Validación** de cuerpos con los esquemas de alta (400 `VALIDATION_ERROR`, `details` = lista de mensajes) y **reglas 422**: embotellar antes de `lockUntilDate` o antes de 180 días de reposo, destilación D.O. con parcela no apta o bajo 1.600 m, pesaje sin Brix/pH/acidez. También 404 y 409 documentados.
+- Las 45 operaciones (35 rutas, incluida `/v1/health`) del OpenAPI con el envoltorio real: `{ success, statusCode, timestamp, path, data | error: { code, message, details } }`, más `switch-organization`, `logout` y `logout-all` del contrato de la Ola 0. Todas devuelven `X-Correlation-ID`.
+- **Sesión** (contrato §4–§5): `POST /v1/auth/login` con cualquier usuario de `users.json` y `demo1234` devuelve `{ user, memberships, activeOrganizationId, tokens }` (lo de `auth-login.json` con tokens de sesión propios): acceso de 15 min con forma de JWT (claims `sub`, `aud`, `org`, `orgType`, `role`, `sid`…), `refreshToken` en el cuerpo por compatibilidad y cookie `doc_rt` (`HttpOnly`, `SameSite=Lax`). `refresh` lee la cookie (o el cuerpo), rota siempre y detecta la reutilización (401 `AUTH_REFRESH_REUSED`); `switch-organization` cambia la organización activa en la misma sesión; `logout`/`logout-all` revocan (204). `GET /v1/users/me` → `{ user, memberships, activeOrganizationId }`. Las sesiones sobreviven a una recarga (`localStorage`); `expireAccessTokens()` simula que pasaron 15 min. El token estático `mock.access.<clave>` sigue valiendo (paneles y pruebas).
+- **Roles** (doc 09 §3) evaluados contra la **membresía activa** → 403; **multi-tenant** por la bodega activa (la plataforma ve todo; lo de otra bodega da 404). Bloquear la membresía activa revoca la sesión en la siguiente petición (401 `AUTH_SESSION_REVOKED`).
+- **Filtros** de las pantallas (`status`, `destinationType`, `harvestBatchId`, `restStatus`, `processType`, `varietyName`, `isDoEligible`, `isActive`, `harvestYear`, `phytosanitaryStatus`, `productType`, `isAnchoredOnChain`, `search`…) y `limit`/`offset` (por defecto 20/0; `limit` > 100 → 422).
+- **Validación** de cuerpos y parámetros con los esquemas de alta (**422** `VALIDATION_ERROR`, `details: [{ field, message }]`) y **reglas 422** con el campo que las provoca: embotellar antes de `lockUntilDate` o antes de 180 días de reposo, destilación D.O. con parcela no apta o bajo 1.600 m, pesaje sin Brix/pH/acidez. JSON mal formado → 400 `BAD_REQUEST`. También 404 y 409 documentados.
 - **Mutaciones** en memoria: lo que se crea aparece en las listas durante la sesión; ids UUID v5 deterministas (`mock:<recurso>:<n>`) y reloj fijo que empieza el 2026-09-25 a las 12:00 UTC y avanza un minuto por alta. `resetErpDb()` vuelve al estado inicial.
 - `POST /v1/uploads` (multipart, ≤ 15 MB, PDF e imágenes) devuelve `/mocks/uploads/<carpeta>/<n>-<archivo>`; `GET /v1/traceability/public/:lotCode` es público; `GET /v1/traceability/dag/:id` devuelve el grafo de la cadena.
 
-Las listas responden `data: { items, total, limit, offset }` hasta que backend confirme la forma (doc 09 §8 punto 1). La suposición vive solo en `src/shared/list.ts` (`LIST_SHAPE`); el cliente del ERP debería leer con `unwrapList(data)` para funcionar con ambas formas.
+Todas las colecciones responden `data: { items, total, limit, offset }` (contrato §2), también `wineries/pending` y `wineries/my/members`. La forma vive solo en `src/shared/list.ts`; `unwrapList(data)` sigue aceptando un array plano por si hay que hablar con un backend anterior al contrato.
 
 ## Escenarios
 
@@ -146,7 +148,7 @@ Se eligen con `setScenario('empty')` (se guarda en `localStorage`), con `?mock=e
 
 ## Usuarios de demo
 
-Contraseña de todos: `demo1234`. Para un panel "cambiar de usuario" usa `demoUsers` (email, rol, bodega, contraseña y token).
+Contraseña de todos: `demo1234`. Para un panel "cambiar de usuario" usa `demoUsers` (email, rol, membresías, organización activa, contraseña y token estático). Membresías: los `PLATFORM_ADMIN` son `SUPERADMIN` de la organización de plataforma; el resto, las de su bodega con el `memberRole` indicado.
 
 | Email | Nombre | `userRole` | `memberRole` | Bodega | Clave |
 |---|---|---|---|---|---|
@@ -163,7 +165,9 @@ Contraseña de todos: `demo1234`. Para un panel "cambiar de usuario" usa `demoUs
 | `gerencia@guadalquivir.test` | Elena Vaca | `WINERY_ADMIN` | `OWNER` | Viñedos del Guadalquivir (pendiente) | `vgq_admin` |
 | `maria@tribu.test` | María Fernández | `CONSUMER` | — | — | `maria` |
 | `carlos@tribu.test` | Carlos Mamani | `CONSUMER` | — | — | `carlos` |
-| `cajero.lacava@drinksonchain.test` | Juan Pérez | `POS_OPERATOR` | — | — | `juan_pos` |
+| `cajero.lacava@drinksonchain.test` | Juan Pérez | `POS_OPERATOR` | — | — (sin membresía hasta la Ola 5) | `juan_pos` |
+| `sofia@aramayo.test` | Lic. Sofía Aramayo | `ENOLOGIST` | `ENOLOGIST` · `OWNER` | Bodega Altos de Calamuchita (activa) · Casa Uriondo (suspendida) | `sofia` |
+| `ines@salazar.test` | Ing. Inés Salazar | `AGRONOMIST` | `AGRONOMIST` · `OPERATOR` bloqueada | Destilería Cinti Viejo (activa) · Bodega Altos de Calamuchita | `ines` |
 
 ## Regenerar los fixtures
 
@@ -183,12 +187,17 @@ El generador es un puerto exacto de `generate.py` (docs/mocks/erp): Mersenne Twi
 ```bash
 pnpm install
 pnpm lint && pnpm typecheck && pnpm test && pnpm build
+pnpm openapi:pull -- <url|ruta>   # copia un OpenAPI 3 a openapi/erp.json y resume las operaciones nuevas o retiradas
 ```
+
+`pnpm test` incluye la **prueba de contrato** (`test/contract.test.ts`, [docs/CONTRATO.md §5](docs/CONTRATO.md)): cada `RouteSpec` existe en `openapi/erp.json` o está adelantada en `openapi/pendientes.json` con su referencia al contrato de ola, y cada fixture y cada respuesta de ejemplo valida con Ajv contra el esquema del OpenAPI.
 
 Estructura:
 
 ```
-openapi/erp.json          OpenAPI del backend (fuente de verdad, 25-09-2026)
+openapi/erp.json          OpenAPI del backend (fuente de verdad; pnpm openapi:pull)
+openapi/pendientes.json   lo que adelanta un contrato de ola y el OpenAPI aún no tiene
+scripts/openapi-pull.mjs  pnpm openapi:pull
 src/index.ts              entrada raíz (sin msw)
 src/shared/               envoltorio, forma de listas, escenarios, fechas, UUID v5
 src/erp/schemas/          zod por recurso (respuesta + alta/edición) y LotView
@@ -203,6 +212,6 @@ test/reference/erp/       salida de Python y generate.py de referencia
 ## Publicar una versión
 
 1. Sube `version` en `package.json` y añade la entrada en `CHANGELOG.md` (en `dev`, PR a `main`).
-2. En `main`: `git tag v0.1.0 && git push origin v0.1.0`.
-3. `release.yml` prueba, construye, ejecuta `pnpm pack` y crea la GitHub Release con `drinks-on-chain-mocks-<versión>.tgz`.
+2. En `main`: `git tag vX.Y.Z && git push origin vX.Y.Z`. Pre-release: con `version` = `X.Y.Z-rc.N` en `dev` y la CI verde, `git tag vX.Y.Z-rc.N` sobre `dev`.
+3. `release.yml` prueba, construye, ejecuta `pnpm pack` y crea la GitHub Release con `drinks-on-chain-mocks-<versión>.tgz` (marcada como pre-release si la versión lleva guion).
 4. En cada app, actualiza la URL del tarball y ejecuta `pnpm install` (y `pnpm exec msw init public` si cambió msw).
