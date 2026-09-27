@@ -46,10 +46,11 @@ export function deriveRestStatus(p: ProductionBatchResponse, options: LotViewOpt
   return {
     id: p.id,
     restStatus: p.restStatus,
-    daysElapsed: elapsed,
+    processEndDate: p.processEndDate ?? null,
+    mandatoryRestUntil: p.mandatoryRestUntil ?? null,
+    daysElapsed: Math.max(0, elapsed),
     daysRemaining: remaining,
     isRestCompleted: remaining === 0,
-    mandatoryRestUntil: p.mandatoryRestUntil ?? null,
   }
 }
 

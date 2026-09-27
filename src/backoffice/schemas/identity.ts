@@ -59,6 +59,8 @@ export type MfaEnrollConfirmResponse = z.infer<typeof MfaEnrollConfirmResponseSc
 export const ForgotPasswordSchema = z.object({
   email: z.email(),
   captchaToken: CaptchaTokenSchema,
+  /** Campo trampa: debe llegar vacío (si no, 202 sin hacer nada). */
+  website: z.string().optional(),
 })
 export type ForgotPasswordDto = z.infer<typeof ForgotPasswordSchema>
 
@@ -79,6 +81,8 @@ export type VerifyEmailDto = z.infer<typeof VerifyEmailSchema>
 export const ResendVerificationSchema = z.object({
   email: z.email(),
   captchaToken: CaptchaTokenSchema,
+  /** Campo trampa: debe llegar vacío (si no, 202 sin hacer nada). */
+  website: z.string().optional(),
 })
 export type ResendVerificationDto = z.infer<typeof ResendVerificationSchema>
 

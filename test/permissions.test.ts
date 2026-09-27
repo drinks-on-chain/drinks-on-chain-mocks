@@ -61,7 +61,10 @@ describe('matriz de roles de bodega (docs-back/05 §3)', () => {
     expect(phyto.status).toBe(403)
     expect(code(phyto.json)).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
     expect((await call('/v1/fermentation-tanks', { token: op, body: tankBody })).status).toBe(403)
-    expect((await call('/v1/terroirs', { token: op })).status).toBe(403)
+    // §11 bis: lectura mínima de parcelas (elige la parcela del pesaje), sin alta ni edición.
+    expect((await call('/v1/terroirs', { token: op })).status).toBe(200)
+    expect((await call(`/v1/terroirs/${altosHarvest.terroirId}`, { token: op })).status).toBe(200)
+    expect((await call('/v1/terroirs', { token: op, body: { parcelName: 'X' } })).status).toBe(403)
     expect((await call('/v1/wine-aging', { token: op })).status).toBe(403)
     expect((await call('/v1/bottling', { token: op })).status).toBe(403)
   })

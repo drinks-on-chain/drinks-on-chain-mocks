@@ -20,26 +20,26 @@ export const IDEMPOTENT_ERP_OPERATIONS = new Set([
 
 /** Acción y tipo de recurso de cada escritura del ERP. */
 const ERP_ACTIONS: Record<string, [action: string, resourceType: string]> = {
-  'POST /v1/auth/signup': ['USER_CREATED', 'USER'],
-  'POST /v1/terroirs': ['TERROIR_CREATED', 'TERROIR'],
-  'PATCH /v1/terroirs/:id': ['TERROIR_UPDATED', 'TERROIR'],
-  'POST /v1/harvest-batches': ['HARVEST_BATCH_CREATED', 'HARVEST_BATCH'],
-  'PATCH /v1/harvest-batches/:id/phyto-status': ['PHYTOSANITARY_STATUS_CHANGED', 'HARVEST_BATCH'],
-  'POST /v1/fermentation-tanks': ['FERMENTATION_TANK_CREATED', 'FERMENTATION_TANK'],
-  'POST /v1/fermentation-tanks/:id/logs': ['FERMENTATION_LOG_RECORDED', 'FERMENTATION_LOG'],
-  'POST /v1/fermentation-tanks/:id/treatments': ['ENOLOGICAL_TREATMENT_RECORDED', 'ENOLOGICAL_TREATMENT'],
-  'POST /v1/wine-aging': ['WINE_AGING_STARTED', 'WINE_AGING'],
-  'POST /v1/production-batches/distillation': ['DISTILLATION_RECORDED', 'PRODUCTION_BATCH'],
-  'POST /v1/bottling': ['BOTTLING_RECORDED', 'BOTTLING_BATCH'],
-  'POST /v1/lab-analyses': ['LAB_ANALYSIS_RECORDED', 'LAB_ANALYSIS'],
-  'POST /v1/uploads': ['FILE_UPLOADED', 'UPLOAD'],
-  'POST /v1/wineries': ['WINERY_CREATED', 'WINERY'],
-  'PATCH /v1/wineries/my': ['WINERY_UPDATED', 'WINERY'],
-  'POST /v1/wineries/my/members': ['MEMBER_JOINED', 'MEMBERSHIP'],
-  'POST /v1/wineries/my/members/create': ['MEMBER_JOINED', 'MEMBERSHIP'],
-  'POST /v1/wineries/:id/approve': ['WINERY_ACTIVATED', 'WINERY'],
-  'POST /v1/wineries/:id/reject': ['WINERY_REVOKED', 'WINERY'],
-  'PATCH /v1/users/me': ['', 'USER'], // lo registra la propia ruta (antes y después)
+  'POST /v1/auth/signup': ['USER_CREATED', 'user'],
+  'POST /v1/terroirs': ['TERROIR_CREATED', 'terroir'],
+  'PATCH /v1/terroirs/:id': ['TERROIR_UPDATED', 'terroir'],
+  'POST /v1/harvest-batches': ['HARVEST_BATCH_CREATED', 'harvest_batch'],
+  'PATCH /v1/harvest-batches/:id/phyto-status': ['HARVEST_BATCH_PHYTO_STATUS_CHANGED', 'harvest_batch'],
+  'POST /v1/fermentation-tanks': ['FERMENTATION_TANK_CREATED', 'fermentation_tank'],
+  'POST /v1/fermentation-tanks/:id/logs': ['FERMENTATION_LOG_ADDED', 'fermentation_log'],
+  'POST /v1/fermentation-tanks/:id/treatments': ['ENOLOGICAL_TREATMENT_ADDED', 'enological_treatment'],
+  'POST /v1/wine-aging': ['WINE_AGING_BATCH_CREATED', 'wine_aging_batch'],
+  'POST /v1/production-batches/distillation': ['PRODUCTION_BATCH_CREATED', 'production_batch'],
+  'POST /v1/bottling': ['BOTTLING_BATCH_CREATED', 'bottling_batch'],
+  'POST /v1/lab-analyses': ['LAB_ANALYSIS_CREATED', 'lab_analysis'],
+  'POST /v1/uploads': ['FILE_UPLOADED', 'file'],
+  'POST /v1/wineries': ['WINERY_CREATED', 'winery'],
+  'PATCH /v1/wineries/my': ['WINERY_UPDATED', 'winery'],
+  'POST /v1/wineries/my/members': ['MEMBER_JOINED', 'membership'],
+  'POST /v1/wineries/my/members/create': ['MEMBER_JOINED', 'membership'],
+  'POST /v1/wineries/:id/approve': ['WINERY_APPROVED', 'winery'],
+  'POST /v1/wineries/:id/reject': ['WINERY_REJECTED', 'winery'],
+  'PATCH /v1/users/me': ['', 'user'], // lo registra la propia ruta (antes y después)
 }
 
 const keyOf = (spec: RouteSpec) => `${spec.method.toUpperCase()} ${spec.path}`
@@ -51,7 +51,7 @@ function erpAfterSuccess(spec: RouteSpec): RouteSpec['afterSuccess'] {
   return (ctx: RouteContext, result: RouteResult) => {
     const data = (result.data ?? {}) as Record<string, unknown>
     const user = data.user as { id?: unknown } | undefined
-    const id = typeof data.id === 'string' ? data.id : typeof data.url === 'string' ? data.url : typeof user?.id === 'string' ? user.id : null
+    const id = typeof data.id === 'string' ? data.id : typeof data.key === 'string' ? data.key.slice(0, 100) : typeof user?.id === 'string' ? user.id : null
     const auth = ctx.optionalAuth
     const organizationId = (typeof data.wineryId === 'string' ? data.wineryId : null) ?? auth?.wineryId ?? null
     // Aprobar/rechazar por las rutas del ERP también deja rastro en el historial de la bodega.
@@ -69,7 +69,7 @@ function erpAfterSuccess(spec: RouteSpec): RouteSpec['afterSuccess'] {
     recordAudit(ctx, {
       action,
       resource: { type: resourceType, id },
-      organizationId: resourceType === 'WINERY' && id ? id : organizationId,
+      organizationId: resourceType === 'winery' && id ? id : organizationId,
       after: pickSummary(data),
     })
   }
@@ -77,7 +77,7 @@ function erpAfterSuccess(spec: RouteSpec): RouteSpec['afterSuccess'] {
 
 /** Resumen sin datos sensibles del recurso creado o cambiado. */
 function pickSummary(data: Record<string, unknown>): Record<string, unknown> | null {
-  const keys = ['harvestBatchCode', 'tankCode', 'parcelName', 'internationalLotCode', 'status', 'agingStatus', 'restStatus', 'phytosanitaryStatus', 'commercialName', 'memberRole', 'treatmentType', 'url']
+  const keys = ['harvestBatchCode', 'tankCode', 'parcelName', 'internationalLotCode', 'status', 'agingStatus', 'restStatus', 'phytosanitaryStatus', 'commercialName', 'memberRole', 'treatmentType', 'key', 'mimeType', 'sizeBytes', 'originalName']
   const out = Object.fromEntries(keys.filter((k) => data[k] !== undefined).map((k) => [k, data[k]]))
   return Object.keys(out).length ? out : null
 }

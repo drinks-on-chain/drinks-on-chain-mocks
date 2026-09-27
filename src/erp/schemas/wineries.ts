@@ -45,13 +45,13 @@ export const CreateWinerySchema = z.object({
   commercialName: z.string().min(1),
   beverageCategory: BeverageCategorySchema,
   taxIdNit: z.string().min(1),
-  senasagSanitaryReg: z.string().nullish(),
+  senasagSanitaryReg: z.string().optional(),
   geographicRegion: z.string().min(1),
-  countryCode: z.string().nullish(),
-  address: z.string().nullish(),
+  countryCode: z.string().optional(),
+  address: z.string().optional(),
   contactEmail: z.email(),
-  contactPhone: z.string().nullish(),
-  logoUrl: z.string().nullish(),
+  contactPhone: z.string().optional(),
+  logoUrl: z.string().optional(),
 })
 export type CreateWineryDto = z.infer<typeof CreateWinerySchema>
 
@@ -77,9 +77,9 @@ export const CreateMemberSchema = z.object({
   password: z.string().min(1),
   fullName: z.string().min(1),
   memberRole: MemberRoleSchema,
-  phoneNumber: z.string().nullish(),
-  professionalLicenseNumber: z.string().nullish(),
-  professionalLicensePdfUrl: z.string().nullish(),
+  phoneNumber: z.string().optional(),
+  professionalLicenseNumber: z.string().optional(),
+  professionalLicensePdfUrl: z.string().optional(),
 })
 export type CreateMemberDto = z.infer<typeof CreateMemberSchema>
 

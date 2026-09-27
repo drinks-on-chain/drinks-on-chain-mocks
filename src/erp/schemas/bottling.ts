@@ -31,15 +31,15 @@ export type BottlingBatchResponse = z.infer<typeof BottlingBatchResponseSchema>
 /** Alta de embotellado: exactamente una fuente (`wineAgingBatchId` o `productionBatchId`). */
 export const CreateBottlingBatchSchema = z
   .object({
-    wineAgingBatchId: z.string().min(1).nullish(),
-    productionBatchId: z.string().min(1).nullish(),
+    wineAgingBatchId: z.string().min(1).optional(),
+    productionBatchId: z.string().min(1).optional(),
     productType: ProductTypeSchema,
     finalAlcoholAbv: z.number().min(0).max(100),
-    waterDilutionLiters: z.number().min(0).nullish(),
+    waterDilutionLiters: z.number().min(0).optional(),
     totalBottlesPackaged: z.number().int().positive(),
     packagingFormatCl: z.number().positive(),
-    bottleType: z.string().nullish(),
-    labelDesignUrl: z.string().nullish(),
+    bottleType: z.string().optional(),
+    labelDesignUrl: z.string().optional(),
     bottlingDate: DateInputSchema,
   })
   .superRefine((b, ctx) => {

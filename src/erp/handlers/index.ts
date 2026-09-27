@@ -61,6 +61,7 @@ export function resetErpDb(): void {
 
 export type { ErpHandlerOptions, RouteSpec } from './http'
 export { CLIENT_APP_HEADER, IDEMPOTENCY_KEY_HEADER, IDEMPOTENT_REPLAYED_HEADER, SAME_ORIGIN_API_PREFIX } from './http'
+export { DEPRECATED_ROUTES } from './routes/wineries'
 export { advanceMockClock, getErpDb, type BackofficeState, type ErpDb } from './db'
 export { mockAccessToken, type AuthContext } from './auth-context'
 export { expireAccessTokens, expireRefreshGrace, LOGIN_LOCK_POLICY, REFRESH_COOKIE, REFRESH_GRACE_SECONDS, resetSessions } from './sessions'

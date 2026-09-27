@@ -52,7 +52,11 @@ export const AuthTokensSchema = z.object({
   accessToken: z.string(),
   tokenType: z.string(),
   expiresIn: z.number(),
-  refreshToken: z.string(),
+  /**
+   * @deprecated Se retira del cuerpo al cerrar la Ola 1 (H1, contrato de la Ola 1 §11): el refresco
+   * viaja en la cookie `doc_rt` (`HttpOnly`). Los mocks aún lo devuelven.
+   */
+  refreshToken: z.string().optional(),
 })
 export type AuthTokens = z.infer<typeof AuthTokensSchema>
 

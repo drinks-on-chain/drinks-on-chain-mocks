@@ -18,7 +18,7 @@ import {
   type WinerySummary,
   type WineryStatus,
 } from '../schemas'
-import { createInvitedWinery, taxIdTaken } from './applications'
+import { createInvitedWinery, taxIdTaken, taxIdTakenError } from './applications'
 import { createInvitation, wineryTarget } from './invitations'
 import { bo, findWinery, now, ownerEmailOf, profileOf, recordAudit, sendMail, setWineryStatus, wineryDetail } from './support'
 
@@ -125,7 +125,7 @@ export const wineryPlatformRoutes: RouteSpec[] = [
     access: WRITERS,
     async handle(ctx) {
       const body = await parseBody(ctx.request, CreatePlatformWinerySchema)
-      if (taxIdTaken(body.taxId)) throw domainError(409, 'ORG_TAX_ID_TAKEN', `Ya hay una bodega o una solicitud abierta con el NIT ${body.taxId}`)
+      if (taxIdTaken(body.taxId)) throw taxIdTakenError(body.taxId)
       const reason = body.reason ?? null
       const winery = createInvitedWinery(ctx, body, reason ?? 'Alta directa')
       const invitation = createInvitation(ctx, {
@@ -178,12 +178,12 @@ export const wineryPlatformRoutes: RouteSpec[] = [
       const { reason, ...body } = await parseBody(ctx.request, UpdatePlatformWinerySchema)
       const w = findWinery(ctx.params.id!)
       if (body.taxId && body.taxId !== w.taxIdNit && taxIdTaken(body.taxId, null, w.id)) {
-        throw domainError(409, 'ORG_TAX_ID_TAKEN', `Ya hay una bodega o una solicitud abierta con el NIT ${body.taxId}`)
+        throw taxIdTakenError(body.taxId)
       }
       const before = applyProfile(w, body)
       recordAudit(ctx, {
         action: 'WINERY_UPDATED',
-        resource: { type: 'WINERY', id: w.id },
+        resource: { type: 'winery', id: w.id },
         organizationId: w.id,
         before,
         after: afterOf(w, Object.keys(before)),
@@ -246,7 +246,7 @@ export const wineryPlatformRoutes: RouteSpec[] = [
       })
       recordAudit(ctx, {
         action: 'WINERY_OWNERSHIP_TRANSFER_STARTED',
-        resource: { type: 'WINERY', id: w.id },
+        resource: { type: 'winery', id: w.id },
         organizationId: w.id,
         before: { ownerUserId: owner.userId },
         after: { newOwnerEmail: invitation.email, keepPreviousOwnerAs: body.keepPreviousOwnerAs },
@@ -275,7 +275,7 @@ export const wineryOrganizationRoutes: RouteSpec[] = [
       const before = applyProfile(w, body)
       recordAudit(ctx, {
         action: 'WINERY_UPDATED',
-        resource: { type: 'WINERY', id: w.id },
+        resource: { type: 'winery', id: w.id },
         organizationId: w.id,
         before,
         after: afterOf(w, Object.keys(before)),

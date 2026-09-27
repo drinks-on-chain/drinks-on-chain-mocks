@@ -1,7 +1,7 @@
 import { PLATFORM_ORGANIZATION } from '../../erp/catalog'
 import { membershipsOf, type AuthContext } from '../../erp/handlers/auth-context'
 import { getErpDb, newId, nowStamp, tick, type BackofficeState } from '../../erp/handlers/db'
-import { ApiError, domainError, notFound } from '../../erp/handlers/errors'
+import { ApiError, domainError } from '../../erp/handlers/errors'
 import type { RouteContext } from '../../erp/handlers/http'
 import { DEFAULT_NOTIFICATION_PREFS, type MockUser, type NotificationPrefs, type WineryResponse } from '../../erp/schemas'
 import { DEFAULT_APP_URLS, renderEmail, type AppUrls, type MailDraft } from '../mail'
@@ -155,7 +155,8 @@ export function recordAudit(ctx: RouteContext | null, entry: AuditEntry): AuditE
 
 export function findWinery(id: string): WineryResponse {
   const w = getErpDb().wineries.find((x) => x.id === id)
-  if (!w) throw notFound(`Bodega con identificador "${id}" no encontrada`)
+  // Como el backend: bodega inexistente → 404 `ORG_NOT_FOUND`.
+  if (!w) throw domainError(404, 'ORG_NOT_FOUND', 'Organización no encontrada')
   return w
 }
 
@@ -210,7 +211,7 @@ export function setWineryStatus(
   profile.statusHistory.push({ status, at, by: opts.by, reason: opts.reason })
   recordAudit(ctx, {
     action: opts.action,
-    resource: { type: 'WINERY', id: winery.id },
+    resource: { type: 'winery', id: winery.id },
     organizationId: winery.id,
     before: { status: before },
     after: { status, ...opts.after },

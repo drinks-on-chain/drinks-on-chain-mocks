@@ -30,7 +30,7 @@ export const SettingDefinitionSchema = z.object({
   min: z.number().optional(),
   max: z.number().optional(),
   /** Piso legal (A-31): un valor más laxo exige `legalException` en un ajuste por bodega. */
-  legalMinimum: z.union([z.number(), z.array(z.string())]).nullable().optional(),
+  legalMinimum: z.union([z.number(), z.array(z.string())]).nullable(),
   globalValue: z.unknown(),
   overridesCount: z.number().int().min(0),
   updatedAt: IsoDateTimeSchema,
@@ -58,6 +58,8 @@ export const SettingHistoryEntrySchema = z.object({
   before: z.unknown(),
   after: z.unknown(),
   reason: z.string(),
+  /** El cambio se hizo con excepción al mínimo legal (A-31). */
+  legalException: z.boolean(),
 })
 export type SettingHistoryEntry = z.infer<typeof SettingHistoryEntrySchema>
 

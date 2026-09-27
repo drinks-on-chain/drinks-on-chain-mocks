@@ -1,45 +1,70 @@
-import { buildPublicPassport } from '../../derive'
+import { buildDagGraph, type PassportChain } from '../../derive'
 import {
   UPLOAD_MAX_BYTES,
-  UPLOAD_MIME_TYPES,
+  UPLOAD_MAX_IMAGE_BYTES,
+  type BottlingBatchResponse,
   type HealthStatus,
-  type TraceabilityDag,
-  type TraceabilityDagNode,
+  type Liveness,
+  type SignedUrlResponse,
+  type UploadMimeType,
   type UploadResponse,
 } from '../../schemas'
-import { anyUser } from '../auth-context'
-import { CLOCK_START, getErpDb, nextSeq, tick } from '../db'
-import { badRequest, fieldError, invalid, notFound } from '../errors'
+import { anyUser, type AuthContext } from '../auth-context'
+import { CLOCK_START, getErpDb, newId, tick } from '../db'
+import { ApiError, badRequest, fieldError, invalid, notFound } from '../errors'
 import { created, ok, strParam, type RouteSpec } from '../http'
 import { findBottling } from './bottling-lab'
 
-// /v1/traceability/*, /v1/uploads, /v1/health
+// /v1/traceability/*, /v1/uploads*, /v1/health*
 
-function buildDag(bottlingId: string, auth: Parameters<typeof findBottling>[0]): TraceabilityDag {
+function chainOf(): PassportChain {
   const db = getErpDb()
-  const b = findBottling(auth, bottlingId)
-  const nodes: TraceabilityDagNode[] = []
-  const edges: TraceabilityDag['edges'] = []
-  const add = (node: TraceabilityDagNode, parent?: string) => {
-    nodes.push(node)
-    if (parent) edges.push({ from: parent, to: node.id })
+  return {
+    wineries: db.wineries,
+    terroirs: db.terroirs,
+    harvestBatches: db.harvestBatches,
+    tanks: db.tanks,
+    wineAgings: db.wineAgings,
+    productionBatches: db.productionBatches,
+    labAnalyses: db.labAnalyses,
   }
-  const aging = b.wineAgingBatchId ? db.wineAgings.find((a) => a.id === b.wineAgingBatchId) : undefined
-  const production = b.productionBatchId ? db.productionBatches.find((p) => p.id === b.productionBatchId) : undefined
-  const tank = db.tanks.find((t) => t.id === (aging?.fermentationTankId ?? production?.fermentationTankId))
-  const harvest = tank ? db.harvestBatches.find((h) => h.id === tank.harvestBatchId) : undefined
-  const terroir = harvest ? db.terroirs.find((t) => t.id === harvest.terroirId) : undefined
-  const lab = db.labAnalyses.find((l) => l.bottlingBatchId === b.id)
+}
 
-  if (terroir) add({ id: terroir.id, type: 'TERROIR', label: terroir.parcelName, date: terroir.createdAt, data: { ...terroir } })
-  if (harvest) add({ id: harvest.id, type: 'HARVEST_BATCH', label: harvest.harvestBatchCode, date: harvest.intakeDate, data: { ...harvest } }, terroir?.id)
-  if (tank) add({ id: tank.id, type: 'FERMENTATION_TANK', label: tank.tankCode, date: tank.startDate, data: { ...tank } }, harvest?.id)
-  if (aging) add({ id: aging.id, type: 'WINE_AGING', label: aging.containerCode ?? aging.containerType, date: aging.createdAt, data: { ...aging } }, tank?.id)
-  if (production) add({ id: production.id, type: 'PRODUCTION_BATCH', label: production.equipmentIdentifier, date: production.processStartDate, data: { ...production } }, tank?.id)
-  add({ id: b.id, type: 'BOTTLING_BATCH', label: b.internationalLotCode, date: b.bottlingDate, data: { ...b } }, aging?.id ?? production?.id)
-  if (lab) add({ id: lab.id, type: 'LAB_ANALYSIS', label: lab.accreditedLabCertificationCode, date: lab.testPerformedAt, data: { ...lab } }, b.id)
+const dagOf = (b: BottlingBatchResponse) => buildDagGraph(b, chainOf())
 
-  return { bottlingBatchId: b.id, lotCode: b.internationalLotCode, nodes, edges }
+// ----- Archivos (almacenamiento privado con URL firmada, como `UploadsService` del backend) -----
+
+/** Vida de la URL firmada (15 min). */
+const SIGNED_URL_TTL_MS = 15 * 60_000
+
+/** Tipo real del archivo por su firma de bytes (el backend no se fía del tipo declarado). */
+function detectFileType(bytes: Uint8Array): { mimeType: UploadMimeType; extension: string; maxBytes: number } | null {
+  const starts = (...sig: number[]) => sig.every((b, i) => bytes[i] === b)
+  if (starts(0x25, 0x50, 0x44, 0x46)) return { mimeType: 'application/pdf', extension: '.pdf', maxBytes: UPLOAD_MAX_BYTES }
+  if (starts(0xff, 0xd8, 0xff)) return { mimeType: 'image/jpeg', extension: '.jpg', maxBytes: UPLOAD_MAX_IMAGE_BYTES }
+  if (starts(0x89, 0x50, 0x4e, 0x47)) return { mimeType: 'image/png', extension: '.png', maxBytes: UPLOAD_MAX_IMAGE_BYTES }
+  if (starts(0x47, 0x49, 0x46, 0x38)) return { mimeType: 'image/gif', extension: '.gif', maxBytes: UPLOAD_MAX_IMAGE_BYTES }
+  if (starts(0x52, 0x49, 0x46, 0x46) && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50) {
+    return { mimeType: 'image/webp', extension: '.webp', maxBytes: UPLOAD_MAX_IMAGE_BYTES }
+  }
+  return null
+}
+
+/** Prefijo de la organización activa (`org/<id>`, `org/platform`); solo personal. */
+function organizationPrefix(auth: AuthContext): string {
+  if (auth.audience !== 'STAFF') throw new ApiError(403, 'FORBIDDEN', 'Solo el personal de una organización puede subir archivos')
+  if (auth.organizationType === 'PLATFORM') return 'org/platform'
+  if (auth.organizationId) return `org/${auth.organizationId}`
+  throw new ApiError(403, 'FORBIDDEN', 'Necesitas una organización activa para subir archivos')
+}
+
+function signedUrl(key: string): SignedUrlResponse {
+  const expires = getErpDb().clock + SIGNED_URL_TTL_MS
+  return {
+    key,
+    url: `/mocks/uploads/${key}?expires=${Math.floor(expires / 1000)}&signature=mock`,
+    expiresAt: new Date(expires).toISOString(),
+  }
 }
 
 export const traceabilitySystemRoutes: RouteSpec[] = [
@@ -47,8 +72,8 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/traceability/dag/:bottlingBatchId',
     access: anyUser,
-    // Como el backend: cualquier sesión; una bodega solo ve sus lotes (los demás, como el pasaporte público).
-    handle: ({ auth, params }) => ok(buildDag(params.bottlingBatchId!, auth.organizationType === 'WINERY' ? auth : null)),
+    // El backend no filtra por bodega (cualquier sesión); los mocks sí: una bodega activa solo ve sus lotes.
+    handle: ({ auth, params }) => ok(dagOf(findBottling(auth.organizationType === 'WINERY' ? auth : null, params.bottlingBatchId!))),
   },
   {
     method: 'get',
@@ -56,27 +81,17 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
     access: 'public',
     handle({ params }) {
       const code = decodeURIComponent(params.lotCode!)
-      const db = getErpDb()
-      const b = db.bottlings.find((x) => x.internationalLotCode.toUpperCase() === code.toUpperCase() || x.id === code)
+      const b = getErpDb().bottlings.find((x) => x.internationalLotCode.toUpperCase() === code.toUpperCase() || x.id === code)
       if (!b) throw notFound(`Lote de embotellado con identificador "${code}" no encontrado`)
-      return ok(
-        buildPublicPassport(b, {
-          wineries: db.wineries,
-          terroirs: db.terroirs,
-          harvestBatches: db.harvestBatches,
-          tanks: db.tanks,
-          wineAgings: db.wineAgings,
-          productionBatches: db.productionBatches,
-          labAnalyses: db.labAnalyses,
-        }),
-      )
+      return ok(dagOf(b))
     },
   },
   {
     method: 'post',
     path: '/v1/uploads',
     access: anyUser,
-    async handle({ request, query }) {
+    async handle({ request, query, auth }) {
+      const prefix = organizationPrefix(auth)
       let form: FormData
       try {
         form = await request.formData()
@@ -84,44 +99,72 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
         throw badRequest('Envíe multipart/form-data con el campo "file"')
       }
       const file = form.get('file')
-      if (!file || typeof file === 'string') {
+      if (!file || typeof file === 'string' || file.size === 0) {
         throw invalid([fieldError('file', 'Debe proporcionar un archivo en el campo multipart/form-data "file".')])
       }
-      if (file.size > UPLOAD_MAX_BYTES) throw invalid([fieldError('file', 'El archivo excede el tamaño máximo (15MB)')])
-      if (!(UPLOAD_MIME_TYPES as readonly string[]).includes(file.type)) {
-        throw invalid([
-          fieldError(
-            'file',
-            `Tipo de archivo no permitido: '${file.type || 'desconocido'}'. Se permiten únicamente imágenes (JPEG, PNG, WEBP, SVG, GIF) y documentos PDF.`,
-          ),
+      const bytes = new Uint8Array(await file.arrayBuffer())
+      const detected = detectFileType(bytes)
+      const declared = (file.type || '').toLowerCase().replace('image/jpg', 'image/jpeg')
+      if (!detected || detected.mimeType !== declared) {
+        throw new ApiError(422, 'FILE_TYPE_NOT_ALLOWED', 'Tipo de archivo no permitido', [
+          fieldError('file', `Tipo de archivo no permitido: el contenido no es ${declared || 'un tipo admitido'}. Se admiten JPEG, PNG, WEBP, GIF y PDF.`),
         ])
       }
-      const folder = (strParam(query, 'folder') ?? 'misc').replace(/[^a-z0-9-]/gi, '')
-      const name = (file.name || 'archivo').replace(/[^\w.-]+/g, '-')
-      tick()
-      const key = `${folder}/${getErpDb().clock + nextSeq('upload')}-${name}`
+      if (bytes.length > detected.maxBytes) {
+        throw new ApiError(413, 'FILE_TOO_LARGE', `El archivo supera el máximo de ${Math.round(detected.maxBytes / (1024 * 1024))} MB para ${detected.mimeType}`)
+      }
+      const folder = (strParam(query, 'folder') ?? '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 50).toLowerCase() || 'general'
+      const now = new Date(Date.parse(tick()))
+      const month = String(now.getUTCMonth() + 1).padStart(2, '0')
+      const key = `${prefix}/${folder}/${now.getUTCFullYear()}/${month}/${newId('upload')}${detected.extension}`
       const upload: UploadResponse = {
-        url: `/mocks/uploads/${key}`,
-        key,
-        originalName: file.name || name,
-        mimeType: file.type,
-        sizeBytes: file.size,
+        ...signedUrl(key),
+        originalName: (file.name || 'archivo').replace(/[\r\n"]/g, '').slice(0, 255),
+        mimeType: detected.mimeType,
+        sizeBytes: bytes.length,
       }
       return created(upload)
     },
   },
   {
     method: 'get',
-    path: '/v1/health',
-    access: 'public',
-    handle() {
-      const health: HealthStatus = {
-        status: 'ok',
-        database: 'connected',
-        redis: 'connected',
-        uptime: (getErpDb().clock - CLOCK_START) / 1000 + 1,
-      }
-      return ok(health)
+    path: '/v1/uploads/url',
+    access: anyUser,
+    handle({ query, auth }) {
+      if (auth.audience !== 'STAFF') throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'No tiene permisos para esta operación')
+      const key = strParam(query, 'key')
+      if (!key) throw invalid([fieldError('key', 'Campo obligatorio')])
+      // La plataforma lee cualquiera; el resto, solo los de su organización (los mocks no guardan los archivos).
+      const own = auth.organizationType === 'PLATFORM' ? /^org\/[\w-]+\// : new RegExp(`^org/${auth.organizationId ?? '-'}/`)
+      if (key.includes('..') || !own.test(key)) throw new ApiError(404, 'FILE_NOT_FOUND', 'Archivo no encontrado')
+      return ok(signedUrl(key))
     },
   },
+  {
+    method: 'get',
+    path: '/v1/health',
+    access: 'public',
+    handle: () => ok(health()),
+  },
+  {
+    method: 'get',
+    path: '/v1/health/live',
+    access: 'public',
+    handle() {
+      const live: Liveness = { status: 'ok', uptime: uptime(), release: null }
+      return ok(live)
+    },
+  },
+  {
+    method: 'get',
+    path: '/v1/health/ready',
+    access: 'public',
+    handle: () => ok(health()),
+  },
 ]
+
+const uptime = () => (getErpDb().clock - CLOCK_START) / 1000 + 1
+
+function health(): HealthStatus {
+  return { status: 'ok', database: 'connected', redis: 'connected', storage: 'connected', worker: 'up', uptime: uptime() }
+}
