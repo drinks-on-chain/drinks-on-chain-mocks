@@ -42,6 +42,8 @@ interface Pending {
   adelantadas: PendingEntry[]
   cambios: PendingEntry[]
   camposExtra: Record<string, { campos: string[]; contrato: string; motivo: string }>
+  /** `Dto.campo` → valores de la enumeración que fija un contrato de ola (sustituyen a los del OpenAPI). */
+  enumCambios: Record<string, { valores: string[]; contrato: string; motivo: string }>
 }
 
 const spec = readJson<OpenApi>('openapi/erp.json')
@@ -90,6 +92,12 @@ function components(): Json {
     const props = schemas[name]?.properties as Record<string, Json> | undefined
     if (!props) throw new Error(`camposExtra: ${name} no existe en el OpenAPI`)
     for (const field of extra.campos) props[field] ??= {}
+  }
+  for (const [target, change] of Object.entries(pending.enumCambios)) {
+    const [name, field] = target.split('.') as [string, string]
+    const prop = (schemas[name]?.properties as Record<string, Json> | undefined)?.[field]
+    if (!prop || !Array.isArray(prop.enum)) throw new Error(`enumCambios: ${target} no es una enumeración del OpenAPI`)
+    prop.enum = [...change.valores, ...(prop.enum.includes(null) ? [null] : [])]
   }
   return { ...spec.components, schemas }
 }
@@ -178,6 +186,10 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
       expect(e.contrato, name).toMatch(/^(plan\/contratos\/o\d+-[\w-]+\.md §\d+|docs\/CONTRATO\.md §\d+)/)
       expect(e.campos.length, name).toBeGreaterThan(0)
     }
+    for (const [name, e] of Object.entries(pending.enumCambios)) {
+      expect(e.contrato, name).toMatch(/^plan\/contratos\/o\d+-[\w-]+\.md §\d+/)
+      expect(e.valores.length, name).toBeGreaterThan(0)
+    }
   })
 })
 
@@ -236,7 +248,7 @@ const winery = (name: string) => F.wineries.find((w) => w.commercialName === nam
 const ALTOS = winery('Bodega Altos de Calamuchita')
 const CINTI = winery('Destilería Cinti Viejo')
 const URIONDO = winery('Casa Uriondo')
-const PENDING = F.wineries.find((w) => w.certificationStatus === 'PENDING')!
+const PENDING = F.wineries.find((w) => w.certificationStatus === 'INVITED')!
 const altosTerroir = F.terroirs.find((t) => t.wineryId === ALTOS.id && t.altitudeMasl >= 1600)!
 const altosHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
 const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id)!

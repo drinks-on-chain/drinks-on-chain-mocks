@@ -19,7 +19,11 @@ export const BEVERAGE_CATEGORIES = ['WINERY', 'BREWERY', 'DISTILLERY', 'OTHER'] 
 export const BeverageCategorySchema = z.enum(BEVERAGE_CATEGORIES)
 export type BeverageCategory = z.infer<typeof BeverageCategorySchema>
 
-export const CERTIFICATION_STATUSES = ['PENDING', 'ACTIVE', 'SUSPENDED', 'REVOKED'] as const
+/**
+ * Estado de la bodega (contrato de la Ola 1 §0): `INVITED` sustituye a `PENDING` (la migración
+ * del backend convierte `PENDING` → `INVITED`). Es también el estado de su organización.
+ */
+export const CERTIFICATION_STATUSES = ['INVITED', 'ACTIVE', 'SUSPENDED', 'REVOKED'] as const
 export const CertificationStatusSchema = z.enum(CERTIFICATION_STATUSES)
 export type CertificationStatus = z.infer<typeof CertificationStatusSchema>
 

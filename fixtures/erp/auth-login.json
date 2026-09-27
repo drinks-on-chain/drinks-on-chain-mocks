@@ -49,7 +49,7 @@
         "organizationType": "PLATFORM",
         "organizationName": "Drinks on Chain",
         "organizationStatus": "ACTIVE",
-        "role": "SUPERADMIN",
+        "role": "SUPPORT",
         "status": "ACTIVE"
       }
     ],
@@ -327,7 +327,7 @@
         "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
         "organizationType": "WINERY",
         "organizationName": "Viñedos del Guadalquivir",
-        "organizationStatus": "PENDING",
+        "organizationStatus": "INVITED",
         "role": "OWNER",
         "status": "ACTIVE"
       }
@@ -481,6 +481,161 @@
       "tokenType": "Bearer",
       "expiresIn": 900,
       "refreshToken": "mock.refresh.ines"
+    }
+  },
+  "cvj_contable": {
+    "user": {
+      "id": "888314c6-9ce6-5b66-b68f-4804276de103",
+      "email": "contabilidad@cintiviejo.test",
+      "fullName": "Lic. Verónica Quiroga",
+      "phoneNumber": "+59172000205",
+      "preferredLocale": "es",
+      "audience": "STAFF",
+      "userRole": "ENOLOGIST",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "memberships": [
+      {
+        "id": "c79a3f44-f369-5b59-8102-36e89311185e",
+        "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "organizationType": "WINERY",
+        "organizationName": "Destilería Cinti Viejo",
+        "organizationStatus": "ACTIVE",
+        "role": "ACCOUNTANT",
+        "status": "BLOCKED"
+      }
+    ],
+    "activeOrganizationId": null,
+    "tokens": {
+      "accessToken": "mock.access.cvj_contable",
+      "tokenType": "Bearer",
+      "expiresIn": 900,
+      "refreshToken": "mock.refresh.cvj_contable"
+    }
+  },
+  "valle_admin": {
+    "user": {
+      "id": "8511139f-baa2-58e0-8297-6bc207d694a6",
+      "email": "hugo@valleescondido.test",
+      "fullName": "Hugo Ortega",
+      "phoneNumber": "+59173000601",
+      "preferredLocale": "es",
+      "audience": "STAFF",
+      "userRole": "WINERY_ADMIN",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "memberships": [
+      {
+        "id": "f3e91402-2702-5b7a-80e9-f387440b2030",
+        "organizationId": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
+        "organizationType": "WINERY",
+        "organizationName": "Bodega Valle Escondido",
+        "organizationStatus": "REVOKED",
+        "role": "OWNER",
+        "status": "ACTIVE"
+      }
+    ],
+    "activeOrganizationId": null,
+    "tokens": {
+      "accessToken": "mock.access.valle_admin",
+      "tokenType": "Bearer",
+      "expiresIn": 900,
+      "refreshToken": "mock.refresh.valle_admin"
+    }
+  },
+  "bo_admin": {
+    "user": {
+      "id": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
+      "email": "administracion@drinksonchain.test",
+      "fullName": "Jorge Salinas",
+      "phoneNumber": "+59170000003",
+      "preferredLocale": "es",
+      "audience": "STAFF",
+      "userRole": "PLATFORM_ADMIN",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "memberships": [
+      {
+        "id": "e05549ba-7859-5b5c-8fe1-9e1d6a4df5f4",
+        "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+        "organizationType": "PLATFORM",
+        "organizationName": "Drinks on Chain",
+        "organizationStatus": "ACTIVE",
+        "role": "ADMIN",
+        "status": "ACTIVE"
+      }
+    ],
+    "activeOrganizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+    "tokens": {
+      "accessToken": "mock.access.bo_admin",
+      "tokenType": "Bearer",
+      "expiresIn": 900,
+      "refreshToken": "mock.refresh.bo_admin"
+    }
+  },
+  "operaciones": {
+    "user": {
+      "id": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "email": "operaciones@drinksonchain.test",
+      "fullName": "Valeria Méndez",
+      "phoneNumber": "+59170000004",
+      "preferredLocale": "es",
+      "audience": "STAFF",
+      "userRole": "PLATFORM_ADMIN",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "memberships": [
+      {
+        "id": "405dcdb8-2354-5b6a-95c8-713036402262",
+        "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+        "organizationType": "PLATFORM",
+        "organizationName": "Drinks on Chain",
+        "organizationStatus": "ACTIVE",
+        "role": "OPERATIONS",
+        "status": "ACTIVE"
+      }
+    ],
+    "activeOrganizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+    "tokens": {
+      "accessToken": "mock.access.operaciones",
+      "tokenType": "Bearer",
+      "expiresIn": 900,
+      "refreshToken": "mock.refresh.operaciones"
+    }
+  },
+  "analista": {
+    "user": {
+      "id": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+      "email": "analista@drinksonchain.test",
+      "fullName": "Camila Torrez",
+      "phoneNumber": "+59170000005",
+      "preferredLocale": "es",
+      "audience": "STAFF",
+      "userRole": "PLATFORM_ADMIN",
+      "wineryId": null,
+      "memberRole": null
+    },
+    "memberships": [
+      {
+        "id": "1628d0c7-17a5-5f92-a711-9766a098ce0e",
+        "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+        "organizationType": "PLATFORM",
+        "organizationName": "Drinks on Chain",
+        "organizationStatus": "ACTIVE",
+        "role": "OPERATIONS",
+        "status": "ACTIVE"
+      }
+    ],
+    "activeOrganizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+    "tokens": {
+      "accessToken": "mock.access.analista",
+      "tokenType": "Bearer",
+      "expiresIn": 900,
+      "refreshToken": "mock.refresh.analista"
     }
   }
 }

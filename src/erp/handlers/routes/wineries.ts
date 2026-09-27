@@ -89,7 +89,8 @@ export const wineryRoutes: RouteSpec[] = [
         onchainProducerId: null,
         onchainRegisterTxHash: null,
         isExportCertified: false,
-        certificationStatus: 'PENDING',
+        // `INVITED` sustituye a `PENDING` desde la Ola 1 (autoinscripción *retirada* en H1).
+        certificationStatus: 'INVITED',
         approvedAt: null,
         createdAt: tick(),
         members: [],
@@ -107,7 +108,8 @@ export const wineryRoutes: RouteSpec[] = [
     access: roles(['PLATFORM_ADMIN']),
     list: 'paged',
     handle({ query }) {
-      const status = enumParam(query, 'status', CERTIFICATION_STATUSES)
+      // `PENDING` (Ola 0) se acepta como alias de `INVITED`.
+      const status = query.get('status') === 'PENDING' ? 'INVITED' : enumParam(query, 'status', CERTIFICATION_STATUSES)
       const category = enumParam(query, 'beverageCategory', BEVERAGE_CATEGORIES)
       const search = strParam(query, 'search')?.toLowerCase()
       const items = getErpDb().wineries.filter(
@@ -191,7 +193,7 @@ export const wineryRoutes: RouteSpec[] = [
     path: '/v1/wineries/pending',
     access: roles(['PLATFORM_ADMIN']),
     list: 'paged',
-    handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'PENDING'), query),
+    handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'INVITED'), query),
   },
   {
     method: 'post',

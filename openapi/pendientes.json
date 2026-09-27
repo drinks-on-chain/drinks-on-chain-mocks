@@ -1,5 +1,5 @@
 {
-  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o0-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta).",
+  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o0-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta). `enumCambios`: `Dto.campo` → valores de una enumeración que un contrato de ola sustituye (p. ej. el estado de la bodega de la Ola 1).",
   "adelantadas": [
     {
       "method": "POST",
@@ -244,6 +244,18 @@
       ],
       "contrato": "docs/CONTRATO.md §2 punto 4",
       "motivo": "El tratamiento guardado = DTO de alta + id y tanque (el OpenAPI no declara la respuesta)."
+    }
+  },
+  "enumCambios": {
+    "WineryResponseDto.certificationStatus": {
+      "valores": [
+        "INVITED",
+        "ACTIVE",
+        "SUSPENDED",
+        "REVOKED"
+      ],
+      "contrato": "plan/contratos/o1-backoffice-y-bodegas.md §0",
+      "motivo": "INVITED sustituye a PENDING (la migración del backend convierte PENDING → INVITED); también es el estado de la organización en Membership.organizationStatus."
     }
   }
 }

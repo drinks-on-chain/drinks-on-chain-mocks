@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { IsoDateTimeSchema } from './common'
 import { MemberRoleSchema, UserRoleSchema } from './enums'
-import { AudienceSchema, MembershipSchema } from './organizations'
+import { AudienceSchema, MembershipSchema, PlatformRoleSchema } from './organizations'
 import { WalletResponseSchema } from './wallets'
 
 // GET/PATCH /v1/users/me · UserProfileResponseDto
@@ -58,6 +58,8 @@ export type UpdateUserDto = z.infer<typeof UpdateUserSchema>
 export const MockUserMetaSchema = z.object({
   key: z.string(),
   password: z.string(),
+  /** Rol en la organización de plataforma (personal interno, contrato de la Ola 1 §5). */
+  platformRole: PlatformRoleSchema.optional(),
 })
 
 /** Fila de `users.json`: el DTO real más `_mock`. */

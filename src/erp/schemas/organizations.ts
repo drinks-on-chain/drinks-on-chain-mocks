@@ -9,7 +9,7 @@ export const ORGANIZATION_TYPES = ['PLATFORM', 'WINERY', 'PICKUP_POINT'] as cons
 export const OrganizationTypeSchema = z.enum(ORGANIZATION_TYPES)
 export type OrganizationType = z.infer<typeof OrganizationTypeSchema>
 
-/** Estado de la organización: el de certificación de la bodega (`PENDING`…`REVOKED`). */
+/** Estado de la organización: el de la bodega (`INVITED` | `ACTIVE` | `SUSPENDED` | `REVOKED`, Ola 1). */
 export const ORGANIZATION_STATUSES = CERTIFICATION_STATUSES
 export const OrganizationStatusSchema = z.enum(ORGANIZATION_STATUSES)
 export type OrganizationStatus = z.infer<typeof OrganizationStatusSchema>
@@ -31,7 +31,7 @@ export const MEMBERSHIP_ROLES = [...PLATFORM_ROLES, ...WINERY_ROLES, ...PICKUP_P
 export const MembershipRoleSchema = z.enum(MEMBERSHIP_ROLES)
 export type MembershipRole = PlatformRole | WineryRole | PickupPointRole
 
-/** `INVITED` llega en la Ola 1. */
+/** Estado de una membresía. Las invitaciones pendientes no son membresías (ver `Invitation`). */
 export const MEMBERSHIP_STATUSES = ['ACTIVE', 'BLOCKED'] as const
 export const MembershipStatusSchema = z.enum(MEMBERSHIP_STATUSES)
 export type MembershipStatus = z.infer<typeof MembershipStatusSchema>

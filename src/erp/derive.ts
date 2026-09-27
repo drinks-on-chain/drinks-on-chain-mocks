@@ -25,21 +25,22 @@ export const ACCESS_TOKEN_TTL_SECONDS = 900
 
 /**
  * Membresías de una persona (contrato de la Ola 0 §4), en orden: plataforma antes que bodegas.
- * - `PLATFORM_ADMIN` → `SUPERADMIN` de la organización de plataforma.
+ * - `PLATFORM_ADMIN` (o `_mock.platformRole`) → membresía de la organización de plataforma con
+ *   el rol `_mock.platformRole` (`SUPERADMIN` si no lo indica).
  * - Cada `wineryMemberships[i]` → membresía `WINERY` con su rol; el id es el del miembro de la
  *   bodega; `isActive: false` → `BLOCKED`.
  * - `POS_OPERATOR` y consumidores → ninguna (el POS llega en la Ola 5).
  */
 export function deriveMemberships(user: MockUser, wineries: readonly WineryResponse[]): Membership[] {
   const out: Membership[] = []
-  if (user.userRole === 'PLATFORM_ADMIN') {
+  if (user.userRole === 'PLATFORM_ADMIN' || user._mock.platformRole) {
     out.push({
       id: uid(`membership:platform:${user.id}`),
       organizationId: PLATFORM_ORGANIZATION.id,
       organizationType: 'PLATFORM',
       organizationName: PLATFORM_ORGANIZATION.name,
       organizationStatus: PLATFORM_ORGANIZATION.status,
-      role: 'SUPERADMIN',
+      role: user._mock.platformRole ?? 'SUPERADMIN',
       status: user.isActive ? 'ACTIVE' : 'BLOCKED',
     })
   }
@@ -101,9 +102,9 @@ export function staticTokens(user: MockUser): AuthTokens {
 export function buildSessionResponse(
   user: MockUser,
   wineries: readonly WineryResponse[],
-  options: { activeOrganizationId?: string | null; tokens?: AuthTokens } = {},
+  options: { activeOrganizationId?: string | null; tokens?: AuthTokens; memberships?: Membership[] } = {},
 ): SessionResponse {
-  const memberships = deriveMemberships(user, wineries)
+  const memberships = options.memberships ?? deriveMemberships(user, wineries)
   const activeOrganizationId =
     options.activeOrganizationId === undefined ? pickActiveOrganizationId(memberships) : options.activeOrganizationId
   const active = memberships.find((m) => m.organizationId === activeOrganizationId)

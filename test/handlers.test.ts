@@ -209,8 +209,9 @@ describe('roles', () => {
     expect((await call('/v1/wineries', { token: owner })).status).toBe(403)
     const admin = await login('gestor@drinksonchain.test')
     const pending = dataOf((await call('/v1/wineries/pending', { token: admin })).json) as Paged<unknown>
-    expect(pending).toMatchObject({ total: 1, limit: 20, offset: 0 })
-    expect(pending.items).toHaveLength(1)
+    // Viñedos del Guadalquivir y Bodega Sol de Padcaya (INVITED desde la Ola 1).
+    expect(pending).toMatchObject({ total: 2, limit: 20, offset: 0 })
+    expect(pending.items).toHaveLength(2)
   })
 
   it('un consumidor no ve datos del ERP pero sí el pasaporte público', async () => {
@@ -385,7 +386,7 @@ describe('bodega, miembros y archivos', () => {
 
   it('aprobar una bodega pendiente le asigna cuenta Stellar', async () => {
     const token = await login('gestor@drinksonchain.test')
-    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'PENDING')!
+    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'INVITED')!
     const approved = dataOf((await call(`/v1/wineries/${pending.id}/approve`, { token, body: {} })).json) as {
       certificationStatus: string
       stellarPublicKey: string

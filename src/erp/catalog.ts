@@ -1,3 +1,4 @@
+import type { PlatformRole } from './schemas/organizations'
 import { uid } from '../shared/uuid'
 
 // Catálogo fijo de la red de prueba que no forma parte de los DTO.
@@ -8,6 +9,7 @@ export const WINERY_CODES: Record<string, string> = {
   cintiviejo: 'CVJ',
   guadalquivir: 'VGQ',
   uriondo: 'CUR',
+  valle: 'VES',
 }
 
 /** Mismo mapa indexado por id de bodega (UUID v5 de `winery:<clave>`). */
@@ -22,3 +24,15 @@ export const PLATFORM_ORGANIZATION = {
   name: 'Drinks on Chain',
   status: 'ACTIVE',
 } as const
+
+/**
+ * Rol de plataforma del personal interno de los fixtures (`_mock.platformRole`, solo en los mocks).
+ * El superusuario lo crea el seeder; el resto entró por invitación (contrato de la Ola 1 §5).
+ */
+export const PLATFORM_ROLE_BY_KEY: Record<string, PlatformRole> = {
+  admin: 'SUPERADMIN',
+  soporte: 'SUPPORT',
+  bo_admin: 'ADMIN',
+  operaciones: 'OPERATIONS',
+  analista: 'OPERATIONS',
+}
