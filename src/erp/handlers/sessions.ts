@@ -32,6 +32,8 @@ export interface MockSession {
   /** Generación del refresco (sube en cada rotación). */
   generation: number
   revoked: boolean
+  /** ¿Pasó el segundo factor (TOTP)? Necesario para activar la organización de plataforma. */
+  mfa: boolean
 }
 
 interface SessionState {
@@ -133,7 +135,12 @@ export function rememberOrganization(userId: string, organizationId: string | nu
 }
 
 /** Crea una sesión nueva (login, signup o renovación con un refresco estático). */
-export function createSession(userId: string, audience: Audience, activeOrganizationId: string | null): MockSession {
+export function createSession(
+  userId: string,
+  audience: Audience,
+  activeOrganizationId: string | null,
+  mfa = false,
+): MockSession {
   const s = current()
   s.seq += 1
   const sid = `${s.nonce}s${s.seq}`
@@ -146,6 +153,7 @@ export function createSession(userId: string, audience: Audience, activeOrganiza
     rotated: [],
     generation: 1,
     revoked: false,
+    mfa,
   }
   s.sessions[sid] = session
   persist()
@@ -171,8 +179,16 @@ export function revokeSession(session: MockSession): void {
   persist()
 }
 
-export function revokeAllSessions(userId: string): void {
-  for (const session of sessionsOf(userId)) session.revoked = true
+export function revokeAllSessions(userId: string, except: string | null = null): void {
+  for (const session of sessionsOf(userId)) if (session.sid !== except) session.revoked = true
+  persist()
+}
+
+/** Revoca las sesiones con esta organización activa (suspender o revocar una bodega, bloquear). */
+export function revokeSessionsOfOrganization(organizationId: string, userId: string | null = null): void {
+  for (const session of Object.values(current().sessions)) {
+    if (session.activeOrganizationId === organizationId && (userId === null || session.userId === userId)) session.revoked = true
+  }
   persist()
 }
 

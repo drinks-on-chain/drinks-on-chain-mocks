@@ -1,19 +1,37 @@
-// Entrada `@drinks-on-chain/mocks/handlers`: handlers MSW, escenarios y base en memoria.
-// Importa msw: no la uses desde código de producción.
+// Entrada `@drinks-on-chain/mocks/handlers`: handlers MSW, escenarios, base en memoria y buzón
+// simulado. Importa msw: no la uses desde código de producción.
 
 export {
+  advanceMockClock,
+  BACKOFFICE_ROUTE_SPECS,
+  CLIENT_APP_HEADER,
   createErpHandlers,
+  createMockHandlers,
   ERP_ROUTE_SPECS,
   ERP_ROUTES,
   expireAccessTokens,
   getErpDb,
+  getMockAppUrls,
+  IDEMPOTENCY_KEY_HEADER,
+  IDEMPOTENT_REPLAYED_HEADER,
   mockAccessToken,
+  mockMailbox,
+  MOCK_ROUTE_SPECS,
   REFRESH_COOKIE,
   resetErpDb,
   resetSessions,
   SAME_ORIGIN_API_PREFIX,
+  setMockAppUrls,
 } from './erp/handlers'
-export type { AuthContext, ErpDb, ErpHandlerOptions, RouteSpec } from './erp/handlers'
+export type {
+  AuthContext,
+  BackofficeState,
+  ErpDb,
+  ErpHandlerOptions,
+  MailboxFilter,
+  MockHandlerOptions,
+  RouteSpec,
+} from './erp/handlers'
 export {
   getScenario,
   isScenarioName,
@@ -27,4 +45,6 @@ export {
   type LatencyOption,
   type ScenarioName,
 } from './shared/scenarios'
-export { DEMO_PASSWORD, demoUsers, type DemoUser } from './erp/fixtures'
+export { DEMO_NEW_PASSWORD, DEMO_PASSWORD, demoStaff, demoUsers, type DemoUser } from './erp/fixtures'
+export { DEFAULT_APP_URLS, type AppUrls } from './backoffice/mail'
+export { DEMO_TOTP_SECRET, generateTotp, MOCK_TOTP_BYPASS_CODE } from './shared/totp'

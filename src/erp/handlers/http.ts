@@ -1,5 +1,6 @@
 import { delay, http, HttpResponse, type HttpHandler } from 'msw'
 import type { z } from 'zod'
+import { canonicalJson, sha256Hex } from '../../shared/crypto'
 import type { ErrorEnvelope, SuccessEnvelope } from '../../shared/envelope'
 import { DEFAULT_LIMIT, DEFAULT_OFFSET, MAX_LIMIT, type ListPage } from '../../shared/list'
 import {
@@ -9,12 +10,14 @@ import {
   SLOW_SCENARIO_DELAY_MS,
   type LatencyOption,
 } from '../../shared/scenarios'
-import { checkAccess, readAuth, requireAuth, type AccessRule, type AuthContext } from './auth-context'
-import { nowIso } from './db'
+import type { CertificationStatus } from '../schemas'
+import { checkAccess, checkOrgActive, readAuth, requireAuth, type AccessRule, type AuthContext } from './auth-context'
+import { nowIso, persistErpDb } from './db'
 import { ApiError, badRequest, fieldError, invalid, unauthorized, validationError } from './errors'
+import { spanishErrorMap } from './zod-es'
 
 // Infraestructura común de los handlers: envoltorio, escenarios, latencia, sesión, roles,
-// validación del cuerpo y paginación.
+// bodega activa, idempotencia, validación del cuerpo y paginación.
 //
 // Cada ruta responde en dos sitios (P-1, contrato de la Ola 0 §7):
 //   `${baseUrl}/v1/...`  el backend directo (por defecto cualquier origen: `*/v1/...`)
@@ -23,6 +26,13 @@ import { ApiError, badRequest, fieldError, invalid, unauthorized, validationErro
 
 /** Prefijo con el que las apps exponen la API en su propio origen (P-1). */
 export const SAME_ORIGIN_API_PREFIX = '/api'
+
+/** Cabecera con la que cada app se identifica en la bitácora (contrato de la Ola 1 §7). */
+export const CLIENT_APP_HEADER = 'x-client-app'
+
+/** Cabecera de idempotencia (contrato de la Ola 0 §3) y la de las respuestas repetidas. */
+export const IDEMPOTENCY_KEY_HEADER = 'Idempotency-Key'
+export const IDEMPOTENT_REPLAYED_HEADER = 'Idempotent-Replayed'
 
 export interface ErpHandlerOptions {
   /**
@@ -47,6 +57,12 @@ export interface RouteContext {
   optionalAuth: AuthContext | null
   /** Cookies de la petición (cabecera `Cookie`, almacén de MSW y `document.cookie`). */
   cookies: Record<string, string>
+  /** `X-Correlation-ID` de la petición o el generado para la respuesta. */
+  correlationId: string
+  /** Valor de la cabecera `X-Client-App` (`ERP`, `BACKOFFICE`…) o `null`. */
+  clientApp: string | null
+  /** ¿Es una ruta pública? */
+  isPublic: boolean
 }
 
 export interface RouteResult {
@@ -55,20 +71,32 @@ export interface RouteResult {
   data: unknown
   /** Cabeceras extra (p. ej. `Set-Cookie`). */
   headers?: Record<string, string>
+  /** Respuesta sin envoltorio (p. ej. `text/csv` de la exportación de la bitácora). */
+  raw?: { body: string; contentType: string }
 }
 
 export interface RouteSpec {
-  method: 'get' | 'post' | 'patch'
+  method: 'get' | 'post' | 'patch' | 'put'
   /** Ruta con prefijo, p. ej. `/v1/terroirs/:id`. */
   path: string
   access: AccessRule | 'public'
   /** Colección (`{ items, total, limit, offset }`): la vacía el escenario `empty`. */
   list?: 'paged'
+  /**
+   * Estados de la bodega activa en los que la ruta sigue permitida (por defecto solo `ACTIVE`;
+   * el resto → 403 `ORG_NOT_ACTIVE`). Solo aplica a las reglas de bodega.
+   */
+  allowInactiveOrg?: readonly CertificationStatus[]
+  /** Acepta `Idempotency-Key` (los 9 POST de alta del ERP, contrato de la Ola 0 §3). */
+  idempotent?: boolean
   handle: (ctx: RouteContext) => RouteResult | Promise<RouteResult>
+  /** Se ejecuta tras una respuesta 2xx (p. ej. la bitácora de las escrituras del ERP). */
+  afterSuccess?: (ctx: RouteContext, result: RouteResult) => void
 }
 
 export const ok = (data: unknown, status = 200): RouteResult => ({ status, data })
 export const created = (data: unknown): RouteResult => ({ status: 201, data })
+export const accepted = (data: unknown = null): RouteResult => ({ status: 202, data })
 export const noContent = (headers?: Record<string, string>): RouteResult => ({ status: 204, data: undefined, headers })
 
 /** `path` del envoltorio: el que ve el backend (sin el prefijo `/api` del proxy de la app). */
@@ -82,14 +110,16 @@ export function envelopePath(url: URL): string {
 let correlationSeq = 0
 
 /** `X-Correlation-ID`: el de la petición o uno nuevo (contrato de la Ola 0 §3). */
-function correlationHeaders(request: Request | undefined): Record<string, string> {
-  const incoming = request?.headers.get('x-correlation-id')
-  return { 'X-Correlation-ID': incoming || `mock-${++correlationSeq}` }
+function correlationIdOf(request: Request | undefined): string {
+  return request?.headers.get('x-correlation-id') || `mock-${++correlationSeq}`
 }
 
-function successResponse(request: Request, url: URL, result: RouteResult) {
-  const headers = { ...correlationHeaders(request), ...result.headers }
+function successResponse(request: Request, url: URL, result: RouteResult, correlationId = correlationIdOf(request)) {
+  const headers = { 'X-Correlation-ID': correlationId, ...result.headers }
   if (result.status === 204) return new HttpResponse(null, { status: 204, headers })
+  if (result.raw) {
+    return new HttpResponse(result.raw.body, { status: result.status, headers: { ...headers, 'Content-Type': result.raw.contentType } })
+  }
   const body: SuccessEnvelope<unknown> = {
     success: true,
     statusCode: result.status,
@@ -100,7 +130,7 @@ function successResponse(request: Request, url: URL, result: RouteResult) {
   return HttpResponse.json(body, { status: result.status, headers })
 }
 
-export function errorResponse(url: URL, error: ApiError, request?: Request) {
+export function errorResponse(url: URL, error: ApiError, request?: Request, correlationId = correlationIdOf(request)) {
   const body: ErrorEnvelope = {
     success: false,
     statusCode: error.statusCode,
@@ -108,7 +138,7 @@ export function errorResponse(url: URL, error: ApiError, request?: Request) {
     path: envelopePath(url),
     error: { code: error.code, message: error.message, details: error.details ?? null },
   }
-  return HttpResponse.json(body, { status: error.statusCode, headers: correlationHeaders(request) })
+  return HttpResponse.json(body, { status: error.statusCode, headers: { 'X-Correlation-ID': correlationId, ...error.headers } })
 }
 
 /** Origen normalizado: `*`, o la URL sin barra final ni `/v1` final. */
@@ -137,6 +167,50 @@ export function buildHandlers(spec: RouteSpec, options: ErpHandlerOptions = {}):
   return routePatterns(base, spec.path).map((pattern) => buildHandlerFor(pattern, spec, options))
 }
 
+// ---------------------------------------------------------------------------
+// Idempotency-Key (contrato de la Ola 0 §3; comportamiento del backend O0-BE-2)
+// ---------------------------------------------------------------------------
+
+interface IdempotentRecord {
+  fingerprint: string
+  status: number
+  data: unknown
+  headers?: Record<string, string>
+}
+/** Respuestas guardadas por persona + método y ruta + clave (en memoria, como Redis con TTL de 24 h). */
+const idempotencyStore = new Map<string, IdempotentRecord>()
+
+/** Borra las respuestas idempotentes guardadas (lo llama `resetErpDb` a través de `resetMocks`). */
+export function resetIdempotency(): void {
+  idempotencyStore.clear()
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+async function idempotencyKeyOf(request: Request, url: URL, auth: AuthContext | null): Promise<{ key: string; fingerprint: string } | null> {
+  const raw = request.headers.get(IDEMPOTENCY_KEY_HEADER)?.trim()
+  if (!raw) return null
+  if (!UUID_RE.test(raw)) {
+    throw new ApiError(422, 'IDEMPOTENCY_KEY_INVALID', `${IDEMPOTENCY_KEY_HEADER} no válida`, [
+      fieldError(IDEMPOTENCY_KEY_HEADER, `${IDEMPOTENCY_KEY_HEADER} debe ser un UUID`),
+    ])
+  }
+  const text = await request.clone().text()
+  const body = parseLoose(text)
+  const route = `${request.method.toUpperCase()} ${envelopePath(new URL(url.pathname, url.origin))}`
+  return { key: [auth?.user.id ?? 'anonymous', route, raw.toLowerCase()].join('|'), fingerprint: sha256Hex(canonicalJson(body)) }
+}
+
+/** JSON del cuerpo o el texto tal cual (huella de la idempotencia). */
+function parseLoose(text: string): unknown {
+  if (!text.trim()) return null
+  try {
+    return JSON.parse(text) as unknown
+  } catch {
+    return text
+  }
+}
+
 function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOptions): HttpHandler {
   const latency = options.latency ?? defaultLatency()
   return http[spec.method](pattern, async ({ request, params, cookies }) => {
@@ -144,9 +218,11 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
     const scenario = getScenario()
     if (scenario === 'offline') return HttpResponse.error()
     await applyLatency(latency, scenario === 'slow' ? SLOW_SCENARIO_DELAY_MS : 0)
+    const correlationId = correlationIdOf(request)
+    const writes = spec.method !== 'get'
     try {
       if (scenario === 'error' && !spec.path.startsWith('/v1/auth/')) {
-        throw new ApiError(500, 'INTERNAL_SERVER_ERROR', 'Error interno del servidor (escenario de prueba "error")')
+        throw new ApiError(500, 'INTERNAL_ERROR', 'Error interno del servidor (escenario de prueba "error")')
       }
       let session: AuthContext | null
       if (spec.access === 'public') {
@@ -154,10 +230,22 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
       } else {
         session = requireAuth(request)
         checkAccess(session, spec.access)
+        checkOrgActive(session, spec.access, spec.allowInactiveOrg)
       }
       if (scenario === 'empty' && spec.list) {
         const empty: ListPage<never> = { items: [], total: 0, ...pageParams(url.searchParams) }
-        return successResponse(request, url, ok(empty))
+        return successResponse(request, url, ok(empty), correlationId)
+      }
+      const idem = spec.idempotent ? await idempotencyKeyOf(request, url, session) : null
+      if (idem) {
+        const saved = idempotencyStore.get(idem.key)
+        if (saved && saved.fingerprint !== idem.fingerprint) {
+          throw new ApiError(409, 'IDEMPOTENCY_KEY_REUSED', `La ${IDEMPOTENCY_KEY_HEADER} ya se usó con otro cuerpo`)
+        }
+        if (saved) {
+          const replay: RouteResult = { status: saved.status, data: saved.data, headers: { ...saved.headers, [IDEMPOTENT_REPLAYED_HEADER]: 'true' } }
+          return successResponse(request, url, replay, correlationId)
+        }
       }
       const ctx: RouteContext = {
         request,
@@ -170,13 +258,28 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
         },
         optionalAuth: session,
         cookies: { ...cookies },
+        correlationId,
+        clientApp: request.headers.get(CLIENT_APP_HEADER),
+        isPublic: spec.access === 'public',
       }
       const result = await spec.handle(ctx)
-      return successResponse(request, url, result)
+      if (idem) {
+        idempotencyStore.set(idem.key, {
+          fingerprint: idem.fingerprint,
+          status: result.status,
+          data: JSON.parse(JSON.stringify(result.data ?? null)) as unknown,
+          headers: result.headers,
+        })
+      }
+      spec.afterSuccess?.(ctx, result)
+      if (writes) persistErpDb()
+      return successResponse(request, url, result, correlationId)
     } catch (err) {
-      if (err instanceof ApiError) return errorResponse(url, err, request)
+      // Las escrituras fallidas también pueden dejar rastro (bitácora de intentos, retos TOTP).
+      if (writes) persistErpDb()
+      if (err instanceof ApiError) return errorResponse(url, err, request, correlationId)
       const message = err instanceof Error ? err.message : String(err)
-      return errorResponse(url, new ApiError(500, 'INTERNAL_SERVER_ERROR', message), request)
+      return errorResponse(url, new ApiError(500, 'INTERNAL_ERROR', message), request, correlationId)
     }
   })
 }
@@ -211,9 +314,9 @@ export async function parseBody<S extends z.ZodType>(request: Request, schema: S
   return validate(await readJson(request), schema)
 }
 
-/** Valida un valor ya leído con un esquema zod (422 VALIDATION_ERROR). */
+/** Valida un valor ya leído con un esquema zod (422 VALIDATION_ERROR, mensajes en español). */
 export function validate<S extends z.ZodType>(raw: unknown, schema: S): z.infer<S> {
-  const result = schema.safeParse(raw)
+  const result = schema.safeParse(raw, { error: spanishErrorMap })
   if (!result.success) throw validationError(result.error.issues)
   return result.data
 }
@@ -224,7 +327,7 @@ export async function readJson(request: Request): Promise<unknown> {
   try {
     return JSON.parse(text) as unknown
   } catch (err) {
-    throw badRequest(err instanceof Error ? err.message : 'JSON inválido')
+    throw badRequest(`El cuerpo no es un JSON válido${err instanceof Error ? `: ${err.message}` : ''}`)
   }
 }
 
@@ -236,9 +339,9 @@ function queryError(field: string, message: string): ApiError {
 export function pageParams(query: URLSearchParams): { limit: number; offset: number } {
   const limit = intParam(query, 'limit') ?? DEFAULT_LIMIT
   const offset = intParam(query, 'offset') ?? DEFAULT_OFFSET
-  if (limit < 1) throw queryError('limit', 'limit must not be less than 1')
-  if (limit > MAX_LIMIT) throw queryError('limit', `limit must not be greater than ${MAX_LIMIT}`)
-  if (offset < 0) throw queryError('offset', 'offset must not be less than 0')
+  if (limit < 1) throw queryError('limit', 'limit no puede ser menor que 1')
+  if (limit > MAX_LIMIT) throw queryError('limit', `limit no puede ser mayor que ${MAX_LIMIT}`)
+  if (offset < 0) throw queryError('offset', 'offset no puede ser menor que 0')
   return { limit, offset }
 }
 
@@ -246,7 +349,7 @@ export function intParam(query: URLSearchParams, name: string): number | undefin
   const raw = query.get(name)
   if (raw === null || raw === '') return undefined
   const n = Number(raw)
-  if (!Number.isInteger(n)) throw queryError(name, `${name} must be an integer number`)
+  if (!Number.isInteger(n)) throw queryError(name, `${name} debe ser un número entero`)
   return n
 }
 
@@ -255,14 +358,14 @@ export function boolParam(query: URLSearchParams, name: string): boolean | undef
   if (raw === null || raw === '') return undefined
   if (raw === 'true') return true
   if (raw === 'false') return false
-  throw queryError(name, `${name} must be a boolean value`)
+  throw queryError(name, `${name} debe ser true o false`)
 }
 
 export function enumParam<T extends string>(query: URLSearchParams, name: string, values: readonly T[]): T | undefined {
   const raw = query.get(name)
   if (raw === null || raw === '') return undefined
   if (!(values as readonly string[]).includes(raw)) {
-    throw queryError(name, `${name} must be one of the following values: ${values.join(', ')}`)
+    throw queryError(name, `${name} debe ser uno de estos valores: ${values.join(', ')}`)
   }
   return raw as T
 }
