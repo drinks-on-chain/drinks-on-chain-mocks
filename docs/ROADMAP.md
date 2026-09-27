@@ -50,7 +50,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Prueba de contrato de las rutas nuevas (`pendientes.json` con `$zod`) y pruebas de reglas, fixtures, recorridos y persistencia · 27-09-2026
 - [x] Alineación con O0-BE-2: `INTERNAL_ERROR`, `WINERY_NOT_PENDING`, `FERMENTATION_TANK_ALREADY_TRANSFERRED`, 422 del backend, mensajes de validación en español · 27-09-2026
 - [x] Versión 0.3.0, CHANGELOG con rupturas y migración, `docs/CONTRATO.md` §6 · 27-09-2026
-- [ ] Etiqueta `v0.3.0-rc.1` sobre `dev` y tarball verificado
+- [x] Etiqueta `v0.3.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.3.0-rc.1.tgz`, instalado y probado en un proyecto limpio · 27-09-2026
 - [ ] Regenerar desde el OpenAPI de O1-BE-1 y vaciar las adelantadas de la Ola 1
 - [ ] Decidir la respuesta de `PATCH /v1/users/me` (perfil o `{ user, memberships, activeOrganizationId }`, CONTRATO §6.1)
 - [ ] Etiqueta estable `v0.3.0` en `main` al cerrar la Ola 1 (coordinación)
