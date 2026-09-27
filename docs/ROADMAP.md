@@ -54,9 +54,21 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Alineación con el backend O0-BE-4 (`fix/o1-alinear-backend`): OpenAPI real, sesión (refresco `<sid>.<gen>.<secreto>`, gracia de 20 s, `switch-organization` con refresco, caducidad, bloqueo del login), códigos del §8, permisos del ERP por membresía y `?wineryId=` de la plataforma · 27-09-2026
 - [x] Precisiones §11 bis: `PATCH /v1/users/me` con membresías, bloqueo de cuenta en `/v1/platform/accounts/{userId}/block|unblock` · 27-09-2026
 - [x] Etiqueta `v0.3.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.3.0-rc.2.tgz`, instalado y probado en un proyecto limpio · 27-09-2026
-- [ ] Regenerar desde el OpenAPI de O1-BE-1 y vaciar las adelantadas de la Ola 1
+- [x] Regenerar desde el OpenAPI de O1-BE-1 y vaciar las adelantadas de la Ola 1 (0.4.0-rc.1) · 27-09-2026
 - [x] Decidir la respuesta de `PATCH /v1/users/me`: `{ user, memberships, activeOrganizationId }` (contrato §11 bis) · 27-09-2026
 - [ ] Etiqueta estable `v0.3.0` en `main` al cerrar la Ola 1 (coordinación)
+
+## Ola 1 · `mocks` 0.4 (alineación con el backend real de la Ola 1 completa)
+
+- [x] `pnpm openapi:pull` del OpenAPI de `drinks-on-chain-back` (`dev`, `eace713`: 119 operaciones) y `openapi/pendientes.json` vacío · 27-09-2026
+- [x] Prueba de contrato estricta (`nullable` solo donde el DTO lo declara, `text/csv`, rutas obsoletas = OpenAPI, filas de la semilla como respuesta) · 27-09-2026
+- [x] DAG y pasaporte público con `DagGraphResponseDto` (`buildDagGraph` = `DagBuilderService`, también en `generate.py`); lecturas, tratamientos y `rest-status` del backend; relaciones de los `include` · 27-09-2026
+- [x] Archivos privados con URL firmada (`GET /v1/uploads/url`), `/health/live` y `/health/ready`; altas `Create*` sin `null`; `AuthTokens.refreshToken` opcional · 27-09-2026
+- [x] Bitácora en `snake_case` y acciones del backend; códigos 404/422 y de TOTP; NIT (bodegas revocadas, solicitudes caducadas, reenvío); equipo (límite al desbloquear, sesiones, vistas); cuentas y invitaciones de una bodega (§11 bis); aceptar con acceso y refresco · 27-09-2026
+- [x] Rutas obsoletas (H1) con `Deprecation` y `Link` · 27-09-2026
+- [x] Versión 0.4.0, CHANGELOG con rupturas y migración, `docs/CONTRATO.md` §7 · 27-09-2026
+- [ ] Etiqueta `v0.4.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.4.0-rc.1.tgz`, instalado y probado en un proyecto limpio
+- [ ] Etiqueta estable `v0.4.0` en `main` al cerrar la Ola 1 (coordinación)
 
 ## Más adelante
 

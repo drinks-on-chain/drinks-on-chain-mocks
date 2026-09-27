@@ -1,6 +1,6 @@
 # @drinks-on-chain/mocks
 
-Datos de prueba compartidos del ecosistema **Drinks on Chain**: esquemas zod de los DTO del backend, fixtures JSON deterministas, la vista derivada `LotView` y handlers [MSW](https://mswjs.io) que imitan el backend del ERP con su envoltorio, sesión (organizaciones, membresías y renovación rotativa en cookie), roles, multi-tenant y reglas de negocio. Desde 0.2 siguen el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro) y desde 0.3 el **de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`): back office, alta de bodegas, invitaciones, equipos, configuración, bitácora, tablero y segundo factor (TOTP), con un buzón simulado. Las apps se construyen contra estos mocks y pasan al backend real cambiando `NEXT_PUBLIC_API_URL` y apagando MSW.
+Datos de prueba compartidos del ecosistema **Drinks on Chain**: esquemas zod de los DTO del backend, fixtures JSON deterministas, la vista derivada `LotView` y handlers [MSW](https://mswjs.io) que imitan el backend del ERP con su envoltorio, sesión (organizaciones, membresías y renovación rotativa en cookie), roles, multi-tenant y reglas de negocio. Desde 0.2 siguen el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro) y desde 0.3 el **de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`): back office, alta de bodegas, invitaciones, equipos, configuración, bitácora, tablero y segundo factor (TOTP), con un buzón simulado. Desde 0.4 están alineados con el **backend real de la Ola 1 completa** (OpenAPI de `drinks-on-chain-back`, sin operaciones adelantadas). Las apps se construyen contra estos mocks y pasan al backend real cambiando `NEXT_PUBLIC_API_URL` y apagando MSW.
 
 Planificación: [`drinks-on-chain-docsfront`](https://github.com/drinks-on-chain/drinks-on-chain-docsfront) (docs 08 y 09). Diferencias entre el OpenAPI y los mocks: [`docs/CONTRATO.md`](docs/CONTRATO.md). Avance: [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
@@ -8,16 +8,16 @@ Alcance actual: dominio **ERP** (el único con backend real) y **Backoffice/iden
 
 ## Instalación
 
-No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball. Las versiones `X.Y.Z-rc.N` son pre-releases publicadas desde `dev` para adelantar el contrato de una ola; las estables salen de `main`. Migraciones (0.1 → 0.2 → 0.3): ver [CHANGELOG](CHANGELOG.md).
+No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball. Las versiones `X.Y.Z-rc.N` son pre-releases publicadas desde `dev` para adelantar el contrato de una ola; las estables salen de `main`. Migraciones (0.1 → 0.2 → 0.3 → 0.4): ver [CHANGELOG](CHANGELOG.md).
 
 ```bash
-pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.3.0-rc.2/drinks-on-chain-mocks-0.3.0-rc.2.tgz
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.1/drinks-on-chain-mocks-0.4.0-rc.1.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
 ```json
 "dependencies": {
-  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.3.0-rc.2/drinks-on-chain-mocks-0.3.0-rc.2.tgz"
+  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.1/drinks-on-chain-mocks-0.4.0-rc.1.tgz"
 }
 ```
 
@@ -130,7 +130,7 @@ afterAll(() => server.close())
 - **Filtros** de las pantallas (`status`, `destinationType`, `harvestBatchId`, `restStatus`, `processType`, `varietyName`, `isDoEligible`, `isActive`, `harvestYear`, `phytosanitaryStatus`, `productType`, `isAnchoredOnChain`, `search`…) y `limit`/`offset` (por defecto 20/0; `limit` > 100 → 422).
 - **Validación** de cuerpos y parámetros con los esquemas de alta (**422** `VALIDATION_ERROR`, `details: [{ field, message }]`) y **reglas 422** con el campo que las provoca: embotellar antes de `lockUntilDate` o antes de 180 días de reposo, destilación D.O. con parcela no apta o bajo 1.600 m, pesaje sin Brix/pH/acidez. JSON mal formado → 400 `BAD_REQUEST`. También 404 y 409 documentados.
 - **Mutaciones** en memoria: lo que se crea aparece en las listas durante la sesión; ids UUID v5 deterministas (`mock:<recurso>:<n>`) y reloj fijo que empieza el 2026-09-25 a las 12:00 UTC y avanza un minuto por alta. `resetErpDb()` vuelve al estado inicial.
-- `POST /v1/uploads` (multipart, ≤ 15 MB, PDF e imágenes) devuelve `/mocks/uploads/<carpeta>/<n>-<archivo>`; `GET /v1/traceability/public/:lotCode` es público; `GET /v1/traceability/dag/:id` devuelve el grafo de la cadena.
+- `POST /v1/uploads` (multipart, solo personal; PDF ≤ 15 MB, JPEG/PNG/WEBP/GIF ≤ 5 MB, tipo reconocido por el contenido) guarda la clave privada `org/<organización>/<carpeta>/<aaaa>/<mm>/<uuid>.<ext>` y devuelve una URL firmada de 15 min (`expiresAt`); `GET /v1/uploads/url?key=` da una nueva. `GET /v1/traceability/public/:lotCode` (público) y `GET /v1/traceability/dag/:id` devuelven el mismo grafo DAG del backend (`DagGraphSchema`: un nodo por etapa con hash SHA-256, métricas ×100 y el laboratorio en `details.labAnalysis` del embotellado). Las rutas de 0.1 que se retiran en H1 responden `Deprecation: true` y `Link` a su sustituta (`DEPRECATED_ROUTES`).
 - **Bodega no activa** (Ola 1 §4): con la bodega activa `INVITED`, `SUSPENDED` o `REVOKED`, las rutas del ERP responden 403 `ORG_NOT_ACTIVE` (`details[0].message` = estado); en `SUSPENDED` se lee el perfil y la bitácora propia.
 - Mensajes de validación en español; errores con los códigos del backend (`INTERNAL_ERROR`, `WINERY_NOT_PENDING`…) y los del contrato de cada ola.
 
@@ -229,7 +229,7 @@ pnpm lint && pnpm typecheck && pnpm test && pnpm build
 pnpm openapi:pull -- <url|ruta>   # copia un OpenAPI 3 a openapi/erp.json y resume las operaciones nuevas o retiradas
 ```
 
-`pnpm test` incluye la **prueba de contrato** (`test/contract.test.ts`, [docs/CONTRATO.md §5](docs/CONTRATO.md)): cada `RouteSpec` existe en `openapi/erp.json` o está adelantada en `openapi/pendientes.json` con su referencia al contrato de ola, y cada fixture y cada respuesta de ejemplo valida con Ajv contra el esquema del OpenAPI.
+`pnpm test` incluye la **prueba de contrato** (`test/contract.test.ts`, [docs/CONTRATO.md §5](docs/CONTRATO.md)): cada `RouteSpec` existe en `openapi/erp.json` o está adelantada en `openapi/pendientes.json` con su referencia al contrato de ola (desde 0.4, ninguna), y cada fixture y cada respuesta de ejemplo valida con Ajv, en modo estricto, contra el esquema del OpenAPI.
 
 Estructura:
 
