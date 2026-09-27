@@ -23,30 +23,30 @@ export type FermentationTankResponse = z.infer<typeof FermentationTankResponseSc
 export const CreateFermentationTankSchema = z.object({
   harvestBatchId: z.string().min(1),
   tankCode: z.string().min(1),
-  capacityLiters: z.number().positive().nullish(),
-  material: z.string().nullish(),
-  volumeFilledLiters: z.number().min(0).nullish(),
-  destinationType: DestinationTypeSchema.nullish(),
-  status: TankStatusSchema.nullish(),
+  capacityLiters: z.number().positive().optional(),
+  material: z.string().optional(),
+  volumeFilledLiters: z.number().min(0).optional(),
+  destinationType: DestinationTypeSchema.optional(),
+  status: TankStatusSchema.optional(),
   startDate: DateInputSchema,
 })
 export type CreateFermentationTankDto = z.infer<typeof CreateFermentationTankSchema>
 
 export const CreateFermentationLogSchema = z.object({
   temperatureCelsius: z.number(),
-  specificGravity: z.number().nullish(),
-  phValue: z.number().min(0).max(14).nullish(),
-  co2Observations: z.string().nullish(),
+  specificGravity: z.number().optional(),
+  phValue: z.number().min(0).max(14).optional(),
+  co2Observations: z.string().optional(),
   recordedAt: DateInputSchema,
-  notes: z.string().nullish(),
+  notes: z.string().optional(),
 })
 export type CreateFermentationLogDto = z.infer<typeof CreateFermentationLogSchema>
 
 /**
- * Lectura guardada (`fermentation-logs.json`, respuesta de `POST …/:id/logs`).
- * El OpenAPI no declara el esquema de respuesta: es el DTO de alta más id, tanque y autor.
+ * Lectura guardada tal como está en `fermentation-logs.json` (fila de la semilla, compartida con
+ * la semilla del backend): el autor es el **miembro** (`recordedByMemberId`).
  */
-export const FermentationLogSchema = z.object({
+export const FermentationLogRecordSchema = z.object({
   id: z.string(),
   fermentationTankId: z.string(),
   temperatureCelsius: z.number(),
@@ -57,25 +57,42 @@ export const FermentationLogSchema = z.object({
   notes: z.string().nullish(),
   recordedByMemberId: z.string().nullish(),
 })
+export type FermentationLogRecord = z.infer<typeof FermentationLogRecordSchema>
+
+/**
+ * Lectura de la API (`FermentationLogResponseDto`): respuesta de `POST …/:id/logs` y `logs` del
+ * detalle de la cuba. El autor es la **persona** (`recordedByUserId`).
+ */
+export const FermentationLogSchema = z.object({
+  id: z.string(),
+  fermentationTankId: z.string(),
+  temperatureCelsius: z.number(),
+  specificGravity: z.number().nullable(),
+  phValue: z.number().nullable(),
+  co2Observations: z.string().nullable(),
+  recordedAt: IsoDateTimeSchema,
+  recordedByUserId: z.string(),
+  notes: z.string().nullable(),
+})
 export type FermentationLog = z.infer<typeof FermentationLogSchema>
 
 export const CreateEnologicalTreatmentSchema = z.object({
   treatmentType: TreatmentTypeSchema,
   additiveName: z.string().min(1),
-  additiveSupplier: z.string().nullish(),
+  additiveSupplier: z.string().optional(),
   dosageAppliedGPerHl: z.number().min(0),
-  totalAppliedG: z.number().min(0).nullish(),
+  totalAppliedG: z.number().min(0).optional(),
   regulatoryAuthCode: z.string().min(1),
   appliedAt: DateInputSchema,
-  notes: z.string().nullish(),
+  notes: z.string().optional(),
 })
 export type CreateEnologicalTreatmentDto = z.infer<typeof CreateEnologicalTreatmentSchema>
 
 /**
- * Tratamiento guardado (`enological-treatments.json`, respuesta de `POST …/:id/treatments`).
- * Sin esquema de respuesta en el OpenAPI: DTO de alta más id y tanque.
+ * Tratamiento tal como está en `enological-treatments.json` (fila de la semilla): sin autor
+ * (la semilla del backend lo asigna al enólogo activo o, si no hay, al dueño).
  */
-export const EnologicalTreatmentSchema = z.object({
+export const EnologicalTreatmentRecordSchema = z.object({
   id: z.string(),
   fermentationTankId: z.string(),
   treatmentType: TreatmentTypeSchema,
@@ -86,5 +103,24 @@ export const EnologicalTreatmentSchema = z.object({
   regulatoryAuthCode: z.string(),
   appliedAt: IsoDateTimeSchema,
   notes: z.string().nullish(),
+})
+export type EnologicalTreatmentRecord = z.infer<typeof EnologicalTreatmentRecordSchema>
+
+/**
+ * Tratamiento de la API (`EnologicalTreatmentResponseDto`): respuesta de `POST …/:id/treatments`
+ * y `treatments` del detalle de la cuba, con el miembro que lo autorizó.
+ */
+export const EnologicalTreatmentSchema = z.object({
+  id: z.string(),
+  fermentationTankId: z.string(),
+  treatmentType: TreatmentTypeSchema,
+  additiveName: z.string(),
+  additiveSupplier: z.string().nullable(),
+  dosageAppliedGPerHl: z.number(),
+  totalAppliedG: z.number().nullable(),
+  regulatoryAuthCode: z.string(),
+  appliedAt: IsoDateTimeSchema,
+  authorizedByMemberId: z.string(),
+  notes: z.string().nullable(),
 })
 export type EnologicalTreatment = z.infer<typeof EnologicalTreatmentSchema>

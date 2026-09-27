@@ -38,9 +38,9 @@ export const CreateHarvestBatchSchema = z.object({
   brixDegrees: z.number().min(0),
   initialPh: z.number().min(0).max(14),
   initialAcidityGl: z.number().min(0),
-  temperatureAtIntakeC: z.number().nullish(),
-  phytosanitaryStatus: PhytosanitaryStatusSchema.nullish(),
-  notes: z.string().nullish(),
+  temperatureAtIntakeC: z.number().optional(),
+  phytosanitaryStatus: PhytosanitaryStatusSchema.optional(),
+  notes: z.string().optional(),
 })
 export type CreateHarvestBatchDto = z.infer<typeof CreateHarvestBatchSchema>
 

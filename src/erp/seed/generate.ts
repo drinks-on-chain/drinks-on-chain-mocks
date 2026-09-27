@@ -1,20 +1,20 @@
 import { addMonthsClamped, day, dayFromIso, dayParts, isoAt, REFERENCE_DAY, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
-import { buildPublicPassport, buildSessionResponse } from '../derive'
+import { buildDagGraph, buildSessionResponse } from '../derive'
 import { deriveLotViews, deriveRestStatus } from '../lot-view'
 import { PLATFORM_ROLE_BY_KEY, WINERY_CODES } from '../catalog'
 import type {
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
-  EnologicalTreatment,
-  FermentationLog,
+  EnologicalTreatmentRecord,
+  FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
   LotView,
   MemberRole,
   MockUser,
   ProductionBatchResponse,
-  PublicPassport,
+  DagGraph,
   RestStatusResponse,
   SessionResponse,
   TerroirResponse,
@@ -57,14 +57,14 @@ export interface ErpFixtureSet {
   'terroirs.json': TerroirResponse[]
   'harvest-batches.json': HarvestBatchResponse[]
   'fermentation-tanks.json': FermentationTankResponse[]
-  'fermentation-logs.json': FermentationLog[]
-  'enological-treatments.json': EnologicalTreatment[]
+  'fermentation-logs.json': FermentationLogRecord[]
+  'enological-treatments.json': EnologicalTreatmentRecord[]
   'wine-aging.json': WineAgingResponse[]
   'production-batches.json': ProductionBatchResponse[]
   'production-rest-status.json': RestStatusResponse[]
   'bottling.json': BottlingBatchResponse[]
   'lab-analyses.json': BatchLabAnalysisResponse[]
-  'traceability-public.json': Record<string, PublicPassport>
+  'traceability-public.json': Record<string, DagGraph>
   'lots-view.json': LotView[]
 }
 export type ErpFixtureName = keyof ErpFixtureSet
@@ -453,8 +453,8 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['t14', 'h07', 'TK-10', 5000, 3900, 'WINE_AGING', 'FERMENTING', day(2026, 3, 11), null],
   ]
   const tanks: FermentationTankResponse[] = []
-  const logs: FermentationLog[] = []
-  const treatments: EnologicalTreatment[] = []
+  const logs: FermentationLogRecord[] = []
+  const treatments: EnologicalTreatmentRecord[] = []
   for (const [key, hkey, code, cap, filled, dest, status, start, end] of TANKS) {
     const h = H[hkey]!
     const tid = uid(`tank:${key}`)
@@ -691,8 +691,8 @@ export function generateErpFixtures(): ErpFixtureSet {
   // 10. Trazabilidad pública y 11. vista derivada LotView
   // -------------------------------------------------------------------------
   const chain = { wineries, terroirs, harvestBatches: harvests, tanks, wineAgings: agings, productionBatches: productions, bottlings, labAnalyses: labs }
-  const publicPassports: Record<string, PublicPassport> = {}
-  for (const b of bottlings) publicPassports[b.internationalLotCode] = buildPublicPassport(b, chain)
+  const publicPassports: Record<string, DagGraph> = {}
+  for (const b of bottlings) publicPassports[b.internationalLotCode] = buildDagGraph(b, chain)
 
   const lots = deriveLotViews(chain, { today: REFERENCE_DAY })
 

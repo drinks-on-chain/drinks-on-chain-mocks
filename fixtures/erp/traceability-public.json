@@ -1,138 +1,616 @@
 {
   "CVJ-2026-SINGANI-001": {
-    "lotCode": "CVJ-2026-SINGANI-001",
-    "winery": {
-      "commercialName": "Destilería Cinti Viejo",
-      "department": "Valle de Cinti",
-      "altitudeMasl": 2410
-    },
-    "product": {
-      "productType": "SINGANI",
-      "alcoholAbv": 40,
-      "bottlesPackaged": 4080,
-      "packagingFormatCl": 75,
-      "bottlingDate": "2026-03-01T00:00:00Z"
-    },
-    "terroir": {
-      "parcelName": "Parcela 2 · Cañón Viejo",
-      "altitudeMasl": 2410,
-      "varietyName": "Moscatel de Alejandría",
-      "doEligible": true,
-      "doType": "D.O. Singani"
-    },
-    "laboratoryCertification": {
-      "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
-      "accreditedLabCertificationCode": "LAB-SENASAG-2026-881",
-      "actualAlcoholAbv": 40.05,
-      "totalAcidityTartaricGl": 4.8,
-      "volatileAcidityAceticGl": 0.22,
-      "conformsToSenasagStandards": true,
-      "reportPdfUrl": "/mocks/uploads/lab-reports/cvj-2026-singani-001.pdf"
-    },
-    "blockchainIntegrity": {
-      "sha256Hash": "ede8c963f0b67ff8e329edf2ca5665ab45932ce668c88ea432cf1c9c8c6092ac",
-      "network": "Stellar Testnet",
-      "status": "VERIFIED_ON_CHAIN"
-    }
+    "rootBatchId": "0x36cb94a4491975760558a2b03d9d1c8ac60b57619f7fe634a1c2794e4143e074",
+    "internationalLotCode": "CVJ-2026-SINGANI-001",
+    "productType": "SINGANI",
+    "nodes": [
+      {
+        "batchId": "0xdc58c730326f900d188f09a89b046a4dc23946ad868a6225a484b5dc4edc041b",
+        "stage": 0,
+        "stageName": "Plot",
+        "parents": [],
+        "timestamp": "2026-02-07T11:00:00Z",
+        "volumeOrUnits": 3.3,
+        "metrics": [
+          241000
+        ],
+        "metadataHash": "0x877c5ee8447678169797020fe349bd6c32de13665dd4f9c0099cca13a4933a27",
+        "isCertified": true,
+        "operator": {
+          "name": "Ingeniero Agrónomo",
+          "role": "Agronomist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "parcelName": "Parcela 2 · Cañón Viejo",
+          "varietyName": "Moscatel de Alejandría",
+          "altitudeMasl": 2410,
+          "surfaceHectares": 3.3,
+          "isDoEligible": true
+        }
+      },
+      {
+        "batchId": "0x3868d25959baf604060fbd48eaa7d70fbb13fd8f4a3b5e295c2e48a1d743517b",
+        "stage": 1,
+        "stageName": "Harvest",
+        "parents": [
+          "0xdc58c730326f900d188f09a89b046a4dc23946ad868a6225a484b5dc4edc041b"
+        ],
+        "timestamp": "2025-03-10T09:42:00Z",
+        "volumeOrUnits": 14850,
+        "metrics": [
+          2240,
+          345,
+          680
+        ],
+        "metadataHash": "0x517add35356c590c00701fa21096662216425d901d2862ec13211a193520150e",
+        "isCertified": true,
+        "operator": {
+          "name": "Jefe de Báscula",
+          "role": "Weigher",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "harvestBatchCode": "HARV-2025-VIEJO-02",
+          "grossWeightKg": 15000,
+          "tareWeightKg": 150,
+          "netWeightKg": 14850,
+          "brixDegrees": 22.4,
+          "initialPh": 3.45,
+          "initialAcidityGl": 6.8,
+          "phytosanitaryStatus": "APPROVED"
+        }
+      },
+      {
+        "batchId": "0x323e79b78d0bcb65a56a0caf2262502104e55a58ed9b93bbf71bee9c9bb3d6d1",
+        "stage": 2,
+        "stageName": "Vinification",
+        "parents": [
+          "0x3868d25959baf604060fbd48eaa7d70fbb13fd8f4a3b5e295c2e48a1d743517b"
+        ],
+        "timestamp": "2025-03-11T14:30:00Z",
+        "volumeOrUnits": 10100,
+        "metrics": [
+          1280,
+          28
+        ],
+        "metadataHash": "0x0fa71782b8c1f2445bf53db3c291bcd58fd860f9814ebb8bb4eb63f6bb280bfc",
+        "isCertified": true,
+        "operator": {
+          "name": "Enólogo de Planta",
+          "role": "Oenologist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "tankCode": "TK-01",
+          "material": "Acero inoxidable AISI 316",
+          "volumeFilledLiters": 10100,
+          "destinationType": "SINGANI_DIST"
+        }
+      },
+      {
+        "batchId": "0xdd5b69f257f60c5c496a38c562933a46133044583b3f42c77502947dab96cbdc",
+        "stage": 4,
+        "stageName": "Distillation",
+        "parents": [
+          "0x323e79b78d0bcb65a56a0caf2262502104e55a58ed9b93bbf71bee9c9bb3d6d1"
+        ],
+        "timestamp": "2025-05-20T00:00:00Z",
+        "volumeOrUnits": 1750,
+        "metrics": [
+          7020
+        ],
+        "metadataHash": "0x4155831a0d4395b3efd9732c87c4041e0049479e6912885bc5bea701dbbb390d",
+        "isCertified": true,
+        "operator": {
+          "name": "Maestro Destilador",
+          "role": "Distiller",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "equipmentIdentifier": "Alambique de cobre Charentais AL-01",
+          "inputVolumeLiters": 10000,
+          "outputVolumeLiters": 1750,
+          "wasteVolumeLiters": 570,
+          "initialAlcoholPercentage": 70.2,
+          "restStatus": "BOTTLED"
+        }
+      },
+      {
+        "batchId": "0x36cb94a4491975760558a2b03d9d1c8ac60b57619f7fe634a1c2794e4143e074",
+        "stage": 5,
+        "stageName": "Bottling",
+        "parents": [
+          "0xdd5b69f257f60c5c496a38c562933a46133044583b3f42c77502947dab96cbdc"
+        ],
+        "timestamp": "2026-03-01T00:00:00Z",
+        "volumeOrUnits": 4080,
+        "metrics": [
+          4000,
+          750
+        ],
+        "metadataHash": "0xfe1f5090be1ff575281bf815c57bc9ce2c431c3737674d9fc8d7efaa90798ab3",
+        "isCertified": true,
+        "operator": {
+          "name": "Supervisor de Envasado",
+          "role": "Packer",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "internationalLotCode": "CVJ-2026-SINGANI-001",
+          "productType": "SINGANI",
+          "finalAlcoholAbv": 40,
+          "waterDilutionLiters": 1321,
+          "totalBottlesPackaged": 4080,
+          "packagingFormatCl": 75,
+          "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-001",
+          "labAnalysis": {
+            "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+            "accreditedLabCertificationCode": "LAB-SENASAG-2026-881",
+            "actualAlcoholAbv": 40.05,
+            "methanolContentMgL": 48,
+            "conformsToSenasagStandards": true
+          }
+        }
+      }
+    ]
   },
   "CVJ-2026-SINGANI-002": {
-    "lotCode": "CVJ-2026-SINGANI-002",
-    "winery": {
-      "commercialName": "Destilería Cinti Viejo",
-      "department": "Valle de Cinti",
-      "altitudeMasl": 2320
-    },
-    "product": {
-      "productType": "SINGANI",
-      "alcoholAbv": 40,
-      "bottlesPackaged": 2140,
-      "packagingFormatCl": 75,
-      "bottlingDate": "2026-02-10T00:00:00Z"
-    },
-    "terroir": {
-      "parcelName": "Parcela 4 · El Molino",
-      "altitudeMasl": 2320,
-      "varietyName": "Moscatel de Alejandría",
-      "doEligible": true,
-      "doType": "D.O. Singani"
-    },
-    "laboratoryCertification": {
-      "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
-      "accreditedLabCertificationCode": "LAB-SENASAG-2026-882",
-      "actualAlcoholAbv": 39.9,
-      "totalAcidityTartaricGl": 4.6,
-      "volatileAcidityAceticGl": 0.25,
-      "conformsToSenasagStandards": true,
-      "reportPdfUrl": "/mocks/uploads/lab-reports/cvj-2026-singani-002.pdf"
-    },
-    "blockchainIntegrity": {
-      "sha256Hash": "a49b67f9f140e35bd3dff9efeac633cde19e7683d292914038ee40d6dd5a22e1",
-      "network": "Stellar Testnet",
-      "status": "VERIFIED_ON_CHAIN"
-    }
+    "rootBatchId": "0x2ff15936d6ed1186aae2dbe8b0fab1d50e2855042f1b9d2ac74e7c2df62355bd",
+    "internationalLotCode": "CVJ-2026-SINGANI-002",
+    "productType": "SINGANI",
+    "nodes": [
+      {
+        "batchId": "0x2789935f828139bc9f9234fafcbd980d40be7c241c6d89806819c17735e08751",
+        "stage": 0,
+        "stageName": "Plot",
+        "parents": [],
+        "timestamp": "2026-02-13T11:00:00Z",
+        "volumeOrUnits": 1.9,
+        "metrics": [
+          232000
+        ],
+        "metadataHash": "0xe2d6f6f1ccc48d26417b33c34de9e2d1013497a03be2aed4e6bdc35d4e34310f",
+        "isCertified": true,
+        "operator": {
+          "name": "Ingeniero Agrónomo",
+          "role": "Agronomist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "parcelName": "Parcela 4 · El Molino",
+          "varietyName": "Moscatel de Alejandría",
+          "altitudeMasl": 2320,
+          "surfaceHectares": 1.9,
+          "isDoEligible": true
+        }
+      },
+      {
+        "batchId": "0x0839ea50d373c7a04ea45ed20112be97fb3bbd8c69855324edf925cafa54e31a",
+        "stage": 1,
+        "stageName": "Harvest",
+        "parents": [
+          "0x2789935f828139bc9f9234fafcbd980d40be7c241c6d89806819c17735e08751"
+        ],
+        "timestamp": "2025-03-18T09:42:00Z",
+        "volumeOrUnits": 9000,
+        "metrics": [
+          2290,
+          338,
+          640
+        ],
+        "metadataHash": "0x46d85fd88e5e7258ef956dbece8b4e5b29da56eae6a188cc55769e7786e68578",
+        "isCertified": true,
+        "operator": {
+          "name": "Jefe de Báscula",
+          "role": "Weigher",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "harvestBatchCode": "HARV-2025-MOLINO-03",
+          "grossWeightKg": 9100,
+          "tareWeightKg": 100,
+          "netWeightKg": 9000,
+          "brixDegrees": 22.9,
+          "initialPh": 3.38,
+          "initialAcidityGl": 6.4,
+          "phytosanitaryStatus": "APPROVED"
+        }
+      },
+      {
+        "batchId": "0xf2abcc7882a8fad4a0b03441036ccd734dbb398726aa54740763bc6478b05049",
+        "stage": 2,
+        "stageName": "Vinification",
+        "parents": [
+          "0x0839ea50d373c7a04ea45ed20112be97fb3bbd8c69855324edf925cafa54e31a"
+        ],
+        "timestamp": "2025-03-19T14:30:00Z",
+        "volumeOrUnits": 6100,
+        "metrics": [
+          1280,
+          28
+        ],
+        "metadataHash": "0x705d0080e2c28219f5e9634a644cb630458efd642e792cba9e57b5e052db73b4",
+        "isCertified": true,
+        "operator": {
+          "name": "Enólogo de Planta",
+          "role": "Oenologist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "tankCode": "TK-02",
+          "material": "Acero inoxidable AISI 316",
+          "volumeFilledLiters": 6100,
+          "destinationType": "SINGANI_DIST"
+        }
+      },
+      {
+        "batchId": "0x1e4361e4e24e6da946e91324546cf0cdafb5a9aa7a5c05bf3aa5326d39cb1896",
+        "stage": 4,
+        "stageName": "Distillation",
+        "parents": [
+          "0xf2abcc7882a8fad4a0b03441036ccd734dbb398726aa54740763bc6478b05049"
+        ],
+        "timestamp": "2025-05-02T00:00:00Z",
+        "volumeOrUnits": 980,
+        "metrics": [
+          6540
+        ],
+        "metadataHash": "0x8cd65880a044ec149751bb67768ce5d88f85f4381dc819c913df323490f47627",
+        "isCertified": true,
+        "operator": {
+          "name": "Maestro Destilador",
+          "role": "Distiller",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "equipmentIdentifier": "Alambique de cobre AL-02",
+          "inputVolumeLiters": 6100,
+          "outputVolumeLiters": 980,
+          "wasteVolumeLiters": 290,
+          "initialAlcoholPercentage": 65.4,
+          "restStatus": "BOTTLED"
+        }
+      },
+      {
+        "batchId": "0x2ff15936d6ed1186aae2dbe8b0fab1d50e2855042f1b9d2ac74e7c2df62355bd",
+        "stage": 5,
+        "stageName": "Bottling",
+        "parents": [
+          "0x1e4361e4e24e6da946e91324546cf0cdafb5a9aa7a5c05bf3aa5326d39cb1896"
+        ],
+        "timestamp": "2026-02-10T00:00:00Z",
+        "volumeOrUnits": 2140,
+        "metrics": [
+          4000,
+          750
+        ],
+        "metadataHash": "0x472d59a2f1dd7fa6d4086ae6772f897ac3034c1ce8d9977d6eb01d7135c19d90",
+        "isCertified": true,
+        "operator": {
+          "name": "Supervisor de Envasado",
+          "role": "Packer",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "internationalLotCode": "CVJ-2026-SINGANI-002",
+          "productType": "SINGANI",
+          "finalAlcoholAbv": 40,
+          "waterDilutionLiters": 620,
+          "totalBottlesPackaged": 2140,
+          "packagingFormatCl": 75,
+          "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-002",
+          "labAnalysis": {
+            "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+            "accreditedLabCertificationCode": "LAB-SENASAG-2026-882",
+            "actualAlcoholAbv": 39.9,
+            "methanolContentMgL": 52,
+            "conformsToSenasagStandards": true
+          }
+        }
+      }
+    ]
   },
   "ALT-2026-WINE-001": {
-    "lotCode": "ALT-2026-WINE-001",
-    "winery": {
-      "commercialName": "Bodega Altos de Calamuchita",
-      "department": "Valle Central de Tarija",
-      "altitudeMasl": 1890
-    },
-    "product": {
-      "productType": "WINE",
-      "alcoholAbv": 14.2,
-      "bottlesPackaged": 5320,
-      "packagingFormatCl": 75,
-      "bottlingDate": "2026-05-12T00:00:00Z"
-    },
-    "terroir": {
-      "parcelName": "Cuartel 5 · La Compañía",
-      "altitudeMasl": 1890,
-      "varietyName": "Cabernet Sauvignon",
-      "doEligible": true,
-      "doType": "Valles Altos de Bolivia"
-    },
-    "laboratoryCertification": {
-      "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
-      "accreditedLabCertificationCode": "LAB-SENASAG-2026-883",
-      "actualAlcoholAbv": 14.22,
-      "totalAcidityTartaricGl": 5.6,
-      "volatileAcidityAceticGl": 0.45,
-      "conformsToSenasagStandards": true,
-      "reportPdfUrl": "/mocks/uploads/lab-reports/alt-2026-wine-001.pdf"
-    },
-    "blockchainIntegrity": {
-      "sha256Hash": "9c93db5cae4621b511ca9cb08bf1fb0ebd4d8e4922dc80be364c48b96f18f95f",
-      "network": "Stellar Testnet",
-      "status": "VERIFIED_ON_CHAIN"
-    }
+    "rootBatchId": "0x4ebee20a92e421622685debaba4b015a2b727549c369da71084ba7a8f57887a8",
+    "internationalLotCode": "ALT-2026-WINE-001",
+    "productType": "WINE",
+    "nodes": [
+      {
+        "batchId": "0x3a9827dc8e9db252170fed1370167d8b71617d8736bf70f94c1df2133ee0f548",
+        "stage": 0,
+        "stageName": "Plot",
+        "parents": [],
+        "timestamp": "2026-02-01T11:00:00Z",
+        "volumeOrUnits": 5,
+        "metrics": [
+          189000
+        ],
+        "metadataHash": "0x34d0360b908aaabf558ed1e5f3f286f2725521cd10974c190550c9c0b994ffc4",
+        "isCertified": true,
+        "operator": {
+          "name": "Ingeniero Agrónomo",
+          "role": "Agronomist",
+          "wineryName": "Bodega Altos de Calamuchita"
+        },
+        "details": {
+          "parcelName": "Cuartel 5 · La Compañía",
+          "varietyName": "Cabernet Sauvignon",
+          "altitudeMasl": 1890,
+          "surfaceHectares": 5,
+          "isDoEligible": true
+        }
+      },
+      {
+        "batchId": "0x2602ae0050c0e33f81f43b0e7e04bfc46e7558fd0f97929b3c017eddcc6f64a5",
+        "stage": 1,
+        "stageName": "Harvest",
+        "parents": [
+          "0x3a9827dc8e9db252170fed1370167d8b71617d8736bf70f94c1df2133ee0f548"
+        ],
+        "timestamp": "2025-03-06T09:42:00Z",
+        "volumeOrUnits": 9800,
+        "metrics": [
+          2480,
+          362,
+          560
+        ],
+        "metadataHash": "0x8901053d10ab3d1d71e6a1c215f4b5789b1bfdd738daa02fc00514179270745a",
+        "isCertified": true,
+        "operator": {
+          "name": "Jefe de Báscula",
+          "role": "Weigher",
+          "wineryName": "Bodega Altos de Calamuchita"
+        },
+        "details": {
+          "harvestBatchCode": "HARV-2025-COMPAÑÍA-09",
+          "grossWeightKg": 9900,
+          "tareWeightKg": 100,
+          "netWeightKg": 9800,
+          "brixDegrees": 24.8,
+          "initialPh": 3.62,
+          "initialAcidityGl": 5.6,
+          "phytosanitaryStatus": "APPROVED"
+        }
+      },
+      {
+        "batchId": "0x9c4d3c19f323f85f27d20c9b41e3110e221d2f1d15947fec9c7b4fe0fd2bcbc1",
+        "stage": 2,
+        "stageName": "Vinification",
+        "parents": [
+          "0x2602ae0050c0e33f81f43b0e7e04bfc46e7558fd0f97929b3c017eddcc6f64a5"
+        ],
+        "timestamp": "2025-03-07T14:30:00Z",
+        "volumeOrUnits": 6700,
+        "metrics": [
+          1280,
+          28
+        ],
+        "metadataHash": "0xaa9cb413f2a3ffbf77d627bd3e09770354c425b4e1664dc081a2ad53ecc64277",
+        "isCertified": true,
+        "operator": {
+          "name": "Enólogo de Planta",
+          "role": "Oenologist",
+          "wineryName": "Bodega Altos de Calamuchita"
+        },
+        "details": {
+          "tankCode": "TK-RED-03",
+          "material": "Acero inoxidable AISI 316",
+          "volumeFilledLiters": 6700,
+          "destinationType": "WINE_AGING"
+        }
+      },
+      {
+        "batchId": "0x11e16b3b473a4b224d775c527b7d443751f5f75c5b8c09d698d042145cc9714d",
+        "stage": 3,
+        "stageName": "Aging",
+        "parents": [
+          "0x9c4d3c19f323f85f27d20c9b41e3110e221d2f1d15947fec9c7b4fe0fd2bcbc1"
+        ],
+        "timestamp": "2025-04-10T10:00:00Z",
+        "volumeOrUnits": 4050,
+        "metrics": [
+          1200
+        ],
+        "metadataHash": "0x00e891738621e99db6c6de6fc684d1816e804e0e56854d30efadbf4044411b01",
+        "isCertified": true,
+        "operator": {
+          "name": "Maestro de Cava",
+          "role": "Oenologist",
+          "wineryName": "Bodega Altos de Calamuchita"
+        },
+        "details": {
+          "containerType": "Barrica",
+          "containerMaterial": "Roble francés (Nevers), tostado medio",
+          "plannedMonths": 12,
+          "lockUntilDate": "2026-04-10"
+        }
+      },
+      {
+        "batchId": "0x4ebee20a92e421622685debaba4b015a2b727549c369da71084ba7a8f57887a8",
+        "stage": 5,
+        "stageName": "Bottling",
+        "parents": [
+          "0x11e16b3b473a4b224d775c527b7d443751f5f75c5b8c09d698d042145cc9714d"
+        ],
+        "timestamp": "2026-05-12T00:00:00Z",
+        "volumeOrUnits": 5320,
+        "metrics": [
+          1420,
+          750
+        ],
+        "metadataHash": "0xffde70d508126760c7d619957dbf4ea17f0462245c7162b7f92874edbf5c0c72",
+        "isCertified": true,
+        "operator": {
+          "name": "Supervisor de Envasado",
+          "role": "Packer",
+          "wineryName": "Bodega Altos de Calamuchita"
+        },
+        "details": {
+          "internationalLotCode": "ALT-2026-WINE-001",
+          "productType": "WINE",
+          "finalAlcoholAbv": 14.2,
+          "waterDilutionLiters": 0,
+          "totalBottlesPackaged": 5320,
+          "packagingFormatCl": 75,
+          "qrBatchUrl": "https://app.drinksonchain.bo/b/ALT-2026-WINE-001",
+          "labAnalysis": {
+            "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+            "accreditedLabCertificationCode": "LAB-SENASAG-2026-883",
+            "actualAlcoholAbv": 14.22,
+            "methanolContentMgL": 0,
+            "conformsToSenasagStandards": true
+          }
+        }
+      }
+    ]
   },
   "CVJ-2026-WINE-003": {
-    "lotCode": "CVJ-2026-WINE-003",
-    "winery": {
-      "commercialName": "Destilería Cinti Viejo",
-      "department": "Valle de Cinti",
-      "altitudeMasl": 2280
-    },
-    "product": {
-      "productType": "WINE",
-      "alcoholAbv": 13.8,
-      "bottlesPackaged": 3860,
-      "packagingFormatCl": 75,
-      "bottlingDate": "2026-09-20T00:00:00Z"
-    },
-    "terroir": {
-      "parcelName": "Parcela 3 · Las Carreras",
-      "altitudeMasl": 2280,
-      "varietyName": "Vischoqueña",
-      "doEligible": true,
-      "doType": "Valles Altos de Bolivia"
-    },
-    "laboratoryCertification": null,
-    "blockchainIntegrity": {
-      "sha256Hash": "7688045198824f28b204708e854f20fc3cc07bf1c3d3e9118ad7a25064c72e24",
-      "network": "Stellar Testnet",
-      "status": "PENDING_ANCHOR"
-    }
+    "rootBatchId": "0xbcc3f8bd955ee49876e48d0ee361dadaa5512538e176796ef0f71ca631548543",
+    "internationalLotCode": "CVJ-2026-WINE-003",
+    "productType": "WINE",
+    "nodes": [
+      {
+        "batchId": "0x278475537339cb827e4eb7986fd1d7192849716f562ce0482ccd69a5dc304a76",
+        "stage": 0,
+        "stageName": "Plot",
+        "parents": [],
+        "timestamp": "2026-02-10T11:00:00Z",
+        "volumeOrUnits": 2.7,
+        "metrics": [
+          228000
+        ],
+        "metadataHash": "0x607bcd22c919e7358317d4ef17641dfe00d552292bb0bbd40c26ad3a524b89b2",
+        "isCertified": true,
+        "operator": {
+          "name": "Ingeniero Agrónomo",
+          "role": "Agronomist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "parcelName": "Parcela 3 · Las Carreras",
+          "varietyName": "Vischoqueña",
+          "altitudeMasl": 2280,
+          "surfaceHectares": 2.7,
+          "isDoEligible": true
+        }
+      },
+      {
+        "batchId": "0x3c502fdb44455134e65f4edb299b839967798a3a33513fa0a0e3435053e0bc17",
+        "stage": 1,
+        "stageName": "Harvest",
+        "parents": [
+          "0x278475537339cb827e4eb7986fd1d7192849716f562ce0482ccd69a5dc304a76"
+        ],
+        "timestamp": "2025-02-26T09:42:00Z",
+        "volumeOrUnits": 7200,
+        "metrics": [
+          2410,
+          355,
+          570
+        ],
+        "metadataHash": "0x0f92ce90aedbade65d59d323d4a3ed0fccffcd7535c7d30f05282baa146adf14",
+        "isCertified": true,
+        "operator": {
+          "name": "Jefe de Báscula",
+          "role": "Weigher",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "harvestBatchCode": "HARV-2025-CARRERAS-04",
+          "grossWeightKg": 7300,
+          "tareWeightKg": 100,
+          "netWeightKg": 7200,
+          "brixDegrees": 24.1,
+          "initialPh": 3.55,
+          "initialAcidityGl": 5.7,
+          "phytosanitaryStatus": "APPROVED"
+        }
+      },
+      {
+        "batchId": "0x1596fb7c66c077369300de3f828f550a8466dddc2423430a0e8de1e34d8d59be",
+        "stage": 2,
+        "stageName": "Vinification",
+        "parents": [
+          "0x3c502fdb44455134e65f4edb299b839967798a3a33513fa0a0e3435053e0bc17"
+        ],
+        "timestamp": "2025-02-27T14:30:00Z",
+        "volumeOrUnits": 4900,
+        "metrics": [
+          1280,
+          28
+        ],
+        "metadataHash": "0x115688b36d0ca123bc8643b3904dd68a2d74111be9a1e11706a1b0833ed3890e",
+        "isCertified": true,
+        "operator": {
+          "name": "Enólogo de Planta",
+          "role": "Oenologist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "tankCode": "TK-05",
+          "material": "Acero inoxidable AISI 316",
+          "volumeFilledLiters": 4900,
+          "destinationType": "WINE_AGING"
+        }
+      },
+      {
+        "batchId": "0x0ef70e882cfd5c0074fd572d84f4bc2926c204c608a1b8af22a82da761553f02",
+        "stage": 3,
+        "stageName": "Aging",
+        "parents": [
+          "0x1596fb7c66c077369300de3f828f550a8466dddc2423430a0e8de1e34d8d59be"
+        ],
+        "timestamp": "2025-04-01T10:00:00Z",
+        "volumeOrUnits": 2925,
+        "metrics": [
+          1000
+        ],
+        "metadataHash": "0x6072840a913ac59a618aaee06cc77bbee027ba54af808776b5895cb7bce48b10",
+        "isCertified": true,
+        "operator": {
+          "name": "Maestro de Cava",
+          "role": "Oenologist",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "containerType": "Barrica",
+          "containerMaterial": "Roble francés, tostado ligero",
+          "plannedMonths": 10,
+          "lockUntilDate": "2026-02-01"
+        }
+      },
+      {
+        "batchId": "0xbcc3f8bd955ee49876e48d0ee361dadaa5512538e176796ef0f71ca631548543",
+        "stage": 5,
+        "stageName": "Bottling",
+        "parents": [
+          "0x0ef70e882cfd5c0074fd572d84f4bc2926c204c608a1b8af22a82da761553f02"
+        ],
+        "timestamp": "2026-09-20T00:00:00Z",
+        "volumeOrUnits": 3860,
+        "metrics": [
+          1380,
+          750
+        ],
+        "metadataHash": "0x59ebe52e1baf8bdf6a24914af5110fe103ccb2d23c1d3a6a419928b15f5fddc1",
+        "isCertified": false,
+        "operator": {
+          "name": "Supervisor de Envasado",
+          "role": "Packer",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "internationalLotCode": "CVJ-2026-WINE-003",
+          "productType": "WINE",
+          "finalAlcoholAbv": 13.8,
+          "waterDilutionLiters": 0,
+          "totalBottlesPackaged": 3860,
+          "packagingFormatCl": 75,
+          "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-WINE-003",
+          "labAnalysis": null
+        }
+      }
+    ]
   }
 }

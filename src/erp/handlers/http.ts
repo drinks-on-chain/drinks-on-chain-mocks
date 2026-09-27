@@ -92,6 +92,16 @@ export interface RouteSpec {
   handle: (ctx: RouteContext) => RouteResult | Promise<RouteResult>
   /** Se ejecuta tras una respuesta 2xx (p. ej. la bitácora de las escrituras del ERP). */
   afterSuccess?: (ctx: RouteContext, result: RouteResult) => void
+  /**
+   * Ruta obsoleta que se retira en H1 (contrato de la Ola 1 §11): la ruta que la sustituye. Como el
+   * backend, sigue funcionando y responde `Deprecation: true` y `Link: <sustituta>; rel="successor-version"`.
+   */
+  deprecated?: string
+}
+
+/** Cabeceras de una ruta obsoleta (`DeprecatedRoute` del backend). */
+export function deprecationHeaders(replacement: string): Record<string, string> {
+  return { Deprecation: 'true', Link: `<${replacement}>; rel="successor-version"` }
 }
 
 export const ok = (data: unknown, status = 200): RouteResult => ({ status, data })
@@ -277,13 +287,14 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
       }
       spec.afterSuccess?.(ctx, result)
       if (writes) persistErpDb()
-      return successResponse(request, url, result, correlationId)
+      const extra = spec.deprecated ? deprecationHeaders(spec.deprecated) : undefined
+      return successResponse(request, url, extra ? { ...result, headers: { ...result.headers, ...extra } } : result, correlationId)
     } catch (err) {
       // Las escrituras fallidas también pueden dejar rastro (bitácora de intentos, retos TOTP).
       if (writes) persistErpDb()
-      if (err instanceof ApiError) return errorResponse(url, err, request, correlationId)
-      const message = err instanceof Error ? err.message : String(err)
-      return errorResponse(url, new ApiError(500, 'INTERNAL_ERROR', message), request, correlationId)
+      const error = err instanceof ApiError ? err : new ApiError(500, 'INTERNAL_ERROR', err instanceof Error ? err.message : String(err))
+      if (spec.deprecated) Object.assign(error.headers, deprecationHeaders(spec.deprecated))
+      return errorResponse(url, error, request, correlationId)
     }
   })
 }
@@ -316,6 +327,20 @@ export function buildFallbackHandlers(options: ErpHandlerOptions): HttpHandler[]
 /** Lee y valida el cuerpo JSON con un esquema zod (422 VALIDATION_ERROR con los campos). */
 export async function parseBody<S extends z.ZodType>(request: Request, schema: S): Promise<z.infer<S>> {
   return validate(await readJson(request), schema)
+}
+
+/**
+ * Cuerpo de un alta (`Create*`): como el backend (`@IsOptional()` de class-validator), un
+ * `null` en un campo opcional cuenta como omitido. Los esquemas `Create*` no lo declaran.
+ */
+export async function parseCreateBody<S extends z.ZodType>(request: Request, schema: S): Promise<z.infer<S>> {
+  return validate(omitNulls(await readJson(request)), schema)
+}
+
+/** Quita las claves de primer nivel con valor `null` (altas: `null` = omitido). */
+export function omitNulls(raw: unknown): unknown {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw
+  return Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== null))
 }
 
 /** Valida un valor ya leído con un esquema zod (422 VALIDATION_ERROR, mensajes en español). */

@@ -13,7 +13,8 @@ import {
 import { canSee, scoped, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
 import { conflict, fieldError, notFound, unprocessable } from '../errors'
-import { boolParam, created, enumParam, listResult, ok, parseBody, type RouteSpec } from '../http'
+import { bottlingView } from '../views'
+import { boolParam, created, enumParam, listResult, ok, parseCreateBody, type RouteSpec } from '../http'
 import { requireWinery } from './terroirs-harvest'
 import { findAging, findProduction } from './winemaking'
 
@@ -59,7 +60,7 @@ export const bottlingLabRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
-      const body = await parseBody(request, CreateBottlingBatchSchema)
+      const body = await parseCreateBody(request, CreateBottlingBatchSchema)
       const todayDay = today()
       let wineryId: string
       let markBottled: () => void
@@ -147,14 +148,14 @@ export const bottlingLabRoutes: RouteSpec[] = [
       const items = scoped(auth, getErpDb().bottlings).filter(
         (b) => (!productType || b.productType === productType) && (anchored === undefined || b.isAnchoredOnChain === anchored),
       )
-      return listResult(items, query)
+      return listResult(items.map((b) => bottlingView(b)), query)
     },
   },
   {
     method: 'get',
     path: '/v1/bottling/:id',
     access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
-    handle: ({ auth, params }) => ok(findBottling(auth, params.id!)),
+    handle: ({ auth, params }) => ok(bottlingView(findBottling(auth, params.id!), true)),
   },
 
   // ----- Laboratorio -----
@@ -163,7 +164,7 @@ export const bottlingLabRoutes: RouteSpec[] = [
     path: '/v1/lab-analyses',
     access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
-      const body = await parseBody(request, CreateBatchLabAnalysisSchema)
+      const body = await parseCreateBody(request, CreateBatchLabAnalysisSchema)
       const bottling = findBottling(auth, body.bottlingBatchId)
       const db = getErpDb()
       if (db.labAnalyses.some((l) => l.bottlingBatchId === bottling.id)) {

@@ -208,6 +208,26 @@ function refreshCandidates(cookies: Record<string, string>, fromBody: string | u
   return jar ? [jar] : []
 }
 
+/**
+ * Sesión de la petición con el refresco rotado, como `switch-organization` del backend (contrato de
+ * la Ola 0 §8): hace falta el refresco de ESTA sesión (cookie `doc_rt` o, hasta H1, `refreshToken`
+ * en el cuerpo); un acceso robado no basta (401 `AUTH_REFRESH_INVALID`). Con un token estático
+ * (solo en los mocks) no hay sesión: se abre una con `organizationId` activa.
+ */
+export function rotatedSessionOf(
+  auth: AuthContext,
+  cookies: Record<string, string>,
+  bodyRefresh: string | undefined,
+  organizationId: string | null,
+): MockSession {
+  if (!auth.sid) return createSession(auth.user.id, auth.audience, organizationId, auth.mfa, getErpDb().clock)
+  const token = refreshCandidates(cookies, bodyRefresh).find((t) => parseRefreshToken(t)?.sid === auth.sid)
+  if (!token) throw refreshInvalid('Falta el token de renovación de esta sesión')
+  const validated = validateRefresh(token)
+  if (!validated.grace) rotateRefresh(validated.session, getErpDb().clock)
+  return validated.session
+}
+
 /** El primero que corresponde a una sesión conocida (una cookie de antes de `resetErpDb()` no tapa el cuerpo). */
 async function presentedRefresh(request: Request, cookies: Record<string, string>): Promise<string | null> {
   const body = await parseBody(request, RefreshTokenSchema)
@@ -347,19 +367,7 @@ export const authUserRoutes: RouteSpec[] = [
       if (membership.organizationType === 'PLATFORM' && !auth.mfa) {
         throw new ApiError(403, 'AUTH_MFA_REQUIRED', 'Para entrar en la plataforma hay que verificar el segundo factor')
       }
-      let session: MockSession
-      if (!auth.sid) {
-        // Token estático (solo en los mocks): no hay sesión, se abre una.
-        session = createSession(auth.user.id, auth.audience, body.organizationId, auth.mfa, getErpDb().clock)
-      } else {
-        // Como el backend (contrato de la Ola 0 §8): hace falta el refresco de ESTA sesión (cookie
-        // `doc_rt` o `refreshToken` en el cuerpo), que se rota. Un acceso robado no basta.
-        const token = refreshCandidates(cookies, body.refreshToken).find((t) => parseRefreshToken(t)?.sid === auth.sid)
-        if (!token) throw refreshInvalid('Falta el token de renovación de esta sesión')
-        const validated = validateRefresh(token)
-        session = validated.session
-        if (!validated.grace) rotateRefresh(session, getErpDb().clock)
-      }
+      const session = rotatedSessionOf(auth, cookies, body.refreshToken, body.organizationId)
       setActiveOrganization(session, body.organizationId)
       rememberOrganization(auth.user.id, body.organizationId)
       return sessionResult(auth.user, session, url)

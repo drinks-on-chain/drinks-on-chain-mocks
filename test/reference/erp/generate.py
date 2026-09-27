@@ -14,7 +14,9 @@ JSON resultantes son los mismos.
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import math
 import random
 import uuid
 from datetime import date, datetime, timedelta, timezone
@@ -610,8 +612,9 @@ def rest_status(p: dict) -> dict:
     end = date.fromisoformat(p["processEndDate"][:10])
     elapsed = (TODAY - end).days
     remaining = max(0, 180 - elapsed)
-    return {"id": p["id"], "restStatus": p["restStatus"], "daysElapsed": elapsed, "daysRemaining": remaining,
-            "isRestCompleted": remaining == 0, "mandatoryRestUntil": p["mandatoryRestUntil"]}
+    return {"id": p["id"], "restStatus": p["restStatus"], "processEndDate": p["processEndDate"],
+            "mandatoryRestUntil": p["mandatoryRestUntil"], "daysElapsed": max(0, elapsed), "daysRemaining": remaining,
+            "isRestCompleted": remaining == 0}
 
 
 rest_statuses = [rest_status(p) for p in productions]
@@ -697,35 +700,104 @@ for key, bkey, abv, tac, vac, fso2, tso2, rs, meth, cu, rev in LAB:
 LB = {l["bottlingBatchId"]: l for l in labs}
 
 # ---------------------------------------------------------------------------
-# 10. Trazabilidad pública (GET /v1/traceability/public/:lotCode)
+# 10. Grafo DAG del lote (GET /v1/traceability/dag/:id y /public/:lotCode)
 # ---------------------------------------------------------------------------
-public = {}
-for b in bottlings:
+# Forma y cálculo de DagBuilderService del backend (DagGraphResponseDto): un nodo por etapa con
+# el SHA-256 de "<ETAPA>-<id>", métricas ×100 (Math.round de JS) y el hash de los metadatos con
+# las claves ordenadas (JSON.stringify de JS: enteros sin ".0", sin espacios, sin escapar UTF-8).
+def js_num(x):
+    return int(x) if isinstance(x, float) and x.is_integer() else x
+
+
+def js_round(x: float) -> int:
+    return math.floor(x + 0.5)
+
+
+def dag_hash(text: str) -> str:
+    return "0x" + hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def meta_hash(d: dict) -> str:
+    canonical = json.dumps({k: js_num(v) for k, v in d.items()}, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return dag_hash(canonical)
+
+
+def num(x):
+    return x if x is not None else 0
+
+
+def dag_graph(b: dict) -> dict:
     w = next(x for x in wineries if x["id"] == b["wineryId"])
-    if b["productionBatchId"]:
-        p = next(x for x in productions if x["id"] == b["productionBatchId"])
-        tank = next(x for x in tanks if x["id"] == p["fermentationTankId"])
-    else:
-        a = next(x for x in agings if x["id"] == b["wineAgingBatchId"])
-        tank = next(x for x in tanks if x["id"] == a["fermentationTankId"])
+
+    def op(name: str, role: str) -> dict:
+        return {"name": name, "role": role, "wineryName": w["commercialName"]}
+
+    a = next((x for x in agings if x["id"] == b["wineAgingBatchId"]), None) if b["wineAgingBatchId"] else None
+    p = next((x for x in productions if x["id"] == b["productionBatchId"]), None) if not a and b["productionBatchId"] else None
+    mid = a or p
+    tank = next(x for x in tanks if x["id"] == mid["fermentationTankId"])
     h = next(x for x in harvests if x["id"] == tank["harvestBatchId"])
     t = next(x for x in terroirs if x["id"] == h["terroirId"])
     lab = LB.get(b["id"])
-    public[b["internationalLotCode"]] = {
-        "lotCode": b["internationalLotCode"],
-        "winery": {"commercialName": w["commercialName"], "department": w["geographicRegion"].split("·")[0].strip(), "altitudeMasl": t["altitudeMasl"]},
-        "product": {"productType": b["productType"], "alcoholAbv": b["finalAlcoholAbv"], "bottlesPackaged": b["totalBottlesPackaged"],
-                    "packagingFormatCl": b["packagingFormatCl"], "bottlingDate": b["bottlingDate"]},
-        "terroir": {"parcelName": t["parcelName"], "altitudeMasl": t["altitudeMasl"], "varietyName": t["varietyName"],
-                    "doEligible": t["isDoEligible"], "doType": t["doType"]},
-        "laboratoryCertification": ({
-            "certifiedLaboratoryName": lab["certifiedLaboratoryName"], "accreditedLabCertificationCode": lab["accreditedLabCertificationCode"],
-            "actualAlcoholAbv": lab["actualAlcoholAbv"], "totalAcidityTartaricGl": lab["totalAcidityTartaricGl"],
-            "volatileAcidityAceticGl": lab["volatileAcidityAceticGl"], "conformsToSenasagStandards": lab["conformsToSenasagStandards"],
-            "reportPdfUrl": lab["laboratoryReportPdfUrl"]} if lab else None),
-        "blockchainIntegrity": {"sha256Hash": b["blockchainDataHash"], "network": "Stellar Testnet",
-                                "status": "VERIFIED_ON_CHAIN" if b["isAnchoredOnChain"] else "PENDING_ANCHOR"},
-    }
+    nodes = []
+    plot = dag_hash(f"TERROIR-{t['id']}")
+    d = {"parcelName": t["parcelName"], "varietyName": t["varietyName"], "altitudeMasl": num(t["altitudeMasl"]),
+         "surfaceHectares": num(t["surfaceHectares"]), "isDoEligible": t["isDoEligible"]}
+    nodes.append({"batchId": plot, "stage": 0, "stageName": "Plot", "parents": [], "timestamp": t["createdAt"],
+                  "volumeOrUnits": num(t["surfaceHectares"]), "metrics": [js_round(num(t["altitudeMasl"]) * 100)],
+                  "metadataHash": meta_hash(d), "isCertified": t["isDoEligible"],
+                  "operator": op("Ingeniero Agrónomo", "Agronomist"), "details": d})
+    hh = dag_hash(f"HARVEST-{h['id']}")
+    d = {"harvestBatchCode": h["harvestBatchCode"], "grossWeightKg": num(h["grossWeightKg"]), "tareWeightKg": num(h["tareWeightKg"]),
+         "netWeightKg": num(h["netWeightKg"]), "brixDegrees": num(h["brixDegrees"]), "initialPh": num(h["initialPh"]),
+         "initialAcidityGl": num(h["initialAcidityGl"]), "phytosanitaryStatus": h["phytosanitaryStatus"]}
+    nodes.append({"batchId": hh, "stage": 1, "stageName": "Harvest", "parents": [plot], "timestamp": h["intakeDate"],
+                  "volumeOrUnits": num(h["netWeightKg"]),
+                  "metrics": [js_round(num(h["brixDegrees"]) * 100), js_round(num(h["initialPh"]) * 100),
+                              js_round(num(h["initialAcidityGl"]) * 100)],
+                  "metadataHash": meta_hash(d), "isCertified": h["phytosanitaryStatus"] == "APPROVED",
+                  "operator": op("Jefe de Báscula", "Weigher"), "details": d})
+    th = dag_hash(f"TANK-{tank['id']}")
+    d = {"tankCode": tank["tankCode"], "material": tank["material"], "volumeFilledLiters": num(tank["volumeFilledLiters"]),
+         "destinationType": tank["destinationType"]}
+    nodes.append({"batchId": th, "stage": 2, "stageName": "Vinification", "parents": [hh], "timestamp": tank["startDate"],
+                  "volumeOrUnits": num(tank["volumeFilledLiters"]), "metrics": [1280, 28], "metadataHash": meta_hash(d),
+                  "isCertified": True, "operator": op("Enólogo de Planta", "Oenologist"), "details": d})
+    if a:
+        mh = dag_hash(f"AGING-{a['id']}")
+        d = {"containerType": a["containerType"], "containerMaterial": a["containerMaterial"], "plannedMonths": a["plannedMonths"],
+             "lockUntilDate": a["lockUntilDate"][:10]}
+        nodes.append({"batchId": mh, "stage": 3, "stageName": "Aging", "parents": [th], "timestamp": a["createdAt"],
+                      "volumeOrUnits": num(a["volumeLiters"]), "metrics": [a["plannedMonths"] * 100], "metadataHash": meta_hash(d),
+                      "isCertified": True, "operator": op("Maestro de Cava", "Oenologist"), "details": d})
+    else:
+        mh = dag_hash(f"DISTILLATION-{p['id']}")
+        d = {"equipmentIdentifier": p["equipmentIdentifier"], "inputVolumeLiters": num(p["inputVolumeLiters"]),
+             "outputVolumeLiters": num(p["outputVolumeLiters"]), "wasteVolumeLiters": num(p["wasteVolumeLiters"]),
+             "initialAlcoholPercentage": num(p["initialAlcoholPercentage"]), "restStatus": p["restStatus"]}
+        alcohol = p["initialAlcoholPercentage"] if p["initialAlcoholPercentage"] is not None else 70.2
+        nodes.append({"batchId": mh, "stage": 4, "stageName": "Distillation", "parents": [th], "timestamp": p["processStartDate"],
+                      "volumeOrUnits": num(p["outputVolumeLiters"]), "metrics": [js_round(alcohol * 100)],
+                      "metadataHash": meta_hash(d), "isCertified": p["isDoEligible"],
+                      "operator": op("Maestro Destilador", "Distiller"), "details": d})
+    root = dag_hash(f"BOTTLING-{b['id']}")
+    d = {"internationalLotCode": b["internationalLotCode"], "productType": b["productType"], "finalAlcoholAbv": num(b["finalAlcoholAbv"]),
+         "waterDilutionLiters": num(b["waterDilutionLiters"]), "totalBottlesPackaged": b["totalBottlesPackaged"],
+         "packagingFormatCl": b["packagingFormatCl"], "qrBatchUrl": b["qrBatchUrl"]}
+    details = dict(d)
+    details["labAnalysis"] = ({
+        "certifiedLaboratoryName": lab["certifiedLaboratoryName"], "accreditedLabCertificationCode": lab["accreditedLabCertificationCode"],
+        "actualAlcoholAbv": num(lab["actualAlcoholAbv"]), "methanolContentMgL": num(lab["methanolContentMgL"]),
+        "conformsToSenasagStandards": lab["conformsToSenasagStandards"]} if lab else None)
+    nodes.append({"batchId": root, "stage": 5, "stageName": "Bottling", "parents": [mh], "timestamp": b["bottlingDate"],
+                  "volumeOrUnits": b["totalBottlesPackaged"],
+                  "metrics": [js_round(num(b["finalAlcoholAbv"]) * 100), b["packagingFormatCl"] * 10],
+                  "metadataHash": meta_hash(d), "isCertified": bool(lab and lab["conformsToSenasagStandards"]),
+                  "operator": op("Supervisor de Envasado", "Packer"), "details": details})
+    return {"rootBatchId": root, "internationalLotCode": b["internationalLotCode"], "productType": b["productType"], "nodes": nodes}
+
+
+public = {b["internationalLotCode"]: dag_graph(b) for b in bottlings}
 
 # ---------------------------------------------------------------------------
 # 11. Vista derivada "Lote" para las pantallas del ERP (no existe en el backend)

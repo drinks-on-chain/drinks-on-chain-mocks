@@ -7,6 +7,10 @@ export const UserRoleSchema = z.enum(USER_ROLES)
 export type UserRole = z.infer<typeof UserRoleSchema>
 
 /** Roles admitidos en `POST /v1/auth/signup`. */
+/**
+ * Roles de `POST /v1/auth/signup`. `WINERY_ADMIN` (registro de personal) es obsoleto y se retira en
+ * H1: las bodegas entran por solicitud de alta o alta directa y su equipo por invitación.
+ */
 export const SIGNUP_ROLES = ['CONSUMER', 'WINERY_ADMIN'] as const
 export const SignupRoleSchema = z.enum(SIGNUP_ROLES)
 export type SignupRole = z.infer<typeof SignupRoleSchema>

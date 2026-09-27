@@ -20,8 +20,8 @@ import type {
   Audience,
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
-  EnologicalTreatment,
-  FermentationLog,
+  EnologicalTreatmentRecord,
+  FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
   LotView,
@@ -52,8 +52,8 @@ export interface ErpFixtures {
   terroirs: TerroirResponse[]
   harvestBatches: HarvestBatchResponse[]
   fermentationTanks: FermentationTankResponse[]
-  fermentationLogs: FermentationLog[]
-  enologicalTreatments: EnologicalTreatment[]
+  fermentationLogs: FermentationLogRecord[]
+  enologicalTreatments: EnologicalTreatmentRecord[]
   wineAging: WineAgingResponse[]
   productionBatches: ProductionBatchResponse[]
   productionRestStatus: RestStatusResponse[]
@@ -72,8 +72,8 @@ export const erpFixtures: ErpFixtures = {
   terroirs: terroirsJson as unknown as TerroirResponse[],
   harvestBatches: harvestJson as unknown as HarvestBatchResponse[],
   fermentationTanks: tanksJson as unknown as FermentationTankResponse[],
-  fermentationLogs: logsJson as unknown as FermentationLog[],
-  enologicalTreatments: treatmentsJson as unknown as EnologicalTreatment[],
+  fermentationLogs: logsJson as unknown as FermentationLogRecord[],
+  enologicalTreatments: treatmentsJson as unknown as EnologicalTreatmentRecord[],
   wineAging: agingJson as unknown as WineAgingResponse[],
   productionBatches: productionJson as unknown as ProductionBatchResponse[],
   productionRestStatus: restStatusJson as unknown as RestStatusResponse[],

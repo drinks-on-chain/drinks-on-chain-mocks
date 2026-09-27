@@ -17,7 +17,7 @@ import {
 import { anyStaff, anyUser, platform, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
 import { conflict, domainError, notFound } from '../errors'
-import { applyPatch, created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
+import { applyPatch, created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec, parseCreateBody } from '../http'
 import { blockOf, setMemberBlocked } from '../../../backoffice/handlers/members'
 import { createUser, findUserByEmail } from './auth-users'
 
@@ -73,13 +73,33 @@ function assertPending(winery: WineryResponse, verb: string): void {
   }
 }
 
-export const wineryRoutes: RouteSpec[] = [
+/**
+ * Rutas de 0.1 que se retiran al cerrar la Ola 1 (H1, contrato de la Ola 1 §11) y su sustituta, como
+ * `@DeprecatedRoute` del backend. `POST /v1/auth/signup` sigue para consumidores: lo obsoleto es
+ * `userRole: 'WINERY_ADMIN'` (el campo), sin cabecera.
+ */
+export const DEPRECATED_ROUTES: Readonly<Record<string, string>> = {
+  'POST /v1/wineries': '/v1/public/winery-applications',
+  'GET /v1/wineries/my/members': '/v1/organizations/current/members',
+  'POST /v1/wineries/my/members': '/v1/organizations/current/invitations',
+  'POST /v1/wineries/my/members/create': '/v1/organizations/current/invitations',
+  'GET /v1/wineries/pending': '/v1/platform/winery-applications',
+  'POST /v1/wineries/:id/approve': '/v1/platform/winery-applications/{id}/approve',
+  'POST /v1/wineries/:id/reject': '/v1/platform/winery-applications/{id}/reject',
+}
+
+const withDeprecation = (spec: RouteSpec): RouteSpec => {
+  const replacement = DEPRECATED_ROUTES[`${spec.method.toUpperCase()} ${spec.path}`]
+  return replacement ? { ...spec, deprecated: replacement } : spec
+}
+
+const routes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/wineries',
     access: anyUser,
     async handle({ request, auth }) {
-      const body = await parseBody(request, CreateWinerySchema)
+      const body = await parseCreateBody(request, CreateWinerySchema)
       const db = getErpDb()
       if (db.wineries.some((w) => w.taxIdNit === body.taxIdNit)) throw conflict('El NIT ya se encuentra registrado')
       const winery: WineryResponse = {
@@ -191,7 +211,7 @@ export const wineryRoutes: RouteSpec[] = [
     access: winery(['OWNER']),
     async handle({ request, auth }) {
       const winery = myWinery(auth)
-      const body = await parseBody(request, CreateMemberSchema)
+      const body = await parseCreateBody(request, CreateMemberSchema)
       if (findUserByEmail(body.email)) throw conflict('El correo electrónico ya se encuentra registrado')
       const user = createUser({
         email: body.email,
@@ -241,3 +261,5 @@ export const wineryRoutes: RouteSpec[] = [
     },
   },
 ]
+
+export const wineryRoutes: RouteSpec[] = routes.map(withDeprecation)

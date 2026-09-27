@@ -10,17 +10,15 @@ import {
   PROCESS_TYPES,
   REST_STATUSES,
   TANK_STATUSES,
-  type EnologicalTreatment,
-  type FermentationLog,
-  type FermentationTankDetail,
   type FermentationTankResponse,
   type ProductionBatchResponse,
   type WineAgingResponse,
 } from '../../schemas'
 import { canSee, scoped, winery, type AuthContext } from '../auth-context'
-import { getErpDb, newId, tick, today } from '../db'
-import { domainError, fieldError, invalid, notFound, unprocessable } from '../errors'
-import { created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
+import { getErpDb, newId, tick, today, type ErpDb } from '../db'
+import { domainError, fieldError, forbidden, invalid, notFound, unprocessable } from '../errors'
+import { created, enumParam, listResult, ok, parseCreateBody, strParam, type RouteSpec } from '../http'
+import { agingView, logView, productionView, tankView, treatmentView } from '../views'
 import { findHarvest, requireWinery } from './terroirs-harvest'
 
 // /v1/fermentation-tanks*, /v1/wine-aging*, /v1/production-batches*
@@ -46,8 +44,6 @@ export function findProduction(auth: AuthContext, id: string): ProductionBatchRe
   return p
 }
 
-const byDate = <T>(key: (x: T) => string) => (a: T, b: T) => key(a).localeCompare(key(b))
-
 export const winemakingRoutes: RouteSpec[] = [
   // ----- Tanques de fermentación -----
   {
@@ -56,7 +52,7 @@ export const winemakingRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
-      const body = await parseBody(request, CreateFermentationTankSchema)
+      const body = await parseCreateBody(request, CreateFermentationTankSchema)
       const harvest = findHarvest(auth, body.harvestBatchId)
       const startDate = normalizeDateTime(body.startDate)
       const tank: FermentationTankResponse = {
@@ -92,7 +88,7 @@ export const winemakingRoutes: RouteSpec[] = [
           (!destination || t.destinationType === destination) &&
           (!harvestBatchId || t.harvestBatchId === harvestBatchId),
       )
-      return listResult(items, query)
+      return listResult(items.map((t) => tankView(t)), query)
     },
   },
   {
@@ -100,14 +96,7 @@ export const winemakingRoutes: RouteSpec[] = [
     path: '/v1/fermentation-tanks/:id',
     access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     handle({ auth, params }) {
-      const t = findTank(auth, params.id!)
-      const db = getErpDb()
-      const detail: FermentationTankDetail = {
-        ...t,
-        logs: db.logs.filter((l) => l.fermentationTankId === t.id).sort(byDate((l) => l.recordedAt)),
-        treatments: db.treatments.filter((x) => x.fermentationTankId === t.id).sort(byDate((x) => x.appliedAt)),
-      }
-      return ok(detail)
+      return ok(tankView(findTank(auth, params.id!), true))
     },
   },
   {
@@ -116,8 +105,8 @@ export const winemakingRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR']),
     async handle({ request, auth, params }) {
       const t = findTank(auth, params.id!)
-      const body = await parseBody(request, CreateFermentationLogSchema)
-      const log: FermentationLog = {
+      const body = await parseCreateBody(request, CreateFermentationLogSchema)
+      const log: ErpDb['logs'][number] = {
         id: newId('log'),
         fermentationTankId: t.id,
         temperatureCelsius: body.temperatureCelsius,
@@ -127,10 +116,12 @@ export const winemakingRoutes: RouteSpec[] = [
         recordedAt: normalizeDateTime(body.recordedAt),
         notes: body.notes ?? null,
         recordedByMemberId: auth.memberId,
+        // El backend guarda la persona (`recordedByUserId`), también la de la plataforma.
+        recordedByUserId: auth.user.id,
       }
       tick()
       getErpDb().logs.push(log)
-      return created(log)
+      return created(logView(log))
     },
   },
   {
@@ -139,8 +130,10 @@ export const winemakingRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth, params }) {
       const t = findTank(auth, params.id!)
-      const body = await parseBody(request, CreateEnologicalTreatmentSchema)
-      const treatment: EnologicalTreatment = {
+      const body = await parseCreateBody(request, CreateEnologicalTreatmentSchema)
+      // Como el backend: lo autoriza un miembro activo de la bodega (la plataforma no puede).
+      if (!auth.memberId) throw forbidden('El usuario no es miembro activo acreditado de esta bodega')
+      const treatment: ErpDb['treatments'][number] = {
         id: newId('treatment'),
         fermentationTankId: t.id,
         treatmentType: body.treatmentType,
@@ -151,10 +144,11 @@ export const winemakingRoutes: RouteSpec[] = [
         regulatoryAuthCode: body.regulatoryAuthCode,
         appliedAt: normalizeDateTime(body.appliedAt),
         notes: body.notes ?? null,
+        authorizedByMemberId: auth.memberId,
       }
       tick()
       getErpDb().treatments.push(treatment)
-      return created(treatment)
+      return created(treatmentView(treatment))
     },
   },
 
@@ -165,7 +159,7 @@ export const winemakingRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
-      const body = await parseBody(request, CreateWineAgingBatchSchema)
+      const body = await parseCreateBody(request, CreateWineAgingBatchSchema)
       const tank = findTank(auth, body.fermentationTankId)
       // Como el backend: una cuba solo pasa una vez a crianza.
       if (getErpDb().wineAgings.some((a) => a.fermentationTankId === tank.id)) {
@@ -196,13 +190,13 @@ export const winemakingRoutes: RouteSpec[] = [
     path: '/v1/wine-aging',
     access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
-    handle: ({ query, auth }) => listResult(scoped(auth, getErpDb().wineAgings), query),
+    handle: ({ query, auth }) => listResult(scoped(auth, getErpDb().wineAgings).map((a) => agingView(a)), query),
   },
   {
     method: 'get',
     path: '/v1/wine-aging/:id',
     access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
-    handle: ({ auth, params }) => ok(findAging(auth, params.id!)),
+    handle: ({ auth, params }) => ok(agingView(findAging(auth, params.id!), true)),
   },
 
   // ----- Destilación y reposo -----
@@ -212,7 +206,7 @@ export const winemakingRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
-      const body = await parseBody(request, CreateDistillationBatchSchema)
+      const body = await parseCreateBody(request, CreateDistillationBatchSchema)
       const tank = findTank(auth, body.fermentationTankId)
       const db = getErpDb()
       // Balance de masa (backend): corazón + descarte no puede superar la entrada + 5 %.
@@ -280,7 +274,7 @@ export const winemakingRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/production-batches/:id',
     access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
-    handle: ({ auth, params }) => ok(findProduction(auth, params.id!)),
+    handle: ({ auth, params }) => ok(productionView(findProduction(auth, params.id!), true)),
   },
   {
     method: 'get',
@@ -297,7 +291,7 @@ export const winemakingRoutes: RouteSpec[] = [
           (!restStatus || p.restStatus === restStatus) &&
           (!tankId || p.fermentationTankId === tankId),
       )
-      return listResult(items, query)
+      return listResult(items.map((p) => productionView(p)), query)
     },
   },
 ]
