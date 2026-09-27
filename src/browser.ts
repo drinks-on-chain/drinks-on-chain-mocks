@@ -60,6 +60,7 @@ export { getScenario, resetScenario, setScenario, SCENARIOS, type ScenarioName }
 export {
   advanceMockClock,
   expireAccessTokens,
+  expireRefreshGrace,
   getMockAppUrls,
   mockMailbox,
   resetErpDb,

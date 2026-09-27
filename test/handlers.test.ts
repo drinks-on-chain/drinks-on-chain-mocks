@@ -59,11 +59,11 @@ describe('autenticación', () => {
     }
   })
 
-  it('contraseña incorrecta → 401 con envoltorio', async () => {
+  it('contraseña incorrecta → 401 AUTH_INVALID_CREDENTIALS con envoltorio', async () => {
     const { status, json } = await call('/v1/auth/login', { body: { email: 'enologa@altos.test', password: 'x' } })
     expect(status).toBe(401)
     const err = ErrorEnvelopeSchema.parse(json)
-    expect(err.error.code).toBe('UNAUTHORIZED')
+    expect(err.error.code).toBe('AUTH_INVALID_CREDENTIALS')
   })
 
   it('cuerpo inválido → 422 VALIDATION_ERROR con details por campo', async () => {
@@ -98,10 +98,13 @@ describe('autenticación', () => {
     const ok = await call('/v1/auth/refresh', { body: { refreshToken: 'mock.refresh.altos_admin' } })
     const session = SessionResponseSchema.parse(dataOf(ok.json))
     expect(session.user.email).toBe('admin@altos.test')
-    expect(session.tokens.refreshToken).toMatch(/^mock\.rt\./)
+    // Refresco con la forma del backend: `<sid>.<generación>.<secreto>`.
+    expect(session.tokens.refreshToken).toMatch(/^[0-9a-f-]{36}\.0\.[A-Za-z0-9_-]{43}$/)
     // Sin sesiones (la cookie que guardó MSW ya no corresponde a ninguna) un refresco desconocido → 401.
     resetErpDb()
-    expect((await call('/v1/auth/refresh', { body: { refreshToken: 'otro' } })).status).toBe(401)
+    const unknown = await call('/v1/auth/refresh', { body: { refreshToken: 'otro' } })
+    expect(unknown.status).toBe(401)
+    expect(ErrorEnvelopeSchema.parse(unknown.json).error.code).toBe('AUTH_REFRESH_INVALID')
   })
 
   it('signup crea un consumidor que luego puede iniciar sesión', async () => {
@@ -202,7 +205,7 @@ describe('roles', () => {
       body: { harvestBatchId: harvest.id, tankCode: 'TK-99', startDate: '2026-09-25' },
     })
     expect(status).toBe(403)
-    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('FORBIDDEN')
+    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
   })
 
   it('solo PLATFORM_ADMIN lista bodegas y pendientes', async () => {

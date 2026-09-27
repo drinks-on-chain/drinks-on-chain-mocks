@@ -25,10 +25,22 @@ export const fieldError = (field: string | null, message: string): ApiErrorDetai
 export const badRequest = (message: string) => new ApiError(400, 'BAD_REQUEST', message)
 export const unauthorized = (message = 'Token de acceso inválido, ausente o expirado') =>
   new ApiError(401, 'UNAUTHORIZED', message)
+// 401 de sesión con los códigos del backend (contrato de la Ola 0 §8).
+export const tokenInvalid = (message = 'Token de acceso inválido') => new ApiError(401, 'AUTH_TOKEN_INVALID', message)
+export const tokenExpired = () => new ApiError(401, 'AUTH_TOKEN_EXPIRED', 'Token de acceso expirado')
+export const invalidCredentials = () => new ApiError(401, 'AUTH_INVALID_CREDENTIALS', 'Credenciales de acceso inválidas')
+export const refreshInvalid = (message = 'Token de renovación ausente o inválido') => new ApiError(401, 'AUTH_REFRESH_INVALID', message)
 export const sessionRevoked = (message = 'La sesión fue revocada') => new ApiError(401, 'AUTH_SESSION_REVOKED', message)
+export const sessionExpired = () => new ApiError(401, 'AUTH_SESSION_EXPIRED', 'La sesión caducó; inicia sesión de nuevo')
 export const refreshReused = () =>
-  new ApiError(401, 'AUTH_REFRESH_REUSED', 'El token de renovación ya se usó: la sesión se revocó por seguridad')
-export const forbidden = (message = 'No tiene permisos para esta operación') => new ApiError(403, 'FORBIDDEN', message)
+  new ApiError(401, 'AUTH_REFRESH_REUSED', 'El token de renovación ya se había usado; la sesión se cerró por seguridad')
+/** 429 con `Retry-After` (bloqueo progresivo del login). */
+export const tooManyAttempts = (seconds: number) =>
+  new ApiError(429, 'AUTH_TOO_MANY_ATTEMPTS', 'Demasiados intentos fallidos. Vuelve a intentarlo más tarde', null, {
+    'Retry-After': String(seconds),
+  })
+/** 403 de audiencia, tipo de organización o rol insuficientes (`AUTH_INSUFFICIENT_PERMISSIONS`, como el backend). */
+export const forbidden = (message = 'No tiene permisos para esta operación') => new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', message)
 export const notFound = (message: string) => new ApiError(404, 'NOT_FOUND', message)
 export const conflict = (message: string) => new ApiError(409, 'CONFLICT', message)
 /** 422 de una regla de negocio, con el campo que la provoca. */

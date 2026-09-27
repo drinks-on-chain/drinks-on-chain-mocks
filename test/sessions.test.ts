@@ -11,7 +11,7 @@ import {
 import { DEMO_TOTP_SECRET, generateTotp } from '../src/fixtures'
 import { PLATFORM_ORGANIZATION } from '../src/erp/catalog'
 import { erpFixtures } from '../src/fixtures'
-import { expireAccessTokens } from '../src/handlers'
+import { expireAccessTokens, expireRefreshGrace } from '../src/handlers'
 import { getErpDb, resetErpDb, setupMockServer } from '../src/node'
 import { API } from './helpers'
 
@@ -146,7 +146,13 @@ describe('renovación rotativa', () => {
     expect(cookieValue(renewed.headers)).toBe(second.tokens.refreshToken)
     expect(claimsOf(second.tokens.accessToken).sid).toBe(claimsOf(session.tokens.accessToken).sid)
 
-    // Reutilizar el refresco ya rotado revoca toda la familia.
+    // Dentro de la gracia (20 s) el anterior devuelve el mismo par (dos pestañas a la vez).
+    const graced = await raw<SessionResponse>('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${first}` })
+    expect(graced.status).toBe(200)
+    expect(SessionResponseSchema.parse(data(graced.json)).tokens).toEqual(second.tokens)
+
+    // Fuera de la gracia, reutilizar el refresco ya rotado revoca toda la familia.
+    expireRefreshGrace()
     const reused = await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${first}` })
     expect(reused.status).toBe(401)
     expect(errorCode(reused.json)).toBe('AUTH_REFRESH_REUSED')
@@ -175,7 +181,7 @@ describe('renovación rotativa', () => {
     expireAccessTokens()
     const expired = await raw('/v1/terroirs', { token: session.tokens.accessToken })
     expect(expired.status).toBe(401)
-    expect(errorCode(expired.json)).toBe('UNAUTHORIZED')
+    expect(errorCode(expired.json)).toBe('AUTH_TOKEN_EXPIRED')
     const renewed = SessionResponseSchema.parse(
       data((await raw<SessionResponse>('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${session.tokens.refreshToken}` })).json),
     )
@@ -212,13 +218,57 @@ describe('cambio de organización', () => {
     expect(again.session.activeOrganizationId).toBe(URIONDO.id)
   })
 
-  it('sin membresía → 404 ORG_NOT_FOUND; membresía bloqueada → 403', async () => {
+  it('sin membresía → 404 ORG_NOT_FOUND; membresía bloqueada → 403 ORG_MEMBERSHIP_BLOCKED; revocada → 403 ORG_REVOKED', async () => {
     const { session } = await login('ines@salazar.test')
     const none = await raw('/v1/auth/switch-organization', { token: session.tokens.accessToken, body: { organizationId: URIONDO.id } })
     expect(none.status).toBe(404)
     expect(errorCode(none.json)).toBe('ORG_NOT_FOUND')
     const blocked = await raw('/v1/auth/switch-organization', { token: session.tokens.accessToken, body: { organizationId: ALTOS.id } })
     expect(blocked.status).toBe(403)
+    expect(errorCode(blocked.json)).toBe('ORG_MEMBERSHIP_BLOCKED')
+    // Hugo es dueño de Bodega Valle Escondido (REVOKED): su única membresía no es utilizable.
+    const hugo = await login('hugo@valleescondido.test')
+    const valle = erpFixtures.wineries.find((w) => w.certificationStatus === 'REVOKED')!
+    const revoked = await raw('/v1/auth/switch-organization', { token: hugo.session.tokens.accessToken, body: { organizationId: valle.id } })
+    expect(revoked.status).toBe(403)
+    expect(errorCode(revoked.json)).toBe('ORG_REVOKED')
+  })
+
+  it('exige el refresco de la misma sesión (cookie o cuerpo) y lo rota (contrato de la Ola 0 §8)', async () => {
+    const a = (await login('sofia@aramayo.test')).session
+    const b = (await login('admin@altos.test')).session
+    // Sin cookie propia: el último refresco guardado es el de otra sesión → 401 AUTH_REFRESH_INVALID.
+    const noRefresh = await raw('/v1/auth/switch-organization', { token: a.tokens.accessToken, cookie: '', body: { organizationId: URIONDO.id } })
+    expect(noRefresh.status).toBe(401)
+    expect(errorCode(noRefresh.json)).toBe('AUTH_REFRESH_INVALID')
+    // El refresco de otra sesión en el cuerpo tampoco vale (y no revoca nada).
+    const foreign = await raw('/v1/auth/switch-organization', {
+      token: a.tokens.accessToken,
+      cookie: '',
+      body: { organizationId: URIONDO.id, refreshToken: b.tokens.refreshToken },
+    })
+    expect(errorCode(foreign.json)).toBe('AUTH_REFRESH_INVALID')
+    expect((await raw('/v1/users/me', { token: b.tokens.accessToken })).status).toBe(200)
+    // Con el refresco de la sesión en el cuerpo: cambia y lo rota.
+    const ok = await raw<SessionResponse>('/v1/auth/switch-organization', {
+      token: a.tokens.accessToken,
+      cookie: '',
+      body: { organizationId: URIONDO.id, refreshToken: a.tokens.refreshToken },
+    })
+    expect(ok.status).toBe(200)
+    const switched = SessionResponseSchema.parse(data(ok.json))
+    expect(switched.tokens.refreshToken).not.toBe(a.tokens.refreshToken)
+    expect(cookieValue(ok.headers)).toBe(switched.tokens.refreshToken)
+    // Con la cookie de la sesión (lo normal en las apps) también vale.
+    const back = await raw('/v1/auth/switch-organization', {
+      token: switched.tokens.accessToken,
+      cookie: `doc_rt=${switched.tokens.refreshToken}`,
+      body: { organizationId: ALTOS.id },
+    })
+    expect(back.status).toBe(200)
+    // El refresco inicial, ya dos veces rotado → reutilización: revoca la sesión.
+    const reused = await raw('/v1/auth/refresh', { cookie: `doc_rt=${a.tokens.refreshToken}`, method: 'POST' })
+    expect(errorCode(reused.json)).toBe('AUTH_REFRESH_REUSED')
   })
 
   it('POST /wineries/my/members reactiva una membresía bloqueada sin tocar el rol global (SE-01)', async () => {
