@@ -1,0 +1,186 @@
+[
+  {
+    "id": "1ee7e630-efb9-5f93-b005-61c5076550f5",
+    "email": "analista@drinksonchain.test",
+    "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+    "organizationType": "PLATFORM",
+    "organizationName": "Drinks on Chain",
+    "role": "OPERATIONS",
+    "status": "ACCEPTED",
+    "expiresAt": "2026-09-23T10:00:00Z",
+    "createdAt": "2026-09-20T10:00:00Z",
+    "invitedBy": {
+      "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
+      "fullName": "Jorge Salinas",
+      "viaPlatform": true
+    },
+    "_mock": {
+      "token": "demo-invitacion-analista",
+      "inviteeName": null,
+      "transfer": null,
+      "acceptedAt": "2026-09-22T09:00:00Z",
+      "revokedAt": null
+    }
+  },
+  {
+    "id": "39eb1612-a1ec-5038-aea2-6496741e4e08",
+    "email": "soporte2@drinksonchain.test",
+    "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+    "organizationType": "PLATFORM",
+    "organizationName": "Drinks on Chain",
+    "role": "SUPPORT",
+    "status": "PENDING",
+    "expiresAt": "2026-09-27T10:00:00Z",
+    "createdAt": "2026-09-24T10:00:00Z",
+    "invitedBy": {
+      "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
+      "fullName": "Jorge Salinas",
+      "viaPlatform": true
+    },
+    "_mock": {
+      "token": "demo-invitacion-soporte",
+      "inviteeName": null,
+      "transfer": null,
+      "acceptedAt": null,
+      "revokedAt": null
+    }
+  },
+  {
+    "id": "15a8bd1a-00f6-5629-85a1-43fe9c6b850b",
+    "email": "gerencia@guadalquivir.test",
+    "organizationId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+    "organizationType": "WINERY",
+    "organizationName": "Viñedos del Guadalquivir",
+    "role": "OWNER",
+    "status": "EXPIRED",
+    "expiresAt": "2026-09-21T09:00:00Z",
+    "createdAt": "2026-09-18T09:00:00Z",
+    "invitedBy": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez",
+      "viaPlatform": true
+    },
+    "_mock": {
+      "token": "demo-invitacion-guadalquivir",
+      "inviteeName": "Elena Vaca",
+      "transfer": null,
+      "acceptedAt": null,
+      "revokedAt": null
+    }
+  },
+  {
+    "id": "45a3d555-de55-5dcf-af73-d97324c07209",
+    "email": "duena@soldepadcaya.test",
+    "organizationId": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
+    "organizationType": "WINERY",
+    "organizationName": "Bodega Sol de Padcaya",
+    "role": "OWNER",
+    "status": "PENDING",
+    "expiresAt": "2026-09-27T09:00:00Z",
+    "createdAt": "2026-09-24T09:00:00Z",
+    "invitedBy": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez",
+      "viaPlatform": true
+    },
+    "_mock": {
+      "token": "demo-invitacion-padcaya",
+      "inviteeName": "Gabriela Ríos",
+      "transfer": null,
+      "acceptedAt": null,
+      "revokedAt": null
+    }
+  },
+  {
+    "id": "5e2b34b6-5f13-5f58-b484-7db70b434e08",
+    "email": "enologo.junior@altos.test",
+    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "organizationType": "WINERY",
+    "organizationName": "Bodega Altos de Calamuchita",
+    "role": "ENOLOGIST",
+    "status": "PENDING",
+    "expiresAt": "2026-09-26T11:00:00Z",
+    "createdAt": "2026-09-23T11:00:00Z",
+    "invitedBy": {
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "viaPlatform": false
+    },
+    "_mock": {
+      "token": "demo-invitacion-altos-enologo",
+      "inviteeName": null,
+      "transfer": null,
+      "acceptedAt": null,
+      "revokedAt": null
+    }
+  },
+  {
+    "id": "6e544b17-3211-5c65-a28f-486b0e97f23d",
+    "email": "practicante@altos.test",
+    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "organizationType": "WINERY",
+    "organizationName": "Bodega Altos de Calamuchita",
+    "role": "AGRONOMIST",
+    "status": "REVOKED",
+    "expiresAt": "2026-09-13T10:00:00Z",
+    "createdAt": "2026-09-10T10:00:00Z",
+    "invitedBy": {
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "viaPlatform": false
+    },
+    "_mock": {
+      "token": "demo-invitacion-altos-practicante",
+      "inviteeName": null,
+      "transfer": null,
+      "acceptedAt": null,
+      "revokedAt": "2026-09-11T09:00:00Z"
+    }
+  },
+  {
+    "id": "fcf28d10-2e23-5514-9286-5007a2b1fb8c",
+    "email": "contabilidad@cintiviejo.test",
+    "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "organizationType": "WINERY",
+    "organizationName": "Destilería Cinti Viejo",
+    "role": "ACCOUNTANT",
+    "status": "ACCEPTED",
+    "expiresAt": "2026-05-21T10:00:00Z",
+    "createdAt": "2026-05-18T10:00:00Z",
+    "invitedBy": {
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "viaPlatform": false
+    },
+    "_mock": {
+      "token": "demo-invitacion-cintiviejo-contable",
+      "inviteeName": null,
+      "transfer": null,
+      "acceptedAt": "2026-05-20T10:00:00Z",
+      "revokedAt": null
+    }
+  },
+  {
+    "id": "90ce54d2-6232-5973-97f6-56795a0e9ef8",
+    "email": "bodeguero@cintiviejo.test",
+    "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "organizationType": "WINERY",
+    "organizationName": "Destilería Cinti Viejo",
+    "role": "OPERATOR",
+    "status": "PENDING",
+    "expiresAt": "2026-09-28T09:00:00Z",
+    "createdAt": "2026-09-25T09:00:00Z",
+    "invitedBy": {
+      "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
+      "fullName": "Pablo Rivera",
+      "viaPlatform": true
+    },
+    "_mock": {
+      "token": "demo-invitacion-cintiviejo-operario",
+      "inviteeName": null,
+      "transfer": null,
+      "acceptedAt": null,
+      "revokedAt": null
+    }
+  }
+]

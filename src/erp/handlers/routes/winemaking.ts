@@ -17,9 +17,9 @@ import {
   type ProductionBatchResponse,
   type WineAgingResponse,
 } from '../../schemas'
-import { canSee, members, roles, scoped, type AuthContext } from '../auth-context'
+import { canSee, scoped, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick, today } from '../db'
-import { notFound, unprocessable } from '../errors'
+import { domainError, fieldError, invalid, notFound, unprocessable } from '../errors'
 import { created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
 import { findHarvest, requireWinery } from './terroirs-harvest'
 
@@ -53,7 +53,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/fermentation-tanks',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateFermentationTankSchema)
@@ -80,7 +80,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/fermentation-tanks',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const status = enumParam(query, 'status', TANK_STATUSES)
@@ -98,7 +98,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/fermentation-tanks/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'AGRONOMIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const t = findTank(auth, params.id!)
       const db = getErpDb()
@@ -113,7 +113,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/fermentation-tanks/:id/logs',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST', 'POS_OPERATOR']),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR']),
     async handle({ request, auth, params }) {
       const t = findTank(auth, params.id!)
       const body = await parseBody(request, CreateFermentationLogSchema)
@@ -136,7 +136,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/fermentation-tanks/:id/treatments',
-    access: roles(['ENOLOGIST', 'WINERY_ADMIN']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth, params }) {
       const t = findTank(auth, params.id!)
       const body = await parseBody(request, CreateEnologicalTreatmentSchema)
@@ -162,11 +162,15 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/wine-aging',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateWineAgingBatchSchema)
       const tank = findTank(auth, body.fermentationTankId)
+      // Como el backend: una cuba solo pasa una vez a crianza.
+      if (getErpDb().wineAgings.some((a) => a.fermentationTankId === tank.id)) {
+        throw domainError(409, 'FERMENTATION_TANK_ALREADY_TRANSFERRED', `La cuba ${tank.tankCode} ya ha sido transferida a un lote de crianza previo`)
+      }
       const start = body.startDate ? dayFromIso(body.startDate) : today()
       const aging: WineAgingResponse = {
         id: newId('aging'),
@@ -190,14 +194,14 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wine-aging',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
     handle: ({ query, auth }) => listResult(scoped(auth, getErpDb().wineAgings), query),
   },
   {
     method: 'get',
     path: '/v1/wine-aging/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle: ({ auth, params }) => ok(findAging(auth, params.id!)),
   },
 
@@ -205,12 +209,23 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'post',
     path: '/v1/production-batches/distillation',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST']),
+    access: winery(['OWNER', 'ENOLOGIST']),
     async handle({ request, auth }) {
       requireWinery(auth)
       const body = await parseBody(request, CreateDistillationBatchSchema)
       const tank = findTank(auth, body.fermentationTankId)
       const db = getErpDb()
+      // Balance de masa (backend): corazón + descarte no puede superar la entrada + 5 %.
+      if (body.inputVolumeLiters && body.outputVolumeLiters && body.wasteVolumeLiters) {
+        if (body.outputVolumeLiters + body.wasteVolumeLiters > body.inputVolumeLiters * 1.05) {
+          throw invalid([
+            fieldError(
+              'outputVolumeLiters',
+              `Balance de masa inconsistente: La suma de corazón (${body.outputVolumeLiters} L) y descarte (${body.wasteVolumeLiters} L) excede el volumen de entrada (${body.inputVolumeLiters} L)`,
+            ),
+          ])
+        }
+      }
       const isDoEligible = body.isDoEligible ?? false
       if (isDoEligible) {
         // Reglas D.O. Singani: la parcela de origen debe ser apta y estar a ≥ 1.600 m.
@@ -218,13 +233,13 @@ export const winemakingRoutes: RouteSpec[] = [
         const terroir = harvest ? db.terroirs.find((t) => t.id === harvest.terroirId) : undefined
         if (!terroir?.isDoEligible) {
           throw unprocessable('La parcela de origen no es apta para la Denominación de Origen', [
-            `terroir ${terroir?.parcelName ?? 'desconocido'}: isDoEligible = false`,
+            fieldError('isDoEligible', `La parcela ${terroir?.parcelName ?? 'de origen'} no es apta para D.O.`),
           ])
         }
         if (terroir.altitudeMasl < DO_MIN_ALTITUDE_MASL) {
           throw unprocessable(
             `La D.O. Singani exige una altitud mínima de ${DO_MIN_ALTITUDE_MASL} m s. n. m. (parcela: ${terroir.altitudeMasl} m)`,
-            [`altitudeMasl ${terroir.altitudeMasl} < ${DO_MIN_ALTITUDE_MASL}`],
+            [fieldError('isDoEligible', `Altitud ${terroir.altitudeMasl} m < ${DO_MIN_ALTITUDE_MASL} m`)],
           )
         }
       }
@@ -255,7 +270,7 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/production-batches/:id/rest-status',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const p = findProduction(auth, params.id!)
       return ok(deriveRestStatus(p, { today: isoDay(today()) }))
@@ -264,13 +279,13 @@ export const winemakingRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/production-batches/:id',
-    access: roles(['WINERY_ADMIN', 'ENOLOGIST'], { adminReads: true }),
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle: ({ auth, params }) => ok(findProduction(auth, params.id!)),
   },
   {
     method: 'get',
     path: '/v1/production-batches',
-    access: members,
+    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const processType = enumParam(query, 'processType', PROCESS_TYPES)

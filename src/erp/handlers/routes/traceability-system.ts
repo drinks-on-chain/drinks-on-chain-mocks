@@ -7,9 +7,9 @@ import {
   type TraceabilityDagNode,
   type UploadResponse,
 } from '../../schemas'
-import { anyUser, members } from '../auth-context'
+import { anyUser } from '../auth-context'
 import { CLOCK_START, getErpDb, nextSeq, tick } from '../db'
-import { ApiError, notFound } from '../errors'
+import { badRequest, fieldError, invalid, notFound } from '../errors'
 import { created, ok, strParam, type RouteSpec } from '../http'
 import { findBottling } from './bottling-lab'
 
@@ -46,8 +46,9 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/traceability/dag/:bottlingBatchId',
-    access: members,
-    handle: ({ auth, params }) => ok(buildDag(params.bottlingBatchId!, auth)),
+    access: anyUser,
+    // Como el backend: cualquier sesión; una bodega solo ve sus lotes (los demás, como el pasaporte público).
+    handle: ({ auth, params }) => ok(buildDag(params.bottlingBatchId!, auth.organizationType === 'WINERY' ? auth : null)),
   },
   {
     method: 'get',
@@ -80,15 +81,20 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
       try {
         form = await request.formData()
       } catch {
-        throw new ApiError(400, 'BAD_REQUEST', 'Archivo faltante: envíe multipart/form-data con el campo "file"')
+        throw badRequest('Envíe multipart/form-data con el campo "file"')
       }
       const file = form.get('file')
       if (!file || typeof file === 'string') {
-        throw new ApiError(400, 'BAD_REQUEST', 'Archivo faltante: envíe multipart/form-data con el campo "file"')
+        throw invalid([fieldError('file', 'Debe proporcionar un archivo en el campo multipart/form-data "file".')])
       }
-      if (file.size > UPLOAD_MAX_BYTES) throw new ApiError(400, 'BAD_REQUEST', 'El archivo excede el tamaño máximo (15MB)')
+      if (file.size > UPLOAD_MAX_BYTES) throw invalid([fieldError('file', 'El archivo excede el tamaño máximo (15MB)')])
       if (!(UPLOAD_MIME_TYPES as readonly string[]).includes(file.type)) {
-        throw new ApiError(400, 'BAD_REQUEST', `Tipo MIME no permitido: ${file.type || 'desconocido'}`)
+        throw invalid([
+          fieldError(
+            'file',
+            `Tipo de archivo no permitido: '${file.type || 'desconocido'}'. Se permiten únicamente imágenes (JPEG, PNG, WEBP, SVG, GIF) y documentos PDF.`,
+          ),
+        ])
       }
       const folder = (strParam(query, 'folder') ?? 'misc').replace(/[^a-z0-9-]/gi, '')
       const name = (file.name || 'archivo').replace(/[^\w.-]+/g, '-')

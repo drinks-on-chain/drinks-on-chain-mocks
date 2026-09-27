@@ -1,16 +1,16 @@
 import type { RequestHandler } from 'msw'
 import { setupServer, type SetupServer } from 'msw/node'
-import { createErpHandlers, type ErpHandlerOptions } from './erp/handlers'
+import { createErpHandlers, type MockHandlerOptions } from './erp/handlers'
 
 // Entrada `@drinks-on-chain/mocks/node`: servidor MSW para Vitest, Playwright o scripts.
 
-export interface SetupMockServerOptions extends ErpHandlerOptions {
-  /** Handlers propios que se evalúan antes que los del ERP. */
+export interface SetupMockServerOptions extends MockHandlerOptions {
+  /** Handlers propios que se evalúan antes que los de los mocks. */
   extraHandlers?: RequestHandler[]
 }
 
 /**
- * Crea un servidor MSW con los handlers del ERP (sin latencia por defecto).
+ * Crea un servidor MSW con todos los handlers (ERP + Ola 1, sin latencia por defecto).
  *
  *   const server = setupMockServer()
  *   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
@@ -22,6 +22,19 @@ export function setupMockServer(options: SetupMockServerOptions = {}): SetupServ
   return setupServer(...extraHandlers, ...createErpHandlers({ latency: 0, ...handlerOptions }))
 }
 
-export { createErpHandlers, getErpDb, mockAccessToken, resetErpDb } from './erp/handlers'
+export {
+  advanceMockClock,
+  createErpHandlers,
+  createMockHandlers,
+  expireAccessTokens,
+  expireRefreshGrace,
+  getErpDb,
+  mockAccessToken,
+  mockMailbox,
+  resetErpDb,
+  resetSessions,
+  setMockAppUrls,
+} from './erp/handlers'
 export { getScenario, resetScenario, setScenario, SCENARIOS, type ScenarioName } from './shared/scenarios'
-export { demoUsers, DEMO_PASSWORD } from './erp/fixtures'
+export { DEMO_NEW_PASSWORD, DEMO_PASSWORD, demoStaff, demoUsers } from './erp/fixtures'
+export { DEMO_TOTP_SECRET, generateTotp, MOCK_TOTP_BYPASS_CODE } from './shared/totp'

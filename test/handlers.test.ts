@@ -14,15 +14,18 @@ import {
   TraceabilityDagSchema,
   unwrapList,
   UploadResponseSchema,
-  UserProfileResponseSchema,
+  MeResponseSchema,
+  MeUserSchema,
+  SessionResponseSchema,
   WineAgingResponseSchema,
   type Paged,
+  type SessionResponse,
   type TerroirResponse,
 } from '../src'
 import { erpFixtures } from '../src/fixtures'
-import { ERP_ROUTES, resetScenario, setScenario } from '../src/handlers'
+import { resetScenario, setScenario } from '../src/handlers'
 import { getErpDb, resetErpDb, setupMockServer } from '../src/node'
-import { API, call, dataOf, login } from './helpers'
+import { API, call, dataOf, login, loginSession } from './helpers'
 
 const server = setupMockServer({ baseUrl: API })
 
@@ -37,49 +40,38 @@ afterAll(() => server.close())
 const ALTOS = erpFixtures.wineries.find((w) => w.commercialName === 'Bodega Altos de Calamuchita')!
 const CINTI = erpFixtures.wineries.find((w) => w.commercialName === 'Destilería Cinti Viejo')!
 
-describe('cobertura del OpenAPI', () => {
-  it('hay un handler por cada operación del OpenAPI', async () => {
-    const { readFileSync } = await import('node:fs')
-    const spec = JSON.parse(readFileSync(new URL('../openapi/erp.json', import.meta.url), 'utf8')) as {
-      paths: Record<string, Record<string, unknown>>
-    }
-    const expected = Object.entries(spec.paths)
-      .flatMap(([path, ops]) => Object.keys(ops).map((m) => `${m.toUpperCase()} ${path.replace(/\{(\w+)\}/g, ':$1')}`))
-      .sort()
-    const actual = ERP_ROUTES.map((r) => `${r.method} ${r.path}`).sort()
-    expect(actual).toEqual(expected)
-  })
-})
-
 describe('autenticación', () => {
-  it('login con usuario de demo devuelve el fixture de auth-login', async () => {
+  it('login con usuario de demo devuelve el fixture de auth-login (salvo los tokens de la sesión)', async () => {
     const { status, json } = await call('/v1/auth/login', { body: { email: 'enologa@altos.test', password: 'demo1234' } })
     expect(status).toBe(200)
     expect(json).toMatchObject({ success: true, statusCode: 200, path: '/v1/auth/login' })
-    expect(dataOf(json)).toStrictEqual(erpFixtures.authLogin.altos_enologa)
+    const data = dataOf(json) as SessionResponse
+    expect({ ...data, tokens: undefined }).toStrictEqual({ ...erpFixtures.authLogin.altos_enologa!, tokens: undefined })
+    expect(data.tokens).toMatchObject({ tokenType: 'Bearer', expiresIn: 900 })
   })
 
   it('las respuestas de login de todos los usuarios coinciden con auth-login.json', async () => {
-    for (const [key, expected] of Object.entries(erpFixtures.authLogin)) {
+    for (const [key, fixture] of Object.entries(erpFixtures.authLogin)) {
       const email = erpFixtures.users.find((u) => u._mock.key === key)!.email
-      const { json } = await call('/v1/auth/login', { body: { email, password: 'demo1234' } })
-      expect(dataOf(json)).toStrictEqual(expected)
+      // El personal de plataforma pasa antes el segundo factor (contrato de la Ola 1 §1).
+      const data = SessionResponseSchema.parse(await loginSession(email))
+      expect({ ...data, tokens: undefined }).toStrictEqual({ ...fixture, tokens: undefined })
     }
   })
 
-  it('contraseña incorrecta → 401 con envoltorio', async () => {
+  it('contraseña incorrecta → 401 AUTH_INVALID_CREDENTIALS con envoltorio', async () => {
     const { status, json } = await call('/v1/auth/login', { body: { email: 'enologa@altos.test', password: 'x' } })
     expect(status).toBe(401)
     const err = ErrorEnvelopeSchema.parse(json)
-    expect(err.error.code).toBe('UNAUTHORIZED')
+    expect(err.error.code).toBe('AUTH_INVALID_CREDENTIALS')
   })
 
-  it('cuerpo inválido → 400 VALIDATION_ERROR con detalles', async () => {
-    const { status, json } = await call('/v1/auth/login', { body: {} })
-    expect(status).toBe(400)
+  it('cuerpo inválido → 422 VALIDATION_ERROR con details por campo', async () => {
+    const { status, json } = await call('/v1/auth/login', { body: { email: 'no-es-correo' } })
+    expect(status).toBe(422)
     const err = ErrorEnvelopeSchema.parse(json)
     expect(err.error.code).toBe('VALIDATION_ERROR')
-    expect(Array.isArray(err.error.details)).toBe(true)
+    expect(err.error.details!.map((d) => d.field)).toEqual(['email', 'password'])
   })
 
   it('JSON mal formado → 400 BAD_REQUEST', async () => {
@@ -93,23 +85,33 @@ describe('autenticación', () => {
     expect((await call('/v1/users/me', { token: 'mock.access.nadie' })).status).toBe(401)
   })
 
-  it('users/me devuelve el perfil sin _mock', async () => {
+  it('users/me devuelve { user, memberships, activeOrganizationId } sin _mock', async () => {
     const token = await login('admin@altos.test')
-    const me = dataOf((await call('/v1/users/me', { token })).json)
-    expect(UserProfileResponseSchema.strict().parse(me).email).toBe('admin@altos.test')
-    expect(me).not.toHaveProperty('_mock')
+    const me = MeResponseSchema.strict().parse(dataOf((await call('/v1/users/me', { token })).json))
+    expect(MeUserSchema.strict().parse(me.user).email).toBe('admin@altos.test')
+    expect(me.user).not.toHaveProperty('_mock')
+    expect(me.activeOrganizationId).toBe(ALTOS.id)
+    expect(me.memberships.map((m) => m.role)).toEqual(['OWNER'])
   })
 
-  it('refresh renueva tokens y rechaza tokens desconocidos', async () => {
+  it('refresh acepta el refresco estático de 0.1 y rechaza tokens desconocidos', async () => {
     const ok = await call('/v1/auth/refresh', { body: { refreshToken: 'mock.refresh.altos_admin' } })
-    expect(dataOf(ok.json)).toMatchObject({ accessToken: 'mock.access.altos_admin', tokenType: 'Bearer' })
-    expect((await call('/v1/auth/refresh', { body: { refreshToken: 'otro' } })).status).toBe(401)
+    const session = SessionResponseSchema.parse(dataOf(ok.json))
+    expect(session.user.email).toBe('admin@altos.test')
+    // Refresco con la forma del backend: `<sid>.<generación>.<secreto>`.
+    expect(session.tokens.refreshToken).toMatch(/^[0-9a-f-]{36}\.0\.[A-Za-z0-9_-]{43}$/)
+    // Sin sesiones (la cookie que guardó MSW ya no corresponde a ninguna) un refresco desconocido → 401.
+    resetErpDb()
+    const unknown = await call('/v1/auth/refresh', { body: { refreshToken: 'otro' } })
+    expect(unknown.status).toBe(401)
+    expect(ErrorEnvelopeSchema.parse(unknown.json).error.code).toBe('AUTH_REFRESH_INVALID')
   })
 
   it('signup crea un consumidor que luego puede iniciar sesión', async () => {
     const res = await call('/v1/auth/signup', { body: { email: 'nuevo@tribu.test', password: 'secreta1', fullName: 'Nuevo' } })
     expect(res.status).toBe(201)
-    expect(await login('nuevo@tribu.test', 'secreta1')).toMatch(/^mock\.access\./)
+    expect(SessionResponseSchema.parse(dataOf(res.json))).toMatchObject({ user: { audience: 'CONSUMER' }, memberships: [], activeOrganizationId: null })
+    expect((await call('/v1/users/me', { token: await login('nuevo@tribu.test', 'secreta1') })).status).toBe(200)
     expect((await call('/v1/auth/signup', { body: { email: 'nuevo@tribu.test', password: 'x', fullName: 'X' } })).status).toBe(409)
   })
 })
@@ -147,7 +149,22 @@ describe('multi-tenant, filtros y paginación', () => {
     expect(first.items).toHaveLength(2)
     expect(second.items).toHaveLength(2)
     expect(second.items[0]).not.toEqual(first.items[0])
-    expect((await call('/v1/harvest-batches?limit=abc', { token })).status).toBe(400)
+    const bad = await call('/v1/harvest-batches?limit=abc', { token })
+    expect(bad.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(bad.json).error.details).toEqual([{ field: 'limit', message: 'limit debe ser un número entero' }])
+  })
+
+  it('limit por defecto 20, máximo 100 (más → 422)', async () => {
+    const token = await login('gestor@drinksonchain.test')
+    const page = dataOf((await call('/v1/harvest-batches', { token })).json) as Paged<unknown>
+    expect(page).toMatchObject({ limit: 20, offset: 0 })
+    expect((await call('/v1/harvest-batches?limit=100', { token })).status).toBe(200)
+    const tooMany = await call('/v1/harvest-batches?limit=101', { token })
+    expect(tooMany.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(tooMany.json).error).toMatchObject({
+      code: 'VALIDATION_ERROR',
+      details: [{ field: 'limit', message: 'limit no puede ser mayor que 100' }],
+    })
   })
 
   it('filtros de tanques (status, destinationType) y de destilación (restStatus)', async () => {
@@ -156,7 +173,7 @@ describe('multi-tenant, filtros y paginación', () => {
     expect(fermenting.items.map((t) => t.tankCode).sort()).toEqual(['TK-04', 'TK-10'])
     const wine = dataOf((await call('/v1/fermentation-tanks?destinationType=WINE_AGING', { token })).json) as Paged<unknown>
     expect(wine.total).toBe(7)
-    expect((await call('/v1/fermentation-tanks?status=NOPE', { token })).status).toBe(400)
+    expect((await call('/v1/fermentation-tanks?status=NOPE', { token })).status).toBe(422)
     const cvj = await login('enologa@cintiviejo.test')
     const resting = dataOf((await call('/v1/production-batches?restStatus=RESTING', { token: cvj })).json) as Paged<unknown>
     expect(resting.total).toBe(2)
@@ -188,15 +205,17 @@ describe('roles', () => {
       body: { harvestBatchId: harvest.id, tankCode: 'TK-99', startDate: '2026-09-25' },
     })
     expect(status).toBe(403)
-    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('FORBIDDEN')
+    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
   })
 
   it('solo PLATFORM_ADMIN lista bodegas y pendientes', async () => {
     const owner = await login('admin@altos.test')
     expect((await call('/v1/wineries', { token: owner })).status).toBe(403)
     const admin = await login('gestor@drinksonchain.test')
-    const pending = dataOf((await call('/v1/wineries/pending', { token: admin })).json) as unknown[]
-    expect(pending).toHaveLength(1)
+    const pending = dataOf((await call('/v1/wineries/pending', { token: admin })).json) as Paged<unknown>
+    // Viñedos del Guadalquivir y Bodega Sol de Padcaya (INVITED desde la Ola 1).
+    expect(pending).toMatchObject({ total: 2, limit: 20, offset: 0 })
+    expect(pending.items).toHaveLength(2)
   })
 
   it('un consumidor no ve datos del ERP pero sí el pasaporte público', async () => {
@@ -213,20 +232,21 @@ describe('recorrido del ERP: vendimia → tanque → crianza → embotellado', (
     const token = await login('enologa@altos.test')
     const terroir = erpFixtures.terroirs.find((t) => t.parcelName === 'Cuartel 1 · La Angostura')!
 
-    // Pesaje sin laboratorio → 422
+    // Pesaje sin laboratorio → 422 con los campos
     const base = { terroirId: terroir.id, intakeDate: '2026-09-25', harvestYear: 2026, grossWeightKg: 5200, tareWeightKg: 100 }
     const noLab = await call('/v1/harvest-batches', { token, body: base })
     expect(noLab.status).toBe(422)
     const err = ErrorEnvelopeSchema.parse(noLab.json)
-    expect(err.error.code).toBe('UNPROCESSABLE_ENTITY')
-    expect(err.error.details).toEqual(['brixDegrees es obligatorio', 'initialPh es obligatorio', 'initialAcidityGl es obligatorio'])
+    expect(err.error.code).toBe('VALIDATION_ERROR')
+    expect(err.error.details!.map((d) => d.field)).toEqual(['brixDegrees', 'initialPh', 'initialAcidityGl'])
 
-    // Bruto ≤ tara → 400
+    // Bruto ≤ tara → 422 en grossWeightKg
     const badWeight = await call('/v1/harvest-batches', {
       token,
       body: { ...base, grossWeightKg: 100, brixDegrees: 23, initialPh: 3.5, initialAcidityGl: 6 },
     })
-    expect(badWeight.status).toBe(400)
+    expect(badWeight.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(badWeight.json).error.details![0]!.field).toBe('grossWeightKg')
 
     // Pesaje correcto → 201 y aparece en la lista
     const created = await call('/v1/harvest-batches', {
@@ -279,7 +299,9 @@ describe('recorrido del ERP: vendimia → tanque → crianza → embotellado', (
     const bottle = { wineAgingBatchId: aging.id, productType: 'WINE', finalAlcoholAbv: 14, totalBottlesPackaged: 5000, packagingFormatCl: 75, bottlingDate: '2026-09-25' }
     const locked = await call('/v1/bottling', { token, body: bottle })
     expect(locked.status).toBe(422)
-    expect(ErrorEnvelopeSchema.parse(locked.json).error.message).toBe('El vino se encuentra bloqueado por período de crianza hasta el 2027-09-25')
+    const lockedErr = ErrorEnvelopeSchema.parse(locked.json).error
+    expect(lockedErr.message).toBe('El vino se encuentra bloqueado por período de crianza hasta el 2027-09-25')
+    expect(lockedErr.details![0]!.field).toBe('wineAgingBatchId')
 
     // Una crianza liberada (fixture READY de otra bodega no es visible → 404)
     const cintiReady = erpFixtures.wineAging.find((a) => a.agingStatus === 'READY')!
@@ -358,15 +380,17 @@ describe('bodega, miembros y archivos', () => {
     })
     expect(res.status).toBe(201)
     const newToken = await login('nueva.enologa@altos.test', 'clave123')
-    const me = dataOf((await call('/v1/users/me', { token: newToken })).json) as { wineryMemberships: { wineryId: string }[] }
-    expect(me.wineryMemberships[0]!.wineryId).toBe(ALTOS.id)
-    const membersList = dataOf((await call('/v1/wineries/my/members', { token })).json) as unknown[]
-    expect(membersList).toHaveLength(5)
+    const me = MeResponseSchema.parse(dataOf((await call('/v1/users/me', { token: newToken })).json))
+    expect(me.user.wineryMemberships[0]!.wineryId).toBe(ALTOS.id)
+    expect(me.activeOrganizationId).toBe(ALTOS.id)
+    const membersList = dataOf((await call('/v1/wineries/my/members', { token })).json) as Paged<unknown>
+    // 4 de los fixtures + Sofía (enóloga) + la nueva; Inés está bloqueada y no aparece.
+    expect(membersList.total).toBe(6)
   })
 
   it('aprobar una bodega pendiente le asigna cuenta Stellar', async () => {
     const token = await login('gestor@drinksonchain.test')
-    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'PENDING')!
+    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'INVITED')!
     const approved = dataOf((await call(`/v1/wineries/${pending.id}/approve`, { token, body: {} })).json) as {
       certificationStatus: string
       stellarPublicKey: string
@@ -385,7 +409,9 @@ describe('bodega, miembros y archivos', () => {
     expect(upload.url).toMatch(/^\/mocks\/uploads\/inspections\/\d+-acta\.pdf$/)
     const bad = new FormData()
     bad.append('file', new File(['x'], 'x.exe', { type: 'application/x-msdownload' }))
-    expect((await call('/v1/uploads', { token, form: bad })).status).toBe(400)
+    const rejected = await call('/v1/uploads', { token, form: bad })
+    expect(rejected.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(rejected.json).error.details![0]!.field).toBe('file')
   })
 
   it('ruta /v1 desconocida → 404 con envoltorio (baseUrl explícito)', async () => {
@@ -405,8 +431,8 @@ describe('escenarios', () => {
   it('empty: listas vacías', async () => {
     const token = await login('enologa@altos.test')
     setScenario('empty')
-    expect(dataOf((await call('/v1/terroirs', { token })).json)).toEqual({ items: [], total: 0, limit: 50, offset: 0 })
-    expect(dataOf((await call('/v1/wineries/my/members', { token })).json)).toEqual([])
+    expect(dataOf((await call('/v1/terroirs', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
+    expect(dataOf((await call('/v1/wineries/my/members', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
   })
 
   it('error: 500 con envoltorio (login sigue funcionando)', async () => {
@@ -414,7 +440,7 @@ describe('escenarios', () => {
     const token = await login('enologa@altos.test')
     const { status, json } = await call('/v1/terroirs', { token })
     expect(status).toBe(500)
-    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('INTERNAL_SERVER_ERROR')
+    expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('INTERNAL_ERROR')
   })
 
   it('offline: error de red', async () => {

@@ -59,6 +59,26 @@
         "professionalLicenseNumber": null,
         "isActive": true,
         "joinedAt": "2026-03-12T10:00:00Z"
+      },
+      {
+        "id": "834fbdac-9013-5cfe-9564-bbe6b8359557",
+        "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+        "fullName": "Lic. Sofía Aramayo",
+        "email": "sofia@aramayo.test",
+        "memberRole": "ENOLOGIST",
+        "professionalLicenseNumber": "COL-ENOL-TAR-133",
+        "isActive": true,
+        "joinedAt": "2026-03-10T10:00:00Z"
+      },
+      {
+        "id": "af3d16da-21a1-59f3-9028-af66cb89294c",
+        "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
+        "fullName": "Ing. Inés Salazar",
+        "email": "ines@salazar.test",
+        "memberRole": "OPERATOR",
+        "professionalLicenseNumber": null,
+        "isActive": false,
+        "joinedAt": "2026-04-01T10:00:00Z"
       }
     ]
   },
@@ -122,6 +142,26 @@
         "professionalLicenseNumber": null,
         "isActive": true,
         "joinedAt": "2026-03-27T10:00:00Z"
+      },
+      {
+        "id": "7e3ae5c8-ffe5-5a2e-abcf-ea2b90c38b0f",
+        "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
+        "fullName": "Ing. Inés Salazar",
+        "email": "ines@salazar.test",
+        "memberRole": "AGRONOMIST",
+        "professionalLicenseNumber": "CIA-CHQ-230",
+        "isActive": true,
+        "joinedAt": "2026-02-03T10:00:00Z"
+      },
+      {
+        "id": "c79a3f44-f369-5b59-8102-36e89311185e",
+        "userId": "888314c6-9ce6-5b66-b68f-4804276de103",
+        "fullName": "Lic. Verónica Quiroga",
+        "email": "contabilidad@cintiviejo.test",
+        "memberRole": "ACCOUNTANT",
+        "professionalLicenseNumber": null,
+        "isActive": false,
+        "joinedAt": "2026-05-20T10:00:00Z"
       }
     ]
   },
@@ -142,7 +182,7 @@
     "onchainProducerId": null,
     "onchainRegisterTxHash": null,
     "isExportCertified": false,
-    "certificationStatus": "PENDING",
+    "certificationStatus": "INVITED",
     "approvedAt": null,
     "createdAt": "2026-09-18T09:00:00Z",
     "members": [
@@ -178,6 +218,72 @@
     "certificationStatus": "SUSPENDED",
     "approvedAt": "2025-11-03T10:00:00Z",
     "createdAt": "2025-10-20T09:00:00Z",
+    "members": [
+      {
+        "id": "15ceef52-08d1-59af-ac64-28566279de57",
+        "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+        "fullName": "Lic. Sofía Aramayo",
+        "email": "sofia@aramayo.test",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2025-10-22T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
+    "legalName": "Sol de Padcaya S.R.L.",
+    "commercialName": "Bodega Sol de Padcaya",
+    "beverageCategory": "WINERY",
+    "taxIdNit": "5044332211",
+    "senasagSanitaryReg": null,
+    "geographicRegion": "Valle Central de Tarija · Padcaya",
+    "countryCode": "BO",
+    "address": null,
+    "contactEmail": "contacto@soldepadcaya.test",
+    "contactPhone": "+59172554433",
+    "logoUrl": "/mocks/uploads/logos/padcaya.png",
+    "stellarPublicKey": null,
+    "onchainProducerId": null,
+    "onchainRegisterTxHash": null,
+    "isExportCertified": false,
+    "certificationStatus": "INVITED",
+    "approvedAt": null,
+    "createdAt": "2026-09-24T09:00:00Z",
     "members": []
+  },
+  {
+    "id": "13b2e8f3-4adf-51d2-a0ac-8bb07c8cf9b9",
+    "legalName": "Valle Escondido S.R.L.",
+    "commercialName": "Bodega Valle Escondido",
+    "beverageCategory": "WINERY",
+    "taxIdNit": "6077001122",
+    "senasagSanitaryReg": "08-01-04-01-0213",
+    "geographicRegion": "Valle Central de Tarija · El Valle",
+    "countryCode": "BO",
+    "address": "Camino a El Valle km 3, Tarija",
+    "contactEmail": "contacto@valleescondido.test",
+    "contactPhone": "+59146640213",
+    "logoUrl": "/mocks/uploads/logos/valle.png",
+    "stellarPublicKey": null,
+    "onchainProducerId": null,
+    "onchainRegisterTxHash": null,
+    "isExportCertified": false,
+    "certificationStatus": "REVOKED",
+    "approvedAt": "2026-01-05T10:00:00Z",
+    "createdAt": "2025-12-01T09:00:00Z",
+    "members": [
+      {
+        "id": "f3e91402-2702-5b7a-80e9-f387440b2030",
+        "userId": "8511139f-baa2-58e0-8297-6bc207d694a6",
+        "fullName": "Hugo Ortega",
+        "email": "hugo@valleescondido.test",
+        "memberRole": "OWNER",
+        "professionalLicenseNumber": null,
+        "isActive": true,
+        "joinedAt": "2026-01-05T10:00:00Z"
+      }
+    ]
   }
 ]

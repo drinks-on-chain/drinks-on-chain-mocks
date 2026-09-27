@@ -1,0 +1,278 @@
+[
+  {
+    "id": "9358a453-1732-5124-8d16-d77b682c294c",
+    "status": "UNVERIFIED",
+    "createdAt": "2026-09-25T08:40:00Z",
+    "updatedAt": "2026-09-25T08:40:00Z",
+    "legalName": "Viñas del Alto Camargo S.R.L.",
+    "tradeName": "Viñas del Alto Camargo",
+    "taxId": "7011002233",
+    "category": "WINERY",
+    "region": "Valle de Cinti · Camargo",
+    "contactName": "Rodrigo Aguilar",
+    "contactEmail": "rodrigo@altocamargo.test",
+    "contactPhone": "+59172110022",
+    "message": "Somos cuatro familias con parrales en Camargo y queremos registrar nuestros lotes.",
+    "assignee": null,
+    "meeting": null,
+    "decision": null,
+    "wineryId": null,
+    "notes": [],
+    "_mock": {
+      "verifyToken": "demo-verificacion-alto-camargo"
+    }
+  },
+  {
+    "id": "63f9cb8d-5c9c-5598-a68b-b03fc5e6f70e",
+    "status": "RECEIVED",
+    "createdAt": "2026-09-25T07:15:00Z",
+    "updatedAt": "2026-09-25T07:20:00Z",
+    "legalName": "Vinos Artesanales Chocloca S.R.L.",
+    "tradeName": "Vinos Artesanales Chocloca",
+    "taxId": "7099887711",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · Chocloca",
+    "contactName": "Ana María Tolaba",
+    "contactEmail": "anamaria@chocloca.test",
+    "contactPhone": "+59172998877",
+    "message": "Elaboramos vino patero y un moscatel; queremos formalizar la trazabilidad.",
+    "assignee": null,
+    "meeting": null,
+    "decision": null,
+    "wineryId": null,
+    "notes": [],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "165c889b-aa28-5251-b0cc-dd74a099391e",
+    "status": "RECEIVED",
+    "createdAt": "2026-09-24T10:05:00Z",
+    "updatedAt": "2026-09-24T10:20:00Z",
+    "legalName": "Destilería Río Pilaya Ltda.",
+    "tradeName": "Destilería Río Pilaya",
+    "taxId": "7033224455",
+    "category": "DISTILLERY",
+    "region": "Valle de Cinti · Villa Abecia",
+    "contactName": "Ernesto Cruz",
+    "contactEmail": "ernesto@riopilaya.test",
+    "contactPhone": null,
+    "message": null,
+    "assignee": null,
+    "meeting": null,
+    "decision": null,
+    "wineryId": null,
+    "notes": [],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "001add36-da49-51e4-b065-2ed0d5baacf4",
+    "status": "RECEIVED",
+    "createdAt": "2026-09-23T15:10:00Z",
+    "updatedAt": "2026-09-23T15:25:00Z",
+    "legalName": "Cervecería Andina de Altura S.R.L.",
+    "tradeName": "Cervecería Andina de Altura",
+    "taxId": "7022113344",
+    "category": "BREWERY",
+    "region": "Valle Central de Tarija · Cercado",
+    "contactName": "Lucía Gareca",
+    "contactEmail": "lucia@andinadealtura.test",
+    "contactPhone": "+59172113344",
+    "message": "Cerveza artesanal con cebada de altura; nos interesa el pasaporte público.",
+    "assignee": null,
+    "meeting": null,
+    "decision": null,
+    "wineryId": null,
+    "notes": [],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "33b67d03-d676-553b-8196-9dce556ee326",
+    "status": "APPROVED",
+    "createdAt": "2026-09-20T12:00:00Z",
+    "updatedAt": "2026-09-24T09:00:00Z",
+    "legalName": "Sol de Padcaya S.R.L.",
+    "tradeName": "Bodega Sol de Padcaya",
+    "taxId": "5044332211",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · Padcaya",
+    "contactName": "Gabriela Ríos",
+    "contactEmail": "duena@soldepadcaya.test",
+    "contactPhone": "+59172554433",
+    "message": "Bodega joven en Padcaya; primera vendimia registrada en 2026.",
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "meeting": null,
+    "decision": {
+      "by": "Valeria Méndez",
+      "at": "2026-09-24T09:00:00Z",
+      "reason": "Documentación completa"
+    },
+    "wineryId": "50ec6662-4f14-525d-8678-42dfd1afe5e1",
+    "notes": [
+      {
+        "id": "22667ca8-50ba-5ce9-a998-0b396709c905",
+        "text": "Documentación completa. Aprobar y dar de alta con Gabriela como dueña.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-23T11:00:00Z"
+      }
+    ],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "ec224afe-19c4-5478-8f67-66f0d3fae8cf",
+    "status": "IN_REVIEW",
+    "createdAt": "2026-09-15T11:00:00Z",
+    "updatedAt": "2026-09-22T16:00:00Z",
+    "legalName": "Tierra de Cintis S.A.",
+    "tradeName": "Bodega Tierra de Cintis",
+    "taxId": "7044335566",
+    "category": "WINERY",
+    "region": "Valle de Cinti · Camargo",
+    "contactName": "Patricia Llanos",
+    "contactEmail": "patricia@tierradecintis.test",
+    "contactPhone": "+59172335566",
+    "message": "Bodega con 12 ha de viñedo propio y una destilería en construcción.",
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "meeting": null,
+    "decision": null,
+    "wineryId": null,
+    "notes": [
+      {
+        "id": "b24c5d13-5ae0-5cef-a32f-79c45ad86e56",
+        "text": "Pedí copia del registro SENASAG y del padrón de viñedos.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-16T09:30:00Z"
+      },
+      {
+        "id": "23c01d42-ec36-52dc-a21d-66b544cbe0f7",
+        "text": "Enviaron el registro SENASAG; falta el padrón de la parcela de Palca Grande.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-22T16:00:00Z"
+      }
+    ],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "a95bd787-dc58-5089-ad12-8b47afab9306",
+    "status": "MEETING_SCHEDULED",
+    "createdAt": "2026-09-10T17:00:00Z",
+    "updatedAt": "2026-09-19T10:00:00Z",
+    "legalName": "Viñedos La Angostura S.R.L.",
+    "tradeName": "Viñedos La Angostura",
+    "taxId": "7055446677",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · La Angostura",
+    "contactName": "Marcelo Vidaurre",
+    "contactEmail": "marcelo@laangostura.test",
+    "contactPhone": "+59172446677",
+    "message": "Queremos entender cómo funciona la preventa antes de sumarnos.",
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "meeting": {
+      "scheduledAt": "2026-09-29T15:00:00Z",
+      "channel": "VIDEO",
+      "notes": "Con Marcelo y su enólogo; revisar el flujo de preventa."
+    },
+    "decision": null,
+    "wineryId": null,
+    "notes": [
+      {
+        "id": "1e3d0a2f-b471-5d1a-8569-58d6cee2a0a7",
+        "text": "Primera llamada: interés en la preventa; proponen una reunión con el socio enólogo.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-11T09:20:00Z"
+      }
+    ],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "8d2be824-665e-5195-a2a6-f1ac8c2d3340",
+    "status": "APPROVED",
+    "createdAt": "2026-09-08T10:00:00Z",
+    "updatedAt": "2026-09-18T09:00:00Z",
+    "legalName": "Viñedos del Guadalquivir S.R.L.",
+    "tradeName": "Viñedos del Guadalquivir",
+    "taxId": "3011223344",
+    "category": "WINERY",
+    "region": "Valle Central de Tarija · Concepción",
+    "contactName": "Elena Vaca",
+    "contactEmail": "gerencia@guadalquivir.test",
+    "contactPhone": "+59171223344",
+    "message": "Queremos registrar la próxima vendimia de Syrah en la red.",
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "meeting": {
+      "scheduledAt": "2026-09-12T15:00:00Z",
+      "channel": "IN_PERSON",
+      "notes": "Visitamos la finca: parcela de Syrah a 1.790 msnm, bodega en obras. Recomiendo aprobar."
+    },
+    "decision": {
+      "by": "Valeria Méndez",
+      "at": "2026-09-18T09:00:00Z",
+      "reason": null
+    },
+    "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
+    "notes": [
+      {
+        "id": "0678f293-ae36-5fd3-96c8-adadf181d207",
+        "text": "Visitamos la finca: parcela de Syrah a 1.790 msnm, bodega en obras. Recomiendo aprobar.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-12T18:00:00Z"
+      }
+    ],
+    "_mock": {
+      "verifyToken": null
+    }
+  },
+  {
+    "id": "ffc47d12-2b5c-5dcb-b745-b7c139cd434e",
+    "status": "REJECTED",
+    "createdAt": "2026-09-05T14:00:00Z",
+    "updatedAt": "2026-09-08T11:00:00Z",
+    "legalName": "Licores del Chaco S.R.L.",
+    "tradeName": "Licores del Chaco",
+    "taxId": "7066557788",
+    "category": "OTHER",
+    "region": "Chaco · Villa Montes",
+    "contactName": "Iván Suárez",
+    "contactEmail": "ivan@licoresdelchaco.test",
+    "contactPhone": "+59172557788",
+    "message": "Distribuimos licores en el Chaco y queremos vender en el Marketplace.",
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "meeting": null,
+    "decision": {
+      "by": "Valeria Méndez",
+      "at": "2026-09-08T11:00:00Z",
+      "reason": "No elabora a partir de materia prima propia: distribuye licores de terceros."
+    },
+    "wineryId": null,
+    "notes": [],
+    "_mock": {
+      "verifyToken": null
+    }
+  }
+]

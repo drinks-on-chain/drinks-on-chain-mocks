@@ -51,7 +51,7 @@ def txhash(seed: str) -> str:
 
 
 def dump(name: str, data) -> None:
-    (OUT / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (OUT / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"  {name:32s} {len(data) if isinstance(data, list) else 'obj'}")
 
 
@@ -72,13 +72,24 @@ WINERIES = [
     dict(key="guadalquivir", code="VGQ", legalName="Viñedos del Guadalquivir S.R.L.", commercialName="Viñedos del Guadalquivir",
          beverageCategory="WINERY", taxIdNit="3011223344", senasagSanitaryReg=None,
          geographicRegion="Valle Central de Tarija · Concepción", address=None,
-         contactEmail="hola@guadalquivir.test", contactPhone="+59171223344", certificationStatus="PENDING",
+         contactEmail="hola@guadalquivir.test", contactPhone="+59171223344", certificationStatus="INVITED",
          approvedAt=None, createdAt=date(2026, 9, 18)),
     dict(key="uriondo", code="CUR", legalName="Casa Uriondo Ltda.", commercialName="Casa Uriondo",
          beverageCategory="DISTILLERY", taxIdNit="4099887766", senasagSanitaryReg="08-01-03-02-0009",
          geographicRegion="Valle Central de Tarija · Uriondo", address="Plaza principal s/n, Uriondo",
          contactEmail="casa@uriondo.test", contactPhone="+59146660009", certificationStatus="SUSPENDED",
          approvedAt=date(2025, 11, 3), createdAt=date(2025, 10, 20)),
+    # Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md §4): estado INVITED | ACTIVE | SUSPENDED | REVOKED.
+    dict(key="padcaya", code=None, legalName="Sol de Padcaya S.R.L.", commercialName="Bodega Sol de Padcaya",
+         beverageCategory="WINERY", taxIdNit="5044332211", senasagSanitaryReg=None,
+         geographicRegion="Valle Central de Tarija · Padcaya", address=None,
+         contactEmail="contacto@soldepadcaya.test", contactPhone="+59172554433", certificationStatus="INVITED",
+         approvedAt=None, createdAt=date(2026, 9, 24)),
+    dict(key="valle", code="VES", legalName="Valle Escondido S.R.L.", commercialName="Bodega Valle Escondido",
+         beverageCategory="WINERY", taxIdNit="6077001122", senasagSanitaryReg="08-01-04-01-0213",
+         geographicRegion="Valle Central de Tarija · El Valle", address="Camino a El Valle km 3, Tarija",
+         contactEmail="contacto@valleescondido.test", contactPhone="+59146640213", certificationStatus="REVOKED",
+         approvedAt=date(2026, 1, 5), createdAt=date(2025, 12, 1)),
 ]
 
 wineries = []
@@ -182,21 +193,169 @@ for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
         # Solo para los mocks: credencial de demo y clave legible.
         "_mock": {"key": key, "password": "demo1234"},
     })
+# Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
+# alterar el resto de la secuencia aleatoria.
+# key, email, fullName, userRole, phone, created, [(wineryKey, memberRole, license, isActive, joined)]
+MULTI = [
+    ("sofia", "sofia@aramayo.test", "Lic. Sofía Aramayo", "ENOLOGIST", "+59176000601", date(2025, 10, 21), [
+        ("altos", "ENOLOGIST", "COL-ENOL-TAR-133", True, date(2026, 3, 10)),
+        ("uriondo", "OWNER", None, True, date(2025, 10, 22)),
+    ]),
+    ("ines", "ines@salazar.test", "Ing. Inés Salazar", "AGRONOMIST", "+59176000602", date(2026, 2, 2), [
+        ("cintiviejo", "AGRONOMIST", "CIA-CHQ-230", True, date(2026, 2, 3)),
+        ("altos", "OPERATOR", None, False, date(2026, 4, 1)),
+    ]),
+    # Ola 1: contadora bloqueada por la plataforma y dueño de la bodega revocada.
+    ("cvj_contable", "contabilidad@cintiviejo.test", "Lic. Verónica Quiroga", "ENOLOGIST", "+59172000205", date(2026, 5, 20), [
+        ("cintiviejo", "ACCOUNTANT", None, False, date(2026, 5, 20)),
+    ]),
+    ("valle_admin", "hugo@valleescondido.test", "Hugo Ortega", "WINERY_ADMIN", "+59173000601", date(2026, 1, 5), [
+        ("valle", "OWNER", None, True, date(2026, 1, 5)),
+    ]),
+]
+for key, email, name, role, phone, created, links in MULTI:
+    uid_ = uid(f"user:{key}")
+    first = W[links[0][0]]
+    wallet = {
+        "id": uid(f"wallet:{key}"),
+        "userId": uid_,
+        "wineryId": first["id"],
+        "stellarPublicAddress": gkey(f"user-wallet:{key}"),
+        "walletType": "CUSTODIAL",
+        "walletPurpose": "PRODUCER_SIGNING",
+        "isPrimary": True,
+        "createdAt": iso(created, 9, 5),
+    }
+    wallets.append(wallet)
+    memberships = []
+    for wkey, mrole, lic, active, joined in links:
+        memberships.append({
+            "wineryId": W[wkey]["id"],
+            "wineryName": W[wkey]["commercialName"],
+            "memberRole": mrole,
+            "professionalLicenseNumber": lic,
+            "isActive": active,
+            "joinedAt": iso(joined, 10),
+        })
+        W[wkey]["members"].append({
+            "id": uid(f"member:{key}:{wkey}"),
+            "userId": uid_,
+            "fullName": name,
+            "email": email,
+            "memberRole": mrole,
+            "professionalLicenseNumber": lic,
+            "isActive": active,
+            "joinedAt": iso(joined, 10),
+        })
+    users.append({
+        "id": uid_,
+        "email": email,
+        "fullName": name,
+        "userRole": role,
+        "phoneNumber": phone,
+        "preferredLocale": "es",
+        "isActive": True,
+        "lastLoginAt": iso(TODAY - timedelta(days=1), 8, 30),
+        "createdAt": iso(created, 9),
+        "wineryMemberships": memberships,
+        "primaryWallet": wallet,
+        "_mock": {"key": key, "password": "demo1234"},
+    })
+# Personal interno de la Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md §5). Sin `rng`.
+# key, email, fullName, phone, created, lastLoginAt (o None)
+STAFF = [
+    ("bo_admin", "administracion@drinksonchain.test", "Jorge Salinas", "+59170000003", date(2026, 4, 10), date(2026, 9, 24)),
+    ("operaciones", "operaciones@drinksonchain.test", "Valeria Méndez", "+59170000004", date(2026, 5, 2), date(2026, 9, 25)),
+    ("analista", "analista@drinksonchain.test", "Camila Torrez", "+59170000005", date(2026, 9, 22), None),
+]
+for key, email, name, phone, created, last in STAFF:
+    uid_ = uid(f"user:{key}")
+    wallet = {
+        "id": uid(f"wallet:{key}"),
+        "userId": uid_,
+        "wineryId": None,
+        "stellarPublicAddress": gkey(f"user-wallet:{key}"),
+        "walletType": "CUSTODIAL",
+        "walletPurpose": "CONSUMER_NFT",
+        "isPrimary": True,
+        "createdAt": iso(created, 9, 5),
+    }
+    wallets.append(wallet)
+    users.append({
+        "id": uid_,
+        "email": email,
+        "fullName": name,
+        "userRole": "PLATFORM_ADMIN",
+        "phoneNumber": phone,
+        "preferredLocale": "es",
+        "isActive": True,
+        "lastLoginAt": iso(last, 8, 30) if last else None,
+        "createdAt": iso(created, 9),
+        "wineryMemberships": [],
+        "primaryWallet": wallet,
+        "_mock": {"key": key, "password": "demo1234"},
+    })
+# Rol en la organización de plataforma (solo en los mocks: `_mock.platformRole`).
+PLATFORM_ROLES = {"admin": "SUPERADMIN", "soporte": "SUPPORT", "bo_admin": "ADMIN", "operaciones": "OPERATIONS", "analista": "OPERATIONS"}
+for u in users:
+    if u["_mock"]["key"] in PLATFORM_ROLES:
+        u["_mock"]["platformRole"] = PLATFORM_ROLES[u["_mock"]["key"]]
 U = {u["_mock"]["key"]: u for u in users}
+
+# ---------------------------------------------------------------------------
+# 2b. Sesión (contrato de la Ola 0 §4–§5): membresías y respuesta de login
+# ---------------------------------------------------------------------------
+PLATFORM_ORG = {"id": uid("organization:platform"), "name": "Drinks on Chain", "status": "ACTIVE"}
+
+
+def memberships_of(u: dict) -> list:
+    """Plataforma antes que bodegas; el id de una membresía de bodega es el del miembro."""
+    out = []
+    if u["userRole"] == "PLATFORM_ADMIN" or u["_mock"].get("platformRole"):
+        out.append({
+            "id": uid(f"membership:platform:{u['id']}"),
+            "organizationId": PLATFORM_ORG["id"],
+            "organizationType": "PLATFORM",
+            "organizationName": PLATFORM_ORG["name"],
+            "organizationStatus": PLATFORM_ORG["status"],
+            "role": u["_mock"].get("platformRole", "SUPERADMIN"),
+            "status": "ACTIVE" if u["isActive"] else "BLOCKED",
+        })
+    for m in u["wineryMemberships"]:
+        w = next(x for x in wineries if x["id"] == m["wineryId"])
+        member = next(x for x in w["members"] if x["userId"] == u["id"])
+        out.append({
+            "id": member["id"],
+            "organizationId": w["id"],
+            "organizationType": "WINERY",
+            "organizationName": w["commercialName"],
+            "organizationStatus": w["certificationStatus"],
+            "role": m["memberRole"],
+            "status": "ACTIVE" if m["isActive"] else "BLOCKED",
+        })
+    return out
 
 
 def auth_response(key: str) -> dict:
     u = U[key]
-    m = u["wineryMemberships"][0] if u["wineryMemberships"] else None
+    ms = memberships_of(u)
+    usable = [m for m in ms if m["status"] == "ACTIVE" and m["organizationStatus"] != "REVOKED"]
+    active = usable[0] if usable else None
+    winery = active if active and active["organizationType"] == "WINERY" else None
     return {
         "user": {
-            "id": u["id"], "email": u["email"], "fullName": u["fullName"], "userRole": u["userRole"],
+            "id": u["id"], "email": u["email"], "fullName": u["fullName"],
             "phoneNumber": u["phoneNumber"], "preferredLocale": "es",
-            "wineryId": m["wineryId"] if m else None, "memberRole": m["memberRole"] if m else None,
+            "audience": "STAFF" if ms else "CONSUMER",
+            "userRole": u["userRole"],
+            "wineryId": winery["organizationId"] if winery else None,
+            "memberRole": winery["role"] if winery else None,
         },
+        "memberships": ms,
+        "activeOrganizationId": active["organizationId"] if active else None,
         "tokens": {
-            "accessToken": f"mock.access.{key}", "refreshToken": f"mock.refresh.{key}",
-            "tokenType": "Bearer", "expiresIn": 604800,
+            "accessToken": f"mock.access.{key}", "tokenType": "Bearer", "expiresIn": 900,
+            "refreshToken": f"mock.refresh.{key}",
         },
     }
 

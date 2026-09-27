@@ -42,8 +42,15 @@ export const CreateBottlingBatchSchema = z
     labelDesignUrl: z.string().nullish(),
     bottlingDate: DateInputSchema,
   })
-  .refine((b) => Boolean(b.wineAgingBatchId) !== Boolean(b.productionBatchId), {
-    message: 'Indique wineAgingBatchId o productionBatchId (uno y solo uno)',
-    path: ['wineAgingBatchId'],
+  .superRefine((b, ctx) => {
+    if (!b.wineAgingBatchId && !b.productionBatchId) {
+      // Mismo mensaje y campos que el backend (O0-BE-2).
+      const message =
+        'Debe especificar un lote de crianza (wineAgingBatchId) o un lote de producción/destilación (productionBatchId)'
+      ctx.addIssue({ code: 'custom', message, path: ['wineAgingBatchId'] })
+      ctx.addIssue({ code: 'custom', message, path: ['productionBatchId'] })
+    } else if (b.wineAgingBatchId && b.productionBatchId) {
+      ctx.addIssue({ code: 'custom', message: 'Indique wineAgingBatchId o productionBatchId (uno y solo uno)', path: ['wineAgingBatchId'] })
+    }
   })
 export type CreateBottlingBatchDto = z.infer<typeof CreateBottlingBatchSchema>

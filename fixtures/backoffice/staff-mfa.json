@@ -1,0 +1,81 @@
+[
+  {
+    "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
+    "enrolled": true,
+    "secret": "DRINKSONCHAINDEMOTOTPKEY",
+    "enrolledAt": "2026-04-04T09:15:00Z",
+    "recoveryCodes": [
+      "F336-E5D5",
+      "83E0-341A",
+      "F465-B02C",
+      "A134-56F0",
+      "AC92-24D2",
+      "1EC9-5A5F",
+      "8AC3-A459",
+      "1429-12C5",
+      "A5F9-B36D",
+      "7341-C136"
+    ]
+  },
+  {
+    "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
+    "enrolled": true,
+    "secret": "DRINKSONCHAINDEMOTOTPKEY",
+    "enrolledAt": "2026-04-10T09:15:00Z",
+    "recoveryCodes": [
+      "4708-28F3",
+      "949B-AEAB",
+      "5E05-E61D",
+      "E890-A57E",
+      "27E7-3DD6",
+      "4A47-0468",
+      "D5FE-9D73",
+      "FB11-78D0",
+      "2BC5-AEA2",
+      "178A-8341"
+    ]
+  },
+  {
+    "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+    "enrolled": true,
+    "secret": "DRINKSONCHAINDEMOTOTPKEY",
+    "enrolledAt": "2026-05-02T09:15:00Z",
+    "recoveryCodes": [
+      "DB7F-25CB",
+      "C580-2D90",
+      "02E1-1078",
+      "E702-CC42",
+      "6D86-C61F",
+      "80EB-F724",
+      "54F1-B8F8",
+      "400B-F623",
+      "50AB-1964",
+      "DDB0-3F60"
+    ]
+  },
+  {
+    "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
+    "enrolled": true,
+    "secret": "DRINKSONCHAINDEMOTOTPKEY",
+    "enrolledAt": "2026-07-25T09:15:00Z",
+    "recoveryCodes": [
+      "ECA1-7B1B",
+      "4C86-5B3D",
+      "2D9E-7319",
+      "3771-DD44",
+      "DC96-5EBE",
+      "9F48-348D",
+      "378D-C12A",
+      "0517-7F0B",
+      "6C96-84D3",
+      "E155-6387"
+    ]
+  },
+  {
+    "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+    "enrolled": false,
+    "secret": null,
+    "enrolledAt": null,
+    "recoveryCodes": []
+  }
+]

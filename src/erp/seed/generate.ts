@@ -1,10 +1,9 @@
 import { addMonthsClamped, day, dayFromIso, dayParts, isoAt, REFERENCE_DAY, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
-import { buildAuthResponse, buildPublicPassport } from '../derive'
+import { buildPublicPassport, buildSessionResponse } from '../derive'
 import { deriveLotViews, deriveRestStatus } from '../lot-view'
-import { WINERY_CODES } from '../catalog'
+import { PLATFORM_ROLE_BY_KEY, WINERY_CODES } from '../catalog'
 import type {
-  AuthResponse,
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
   EnologicalTreatment,
@@ -12,10 +11,12 @@ import type {
   FermentationTankResponse,
   HarvestBatchResponse,
   LotView,
+  MemberRole,
   MockUser,
   ProductionBatchResponse,
   PublicPassport,
   RestStatusResponse,
+  SessionResponse,
   TerroirResponse,
   WalletResponse,
   WineAgingResponse,
@@ -52,7 +53,7 @@ export interface ErpFixtureSet {
   'wineries.json': WineryResponse[]
   'users.json': MockUser[]
   'wallets.json': WalletResponse[]
-  'auth-login.json': Record<string, AuthResponse>
+  'auth-login.json': Record<string, SessionResponse>
   'terroirs.json': TerroirResponse[]
   'harvest-batches.json': HarvestBatchResponse[]
   'fermentation-tanks.json': FermentationTankResponse[]
@@ -88,13 +89,24 @@ export function generateErpFixtures(): ErpFixtureSet {
     { key: 'guadalquivir', legalName: 'Viñedos del Guadalquivir S.R.L.', commercialName: 'Viñedos del Guadalquivir',
       beverageCategory: 'WINERY', taxIdNit: '3011223344', senasagSanitaryReg: null,
       geographicRegion: 'Valle Central de Tarija · Concepción', address: null,
-      contactEmail: 'hola@guadalquivir.test', contactPhone: '+59171223344', certificationStatus: 'PENDING',
+      contactEmail: 'hola@guadalquivir.test', contactPhone: '+59171223344', certificationStatus: 'INVITED',
       approvedAt: null, createdAt: day(2026, 9, 18) },
     { key: 'uriondo', legalName: 'Casa Uriondo Ltda.', commercialName: 'Casa Uriondo',
       beverageCategory: 'DISTILLERY', taxIdNit: '4099887766', senasagSanitaryReg: '08-01-03-02-0009',
       geographicRegion: 'Valle Central de Tarija · Uriondo', address: 'Plaza principal s/n, Uriondo',
       contactEmail: 'casa@uriondo.test', contactPhone: '+59146660009', certificationStatus: 'SUSPENDED',
       approvedAt: day(2025, 11, 3), createdAt: day(2025, 10, 20) },
+    // Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md §4): estado INVITED | ACTIVE | SUSPENDED | REVOKED.
+    { key: 'padcaya', legalName: 'Sol de Padcaya S.R.L.', commercialName: 'Bodega Sol de Padcaya',
+      beverageCategory: 'WINERY', taxIdNit: '5044332211', senasagSanitaryReg: null,
+      geographicRegion: 'Valle Central de Tarija · Padcaya', address: null,
+      contactEmail: 'contacto@soldepadcaya.test', contactPhone: '+59172554433', certificationStatus: 'INVITED',
+      approvedAt: null, createdAt: day(2026, 9, 24) },
+    { key: 'valle', legalName: 'Valle Escondido S.R.L.', commercialName: 'Bodega Valle Escondido',
+      beverageCategory: 'WINERY', taxIdNit: '6077001122', senasagSanitaryReg: '08-01-04-01-0213',
+      geographicRegion: 'Valle Central de Tarija · El Valle', address: 'Camino a El Valle km 3, Tarija',
+      contactEmail: 'contacto@valleescondido.test', contactPhone: '+59146640213', certificationStatus: 'REVOKED',
+      approvedAt: day(2026, 1, 5), createdAt: day(2025, 12, 1) },
   ] as const
 
   const wineries: WineryResponse[] = []
@@ -201,8 +213,120 @@ export function generateErpFixtures(): ErpFixtureSet {
       _mock: { key, password: 'demo1234' },
     })
   }
-  const auth: Record<string, AuthResponse> = {}
-  for (const u of users) auth[u._mock.key] = buildAuthResponse(u)
+  // Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
+  // alterar el resto de la secuencia aleatoria.
+  type Link = [string, MemberRole, string | null, boolean, Day]
+  const MULTI: [string, string, string, MockUser['userRole'], string, Day, Link[]][] = [
+    ['sofia', 'sofia@aramayo.test', 'Lic. Sofía Aramayo', 'ENOLOGIST', '+59176000601', day(2025, 10, 21), [
+      ['altos', 'ENOLOGIST', 'COL-ENOL-TAR-133', true, day(2026, 3, 10)],
+      ['uriondo', 'OWNER', null, true, day(2025, 10, 22)],
+    ]],
+    ['ines', 'ines@salazar.test', 'Ing. Inés Salazar', 'AGRONOMIST', '+59176000602', day(2026, 2, 2), [
+      ['cintiviejo', 'AGRONOMIST', 'CIA-CHQ-230', true, day(2026, 2, 3)],
+      ['altos', 'OPERATOR', null, false, day(2026, 4, 1)],
+    ]],
+    // Ola 1: contadora bloqueada por la plataforma y dueño de la bodega revocada.
+    ['cvj_contable', 'contabilidad@cintiviejo.test', 'Lic. Verónica Quiroga', 'ENOLOGIST', '+59172000205', day(2026, 5, 20), [
+      ['cintiviejo', 'ACCOUNTANT', null, false, day(2026, 5, 20)],
+    ]],
+    ['valle_admin', 'hugo@valleescondido.test', 'Hugo Ortega', 'WINERY_ADMIN', '+59173000601', day(2026, 1, 5), [
+      ['valle', 'OWNER', null, true, day(2026, 1, 5)],
+    ]],
+  ]
+  for (const [key, email, name, role, phone, created, links] of MULTI) {
+    const userId = uid(`user:${key}`)
+    const first = W[links[0]![0]]!
+    const wallet: WalletResponse = {
+      id: uid(`wallet:${key}`),
+      userId,
+      wineryId: first.id,
+      stellarPublicAddress: gkey(`user-wallet:${key}`),
+      walletType: 'CUSTODIAL',
+      walletPurpose: 'PRODUCER_SIGNING',
+      isPrimary: true,
+      createdAt: isoAt(created, 9, 5),
+    }
+    wallets.push(wallet)
+    const memberships: MockUser['wineryMemberships'] = []
+    for (const [wkey, mrole, lic, active, joined] of links) {
+      memberships.push({
+        wineryId: W[wkey]!.id,
+        wineryName: W[wkey]!.commercialName,
+        memberRole: mrole,
+        professionalLicenseNumber: lic,
+        isActive: active,
+        joinedAt: isoAt(joined, 10),
+      })
+      W[wkey]!.members!.push({
+        id: uid(`member:${key}:${wkey}`),
+        userId,
+        fullName: name,
+        email,
+        memberRole: mrole,
+        professionalLicenseNumber: lic,
+        isActive: active,
+        joinedAt: isoAt(joined, 10),
+      })
+    }
+    users.push({
+      id: userId,
+      email,
+      fullName: name,
+      userRole: role,
+      phoneNumber: phone,
+      preferredLocale: 'es',
+      isActive: true,
+      lastLoginAt: isoAt(addDays(TODAY, -1), 8, 30),
+      createdAt: isoAt(created, 9),
+      wineryMemberships: memberships,
+      primaryWallet: wallet,
+      _mock: { key, password: 'demo1234' },
+    })
+  }
+
+  // Personal interno de la Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md §5). Sin `rng`.
+  const STAFF: [string, string, string, string, Day, Day | null][] = [
+    ['bo_admin', 'administracion@drinksonchain.test', 'Jorge Salinas', '+59170000003', day(2026, 4, 10), day(2026, 9, 24)],
+    ['operaciones', 'operaciones@drinksonchain.test', 'Valeria Méndez', '+59170000004', day(2026, 5, 2), day(2026, 9, 25)],
+    ['analista', 'analista@drinksonchain.test', 'Camila Torrez', '+59170000005', day(2026, 9, 22), null],
+  ]
+  for (const [key, email, name, phone, created, last] of STAFF) {
+    const userId = uid(`user:${key}`)
+    const wallet: WalletResponse = {
+      id: uid(`wallet:${key}`),
+      userId,
+      wineryId: null,
+      stellarPublicAddress: gkey(`user-wallet:${key}`),
+      walletType: 'CUSTODIAL',
+      walletPurpose: 'CONSUMER_NFT',
+      isPrimary: true,
+      createdAt: isoAt(created, 9, 5),
+    }
+    wallets.push(wallet)
+    users.push({
+      id: userId,
+      email,
+      fullName: name,
+      userRole: 'PLATFORM_ADMIN',
+      phoneNumber: phone,
+      preferredLocale: 'es',
+      isActive: true,
+      lastLoginAt: last !== null ? isoAt(last, 8, 30) : null,
+      createdAt: isoAt(created, 9),
+      wineryMemberships: [],
+      primaryWallet: wallet,
+      _mock: { key, password: 'demo1234' },
+    })
+  }
+  // Rol en la organización de plataforma (solo en los mocks: `_mock.platformRole`).
+  for (const u of users) {
+    const platformRole = PLATFORM_ROLE_BY_KEY[u._mock.key]
+    if (platformRole) u._mock.platformRole = platformRole
+  }
+
+  // Sesión (contrato de la Ola 0 §4–§5): membresías y respuesta de login con tokens estáticos.
+  const auth: Record<string, SessionResponse> = {}
+  for (const u of users) auth[u._mock.key] = buildSessionResponse(u, wineries)
 
   // -------------------------------------------------------------------------
   // 3. Terroirs (TerroirResponseDto)
