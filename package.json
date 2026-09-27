@@ -1,6 +1,6 @@
 {
   "name": "@drinks-on-chain/mocks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Datos de prueba, esquemas zod y handlers MSW del ecosistema Drinks on Chain",
   "type": "module",
   "repository": {
@@ -26,6 +26,7 @@
       "import": "./dist/fixtures.js"
     },
     "./fixtures/erp/*.json": "./fixtures/erp/*.json",
+    "./fixtures/backoffice/*.json": "./fixtures/backoffice/*.json",
     "./handlers": {
       "types": "./dist/handlers.d.ts",
       "import": "./dist/handlers.js"
