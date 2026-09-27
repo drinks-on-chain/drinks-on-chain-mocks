@@ -31,12 +31,25 @@ export const UserProfileResponseSchema = z.object({
 })
 export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>
 
+/** Preferencias de notificación (contrato de la Ola 1 §1, IAM-09). */
+export const NotificationPrefsSchema = z.object({
+  lotProgress: z.boolean(),
+  redemptionReminders: z.boolean(),
+})
+export type NotificationPrefs = z.infer<typeof NotificationPrefsSchema>
+
+/** Preferencias de una persona que aún no las cambió. */
+export const DEFAULT_NOTIFICATION_PREFS: NotificationPrefs = { lotProgress: true, redemptionReminders: true }
+
 /**
  * `GET /v1/users/me` (contrato de la Ola 0 §5): `{ user, memberships, activeOrganizationId }`.
- * `user` es el perfil de 0.1 más `audience`.
+ * `user` es el perfil de 0.1 más `audience` y, desde la Ola 1, `notificationPrefs` y
+ * `promotionsConsent` (IAM-09).
  */
 export const MeUserSchema = UserProfileResponseSchema.extend({
   audience: AudienceSchema,
+  notificationPrefs: NotificationPrefsSchema.optional(),
+  promotionsConsent: z.boolean().optional(),
 })
 export type MeUser = z.infer<typeof MeUserSchema>
 
@@ -47,10 +60,16 @@ export const MeResponseSchema = z.object({
 })
 export type MeResponse = z.infer<typeof MeResponseSchema>
 
+/**
+ * `PATCH /v1/users/me`. `notificationPrefs` y `promotionsConsent` llegan con la Ola 1 (IAM-09);
+ * `notificationPrefs` admite cambios parciales.
+ */
 export const UpdateUserSchema = z.object({
   fullName: z.string().min(1).optional(),
   phoneNumber: z.string().nullish(),
   preferredLocale: z.string().optional(),
+  notificationPrefs: NotificationPrefsSchema.partial().optional(),
+  promotionsConsent: z.boolean().optional(),
 })
 export type UpdateUserDto = z.infer<typeof UpdateUserSchema>
 
