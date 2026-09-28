@@ -143,42 +143,22 @@
     },
     "/v1/auth/logout": {
       "post": {
-        "description": "Revoca la sesión (identificada por el acceso, aunque haya caducado, o por el refresco) y borra la cookie (`doc_rt=; Max-Age=0`). Siempre 204.",
+        "description": "Revoca la sesión (identificada por el acceso, aunque haya caducado, o por la cookie `doc_rt`) y borra la cookie (`doc_rt=; Max-Age=0`). Siempre 204.",
         "operationId": "AuthController_logout_v1",
         "parameters": [
           {
             "name": "Authorization",
             "in": "header",
-            "description": "Bearer con el acceso (aunque haya caducado); si falta, se usa el refresco",
+            "description": "Bearer con el acceso (aunque haya caducado); si falta, se usa la cookie `doc_rt`",
             "required": false,
             "schema": {
               "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RefreshTokenDto"
-              }
-            }
-          }
-        },
         "responses": {
           "204": {
             "description": "Sesión cerrada"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
           }
         },
         "summary": "Cerrar la sesión actual",
@@ -423,19 +403,9 @@
     },
     "/v1/auth/refresh": {
       "post": {
-        "description": "Lee el refresco de la cookie `doc_rt` (o, hasta H1, del cuerpo), lo rota y responde como el login. Además, `Set-Cookie: doc_rt=<refresco>; Max-Age=<7 días personal | 30 consumidores>; Path=/; HttpOnly; Secure; SameSite=Lax`. Un refresco ya rotado presentado otra vez dentro del periodo de gracia (20 s) devuelve el mismo par nuevo; fuera de él revoca la sesión (401 `AUTH_REFRESH_REUSED`).",
+        "description": "Lee el refresco de la cookie `doc_rt` (el cuerpo no se lee), lo rota y responde como el login. Además, `Set-Cookie: doc_rt=<refresco>; Max-Age=<7 días personal | 30 consumidores>; Path=/; HttpOnly; Secure; SameSite=Lax`. Un refresco ya rotado presentado otra vez dentro del periodo de gracia (20 s) devuelve el mismo par nuevo; fuera de él revoca la sesión (401 `AUTH_REFRESH_REUSED`).",
         "operationId": "AuthController_refreshTokens_v1",
         "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RefreshTokenDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Sesión renovada",
@@ -449,16 +419,6 @@
           },
           "401": {
             "description": "AUTH_REFRESH_INVALID, AUTH_REFRESH_REUSED, AUTH_SESSION_REVOKED o AUTH_SESSION_EXPIRED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
             "content": {
               "application/json": {
                 "schema": {
@@ -570,7 +530,7 @@
     },
     "/v1/auth/signup": {
       "post": {
-        "description": "Crea la cuenta (contraseña con bcrypt), su billetera custodial y abre una sesión. Además, `Set-Cookie: doc_rt=<refresco>; Max-Age=<7 días personal | 30 consumidores>; Path=/; HttpOnly; Secure; SameSite=Lax`. **Obsoleto para personal (H1)**: `userRole: WINERY_ADMIN` se retira al cerrar la Ola 1 (cada uso deja un aviso en los logs); después la ruta queda solo para consumidores (Ola 4).",
+        "description": "Crea una cuenta de consumidor (`audience: CONSUMER`, sin membresías), su billetera custodial y abre una sesión. Además, `Set-Cookie: doc_rt=<refresco>; Max-Age=<7 días personal | 30 consumidores>; Path=/; HttpOnly; Secure; SameSite=Lax`. El personal nunca se registra aquí: entra por invitación o por la solicitud de alta de su bodega (el registro de personal se retiró al cerrar la Ola 1). La Ola 4 añadirá captcha y verificación del correo.",
         "operationId": "AuthController_signup_v1",
         "parameters": [],
         "requestBody": {
@@ -585,7 +545,7 @@
         },
         "responses": {
           "201": {
-            "description": "Usuario registrado y sesión abierta",
+            "description": "Consumidor registrado y sesión abierta",
             "content": {
               "application/json": {
                 "schema": {
@@ -608,7 +568,7 @@
             }
           }
         },
-        "summary": "Registrar un nuevo usuario en la plataforma",
+        "summary": "Registrar un consumidor",
         "tags": [
           "Autenticación"
         ],
@@ -617,7 +577,7 @@
     },
     "/v1/auth/switch-organization": {
       "post": {
-        "description": "Misma sesión (`sid`), tokens nuevos con la organización elegida. Necesita el acceso vigente y el refresco de esa sesión (cookie `doc_rt` o, hasta H1, el cuerpo), que se rota. Además, `Set-Cookie: doc_rt=<refresco>; Max-Age=<7 días personal | 30 consumidores>; Path=/; HttpOnly; Secure; SameSite=Lax`.",
+        "description": "Misma sesión (`sid`), tokens nuevos con la organización elegida. Necesita el acceso vigente y el refresco de esa sesión en la cookie `doc_rt`, que se rota. Además, `Set-Cookie: doc_rt=<refresco>; Max-Age=<7 días personal | 30 consumidores>; Path=/; HttpOnly; Secure; SameSite=Lax`.",
         "operationId": "AuthController_switchOrganization_v1",
         "parameters": [],
         "requestBody": {
@@ -8215,57 +8175,6 @@
         "tags": [
           "Bodegas y Productores"
         ]
-      },
-      "post": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1). Sustituida por el formulario público `POST /v1/public/winery-applications` y el alta directa `POST /v1/platform/wineries`. Crea una bodega en estado INVITED con su organización, asocia al creador como OWNER y asigna una billetera custodial institucional. Para operar con ella, cambia la organización activa (`POST /v1/auth/switch-organization`) o renueva la sesión.",
-        "operationId": "WineriesController_createWinery_v1",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateWineryDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Bodega registrada exitosamente en estado INVITED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WineryResponseDto"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "El NIT ya se encuentra registrado"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Solicitar alta y registro de una nueva bodega (obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/public/winery-applications"
       }
     },
     "/v1/wineries/my": {
@@ -8346,449 +8255,6 @@
         "tags": [
           "Bodegas y Productores"
         ]
-      }
-    },
-    "/v1/wineries/my/members": {
-      "get": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1); sustituida por `GET /v1/organizations/current/members`. Retorna la lista de miembros activos en la bodega actual.",
-        "operationId": "WineriesController_getMyMembers_v1",
-        "parameters": [
-          {
-            "name": "limit",
-            "required": false,
-            "in": "query",
-            "description": "Resultados por página (1–100)",
-            "schema": {
-              "minimum": 1,
-              "maximum": 100,
-              "default": 20,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "offset",
-            "required": false,
-            "in": "query",
-            "description": "Resultados que se saltan desde el inicio",
-            "schema": {
-              "minimum": 0,
-              "default": 0,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "wineryId",
-            "required": false,
-            "in": "query",
-            "description": "Solo personal de plataforma: bodega sobre la que se consulta (sin él, todas)",
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Página de miembros activos de la bodega",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "items",
-                    "total",
-                    "limit",
-                    "offset"
-                  ],
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/WineryMemberItemDto"
-                      }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "example": 1,
-                      "description": "Total de resultados con los filtros aplicados"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 100,
-                      "example": 20
-                    },
-                    "offset": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "example": 0
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar miembros operativos de la bodega (obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/organizations/current/members"
-      },
-      "post": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1); el equipo se forma por invitación (`POST /v1/organizations/current/invitations`). Añade o reactiva la membresía de un usuario existente en **esta** bodega (enólogo, agrónomo, operario o contador). Nunca modifica su rol global ni sus membresías en otras organizaciones (SE-01).",
-        "operationId": "WineriesController_addMember_v1",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddMemberDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Miembro incorporado exitosamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WineryMemberItemDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "ORG_BLOCKED_BY_PLATFORM: la plataforma bloqueó esa membresía; el dueño no puede reactivarla"
-          },
-          "404": {
-            "description": "El usuario no existe"
-          },
-          "409": {
-            "description": "ORG_ALREADY_MEMBER: el usuario ya es miembro activo de la bodega"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Incorporar un nuevo miembro operativo a la bodega (obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/organizations/current/invitations"
-      }
-    },
-    "/v1/wineries/my/members/create": {
-      "post": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1); el equipo se forma por invitación (`POST /v1/organizations/current/invitations`, la persona elige su contraseña). Crea la cuenta de usuario, aprovisiona su billetera custodial y lo asocia a la bodega en un solo paso.",
-        "operationId": "WineriesController_createAndAddMember_v1",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateMemberDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Miembro operativo creado e incorporado exitosamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WineryMemberItemDto"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "El correo electrónico ya se encuentra registrado"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Registrar y dar de alta a un nuevo miembro operativo en la bodega (obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/organizations/current/invitations"
-      }
-    },
-    "/v1/wineries/pending": {
-      "get": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1); sustituida por la bandeja de solicitudes (`GET /v1/platform/winery-applications`) y el directorio (`GET /v1/platform/wineries?status=INVITED`). Obtiene todas las solicitudes de bodegas en estado INVITED para revisión y certificación legal.",
-        "operationId": "WineriesController_getPendingWineries_v1",
-        "parameters": [
-          {
-            "name": "limit",
-            "required": false,
-            "in": "query",
-            "description": "Resultados por página (1–100)",
-            "schema": {
-              "minimum": 1,
-              "maximum": 100,
-              "default": 20,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "offset",
-            "required": false,
-            "in": "query",
-            "description": "Resultados que se saltan desde el inicio",
-            "schema": {
-              "minimum": 0,
-              "default": 0,
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Página de bodegas pendientes",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "items",
-                    "total",
-                    "limit",
-                    "offset"
-                  ],
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/WineryResponseDto"
-                      }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "example": 1,
-                      "description": "Total de resultados con los filtros aplicados"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 100,
-                      "example": 20
-                    },
-                    "offset": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "example": 0
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Requiere la organización de plataforma activa"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar bodegas pendientes de aprobación (solo plataforma; obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/platform/winery-applications"
-      }
-    },
-    "/v1/wineries/{id}/approve": {
-      "post": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1); sustituida por la aprobación de solicitudes y la activación al aceptar el dueño su invitación. Asigna el prefijo de lote. Cambia el estado de la bodega a ACTIVE y ejecuta el hook C-01 ProducerRegistry para registrarla on-chain.",
-        "operationId": "WineriesController_approveWinery_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ApproveWineryDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Bodega aprobada y registrada exitosamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WineryResponseDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Requiere la organización de plataforma activa"
-          },
-          "404": {
-            "description": "Bodega no encontrada"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Aprobar y certificar una bodega (solo plataforma; obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/platform/winery-applications/{id}/approve"
-      }
-    },
-    "/v1/wineries/{id}/reject": {
-      "post": {
-        "deprecated": true,
-        "description": "Obsoleta: se retira al cerrar la Ola 1 (H1); sustituida por `POST /v1/platform/winery-applications/{id}/reject` y `POST /v1/platform/wineries/{id}/revoke`. Cambia el estado de la bodega a REJECTED registrando formalmente el motivo legal o técnico.",
-        "operationId": "WineriesController_rejectWinery_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RejectWineryDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Bodega rechazada exitosamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WineryResponseDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Requiere la organización de plataforma activa"
-          },
-          "404": {
-            "description": "Bodega no encontrada"
-          },
-          "422": {
-            "description": "VALIDATION_ERROR: cuerpo inválido (un detalle por campo; `null` en un campo opcional equivale a omitirlo)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Rechazar una solicitud de bodega (solo plataforma; obsoleta, H1)",
-        "tags": [
-          "Bodegas y Productores"
-        ],
-        "x-replaced-by": "/v1/platform/winery-applications/{id}/reject"
       }
     }
   },
@@ -8927,42 +8393,6 @@
         },
         "required": [
           "text"
-        ]
-      },
-      "AddMemberDto": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "description": "UUID del usuario a incorporar como miembro operativo"
-          },
-          "memberRole": {
-            "type": "string",
-            "enum": [
-              "OWNER",
-              "ENOLOGIST",
-              "AGRONOMIST",
-              "OPERATOR",
-              "ACCOUNTANT"
-            ],
-            "example": "ENOLOGIST",
-            "description": "Rol operativo dentro de la bodega"
-          },
-          "professionalLicenseNumber": {
-            "type": "string",
-            "example": "MP-BOL-2024-9981",
-            "description": "Número de matrícula profesional (obligatorio para enólogos/agrónomos)"
-          },
-          "professionalLicensePdfUrl": {
-            "type": "string",
-            "example": "https://storage.supabase.co/licenses/license-9981.pdf",
-            "description": "URL del PDF de la matrícula profesional"
-          }
-        },
-        "required": [
-          "userId",
-          "memberRole"
         ]
       },
       "ApiErrorResponseDto": {
@@ -9123,16 +8553,6 @@
           "winery",
           "invitation"
         ]
-      },
-      "ApproveWineryDto": {
-        "type": "object",
-        "properties": {
-          "approvalNotes": {
-            "type": "string",
-            "example": "Verificación legal y sanitaria SENASAG completada satisfactoriamente.",
-            "description": "Notas u observaciones del Platform Admin en la aprobación"
-          }
-        }
       },
       "Audience": {
         "type": "string",
@@ -9369,7 +8789,7 @@
         "properties": {
           "accessToken": {
             "type": "string",
-            "description": "Token de acceso JWT (15 min). Claims: sub, aud, org, orgType, role, sid, jti (+ email, userRole, wineryId, memberRole hasta H1)",
+            "description": "Token de acceso JWT (15 min). Claims: sub, aud, org, orgType, role, sid, jti",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           },
           "tokenType": {
@@ -9380,19 +8800,12 @@
             "type": "number",
             "example": 900,
             "description": "Vida del token de acceso en segundos"
-          },
-          "refreshToken": {
-            "type": "string",
-            "description": "Token de renovación. Viaja también en la cookie HttpOnly `doc_rt`; en el cuerpo solo por compatibilidad (*retirada* en H1)",
-            "example": "6f1c2b7e-0d4e-4c1a-9f3b-8a7d6e5c4b3a.3.Q2hhbmdlLW1lLXJlZnJlc2gtc2VjcmV0LXZhbHVlLTQ",
-            "deprecated": true
           }
         },
         "required": [
           "accessToken",
           "tokenType",
-          "expiresIn",
-          "refreshToken"
+          "expiresIn"
         ]
       },
       "AuthUserDto": {
@@ -9427,34 +8840,6 @@
                 "$ref": "#/components/schemas/Audience"
               }
             ]
-          },
-          "userRole": {
-            "type": "string",
-            "enum": [
-              "PLATFORM_ADMIN",
-              "WINERY_ADMIN",
-              "ENOLOGIST",
-              "AGRONOMIST",
-              "CONSUMER",
-              "POS_OPERATOR"
-            ],
-            "example": "WINERY_ADMIN",
-            "deprecated": true,
-            "description": "Compatibilidad hasta H1: rol de 0.1 equivalente a la organización activa"
-          },
-          "wineryId": {
-            "type": "string",
-            "example": "8d7e2c1a-4b5f-4c3d-9e8f-1a2b3c4d5e6f",
-            "nullable": true,
-            "deprecated": true,
-            "description": "Compatibilidad hasta H1: la bodega activa"
-          },
-          "memberRole": {
-            "type": "string",
-            "example": "OWNER",
-            "nullable": true,
-            "deprecated": true,
-            "description": "Compatibilidad hasta H1: rol en la bodega activa"
           }
         },
         "required": [
@@ -9462,8 +8847,7 @@
           "email",
           "fullName",
           "preferredLocale",
-          "audience",
-          "userRole"
+          "audience"
         ]
       },
       "BatchLabAnalysisResponseDto": {
@@ -10338,59 +9722,6 @@
           "role"
         ]
       },
-      "CreateMemberDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "enologo@bodega.bo",
-            "description": "Correo electrónico institucional para el nuevo miembro"
-          },
-          "password": {
-            "type": "string",
-            "example": "Password123!",
-            "description": "Contraseña temporal o definitiva (mínimo 8 caracteres, al menos una letra y un número)"
-          },
-          "fullName": {
-            "type": "string",
-            "example": "Lic. Marcela Zenteno",
-            "description": "Nombre completo del miembro operativo"
-          },
-          "memberRole": {
-            "type": "string",
-            "enum": [
-              "OWNER",
-              "ENOLOGIST",
-              "AGRONOMIST",
-              "OPERATOR",
-              "ACCOUNTANT"
-            ],
-            "example": "ENOLOGIST",
-            "description": "Rol operativo dentro de la bodega (ENOLOGIST, AGRONOMIST, OPERATOR, ACCOUNTANT, WINERY_ADMIN)"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "example": "+59171234567",
-            "description": "Número de teléfono de contacto"
-          },
-          "professionalLicenseNumber": {
-            "type": "string",
-            "example": "COL-ENOL-TAR-402",
-            "description": "Número de matrícula profesional (obligatorio para enólogos/agrónomos)"
-          },
-          "professionalLicensePdfUrl": {
-            "type": "string",
-            "example": "https://storage.supabase.co/licenses/license-402.pdf",
-            "description": "URL del PDF de la matrícula profesional"
-          }
-        },
-        "required": [
-          "email",
-          "password",
-          "fullName",
-          "memberRole"
-        ]
-      },
       "CreatePlatformUserDto": {
         "type": "object",
         "properties": {
@@ -10754,81 +10085,6 @@
         "required": [
           "id",
           "status"
-        ]
-      },
-      "CreateWineryDto": {
-        "type": "object",
-        "properties": {
-          "legalName": {
-            "type": "string",
-            "example": "Sociedad Agroindustrial Kohlberg S.A.",
-            "description": "Razón social legal de la empresa"
-          },
-          "commercialName": {
-            "type": "string",
-            "example": "Bodega Kohlberg",
-            "description": "Nombre o marca comercial de la bodega"
-          },
-          "beverageCategory": {
-            "type": "string",
-            "enum": [
-              "WINERY",
-              "BREWERY",
-              "DISTILLERY",
-              "OTHER"
-            ],
-            "example": "WINERY",
-            "description": "Categoría principal de producción de bebida"
-          },
-          "taxIdNit": {
-            "type": "string",
-            "example": "1028374029",
-            "description": "Número de Identificación Tributaria (NIT)"
-          },
-          "senasagSanitaryReg": {
-            "type": "string",
-            "example": "08-01-03-01-0001",
-            "description": "Registro Sanitario SENASAG"
-          },
-          "geographicRegion": {
-            "type": "string",
-            "example": "Valle Central de Tarija",
-            "description": "Región geográfica o departamento de producción"
-          },
-          "countryCode": {
-            "type": "string",
-            "example": "BO",
-            "default": "BO",
-            "description": "Código de país ISO 3166-1 alfa-2"
-          },
-          "address": {
-            "type": "string",
-            "example": "Km 15 Carretera a Bermejo, Santa Ana la Nueva",
-            "description": "Dirección física de la bodega o destilería"
-          },
-          "contactEmail": {
-            "type": "string",
-            "example": "contacto@kohlberg.bo",
-            "description": "Correo electrónico institucional"
-          },
-          "contactPhone": {
-            "type": "string",
-            "example": "+59146642345",
-            "description": "Teléfono de contacto institucional"
-          },
-          "logoUrl": {
-            "type": "string",
-            "example": "https://storage.supabase.co/drinks-on-chain/logos/kohlberg.png",
-            "description": "URL del logo institucional"
-          }
-        },
-        "required": [
-          "legalName",
-          "commercialName",
-          "beverageCategory",
-          "taxIdNit",
-          "geographicRegion",
-          "contactEmail"
         ]
       },
       "DagGraphResponseDto": {
@@ -11903,20 +11159,6 @@
             "type": "string",
             "example": "Juan Pérez"
           },
-          "userRole": {
-            "type": "string",
-            "enum": [
-              "PLATFORM_ADMIN",
-              "WINERY_ADMIN",
-              "ENOLOGIST",
-              "AGRONOMIST",
-              "CONSUMER",
-              "POS_OPERATOR"
-            ],
-            "example": "CONSUMER",
-            "deprecated": true,
-            "description": "Obsoleto (H1): rol global de 0.1; los permisos van por membresía"
-          },
           "phoneNumber": {
             "type": "string",
             "nullable": true,
@@ -11978,7 +11220,6 @@
           "id",
           "email",
           "fullName",
-          "userRole",
           "preferredLocale",
           "isActive",
           "createdAt",
@@ -12760,17 +12001,6 @@
           "website"
         ]
       },
-      "RefreshTokenDto": {
-        "type": "object",
-        "properties": {
-          "refreshToken": {
-            "type": "string",
-            "description": "Compatibilidad hasta H1: el refresco, si el cliente no usa la cookie `doc_rt`",
-            "example": "6f1c2b7e-0d4e-4c1a-9f3b-8a7d6e5c4b3a.3.Q2hhbmdlLW1lLXJlZnJlc2gtc2VjcmV0LXZhbHVlLTQ",
-            "deprecated": true
-          }
-        }
-      },
       "RejectApplicationDto": {
         "type": "object",
         "properties": {
@@ -12784,19 +12014,6 @@
         },
         "required": [
           "reason"
-        ]
-      },
-      "RejectWineryDto": {
-        "type": "object",
-        "properties": {
-          "rejectionReason": {
-            "type": "string",
-            "example": "Registro sanitario SENASAG inválido o documentación de constitución incompleta.",
-            "description": "Motivo formal del rechazo de la solicitud de bodega"
-          }
-        },
-        "required": [
-          "rejectionReason"
         ]
       },
       "RequiredReasonDto": {
@@ -13392,7 +12609,7 @@
         "properties": {
           "email": {
             "type": "string",
-            "example": "juan.perez@bodega.bo",
+            "example": "ana.rojas@correo.bo",
             "description": "Correo electrónico único para inicio de sesión"
           },
           "password": {
@@ -13404,16 +12621,6 @@
             "type": "string",
             "example": "Juan Pérez",
             "description": "Nombre completo o razón del usuario"
-          },
-          "userRole": {
-            "type": "string",
-            "enum": [
-              "CONSUMER",
-              "WINERY_ADMIN"
-            ],
-            "default": "CONSUMER",
-            "deprecated": true,
-            "description": "Obsoleto (H1): el registro de personal (`WINERY_ADMIN`) se retira al cerrar la Ola 1; las bodegas entran por solicitud de alta o alta directa y su equipo por invitación. Tras H1 la ruta queda solo para consumidores (`CONSUMER`, Ola 4). Roles administrativos y operativos no están permitidos en registro público."
           },
           "phoneNumber": {
             "type": "string",
@@ -13439,11 +12646,6 @@
           "organizationId": {
             "type": "string",
             "example": "8d7e2c1a-4b5f-4c3d-9e8f-1a2b3c4d5e6f"
-          },
-          "refreshToken": {
-            "type": "string",
-            "description": "Compatibilidad hasta H1: el refresco, si el cliente no usa la cookie `doc_rt`",
-            "deprecated": true
           }
         },
         "required": [
