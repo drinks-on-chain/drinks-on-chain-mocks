@@ -8,19 +8,19 @@ Los mocks imitaron el contrato de la Ola 0 antes de que el backend lo publicara;
 
 | Tema | Contrato (§) | Mocks 0.2 |
 |---|---|---|
-| Listas | §2 | Toda colección devuelve `{ items, total, limit, offset }`, `limit` 20 por defecto y 100 como máximo (más → 422), incluidas `wineries/pending` y `wineries/my/members` |
+| Listas | §2 | Toda colección devuelve `{ items, total, limit, offset }`, `limit` 20 por defecto y 100 como máximo (más → 422) |
 | Errores | §1 | Validación → **422** `VALIDATION_ERROR` con `details: [{ field, message }]` (`field` con puntos: `items.0.quantity`); reglas de negocio → 422 `UNPROCESSABLE_ENTITY` con el campo que las provoca; el resto (400 JSON mal formado, 401, 403, 404, 409, 500) con `details: null`. Códigos de sesión y permisos como `error-codes.ts` del backend (§8 del contrato, desde 0.3.0-rc.2): 401 `AUTH_INVALID_CREDENTIALS` (login; también cuenta bloqueada), `AUTH_TOKEN_INVALID` (acceso ausente o mal formado), `AUTH_TOKEN_EXPIRED`, `AUTH_REFRESH_INVALID`, `AUTH_REFRESH_REUSED`, `AUTH_SESSION_REVOKED`, `AUTH_SESSION_EXPIRED`; 403 `AUTH_INSUFFICIENT_PERMISSIONS` (antes `FORBIDDEN`), `ORG_MEMBERSHIP_BLOCKED`, `ORG_REVOKED`, `ORG_BLOCKED_BY_PLATFORM`; 404 `ORG_NOT_FOUND`; 409 `ORG_ALREADY_MEMBER`; 429 `AUTH_TOO_MANY_ATTEMPTS` |
 | Membresías | §4 | `PLATFORM_ADMIN` → membresía de la organización de plataforma (`Drinks on Chain`) con el rol `_mock.platformRole` (desde 0.3; `SUPERADMIN` si no lo indica); cada `wineryMemberships[i]` → membresía `WINERY` (id = id de miembro; `isActive: false` → `BLOCKED`); `POS_OPERATOR` y consumidores sin membresía. La organización de una bodega es la propia bodega (enlace 1:1) y su estado es `certificationStatus` |
-| Login | §5 | `{ user (+ audience, userRole/wineryId/memberRole de compatibilidad), memberships, activeOrganizationId, tokens }`; acceso de 15 min (`expiresIn: 900`) con forma de JWT (`header.payload.mock`, claims `sub`, `aud`, `org`, `orgType`, `role`, `sid`, `jti`, `iat`, `exp` + los de compatibilidad); `refreshToken` en el cuerpo y `Set-Cookie: doc_rt=…; HttpOnly; [Secure;] SameSite=Lax; Path=/; Max-Age=604800` (30 días para consumidores; `Secure` solo con `https:`) |
+| Login | §5 | `{ user (+ audience), memberships, activeOrganizationId, tokens }` (sin `userRole`/`wineryId`/`memberRole` desde H1); acceso de 15 min (`expiresIn: 900`) con forma de JWT (`header.payload.mock`, claims `sub`, `aud`, `org`, `orgType`, `role`, `sid`, `jti`, `iat`, `exp`; sin los de compatibilidad desde H1); el refresco **solo** en `Set-Cookie: doc_rt=…; HttpOnly; [Secure;] SameSite=Lax; Path=/; Max-Age=604800` (30 días para consumidores; `Secure` solo con `https:`) |
 | Organización activa | §5 | La última usada (se recuerda por persona) si sigue siendo válida; si no, la primera membresía `ACTIVE` de organización no `REVOKED` (plataforma antes que bodega); `null` si no hay |
-| Refresh | §5, §8 | Refresco `<sid>.<generación>.<secreto>` como el backend (`sid` UUID, generación desde 0, secreto de 43 caracteres base64url). Lee la cookie `doc_rt` (petición o almacén de MSW) o el cuerpo `{ refreshToken }`; solo si no llega ninguno, el almacén propio de los mocks. Rota siempre y responde como el login. Uno que no encaja en ninguna cadena → 401 `AUTH_REFRESH_INVALID` **sin revocar**; el inmediatamente anterior dentro de la gracia (20 s, hora real) → el mismo par nuevo; uno antiguo fuera de la gracia → revoca la sesión y 401 `AUTH_REFRESH_REUSED`; sesión revocada, persona o membresía activa bloqueada → 401 `AUTH_SESSION_REVOKED`; sesión caducada (7 días sin rotar el personal, 30 los consumidores, reloj de los mocks) → 401 `AUTH_SESSION_EXPIRED`. Si la sesión no tenía organización activa, la renovación toma la de por defecto. El refresco estático de 0.1 (`mock.refresh.<clave>`, solo en los mocks) abre una sesión nueva |
-| `switch-organization` | §5, §8 | Misma sesión (`sid`), tokens nuevos. Exige **también el refresco de esa misma sesión** (cookie `doc_rt` o `refreshToken` en el cuerpo), que se rota; sin él o de otra sesión → 401 `AUTH_REFRESH_INVALID`. Sin membresía → 404 `ORG_NOT_FOUND`; membresía `BLOCKED` → 403 `ORG_MEMBERSHIP_BLOCKED`; organización `REVOKED` → 403 `ORG_REVOKED`. Con un token estático `mock.access.<clave>` (sin sesión) abre una sesión nueva |
+| Refresh | §5, §8 | Refresco `<sid>.<generación>.<secreto>` como el backend (`sid` UUID, generación desde 0, secreto de 43 caracteres base64url). Lee la cookie `doc_rt` de la petición o, si no llega, el almacén propio de los mocks (el cuerpo `{ refreshToken }` no se lee desde H1). Rota siempre y responde como el login. Uno que no encaja en ninguna cadena → 401 `AUTH_REFRESH_INVALID` **sin revocar**; el inmediatamente anterior dentro de la gracia (20 s, hora real) → el mismo par nuevo; uno antiguo fuera de la gracia → revoca la sesión y 401 `AUTH_REFRESH_REUSED`; sesión revocada, persona o membresía activa bloqueada → 401 `AUTH_SESSION_REVOKED`; sesión caducada (7 días sin rotar el personal, 30 los consumidores, reloj de los mocks) → 401 `AUTH_SESSION_EXPIRED`. Si la sesión no tenía organización activa, la renovación toma la de por defecto. El refresco estático `mock.refresh.<clave>` en la cookie (solo en los mocks) abre una sesión nueva |
+| `switch-organization` | §5, §8 | Misma sesión (`sid`), tokens nuevos. Exige **también el refresco de esa misma sesión** en la cookie `doc_rt`, que se rota (`refreshToken` en el cuerpo → 422 desde H1); sin él o de otra sesión → 401 `AUTH_REFRESH_INVALID`. Sin membresía → 404 `ORG_NOT_FOUND`; membresía `BLOCKED` → 403 `ORG_MEMBERSHIP_BLOCKED`; organización `REVOKED` → 403 `ORG_REVOKED`. Con un token estático `mock.access.<clave>` (sin sesión) abre una sesión nueva |
 | `logout` / `logout-all` | §5 | 204 sin cuerpo y `Set-Cookie: doc_rt=; … Max-Age=0`. `logout` identifica la sesión por el acceso (aunque haya caducado) o por el refresco |
 | `GET /users/me` | §5 | `{ user, memberships, activeOrganizationId }` (`MeResponseDto`); `user` es el perfil de 0.1 más `audience`. `PATCH /users/me` devuelve lo mismo desde 0.3.0-rc.2 (contrato de la Ola 1 §11 bis; el backend aún devuelve el perfil: `cambios` de `pendientes.json`) |
 | Revocación inmediata | §5 (IAM-13) | Si la membresía activa pasa a `BLOCKED` o la persona a inactiva, la siguiente petición con ese acceso revoca la sesión (401 `AUTH_SESSION_REVOKED`) |
-| Permisos | §6, §8 | Como los guards del backend: `@OrgType('WINERY') @Roles(...)` con el **rol de la membresía activa** (tabla del §3). El `userRole` global ya no autoriza nada (solo compatibilidad hasta H1) |
+| Permisos | §6, §8 | Como los guards del backend: `@OrgType('WINERY') @Roles(...)` con el **rol de la membresía activa** (tabla del §3). No hay rol global (`userRole` se retiró en H1) |
 | Bloqueo del login | §8 (IAM-07) | Por correo, con la hora real: 5 fallos en una hora → 429 `AUTH_TOO_MANY_ATTEMPTS` con `Retry-After: 60`, que se duplica con cada fallo (tope 1 h); mientras dura no se comprueba la contraseña; un login correcto limpia el contador. El límite por IP (20) y los límites de peticiones por minuto no se simulan. `resetErpDb()` lo borra |
-| SE-01 | §4 | `POST /wineries/my/members` añade o **reactiva** una membresía y nunca toca el rol global; `POST /wineries` ya no convierte al consumidor en `WINERY_ADMIN` (su rol efectivo sale de la membresía `OWNER`) |
+| SE-01 | §4 | Una bodega solo escribe su propia membresía: el equipo entra por invitación (`/organizations/current/invitations`, aceptar añade o reactiva la membresía) |
 | Rutas | §7 (P-1) | Cada handler responde en `${baseUrl}/v1/...` y en `/api/v1/...` de cualquier origen; el `path` del envoltorio es siempre `/v1/...`. `baseUrl` tolera barra final y `/v1` final |
 | Cabeceras | §3 | `X-Correlation-ID`: se devuelve el de la petición o `mock-<n>`. `Idempotency-Key` (desde 0.3, como O0-BE-2): en los 9 POST de alta del ERP, UUID; misma clave y cuerpo → respuesta guardada con `Idempotent-Replayed: true`; otro cuerpo → 409 `IDEMPOTENCY_KEY_REUSED`; no UUID → 422 `IDEMPOTENCY_KEY_INVALID`. Por persona + método y ruta, en memoria |
 
@@ -46,7 +46,7 @@ Los 13 fixtures con DTO en el OpenAPI (`WineryResponseDto` y sus miembros, `User
 | 10 | Pesaje sin laboratorio | Brix, pH y acidez son `required` en `CreateHarvestBatchDto` | 422 `VALIDATION_ERROR` con un detalle por campo (`brixDegrees`, `initialPh`, `initialAcidityGl`) |
 | 11 | Bruto ≤ tara | 400 "Peso bruto menor o igual a tara" | 422 `VALIDATION_ERROR` en `grossWeightKg` (contrato §1) |
 | 12 | Rechazo de bodega | El enum `certificationStatus` no tiene `REJECTED` (el catálogo lo lista como filtro) | `POST …/reject` deja la bodega en `REVOKED` |
-| 13 | Alta de usuarios | `SignupDto.userRole` solo admite `CONSUMER` y `WINERY_ADMIN` | Igual. Los miembros creados con `members/create` reciben `userRole` según su `memberRole` (`OWNER → WINERY_ADMIN`; `OPERATOR` y `ACCOUNTANT → ENOLOGIST`, como los operarios de los fixtures) solo como dato de compatibilidad: los permisos salen de la membresía activa |
+| 13 | Alta de usuarios | Desde H1 `signup` solo registra consumidores (`userRole` → 422); el personal entra por invitación | Igual; los fixtures de personas ya no llevan `userRole` |
 | 14 | Fechas | Los DTO de alta declaran las fechas como `string` sin formato; las respuestas como `date-time` (el servidor devuelve milisegundos, `…:40.187Z`) | Aceptan `YYYY-MM-DD` o ISO; responden `YYYY-MM-DDTHH:MM:SSZ`. Los esquemas aceptan ambos formatos |
 | 15 | `lockUntilDate` | Lo calcula el backend (`startDate` + `plannedMonths`), algoritmo no documentado | `startDate` (hoy por defecto) + meses, día acotado a 28 (como `generate.py`) |
 | 16 | Candado y reposo | 422 "El vino se encuentra bloqueado por período de crianza hasta el YYYY-MM-DD"; 422 "reposo inerte < 180 días" | Mismo mensaje para la crianza; el reposo se calcula con `deriveRestStatus` desde `processEndDate` (o el inicio). Comparan con el "hoy" del reloj de los mocks (25-09-2026) |
@@ -57,7 +57,7 @@ Los 13 fixtures con DTO en el OpenAPI (`WineryResponseDto` y sus miembros, `User
 | 21 | Conteo de rutas | El doc 09 habla de "35 rutas" | Con la Ola 1 completa son 102 rutas y 119 operaciones, incluidas `GET /v1/health`, `/health/live` y `/health/ready` (públicas) y `GET /v1/uploads/url`. Hay un handler por operación (lo comprueba `test/contract.test.ts`) |
 | 22 | `GET /traceability/dag/:id` | Sin `@OrgType` ni `@Roles`: cualquier sesión, sin filtrar por bodega | Cualquier sesión; con una bodega activa solo sus lotes (404 los de otra), la plataforma y el resto ven todos. Confirmar con backend si el DAG debe filtrar por bodega |
 | 23 | Archivos | `POST /v1/uploads` solo personal, tipo por firma de bytes (JPEG, PNG, WEBP, GIF ≤ 5 MB; PDF ≤ 15 MB), clave privada `org/<id>/<carpeta>/<aaaa>/<mm>/<uuid>.<ext>` y URL firmada de 15 min; `GET /v1/uploads/url?key=` | Igual (0.4): consumidor → 403 `FORBIDDEN`; tipo que no coincide → 422 `FILE_TYPE_NOT_ALLOWED` en `file`; demasiado grande → 413 `FILE_TOO_LARGE`; clave de otra organización → 404 `FILE_NOT_FOUND`. La URL `/mocks/uploads/<clave>?expires=…&signature=mock` no sirve ningún archivo |
-| 24 | Rutas obsoletas (H1) | `deprecated` y `x-replaced-by` en el OpenAPI; responden `Deprecation: true` y `Link: <sustituta>; rel="successor-version"` | Igual (`DEPRECATED_ROUTES`; la prueba de contrato exige las mismas que el OpenAPI). `POST /v1/auth/signup` con `userRole: WINERY_ADMIN`: solo el campo es obsoleto (sin cabecera) |
+| 24 | Rutas obsoletas | Retiradas en H1 (404): `POST /wineries`, `wineries/pending`, `wineries/{id}/approve|reject`, `wineries/my/members*`. La maquinaria `deprecated` + `x-replaced-by` + `Deprecation`/`Link` queda para próximas retiradas | Igual: sin rutas; `RouteSpec.deprecated` se conserva y la prueba de contrato exige las mismas obsoletas que el OpenAPI (hoy ninguna) |
 
 ## 3. Permisos aplicados por los handlers
 
@@ -77,13 +77,13 @@ Desde 0.3.0-rc.2, la matriz de los guards del backend (`@OrgType('WINERY') @Role
 | Crianza, destilación (y `rest-status`), embotellado: lectura | ✅ | ✅ | — | — | ✅ |
 | Laboratorio: alta | ✅ | ✅ | — | — | — |
 | Laboratorio: lectura | ✅ | ✅ | ✅ | — | ✅ |
-| `PATCH /wineries/my`, `POST /wineries/my/members`, `/members/create` | ✅ | — | — | — | — |
-| `GET /wineries/my`, `/wineries/my/members` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `PATCH /wineries/my` | ✅ | — | — | — | — |
+| `GET /wineries/my` | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 - **Plataforma sobre una bodega** (OP-07): en todas las rutas de la tabla, `SUPERADMIN`, `ADMIN` y `OPERATIONS` leen y escriben y `SUPPORT` solo lee, con la bodega en `?wineryId=`. Las lecturas sin él ven todas las bodegas; las escrituras sin él → 422 `VALIDATION_ERROR` con `details[{ field: 'wineryId' }]`; `wineryId` que no es UUID → 422; bodega inexistente → 404 `ORG_NOT_FOUND`.
 - **Bodega activa**: si la petición apunta a otra bodega (`?wineryId=` o `wineryId` en el cuerpo) → 404 `NOT_FOUND` (nunca 403); lo de otra bodega por id también es 404.
-- **Rutas de plataforma**: `GET /wineries`, `/wineries/pending`: todo el personal de plataforma; `approve`/`reject`: `SUPERADMIN`, `ADMIN`, `OPERATIONS`.
-- **Cualquier sesión**: `users/me*`, `POST /wineries`, `POST /uploads`, `switch-organization`, `logout-all`, `GET /traceability/dag/:id` (§2 punto 22). **Públicas**: `GET /traceability/public/:lotCode`, `GET /health`, `signup`, `login`, `refresh`, `logout`.
+- **Rutas de plataforma**: `GET /wineries` (directorio): todo el personal de plataforma; `/platform/*` según la matriz de la Ola 1.
+- **Cualquier sesión**: `users/me*`, `POST /uploads`, `switch-organization`, `logout-all`, `GET /traceability/dag/:id` (§2 punto 22). **Públicas**: `GET /traceability/public/:lotCode`, `GET /health`, `signup`, `login`, `refresh`, `logout`.
 - Rol insuficiente, tipo de organización equivocado o `SUPPORT` escribiendo → 403 `AUTH_INSUFFICIENT_PERMISSIONS`. El personal de plataforma necesita además el segundo factor en la sesión (403 `AUTH_MFA_REQUIRED`; Ola 1).
 - Cambios frente a 0.3.0-rc.1: el operario ya no actúa como enólogo (pesa y registra lecturas, no crea cubas ni lee crianza/embotellado), el contador solo lee, el dueño dictamina, el agrónomo registra lecturas, el `POS_OPERATOR` global ya no registra lecturas y los consumidores ya no leen análisis de laboratorio por el ERP.
 
@@ -166,15 +166,28 @@ OpenAPI de `drinks-on-chain-back` en `dev` (`eace713`) y su código (`docs/arqui
 | Lecturas, tratamientos, reposo | `recordedByUserId`, `authorizedByMemberId`, `processEndDate` | Igual; un tratamiento lo autoriza un miembro activo (la plataforma → 403) |
 | Relaciones | `include` de Prisma | Igual (§2 punto 5) |
 | Altas con `null` | `@IsOptional()`: `null` = omitido; el OpenAPI no lo declara | `Create*Schema` sin `null`; los handlers lo aceptan como omitido |
-| `AuthTokens.refreshToken` | Se retira del cuerpo en H1 | Opcional en el esquema (los mocks aún lo mandan) |
+| `AuthTokens.refreshToken` | Retirado del cuerpo en H1 | Opcional y `@deprecated` en el esquema; los mocks ya no lo mandan (0.4.0-rc.2, §8) |
 | Códigos | `ORG_NOT_FOUND` (bodega), `NOT_FOUND` (solicitud, miembro de otra organización, membresía de plataforma), `USER_NOT_FOUND`, `APPLICATION_TOKEN_INVALID`, `AUTH_MFA_*`, `AUTH_LOGIN_REQUIRED`, `FILE_*` | Igual; `API_ERROR_CODES` = catálogo de `error-codes.ts` |
 | NIT | Único entre todas las bodegas; solicitudes abiertas | §6.1 "Solicitudes" |
 | Equipo y cuentas | `TeamService`, `PlatformUsersService` | §6.1 "Equipo" y "Usuarios internos" |
 | Invitaciones | Cuenta existente: acceso + refresco; plataforma → reto TOTP | §6.1 "Aceptar" |
 | Bitácora | `snake_case` | §6.1 "Bitácora" |
-| Obsoletas (H1) | `deprecated` + cabeceras | §2 punto 24 |
+| Obsoletas (H1) | Retiradas al cerrar la Ola 1 | §2 punto 24 y §8 |
 | Archivos | Almacenamiento privado, URL firmada | §2 punto 23 |
 | Salud | `storage`, `worker`; `/live` y `/ready` | Siempre `ok`, `connected`, `up`; `release: null` |
 
 Diferencias que quedan (decisiones de los mocks): el DAG filtra por bodega activa (§2 punto 22); las fechas del DAG no llevan milisegundos y la de la vendimia es la del pesaje con hora (el backend guarda solo el día); el dueño activo de una bodega `INVITED` de los fixtures acepta su invitación de dueño (el backend respondería 409); los límites por IP y por correo del formulario público y el captcha real no se simulan; los archivos subidos no se guardan.
 
+## 8. Retirada de H1 (mocks 0.4.0-rc.2)
+
+Contrato de la Ola 1 §11 y de la Ola 0 §5. OpenAPI de `drinks-on-chain-back` en `dev` tras la retirada (`c9e96e5`: 112 operaciones, 138 esquemas). Detalle y migración en el CHANGELOG.
+
+| Retirado | Queda |
+|---|---|
+| `tokens.refreshToken` en las respuestas de sesión (`login`, `refresh`, `switch-organization`, `mfa/*`, aceptar invitación) | Solo la cookie `doc_rt` (`AuthTokensSchema.refreshToken` opcional y `@deprecated`; se borra en 0.5) |
+| Refresco en el cuerpo de `refresh`, `logout` y `switch-organization` | `refresh`/`logout` no leen el cuerpo; `switch-organization` con `refreshToken` → 422 `VALIDATION_ERROR` (`details[{ field: 'refreshToken' }]`) |
+| `user.userRole`, `user.wineryId`, `user.memberRole` (sesión) y `userRole` de `/users/me` y de los fixtures de personas | `memberships` + `activeOrganizationId` |
+| Claims `email`, `userRole`, `wineryId`, `memberRole` | `sub, aud, org, orgType, role, sid, jti, iat, exp` |
+| `signup` con `userRole` | `signup` solo de consumidores; `userRole` → 422 |
+| `POST /v1/wineries`, `GET /v1/wineries/pending`, `POST /v1/wineries/{id}/approve|reject`, `GET|POST /v1/wineries/my/members`, `POST /v1/wineries/my/members/create` | 404; sustitutas: solicitudes, alta directa, `/organizations/current/members` e `/invitations` |
+| Esquemas `CreateWinerySchema`, `AddMemberSchema`, `CreateMemberSchema`, `ApproveWinerySchema`, `RejectWinerySchema`, `RefreshTokenSchema`, `UserRoleSchema`/`USER_ROLES`, `SignupRoleSchema`/`SIGNUP_ROLES`; `DEPRECATED_ROUTES`; código `WINERY_NOT_PENDING` | — |

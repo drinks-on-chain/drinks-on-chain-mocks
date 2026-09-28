@@ -11,13 +11,13 @@ Alcance actual: dominio **ERP** (el único con backend real) y **Backoffice/iden
 No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball. Las versiones `X.Y.Z-rc.N` son pre-releases publicadas desde `dev` para adelantar el contrato de una ola; las estables salen de `main`. Migraciones (0.1 → 0.2 → 0.3 → 0.4): ver [CHANGELOG](CHANGELOG.md).
 
 ```bash
-pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.1/drinks-on-chain-mocks-0.4.0-rc.1.tgz
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.2/drinks-on-chain-mocks-0.4.0-rc.2.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
 ```json
 "dependencies": {
-  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.1/drinks-on-chain-mocks-0.4.0-rc.1.tgz"
+  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.2/drinks-on-chain-mocks-0.4.0-rc.2.tgz"
 }
 ```
 
@@ -125,14 +125,14 @@ afterAll(() => server.close())
 ## Qué simulan los handlers
 
 - Las 48 operaciones (38 rutas, incluida `/v1/health`) del OpenAPI del backend (O0-BE-4) con el envoltorio real: `{ success, statusCode, timestamp, path, data | error: { code, message, details } }`, y las **66 de la Ola 1** (ver abajo). Todas devuelven `X-Correlation-ID`; los 9 POST de alta del ERP aceptan `Idempotency-Key` (repetición → `Idempotent-Replayed: true`).
-- **Sesión** (contrato §4–§5): `POST /v1/auth/login` con cualquier usuario de `users.json` y `demo1234` devuelve `{ user, memberships, activeOrganizationId, tokens }` (lo de `auth-login.json` con tokens de sesión propios): acceso de 15 min con forma de JWT (claims `sub`, `aud`, `org`, `orgType`, `role`, `sid`…), `refreshToken` en el cuerpo por compatibilidad y cookie `doc_rt` (`HttpOnly`, `SameSite=Lax`). Como el backend (contrato §8): refresco `<sid>.<generación>.<secreto>`; `refresh` lee la cookie (o el cuerpo), rota siempre, tolera el anterior durante 20 s (dos pestañas) y detecta la reutilización (401 `AUTH_REFRESH_REUSED`; uno inventado → `AUTH_REFRESH_INVALID` sin revocar); `switch-organization` cambia la organización activa en la misma sesión y **exige el refresco de esa sesión** (cookie o `refreshToken` en el cuerpo); `logout`/`logout-all` revocan (204). `GET` y `PATCH /v1/users/me` → `{ user, memberships, activeOrganizationId }`. 5 logins fallidos del mismo correo → 429 `AUTH_TOO_MANY_ATTEMPTS` con `Retry-After`. Las sesiones sobreviven a una recarga (`localStorage`); `expireAccessTokens()` simula que pasaron 15 min y `expireRefreshGrace()` que pasaron los 20 s de gracia. El token estático `mock.access.<clave>` sigue valiendo (paneles y pruebas).
+- **Sesión** (contrato §4–§5): `POST /v1/auth/login` con cualquier usuario de `users.json` y `demo1234` devuelve `{ user, memberships, activeOrganizationId, tokens }` (lo de `auth-login.json` con tokens de sesión propios): acceso de 15 min con forma de JWT (claims `sub`, `aud`, `org`, `orgType`, `role`, `sid`…) y el refresco **solo** en la cookie `doc_rt` (`HttpOnly`, `SameSite=Lax`; desde H1 no va en el cuerpo). Como el backend (contrato §8): refresco `<sid>.<generación>.<secreto>`; `refresh` lee la cookie, rota siempre, tolera el anterior durante 20 s (dos pestañas) y detecta la reutilización (401 `AUTH_REFRESH_REUSED`; uno inventado → `AUTH_REFRESH_INVALID` sin revocar); `switch-organization` cambia la organización activa en la misma sesión y **exige el refresco de esa sesión** en la cookie (`refreshToken` en el cuerpo → 422); `logout`/`logout-all` revocan (204). `GET` y `PATCH /v1/users/me` → `{ user, memberships, activeOrganizationId }`. 5 logins fallidos del mismo correo → 429 `AUTH_TOO_MANY_ATTEMPTS` con `Retry-After`. Las sesiones sobreviven a una recarga (`localStorage`); `expireAccessTokens()` simula que pasaron 15 min y `expireRefreshGrace()` que pasaron los 20 s de gracia. El token estático `mock.access.<clave>` sigue valiendo (paneles y pruebas).
 - **Permisos** como los guards del backend: rol de la **membresía activa** (`OPERATOR` pesa y registra lecturas, `ACCOUNTANT` solo lee, `OWNER` dictamina; matriz en [docs/CONTRATO.md §3](docs/CONTRATO.md)) → 403 `AUTH_INSUFFICIENT_PERMISSIONS`; **multi-tenant** por la bodega activa (lo de otra bodega da 404). La plataforma lee todas las bodegas y opera sobre una con `?wineryId=` (obligatorio en escrituras → 422; `SUPPORT` solo lee). Bloquear la membresía activa revoca la sesión en la siguiente petición (401 `AUTH_SESSION_REVOKED`).
 - **Filtros** de las pantallas (`status`, `destinationType`, `harvestBatchId`, `restStatus`, `processType`, `varietyName`, `isDoEligible`, `isActive`, `harvestYear`, `phytosanitaryStatus`, `productType`, `isAnchoredOnChain`, `search`…) y `limit`/`offset` (por defecto 20/0; `limit` > 100 → 422).
 - **Validación** de cuerpos y parámetros con los esquemas de alta (**422** `VALIDATION_ERROR`, `details: [{ field, message }]`) y **reglas 422** con el campo que las provoca: embotellar antes de `lockUntilDate` o antes de 180 días de reposo, destilación D.O. con parcela no apta o bajo 1.600 m, pesaje sin Brix/pH/acidez. JSON mal formado → 400 `BAD_REQUEST`. También 404 y 409 documentados.
 - **Mutaciones** en memoria: lo que se crea aparece en las listas durante la sesión; ids UUID v5 deterministas (`mock:<recurso>:<n>`) y reloj fijo que empieza el 2026-09-25 a las 12:00 UTC y avanza un minuto por alta. `resetErpDb()` vuelve al estado inicial.
-- `POST /v1/uploads` (multipart, solo personal; PDF ≤ 15 MB, JPEG/PNG/WEBP/GIF ≤ 5 MB, tipo reconocido por el contenido) guarda la clave privada `org/<organización>/<carpeta>/<aaaa>/<mm>/<uuid>.<ext>` y devuelve una URL firmada de 15 min (`expiresAt`); `GET /v1/uploads/url?key=` da una nueva. `GET /v1/traceability/public/:lotCode` (público) y `GET /v1/traceability/dag/:id` devuelven el mismo grafo DAG del backend (`DagGraphSchema`: un nodo por etapa con hash SHA-256, métricas ×100 y el laboratorio en `details.labAnalysis` del embotellado). Las rutas de 0.1 que se retiran en H1 responden `Deprecation: true` y `Link` a su sustituta (`DEPRECATED_ROUTES`).
+- `POST /v1/uploads` (multipart, solo personal; PDF ≤ 15 MB, JPEG/PNG/WEBP/GIF ≤ 5 MB, tipo reconocido por el contenido) guarda la clave privada `org/<organización>/<carpeta>/<aaaa>/<mm>/<uuid>.<ext>` y devuelve una URL firmada de 15 min (`expiresAt`); `GET /v1/uploads/url?key=` da una nueva. `GET /v1/traceability/public/:lotCode` (público) y `GET /v1/traceability/dag/:id` devuelven el mismo grafo DAG del backend (`DagGraphSchema`: un nodo por etapa con hash SHA-256, métricas ×100 y el laboratorio en `details.labAnalysis` del embotellado). Las rutas de 0.1 retiradas en H1 (`POST /wineries`, `wineries/pending|approve|reject`, `wineries/my/members*`) responden 404, como el backend; `signup` solo registra consumidores.
 - **Bodega no activa** (Ola 1 §4): con la bodega activa `INVITED`, `SUSPENDED` o `REVOKED`, las rutas del ERP responden 403 `ORG_NOT_ACTIVE` (`details[0].message` = estado); en `SUSPENDED` se lee el perfil y la bitácora propia.
-- Mensajes de validación en español; errores con los códigos del backend (`INTERNAL_ERROR`, `WINERY_NOT_PENDING`…) y los del contrato de cada ola.
+- Mensajes de validación en español; errores con los códigos del backend (`INTERNAL_ERROR`, `FERMENTATION_TANK_ALREADY_TRANSFERRED`…) y los del contrato de cada ola.
 
 ### Ola 1 (`plan/contratos/o1-backoffice-y-bodegas.md`)
 
@@ -157,7 +157,7 @@ mockMailbox.list()  // todos, los más recientes primero
 
 Las URL base de las apps se cambian con `setMockAppUrls({ ERP: 'https://…' })` o la opción `appUrls` de `startMockWorker`/`setupMockServer`. En el navegador, `startMockWorker` publica `window.__docMocks` (`mailbox`, `reset`, `advanceClock`, `getScenario`, `setScenario`) para el panel `/__mocks` y las e2e (`page.evaluate(() => window.__docMocks.mailbox.latest({ to }))`).
 
-Todas las colecciones responden `data: { items, total, limit, offset }` (contrato §2), también `wineries/pending` y `wineries/my/members`. La forma vive solo en `src/shared/list.ts`; `unwrapList(data)` sigue aceptando un array plano por si hay que hablar con un backend anterior al contrato.
+Todas las colecciones responden `data: { items, total, limit, offset }` (contrato §2). La forma vive solo en `src/shared/list.ts`; `unwrapList(data)` sigue aceptando un array plano por si hay que hablar con un backend anterior al contrato.
 
 ## Escenarios
 
@@ -173,7 +173,7 @@ Se eligen con `setScenario('empty')` (se guarda en `localStorage`), con `?mock=e
 
 ## Usuarios de demo
 
-Contraseña de todos: `demo1234` (para contraseñas nuevas, `DEMO_NEW_PASSWORD` = `vendimia-2026`). Para un panel "cambiar de usuario" usa `demoUsers` (email, rol, membresías, organización activa, rol de plataforma, TOTP, contraseña y token estático). Membresías: el personal interno pertenece a la organización de plataforma con su rol; el resto, a su bodega con el `memberRole` indicado.
+Contraseña de todos: `demo1234` (para contraseñas nuevas, `DEMO_NEW_PASSWORD` = `vendimia-2026`). Para un panel "cambiar de usuario" usa `demoUsers` (email, `role` en la organización activa, membresías, organización activa, rol de plataforma, TOTP, contraseña y token estático). Membresías: el personal interno pertenece a la organización de plataforma con su rol; el resto, a su bodega con el `memberRole` indicado.
 
 **Personal interno (segundo factor obligatorio).** Secreto TOTP de demo: `DRINKSONCHAINDEMOTOTPKEY` (`DEMO_TOTP_SECRET`; genera el código con `generateTotp(DEMO_TOTP_SECRET)` o en una app de autenticación); atajo solo de los mocks: `000000`.
 
@@ -187,24 +187,24 @@ Contraseña de todos: `demo1234` (para contraseñas nuevas, `DEMO_NEW_PASSWORD` 
 
 **Bodegas y personas**:
 
-| Email | Nombre | `userRole` | `memberRole` | Bodega | Clave |
-|---|---|---|---|---|---|
-| `admin@altos.test` | Martín Calamuchita | `WINERY_ADMIN` | `OWNER` | Bodega Altos de Calamuchita | `altos_admin` |
-| `enologa@altos.test` | Lic. Carla Villarroel | `ENOLOGIST` | `ENOLOGIST` | Bodega Altos de Calamuchita | `altos_enologa` |
-| `agronomo@altos.test` | Ing. Diego Paredes | `AGRONOMIST` | `AGRONOMIST` | Bodega Altos de Calamuchita | `altos_agronomo` |
-| `operario@altos.test` | Mario Quispe | `ENOLOGIST` | `OPERATOR` | Bodega Altos de Calamuchita | `altos_operario` |
-| `admin@cintiviejo.test` | Rosa Camargo | `WINERY_ADMIN` | `OWNER` | Destilería Cinti Viejo | `cvj_admin` |
-| `enologa@cintiviejo.test` | Lic. Lucía Rojas | `ENOLOGIST` | `ENOLOGIST` | Destilería Cinti Viejo | `cvj_enologa` |
-| `agronomo@cintiviejo.test` | Ing. Tomás Flores | `AGRONOMIST` | `AGRONOMIST` | Destilería Cinti Viejo | `cvj_agronomo` |
-| `operario@cintiviejo.test` | Rubén Flores | `ENOLOGIST` | `OPERATOR` | Destilería Cinti Viejo | `cvj_operario` |
-| `gerencia@guadalquivir.test` | Elena Vaca | `WINERY_ADMIN` | `OWNER` | Viñedos del Guadalquivir (`INVITED`) | `vgq_admin` |
-| `maria@tribu.test` | María Fernández | `CONSUMER` | — | — | `maria` |
-| `carlos@tribu.test` | Carlos Mamani | `CONSUMER` | — | — | `carlos` |
-| `cajero.lacava@drinksonchain.test` | Juan Pérez | `POS_OPERATOR` | — | — (sin membresía hasta la Ola 5) | `juan_pos` |
-| `sofia@aramayo.test` | Lic. Sofía Aramayo | `ENOLOGIST` | `ENOLOGIST` · `OWNER` | Bodega Altos de Calamuchita (activa) · Casa Uriondo (suspendida) | `sofia` |
-| `ines@salazar.test` | Ing. Inés Salazar | `AGRONOMIST` | `AGRONOMIST` · `OPERATOR` bloqueada (por el dueño) | Destilería Cinti Viejo (activa) · Bodega Altos de Calamuchita | `ines` |
-| `contabilidad@cintiviejo.test` | Lic. Verónica Quiroga | `ENOLOGIST` | `ACCOUNTANT` bloqueada (por la plataforma) | Destilería Cinti Viejo | `cvj_contable` |
-| `hugo@valleescondido.test` | Hugo Ortega | `WINERY_ADMIN` | `OWNER` | Bodega Valle Escondido (`REVOKED`) | `valle_admin` |
+| Email | Nombre | Rol en la bodega | Bodega | Clave |
+|---|---|---|---|---|
+| `admin@altos.test` | Martín Calamuchita | `OWNER` | Bodega Altos de Calamuchita | `altos_admin` |
+| `enologa@altos.test` | Lic. Carla Villarroel | `ENOLOGIST` | Bodega Altos de Calamuchita | `altos_enologa` |
+| `agronomo@altos.test` | Ing. Diego Paredes | `AGRONOMIST` | Bodega Altos de Calamuchita | `altos_agronomo` |
+| `operario@altos.test` | Mario Quispe | `OPERATOR` | Bodega Altos de Calamuchita | `altos_operario` |
+| `admin@cintiviejo.test` | Rosa Camargo | `OWNER` | Destilería Cinti Viejo | `cvj_admin` |
+| `enologa@cintiviejo.test` | Lic. Lucía Rojas | `ENOLOGIST` | Destilería Cinti Viejo | `cvj_enologa` |
+| `agronomo@cintiviejo.test` | Ing. Tomás Flores | `AGRONOMIST` | Destilería Cinti Viejo | `cvj_agronomo` |
+| `operario@cintiviejo.test` | Rubén Flores | `OPERATOR` | Destilería Cinti Viejo | `cvj_operario` |
+| `gerencia@guadalquivir.test` | Elena Vaca | `OWNER` | Viñedos del Guadalquivir (`INVITED`) | `vgq_admin` |
+| `maria@tribu.test` | María Fernández | — | — | `maria` |
+| `carlos@tribu.test` | Carlos Mamani | — | — | `carlos` |
+| `cajero.lacava@drinksonchain.test` | Juan Pérez | — | — (sin membresía hasta la Ola 5) | `juan_pos` |
+| `sofia@aramayo.test` | Lic. Sofía Aramayo | `ENOLOGIST` · `OWNER` | Bodega Altos de Calamuchita (activa) · Casa Uriondo (suspendida) | `sofia` |
+| `ines@salazar.test` | Ing. Inés Salazar | `AGRONOMIST` · `OPERATOR` bloqueada (por el dueño) | Destilería Cinti Viejo (activa) · Bodega Altos de Calamuchita | `ines` |
+| `contabilidad@cintiviejo.test` | Lic. Verónica Quiroga | `ACCOUNTANT` bloqueada (por la plataforma) | Destilería Cinti Viejo | `cvj_contable` |
+| `hugo@valleescondido.test` | Hugo Ortega | `OWNER` | Bodega Valle Escondido (`REVOKED`) | `valle_admin` |
 
 ## Regenerar los fixtures
 

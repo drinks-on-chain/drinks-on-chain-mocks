@@ -2,6 +2,19 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.4.0-rc.2] · 2026-09-27
+
+**Retirada de H1** al cerrar la Ola 1 (`plan/contratos/o1-backoffice-y-bodegas.md` §11 y `o0-sesiones-y-estandares.md` §5), alineada con el backend en `dev` (`c9e96e5`: 112 operaciones, 138 esquemas). Pre-release sobre `dev`; detalle en [docs/CONTRATO.md](docs/CONTRATO.md) §8. El ERP y el Backoffice en `dev` ya no usaban nada de lo retirado (toleraban `tokens.refreshToken` como opcional).
+
+### Retirado (rupturas y migración)
+
+1. **Refresco solo en la cookie `doc_rt`**: las respuestas de sesión (`login`, `refresh`, `switch-organization`, `mfa/*`, aceptar invitación) ya no llevan `tokens.refreshToken`; `refresh` y `logout` no leen el cuerpo; `switch-organization` con `refreshToken` → 422 `VALIDATION_ERROR` en `refreshToken`. `AuthTokensSchema.refreshToken` queda opcional y `@deprecated` (se borra en 0.5); `RefreshTokenSchema` desaparece. *Migración*: quitar `legacyRefreshToken` y el cuerpo de `doRefresh()`/`switchOrganization()` del cliente de API (plantilla, ERP, Backoffice); renovar con `credentials: 'include'`.
+2. **Sin rol global**: fuera `user.userRole`, `user.wineryId` y `user.memberRole` de la sesión, `userRole` de `GET/PATCH /v1/users/me` (`UserProfileResponseSchema`, `MeUserSchema`) y de los fixtures de personas (`users.json`, `auth-login.json`), y los claims `email`, `userRole`, `wineryId`, `memberRole` (`AccessTokenClaimsSchema`). Desaparecen `UserRoleSchema`/`USER_ROLES`/`UserRole` y `SignupRoleSchema`/`SIGNUP_ROLES`. *Migración*: el rol y la bodega salen de `memberships` y `activeOrganizationId`.
+3. **`DemoUser`**: `userRole` y `memberRole` → `role` (rol en la organización activa: plataforma o bodega, o `null`); `wineryId` se mantiene. *Migración (paneles `/__mocks` del ERP, Backoffice y plantilla)*: `u.memberRole ?? u.userRole` → `u.role`.
+4. **`signup` solo para consumidores**: `userRole` en el cuerpo → 422 (`SignupSchema` sin `userRole`).
+5. **Rutas de 0.1 retiradas** (404, como el backend): `POST /v1/wineries`, `GET /v1/wineries/pending`, `POST /v1/wineries/{id}/approve|reject`, `GET|POST /v1/wineries/my/members`, `POST /v1/wineries/my/members/create`. Con ellas, `CreateWinerySchema`, `AddMemberSchema`, `CreateMemberSchema`, `ApproveWinerySchema`, `RejectWinerySchema`, `DEPRECATED_ROUTES` (de `/handlers`) y el código `WINERY_NOT_PENDING`. *Migración*: solicitudes (`/public/winery-applications`, `/platform/winery-applications/*`), alta directa (`/platform/wineries`) y equipo (`/organizations/current/members`, `/invitations`). Quedan `GET /v1/wineries` y `GET`/`PATCH /v1/wineries/my`.
+6. **OpenAPI**: `openapi/erp.json` = backend tras la retirada; la prueba de contrato comprueba además que nada de lo retirado vuelva.
+
 ## [0.4.0-rc.1] · 2026-09-27
 
 Alineación con el **backend real de la Ola 1 completa** (OpenAPI de `drinks-on-chain-back` en `dev`, `eace713`: 119 operaciones, 144 esquemas; `plan/contratos/o1-backoffice-y-bodegas.md` con §11 bis). `openapi/pendientes.json` queda vacío: la prueba de contrato valida todas las respuestas contra el OpenAPI real, en modo estricto. Pre-release sobre `dev`; detalle en [docs/CONTRATO.md](docs/CONTRATO.md) §2, §6.1 y §7.
