@@ -1,6 +1,5 @@
 import type { RouteContext, RouteResult, RouteSpec } from '../../erp/handlers/http'
-import type { WineryResponse } from '../../erp/schemas'
-import { SYSTEM_NAME, now, profileOf, recordAudit } from './support'
+import { recordAudit } from './support'
 
 // Bitácora de las escrituras de las rutas del ERP (AUD-01: "toda escritura deja una entrada") y
 // operaciones que aceptan `Idempotency-Key`. No cambia las respuestas del ERP.
@@ -33,12 +32,7 @@ const ERP_ACTIONS: Record<string, [action: string, resourceType: string]> = {
   'POST /v1/bottling': ['BOTTLING_BATCH_CREATED', 'bottling_batch'],
   'POST /v1/lab-analyses': ['LAB_ANALYSIS_CREATED', 'lab_analysis'],
   'POST /v1/uploads': ['FILE_UPLOADED', 'file'],
-  'POST /v1/wineries': ['WINERY_CREATED', 'winery'],
   'PATCH /v1/wineries/my': ['WINERY_UPDATED', 'winery'],
-  'POST /v1/wineries/my/members': ['MEMBER_JOINED', 'membership'],
-  'POST /v1/wineries/my/members/create': ['MEMBER_JOINED', 'membership'],
-  'POST /v1/wineries/:id/approve': ['WINERY_APPROVED', 'winery'],
-  'POST /v1/wineries/:id/reject': ['WINERY_REJECTED', 'winery'],
   'PATCH /v1/users/me': ['', 'user'], // lo registra la propia ruta (antes y después)
 }
 
@@ -54,18 +48,6 @@ function erpAfterSuccess(spec: RouteSpec): RouteSpec['afterSuccess'] {
     const id = typeof data.id === 'string' ? data.id : typeof data.key === 'string' ? data.key.slice(0, 100) : typeof user?.id === 'string' ? user.id : null
     const auth = ctx.optionalAuth
     const organizationId = (typeof data.wineryId === 'string' ? data.wineryId : null) ?? auth?.wineryId ?? null
-    // Aprobar/rechazar por las rutas del ERP también deja rastro en el historial de la bodega.
-    if (keyOf(spec) === 'POST /v1/wineries/:id/approve' || keyOf(spec) === 'POST /v1/wineries/:id/reject') {
-      const winery = data as unknown as WineryResponse
-      profileOf(winery).statusHistory.push({
-        status: winery.certificationStatus,
-        at: now(),
-        by: auth?.user.fullName ?? SYSTEM_NAME,
-        reason: null,
-      })
-      recordAudit(ctx, { action, resource: { type: resourceType, id: winery.id }, organizationId: winery.id, after: { status: winery.certificationStatus } })
-      return
-    }
     recordAudit(ctx, {
       action,
       resource: { type: resourceType, id },

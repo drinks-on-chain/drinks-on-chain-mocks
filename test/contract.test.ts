@@ -197,7 +197,7 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     expect(new Set(routeOps).size).toBe(routeOps.length)
   })
 
-  it('las rutas obsoletas (H1) son las del OpenAPI, con la misma sustituta (x-replaced-by)', () => {
+  it('las rutas obsoletas son las del OpenAPI, con la misma sustituta (x-replaced-by); tras H1, ninguna', () => {
     type Op = { deprecated?: boolean; 'x-replaced-by'?: string }
     const inSpec = Object.entries(spec.paths).flatMap(([p, ops]) =>
       Object.entries(ops as Record<string, Op>)
@@ -206,6 +206,27 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     )
     const inMocks = MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated] as const)
     expect(new Map(inMocks)).toEqual(new Map(inSpec))
+    expect(inMocks).toEqual([])
+  })
+
+  it('lo retirado en H1 no está en el OpenAPI ni en los mocks', () => {
+    const retired = [
+      'POST /v1/wineries',
+      'GET /v1/wineries/pending',
+      'POST /v1/wineries/{id}/approve',
+      'POST /v1/wineries/{id}/reject',
+      'GET /v1/wineries/my/members',
+      'POST /v1/wineries/my/members',
+      'POST /v1/wineries/my/members/create',
+    ]
+    expect(retired.filter((op) => openApiOps.has(op) || routeOps.includes(op))).toEqual([])
+    const props = (name: string) => Object.keys((spec.components.schemas[name]?.properties as Json | undefined) ?? {})
+    expect(props('AuthTokensDto')).not.toContain('refreshToken')
+    for (const name of ['AuthUserDto', 'MeUserDto']) {
+      expect(props(name).filter((p) => ['userRole', 'wineryId', 'memberRole'].includes(p))).toEqual([])
+    }
+    expect(props('SignupDto')).not.toContain('userRole')
+    expect(props('SwitchOrganizationDto')).toEqual(['organizationId'])
   })
 
   it('pendientes.json: las adelantadas aún no están en el OpenAPI (si llegan, se borran de aquí) y los cambios sí', () => {
@@ -302,7 +323,6 @@ const winery = (name: string) => F.wineries.find((w) => w.commercialName === nam
 const ALTOS = winery('Bodega Altos de Calamuchita')
 const CINTI = winery('Destilería Cinti Viejo')
 const URIONDO = winery('Casa Uriondo')
-const PENDING = F.wineries.find((w) => w.certificationStatus === 'INVITED')!
 const altosTerroir = F.terroirs.find((t) => t.wineryId === ALTOS.id && t.altitudeMasl >= 1600)!
 const altosHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
 const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id)!
@@ -321,6 +341,8 @@ interface Sample {
   url: string | ((v: Vars) => string)
   body?: unknown | ((v: Vars) => unknown)
   form?: () => FormData
+  /** Cabecera `Cookie` (p. ej. el refresco `doc_rt`, que desde H1 solo viaja ahí). */
+  cookie?: string
   status: number
   /** Pasos previos (p. ej. pedir un enlace y leerlo del buzón). */
   setup?: () => Promise<Vars>
@@ -332,33 +354,16 @@ const SAMPLES: Record<string, Sample> = {
   'GET /v1/health/ready': { url: '/v1/health/ready', status: 200 },
   'POST /v1/auth/signup': { url: '/v1/auth/signup', body: { email: 'contrato@tribu.test', password: 'clave123', fullName: 'Contrato' }, status: 201 },
   'POST /v1/auth/login': { url: '/v1/auth/login', body: { email: 'sofia@aramayo.test', password: 'demo1234' }, status: 200 },
-  'POST /v1/auth/refresh': { url: '/v1/auth/refresh', body: { refreshToken: 'mock.refresh.altos_admin' }, status: 200 },
+  'POST /v1/auth/refresh': { url: '/v1/auth/refresh', cookie: 'doc_rt=mock.refresh.altos_admin', status: 200 },
   'POST /v1/auth/switch-organization': { as: 'sofia', url: '/v1/auth/switch-organization', body: { organizationId: URIONDO.id }, status: 200 },
   'POST /v1/auth/logout': { as: 'altos_admin', url: '/v1/auth/logout', body: {}, status: 204 },
   'POST /v1/auth/logout-all': { as: 'altos_admin', url: '/v1/auth/logout-all', body: {}, status: 204 },
   'GET /v1/users/me': { as: 'ines', url: '/v1/users/me', status: 200 },
   'PATCH /v1/users/me': { as: 'altos_admin', url: '/v1/users/me', body: { fullName: 'Martín C.' }, status: 200 },
   'GET /v1/users/me/wallet': { as: 'altos_admin', url: '/v1/users/me/wallet', status: 200 },
-  'POST /v1/wineries': {
-    as: 'maria',
-    url: '/v1/wineries',
-    body: { legalName: 'Nueva S.R.L.', commercialName: 'Nueva', beverageCategory: 'WINERY', taxIdNit: '5550001', geographicRegion: 'Valle Central de Tarija', contactEmail: 'hola@nueva.test' },
-    status: 201,
-  },
   'GET /v1/wineries': { as: 'admin', url: '/v1/wineries', status: 200 },
   'GET /v1/wineries/my': { as: 'altos_admin', url: '/v1/wineries/my', status: 200 },
   'PATCH /v1/wineries/my': { as: 'altos_admin', url: '/v1/wineries/my', body: { address: 'Camino a Calamuchita km 9' }, status: 200 },
-  'POST /v1/wineries/my/members': { as: 'altos_admin', url: '/v1/wineries/my/members', body: { userId: maria.id, memberRole: 'ACCOUNTANT' }, status: 201 },
-  'GET /v1/wineries/my/members': { as: 'altos_admin', url: '/v1/wineries/my/members', status: 200 },
-  'POST /v1/wineries/my/members/create': {
-    as: 'altos_admin',
-    url: '/v1/wineries/my/members/create',
-    body: { email: 'contable@altos.test', password: 'clave123', fullName: 'Contable', memberRole: 'ACCOUNTANT' },
-    status: 201,
-  },
-  'GET /v1/wineries/pending': { as: 'admin', url: '/v1/wineries/pending', status: 200 },
-  'POST /v1/wineries/{id}/approve': { as: 'admin', url: `/v1/wineries/${PENDING.id}/approve`, body: {}, status: 200 },
-  'POST /v1/wineries/{id}/reject': { as: 'admin', url: `/v1/wineries/${PENDING.id}/reject`, body: { rejectionReason: 'Falta el registro SENASAG' }, status: 200 },
   'POST /v1/terroirs': {
     as: 'altos_agronomo',
     url: '/v1/terroirs',
@@ -807,6 +812,7 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
     const vars = sample.setup ? await sample.setup() : {}
     const headers: Record<string, string> = {}
     if (sample.as) headers.Authorization = `Bearer mock.access.${sample.as}`
+    if (sample.cookie) headers.Cookie = sample.cookie
     let body: BodyInit | undefined
     const rawBody = typeof sample.body === 'function' ? (sample.body as (v: Vars) => unknown)(vars) : sample.body
     if (sample.form) body = sample.form()

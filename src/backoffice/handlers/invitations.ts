@@ -1,5 +1,4 @@
 import { PLATFORM_ORGANIZATION } from '../../erp/catalog'
-import { USER_ROLE_FOR_MEMBER } from '../../erp/derive'
 import { anyUser, orgMember, type AuthContext } from '../../erp/handlers/auth-context'
 import { getErpDb, newId, nextSeq } from '../../erp/handlers/db'
 import { ApiError, domainError, fieldError, invalid, notFound } from '../../erp/handlers/errors'
@@ -183,7 +182,7 @@ export const platformTarget: InvitationTarget = {
 function isMember(target: InvitationTarget, email: string): boolean {
   const user = findUserByEmail(email)
   if (!user) return false
-  if (target.organizationType === 'PLATFORM') return Boolean(user._mock.platformRole) || user.userRole === 'PLATFORM_ADMIN'
+  if (target.organizationType === 'PLATFORM') return Boolean(user._mock.platformRole)
   const winery = getErpDb().wineries.find((w) => w.id === target.organizationId)
   return Boolean(winery?.members?.some((m) => m.userId === user.id))
 }
@@ -381,7 +380,7 @@ async function accept(ctx: RouteContext) {
     if (auth.user.id !== existing.id) throw domainError(403, 'INVITATION_EMAIL_MISMATCH', 'La invitación es para otro correo')
     assertCanJoin(inv, existing)
     // Bodega: además del acceso hace falta el refresco de esa misma sesión (cookie `doc_rt`).
-    if (inv.organizationType !== 'PLATFORM') session = rotatedSessionOf(auth, ctx.cookies, undefined, inv.organizationId)
+    if (inv.organizationType !== 'PLATFORM') session = rotatedSessionOf(auth, ctx.cookies, inv.organizationId)
     user = existing
   } else {
     if (auth) throw domainError(403, 'INVITATION_EMAIL_MISMATCH', 'La invitación es para otro correo: cierra la sesión para crear la cuenta')
@@ -395,7 +394,6 @@ async function accept(ctx: RouteContext) {
       email: inv.email,
       password: body.password!,
       fullName: body.fullName!,
-      userRole: inv.organizationType === 'PLATFORM' ? 'PLATFORM_ADMIN' : USER_ROLE_FOR_MEMBER[inv.role as MemberRole],
       wineryId: inv.organizationType === 'WINERY' ? inv.organizationId : null,
     })
     recordAudit(ctx, {

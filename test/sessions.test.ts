@@ -74,11 +74,11 @@ async function login(email: string) {
   const res = await raw<LoginResponse>('/v1/auth/login', { body: { email, password: 'demo1234' } })
   expect(res.status).toBe(200)
   const first = data(res.json)
-  if (!('mfa' in first)) return { session: SessionResponseSchema.parse(first), headers: res.headers }
+  if (!('mfa' in first)) return { session: SessionResponseSchema.parse(first), headers: res.headers, refresh: cookieValue(res.headers) }
   // Personal de plataforma: segundo factor con el TOTP de demo (contrato de la Ola 1 §1).
   const verified = await raw<SessionResponse>('/v1/auth/mfa/verify', { body: { mfaToken: first.mfa.mfaToken, code: generateTotp(DEMO_TOTP_SECRET) } })
   expect(verified.status).toBe(200)
-  return { session: SessionResponseSchema.parse(data(verified.json)), headers: verified.headers }
+  return { session: SessionResponseSchema.parse(data(verified.json)), headers: verified.headers, refresh: cookieValue(verified.headers) }
 }
 
 function claimsOf(accessToken: string) {
@@ -88,19 +88,24 @@ function claimsOf(accessToken: string) {
 
 describe('login y membresías', () => {
   it('la respuesta trae membresías, organización activa, audiencia y un acceso de 15 min', async () => {
-    const { session, headers } = await login('enologa@altos.test')
-    expect(session.user).toMatchObject({ audience: 'STAFF', userRole: 'ENOLOGIST', wineryId: ALTOS.id, memberRole: 'ENOLOGIST' })
+    const { session, headers, refresh } = await login('enologa@altos.test')
+    expect(session.user).toMatchObject({ audience: 'STAFF' })
+    // Retirados en H1: el rol y la bodega van en las membresías; el refresco, solo en la cookie.
+    for (const legacy of ['userRole', 'wineryId', 'memberRole']) expect(session.user).not.toHaveProperty(legacy)
+    expect(session.tokens).not.toHaveProperty('refreshToken')
     expect(session.memberships).toEqual([
       expect.objectContaining({ organizationId: ALTOS.id, organizationType: 'WINERY', role: 'ENOLOGIST', status: 'ACTIVE' }),
     ])
     expect(session.activeOrganizationId).toBe(ALTOS.id)
     expect(session.tokens).toMatchObject({ tokenType: 'Bearer', expiresIn: 900 })
     const claims = claimsOf(session.tokens.accessToken)
-    expect(claims).toMatchObject({ aud: 'STAFF', org: ALTOS.id, orgType: 'WINERY', role: 'ENOLOGIST', email: 'enologa@altos.test' })
+    expect(claims).toMatchObject({ aud: 'STAFF', org: ALTOS.id, orgType: 'WINERY', role: 'ENOLOGIST' })
+    for (const legacy of ['email', 'userRole', 'wineryId', 'memberRole']) expect(claims).not.toHaveProperty(legacy)
     expect(claims.exp - claims.iat).toBe(900)
     // Cookie de renovación: HttpOnly, SameSite=Lax, Path=/, 7 días para personal, Secure en HTTPS.
     const setCookie = headers.get('set-cookie')!
-    expect(setCookie).toContain(`doc_rt=${session.tokens.refreshToken}`)
+    expect(refresh).toMatch(/^[0-9a-f-]{36}\.0\.[A-Za-z0-9_-]{43}$/)
+    expect(setCookie).toContain(`doc_rt=${refresh}`)
     expect(setCookie).toMatch(/HttpOnly; Secure; SameSite=Lax; Path=\/; Max-Age=604800/)
   })
 
@@ -108,7 +113,6 @@ describe('login y membresías', () => {
     const admin = await login('gestor@drinksonchain.test')
     expect(admin.session.activeOrganizationId).toBe(PLATFORM_ORGANIZATION.id)
     expect(admin.session.memberships[0]).toMatchObject({ organizationType: 'PLATFORM', role: 'SUPERADMIN' })
-    expect(admin.session.user).toMatchObject({ wineryId: null, memberRole: null })
 
     const res = await raw<SessionResponse>('/api/v1/auth/login', { origin: 'http://localhost:3002', body: { email: 'maria@tribu.test', password: 'demo1234' } })
     const maria = SessionResponseSchema.parse(data(res.json))
@@ -136,37 +140,40 @@ describe('login y membresías', () => {
 
 describe('renovación rotativa', () => {
   it('rota con la cookie (sin cuerpo) y detecta la reutilización', async () => {
-    const { session } = await login('admin@cintiviejo.test')
-    const first = session.tokens.refreshToken
+    const { session, refresh: first } = await login('admin@cintiviejo.test')
 
     const renewed = await raw<SessionResponse>('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${first}` })
     expect(renewed.status).toBe(200)
     const second = SessionResponseSchema.parse(data(renewed.json))
-    expect(second.tokens.refreshToken).not.toBe(first)
-    expect(cookieValue(renewed.headers)).toBe(second.tokens.refreshToken)
+    const secondRefresh = cookieValue(renewed.headers)
+    expect(secondRefresh).not.toBe(first)
     expect(claimsOf(second.tokens.accessToken).sid).toBe(claimsOf(session.tokens.accessToken).sid)
 
     // Dentro de la gracia (20 s) el anterior devuelve el mismo par (dos pestañas a la vez).
     const graced = await raw<SessionResponse>('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${first}` })
     expect(graced.status).toBe(200)
     expect(SessionResponseSchema.parse(data(graced.json)).tokens).toEqual(second.tokens)
+    expect(cookieValue(graced.headers)).toBe(secondRefresh)
 
     // Fuera de la gracia, reutilizar el refresco ya rotado revoca toda la familia.
     expireRefreshGrace()
     const reused = await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${first}` })
     expect(reused.status).toBe(401)
     expect(errorCode(reused.json)).toBe('AUTH_REFRESH_REUSED')
-    const after = await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${second.tokens.refreshToken}` })
+    const after = await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${secondRefresh}` })
     expect(errorCode(after.json)).toBe('AUTH_SESSION_REVOKED')
     const me = await raw('/v1/users/me', { token: second.tokens.accessToken })
     expect(me.status).toBe(401)
     expect(errorCode(me.json)).toBe('AUTH_SESSION_REVOKED')
   })
 
-  it('acepta el refresco en el cuerpo (compatibilidad con 0.1, retirada en H1)', async () => {
-    const { session } = await login('agronomo@altos.test')
-    const res = await raw('/v1/auth/refresh', { body: { refreshToken: session.tokens.refreshToken }, cookie: '' })
+  it('el refresco en el cuerpo ya no se lee (retirado en H1): manda la cookie', async () => {
+    const { refresh } = await login('agronomo@altos.test')
+    const other = await login('enologa@cintiviejo.test')
+    // Cookie de otra sesión y el refresco de la primera en el cuerpo: renueva la de la cookie.
+    const res = await raw<SessionResponse>('/v1/auth/refresh', { body: { refreshToken: refresh }, cookie: `doc_rt=${other.refresh}` })
     expect(res.status).toBe(200)
+    expect(SessionResponseSchema.parse(data(res.json)).user.email).toBe('enologa@cintiviejo.test')
   })
 
   it('usa la cookie que guarda MSW aunque la app no la envíe explícitamente', async () => {
@@ -177,13 +184,13 @@ describe('renovación rotativa', () => {
   })
 
   it('expireAccessTokens() simula el paso de 15 min: el acceso caduca y la renovación lo repone', async () => {
-    const { session } = await login('enologa@cintiviejo.test')
+    const { session, refresh } = await login('enologa@cintiviejo.test')
     expireAccessTokens()
     const expired = await raw('/v1/terroirs', { token: session.tokens.accessToken })
     expect(expired.status).toBe(401)
     expect(errorCode(expired.json)).toBe('AUTH_TOKEN_EXPIRED')
     const renewed = SessionResponseSchema.parse(
-      data((await raw<SessionResponse>('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${session.tokens.refreshToken}` })).json),
+      data((await raw<SessionResponse>('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${refresh}` })).json),
     )
     expect((await raw('/v1/terroirs', { token: renewed.tokens.accessToken })).status).toBe(200)
   })
@@ -204,7 +211,6 @@ describe('cambio de organización', () => {
     expect(res.status).toBe(200)
     const switched = SessionResponseSchema.parse(data(res.json))
     expect(switched.activeOrganizationId).toBe(URIONDO.id)
-    expect(switched.user).toMatchObject({ wineryId: URIONDO.id, memberRole: 'OWNER' })
     expect(claimsOf(switched.tokens.accessToken)).toMatchObject({ org: URIONDO.id, role: 'OWNER', sid: claimsOf(asEnologist).sid })
 
     const asOwner = switched.tokens.accessToken
@@ -234,52 +240,65 @@ describe('cambio de organización', () => {
     expect(errorCode(revoked.json)).toBe('ORG_REVOKED')
   })
 
-  it('exige el refresco de la misma sesión (cookie o cuerpo) y lo rota (contrato de la Ola 0 §8)', async () => {
-    const a = (await login('sofia@aramayo.test')).session
-    const b = (await login('admin@altos.test')).session
+  it('exige el refresco de la misma sesión en la cookie y lo rota (contrato de la Ola 0 §8)', async () => {
+    const { session: a, refresh: aRefresh } = await login('sofia@aramayo.test')
+    const { session: b, refresh: bRefresh } = await login('admin@altos.test')
     // Sin cookie propia: el último refresco guardado es el de otra sesión → 401 AUTH_REFRESH_INVALID.
     const noRefresh = await raw('/v1/auth/switch-organization', { token: a.tokens.accessToken, cookie: '', body: { organizationId: URIONDO.id } })
     expect(noRefresh.status).toBe(401)
     expect(errorCode(noRefresh.json)).toBe('AUTH_REFRESH_INVALID')
-    // El refresco de otra sesión en el cuerpo tampoco vale (y no revoca nada).
+    // El refresco de otra sesión en la cookie tampoco vale (y no revoca nada).
     const foreign = await raw('/v1/auth/switch-organization', {
       token: a.tokens.accessToken,
-      cookie: '',
-      body: { organizationId: URIONDO.id, refreshToken: b.tokens.refreshToken },
+      cookie: `doc_rt=${bRefresh}`,
+      body: { organizationId: URIONDO.id },
     })
     expect(errorCode(foreign.json)).toBe('AUTH_REFRESH_INVALID')
     expect((await raw('/v1/users/me', { token: b.tokens.accessToken })).status).toBe(200)
-    // Con el refresco de la sesión en el cuerpo: cambia y lo rota.
+    // El refresco en el cuerpo ya no se acepta (retirado en H1): 422 como el backend.
+    const inBody = await raw('/v1/auth/switch-organization', {
+      token: a.tokens.accessToken,
+      cookie: `doc_rt=${aRefresh}`,
+      body: { organizationId: URIONDO.id, refreshToken: aRefresh },
+    })
+    expect(inBody.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(inBody.json).error.details).toEqual([expect.objectContaining({ field: 'refreshToken' })])
+    // Con la cookie de la sesión: cambia y lo rota.
     const ok = await raw<SessionResponse>('/v1/auth/switch-organization', {
       token: a.tokens.accessToken,
-      cookie: '',
-      body: { organizationId: URIONDO.id, refreshToken: a.tokens.refreshToken },
+      cookie: `doc_rt=${aRefresh}`,
+      body: { organizationId: URIONDO.id },
     })
     expect(ok.status).toBe(200)
     const switched = SessionResponseSchema.parse(data(ok.json))
-    expect(switched.tokens.refreshToken).not.toBe(a.tokens.refreshToken)
-    expect(cookieValue(ok.headers)).toBe(switched.tokens.refreshToken)
-    // Con la cookie de la sesión (lo normal en las apps) también vale.
+    const switchedRefresh = cookieValue(ok.headers)
+    expect(switchedRefresh).not.toBe(aRefresh)
     const back = await raw('/v1/auth/switch-organization', {
       token: switched.tokens.accessToken,
-      cookie: `doc_rt=${switched.tokens.refreshToken}`,
+      cookie: `doc_rt=${switchedRefresh}`,
       body: { organizationId: ALTOS.id },
     })
     expect(back.status).toBe(200)
     // El refresco inicial, ya dos veces rotado → reutilización: revoca la sesión.
-    const reused = await raw('/v1/auth/refresh', { cookie: `doc_rt=${a.tokens.refreshToken}`, method: 'POST' })
+    const reused = await raw('/v1/auth/refresh', { cookie: `doc_rt=${aRefresh}`, method: 'POST' })
     expect(errorCode(reused.json)).toBe('AUTH_REFRESH_REUSED')
   })
 
-  it('POST /wineries/my/members reactiva una membresía bloqueada sin tocar el rol global (SE-01)', async () => {
+  it('las rutas de 0.1 retiradas en H1 ya no existen (my/members, autoinscripción, pending/approve/reject)', async () => {
     const owner = (await login('admin@altos.test')).session.tokens.accessToken
-    const ines = erpFixtures.users.find((u) => u._mock.key === 'ines')!
-    const res = await raw('/v1/wineries/my/members', { token: owner, body: { userId: ines.id, memberRole: 'OPERATOR' } })
-    expect(res.status).toBe(201)
-    expect(getErpDb().users.find((u) => u.id === ines.id)!.userRole).toBe('AGRONOMIST')
-    const { session } = await login('ines@salazar.test')
-    const switched = await raw('/v1/auth/switch-organization', { token: session.tokens.accessToken, body: { organizationId: ALTOS.id } })
-    expect(switched.status).toBe(200)
+    const retired: [string, string][] = [
+      ['POST', '/v1/wineries'],
+      ['GET', '/v1/wineries/pending'],
+      ['POST', `/v1/wineries/${ALTOS.id}/approve`],
+      ['POST', `/v1/wineries/${ALTOS.id}/reject`],
+      ['GET', '/v1/wineries/my/members'],
+      ['POST', '/v1/wineries/my/members'],
+      ['POST', '/v1/wineries/my/members/create'],
+    ]
+    for (const [method, path] of retired) {
+      const res = await raw(path, { method, token: owner, body: method === 'POST' ? {} : undefined })
+      expect({ method, path, status: res.status }).toEqual({ method, path, status: 404 })
+    }
   })
 
   it('bloquear la membresía activa revoca la sesión en la siguiente petición (IAM-13)', async () => {
@@ -296,22 +315,22 @@ describe('cambio de organización', () => {
 
 describe('cierre de sesión', () => {
   it('logout revoca la sesión actual y borra la cookie', async () => {
-    const { session } = await login('enologa@altos.test')
+    const { session, refresh } = await login('enologa@altos.test')
     const out = await raw('/v1/auth/logout', { method: 'POST', token: session.tokens.accessToken })
     expect(out.status).toBe(204)
     expect(out.json).toBeNull()
     expect(out.headers.get('set-cookie')).toMatch(/^doc_rt=; HttpOnly; Secure; SameSite=Lax; Path=\/; Max-Age=0$/)
     expect(errorCode((await raw('/v1/users/me', { token: session.tokens.accessToken })).json)).toBe('AUTH_SESSION_REVOKED')
-    const refresh = await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${session.tokens.refreshToken}` })
-    expect(errorCode(refresh.json)).toBe('AUTH_SESSION_REVOKED')
+    const renewed = await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${refresh}` })
+    expect(errorCode(renewed.json)).toBe('AUTH_SESSION_REVOKED')
   })
 
   it('logout con el acceso caducado identifica la sesión por la cookie', async () => {
-    const { session } = await login('enologa@altos.test')
+    const { refresh } = await login('enologa@altos.test')
     expireAccessTokens()
-    const out = await raw('/v1/auth/logout', { method: 'POST', cookie: `doc_rt=${session.tokens.refreshToken}` })
+    const out = await raw('/v1/auth/logout', { method: 'POST', cookie: `doc_rt=${refresh}` })
     expect(out.status).toBe(204)
-    expect(errorCode((await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${session.tokens.refreshToken}` })).json)).toBe(
+    expect(errorCode((await raw('/v1/auth/refresh', { method: 'POST', cookie: `doc_rt=${refresh}` })).json)).toBe(
       'AUTH_SESSION_REVOKED',
     )
   })

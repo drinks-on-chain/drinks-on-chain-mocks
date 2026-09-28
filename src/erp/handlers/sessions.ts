@@ -411,7 +411,7 @@ export function isExpired(claims: AccessTokenClaims): boolean {
   return Number(claims.jti) <= current().expiredUpTo
 }
 
-/** Tokens de la respuesta de sesión. */
-export function tokensFor(accessToken: string, refreshToken: string): AuthTokens {
-  return { accessToken, tokenType: 'Bearer', expiresIn: ACCESS_TOKEN_TTL_SECONDS, refreshToken }
+/** Tokens de la respuesta de sesión (el refresco va solo en la cookie `doc_rt` desde H1). */
+export function tokensFor(accessToken: string): AuthTokens {
+  return { accessToken, tokenType: 'Bearer', expiresIn: ACCESS_TOKEN_TTL_SECONDS }
 }

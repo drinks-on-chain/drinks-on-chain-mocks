@@ -18,7 +18,7 @@ import { DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures as F, generateTotp, MO
 import { mockMailbox, resetScenario, setScenario } from '../src/handlers'
 import { advanceMockClock, getErpDb, resetErpDb, setupMockServer } from '../src/node'
 import { uid } from '../src/shared/uuid'
-import { API, call, dataOf, login, loginSession } from './helpers'
+import { API, call, dataOf, login, loginSession, loginWithRefresh } from './helpers'
 
 // Recorridos de la Ola 1 contra los handlers (plan/contratos/o1-backoffice-y-bodegas.md).
 
@@ -104,7 +104,7 @@ describe('alta de una bodega por solicitud (camino A), de punta a punta', () => 
     expect(accepted.headers.get('set-cookie')).toMatch(/^doc_rt=/)
     const session = SessionResponseSchema.parse(dataOf(accepted.json))
     expect(session.activeOrganizationId).toBe(approved.winery.id)
-    expect(session.user).toMatchObject({ memberRole: 'OWNER', wineryId: approved.winery.id })
+    expect(session.memberships).toEqual([expect.objectContaining({ organizationId: approved.winery.id, role: 'OWNER' })])
     // 5. La bodega queda ACTIVE con prefijo de lote y el ERP funciona
     const detail = WineryDetailSchema.parse(dataOf((await call(`/v1/platform/wineries/${approved.winery.id}`, { token: ops })).json))
     expect(detail).toMatchObject({ status: 'ACTIVE', lotPrefix: 'CSU', membersCount: 1, owner: { fullName: 'Julia Soto' } })
@@ -204,7 +204,7 @@ describe('alta directa, suspensión y bodega no activa en el ERP', () => {
   })
 
   it('bodega invitada (Viñedos del Guadalquivir): el ERP responde ORG_NOT_ACTIVE con INVITED; reenviar y aceptar con la cuenta existente la activa', async () => {
-    const elenaSession = await loginSession('gerencia@guadalquivir.test')
+    const { session: elenaSession, refresh: elenaRefresh } = await loginWithRefresh('gerencia@guadalquivir.test')
     const elena = elenaSession.tokens.accessToken
     expect(errorOf((await call('/v1/terroirs', { token: elena })).json)).toMatchObject({ code: 'ORG_NOT_ACTIVE', details: [{ message: 'INVITED' }] })
     expect((await call('/v1/organizations/current', { token: elena })).status).toBe(403)
@@ -220,7 +220,7 @@ describe('alta directa, suspensión y bodega no activa en el ERP', () => {
     // Cuenta existente: 401 AUTH_LOGIN_REQUIRED sin sesión; con el acceso, además el refresco de esa sesión (cookie doc_rt)
     expect(errorOf((await call(`/v1/invitations/${token}/accept`, { body: {} })).json).code).toBe('AUTH_LOGIN_REQUIRED')
     expect(errorOf((await call(`/v1/invitations/${token}/accept`, { token: elena, body: {} })).json).code).toBe('AUTH_REFRESH_INVALID')
-    const cookie = { Cookie: `doc_rt=${elenaSession.tokens.refreshToken}` }
+    const cookie = { Cookie: `doc_rt=${elenaRefresh}` }
     const accepted = SessionResponseSchema.parse(dataOf((await call(`/v1/invitations/${token}/accept`, { token: elena, body: {}, headers: cookie })).json))
     expect((await call('/v1/terroirs', { token: accepted.tokens.accessToken })).status).toBe(200)
     expect(dataOf((await call<WineryDetail>(`/v1/platform/wineries/${W('guadalquivir').id}`, { token: ops })).json)).toMatchObject({ status: 'ACTIVE', lotPrefix: 'VGQ' })
@@ -561,11 +561,6 @@ describe('escenarios en los dominios de la Ola 1', () => {
 })
 
 describe('ERP: lo que cambió con la Ola 1 y el backend O0-BE-2', () => {
-  it('aprobar o rechazar una bodega que no está pendiente → 409 WINERY_NOT_PENDING', async () => {
-    const res = await call(`/v1/wineries/${ALTOS.id}/approve`, { token: staticToken('admin'), body: {} })
-    expect(errorOf(res.json).code).toBe('WINERY_NOT_PENDING')
-  })
-
   it('una cuba pasa una sola vez a crianza → 409 FERMENTATION_TANK_ALREADY_TRANSFERRED', async () => {
     const aging = F.wineAging.find((a) => a.wineryId === ALTOS.id)!
     const res = await call('/v1/wine-aging', { token: staticToken('altos_enologa'), body: { fermentationTankId: aging.fermentationTankId, containerType: 'Barrica', plannedMonths: 6 } })

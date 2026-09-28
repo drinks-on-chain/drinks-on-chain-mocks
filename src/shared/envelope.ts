@@ -38,7 +38,6 @@ export const API_ERROR_CODES = [
   'IDEMPOTENCY_KEY_INVALID',
   'IDEMPOTENCY_KEY_REUSED',
   // ERP (backend O0-BE-2)
-  'WINERY_NOT_PENDING',
   'FERMENTATION_TANK_ALREADY_TRANSFERRED',
   // Ola 1: cuenta, segundo factor y captcha
   'AUTH_MFA_REQUIRED',

@@ -53,18 +53,17 @@ export const MembershipSchema = z.object({
 export type Membership = z.infer<typeof MembershipSchema>
 
 /**
- * `POST /v1/auth/switch-organization`. Exige también el refresco de la misma sesión: la cookie
- * `doc_rt` o, hasta H1, `refreshToken` en el cuerpo (contrato de la Ola 0 §8).
+ * `POST /v1/auth/switch-organization`. Exige también el refresco de la misma sesión en la cookie
+ * `doc_rt` (contrato de la Ola 0 §8); `refreshToken` en el cuerpo → 422 desde H1.
  */
 export const SwitchOrganizationSchema = z.object({
   organizationId: z.string().min(1),
-  refreshToken: z.string().min(1).optional(),
 })
 export type SwitchOrganizationDto = z.infer<typeof SwitchOrganizationSchema>
 
 /**
- * Claims del token de acceso (contrato §5). `email`, `userRole`, `wineryId` y `memberRole` se
- * mantienen por compatibilidad hasta H1. Los tokens de los mocks tienen forma de JWT con
+ * Claims del token de acceso (contrato §5): los de compatibilidad (`email`, `userRole`,
+ * `wineryId`, `memberRole`) se retiraron en H1. Los tokens de los mocks tienen forma de JWT con
  * firma `mock` (no se verifican criptográficamente).
  */
 export const AccessTokenClaimsSchema = z.object({
@@ -77,9 +76,5 @@ export const AccessTokenClaimsSchema = z.object({
   jti: z.string(),
   iat: z.number().int(),
   exp: z.number().int(),
-  email: z.string(),
-  userRole: z.string(),
-  wineryId: z.string().nullable(),
-  memberRole: z.string().nullable(),
 })
 export type AccessTokenClaims = z.infer<typeof AccessTokenClaimsSchema>

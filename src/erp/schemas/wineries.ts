@@ -40,21 +40,6 @@ export const WineryResponseSchema = z.object({
 })
 export type WineryResponse = z.infer<typeof WineryResponseSchema>
 
-export const CreateWinerySchema = z.object({
-  legalName: z.string().min(1),
-  commercialName: z.string().min(1),
-  beverageCategory: BeverageCategorySchema,
-  taxIdNit: z.string().min(1),
-  senasagSanitaryReg: z.string().optional(),
-  geographicRegion: z.string().min(1),
-  countryCode: z.string().optional(),
-  address: z.string().optional(),
-  contactEmail: z.email(),
-  contactPhone: z.string().optional(),
-  logoUrl: z.string().optional(),
-})
-export type CreateWineryDto = z.infer<typeof CreateWinerySchema>
-
 export const UpdateWinerySchema = z.object({
   commercialName: z.string().min(1).optional(),
   address: z.string().nullish(),
@@ -63,32 +48,3 @@ export const UpdateWinerySchema = z.object({
   logoUrl: z.string().nullish(),
 })
 export type UpdateWineryDto = z.infer<typeof UpdateWinerySchema>
-
-export const AddMemberSchema = z.object({
-  userId: z.string().min(1),
-  memberRole: MemberRoleSchema,
-  professionalLicenseNumber: z.string().nullish(),
-  professionalLicensePdfUrl: z.string().nullish(),
-})
-export type AddMemberDto = z.infer<typeof AddMemberSchema>
-
-export const CreateMemberSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1),
-  fullName: z.string().min(1),
-  memberRole: MemberRoleSchema,
-  phoneNumber: z.string().optional(),
-  professionalLicenseNumber: z.string().optional(),
-  professionalLicensePdfUrl: z.string().optional(),
-})
-export type CreateMemberDto = z.infer<typeof CreateMemberSchema>
-
-export const ApproveWinerySchema = z.object({
-  approvalNotes: z.string().nullish(),
-})
-export type ApproveWineryDto = z.infer<typeof ApproveWinerySchema>
-
-export const RejectWinerySchema = z.object({
-  rejectionReason: z.string().min(1),
-})
-export type RejectWineryDto = z.infer<typeof RejectWinerySchema>

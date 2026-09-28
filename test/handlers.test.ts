@@ -93,15 +93,16 @@ describe('autenticación', () => {
     expect(me.memberships.map((m) => m.role)).toEqual(['OWNER'])
   })
 
-  it('refresh acepta el refresco estático de 0.1 y rechaza tokens desconocidos', async () => {
-    const ok = await call('/v1/auth/refresh', { body: { refreshToken: 'mock.refresh.altos_admin' } })
+  it('refresh acepta el refresco estático de los mocks en la cookie y rechaza tokens desconocidos', async () => {
+    const ok = await call('/v1/auth/refresh', { method: 'POST', headers: { Cookie: 'doc_rt=mock.refresh.altos_admin' } })
     const session = SessionResponseSchema.parse(dataOf(ok.json))
     expect(session.user.email).toBe('admin@altos.test')
-    // Refresco con la forma del backend: `<sid>.<generación>.<secreto>`.
-    expect(session.tokens.refreshToken).toMatch(/^[0-9a-f-]{36}\.0\.[A-Za-z0-9_-]{43}$/)
+    // El refresco va solo en la cookie (H1), con la forma del backend: `<sid>.<generación>.<secreto>`.
+    expect(session.tokens).not.toHaveProperty('refreshToken')
+    expect(/doc_rt=([^;]*)/.exec(ok.headers.get('set-cookie') ?? '')?.[1]).toMatch(/^[0-9a-f-]{36}\.0\.[A-Za-z0-9_-]{43}$/)
     // Sin sesiones (la cookie que guardó MSW ya no corresponde a ninguna) un refresco desconocido → 401.
     resetErpDb()
-    const unknown = await call('/v1/auth/refresh', { body: { refreshToken: 'otro' } })
+    const unknown = await call('/v1/auth/refresh', { method: 'POST', headers: { Cookie: 'doc_rt=otro' } })
     expect(unknown.status).toBe(401)
     expect(ErrorEnvelopeSchema.parse(unknown.json).error.code).toBe('AUTH_REFRESH_INVALID')
   })
@@ -112,6 +113,12 @@ describe('autenticación', () => {
     expect(SessionResponseSchema.parse(dataOf(res.json))).toMatchObject({ user: { audience: 'CONSUMER' }, memberships: [], activeOrganizationId: null })
     expect((await call('/v1/users/me', { token: await login('nuevo@tribu.test', 'secreta1') })).status).toBe(200)
     expect((await call('/v1/auth/signup', { body: { email: 'nuevo@tribu.test', password: 'x', fullName: 'X' } })).status).toBe(409)
+  })
+
+  it('signup ya no registra personal (H1): userRole → 422', async () => {
+    const res = await call('/v1/auth/signup', { body: { email: 'duena@nueva.test', password: 'secreta1', fullName: 'Dueña', userRole: 'WINERY_ADMIN' } })
+    expect(res.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(res.json).error.details).toEqual([expect.objectContaining({ field: 'userRole' })])
   })
 })
 
@@ -207,14 +214,14 @@ describe('roles', () => {
     expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
   })
 
-  it('solo PLATFORM_ADMIN lista bodegas y pendientes', async () => {
+  it('solo la plataforma lista el directorio de bodegas', async () => {
     const owner = await login('admin@altos.test')
     expect((await call('/v1/wineries', { token: owner })).status).toBe(403)
     const admin = await login('gestor@drinksonchain.test')
-    const pending = dataOf((await call('/v1/wineries/pending', { token: admin })).json) as Paged<unknown>
+    const invited = dataOf((await call('/v1/wineries?status=INVITED', { token: admin })).json) as Paged<unknown>
     // Viñedos del Guadalquivir y Bodega Sol de Padcaya (INVITED desde la Ola 1).
-    expect(pending).toMatchObject({ total: 2, limit: 20, offset: 0 })
-    expect(pending.items).toHaveLength(2)
+    expect(invited).toMatchObject({ total: 2, limit: 20, offset: 0 })
+    expect(invited.items).toHaveLength(2)
   })
 
   it('un consumidor no ve datos del ERP pero sí el pasaporte público', async () => {
@@ -378,43 +385,13 @@ describe('recorrido del ERP: vendimia → tanque → crianza → embotellado', (
 })
 
 describe('bodega, miembros y archivos', () => {
-  it('el dueño crea un miembro que puede iniciar sesión con su bodega', async () => {
-    const token = await login('admin@altos.test')
-    const res = await call('/v1/wineries/my/members/create', {
-      token,
-      body: { email: 'nueva.enologa@altos.test', password: 'clave123', fullName: 'Nueva Enóloga', memberRole: 'ENOLOGIST' },
-    })
-    expect(res.status).toBe(201)
-    const newToken = await login('nueva.enologa@altos.test', 'clave123')
-    const me = MeResponseSchema.parse(dataOf((await call('/v1/users/me', { token: newToken })).json))
-    expect(me.user.wineryMemberships[0]!.wineryId).toBe(ALTOS.id)
-    expect(me.activeOrganizationId).toBe(ALTOS.id)
-    const membersList = dataOf((await call('/v1/wineries/my/members', { token })).json) as Paged<unknown>
-    // 4 de los fixtures + Sofía (enóloga) + la nueva; Inés está bloqueada y no aparece.
-    expect(membersList.total).toBe(6)
-  })
-
-  it('aprobar una bodega pendiente le asigna cuenta Stellar', async () => {
-    const token = await login('gestor@drinksonchain.test')
-    const pending = erpFixtures.wineries.find((w) => w.certificationStatus === 'INVITED')!
-    const approved = dataOf((await call(`/v1/wineries/${pending.id}/approve`, { token, body: {} })).json) as {
-      certificationStatus: string
-      stellarPublicKey: string
-    }
-    expect(approved.certificationStatus).toBe('ACTIVE')
-    expect(approved.stellarPublicKey).toMatch(/^G[A-Z2-7]{55}$/)
-  })
-
-  it('rutas obsoletas (H1): siguen funcionando con Deprecation y Link a la sustituta', async () => {
+  it('las rutas de 0.1 retiradas en H1 responden 404 (sin cabeceras Deprecation)', async () => {
     const token = await login('admin@altos.test')
     const res = await call('/v1/wineries/my/members', { token })
-    expect(res.status).toBe(200)
-    expect(res.headers.get('deprecation')).toBe('true')
-    expect(res.headers.get('link')).toBe('</v1/organizations/current/members>; rel="successor-version"')
-    const denied = await call('/v1/wineries/pending', { token })
-    expect(denied.status).toBe(403)
-    expect(denied.headers.get('link')).toBe('</v1/platform/winery-applications>; rel="successor-version"')
-    expect((await call('/v1/organizations/current/members', { token })).headers.get('deprecation')).toBeNull()
+    expect(res.status).toBe(404)
+    expect(res.headers.get('deprecation')).toBeNull()
+    expect((await call('/v1/wineries/pending', { token: await login('gestor@drinksonchain.test') })).status).toBe(404)
+    expect((await call('/v1/organizations/current/members', { token })).status).toBe(200)
   })
 
   it('POST /v1/uploads: clave privada de la organización, URL firmada y GET /v1/uploads/url', async () => {
@@ -465,7 +442,7 @@ describe('escenarios', () => {
     const token = await login('enologa@altos.test')
     setScenario('empty')
     expect(dataOf((await call('/v1/terroirs', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
-    expect(dataOf((await call('/v1/wineries/my/members', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
+    expect(dataOf((await call('/v1/harvest-batches', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
   })
 
   it('error: 500 con envoltorio (login sigue funcionando)', async () => {

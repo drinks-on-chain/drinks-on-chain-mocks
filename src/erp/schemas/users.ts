@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { IsoDateTimeSchema } from './common'
-import { MemberRoleSchema, UserRoleSchema } from './enums'
+import { MemberRoleSchema } from './enums'
 import { AudienceSchema, MembershipSchema, PlatformRoleSchema } from './organizations'
 import { WalletResponseSchema } from './wallets'
 
@@ -20,7 +20,6 @@ export const UserProfileResponseSchema = z.object({
   id: z.string(),
   email: z.string(),
   fullName: z.string(),
-  userRole: UserRoleSchema,
   phoneNumber: z.string().nullish(),
   preferredLocale: z.string(),
   isActive: z.boolean(),

@@ -1,4 +1,4 @@
-import { deriveMemberships, isUsableMembership, pickActiveOrganizationId, USER_ROLE_FOR_MEMBER } from '../derive'
+import { deriveMemberships, isUsableMembership, pickActiveOrganizationId } from '../derive'
 import type {
   Audience,
   CertificationStatus,
@@ -8,7 +8,6 @@ import type {
   MockUser,
   OrganizationType,
   PlatformRole,
-  UserRole,
   WineryRole,
 } from '../schemas'
 import { getErpDb } from './db'
@@ -33,8 +32,7 @@ import {
 export interface AuthContext {
   user: MockUser
   key: string
-  /** `userRole` equivalente a la membresía activa: solo compatibilidad (*retirada* en H1), no autoriza nada. */
-  role: UserRole
+  /** ¿La organización activa es la de plataforma? */
   isPlatformAdmin: boolean
   /** Bodega activa; `null` para la plataforma, consumidores y cajeros. */
   wineryId: string | null
@@ -105,14 +103,10 @@ export function contextFor(
   const orgId = organizationId === undefined ? defaultOrganizationId(user, memberships) : organizationId
   const active = orgId ? memberships.find((m) => m.organizationId === orgId) : undefined
   const winery = active?.organizationType === 'WINERY' ? active : undefined
-  let role: UserRole = user.userRole
-  if (active?.organizationType === 'PLATFORM') role = 'PLATFORM_ADMIN'
-  else if (winery) role = USER_ROLE_FOR_MEMBER[winery.role as MemberRole]
   return {
     user,
     key: user._mock.key,
-    role,
-    isPlatformAdmin: role === 'PLATFORM_ADMIN',
+    isPlatformAdmin: active?.organizationType === 'PLATFORM',
     wineryId: winery?.organizationId ?? null,
     tenantId: winery?.organizationId ?? null,
     memberRole: (winery?.role as MemberRole | undefined) ?? null,

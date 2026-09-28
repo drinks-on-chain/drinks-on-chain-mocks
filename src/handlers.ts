@@ -7,7 +7,6 @@ export {
   CLIENT_APP_HEADER,
   createErpHandlers,
   createMockHandlers,
-  DEPRECATED_ROUTES,
   ERP_ROUTE_SPECS,
   ERP_ROUTES,
   expireAccessTokens,

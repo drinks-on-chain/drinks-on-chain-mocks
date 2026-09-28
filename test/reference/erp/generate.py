@@ -127,25 +127,25 @@ WCODE = {w["key"]: w["code"] for w in WINERIES}
 # 2. Usuarios (UserProfileResponseDto) y billeteras (WalletResponseDto)
 # ---------------------------------------------------------------------------
 PEOPLE = [
-    # key, email, fullName, userRole, wineryKey, memberRole, license, phone
-    ("admin", "gestor@drinksonchain.test", "Ana Gutiérrez", "PLATFORM_ADMIN", None, None, None, "+59170000001"),
-    ("soporte", "soporte@drinksonchain.test", "Pablo Rivera", "PLATFORM_ADMIN", None, None, None, "+59170000002"),
-    ("altos_admin", "admin@altos.test", "Martín Calamuchita", "WINERY_ADMIN", "altos", "OWNER", None, "+59171000101"),
-    ("altos_enologa", "enologa@altos.test", "Lic. Carla Villarroel", "ENOLOGIST", "altos", "ENOLOGIST", "COL-ENOL-TAR-118", "+59171000102"),
-    ("altos_agronomo", "agronomo@altos.test", "Ing. Diego Paredes", "AGRONOMIST", "altos", "AGRONOMIST", "CIA-TAR-522", "+59171000103"),
-    ("altos_operario", "operario@altos.test", "Mario Quispe", "ENOLOGIST", "altos", "OPERATOR", None, "+59171000104"),
-    ("cvj_admin", "admin@cintiviejo.test", "Rosa Camargo", "WINERY_ADMIN", "cintiviejo", "OWNER", None, "+59172000201"),
-    ("cvj_enologa", "enologa@cintiviejo.test", "Lic. Lucía Rojas", "ENOLOGIST", "cintiviejo", "ENOLOGIST", "COL-ENOL-CHQ-041", "+59172000202"),
-    ("cvj_agronomo", "agronomo@cintiviejo.test", "Ing. Tomás Flores", "AGRONOMIST", "cintiviejo", "AGRONOMIST", "CIA-CHQ-207", "+59172000203"),
-    ("cvj_operario", "operario@cintiviejo.test", "Rubén Flores", "ENOLOGIST", "cintiviejo", "OPERATOR", None, "+59172000204"),
-    ("vgq_admin", "gerencia@guadalquivir.test", "Elena Vaca", "WINERY_ADMIN", "guadalquivir", "OWNER", None, "+59173000301"),
-    ("maria", "maria@tribu.test", "María Fernández", "CONSUMER", None, None, None, "+59174000401"),
-    ("carlos", "carlos@tribu.test", "Carlos Mamani", "CONSUMER", None, None, None, "+59174000402"),
-    ("juan_pos", "cajero.lacava@drinksonchain.test", "Juan Pérez", "POS_OPERATOR", None, None, None, "+59175000501"),
+    # key, email, fullName, wineryKey, memberRole, license, phone (sin rol global desde H1)
+    ("admin", "gestor@drinksonchain.test", "Ana Gutiérrez", None, None, None, "+59170000001"),
+    ("soporte", "soporte@drinksonchain.test", "Pablo Rivera", None, None, None, "+59170000002"),
+    ("altos_admin", "admin@altos.test", "Martín Calamuchita", "altos", "OWNER", None, "+59171000101"),
+    ("altos_enologa", "enologa@altos.test", "Lic. Carla Villarroel", "altos", "ENOLOGIST", "COL-ENOL-TAR-118", "+59171000102"),
+    ("altos_agronomo", "agronomo@altos.test", "Ing. Diego Paredes", "altos", "AGRONOMIST", "CIA-TAR-522", "+59171000103"),
+    ("altos_operario", "operario@altos.test", "Mario Quispe", "altos", "OPERATOR", None, "+59171000104"),
+    ("cvj_admin", "admin@cintiviejo.test", "Rosa Camargo", "cintiviejo", "OWNER", None, "+59172000201"),
+    ("cvj_enologa", "enologa@cintiviejo.test", "Lic. Lucía Rojas", "cintiviejo", "ENOLOGIST", "COL-ENOL-CHQ-041", "+59172000202"),
+    ("cvj_agronomo", "agronomo@cintiviejo.test", "Ing. Tomás Flores", "cintiviejo", "AGRONOMIST", "CIA-CHQ-207", "+59172000203"),
+    ("cvj_operario", "operario@cintiviejo.test", "Rubén Flores", "cintiviejo", "OPERATOR", None, "+59172000204"),
+    ("vgq_admin", "gerencia@guadalquivir.test", "Elena Vaca", "guadalquivir", "OWNER", None, "+59173000301"),
+    ("maria", "maria@tribu.test", "María Fernández", None, None, None, "+59174000401"),
+    ("carlos", "carlos@tribu.test", "Carlos Mamani", None, None, None, "+59174000402"),
+    ("juan_pos", "cajero.lacava@drinksonchain.test", "Juan Pérez", None, None, None, "+59175000501"),
 ]
 
 users, wallets = [], []
-for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
+for key, email, name, wkey, mrole, lic, phone in PEOPLE:
     uid_ = uid(f"user:{key}")
     created = date(2026, 1, 10) + timedelta(days=rng.randint(0, 200))
     wallet = {
@@ -184,7 +184,6 @@ for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
         "id": uid_,
         "email": email,
         "fullName": name,
-        "userRole": role,
         "phoneNumber": phone,
         "preferredLocale": "es",
         "isActive": True,
@@ -197,25 +196,25 @@ for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
     })
 # Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
 # alterar el resto de la secuencia aleatoria.
-# key, email, fullName, userRole, phone, created, [(wineryKey, memberRole, license, isActive, joined)]
+# key, email, fullName, phone, created, [(wineryKey, memberRole, license, isActive, joined)]
 MULTI = [
-    ("sofia", "sofia@aramayo.test", "Lic. Sofía Aramayo", "ENOLOGIST", "+59176000601", date(2025, 10, 21), [
+    ("sofia", "sofia@aramayo.test", "Lic. Sofía Aramayo", "+59176000601", date(2025, 10, 21), [
         ("altos", "ENOLOGIST", "COL-ENOL-TAR-133", True, date(2026, 3, 10)),
         ("uriondo", "OWNER", None, True, date(2025, 10, 22)),
     ]),
-    ("ines", "ines@salazar.test", "Ing. Inés Salazar", "AGRONOMIST", "+59176000602", date(2026, 2, 2), [
+    ("ines", "ines@salazar.test", "Ing. Inés Salazar", "+59176000602", date(2026, 2, 2), [
         ("cintiviejo", "AGRONOMIST", "CIA-CHQ-230", True, date(2026, 2, 3)),
         ("altos", "OPERATOR", None, False, date(2026, 4, 1)),
     ]),
     # Ola 1: contadora bloqueada por la plataforma y dueño de la bodega revocada.
-    ("cvj_contable", "contabilidad@cintiviejo.test", "Lic. Verónica Quiroga", "ENOLOGIST", "+59172000205", date(2026, 5, 20), [
+    ("cvj_contable", "contabilidad@cintiviejo.test", "Lic. Verónica Quiroga", "+59172000205", date(2026, 5, 20), [
         ("cintiviejo", "ACCOUNTANT", None, False, date(2026, 5, 20)),
     ]),
-    ("valle_admin", "hugo@valleescondido.test", "Hugo Ortega", "WINERY_ADMIN", "+59173000601", date(2026, 1, 5), [
+    ("valle_admin", "hugo@valleescondido.test", "Hugo Ortega", "+59173000601", date(2026, 1, 5), [
         ("valle", "OWNER", None, True, date(2026, 1, 5)),
     ]),
 ]
-for key, email, name, role, phone, created, links in MULTI:
+for key, email, name, phone, created, links in MULTI:
     uid_ = uid(f"user:{key}")
     first = W[links[0][0]]
     wallet = {
@@ -253,7 +252,6 @@ for key, email, name, role, phone, created, links in MULTI:
         "id": uid_,
         "email": email,
         "fullName": name,
-        "userRole": role,
         "phoneNumber": phone,
         "preferredLocale": "es",
         "isActive": True,
@@ -287,7 +285,6 @@ for key, email, name, phone, created, last in STAFF:
         "id": uid_,
         "email": email,
         "fullName": name,
-        "userRole": "PLATFORM_ADMIN",
         "phoneNumber": phone,
         "preferredLocale": "es",
         "isActive": True,
@@ -313,14 +310,14 @@ PLATFORM_ORG = {"id": uid("organization:platform"), "name": "Drinks on Chain", "
 def memberships_of(u: dict) -> list:
     """Plataforma antes que bodegas; el id de una membresía de bodega es el del miembro."""
     out = []
-    if u["userRole"] == "PLATFORM_ADMIN" or u["_mock"].get("platformRole"):
+    if u["_mock"].get("platformRole"):
         out.append({
             "id": uid(f"membership:platform:{u['id']}"),
             "organizationId": PLATFORM_ORG["id"],
             "organizationType": "PLATFORM",
             "organizationName": PLATFORM_ORG["name"],
             "organizationStatus": PLATFORM_ORG["status"],
-            "role": u["_mock"].get("platformRole", "SUPERADMIN"),
+            "role": u["_mock"]["platformRole"],
             "status": "ACTIVE" if u["isActive"] else "BLOCKED",
         })
     for m in u["wineryMemberships"]:
@@ -343,21 +340,16 @@ def auth_response(key: str) -> dict:
     ms = memberships_of(u)
     usable = [m for m in ms if m["status"] == "ACTIVE" and m["organizationStatus"] != "REVOKED"]
     active = usable[0] if usable else None
-    winery = active if active and active["organizationType"] == "WINERY" else None
     return {
         "user": {
             "id": u["id"], "email": u["email"], "fullName": u["fullName"],
             "phoneNumber": u["phoneNumber"], "preferredLocale": "es",
             "audience": "STAFF" if ms else "CONSUMER",
-            "userRole": u["userRole"],
-            "wineryId": winery["organizationId"] if winery else None,
-            "memberRole": winery["role"] if winery else None,
         },
         "memberships": ms,
         "activeOrganizationId": active["organizationId"] if active else None,
         "tokens": {
             "accessToken": f"mock.access.{key}", "tokenType": "Bearer", "expiresIn": 900,
-            "refreshToken": f"mock.refresh.{key}",
         },
     }
 

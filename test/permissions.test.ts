@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { ErrorEnvelopeSchema, MeResponseSchema, type Envelope, type Paged, type TerroirResponse } from '../src'
-import { erpFixtures } from '../src/fixtures'
-import { advanceMockClock, LOGIN_LOCK_POLICY } from '../src/handlers'
+import { DEMO_NEW_PASSWORD, erpFixtures } from '../src/fixtures'
+import { advanceMockClock, LOGIN_LOCK_POLICY, mockMailbox } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
 import { API, call, dataOf, login, loginSession } from './helpers'
 
@@ -39,15 +39,20 @@ const harvestBody = {
 const logBody = { temperatureCelsius: 22, recordedAt: '2026-09-25T08:00:00Z' }
 const tankBody = { harvestBatchId: altosHarvest.id, tankCode: 'TK-PERM', startDate: '2026-09-25' }
 
-/** Contadora activa en Altos (en los fixtures la única contadora está bloqueada). */
+/** Contadora activa en Altos (en los fixtures la única contadora está bloqueada): invitada y aceptada. */
 async function altosAccountant(): Promise<string> {
   const owner = await login('admin@altos.test')
-  const res = await call('/v1/wineries/my/members/create', {
-    token: owner,
-    body: { email: 'contable@altos.test', password: 'demo1234', fullName: 'Contable Altos', memberRole: 'ACCOUNTANT' },
-  })
+  const res = await call('/v1/organizations/current/invitations', { token: owner, body: { email: 'contable@altos.test', role: 'ACCOUNTANT' } })
   expect(res.status).toBe(201)
-  return login('contable@altos.test')
+  const invite = mockMailbox.latest({ to: 'contable@altos.test', template: 'INVITATION' })!
+  const accepted = await call(`/v1/invitations/${invite.token}/accept`, { body: { fullName: 'Contable Altos', password: DEMO_NEW_PASSWORD } })
+  expect(accepted.status).toBe(200)
+  return login('contable@altos.test', DEMO_NEW_PASSWORD)
+}
+
+/** `sid` del acceso (el refresco es `<sid>.<generación>.<secreto>`). */
+function claimsSid(accessToken: string): string {
+  return (JSON.parse(Buffer.from(accessToken.split('.')[1]!, 'base64url').toString('utf8')) as { sid: string }).sid
 }
 
 describe('matriz de roles de bodega (docs-back/05 §3)', () => {
@@ -137,26 +142,22 @@ describe('plataforma sobre una bodega (?wineryId=, OP-07)', () => {
     const write = await call(`/v1/harvest-batches?wineryId=${ALTOS.id}`, { token: support, body: harvestBody })
     expect(write.status).toBe(403)
     expect(code(write.json)).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
-    expect((await call(`/v1/wineries/${F.wineries.find((w) => w.certificationStatus === 'INVITED')!.id}/approve`, { token: support, body: {} })).status).toBe(403)
-    expect((await call('/v1/wineries/pending', { token: support })).status).toBe(200)
+    expect((await call('/v1/wineries?status=INVITED', { token: support })).status).toBe(200)
   })
 })
 
-describe('altas de miembros (SE-01)', () => {
-  it('ya miembro activo → 409 ORG_ALREADY_MEMBER; bloqueada por la plataforma → 403 ORG_BLOCKED_BY_PLATFORM (solo la plataforma la reactiva)', async () => {
+describe('equipo de la bodega (SE-01)', () => {
+  it('invitar a quien ya es miembro → 409 ORG_ALREADY_MEMBER; el dueño no desbloquea lo que bloqueó la plataforma (403 ORG_BLOCKED_BY_PLATFORM)', async () => {
     const owner = await login('admin@cintiviejo.test')
-    const enologa = F.users.find((u) => u._mock.key === 'cvj_enologa')!
-    const dup = await call('/v1/wineries/my/members', { token: owner, body: { userId: enologa.id, memberRole: 'ENOLOGIST' } })
+    const dup = await call('/v1/organizations/current/invitations', { token: owner, body: { email: 'enologa@cintiviejo.test', role: 'ENOLOGIST' } })
     expect(dup.status).toBe(409)
     expect(code(dup.json)).toBe('ORG_ALREADY_MEMBER')
     const veronica = F.users.find((u) => u._mock.key === 'cvj_contable')!
-    const blocked = await call('/v1/wineries/my/members', { token: owner, body: { userId: veronica.id, memberRole: 'ACCOUNTANT' } })
+    const membershipId = CINTI.members!.find((m) => m.userId === veronica.id)!.id
+    const blocked = await call(`/v1/organizations/current/members/${membershipId}/unblock`, { token: owner, body: {} })
     expect(blocked.status).toBe(403)
     expect(code(blocked.json)).toBe('ORG_BLOCKED_BY_PLATFORM')
-    const admin = (await loginSession('gestor@drinksonchain.test')).tokens.accessToken
-    const byPlatform = await call(`/v1/wineries/my/members?wineryId=${CINTI.id}`, { token: admin, body: { userId: veronica.id, memberRole: 'ACCOUNTANT' } })
-    expect(byPlatform.status).toBe(201)
-    expect((await call('/v1/terroirs', { token: await login('contabilidad@cintiviejo.test') })).status).toBe(200)
+    // La plataforma sí puede (con motivo y dentro del límite de colaboradores): test/backoffice-flows.test.ts.
   })
 })
 
@@ -168,19 +169,21 @@ describe('sesión: códigos del backend', () => {
 
   it('refresco inventado con la forma correcta → 401 AUTH_REFRESH_INVALID sin revocar la sesión', async () => {
     const session = await loginSession('enologa@altos.test')
-    const [sid] = session.tokens.refreshToken!.split('.')
-    const forged = `${sid}.0.${'A'.repeat(43)}`
+    const refresh = claimsSid(session.tokens.accessToken)
+    const forged = `${refresh}.0.${'A'.repeat(43)}`
     const res = await call('/v1/auth/refresh', { method: 'POST', headers: { Cookie: `doc_rt=${forged}` } })
     expect(res.status).toBe(401)
     expect(code(res.json)).toBe('AUTH_REFRESH_INVALID')
     expect((await call('/v1/users/me', { token: session.tokens.accessToken })).status).toBe(200)
-    expect((await call('/v1/auth/refresh', { body: { refreshToken: session.tokens.refreshToken } })).status).toBe(200)
+    // La sesión sigue viva: la renovación con la cookie que guarda MSW funciona.
+    expect((await call('/v1/auth/refresh', { method: 'POST' })).status).toBe(200)
   })
 
   it('sesión sin uso más allá de su duración (7 días el personal) → 401 AUTH_SESSION_EXPIRED', async () => {
-    const session = await loginSession('enologa@altos.test')
+    await loginSession('enologa@altos.test')
     advanceMockClock(8 * 86_400_000)
-    const res = await call('/v1/auth/refresh', { body: { refreshToken: session.tokens.refreshToken } })
+    // Sin cookie explícita: la que guardó MSW al iniciar sesión.
+    const res = await call('/v1/auth/refresh', { method: 'POST' })
     expect(res.status).toBe(401)
     expect(code(res.json)).toBe('AUTH_SESSION_EXPIRED')
   })

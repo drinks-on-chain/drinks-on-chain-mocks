@@ -1,27 +1,21 @@
-import { fakeHash64, fakeStellarAddress } from '../../../shared/uuid'
-import { USER_ROLE_FOR_MEMBER } from '../../derive'
 import {
-  AddMemberSchema,
-  ApproveWinerySchema,
   BEVERAGE_CATEGORIES,
   CERTIFICATION_STATUSES,
-  CreateMemberSchema,
-  CreateWinerySchema,
-  RejectWinerySchema,
   UpdateWinerySchema,
   type MemberRole,
   type MockUser,
   type WineryMemberItem,
   type WineryResponse,
 } from '../../schemas'
-import { anyStaff, anyUser, platform, winery, type AuthContext } from '../auth-context'
+import { anyStaff, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
-import { conflict, domainError, notFound } from '../errors'
-import { applyPatch, created, enumParam, listResult, ok, parseBody, strParam, type RouteSpec, parseCreateBody } from '../http'
-import { blockOf, setMemberBlocked } from '../../../backoffice/handlers/members'
-import { createUser, findUserByEmail } from './auth-users'
+import { notFound } from '../errors'
+import { applyPatch, enumParam, listResult, ok, parseBody, strParam, type RouteSpec } from '../http'
 
-// /v1/wineries*
+// /v1/wineries*: directorio de la plataforma y perfil de la bodega activa (0.1). La autoinscripción,
+// `pending`/`approve`/`reject` y `my/members*` se retiraron al cerrar la Ola 1 (H1, contrato de la
+// Ola 1 §11): los sustituyen `/v1/public/winery-applications`, `/v1/platform/*` y
+// `/v1/organizations/current/*`.
 
 /** Bodega de la petición: la activa o, para la plataforma, la de `?wineryId=`. */
 function myWinery(auth: AuthContext): WineryResponse {
@@ -30,13 +24,7 @@ function myWinery(auth: AuthContext): WineryResponse {
   return w
 }
 
-function findWinery(id: string): WineryResponse {
-  const w = getErpDb().wineries.find((x) => x.id === id)
-  if (!w) throw notFound(`Bodega con identificador "${id}" no encontrada`)
-  return w
-}
-
-/** Añade una membresía de bodega (miembro de la bodega + enlace en el perfil de la persona). */
+/** Añade una membresía de bodega (miembro de la bodega + enlace en el perfil de la persona): aceptar una invitación. */
 export function addMembership(
   winery: WineryResponse,
   user: MockUser,
@@ -66,72 +54,7 @@ export function addMembership(
   return member
 }
 
-/** Aprobar o rechazar solo una bodega pendiente (`INVITED`); si no, 409 `WINERY_NOT_PENDING` como el backend. */
-function assertPending(winery: WineryResponse, verb: string): void {
-  if (winery.certificationStatus !== 'INVITED') {
-    throw domainError(409, 'WINERY_NOT_PENDING', `La bodega se encuentra en estado '${winery.certificationStatus}' y no puede ser ${verb}`)
-  }
-}
-
-/**
- * Rutas de 0.1 que se retiran al cerrar la Ola 1 (H1, contrato de la Ola 1 §11) y su sustituta, como
- * `@DeprecatedRoute` del backend. `POST /v1/auth/signup` sigue para consumidores: lo obsoleto es
- * `userRole: 'WINERY_ADMIN'` (el campo), sin cabecera.
- */
-export const DEPRECATED_ROUTES: Readonly<Record<string, string>> = {
-  'POST /v1/wineries': '/v1/public/winery-applications',
-  'GET /v1/wineries/my/members': '/v1/organizations/current/members',
-  'POST /v1/wineries/my/members': '/v1/organizations/current/invitations',
-  'POST /v1/wineries/my/members/create': '/v1/organizations/current/invitations',
-  'GET /v1/wineries/pending': '/v1/platform/winery-applications',
-  'POST /v1/wineries/:id/approve': '/v1/platform/winery-applications/{id}/approve',
-  'POST /v1/wineries/:id/reject': '/v1/platform/winery-applications/{id}/reject',
-}
-
-const withDeprecation = (spec: RouteSpec): RouteSpec => {
-  const replacement = DEPRECATED_ROUTES[`${spec.method.toUpperCase()} ${spec.path}`]
-  return replacement ? { ...spec, deprecated: replacement } : spec
-}
-
-const routes: RouteSpec[] = [
-  {
-    method: 'post',
-    path: '/v1/wineries',
-    access: anyUser,
-    async handle({ request, auth }) {
-      const body = await parseCreateBody(request, CreateWinerySchema)
-      const db = getErpDb()
-      if (db.wineries.some((w) => w.taxIdNit === body.taxIdNit)) throw conflict('El NIT ya se encuentra registrado')
-      const winery: WineryResponse = {
-        id: newId('winery'),
-        legalName: body.legalName,
-        commercialName: body.commercialName,
-        beverageCategory: body.beverageCategory,
-        taxIdNit: body.taxIdNit,
-        senasagSanitaryReg: body.senasagSanitaryReg ?? null,
-        geographicRegion: body.geographicRegion,
-        countryCode: body.countryCode ?? 'BO',
-        address: body.address ?? null,
-        contactEmail: body.contactEmail,
-        contactPhone: body.contactPhone ?? null,
-        logoUrl: body.logoUrl ?? null,
-        stellarPublicKey: null,
-        onchainProducerId: null,
-        onchainRegisterTxHash: null,
-        isExportCertified: false,
-        // `INVITED` sustituye a `PENDING` desde la Ola 1 (autoinscripción *retirada* en H1).
-        certificationStatus: 'INVITED',
-        approvedAt: null,
-        createdAt: tick(),
-        members: [],
-      }
-      db.wineries.push(winery)
-      // El solicitante queda como OWNER de la bodega. Su rol global no cambia (SE-01): el rol
-      // efectivo sale de la membresía al activar esa organización.
-      addMembership(winery, auth.user, 'OWNER', null)
-      return created(winery)
-    },
-  },
+export const wineryRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/wineries',
@@ -171,95 +94,4 @@ const routes: RouteSpec[] = [
       return ok(winery)
     },
   },
-  {
-    method: 'post',
-    path: '/v1/wineries/my/members',
-    access: winery(['OWNER']),
-    async handle({ request, auth }) {
-      const winery = myWinery(auth)
-      const body = await parseBody(request, AddMemberSchema)
-      const user = getErpDb().users.find((u) => u.id === body.userId)
-      if (!user) throw notFound('El usuario no existe')
-      // Añade o reactiva una membresía de esta bodega; nunca toca roles globales (SE-01).
-      const existing = winery.members?.find((m) => m.userId === user.id)
-      if (existing?.isActive) throw domainError(409, 'ORG_ALREADY_MEMBER', 'La persona ya es miembro activo de la bodega')
-      if (existing) {
-        // Lo que bloqueó la plataforma solo lo levanta la plataforma (como el backend).
-        if (auth.organizationType !== 'PLATFORM' && blockOf(existing.id)?.by === 'PLATFORM') {
-          throw domainError(403, 'ORG_BLOCKED_BY_PLATFORM', 'Este bloqueo lo hizo el equipo de Drinks on Chain: solo la plataforma puede levantarlo')
-        }
-        setMemberBlocked(winery, existing, null)
-        existing.memberRole = body.memberRole
-        existing.professionalLicenseNumber = body.professionalLicenseNumber ?? existing.professionalLicenseNumber ?? null
-        const link = user.wineryMemberships.find((m) => m.wineryId === winery.id)
-        if (link) Object.assign(link, { isActive: true, memberRole: body.memberRole, professionalLicenseNumber: existing.professionalLicenseNumber })
-        return created(existing)
-      }
-      return created(addMembership(winery, user, body.memberRole, body.professionalLicenseNumber))
-    },
-  },
-  {
-    method: 'get',
-    path: '/v1/wineries/my/members',
-    access: winery(),
-    list: 'paged',
-    handle: ({ auth, query }) => listResult((myWinery(auth).members ?? []).filter((m) => m.isActive), query),
-  },
-  {
-    method: 'post',
-    path: '/v1/wineries/my/members/create',
-    access: winery(['OWNER']),
-    async handle({ request, auth }) {
-      const winery = myWinery(auth)
-      const body = await parseCreateBody(request, CreateMemberSchema)
-      if (findUserByEmail(body.email)) throw conflict('El correo electrónico ya se encuentra registrado')
-      const user = createUser({
-        email: body.email,
-        password: body.password,
-        fullName: body.fullName,
-        phoneNumber: body.phoneNumber,
-        userRole: USER_ROLE_FOR_MEMBER[body.memberRole],
-        wineryId: winery.id,
-      })
-      return created(addMembership(winery, user, body.memberRole, body.professionalLicenseNumber))
-    },
-  },
-  {
-    method: 'get',
-    path: '/v1/wineries/pending',
-    access: anyStaff,
-    list: 'paged',
-    handle: ({ query }) => listResult(getErpDb().wineries.filter((w) => w.certificationStatus === 'INVITED'), query),
-  },
-  {
-    method: 'post',
-    path: '/v1/wineries/:id/approve',
-    access: platform(['ADMIN', 'OPERATIONS']),
-    async handle({ request, params }) {
-      const winery = findWinery(params.id!)
-      await parseBody(request, ApproveWinerySchema)
-      assertPending(winery, 'aprobada nuevamente')
-      winery.certificationStatus = 'ACTIVE'
-      winery.approvedAt = tick()
-      winery.stellarPublicKey ??= fakeStellarAddress(`winery-wallet:${winery.id}`)
-      winery.onchainProducerId ??= `PROD_${winery.countryCode}_${winery.taxIdNit}`
-      winery.onchainRegisterTxHash ??= fakeHash64(`register:${winery.id}`)
-      return ok(winery)
-    },
-  },
-  {
-    method: 'post',
-    path: '/v1/wineries/:id/reject',
-    access: platform(['ADMIN', 'OPERATIONS']),
-    async handle({ request, params }) {
-      const winery = findWinery(params.id!)
-      await parseBody(request, RejectWinerySchema)
-      assertPending(winery, 'rechazada')
-      // El enum no tiene REJECTED: los mocks usan REVOKED (pendiente de confirmar, CONTRATO.md).
-      winery.certificationStatus = 'REVOKED'
-      return ok(winery)
-    },
-  },
 ]
-
-export const wineryRoutes: RouteSpec[] = routes.map(withDeprecation)

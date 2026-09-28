@@ -6,14 +6,12 @@ import type {
   FermentationTankResponse,
   HarvestBatchResponse,
   Membership,
-  MemberRole,
   MockUser,
   ProductionBatchResponse,
   DagGraph,
   DagNode,
   SessionResponse,
   TerroirResponse,
-  UserRole,
   WineAgingResponse,
   WineryResponse,
 } from './schemas'
@@ -27,22 +25,21 @@ export const ACCESS_TOKEN_TTL_SECONDS = 900
 
 /**
  * Membresías de una persona (contrato de la Ola 0 §4), en orden: plataforma antes que bodegas.
- * - `PLATFORM_ADMIN` (o `_mock.platformRole`) → membresía de la organización de plataforma con
- *   el rol `_mock.platformRole` (`SUPERADMIN` si no lo indica).
+ * - `_mock.platformRole` → membresía de la organización de plataforma con ese rol.
  * - Cada `wineryMemberships[i]` → membresía `WINERY` con su rol; el id es el del miembro de la
  *   bodega; `isActive: false` → `BLOCKED`.
- * - `POS_OPERATOR` y consumidores → ninguna (el POS llega en la Ola 5).
+ * - Consumidores (y el cajero de demo) → ninguna (el POS llega en la Ola 5).
  */
 export function deriveMemberships(user: MockUser, wineries: readonly WineryResponse[]): Membership[] {
   const out: Membership[] = []
-  if (user.userRole === 'PLATFORM_ADMIN' || user._mock.platformRole) {
+  if (user._mock.platformRole) {
     out.push({
       id: uid(`membership:platform:${user.id}`),
       organizationId: PLATFORM_ORGANIZATION.id,
       organizationType: 'PLATFORM',
       organizationName: PLATFORM_ORGANIZATION.name,
       organizationStatus: PLATFORM_ORGANIZATION.status,
-      role: user._mock.platformRole ?? 'SUPERADMIN',
+      role: user._mock.platformRole,
       status: user.isActive ? 'ACTIVE' : 'BLOCKED',
     })
   }
@@ -78,22 +75,12 @@ export function pickActiveOrganizationId(memberships: readonly Membership[], pre
   return usable[0]?.organizationId ?? null
 }
 
-/** `userRole` equivalente a un rol de bodega (los operarios y contables son `ENOLOGIST`, como en los fixtures). */
-export const USER_ROLE_FOR_MEMBER: Record<MemberRole, UserRole> = {
-  OWNER: 'WINERY_ADMIN',
-  ENOLOGIST: 'ENOLOGIST',
-  AGRONOMIST: 'AGRONOMIST',
-  OPERATOR: 'ENOLOGIST',
-  ACCOUNTANT: 'ENOLOGIST',
-}
-
 /** Tokens estáticos de un usuario de demo (`mock.access.<clave>`): los de `auth-login.json`. */
 export function staticTokens(user: MockUser): AuthTokens {
   return {
     accessToken: `mock.access.${user._mock.key}`,
     tokenType: 'Bearer',
     expiresIn: ACCESS_TOKEN_TTL_SECONDS,
-    refreshToken: `mock.refresh.${user._mock.key}`,
   }
 }
 
@@ -109,8 +96,6 @@ export function buildSessionResponse(
   const memberships = options.memberships ?? deriveMemberships(user, wineries)
   const activeOrganizationId =
     options.activeOrganizationId === undefined ? pickActiveOrganizationId(memberships) : options.activeOrganizationId
-  const active = memberships.find((m) => m.organizationId === activeOrganizationId)
-  const activeWinery = active?.organizationType === 'WINERY' ? active : undefined
   return {
     user: {
       id: user.id,
@@ -119,9 +104,6 @@ export function buildSessionResponse(
       phoneNumber: user.phoneNumber,
       preferredLocale: 'es',
       audience: memberships.length > 0 ? 'STAFF' : 'CONSUMER',
-      userRole: user.userRole,
-      wineryId: activeWinery ? activeWinery.organizationId : null,
-      memberRole: activeWinery ? (activeWinery.role as MemberRole) : null,
     },
     memberships,
     activeOrganizationId,
