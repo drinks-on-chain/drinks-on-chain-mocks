@@ -6,6 +6,7 @@ import {
   AuditEventSchema,
   DashboardAlertSchema,
   MockEmailSchema,
+  WaitlistEntrySchema,
   WineryDetailSchema,
   type AuditEvent,
 } from '../src'
@@ -47,6 +48,7 @@ const SCHEMAS: Record<string, z.ZodType> = {
   'alerts.json': z.array(DashboardAlertSchema),
   'audit.json': z.array(AuditEventSchema),
   'mailbox.json': z.array(MockEmailSchema),
+  'waitlist.json': z.array(WaitlistEntrySchema),
 }
 
 describe('fixtures de la Ola 1: esquemas y generador', () => {
