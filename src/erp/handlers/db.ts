@@ -9,7 +9,7 @@ import type {
   StoredSettingHistory,
   WineryProfile,
 } from '../../backoffice/model'
-import type { AuditEvent, DashboardAlert, MockEmail } from '../../backoffice/schemas'
+import type { AuditEvent, DashboardAlert, MockEmail, WaitlistEntry } from '../../backoffice/schemas'
 import { REFERENCE_DAY, toDay, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
 import { erpFixtures } from '../fixtures'
@@ -54,6 +54,10 @@ export interface BackofficeState {
   alerts: DashboardAlert[]
   audit: AuditEvent[]
   mailbox: MockEmail[]
+  /** Lista de espera (contrato O1b). */
+  waitlist: WaitlistEntry[]
+  /** Inscripciones por correo en la última hora (hora real, como el bloqueo del login): más de 3 → 429. */
+  waitlistAttempts?: Record<string, { count: number; firstAt: number }>
   /** Retos de segundo factor (`mfaToken`): caducan con el reloj de los mocks (5 min). */
   mfaTokens: Record<string, { userId: string; expiresAt: number; secret: string | null }>
   /** Códigos TOTP fallidos seguidos por persona (5 → 429). */
@@ -107,6 +111,8 @@ function createBackofficeState(): BackofficeState {
     alerts: f.alerts,
     audit: f.audit,
     mailbox: f.mailbox,
+    waitlist: f.waitlist,
+    waitlistAttempts: {},
     mfaTokens: {},
     mfaFailures: {},
     resetTokens: {},

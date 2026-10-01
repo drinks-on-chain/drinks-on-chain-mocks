@@ -2,6 +2,25 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.4.1] · 2026-10-01
+
+**Lista de espera** (añadido a la Ola 1; `plan/contratos/o1b-lista-de-espera.md`), alineada con el backend `v0.1.1` (118 operaciones, 149 esquemas). Solo añade: nada de lo que había en 0.4.0 cambia de forma, salvo el bloque nuevo y obligatorio `waitlist` del tablero. Detalle y diferencias con el contrato escrito en [docs/CONTRATO.md](docs/CONTRATO.md) §9.
+
+### Añadido
+
+- **Esquemas** (entrada raíz): `WaitlistJoinRequestSchema` (unión por `type` de `WaitlistConsumerJoinSchema` y `WaitlistWineryJoinSchema`, con los mensajes del backend), `WaitlistJoinResponseSchema`, `WaitlistStatsSchema`, `WaitlistEntrySchema`, `WaitlistSourceSchema`, `WaitlistSourcesSchema`, `UpdateWaitlistEntrySchema`, `DashboardWaitlistSchema`, las enumeraciones `WaitlistTypeSchema`/`WAITLIST_TYPES`, `WaitlistStatusSchema`/`WAITLIST_STATUSES`, `WaitlistInterestSchema`/`WAITLIST_INTERESTS`, `WaitlistProducesSchema`/`WAITLIST_PRODUCES`, `WaitlistLocaleSchema`/`WAITLIST_LOCALES` y las constantes `WAITLIST_PHONE_PATTERN`, `WAITLIST_SOURCE_PATTERN`, `WAITLIST_RESOURCE_TYPE`, `WAITLIST_EMAIL_LIMIT_PER_HOUR`, `WAITLIST_CSV_COLUMNS` y `WAITLIST_EXPORT_MAX_ROWS`, con sus tipos (`WaitlistEntry`, `WaitlistJoinRequest`, `UpdateWaitlistEntryDto`…).
+- **Tablero**: `DashboardSchema.waitlist` = `{ consumers, wineries, last24h }` en `GET /v1/platform/dashboard`.
+- **Permisos**: capacidad `waitlist` («Lista de espera») en `GET /v1/platform/permissions`: `FULL` para `SUPERADMIN`, `ADMIN` y `OPERATIONS`; `READ` para `SUPPORT`.
+- **Fixtures**: `fixtures/backoffice/waitlist.json` (`backofficeFixtures.waitlist`): 52 inscripciones (38 consumidores y 14 bodegas ficticias), con `tarija-2026` como origen mayoritario, 8 sin origen, los tres estados y 7 de las últimas 24 h.
+- **Handlers** (incluidos en `createMockHandlers()`): `POST /v1/public/waitlist`, `GET /v1/public/waitlist/stats`, `GET /v1/platform/waitlist`, `GET /v1/platform/waitlist/sources`, `PATCH /v1/platform/waitlist/{id}` y `GET /v1/platform/waitlist/export` (CSV con BOM y `Content-Disposition`), con eventos `WAITLIST_JOINED`, `WAITLIST_STATUS_CHANGED` y `WAITLIST_EXPORTED` en la bitácora (recurso `waitlist_entry`).
+- Código `WAITLIST_EXPORT_TOO_LARGE` en `API_ERROR_CODES`.
+- Pruebas: `test/waitlist.test.ts` y las 6 rutas y `waitlist.json` en la prueba de contrato estricta (`openapi/pendientes.json` sigue vacío).
+
+### Migración (Backoffice)
+
+- Quien construya un `Dashboard` a mano (pruebas, historias) debe añadir `waitlist`. El resto es aditivo.
+- La bitácora de los fixtures (`audit.json`) no cambia: las inscripciones sembradas no tienen eventos; las que se crean o se editan en la sesión sí.
+
 ## [0.4.0-rc.2] · 2026-09-27
 
 **Retirada de H1** al cerrar la Ola 1 (`plan/contratos/o1-backoffice-y-bodegas.md` §11 y `o0-sesiones-y-estandares.md` §5), alineada con el backend en `dev` (`c9e96e5`: 112 operaciones, 138 esquemas). Pre-release sobre `dev`; detalle en [docs/CONTRATO.md](docs/CONTRATO.md) §8. El ERP y el Backoffice en `dev` ya no usaban nada de lo retirado (toleraban `tokens.refreshToken` como opcional).
