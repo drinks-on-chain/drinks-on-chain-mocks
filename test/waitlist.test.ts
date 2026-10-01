@@ -175,6 +175,9 @@ describe('POST /v1/public/waitlist', () => {
         { field: 'source', message: 'El origen admite hasta 40 caracteres: letras minúsculas, números y guiones' },
       ]),
     )
+    // Como el e2e del backend: un detalle por campo.
+    expect(fieldsOf((await join({ type: 'CONSUMER' })).json).sort()).toEqual(['consent', 'email', 'fullName', 'isAdult'])
+    expect(fieldsOf((await join({ ...CONSUMER, phone: 'abc' })).json)).toEqual(['phone'])
     expect(fieldsOf((await join({ ...CONSUMER, isAdult: false })).json)).toEqual(['isAdult'])
     expect(fieldsOf((await join({ ...CONSUMER, consent: undefined })).json)).toEqual(['consent'])
 
