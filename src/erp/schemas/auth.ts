@@ -1,14 +1,13 @@
 import { z } from 'zod'
-import { MemberRoleSchema, SignupRoleSchema, UserRoleSchema } from './enums'
 import { AudienceSchema, MembershipSchema } from './organizations'
 
 // POST /v1/auth/signup · /login · /refresh · /switch-organization (contrato de la Ola 0 §5)
 
+/** `POST /v1/auth/signup`: solo consumidores (el `userRole` de personal se retiró en H1; enviarlo → 422). */
 export const SignupSchema = z.object({
   email: z.email(),
   password: z.string().min(1),
   fullName: z.string().min(1),
-  userRole: SignupRoleSchema.nullish(),
   phoneNumber: z.string().nullish(),
   preferredLocale: z.string().nullish(),
 })
@@ -21,18 +20,8 @@ export const LoginSchema = z.object({
 export type LoginDto = z.infer<typeof LoginSchema>
 
 /**
- * Cuerpo de `POST /v1/auth/refresh`. El refresco viaja en la cookie `doc_rt`; el cuerpo
- * `{ refreshToken }` se acepta por compatibilidad (*retirada* en H1).
- */
-export const RefreshTokenSchema = z.object({
-  refreshToken: z.string().min(1).optional(),
-})
-export type RefreshTokenDto = z.infer<typeof RefreshTokenSchema>
-
-/**
- * Persona en la respuesta de sesión. `userRole`, `wineryId` y `memberRole` se mantienen por
- * compatibilidad (*retirada* en H1): `wineryId`/`memberRole` reflejan la organización activa
- * si es una bodega.
+ * Persona en la respuesta de sesión. El rol y la bodega van en `memberships` y
+ * `activeOrganizationId` (`userRole`, `wineryId` y `memberRole` se retiraron en H1).
  */
 export const AuthUserSchema = z.object({
   id: z.string(),
@@ -41,18 +30,20 @@ export const AuthUserSchema = z.object({
   phoneNumber: z.string().nullish(),
   preferredLocale: z.string(),
   audience: AudienceSchema,
-  userRole: UserRoleSchema,
-  wineryId: z.string().nullish(),
-  memberRole: MemberRoleSchema.nullish(),
 })
 export type AuthUser = z.infer<typeof AuthUserSchema>
 
-/** Acceso de 15 min (`expiresIn: 900`); `refreshToken` en el cuerpo por compatibilidad (*retirada* en H1). */
+/** Acceso de 15 min (`expiresIn: 900`). El refresco viaja solo en la cookie `doc_rt` (`HttpOnly`). */
 export const AuthTokensSchema = z.object({
   accessToken: z.string(),
   tokenType: z.string(),
   expiresIn: z.number(),
-  refreshToken: z.string(),
+  /**
+   * @deprecated Retirado del cuerpo en H1 (contrato de la Ola 1 §11 y §11 bis): ni el backend ni los
+   * mocks lo envían desde 0.4.0-rc.2; queda opcional en el tipo para no romper a quien lo lea y se
+   * borra en 0.5. El refresco viaja solo en la cookie `doc_rt`.
+   */
+  refreshToken: z.string().optional(),
 })
 export type AuthTokens = z.infer<typeof AuthTokensSchema>
 

@@ -1,20 +1,20 @@
 import { addMonthsClamped, day, dayFromIso, dayParts, isoAt, REFERENCE_DAY, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
-import { buildPublicPassport, buildSessionResponse } from '../derive'
+import { buildDagGraph, buildSessionResponse } from '../derive'
 import { deriveLotViews, deriveRestStatus } from '../lot-view'
 import { PLATFORM_ROLE_BY_KEY, WINERY_CODES } from '../catalog'
 import type {
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
-  EnologicalTreatment,
-  FermentationLog,
+  EnologicalTreatmentRecord,
+  FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
   LotView,
   MemberRole,
   MockUser,
   ProductionBatchResponse,
-  PublicPassport,
+  DagGraph,
   RestStatusResponse,
   SessionResponse,
   TerroirResponse,
@@ -57,14 +57,14 @@ export interface ErpFixtureSet {
   'terroirs.json': TerroirResponse[]
   'harvest-batches.json': HarvestBatchResponse[]
   'fermentation-tanks.json': FermentationTankResponse[]
-  'fermentation-logs.json': FermentationLog[]
-  'enological-treatments.json': EnologicalTreatment[]
+  'fermentation-logs.json': FermentationLogRecord[]
+  'enological-treatments.json': EnologicalTreatmentRecord[]
   'wine-aging.json': WineAgingResponse[]
   'production-batches.json': ProductionBatchResponse[]
   'production-rest-status.json': RestStatusResponse[]
   'bottling.json': BottlingBatchResponse[]
   'lab-analyses.json': BatchLabAnalysisResponse[]
-  'traceability-public.json': Record<string, PublicPassport>
+  'traceability-public.json': Record<string, DagGraph>
   'lots-view.json': LotView[]
 }
 export type ErpFixtureName = keyof ErpFixtureSet
@@ -142,27 +142,28 @@ export function generateErpFixtures(): ErpFixtureSet {
   // -------------------------------------------------------------------------
   // 2. Usuarios (UserProfileResponseDto) y billeteras (WalletResponseDto)
   // -------------------------------------------------------------------------
-  type Person = [string, string, string, MockUser['userRole'], string | null, 'OWNER' | 'ENOLOGIST' | 'AGRONOMIST' | 'OPERATOR' | null, string | null, string]
+  // key, email, fullName, wineryKey, memberRole, license, phone (sin rol global desde H1)
+  type Person = [string, string, string, string | null, 'OWNER' | 'ENOLOGIST' | 'AGRONOMIST' | 'OPERATOR' | null, string | null, string]
   const PEOPLE: Person[] = [
-    ['admin', 'gestor@drinksonchain.test', 'Ana Gutiérrez', 'PLATFORM_ADMIN', null, null, null, '+59170000001'],
-    ['soporte', 'soporte@drinksonchain.test', 'Pablo Rivera', 'PLATFORM_ADMIN', null, null, null, '+59170000002'],
-    ['altos_admin', 'admin@altos.test', 'Martín Calamuchita', 'WINERY_ADMIN', 'altos', 'OWNER', null, '+59171000101'],
-    ['altos_enologa', 'enologa@altos.test', 'Lic. Carla Villarroel', 'ENOLOGIST', 'altos', 'ENOLOGIST', 'COL-ENOL-TAR-118', '+59171000102'],
-    ['altos_agronomo', 'agronomo@altos.test', 'Ing. Diego Paredes', 'AGRONOMIST', 'altos', 'AGRONOMIST', 'CIA-TAR-522', '+59171000103'],
-    ['altos_operario', 'operario@altos.test', 'Mario Quispe', 'ENOLOGIST', 'altos', 'OPERATOR', null, '+59171000104'],
-    ['cvj_admin', 'admin@cintiviejo.test', 'Rosa Camargo', 'WINERY_ADMIN', 'cintiviejo', 'OWNER', null, '+59172000201'],
-    ['cvj_enologa', 'enologa@cintiviejo.test', 'Lic. Lucía Rojas', 'ENOLOGIST', 'cintiviejo', 'ENOLOGIST', 'COL-ENOL-CHQ-041', '+59172000202'],
-    ['cvj_agronomo', 'agronomo@cintiviejo.test', 'Ing. Tomás Flores', 'AGRONOMIST', 'cintiviejo', 'AGRONOMIST', 'CIA-CHQ-207', '+59172000203'],
-    ['cvj_operario', 'operario@cintiviejo.test', 'Rubén Flores', 'ENOLOGIST', 'cintiviejo', 'OPERATOR', null, '+59172000204'],
-    ['vgq_admin', 'gerencia@guadalquivir.test', 'Elena Vaca', 'WINERY_ADMIN', 'guadalquivir', 'OWNER', null, '+59173000301'],
-    ['maria', 'maria@tribu.test', 'María Fernández', 'CONSUMER', null, null, null, '+59174000401'],
-    ['carlos', 'carlos@tribu.test', 'Carlos Mamani', 'CONSUMER', null, null, null, '+59174000402'],
-    ['juan_pos', 'cajero.lacava@drinksonchain.test', 'Juan Pérez', 'POS_OPERATOR', null, null, null, '+59175000501'],
+    ['admin', 'gestor@drinksonchain.test', 'Ana Gutiérrez', null, null, null, '+59170000001'],
+    ['soporte', 'soporte@drinksonchain.test', 'Pablo Rivera', null, null, null, '+59170000002'],
+    ['altos_admin', 'admin@altos.test', 'Martín Calamuchita', 'altos', 'OWNER', null, '+59171000101'],
+    ['altos_enologa', 'enologa@altos.test', 'Lic. Carla Villarroel', 'altos', 'ENOLOGIST', 'COL-ENOL-TAR-118', '+59171000102'],
+    ['altos_agronomo', 'agronomo@altos.test', 'Ing. Diego Paredes', 'altos', 'AGRONOMIST', 'CIA-TAR-522', '+59171000103'],
+    ['altos_operario', 'operario@altos.test', 'Mario Quispe', 'altos', 'OPERATOR', null, '+59171000104'],
+    ['cvj_admin', 'admin@cintiviejo.test', 'Rosa Camargo', 'cintiviejo', 'OWNER', null, '+59172000201'],
+    ['cvj_enologa', 'enologa@cintiviejo.test', 'Lic. Lucía Rojas', 'cintiviejo', 'ENOLOGIST', 'COL-ENOL-CHQ-041', '+59172000202'],
+    ['cvj_agronomo', 'agronomo@cintiviejo.test', 'Ing. Tomás Flores', 'cintiviejo', 'AGRONOMIST', 'CIA-CHQ-207', '+59172000203'],
+    ['cvj_operario', 'operario@cintiviejo.test', 'Rubén Flores', 'cintiviejo', 'OPERATOR', null, '+59172000204'],
+    ['vgq_admin', 'gerencia@guadalquivir.test', 'Elena Vaca', 'guadalquivir', 'OWNER', null, '+59173000301'],
+    ['maria', 'maria@tribu.test', 'María Fernández', null, null, null, '+59174000401'],
+    ['carlos', 'carlos@tribu.test', 'Carlos Mamani', null, null, null, '+59174000402'],
+    ['juan_pos', 'cajero.lacava@drinksonchain.test', 'Juan Pérez', null, null, null, '+59175000501'],
   ]
 
   const users: MockUser[] = []
   const wallets: WalletResponse[] = []
-  for (const [key, email, name, role, wkey, mrole, lic, phone] of PEOPLE) {
+  for (const [key, email, name, wkey, mrole, lic, phone] of PEOPLE) {
     const userId = uid(`user:${key}`)
     const created = addDays(day(2026, 1, 10), rng.randint(0, 200))
     const wallet: WalletResponse = {
@@ -202,7 +203,6 @@ export function generateErpFixtures(): ErpFixtureSet {
       id: userId,
       email,
       fullName: name,
-      userRole: role,
       phoneNumber: phone,
       preferredLocale: 'es',
       isActive: true,
@@ -216,24 +216,24 @@ export function generateErpFixtures(): ErpFixtureSet {
   // Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
   // alterar el resto de la secuencia aleatoria.
   type Link = [string, MemberRole, string | null, boolean, Day]
-  const MULTI: [string, string, string, MockUser['userRole'], string, Day, Link[]][] = [
-    ['sofia', 'sofia@aramayo.test', 'Lic. Sofía Aramayo', 'ENOLOGIST', '+59176000601', day(2025, 10, 21), [
+  const MULTI: [string, string, string, string, Day, Link[]][] = [
+    ['sofia', 'sofia@aramayo.test', 'Lic. Sofía Aramayo', '+59176000601', day(2025, 10, 21), [
       ['altos', 'ENOLOGIST', 'COL-ENOL-TAR-133', true, day(2026, 3, 10)],
       ['uriondo', 'OWNER', null, true, day(2025, 10, 22)],
     ]],
-    ['ines', 'ines@salazar.test', 'Ing. Inés Salazar', 'AGRONOMIST', '+59176000602', day(2026, 2, 2), [
+    ['ines', 'ines@salazar.test', 'Ing. Inés Salazar', '+59176000602', day(2026, 2, 2), [
       ['cintiviejo', 'AGRONOMIST', 'CIA-CHQ-230', true, day(2026, 2, 3)],
       ['altos', 'OPERATOR', null, false, day(2026, 4, 1)],
     ]],
     // Ola 1: contadora bloqueada por la plataforma y dueño de la bodega revocada.
-    ['cvj_contable', 'contabilidad@cintiviejo.test', 'Lic. Verónica Quiroga', 'ENOLOGIST', '+59172000205', day(2026, 5, 20), [
+    ['cvj_contable', 'contabilidad@cintiviejo.test', 'Lic. Verónica Quiroga', '+59172000205', day(2026, 5, 20), [
       ['cintiviejo', 'ACCOUNTANT', null, false, day(2026, 5, 20)],
     ]],
-    ['valle_admin', 'hugo@valleescondido.test', 'Hugo Ortega', 'WINERY_ADMIN', '+59173000601', day(2026, 1, 5), [
+    ['valle_admin', 'hugo@valleescondido.test', 'Hugo Ortega', '+59173000601', day(2026, 1, 5), [
       ['valle', 'OWNER', null, true, day(2026, 1, 5)],
     ]],
   ]
-  for (const [key, email, name, role, phone, created, links] of MULTI) {
+  for (const [key, email, name, phone, created, links] of MULTI) {
     const userId = uid(`user:${key}`)
     const first = W[links[0]![0]]!
     const wallet: WalletResponse = {
@@ -272,7 +272,6 @@ export function generateErpFixtures(): ErpFixtureSet {
       id: userId,
       email,
       fullName: name,
-      userRole: role,
       phoneNumber: phone,
       preferredLocale: 'es',
       isActive: true,
@@ -307,7 +306,6 @@ export function generateErpFixtures(): ErpFixtureSet {
       id: userId,
       email,
       fullName: name,
-      userRole: 'PLATFORM_ADMIN',
       phoneNumber: phone,
       preferredLocale: 'es',
       isActive: true,
@@ -453,8 +451,8 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['t14', 'h07', 'TK-10', 5000, 3900, 'WINE_AGING', 'FERMENTING', day(2026, 3, 11), null],
   ]
   const tanks: FermentationTankResponse[] = []
-  const logs: FermentationLog[] = []
-  const treatments: EnologicalTreatment[] = []
+  const logs: FermentationLogRecord[] = []
+  const treatments: EnologicalTreatmentRecord[] = []
   for (const [key, hkey, code, cap, filled, dest, status, start, end] of TANKS) {
     const h = H[hkey]!
     const tid = uid(`tank:${key}`)
@@ -691,8 +689,8 @@ export function generateErpFixtures(): ErpFixtureSet {
   // 10. Trazabilidad pública y 11. vista derivada LotView
   // -------------------------------------------------------------------------
   const chain = { wineries, terroirs, harvestBatches: harvests, tanks, wineAgings: agings, productionBatches: productions, bottlings, labAnalyses: labs }
-  const publicPassports: Record<string, PublicPassport> = {}
-  for (const b of bottlings) publicPassports[b.internationalLotCode] = buildPublicPassport(b, chain)
+  const publicPassports: Record<string, DagGraph> = {}
+  for (const b of bottlings) publicPassports[b.internationalLotCode] = buildDagGraph(b, chain)
 
   const lots = deriveLotViews(chain, { today: REFERENCE_DAY })
 

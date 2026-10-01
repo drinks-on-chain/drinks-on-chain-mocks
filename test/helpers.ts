@@ -48,6 +48,17 @@ export async function loginSession(email: string, password = 'demo1234'): Promis
   return dataOf((await call<SessionResponse>('/v1/auth/mfa/verify', { body: { mfaToken, code: generateTotp(DEMO_TOTP_SECRET) } })).json)
 }
 
+/** Valor de la cookie `doc_rt` de una respuesta (el refresco solo viaja ahí desde H1). */
+export function refreshCookieOf(headers: Headers): string {
+  return /doc_rt=([^;]*)/.exec(headers.get('set-cookie') ?? '')?.[1] ?? ''
+}
+
+/** Inicio de sesión de personal de bodega o consumidor (sin segundo factor) con su refresco. */
+export async function loginWithRefresh(email: string, password = 'demo1234'): Promise<{ session: SessionResponse; refresh: string }> {
+  const res = await call<SessionResponse>('/v1/auth/login', { body: { email, password } })
+  return { session: dataOf(res.json), refresh: refreshCookieOf(res.headers) }
+}
+
 /** Token de acceso de una sesión nueva (con el segundo factor si hace falta). */
 export async function login(email: string, password = 'demo1234'): Promise<string> {
   return (await loginSession(email, password)).tokens.accessToken

@@ -18,7 +18,7 @@ import { DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures as F, generateTotp, MO
 import { mockMailbox, resetScenario, setScenario } from '../src/handlers'
 import { advanceMockClock, getErpDb, resetErpDb, setupMockServer } from '../src/node'
 import { uid } from '../src/shared/uuid'
-import { API, call, dataOf, login, loginSession } from './helpers'
+import { API, call, dataOf, login, loginSession, loginWithRefresh } from './helpers'
 
 // Recorridos de la Ola 1 contra los handlers (plan/contratos/o1-backoffice-y-bodegas.md).
 
@@ -104,7 +104,7 @@ describe('alta de una bodega por solicitud (camino A), de punta a punta', () => 
     expect(accepted.headers.get('set-cookie')).toMatch(/^doc_rt=/)
     const session = SessionResponseSchema.parse(dataOf(accepted.json))
     expect(session.activeOrganizationId).toBe(approved.winery.id)
-    expect(session.user).toMatchObject({ memberRole: 'OWNER', wineryId: approved.winery.id })
+    expect(session.memberships).toEqual([expect.objectContaining({ organizationId: approved.winery.id, role: 'OWNER' })])
     // 5. La bodega queda ACTIVE con prefijo de lote y el ERP funciona
     const detail = WineryDetailSchema.parse(dataOf((await call(`/v1/platform/wineries/${approved.winery.id}`, { token: ops })).json))
     expect(detail).toMatchObject({ status: 'ACTIVE', lotPrefix: 'CSU', membersCount: 1, owner: { fullName: 'Julia Soto' } })
@@ -204,7 +204,8 @@ describe('alta directa, suspensión y bodega no activa en el ERP', () => {
   })
 
   it('bodega invitada (Viñedos del Guadalquivir): el ERP responde ORG_NOT_ACTIVE con INVITED; reenviar y aceptar con la cuenta existente la activa', async () => {
-    const elena = (await loginSession('gerencia@guadalquivir.test')).tokens.accessToken
+    const { session: elenaSession, refresh: elenaRefresh } = await loginWithRefresh('gerencia@guadalquivir.test')
+    const elena = elenaSession.tokens.accessToken
     expect(errorOf((await call('/v1/terroirs', { token: elena })).json)).toMatchObject({ code: 'ORG_NOT_ACTIVE', details: [{ message: 'INVITED' }] })
     expect((await call('/v1/organizations/current', { token: elena })).status).toBe(403)
     // La invitación de dueño caducó: la reenvía operaciones
@@ -215,9 +216,12 @@ describe('alta directa, suspensión y bodega no activa en el ERP', () => {
     expect(dataOf((await call<Invitation>(`/v1/invitations/${inv}/resend`, { token: ops, body: {} })).json).status).toBe('PENDING')
     expect(errorOf((await call('/v1/invitations/demo-invitacion-guadalquivir')).json).code).toBe('INVITATION_NOT_FOUND')
     const token = mockMailbox.latest({ to: 'gerencia@guadalquivir.test', template: 'INVITATION' })!.token!
-    expect((await call(`/v1/invitations/${token}/accept`, { body: {} })).status).toBe(401)
     expect(errorOf((await call(`/v1/invitations/${token}/accept`, { token: await login('admin@altos.test'), body: {} })).json).code).toBe('INVITATION_EMAIL_MISMATCH')
-    const accepted = SessionResponseSchema.parse(dataOf((await call(`/v1/invitations/${token}/accept`, { token: elena, body: {} })).json))
+    // Cuenta existente: 401 AUTH_LOGIN_REQUIRED sin sesión; con el acceso, además el refresco de esa sesión (cookie doc_rt)
+    expect(errorOf((await call(`/v1/invitations/${token}/accept`, { body: {} })).json).code).toBe('AUTH_LOGIN_REQUIRED')
+    expect(errorOf((await call(`/v1/invitations/${token}/accept`, { token: elena, body: {} })).json).code).toBe('AUTH_REFRESH_INVALID')
+    const cookie = { Cookie: `doc_rt=${elenaRefresh}` }
+    const accepted = SessionResponseSchema.parse(dataOf((await call(`/v1/invitations/${token}/accept`, { token: elena, body: {}, headers: cookie })).json))
     expect((await call('/v1/terroirs', { token: accepted.tokens.accessToken })).status).toBe(200)
     expect(dataOf((await call<WineryDetail>(`/v1/platform/wineries/${W('guadalquivir').id}`, { token: ops })).json)).toMatchObject({ status: 'ACTIVE', lotPrefix: 'VGQ' })
   })
@@ -294,6 +298,11 @@ describe('equipo de la bodega (dueño y back office)', () => {
     const support = await login('soporte@drinksonchain.test')
     const noReason = await call(`/v1/platform/organizations/${CINTI.id}/members/${contable}/unblock`, { token: support, body: {} })
     expect(errorOf(noReason.json)).toMatchObject({ code: 'VALIDATION_ERROR', details: [{ field: 'reason' }] })
+    // Desbloquear respeta el límite de colaboradores (Cinti Viejo: 6 de 6 con la invitación pendiente)
+    const full = await call(`/v1/platform/organizations/${CINTI.id}/members/${contable}/unblock`, { token: support, body: { reason: 'Confirmado con la dueña' } })
+    expect(errorOf(full.json).code).toBe('ORG_MEMBER_LIMIT_REACHED')
+    const pending = uid('invitation:cintiviejo-operario')
+    expect((await call(`/v1/invitations/${pending}/revoke`, { token: support, body: { reason: 'Libera un lugar del equipo' } })).status).toBe(200)
     expect(dataOf((await call(`/v1/platform/organizations/${CINTI.id}/members/${contable}/unblock`, { token: support, body: { reason: 'Confirmado con la dueña' }, headers: BO })).json)).toMatchObject({ status: 'ACTIVE' })
     expect(mockMailbox.latest({ to: 'admin@cintiviejo.test', template: 'TEAM_CHANGED_BY_PLATFORM' })!.text).toContain('Confirmado con la dueña')
     expect(lastAudit('MEMBER_UNBLOCKED')).toMatchObject({ reason: 'Confirmado con la dueña', source: { app: 'BACKOFFICE' }, actor: { viaPlatform: true } })
@@ -381,7 +390,7 @@ describe('usuarios internos y segundo factor (TOTP)', () => {
     const blockedLogin = await call('/v1/auth/login', { body: { email: 'maria@tribu.test', password: 'demo1234' } })
     expect(blockedLogin.status).toBe(401)
     expect(errorOf(blockedLogin.json).code).toBe('AUTH_INVALID_CREDENTIALS')
-    expect(errorOf((await call(`/v1/platform/accounts/${anaMembership}/block`, { token: admin, body: { reason: REASON } })).json).code).toBe('NOT_FOUND')
+    expect(errorOf((await call(`/v1/platform/accounts/${anaMembership}/block`, { token: admin, body: { reason: REASON } })).json).code).toBe('USER_NOT_FOUND')
     expect(dataOf((await call(`/v1/platform/accounts/${maria}/unblock`, { token: admin, body: { reason: REASON } })).json)).toMatchObject({ status: 'ACTIVE' })
     expect((await call('/v1/auth/login', { body: { email: 'maria@tribu.test', password: 'demo1234' } })).status).toBe(200)
     // Restablecer el TOTP obliga a reinscribirlo
@@ -486,7 +495,7 @@ describe('bitácora', () => {
     const ops = await login('operaciones@drinksonchain.test')
     await call(`/v1/platform/wineries/${URIONDO.id}/reactivate`, { token: ops, body: { reason: 'Registro renovado' }, headers: { ...BO, 'X-Correlation-ID': 'corr-1' } })
     const events = getErpDb().backoffice.audit.slice(before)
-    expect(events.map((e) => e.action)).toEqual(['USER_LOGGED_IN', 'WINERY_REACTIVATED'])
+    expect(events.map((e) => e.action)).toEqual(['AUTH_LOGIN_SUCCEEDED', 'WINERY_REACTIVATED'])
     expect(events[1]).toMatchObject({
       source: { app: 'BACKOFFICE' },
       correlationId: 'corr-1',
@@ -552,11 +561,6 @@ describe('escenarios en los dominios de la Ola 1', () => {
 })
 
 describe('ERP: lo que cambió con la Ola 1 y el backend O0-BE-2', () => {
-  it('aprobar o rechazar una bodega que no está pendiente → 409 WINERY_NOT_PENDING', async () => {
-    const res = await call(`/v1/wineries/${ALTOS.id}/approve`, { token: staticToken('admin'), body: {} })
-    expect(errorOf(res.json).code).toBe('WINERY_NOT_PENDING')
-  })
-
   it('una cuba pasa una sola vez a crianza → 409 FERMENTATION_TANK_ALREADY_TRANSFERRED', async () => {
     const aging = F.wineAging.find((a) => a.wineryId === ALTOS.id)!
     const res = await call('/v1/wine-aging', { token: staticToken('altos_enologa'), body: { fermentationTankId: aging.fermentationTankId, containerType: 'Barrica', plannedMonths: 6 } })

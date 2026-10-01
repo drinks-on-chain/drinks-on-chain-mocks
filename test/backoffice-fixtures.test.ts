@@ -153,7 +153,7 @@ describe('fixtures de la Ola 1: coherencia con el ERP', () => {
       }
     }
     const actions = new Set(audit.map((e) => e.action))
-    for (const a of ['WINERY_APPLICATION_APPROVED', 'INVITATION_CREATED', 'MEMBER_BLOCKED', 'SETTING_OVERRIDE_SET', 'WINERY_SUSPENDED', 'BOTTLING_RECORDED']) {
+    for (const a of ['WINERY_APPLICATION_APPROVED', 'INVITATION_CREATED', 'MEMBER_BLOCKED', 'SETTING_OVERRIDE_SET', 'WINERY_SUSPENDED', 'BOTTLING_BATCH_CREATED']) {
       expect(actions.has(a), a).toBe(true)
     }
   })

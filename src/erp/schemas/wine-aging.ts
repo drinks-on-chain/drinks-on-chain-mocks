@@ -24,12 +24,12 @@ export type WineAgingResponse = z.infer<typeof WineAgingResponseSchema>
 export const CreateWineAgingBatchSchema = z.object({
   fermentationTankId: z.string().min(1),
   containerType: z.string().min(1),
-  containerMaterial: z.string().nullish(),
-  containerCode: z.string().nullish(),
-  barrelUseCycle: z.number().int().min(1).nullish(),
-  volumeLiters: z.number().positive().nullish(),
+  containerMaterial: z.string().optional(),
+  containerCode: z.string().optional(),
+  barrelUseCycle: z.number().int().min(1).optional(),
+  volumeLiters: z.number().positive().optional(),
   plannedMonths: z.number().int().min(0),
-  startDate: DateInputSchema.nullish(),
-  notes: z.string().nullish(),
+  startDate: DateInputSchema.optional(),
+  notes: z.string().optional(),
 })
 export type CreateWineAgingBatchDto = z.infer<typeof CreateWineAgingBatchSchema>

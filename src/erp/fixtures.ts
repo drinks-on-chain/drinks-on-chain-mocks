@@ -20,13 +20,13 @@ import type {
   Audience,
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
-  EnologicalTreatment,
-  FermentationLog,
+  EnologicalTreatmentRecord,
+  FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
   LotView,
-  MemberRole,
   Membership,
+  MembershipRole,
   MockUser,
   PlatformRole,
   ProductionBatchResponse,
@@ -34,7 +34,6 @@ import type {
   RestStatusResponse,
   SessionResponse,
   TerroirResponse,
-  UserRole,
   WalletResponse,
   WineAgingResponse,
   WineryResponse,
@@ -52,8 +51,8 @@ export interface ErpFixtures {
   terroirs: TerroirResponse[]
   harvestBatches: HarvestBatchResponse[]
   fermentationTanks: FermentationTankResponse[]
-  fermentationLogs: FermentationLog[]
-  enologicalTreatments: EnologicalTreatment[]
+  fermentationLogs: FermentationLogRecord[]
+  enologicalTreatments: EnologicalTreatmentRecord[]
   wineAging: WineAgingResponse[]
   productionBatches: ProductionBatchResponse[]
   productionRestStatus: RestStatusResponse[]
@@ -72,8 +71,8 @@ export const erpFixtures: ErpFixtures = {
   terroirs: terroirsJson as unknown as TerroirResponse[],
   harvestBatches: harvestJson as unknown as HarvestBatchResponse[],
   fermentationTanks: tanksJson as unknown as FermentationTankResponse[],
-  fermentationLogs: logsJson as unknown as FermentationLog[],
-  enologicalTreatments: treatmentsJson as unknown as EnologicalTreatment[],
+  fermentationLogs: logsJson as unknown as FermentationLogRecord[],
+  enologicalTreatments: treatmentsJson as unknown as EnologicalTreatmentRecord[],
   wineAging: agingJson as unknown as WineAgingResponse[],
   productionBatches: productionJson as unknown as ProductionBatchResponse[],
   productionRestStatus: restStatusJson as unknown as RestStatusResponse[],
@@ -98,15 +97,18 @@ export interface DemoUser {
   email: string
   password: string
   fullName: string
-  userRole: UserRole
   /** `STAFF` con al menos una membresía; `CONSUMER` sin ninguna. */
   audience: Audience
   /** Membresías (contrato de la Ola 0 §4). */
   memberships: Membership[]
   /** Organización activa al iniciar sesión. */
   activeOrganizationId: string | null
-  /** Rol y bodega de la organización activa (compatibilidad con 0.1). */
-  memberRole: MemberRole | null
+  /**
+   * Rol en la organización activa (el de su membresía: plataforma o bodega), o `null` sin
+   * organización. Sustituye a `userRole`/`memberRole`, retirados en H1.
+   */
+  role: MembershipRole | null
+  /** Bodega activa, si la organización activa es una bodega. */
   wineryId: string | null
   wineryName: string | null
   /** Token Bearer estático que aceptan los handlers (`mock.access.<key>`), sin sesión revocable. */
@@ -128,15 +130,14 @@ export const demoUsers: DemoUser[] = erpFixtures.users.map((u) => {
     email: u.email,
     password: u._mock.password,
     fullName: u.fullName,
-    userRole: u.userRole,
     audience: session.user.audience,
     memberships: session.memberships,
     activeOrganizationId: session.activeOrganizationId,
-    memberRole: session.user.memberRole ?? null,
-    wineryId: session.user.wineryId ?? null,
+    role: active?.role ?? null,
+    wineryId: active?.organizationType === 'WINERY' ? active.organizationId : null,
     wineryName: active?.organizationType === 'WINERY' ? active.organizationName : null,
     accessToken: session.tokens.accessToken,
-    platformRole: u._mock.platformRole ?? (u.userRole === 'PLATFORM_ADMIN' ? 'SUPERADMIN' : null),
+    platformRole: u._mock.platformRole ?? null,
     mfa: mfaOf(u.id),
   }
 })

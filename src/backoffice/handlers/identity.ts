@@ -83,7 +83,7 @@ function mfaFailure(ctx: RouteContext, token: string, user: MockUser): never {
   const failures = (state.mfaFailures[user.id] ?? 0) + 1
   recordAudit(ctx, {
     action: 'MFA_FAILED',
-    resource: { type: 'USER', id: user.id },
+    resource: { type: 'user', id: user.id },
     organizationId: PLATFORM_ORGANIZATION.id,
     after: { failures },
     actor: personActor(user, null, null),
@@ -102,7 +102,7 @@ function mfaFailure(ctx: RouteContext, token: string, user: MockUser): never {
     })
   }
   state.mfaFailures[user.id] = failures
-  throw domainError(401, 'AUTH_MFA_INVALID_CODE', 'El código no es válido', 'code')
+  throw domainError(401, 'AUTH_MFA_INVALID_CODE', 'El código no es válido')
 }
 
 /** ¿Es un código TOTP válido (hora real ± 30 s) o el atajo de los mocks `000000`? */
@@ -133,8 +133,8 @@ function mfaSuccess(ctx: RouteContext, token: string, user: MockUser, extra: Rec
 
 export function recordLogin(ctx: RouteContext, user: MockUser, mfa: boolean): void {
   recordAudit(ctx, {
-    action: 'USER_LOGGED_IN',
-    resource: { type: 'USER', id: user.id },
+    action: 'AUTH_LOGIN_SUCCEEDED',
+    resource: { type: 'user', id: user.id },
     organizationId: mfa ? PLATFORM_ORGANIZATION.id : null,
     after: { mfa },
     actor: personActor(user, null, null),
@@ -143,8 +143,8 @@ export function recordLogin(ctx: RouteContext, user: MockUser, mfa: boolean): vo
 
 export function recordLoginFailure(ctx: RouteContext, user: MockUser): void {
   recordAudit(ctx, {
-    action: 'USER_LOGIN_FAILED',
-    resource: { type: 'USER', id: user.id },
+    action: 'AUTH_LOGIN_FAILED',
+    resource: { type: 'user', id: user.id },
     organizationId: null,
     actor: { userId: user.id, fullName: user.fullName, role: null, organizationId: null, viaPlatform: false },
   })
@@ -163,7 +163,7 @@ export function recordProfileUpdate(ctx: RouteContext, before: Record<string, un
   const user = ctx.auth.user
   recordAudit(ctx, {
     action: 'USER_PROFILE_UPDATED',
-    resource: { type: 'USER', id: user.id },
+    resource: { type: 'user', id: user.id },
     organizationId: null,
     before,
     after: { fullName: user.fullName, preferredLocale: user.preferredLocale, ...prefsOf(user.id) },
@@ -195,7 +195,7 @@ export const identityRoutes: RouteSpec[] = [
     async handle({ request }) {
       const body = await parseBody(request, MfaTokenSchema)
       const { user, entry } = takeMfaToken(body.mfaToken)
-      if (mfaOf(user.id)?.enrolled) throw domainError(409, 'CONFLICT', 'El segundo factor ya está inscrito: usa /v1/auth/mfa/verify')
+      if (mfaOf(user.id)?.enrolled) throw domainError(409, 'AUTH_MFA_ALREADY_ENROLLED', 'El segundo factor ya está inscrito: usa /v1/auth/mfa/verify')
       // En los mocks el secreto es siempre el de demo, para que las e2e puedan generar códigos.
       entry.secret = DEMO_TOTP_SECRET
       return ok({ otpauthUrl: otpauthUrl(DEMO_TOTP_SECRET, user.email), secret: DEMO_TOTP_SECRET })
@@ -208,8 +208,8 @@ export const identityRoutes: RouteSpec[] = [
     async handle(ctx) {
       const body = await parseBody(ctx.request, MfaCodeSchema)
       const { user, entry } = takeMfaToken(body.mfaToken)
-      if (mfaOf(user.id)?.enrolled) throw domainError(409, 'CONFLICT', 'El segundo factor ya está inscrito: usa /v1/auth/mfa/verify')
-      if (!entry.secret) throw domainError(409, 'CONFLICT', 'Primero hay que pedir el secreto con /v1/auth/mfa/enroll')
+      if (mfaOf(user.id)?.enrolled) throw domainError(409, 'AUTH_MFA_ALREADY_ENROLLED', 'El segundo factor ya está inscrito: usa /v1/auth/mfa/verify')
+      if (!entry.secret) throw domainError(409, 'AUTH_MFA_ENROLLMENT_NOT_STARTED', 'Primero hay que pedir el secreto con /v1/auth/mfa/enroll')
       if (!totpOk(entry.secret, body.code)) mfaFailure(ctx, body.mfaToken, user)
       const recoveryCodes = newRecoveryCodes(user.id)
       const state = bo()
@@ -217,7 +217,7 @@ export const identityRoutes: RouteSpec[] = [
       state.mfa = [...state.mfa.filter((m) => m.userId !== user.id), record]
       recordAudit(ctx, {
         action: 'MFA_ENROLLED',
-        resource: { type: 'USER', id: user.id },
+        resource: { type: 'user', id: user.id },
         organizationId: PLATFORM_ORGANIZATION.id,
         actor: personActor(user, null, null),
       })
@@ -232,14 +232,14 @@ export const identityRoutes: RouteSpec[] = [
       const body = await parseBody(ctx.request, MfaCodeSchema)
       const { user } = takeMfaToken(body.mfaToken)
       const mfa = mfaOf(user.id)
-      if (!mfa?.enrolled || !mfa.secret) throw domainError(409, 'CONFLICT', 'El segundo factor no está inscrito: usa /v1/auth/mfa/enroll')
+      if (!mfa?.enrolled || !mfa.secret) throw domainError(409, 'AUTH_MFA_NOT_ENROLLED', 'El segundo factor no está inscrito: usa /v1/auth/mfa/enroll')
       const code = body.code.trim().toUpperCase()
       const recovery = mfa.recoveryCodes.indexOf(code)
       if (recovery >= 0) {
         mfa.recoveryCodes.splice(recovery, 1)
         recordAudit(ctx, {
           action: 'MFA_RECOVERY_CODE_USED',
-          resource: { type: 'USER', id: user.id },
+          resource: { type: 'user', id: user.id },
           organizationId: PLATFORM_ORGANIZATION.id,
           after: { remaining: mfa.recoveryCodes.length },
           actor: personActor(user, null, null),
@@ -257,13 +257,14 @@ export const identityRoutes: RouteSpec[] = [
     async handle(ctx) {
       const body = await parseBody(ctx.request, ForgotPasswordSchema)
       checkCaptcha(body.captchaToken)
+      if (body.website?.trim()) return accepted() // campo trampa relleno: 202 sin hacer nada
       const user = findUserByEmail(body.email)
       // 202 siempre: no se revela si el correo tiene cuenta.
       if (user?.isActive) {
         issuePasswordReset(ctx, user, mailAppFor(ctx))
         recordAudit(ctx, {
           action: 'USER_PASSWORD_RESET_REQUESTED',
-          resource: { type: 'USER', id: user.id },
+          resource: { type: 'user', id: user.id },
           organizationId: null,
           actor: { userId: null, fullName: null, role: null, organizationId: null, viaPlatform: false },
         })
@@ -287,7 +288,7 @@ export const identityRoutes: RouteSpec[] = [
       entry.usedAt = now()
       revokeAllSessions(user.id)
       sendMail(simpleMail(user.email, 'PASSWORD_CHANGED', 'Tu contraseña cambió', ['La contraseña de tu cuenta se cambió.', 'Si no fuiste tú, avisa al equipo de Drinks on Chain.']))
-      recordAudit(ctx, { action: 'USER_PASSWORD_RESET', resource: { type: 'USER', id: user.id }, organizationId: null, actor: personActor(user, null, null) })
+      recordAudit(ctx, { action: 'USER_PASSWORD_RESET', resource: { type: 'user', id: user.id }, organizationId: null, actor: personActor(user, null, null) })
       return noContent()
     },
   },
@@ -303,7 +304,7 @@ export const identityRoutes: RouteSpec[] = [
         throw domainError(422, 'AUTH_EMAIL_TOKEN_INVALID', 'El enlace de verificación no es válido o ya se usó', 'token')
       }
       entry.usedAt = now()
-      recordAudit(ctx, { action: 'USER_EMAIL_VERIFIED', resource: { type: 'USER', id: user.id }, organizationId: null, actor: personActor(user, null, null) })
+      recordAudit(ctx, { action: 'USER_EMAIL_VERIFIED', resource: { type: 'user', id: user.id }, organizationId: null, actor: personActor(user, null, null) })
       return noContent()
     },
   },
@@ -314,6 +315,7 @@ export const identityRoutes: RouteSpec[] = [
     async handle(ctx) {
       const body = await parseBody(ctx.request, ResendVerificationSchema)
       checkCaptcha(body.captchaToken)
+      if (body.website?.trim()) return accepted() // campo trampa relleno: 202 sin hacer nada
       const user = findUserByEmail(body.email)
       if (user?.isActive) {
         const token = opaqueToken('vfy', user.id)
@@ -337,7 +339,7 @@ export const identityRoutes: RouteSpec[] = [
       user._mock.password = body.newPassword
       revokeAllSessions(user.id, ctx.auth.sid)
       sendMail(simpleMail(user.email, 'PASSWORD_CHANGED', 'Tu contraseña cambió', ['La contraseña de tu cuenta se cambió.', 'Si no fuiste tú, avisa al equipo de Drinks on Chain.']))
-      recordAudit(ctx, { action: 'USER_PASSWORD_CHANGED', resource: { type: 'USER', id: user.id }, organizationId: null })
+      recordAudit(ctx, { action: 'USER_PASSWORD_CHANGED', resource: { type: 'user', id: user.id }, organizationId: null })
       return noContent()
     },
   },

@@ -27,19 +27,19 @@ export type TerroirResponse = z.infer<typeof TerroirResponseSchema>
 
 export const CreateTerroirSchema = z.object({
   parcelName: z.string().min(1),
-  cadastreCode: z.string().nullish(),
+  cadastreCode: z.string().optional(),
   surfaceHectares: z.number().positive(),
   altitudeMasl: z.number(),
-  latitude: z.number().min(-90).max(90).nullish(),
-  longitude: z.number().min(-180).max(180).nullish(),
-  geographicPolygonGeojson: GeoJsonGeometrySchema.nullish(),
+  latitude: z.number().min(-90).max(90).optional(),
+  longitude: z.number().min(-180).max(180).optional(),
+  geographicPolygonGeojson: GeoJsonGeometrySchema.optional(),
   rawMaterialType: z.string().min(1),
   varietyName: z.string().min(1),
-  soilType: z.string().nullish(),
-  irrigationSystem: z.string().nullish(),
+  soilType: z.string().optional(),
+  irrigationSystem: z.string().optional(),
   isDoEligible: z.boolean().optional(),
-  doType: z.string().nullish(),
-  doCertificateUrl: z.string().nullish(),
+  doType: z.string().optional(),
+  doCertificateUrl: z.string().optional(),
 })
 export type CreateTerroirDto = z.infer<typeof CreateTerroirSchema>
 

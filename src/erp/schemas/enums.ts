@@ -2,14 +2,7 @@ import { z } from 'zod'
 
 // Enumeraciones del backend del ERP, copiadas tal cual del OpenAPI (doc 09 §4).
 
-export const USER_ROLES = ['PLATFORM_ADMIN', 'WINERY_ADMIN', 'ENOLOGIST', 'AGRONOMIST', 'CONSUMER', 'POS_OPERATOR'] as const
-export const UserRoleSchema = z.enum(USER_ROLES)
-export type UserRole = z.infer<typeof UserRoleSchema>
-
-/** Roles admitidos en `POST /v1/auth/signup`. */
-export const SIGNUP_ROLES = ['CONSUMER', 'WINERY_ADMIN'] as const
-export const SignupRoleSchema = z.enum(SIGNUP_ROLES)
-export type SignupRole = z.infer<typeof SignupRoleSchema>
+// Sin rol global (`USER_ROLES`) ni roles de `signup` desde H1: los permisos van por membresía.
 
 export const MEMBER_ROLES = ['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT'] as const
 export const MemberRoleSchema = z.enum(MEMBER_ROLES)

@@ -6,28 +6,14 @@ import {
   PHYTOSANITARY_STATUSES,
   UpdatePhytoStatusSchema,
   UpdateTerroirSchema,
-  type HarvestBatchDetail,
   type HarvestBatchResponse,
-  type TerroirDetail,
   type TerroirResponse,
 } from '../../schemas'
 import { canSee, scoped, winery, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
 import { fieldError, forbidden, invalid, notFound } from '../errors'
-import {
-  applyPatch,
-  boolParam,
-  created,
-  enumParam,
-  intParam,
-  listResult,
-  ok,
-  parseBody,
-  readJson,
-  strParam,
-  validate,
-  type RouteSpec,
-} from '../http'
+import { harvestView, terroirDetail } from '../views'
+import { applyPatch, boolParam, created, enumParam, intParam, listResult, ok, parseBody, readJson, strParam, validate, type RouteSpec, parseCreateBody, omitNulls } from '../http'
 
 // /v1/terroirs* y /v1/harvest-batches*
 
@@ -62,7 +48,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     access: winery(['OWNER', 'AGRONOMIST']),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
-      const body = await parseBody(request, CreateTerroirSchema)
+      const body = await parseCreateBody(request, CreateTerroirSchema)
       const terroir: TerroirResponse = {
         id: newId('terroir'),
         wineryId,
@@ -90,7 +76,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/terroirs',
-    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const isDoEligible = boolParam(query, 'isDoEligible')
@@ -110,11 +96,9 @@ export const terroirHarvestRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/terroirs/:id',
-    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
+    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     handle({ auth, params }) {
-      const t = findTerroir(auth, params.id!)
-      const detail: TerroirDetail = { ...t, harvestBatches: getErpDb().harvestBatches.filter((h) => h.terroirId === t.id) }
-      return ok(detail)
+      return ok(terroirDetail(findTerroir(auth, params.id!)))
     },
   },
   {
@@ -145,7 +129,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
           'Brix, pH y acidez son obligatorios al registrar el pesaje',
         )
       }
-      const body = validate(raw, CreateHarvestBatchSchema)
+      const body = validate(omitNulls(raw), CreateHarvestBatchSchema)
       if (body.grossWeightKg <= body.tareWeightKg) {
         throw invalid([fieldError('grossWeightKg', 'El peso bruto debe ser estrictamente mayor al peso tara')])
       }
@@ -193,7 +177,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
           (!terroirId || h.terroirId === terroirId) &&
           (!status || h.phytosanitaryStatus === status),
       )
-      return listResult(items, query)
+      return listResult(items.map((h) => harvestView(h)), query)
     },
   },
   {
@@ -201,9 +185,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     path: '/v1/harvest-batches/:id',
     access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']),
     handle({ auth, params }) {
-      const h = findHarvest(auth, params.id!)
-      const detail: HarvestBatchDetail = { ...h, fermentationTanks: getErpDb().tanks.filter((t) => t.harvestBatchId === h.id) }
-      return ok(detail)
+      return ok(harvestView(findHarvest(auth, params.id!), true))
     },
   },
   {

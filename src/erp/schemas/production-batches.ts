@@ -37,27 +37,28 @@ export const CreateDistillationBatchSchema = z.object({
   fermentationTankId: z.string().min(1),
   equipmentIdentifier: z.string().min(1),
   processStartDate: DateInputSchema,
-  processEndDate: DateInputSchema.nullish(),
-  inputVolumeLiters: z.number().min(0).nullish(),
-  outputVolumeLiters: z.number().min(0).nullish(),
-  wasteVolumeLiters: z.number().min(0).nullish(),
-  initialAlcoholPercentage: z.number().min(0).max(100).nullish(),
-  isDoEligible: z.boolean().nullish(),
-  additionalParams: JsonObjectSchema.nullish(),
-  notes: z.string().nullish(),
+  processEndDate: DateInputSchema.optional(),
+  inputVolumeLiters: z.number().min(0).optional(),
+  outputVolumeLiters: z.number().min(0).optional(),
+  wasteVolumeLiters: z.number().min(0).optional(),
+  initialAlcoholPercentage: z.number().min(0).max(100).optional(),
+  isDoEligible: z.boolean().optional(),
+  additionalParams: JsonObjectSchema.optional(),
+  notes: z.string().optional(),
 })
 export type CreateDistillationBatchDto = z.infer<typeof CreateDistillationBatchSchema>
 
 /**
- * Respuesta de `GET /v1/production-batches/:id/rest-status`. Sin esquema en el OpenAPI:
- * forma tomada de la guía de pruebas del backend, más `mandatoryRestUntil`.
+ * Respuesta de `GET /v1/production-batches/:id/rest-status` (`RestStatusResponseDto`). Los mocks
+ * cuentan los días desde `processEndDate` (o el inicio si no hay fin) con su reloj.
  */
 export const RestStatusResponseSchema = z.object({
   id: z.string(),
   restStatus: RestStatusSchema,
-  daysElapsed: z.number().int(),
-  daysRemaining: z.number().int(),
+  processEndDate: IsoDateTimeSchema.nullable(),
+  mandatoryRestUntil: IsoDateTimeSchema.nullable(),
+  daysElapsed: z.number().int().min(0),
+  daysRemaining: z.number().int().min(0),
   isRestCompleted: z.boolean(),
-  mandatoryRestUntil: IsoDateTimeSchema.nullish(),
 })
 export type RestStatusResponse = z.infer<typeof RestStatusResponseSchema>

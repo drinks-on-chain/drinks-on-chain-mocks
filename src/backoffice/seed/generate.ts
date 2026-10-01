@@ -169,21 +169,21 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
       recoveryCodes: enrolled ? recoveryCodesFor(key) : [],
     }
   })
-  fact(U('admin').createdAt, system, 'WORKER', 'PLATFORM_SUPERADMIN_SEEDED', { type: 'USER', id: U('admin').id }, PLATFORM_ORGANIZATION.id, {
+  fact(U('admin').createdAt, system, 'WORKER', 'PLATFORM_SUPERADMIN_SEEDED', { type: 'user', id: U('admin').id }, PLATFORM_ORGANIZATION.id, {
     after: { email: U('admin').email, role: 'SUPERADMIN' },
   })
   for (const key of ['bo_admin', 'operaciones', 'soporte']) {
     const u = U(key)
-    fact(u.createdAt, staff(key), 'BACKOFFICE', 'MEMBER_JOINED', { type: 'MEMBERSHIP', id: platformMembershipId(key) }, PLATFORM_ORGANIZATION.id, {
+    fact(u.createdAt, staff(key), 'BACKOFFICE', 'MEMBER_JOINED', { type: 'membership', id: platformMembershipId(key) }, PLATFORM_ORGANIZATION.id, {
       after: { role: u._mock.platformRole ?? null },
     })
   }
   for (const m of staffMfa.filter((x) => x.enrolled)) {
     const key = users.find((u) => u.id === m.userId)!._mock.key
-    fact(m.enrolledAt!, staff(key), 'BACKOFFICE', 'MFA_ENROLLED', { type: 'USER', id: m.userId }, PLATFORM_ORGANIZATION.id)
+    fact(m.enrolledAt!, staff(key), 'BACKOFFICE', 'MFA_ENROLLED', { type: 'user', id: m.userId }, PLATFORM_ORGANIZATION.id)
   }
   for (const key of ['admin', 'soporte', 'bo_admin', 'operaciones']) {
-    fact(U(key).lastLoginAt!, staff(key), 'BACKOFFICE', 'USER_LOGGED_IN', { type: 'USER', id: U(key).id }, PLATFORM_ORGANIZATION.id, {
+    fact(U(key).lastLoginAt!, staff(key), 'BACKOFFICE', 'AUTH_LOGIN_SUCCEEDED', { type: 'user', id: U(key).id }, PLATFORM_ORGANIZATION.id, {
       after: { mfa: true },
     })
   }
@@ -233,7 +233,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     invitations.push(inv)
     const actor = org && !p.viaPlatform ? member(p.byKey, p.wineryKey!, 'OWNER') : staff(p.byKey)
     const app: ClientApp = org && !p.viaPlatform ? 'ERP' : 'BACKOFFICE'
-    fact(createdAt, actor, app, 'INVITATION_CREATED', { type: 'INVITATION', id: inv.id }, inv.organizationId, {
+    fact(createdAt, actor, app, 'INVITATION_CREATED', { type: 'invitation', id: inv.id }, inv.organizationId, {
       after: { email: inv.email, role: inv.role, expiresAt },
       reason: p.reason ?? null,
     })
@@ -250,10 +250,10 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
       }),
     })
     if (inv.status === 'EXPIRED') {
-      fact(expiresAt, system, 'WORKER', 'INVITATION_EXPIRED', { type: 'INVITATION', id: inv.id }, inv.organizationId)
+      fact(expiresAt, system, 'WORKER', 'INVITATION_EXPIRED', { type: 'invitation', id: inv.id }, inv.organizationId)
     }
     if (p.revokedAt) {
-      fact(p.revokedAt, actor, app, 'INVITATION_REVOKED', { type: 'INVITATION', id: inv.id }, inv.organizationId, {
+      fact(p.revokedAt, actor, app, 'INVITATION_REVOKED', { type: 'invitation', id: inv.id }, inv.organizationId, {
         before: { status: 'PENDING' },
         after: { status: 'REVOKED' },
       })
@@ -274,8 +274,8 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     acceptedAt: at(2026, 9, 22, 9),
     reason: 'Refuerzo de operaciones para la temporada de altas',
   })
-  fact(at(2026, 9, 22, 9), staff('analista'), 'BACKOFFICE', 'INVITATION_ACCEPTED', { type: 'INVITATION', id: invCamila.id }, PLATFORM_ORGANIZATION.id)
-  fact(at(2026, 9, 22, 9), staff('analista'), 'BACKOFFICE', 'MEMBER_JOINED', { type: 'MEMBERSHIP', id: platformMembershipId('analista') }, PLATFORM_ORGANIZATION.id, {
+  fact(at(2026, 9, 22, 9), staff('analista'), 'BACKOFFICE', 'INVITATION_ACCEPTED', { type: 'invitation', id: invCamila.id }, PLATFORM_ORGANIZATION.id)
+  fact(at(2026, 9, 22, 9), staff('analista'), 'BACKOFFICE', 'MEMBER_JOINED', { type: 'membership', id: platformMembershipId('analista') }, PLATFORM_ORGANIZATION.id, {
     after: { role: 'OPERATIONS' },
   })
   // INV-2 · usuario interno pendiente.
@@ -319,13 +319,13 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     const notes: ApplicationNote[] = []
     let status: StoredApplication['status'] = 'UNVERIFIED'
     let updatedAt = s.createdAt
-    fact(s.createdAt, publicActor, 'PUBLIC', 'WINERY_APPLICATION_SUBMITTED', { type: 'WINERY_APPLICATION', id }, null, {
+    fact(s.createdAt, publicActor, 'PUBLIC', 'WINERY_APPLICATION_SUBMITTED', { type: 'winery_application', id }, null, {
       after: { tradeName: s.tradeName, taxId: s.taxId, contactEmail: s.contactEmail },
     })
     if (s.verifiedAt) {
       status = 'RECEIVED'
       updatedAt = s.verifiedAt
-      fact(s.verifiedAt, publicActor, 'PUBLIC', 'WINERY_APPLICATION_VERIFIED', { type: 'WINERY_APPLICATION', id }, null, {
+      fact(s.verifiedAt, publicActor, 'PUBLIC', 'WINERY_APPLICATION_VERIFIED', { type: 'winery_application', id }, null, {
         before: { status: 'UNVERIFIED' },
         after: { status: 'RECEIVED' },
       })
@@ -335,7 +335,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     if (s.takenAt) {
       status = 'IN_REVIEW'
       updatedAt = s.takenAt
-      fact(s.takenAt, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_TAKEN', { type: 'WINERY_APPLICATION', id }, null, {
+      fact(s.takenAt, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_TAKEN', { type: 'winery_application', id }, null, {
         before: { status: 'RECEIVED', assigneeId: null },
         after: { status: 'IN_REVIEW', assigneeId: valeria.id },
       })
@@ -344,7 +344,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
       const note: ApplicationNote = { id: uid(`note:${s.key}:${notes.length + 1}`), text, by: valeria.fullName, at: noteAt }
       notes.push(note)
       updatedAt = noteAt > updatedAt ? noteAt : updatedAt
-      fact(noteAt, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_NOTE_ADDED', { type: 'WINERY_APPLICATION', id }, null, {
+      fact(noteAt, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_NOTE_ADDED', { type: 'winery_application', id }, null, {
         after: { noteId: note.id },
       })
     }
@@ -353,7 +353,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
       status = 'MEETING_SCHEDULED'
       updatedAt = s.meeting.scheduledOn
       meeting = { scheduledAt: s.meeting.scheduledAt, channel: s.meeting.channel, notes: s.meeting.notes }
-      fact(s.meeting.scheduledOn, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_MEETING_SCHEDULED', { type: 'WINERY_APPLICATION', id }, null, {
+      fact(s.meeting.scheduledOn, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_MEETING_SCHEDULED', { type: 'winery_application', id }, null, {
         before: { status: 'IN_REVIEW' },
         after: { status: 'MEETING_SCHEDULED', scheduledAt: s.meeting.scheduledAt, channel: s.meeting.channel },
       })
@@ -362,7 +362,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
         updatedAt = s.meeting.doneAt
         meeting = { ...meeting, notes: s.meeting.doneNotes ?? meeting.notes }
         notes.push({ id: uid(`note:${s.key}:${notes.length + 1}`), text: s.meeting.doneNotes!, by: valeria.fullName, at: s.meeting.doneAt })
-        fact(s.meeting.doneAt, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_MEETING_DONE', { type: 'WINERY_APPLICATION', id }, null, {
+        fact(s.meeting.doneAt, staff('operaciones'), 'BACKOFFICE', 'WINERY_APPLICATION_MEETING_DONE', { type: 'winery_application', id }, null, {
           before: { status: 'MEETING_SCHEDULED' },
           after: { status: 'IN_REVIEW' },
         })
@@ -380,7 +380,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
         staff('operaciones'),
         'BACKOFFICE',
         s.decision.kind === 'APPROVED' ? 'WINERY_APPLICATION_APPROVED' : 'WINERY_APPLICATION_REJECTED',
-        { type: 'WINERY_APPLICATION', id },
+        { type: 'winery_application', id },
         wineryId,
         { before: { status: 'IN_REVIEW' }, after: { status: s.decision.kind, wineryId }, reason: s.decision.reason },
       )
@@ -634,7 +634,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     let previous: string | null = null
     for (const h of history[key]!) {
       const { actor, app } = actorForHistory(h.by)
-      fact(h.at, actor.userId && !actor.viaPlatform ? { ...actor, organizationId: W(key).id } : actor, app, ACTION_BY_STATUS[h.status], { type: 'WINERY', id: W(key).id }, W(key).id, {
+      fact(h.at, actor.userId && !actor.viaPlatform ? { ...actor, organizationId: W(key).id } : actor, app, ACTION_BY_STATUS[h.status], { type: 'winery', id: W(key).id }, W(key).id, {
         before: previous ? { status: previous } : null,
         after: { status: h.status, ...(h.status === 'ACTIVE' && LOT_PREFIX[key] ? { lotPrefix: LOT_PREFIX[key] } : {}) },
         reason: h.reason,
@@ -700,7 +700,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     createdAt: at(2026, 5, 18, 10),
     acceptedAt: W('cintiviejo').members!.find((m) => m.userId === U('cvj_contable').id)!.joinedAt,
   })
-  fact(invContable._mock.acceptedAt!, member('cvj_contable', 'cintiviejo', 'ACCOUNTANT'), 'ERP', 'INVITATION_ACCEPTED', { type: 'INVITATION', id: invContable.id }, W('cintiviejo').id)
+  fact(invContable._mock.acceptedAt!, member('cvj_contable', 'cintiviejo', 'ACCOUNTANT'), 'ERP', 'INVITATION_ACCEPTED', { type: 'invitation', id: invContable.id }, W('cintiviejo').id)
   invite({
     key: 'cintiviejo-operario',
     token: 'demo-invitacion-cintiviejo-operario',
@@ -719,7 +719,7 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     const wineryKey = wineryKeys.find((k) => W(k).id === w.id)!
     for (const m of w.members ?? []) {
       const key = users.find((u) => u.id === m.userId)!._mock.key
-      fact(m.joinedAt, member(key, wineryKey, m.memberRole), 'ERP', 'MEMBER_JOINED', { type: 'MEMBERSHIP', id: m.id }, w.id, {
+      fact(m.joinedAt, member(key, wineryKey, m.memberRole), 'ERP', 'MEMBER_JOINED', { type: 'membership', id: m.id }, w.id, {
         after: { role: m.memberRole },
       })
     }
@@ -742,12 +742,12 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
       at: at(2026, 9, 12, 15),
     },
   ]
-  fact(blocks[0]!.at, member('altos_admin', 'altos', 'OWNER'), 'ERP', 'MEMBER_BLOCKED', { type: 'MEMBERSHIP', id: blocks[0]!.membershipId }, W('altos').id, {
+  fact(blocks[0]!.at, member('altos_admin', 'altos', 'OWNER'), 'ERP', 'MEMBER_BLOCKED', { type: 'membership', id: blocks[0]!.membershipId }, W('altos').id, {
     before: { status: 'ACTIVE' },
     after: { status: 'BLOCKED', blockedBy: 'OWNER' },
     reason: blocks[0]!.reason,
   })
-  fact(blocks[1]!.at, staff('soporte'), 'BACKOFFICE', 'MEMBER_BLOCKED', { type: 'MEMBERSHIP', id: blocks[1]!.membershipId }, W('cintiviejo').id, {
+  fact(blocks[1]!.at, staff('soporte'), 'BACKOFFICE', 'MEMBER_BLOCKED', { type: 'membership', id: blocks[1]!.membershipId }, W('cintiviejo').id, {
     before: { status: 'ACTIVE' },
     after: { status: 'BLOCKED', blockedBy: 'PLATFORM' },
     reason: blocks[1]!.reason,
@@ -772,8 +772,8 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     const wineryId = W(wineryKey).id
     overrides.push({ key, wineryId, value, legalException, reason, updatedAt, updatedBy: jorge })
     const before = SETTINGS_CATALOG.find((s) => s.key === key)!.default
-    settingHistory.push({ key, at: updatedAt, by: jorge, scope: wineryId, before, after: value, reason })
-    fact(updatedAt, staff('bo_admin'), 'BACKOFFICE', 'SETTING_OVERRIDE_SET', { type: 'SETTING', id: key }, wineryId, {
+    settingHistory.push({ key, at: updatedAt, by: jorge, scope: wineryId, before, after: value, reason, legalException })
+    fact(updatedAt, staff('bo_admin'), 'BACKOFFICE', 'SETTING_OVERRIDE_SET', { type: 'setting', id: key }, wineryId, {
       before: { value: null },
       after: { value, legalException },
       reason,
@@ -782,8 +782,8 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
   function changeGlobal(key: string, before: unknown, after: unknown, updatedAt: string, reason: string) {
     const stored = settings.find((s) => s.key === key)!
     Object.assign(stored, { value: after, updatedAt, updatedBy: jorge })
-    settingHistory.push({ key, at: updatedAt, by: jorge, scope: 'GLOBAL', before, after, reason })
-    fact(updatedAt, staff('bo_admin'), 'BACKOFFICE', 'SETTING_CHANGED', { type: 'SETTING', id: key }, null, {
+    settingHistory.push({ key, at: updatedAt, by: jorge, scope: 'GLOBAL', before, after, reason, legalException: false })
+    fact(updatedAt, staff('bo_admin'), 'BACKOFFICE', 'SETTING_CHANGED', { type: 'setting', id: key }, null, {
       before: { value: before },
       after: { value: after },
       reason,
@@ -822,45 +822,45 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
   }
   const tankWinery = (tankId: string) => erp['fermentation-tanks.json'].find((t) => t.id === tankId)!.wineryId
   for (const t of erp['terroirs.json']) {
-    fact(t.createdAt, erpActor(t.wineryId, 'AGRONOMIST'), 'ERP', 'TERROIR_CREATED', { type: 'TERROIR', id: t.id }, t.wineryId, {
+    fact(t.createdAt, erpActor(t.wineryId, 'AGRONOMIST'), 'ERP', 'TERROIR_CREATED', { type: 'terroir', id: t.id }, t.wineryId, {
       after: { parcelName: t.parcelName, altitudeMasl: t.altitudeMasl },
     })
   }
   for (const h of erp['harvest-batches.json']) {
-    fact(h.createdAt, erpActor(h.wineryId, 'AGRONOMIST', h.certifiedByMemberId), 'ERP', 'HARVEST_BATCH_CREATED', { type: 'HARVEST_BATCH', id: h.id }, h.wineryId, {
+    fact(h.createdAt, erpActor(h.wineryId, 'AGRONOMIST', h.certifiedByMemberId), 'ERP', 'HARVEST_BATCH_CREATED', { type: 'harvest_batch', id: h.id }, h.wineryId, {
       after: { harvestBatchCode: h.harvestBatchCode, netWeightKg: h.netWeightKg },
     })
   }
   for (const t of erp['fermentation-tanks.json']) {
-    fact(t.createdAt, erpActor(t.wineryId, 'ENOLOGIST'), 'ERP', 'FERMENTATION_TANK_CREATED', { type: 'FERMENTATION_TANK', id: t.id }, t.wineryId, {
+    fact(t.createdAt, erpActor(t.wineryId, 'ENOLOGIST'), 'ERP', 'FERMENTATION_TANK_CREATED', { type: 'fermentation_tank', id: t.id }, t.wineryId, {
       after: { tankCode: t.tankCode, status: t.status },
     })
   }
   for (const tr of erp['enological-treatments.json']) {
     const wineryId = tankWinery(tr.fermentationTankId)
     const when = tr.appliedAt.length === 10 ? `${tr.appliedAt}T12:00:00Z` : tr.appliedAt
-    fact(when, erpActor(wineryId, 'ENOLOGIST'), 'ERP', 'ENOLOGICAL_TREATMENT_RECORDED', { type: 'ENOLOGICAL_TREATMENT', id: tr.id }, wineryId, {
+    fact(when, erpActor(wineryId, 'ENOLOGIST'), 'ERP', 'ENOLOGICAL_TREATMENT_ADDED', { type: 'enological_treatment', id: tr.id }, wineryId, {
       after: { treatmentType: tr.treatmentType },
     })
   }
   for (const a of erp['wine-aging.json']) {
-    fact(a.createdAt, erpActor(a.wineryId, 'ENOLOGIST'), 'ERP', 'WINE_AGING_STARTED', { type: 'WINE_AGING', id: a.id }, a.wineryId, {
+    fact(a.createdAt, erpActor(a.wineryId, 'ENOLOGIST'), 'ERP', 'WINE_AGING_BATCH_CREATED', { type: 'wine_aging_batch', id: a.id }, a.wineryId, {
       after: { lockUntilDate: a.lockUntilDate },
     })
   }
   for (const p of erp['production-batches.json']) {
-    fact(p.createdAt, erpActor(p.wineryId, 'ENOLOGIST'), 'ERP', 'DISTILLATION_RECORDED', { type: 'PRODUCTION_BATCH', id: p.id }, p.wineryId, {
+    fact(p.createdAt, erpActor(p.wineryId, 'ENOLOGIST'), 'ERP', 'PRODUCTION_BATCH_CREATED', { type: 'production_batch', id: p.id }, p.wineryId, {
       after: { processType: p.processType, isDoEligible: p.isDoEligible },
     })
   }
   for (const b of erp['bottling.json']) {
-    fact(b.createdAt, erpActor(b.wineryId, 'ENOLOGIST', b.releasedByMemberId), 'ERP', 'BOTTLING_RECORDED', { type: 'BOTTLING_BATCH', id: b.id }, b.wineryId, {
+    fact(b.createdAt, erpActor(b.wineryId, 'ENOLOGIST', b.releasedByMemberId), 'ERP', 'BOTTLING_BATCH_CREATED', { type: 'bottling_batch', id: b.id }, b.wineryId, {
       after: { internationalLotCode: b.internationalLotCode, bottles: b.totalBottlesPackaged },
     })
   }
   for (const l of erp['lab-analyses.json']) {
     const wineryId = erp['bottling.json'].find((b) => b.id === l.bottlingBatchId)!.wineryId
-    fact(l.createdAt, erpActor(wineryId, 'ENOLOGIST', l.reviewedByMemberId), 'ERP', 'LAB_ANALYSIS_RECORDED', { type: 'LAB_ANALYSIS', id: l.id }, wineryId, {
+    fact(l.createdAt, erpActor(wineryId, 'ENOLOGIST', l.reviewedByMemberId), 'ERP', 'LAB_ANALYSIS_CREATED', { type: 'lab_analysis', id: l.id }, wineryId, {
       after: { conformsToSenasagStandards: l.conformsToSenasagStandards },
     })
   }

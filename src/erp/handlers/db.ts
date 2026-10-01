@@ -16,8 +16,8 @@ import { erpFixtures } from '../fixtures'
 import type {
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
-  EnologicalTreatment,
-  FermentationLog,
+  EnologicalTreatmentRecord,
+  FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
   MockUser,
@@ -66,6 +66,8 @@ export interface BackofficeState {
   prefs: Record<string, { notificationPrefs: NotificationPrefs; promotionsConsent: boolean }>
   /** Motivo del bloqueo de la cuenta completa por persona. */
   accountBlocks: Record<string, string | null>
+  /** Fecha del bloqueo de la cuenta completa por persona (`GET /v1/platform/accounts/{userId}`). */
+  accountBlockedAt?: Record<string, string>
 }
 
 export interface ErpDb {
@@ -75,8 +77,10 @@ export interface ErpDb {
   terroirs: TerroirResponse[]
   harvestBatches: HarvestBatchResponse[]
   tanks: FermentationTankResponse[]
-  logs: FermentationLog[]
-  treatments: EnologicalTreatment[]
+  /** Lecturas (filas de la semilla; las altas guardan además la persona que la registró). */
+  logs: Array<FermentationLogRecord & { recordedByUserId?: string }>
+  /** Tratamientos (filas de la semilla; las altas guardan además el miembro que lo autorizó). */
+  treatments: Array<EnologicalTreatmentRecord & { authorizedByMemberId?: string }>
   wineAgings: WineAgingResponse[]
   productionBatches: ProductionBatchResponse[]
   bottlings: BottlingBatchResponse[]
@@ -109,6 +113,7 @@ function createBackofficeState(): BackofficeState {
     emailTokens: {},
     prefs: {},
     accountBlocks: {},
+    accountBlockedAt: {},
   }
 }
 

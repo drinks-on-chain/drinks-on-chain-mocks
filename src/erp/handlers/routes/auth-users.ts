@@ -11,7 +11,6 @@ import { fakeStellarAddress } from '../../../shared/uuid'
 import { buildSessionResponse, isUsableMembership } from '../../derive'
 import {
   LoginSchema,
-  RefreshTokenSchema,
   SignupSchema,
   SwitchOrganizationSchema,
   UpdateUserSchema,
@@ -35,6 +34,8 @@ import { getErpDb, newId, nextSeq, tick } from '../db'
 import {
   ApiError,
   conflict,
+  fieldError,
+  invalid,
   invalidCredentials,
   notFound,
   refreshInvalid,
@@ -43,7 +44,7 @@ import {
   sessionRevoked,
   tooManyAttempts,
 } from '../errors'
-import { applyPatch, noContent, ok, parseBody, type RouteResult, type RouteSpec } from '../http'
+import { applyPatch, noContent, ok, parseBody, readJson, validate, type RouteResult, type RouteSpec } from '../http'
 import {
   clearRefreshCookie,
   createSession,
@@ -86,12 +87,11 @@ export function findUserByEmail(email: string): MockUser | undefined {
   return getErpDb().users.find((u) => u.email.toLowerCase() === needle)
 }
 
-/** Crea usuario + billetera custodial (signup y alta de miembros). */
+/** Crea usuario + billetera custodial (signup de consumidores e invitación aceptada con cuenta nueva). */
 export function createUser(input: {
   email: string
   password: string
   fullName: string
-  userRole: MockUser['userRole']
   phoneNumber?: string | null
   preferredLocale?: string | null
   wineryId?: string | null
@@ -114,7 +114,6 @@ export function createUser(input: {
     id,
     email: input.email.trim().toLowerCase(),
     fullName: input.fullName,
-    userRole: input.userRole,
     phoneNumber: input.phoneNumber ?? null,
     preferredLocale: input.preferredLocale ?? 'es',
     isActive: true,
@@ -140,10 +139,6 @@ function accessTokenFor(user: MockUser, session: MockSession): string {
       orgType: ctx.organizationType,
       role: ctx.membershipRole,
       sid: session.sid,
-      email: user.email,
-      userRole: user.userRole,
-      wineryId: ctx.wineryId,
-      memberRole: ctx.memberRole,
     },
     getErpDb().clock,
   )
@@ -166,7 +161,7 @@ export function sessionResult(
   rememberAccessToken(session, accessToken)
   const body: SessionResponse = buildSessionResponse(user, getErpDb().wineries, {
     activeOrganizationId: session.activeOrganizationId,
-    tokens: tokensFor(accessToken, session.refreshToken),
+    tokens: tokensFor(accessToken),
     memberships: membershipsOf(user),
   })
   writeCookieJar(session.refreshToken)
@@ -198,21 +193,45 @@ function isKnownRefresh(token: string): boolean {
 }
 
 /**
- * Refrescos presentados: cookie `doc_rt` (de la petición o del almacén de MSW) y cuerpo
- * `{ refreshToken }` (*retirada* en H1); solo si no llega ninguno, el almacén propio de los mocks.
+ * Refresco presentado: la cookie `doc_rt` de la petición o, si no llega, la del almacén propio de
+ * los mocks (MSW en el navegador). El cuerpo `{ refreshToken }` no se lee desde H1.
  */
-function refreshCandidates(cookies: Record<string, string>, fromBody: string | undefined): string[] {
-  const explicit = [cookies[REFRESH_COOKIE], fromBody].filter((t): t is string => Boolean(t))
-  if (explicit.length > 0) return explicit
+function refreshCandidates(cookies: Record<string, string>): string[] {
+  const fromCookie = cookies[REFRESH_COOKIE]
+  if (fromCookie) return [fromCookie]
   const jar = readCookieJar()
   return jar ? [jar] : []
 }
 
-/** El primero que corresponde a una sesión conocida (una cookie de antes de `resetErpDb()` no tapa el cuerpo). */
-async function presentedRefresh(request: Request, cookies: Record<string, string>): Promise<string | null> {
-  const body = await parseBody(request, RefreshTokenSchema)
-  const candidates = refreshCandidates(cookies, body.refreshToken)
+/**
+ * Sesión de la petición con el refresco rotado, como `switch-organization` del backend (contrato de
+ * la Ola 0 §8): hace falta el refresco de ESTA sesión en la cookie `doc_rt`; un acceso robado no
+ * basta (401 `AUTH_REFRESH_INVALID`). Con un token estático (solo en los mocks) no hay sesión: se
+ * abre una con `organizationId` activa.
+ */
+export function rotatedSessionOf(auth: AuthContext, cookies: Record<string, string>, organizationId: string | null): MockSession {
+  if (!auth.sid) return createSession(auth.user.id, auth.audience, organizationId, auth.mfa, getErpDb().clock)
+  const token = refreshCandidates(cookies).find((t) => parseRefreshToken(t)?.sid === auth.sid)
+  if (!token) throw refreshInvalid('Falta el token de renovación de esta sesión')
+  const validated = validateRefresh(token)
+  if (!validated.grace) rotateRefresh(validated.session, getErpDb().clock)
+  return validated.session
+}
+
+/** El refresco de la cookie (el primero que corresponde a una sesión conocida). */
+function presentedRefresh(cookies: Record<string, string>): string | null {
+  const candidates = refreshCandidates(cookies)
   return candidates.find(isKnownRefresh) ?? candidates[0] ?? null
+}
+
+/**
+ * Campos retirados en H1 que el backend rechaza (`forbidNonWhitelisted` de class-validator): 422
+ * `VALIDATION_ERROR` con `details[{ field, message: 'property … should not exist' }]`.
+ */
+function rejectRetiredFields(raw: unknown, fields: readonly string[]): void {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return
+  const present = fields.filter((f) => f in raw)
+  if (present.length) throw invalid(present.map((f) => fieldError(f, `property ${f} should not exist`)))
 }
 
 /**
@@ -279,9 +298,12 @@ export const authUserRoutes: RouteSpec[] = [
     path: '/v1/auth/signup',
     access: 'public',
     async handle({ request, url }) {
-      const body = await parseBody(request, SignupSchema)
+      // Solo consumidores: el registro de personal (`userRole`) se retiró en H1.
+      const raw = await readJson(request)
+      rejectRetiredFields(raw, ['userRole'])
+      const body = validate(raw, SignupSchema)
       if (findUserByEmail(body.email)) throw conflict('El correo electrónico ya existe')
-      const user = createUser({ ...body, userRole: body.userRole ?? 'CONSUMER' })
+      const user = createUser(body)
       return sessionResult(user, openSession(user), url, 201)
     },
   },
@@ -314,8 +336,8 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'post',
     path: '/v1/auth/refresh',
     access: 'public',
-    async handle({ request, url, cookies }) {
-      const token = await presentedRefresh(request, cookies)
+    handle({ url, cookies }) {
+      const token = presentedRefresh(cookies)
       // Refresco estático de los fixtures (`mock.refresh.<clave>`, solo en los mocks): abre una sesión nueva.
       if (token?.startsWith(REFRESH_TOKEN_PREFIX)) {
         const user = findUserByKey(token.slice(REFRESH_TOKEN_PREFIX.length))
@@ -338,7 +360,9 @@ export const authUserRoutes: RouteSpec[] = [
     path: '/v1/auth/switch-organization',
     access: anyUser,
     async handle({ request, url, auth, cookies }) {
-      const body = await parseBody(request, SwitchOrganizationSchema)
+      const raw = await readJson(request)
+      rejectRetiredFields(raw, ['refreshToken'])
+      const body = validate(raw, SwitchOrganizationSchema)
       const membership = auth.memberships.find((m) => m.organizationId === body.organizationId)
       if (!membership) throw new ApiError(404, 'ORG_NOT_FOUND', 'Organización no encontrada')
       if (membership.status !== 'ACTIVE') throw new ApiError(403, 'ORG_MEMBERSHIP_BLOCKED', 'Tu membresía en esta organización está bloqueada')
@@ -347,19 +371,7 @@ export const authUserRoutes: RouteSpec[] = [
       if (membership.organizationType === 'PLATFORM' && !auth.mfa) {
         throw new ApiError(403, 'AUTH_MFA_REQUIRED', 'Para entrar en la plataforma hay que verificar el segundo factor')
       }
-      let session: MockSession
-      if (!auth.sid) {
-        // Token estático (solo en los mocks): no hay sesión, se abre una.
-        session = createSession(auth.user.id, auth.audience, body.organizationId, auth.mfa, getErpDb().clock)
-      } else {
-        // Como el backend (contrato de la Ola 0 §8): hace falta el refresco de ESTA sesión (cookie
-        // `doc_rt` o `refreshToken` en el cuerpo), que se rota. Un acceso robado no basta.
-        const token = refreshCandidates(cookies, body.refreshToken).find((t) => parseRefreshToken(t)?.sid === auth.sid)
-        if (!token) throw refreshInvalid('Falta el token de renovación de esta sesión')
-        const validated = validateRefresh(token)
-        session = validated.session
-        if (!validated.grace) rotateRefresh(session, getErpDb().clock)
-      }
+      const session = rotatedSessionOf(auth, cookies, body.organizationId)
       setActiveOrganization(session, body.organizationId)
       rememberOrganization(auth.user.id, body.organizationId)
       return sessionResult(auth.user, session, url)
@@ -369,8 +381,8 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'post',
     path: '/v1/auth/logout',
     access: 'public',
-    async handle({ request, url, cookies, optionalAuth }) {
-      const refresh = await presentedRefresh(request, cookies)
+    handle({ request, url, cookies, optionalAuth }) {
+      const refresh = presentedRefresh(cookies)
       const session = sessionForLogout(optionalAuth, request, refresh)
       if (session) revokeSession(session)
       writeCookieJar(null)

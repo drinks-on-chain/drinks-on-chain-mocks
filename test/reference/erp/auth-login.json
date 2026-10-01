@@ -6,10 +6,7 @@
       "fullName": "Ana Gutiérrez",
       "phoneNumber": "+59170000001",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "PLATFORM_ADMIN",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -26,8 +23,7 @@
     "tokens": {
       "accessToken": "mock.access.admin",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.admin"
+      "expiresIn": 900
     }
   },
   "soporte": {
@@ -37,10 +33,7 @@
       "fullName": "Pablo Rivera",
       "phoneNumber": "+59170000002",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "PLATFORM_ADMIN",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -57,8 +50,7 @@
     "tokens": {
       "accessToken": "mock.access.soporte",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.soporte"
+      "expiresIn": 900
     }
   },
   "altos_admin": {
@@ -68,10 +60,7 @@
       "fullName": "Martín Calamuchita",
       "phoneNumber": "+59171000101",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "WINERY_ADMIN",
-      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "memberRole": "OWNER"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -88,8 +77,7 @@
     "tokens": {
       "accessToken": "mock.access.altos_admin",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.altos_admin"
+      "expiresIn": 900
     }
   },
   "altos_enologa": {
@@ -99,10 +87,7 @@
       "fullName": "Lic. Carla Villarroel",
       "phoneNumber": "+59171000102",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "ENOLOGIST",
-      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "memberRole": "ENOLOGIST"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -119,8 +104,7 @@
     "tokens": {
       "accessToken": "mock.access.altos_enologa",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.altos_enologa"
+      "expiresIn": 900
     }
   },
   "altos_agronomo": {
@@ -130,10 +114,7 @@
       "fullName": "Ing. Diego Paredes",
       "phoneNumber": "+59171000103",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "AGRONOMIST",
-      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "memberRole": "AGRONOMIST"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -150,8 +131,7 @@
     "tokens": {
       "accessToken": "mock.access.altos_agronomo",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.altos_agronomo"
+      "expiresIn": 900
     }
   },
   "altos_operario": {
@@ -161,10 +141,7 @@
       "fullName": "Mario Quispe",
       "phoneNumber": "+59171000104",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "ENOLOGIST",
-      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "memberRole": "OPERATOR"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -181,8 +158,7 @@
     "tokens": {
       "accessToken": "mock.access.altos_operario",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.altos_operario"
+      "expiresIn": 900
     }
   },
   "cvj_admin": {
@@ -192,10 +168,7 @@
       "fullName": "Rosa Camargo",
       "phoneNumber": "+59172000201",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "WINERY_ADMIN",
-      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "memberRole": "OWNER"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -212,8 +185,7 @@
     "tokens": {
       "accessToken": "mock.access.cvj_admin",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.cvj_admin"
+      "expiresIn": 900
     }
   },
   "cvj_enologa": {
@@ -223,10 +195,7 @@
       "fullName": "Lic. Lucía Rojas",
       "phoneNumber": "+59172000202",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "ENOLOGIST",
-      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "memberRole": "ENOLOGIST"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -243,8 +212,7 @@
     "tokens": {
       "accessToken": "mock.access.cvj_enologa",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.cvj_enologa"
+      "expiresIn": 900
     }
   },
   "cvj_agronomo": {
@@ -254,10 +222,7 @@
       "fullName": "Ing. Tomás Flores",
       "phoneNumber": "+59172000203",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "AGRONOMIST",
-      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "memberRole": "AGRONOMIST"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -274,8 +239,7 @@
     "tokens": {
       "accessToken": "mock.access.cvj_agronomo",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.cvj_agronomo"
+      "expiresIn": 900
     }
   },
   "cvj_operario": {
@@ -285,10 +249,7 @@
       "fullName": "Rubén Flores",
       "phoneNumber": "+59172000204",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "ENOLOGIST",
-      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "memberRole": "OPERATOR"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -305,8 +266,7 @@
     "tokens": {
       "accessToken": "mock.access.cvj_operario",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.cvj_operario"
+      "expiresIn": 900
     }
   },
   "vgq_admin": {
@@ -316,10 +276,7 @@
       "fullName": "Elena Vaca",
       "phoneNumber": "+59173000301",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "WINERY_ADMIN",
-      "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f",
-      "memberRole": "OWNER"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -336,8 +293,7 @@
     "tokens": {
       "accessToken": "mock.access.vgq_admin",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.vgq_admin"
+      "expiresIn": 900
     }
   },
   "maria": {
@@ -347,18 +303,14 @@
       "fullName": "María Fernández",
       "phoneNumber": "+59174000401",
       "preferredLocale": "es",
-      "audience": "CONSUMER",
-      "userRole": "CONSUMER",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "CONSUMER"
     },
     "memberships": [],
     "activeOrganizationId": null,
     "tokens": {
       "accessToken": "mock.access.maria",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.maria"
+      "expiresIn": 900
     }
   },
   "carlos": {
@@ -368,18 +320,14 @@
       "fullName": "Carlos Mamani",
       "phoneNumber": "+59174000402",
       "preferredLocale": "es",
-      "audience": "CONSUMER",
-      "userRole": "CONSUMER",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "CONSUMER"
     },
     "memberships": [],
     "activeOrganizationId": null,
     "tokens": {
       "accessToken": "mock.access.carlos",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.carlos"
+      "expiresIn": 900
     }
   },
   "juan_pos": {
@@ -389,18 +337,14 @@
       "fullName": "Juan Pérez",
       "phoneNumber": "+59175000501",
       "preferredLocale": "es",
-      "audience": "CONSUMER",
-      "userRole": "POS_OPERATOR",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "CONSUMER"
     },
     "memberships": [],
     "activeOrganizationId": null,
     "tokens": {
       "accessToken": "mock.access.juan_pos",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.juan_pos"
+      "expiresIn": 900
     }
   },
   "sofia": {
@@ -410,10 +354,7 @@
       "fullName": "Lic. Sofía Aramayo",
       "phoneNumber": "+59176000601",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "ENOLOGIST",
-      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "memberRole": "ENOLOGIST"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -439,8 +380,7 @@
     "tokens": {
       "accessToken": "mock.access.sofia",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.sofia"
+      "expiresIn": 900
     }
   },
   "ines": {
@@ -450,10 +390,7 @@
       "fullName": "Ing. Inés Salazar",
       "phoneNumber": "+59176000602",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "AGRONOMIST",
-      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "memberRole": "AGRONOMIST"
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -479,8 +416,7 @@
     "tokens": {
       "accessToken": "mock.access.ines",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.ines"
+      "expiresIn": 900
     }
   },
   "cvj_contable": {
@@ -490,10 +426,7 @@
       "fullName": "Lic. Verónica Quiroga",
       "phoneNumber": "+59172000205",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "ENOLOGIST",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -510,8 +443,7 @@
     "tokens": {
       "accessToken": "mock.access.cvj_contable",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.cvj_contable"
+      "expiresIn": 900
     }
   },
   "valle_admin": {
@@ -521,10 +453,7 @@
       "fullName": "Hugo Ortega",
       "phoneNumber": "+59173000601",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "WINERY_ADMIN",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -541,8 +470,7 @@
     "tokens": {
       "accessToken": "mock.access.valle_admin",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.valle_admin"
+      "expiresIn": 900
     }
   },
   "bo_admin": {
@@ -552,10 +480,7 @@
       "fullName": "Jorge Salinas",
       "phoneNumber": "+59170000003",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "PLATFORM_ADMIN",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -572,8 +497,7 @@
     "tokens": {
       "accessToken": "mock.access.bo_admin",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.bo_admin"
+      "expiresIn": 900
     }
   },
   "operaciones": {
@@ -583,10 +507,7 @@
       "fullName": "Valeria Méndez",
       "phoneNumber": "+59170000004",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "PLATFORM_ADMIN",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -603,8 +524,7 @@
     "tokens": {
       "accessToken": "mock.access.operaciones",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.operaciones"
+      "expiresIn": 900
     }
   },
   "analista": {
@@ -614,10 +534,7 @@
       "fullName": "Camila Torrez",
       "phoneNumber": "+59170000005",
       "preferredLocale": "es",
-      "audience": "STAFF",
-      "userRole": "PLATFORM_ADMIN",
-      "wineryId": null,
-      "memberRole": null
+      "audience": "STAFF"
     },
     "memberships": [
       {
@@ -634,8 +551,7 @@
     "tokens": {
       "accessToken": "mock.access.analista",
       "tokenType": "Bearer",
-      "expiresIn": 900,
-      "refreshToken": "mock.refresh.analista"
+      "expiresIn": 900
     }
   }
 }

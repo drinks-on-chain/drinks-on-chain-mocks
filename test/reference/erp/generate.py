@@ -14,7 +14,9 @@ JSON resultantes son los mismos.
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import math
 import random
 import uuid
 from datetime import date, datetime, timedelta, timezone
@@ -125,25 +127,25 @@ WCODE = {w["key"]: w["code"] for w in WINERIES}
 # 2. Usuarios (UserProfileResponseDto) y billeteras (WalletResponseDto)
 # ---------------------------------------------------------------------------
 PEOPLE = [
-    # key, email, fullName, userRole, wineryKey, memberRole, license, phone
-    ("admin", "gestor@drinksonchain.test", "Ana Gutiérrez", "PLATFORM_ADMIN", None, None, None, "+59170000001"),
-    ("soporte", "soporte@drinksonchain.test", "Pablo Rivera", "PLATFORM_ADMIN", None, None, None, "+59170000002"),
-    ("altos_admin", "admin@altos.test", "Martín Calamuchita", "WINERY_ADMIN", "altos", "OWNER", None, "+59171000101"),
-    ("altos_enologa", "enologa@altos.test", "Lic. Carla Villarroel", "ENOLOGIST", "altos", "ENOLOGIST", "COL-ENOL-TAR-118", "+59171000102"),
-    ("altos_agronomo", "agronomo@altos.test", "Ing. Diego Paredes", "AGRONOMIST", "altos", "AGRONOMIST", "CIA-TAR-522", "+59171000103"),
-    ("altos_operario", "operario@altos.test", "Mario Quispe", "ENOLOGIST", "altos", "OPERATOR", None, "+59171000104"),
-    ("cvj_admin", "admin@cintiviejo.test", "Rosa Camargo", "WINERY_ADMIN", "cintiviejo", "OWNER", None, "+59172000201"),
-    ("cvj_enologa", "enologa@cintiviejo.test", "Lic. Lucía Rojas", "ENOLOGIST", "cintiviejo", "ENOLOGIST", "COL-ENOL-CHQ-041", "+59172000202"),
-    ("cvj_agronomo", "agronomo@cintiviejo.test", "Ing. Tomás Flores", "AGRONOMIST", "cintiviejo", "AGRONOMIST", "CIA-CHQ-207", "+59172000203"),
-    ("cvj_operario", "operario@cintiviejo.test", "Rubén Flores", "ENOLOGIST", "cintiviejo", "OPERATOR", None, "+59172000204"),
-    ("vgq_admin", "gerencia@guadalquivir.test", "Elena Vaca", "WINERY_ADMIN", "guadalquivir", "OWNER", None, "+59173000301"),
-    ("maria", "maria@tribu.test", "María Fernández", "CONSUMER", None, None, None, "+59174000401"),
-    ("carlos", "carlos@tribu.test", "Carlos Mamani", "CONSUMER", None, None, None, "+59174000402"),
-    ("juan_pos", "cajero.lacava@drinksonchain.test", "Juan Pérez", "POS_OPERATOR", None, None, None, "+59175000501"),
+    # key, email, fullName, wineryKey, memberRole, license, phone (sin rol global desde H1)
+    ("admin", "gestor@drinksonchain.test", "Ana Gutiérrez", None, None, None, "+59170000001"),
+    ("soporte", "soporte@drinksonchain.test", "Pablo Rivera", None, None, None, "+59170000002"),
+    ("altos_admin", "admin@altos.test", "Martín Calamuchita", "altos", "OWNER", None, "+59171000101"),
+    ("altos_enologa", "enologa@altos.test", "Lic. Carla Villarroel", "altos", "ENOLOGIST", "COL-ENOL-TAR-118", "+59171000102"),
+    ("altos_agronomo", "agronomo@altos.test", "Ing. Diego Paredes", "altos", "AGRONOMIST", "CIA-TAR-522", "+59171000103"),
+    ("altos_operario", "operario@altos.test", "Mario Quispe", "altos", "OPERATOR", None, "+59171000104"),
+    ("cvj_admin", "admin@cintiviejo.test", "Rosa Camargo", "cintiviejo", "OWNER", None, "+59172000201"),
+    ("cvj_enologa", "enologa@cintiviejo.test", "Lic. Lucía Rojas", "cintiviejo", "ENOLOGIST", "COL-ENOL-CHQ-041", "+59172000202"),
+    ("cvj_agronomo", "agronomo@cintiviejo.test", "Ing. Tomás Flores", "cintiviejo", "AGRONOMIST", "CIA-CHQ-207", "+59172000203"),
+    ("cvj_operario", "operario@cintiviejo.test", "Rubén Flores", "cintiviejo", "OPERATOR", None, "+59172000204"),
+    ("vgq_admin", "gerencia@guadalquivir.test", "Elena Vaca", "guadalquivir", "OWNER", None, "+59173000301"),
+    ("maria", "maria@tribu.test", "María Fernández", None, None, None, "+59174000401"),
+    ("carlos", "carlos@tribu.test", "Carlos Mamani", None, None, None, "+59174000402"),
+    ("juan_pos", "cajero.lacava@drinksonchain.test", "Juan Pérez", None, None, None, "+59175000501"),
 ]
 
 users, wallets = [], []
-for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
+for key, email, name, wkey, mrole, lic, phone in PEOPLE:
     uid_ = uid(f"user:{key}")
     created = date(2026, 1, 10) + timedelta(days=rng.randint(0, 200))
     wallet = {
@@ -182,7 +184,6 @@ for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
         "id": uid_,
         "email": email,
         "fullName": name,
-        "userRole": role,
         "phoneNumber": phone,
         "preferredLocale": "es",
         "isActive": True,
@@ -195,25 +196,25 @@ for key, email, name, role, wkey, mrole, lic, phone in PEOPLE:
     })
 # Personas con varias membresías (contrato de la Ola 0 §4). Fechas fijas y sin `rng` para no
 # alterar el resto de la secuencia aleatoria.
-# key, email, fullName, userRole, phone, created, [(wineryKey, memberRole, license, isActive, joined)]
+# key, email, fullName, phone, created, [(wineryKey, memberRole, license, isActive, joined)]
 MULTI = [
-    ("sofia", "sofia@aramayo.test", "Lic. Sofía Aramayo", "ENOLOGIST", "+59176000601", date(2025, 10, 21), [
+    ("sofia", "sofia@aramayo.test", "Lic. Sofía Aramayo", "+59176000601", date(2025, 10, 21), [
         ("altos", "ENOLOGIST", "COL-ENOL-TAR-133", True, date(2026, 3, 10)),
         ("uriondo", "OWNER", None, True, date(2025, 10, 22)),
     ]),
-    ("ines", "ines@salazar.test", "Ing. Inés Salazar", "AGRONOMIST", "+59176000602", date(2026, 2, 2), [
+    ("ines", "ines@salazar.test", "Ing. Inés Salazar", "+59176000602", date(2026, 2, 2), [
         ("cintiviejo", "AGRONOMIST", "CIA-CHQ-230", True, date(2026, 2, 3)),
         ("altos", "OPERATOR", None, False, date(2026, 4, 1)),
     ]),
     # Ola 1: contadora bloqueada por la plataforma y dueño de la bodega revocada.
-    ("cvj_contable", "contabilidad@cintiviejo.test", "Lic. Verónica Quiroga", "ENOLOGIST", "+59172000205", date(2026, 5, 20), [
+    ("cvj_contable", "contabilidad@cintiviejo.test", "Lic. Verónica Quiroga", "+59172000205", date(2026, 5, 20), [
         ("cintiviejo", "ACCOUNTANT", None, False, date(2026, 5, 20)),
     ]),
-    ("valle_admin", "hugo@valleescondido.test", "Hugo Ortega", "WINERY_ADMIN", "+59173000601", date(2026, 1, 5), [
+    ("valle_admin", "hugo@valleescondido.test", "Hugo Ortega", "+59173000601", date(2026, 1, 5), [
         ("valle", "OWNER", None, True, date(2026, 1, 5)),
     ]),
 ]
-for key, email, name, role, phone, created, links in MULTI:
+for key, email, name, phone, created, links in MULTI:
     uid_ = uid(f"user:{key}")
     first = W[links[0][0]]
     wallet = {
@@ -251,7 +252,6 @@ for key, email, name, role, phone, created, links in MULTI:
         "id": uid_,
         "email": email,
         "fullName": name,
-        "userRole": role,
         "phoneNumber": phone,
         "preferredLocale": "es",
         "isActive": True,
@@ -285,7 +285,6 @@ for key, email, name, phone, created, last in STAFF:
         "id": uid_,
         "email": email,
         "fullName": name,
-        "userRole": "PLATFORM_ADMIN",
         "phoneNumber": phone,
         "preferredLocale": "es",
         "isActive": True,
@@ -311,14 +310,14 @@ PLATFORM_ORG = {"id": uid("organization:platform"), "name": "Drinks on Chain", "
 def memberships_of(u: dict) -> list:
     """Plataforma antes que bodegas; el id de una membresía de bodega es el del miembro."""
     out = []
-    if u["userRole"] == "PLATFORM_ADMIN" or u["_mock"].get("platformRole"):
+    if u["_mock"].get("platformRole"):
         out.append({
             "id": uid(f"membership:platform:{u['id']}"),
             "organizationId": PLATFORM_ORG["id"],
             "organizationType": "PLATFORM",
             "organizationName": PLATFORM_ORG["name"],
             "organizationStatus": PLATFORM_ORG["status"],
-            "role": u["_mock"].get("platformRole", "SUPERADMIN"),
+            "role": u["_mock"]["platformRole"],
             "status": "ACTIVE" if u["isActive"] else "BLOCKED",
         })
     for m in u["wineryMemberships"]:
@@ -341,21 +340,16 @@ def auth_response(key: str) -> dict:
     ms = memberships_of(u)
     usable = [m for m in ms if m["status"] == "ACTIVE" and m["organizationStatus"] != "REVOKED"]
     active = usable[0] if usable else None
-    winery = active if active and active["organizationType"] == "WINERY" else None
     return {
         "user": {
             "id": u["id"], "email": u["email"], "fullName": u["fullName"],
             "phoneNumber": u["phoneNumber"], "preferredLocale": "es",
             "audience": "STAFF" if ms else "CONSUMER",
-            "userRole": u["userRole"],
-            "wineryId": winery["organizationId"] if winery else None,
-            "memberRole": winery["role"] if winery else None,
         },
         "memberships": ms,
         "activeOrganizationId": active["organizationId"] if active else None,
         "tokens": {
             "accessToken": f"mock.access.{key}", "tokenType": "Bearer", "expiresIn": 900,
-            "refreshToken": f"mock.refresh.{key}",
         },
     }
 
@@ -610,8 +604,9 @@ def rest_status(p: dict) -> dict:
     end = date.fromisoformat(p["processEndDate"][:10])
     elapsed = (TODAY - end).days
     remaining = max(0, 180 - elapsed)
-    return {"id": p["id"], "restStatus": p["restStatus"], "daysElapsed": elapsed, "daysRemaining": remaining,
-            "isRestCompleted": remaining == 0, "mandatoryRestUntil": p["mandatoryRestUntil"]}
+    return {"id": p["id"], "restStatus": p["restStatus"], "processEndDate": p["processEndDate"],
+            "mandatoryRestUntil": p["mandatoryRestUntil"], "daysElapsed": max(0, elapsed), "daysRemaining": remaining,
+            "isRestCompleted": remaining == 0}
 
 
 rest_statuses = [rest_status(p) for p in productions]
@@ -697,35 +692,104 @@ for key, bkey, abv, tac, vac, fso2, tso2, rs, meth, cu, rev in LAB:
 LB = {l["bottlingBatchId"]: l for l in labs}
 
 # ---------------------------------------------------------------------------
-# 10. Trazabilidad pública (GET /v1/traceability/public/:lotCode)
+# 10. Grafo DAG del lote (GET /v1/traceability/dag/:id y /public/:lotCode)
 # ---------------------------------------------------------------------------
-public = {}
-for b in bottlings:
+# Forma y cálculo de DagBuilderService del backend (DagGraphResponseDto): un nodo por etapa con
+# el SHA-256 de "<ETAPA>-<id>", métricas ×100 (Math.round de JS) y el hash de los metadatos con
+# las claves ordenadas (JSON.stringify de JS: enteros sin ".0", sin espacios, sin escapar UTF-8).
+def js_num(x):
+    return int(x) if isinstance(x, float) and x.is_integer() else x
+
+
+def js_round(x: float) -> int:
+    return math.floor(x + 0.5)
+
+
+def dag_hash(text: str) -> str:
+    return "0x" + hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def meta_hash(d: dict) -> str:
+    canonical = json.dumps({k: js_num(v) for k, v in d.items()}, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return dag_hash(canonical)
+
+
+def num(x):
+    return x if x is not None else 0
+
+
+def dag_graph(b: dict) -> dict:
     w = next(x for x in wineries if x["id"] == b["wineryId"])
-    if b["productionBatchId"]:
-        p = next(x for x in productions if x["id"] == b["productionBatchId"])
-        tank = next(x for x in tanks if x["id"] == p["fermentationTankId"])
-    else:
-        a = next(x for x in agings if x["id"] == b["wineAgingBatchId"])
-        tank = next(x for x in tanks if x["id"] == a["fermentationTankId"])
+
+    def op(name: str, role: str) -> dict:
+        return {"name": name, "role": role, "wineryName": w["commercialName"]}
+
+    a = next((x for x in agings if x["id"] == b["wineAgingBatchId"]), None) if b["wineAgingBatchId"] else None
+    p = next((x for x in productions if x["id"] == b["productionBatchId"]), None) if not a and b["productionBatchId"] else None
+    mid = a or p
+    tank = next(x for x in tanks if x["id"] == mid["fermentationTankId"])
     h = next(x for x in harvests if x["id"] == tank["harvestBatchId"])
     t = next(x for x in terroirs if x["id"] == h["terroirId"])
     lab = LB.get(b["id"])
-    public[b["internationalLotCode"]] = {
-        "lotCode": b["internationalLotCode"],
-        "winery": {"commercialName": w["commercialName"], "department": w["geographicRegion"].split("·")[0].strip(), "altitudeMasl": t["altitudeMasl"]},
-        "product": {"productType": b["productType"], "alcoholAbv": b["finalAlcoholAbv"], "bottlesPackaged": b["totalBottlesPackaged"],
-                    "packagingFormatCl": b["packagingFormatCl"], "bottlingDate": b["bottlingDate"]},
-        "terroir": {"parcelName": t["parcelName"], "altitudeMasl": t["altitudeMasl"], "varietyName": t["varietyName"],
-                    "doEligible": t["isDoEligible"], "doType": t["doType"]},
-        "laboratoryCertification": ({
-            "certifiedLaboratoryName": lab["certifiedLaboratoryName"], "accreditedLabCertificationCode": lab["accreditedLabCertificationCode"],
-            "actualAlcoholAbv": lab["actualAlcoholAbv"], "totalAcidityTartaricGl": lab["totalAcidityTartaricGl"],
-            "volatileAcidityAceticGl": lab["volatileAcidityAceticGl"], "conformsToSenasagStandards": lab["conformsToSenasagStandards"],
-            "reportPdfUrl": lab["laboratoryReportPdfUrl"]} if lab else None),
-        "blockchainIntegrity": {"sha256Hash": b["blockchainDataHash"], "network": "Stellar Testnet",
-                                "status": "VERIFIED_ON_CHAIN" if b["isAnchoredOnChain"] else "PENDING_ANCHOR"},
-    }
+    nodes = []
+    plot = dag_hash(f"TERROIR-{t['id']}")
+    d = {"parcelName": t["parcelName"], "varietyName": t["varietyName"], "altitudeMasl": num(t["altitudeMasl"]),
+         "surfaceHectares": num(t["surfaceHectares"]), "isDoEligible": t["isDoEligible"]}
+    nodes.append({"batchId": plot, "stage": 0, "stageName": "Plot", "parents": [], "timestamp": t["createdAt"],
+                  "volumeOrUnits": num(t["surfaceHectares"]), "metrics": [js_round(num(t["altitudeMasl"]) * 100)],
+                  "metadataHash": meta_hash(d), "isCertified": t["isDoEligible"],
+                  "operator": op("Ingeniero Agrónomo", "Agronomist"), "details": d})
+    hh = dag_hash(f"HARVEST-{h['id']}")
+    d = {"harvestBatchCode": h["harvestBatchCode"], "grossWeightKg": num(h["grossWeightKg"]), "tareWeightKg": num(h["tareWeightKg"]),
+         "netWeightKg": num(h["netWeightKg"]), "brixDegrees": num(h["brixDegrees"]), "initialPh": num(h["initialPh"]),
+         "initialAcidityGl": num(h["initialAcidityGl"]), "phytosanitaryStatus": h["phytosanitaryStatus"]}
+    nodes.append({"batchId": hh, "stage": 1, "stageName": "Harvest", "parents": [plot], "timestamp": h["intakeDate"],
+                  "volumeOrUnits": num(h["netWeightKg"]),
+                  "metrics": [js_round(num(h["brixDegrees"]) * 100), js_round(num(h["initialPh"]) * 100),
+                              js_round(num(h["initialAcidityGl"]) * 100)],
+                  "metadataHash": meta_hash(d), "isCertified": h["phytosanitaryStatus"] == "APPROVED",
+                  "operator": op("Jefe de Báscula", "Weigher"), "details": d})
+    th = dag_hash(f"TANK-{tank['id']}")
+    d = {"tankCode": tank["tankCode"], "material": tank["material"], "volumeFilledLiters": num(tank["volumeFilledLiters"]),
+         "destinationType": tank["destinationType"]}
+    nodes.append({"batchId": th, "stage": 2, "stageName": "Vinification", "parents": [hh], "timestamp": tank["startDate"],
+                  "volumeOrUnits": num(tank["volumeFilledLiters"]), "metrics": [1280, 28], "metadataHash": meta_hash(d),
+                  "isCertified": True, "operator": op("Enólogo de Planta", "Oenologist"), "details": d})
+    if a:
+        mh = dag_hash(f"AGING-{a['id']}")
+        d = {"containerType": a["containerType"], "containerMaterial": a["containerMaterial"], "plannedMonths": a["plannedMonths"],
+             "lockUntilDate": a["lockUntilDate"][:10]}
+        nodes.append({"batchId": mh, "stage": 3, "stageName": "Aging", "parents": [th], "timestamp": a["createdAt"],
+                      "volumeOrUnits": num(a["volumeLiters"]), "metrics": [a["plannedMonths"] * 100], "metadataHash": meta_hash(d),
+                      "isCertified": True, "operator": op("Maestro de Cava", "Oenologist"), "details": d})
+    else:
+        mh = dag_hash(f"DISTILLATION-{p['id']}")
+        d = {"equipmentIdentifier": p["equipmentIdentifier"], "inputVolumeLiters": num(p["inputVolumeLiters"]),
+             "outputVolumeLiters": num(p["outputVolumeLiters"]), "wasteVolumeLiters": num(p["wasteVolumeLiters"]),
+             "initialAlcoholPercentage": num(p["initialAlcoholPercentage"]), "restStatus": p["restStatus"]}
+        alcohol = p["initialAlcoholPercentage"] if p["initialAlcoholPercentage"] is not None else 70.2
+        nodes.append({"batchId": mh, "stage": 4, "stageName": "Distillation", "parents": [th], "timestamp": p["processStartDate"],
+                      "volumeOrUnits": num(p["outputVolumeLiters"]), "metrics": [js_round(alcohol * 100)],
+                      "metadataHash": meta_hash(d), "isCertified": p["isDoEligible"],
+                      "operator": op("Maestro Destilador", "Distiller"), "details": d})
+    root = dag_hash(f"BOTTLING-{b['id']}")
+    d = {"internationalLotCode": b["internationalLotCode"], "productType": b["productType"], "finalAlcoholAbv": num(b["finalAlcoholAbv"]),
+         "waterDilutionLiters": num(b["waterDilutionLiters"]), "totalBottlesPackaged": b["totalBottlesPackaged"],
+         "packagingFormatCl": b["packagingFormatCl"], "qrBatchUrl": b["qrBatchUrl"]}
+    details = dict(d)
+    details["labAnalysis"] = ({
+        "certifiedLaboratoryName": lab["certifiedLaboratoryName"], "accreditedLabCertificationCode": lab["accreditedLabCertificationCode"],
+        "actualAlcoholAbv": num(lab["actualAlcoholAbv"]), "methanolContentMgL": num(lab["methanolContentMgL"]),
+        "conformsToSenasagStandards": lab["conformsToSenasagStandards"]} if lab else None)
+    nodes.append({"batchId": root, "stage": 5, "stageName": "Bottling", "parents": [mh], "timestamp": b["bottlingDate"],
+                  "volumeOrUnits": b["totalBottlesPackaged"],
+                  "metrics": [js_round(num(b["finalAlcoholAbv"]) * 100), b["packagingFormatCl"] * 10],
+                  "metadataHash": meta_hash(d), "isCertified": bool(lab and lab["conformsToSenasagStandards"]),
+                  "operator": op("Supervisor de Envasado", "Packer"), "details": details})
+    return {"rootBatchId": root, "internationalLotCode": b["internationalLotCode"], "productType": b["productType"], "nodes": nodes}
+
+
+public = {b["internationalLotCode"]: dag_graph(b) for b in bottlings}
 
 # ---------------------------------------------------------------------------
 # 11. Vista derivada "Lote" para las pantallas del ERP (no existe en el backend)

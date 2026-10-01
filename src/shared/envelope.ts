@@ -38,7 +38,6 @@ export const API_ERROR_CODES = [
   'IDEMPOTENCY_KEY_INVALID',
   'IDEMPOTENCY_KEY_REUSED',
   // ERP (backend O0-BE-2)
-  'WINERY_NOT_PENDING',
   'FERMENTATION_TANK_ALREADY_TRANSFERRED',
   // Ola 1: cuenta, segundo factor y captcha
   'AUTH_MFA_REQUIRED',
@@ -72,6 +71,24 @@ export const API_ERROR_CODES = [
   'SETTING_BELOW_LEGAL_MINIMUM',
   'SETTING_LEVEL_NOT_ALLOWED',
   'AUDIT_EXPORT_TOO_LARGE',
+  // Ola 1 completa (backend `error-codes.ts`, mocks 0.4)
+  'AUTH_LOGIN_REQUIRED',
+  'AUTH_MFA_NOT_ENROLLED',
+  'AUTH_MFA_ALREADY_ENROLLED',
+  'AUTH_MFA_ENROLLMENT_NOT_STARTED',
+  'USER_NOT_FOUND',
+  'FILE_TYPE_NOT_ALLOWED',
+  'FILE_TOO_LARGE',
+  'FILE_NOT_FOUND',
+  // Del backend; los mocks no los emiten
+  'BAD_GATEWAY',
+  'SERVICE_UNAVAILABLE',
+  'UNKNOWN_ERROR',
+  'IDEMPOTENCY_KEY_REQUIRED',
+  'IDEMPOTENCY_IN_PROGRESS',
+  'IDEMPOTENCY_STORE_UNAVAILABLE',
+  'CAPTCHA_UNAVAILABLE',
+  'TRACEABILITY_STRATEGY_NOT_FOUND',
 ] as const
 /** Código de error: uno de `API_ERROR_CODES` o cualquier otro que añada el backend. */
 export type ApiErrorCode = (typeof API_ERROR_CODES)[number] | (string & {})

@@ -54,8 +54,8 @@ function targetWineries(ids: string[] | 'ALL'): { id: string; name: string }[] {
   return [...new Set(ids)].map((id) => ({ id, name: wineries.find((w) => w.id === id)!.commercialName }))
 }
 
-function history(ctx: RouteContext, key: string, scope: string, before: unknown, after: unknown, reason: string, at: string) {
-  bo().settingHistory.push({ key, at, by: ctx.auth.user.fullName, scope, before, after, reason })
+function history(ctx: RouteContext, key: string, scope: string, before: unknown, after: unknown, reason: string, at: string, legalException = false) {
+  bo().settingHistory.push({ key, at, by: ctx.auth.user.fullName, scope, before, after, reason, legalException })
 }
 
 export const settingsRoutes: RouteSpec[] = [
@@ -92,7 +92,7 @@ export const settingsRoutes: RouteSpec[] = [
       history(ctx, entry.key, 'GLOBAL', before, body.value, body.reason, at)
       recordAudit(ctx, {
         action: 'SETTING_CHANGED',
-        resource: { type: 'SETTING', id: entry.key },
+        resource: { type: 'setting', id: entry.key },
         organizationId: null,
         before: { value: before },
         after: { value: body.value },
@@ -147,10 +147,10 @@ export const settingsRoutes: RouteSpec[] = [
           updatedBy: ctx.auth.user.fullName,
         }
         state.overrides = [...state.overrides.filter((o) => !(o.key === entry.key && o.wineryId === t.id)), next]
-        history(ctx, entry.key, t.id, before, body.value, body.reason, at)
+        history(ctx, entry.key, t.id, before, body.value, body.reason, at, next.legalException)
         recordAudit(ctx, {
           action: 'SETTING_OVERRIDE_SET',
-          resource: { type: 'SETTING', id: entry.key },
+          resource: { type: 'setting', id: entry.key },
           organizationId: t.id,
           before: { value: current ? current.value : null },
           after: { value: body.value, legalException: next.legalException },
@@ -180,7 +180,7 @@ export const settingsRoutes: RouteSpec[] = [
         history(ctx, entry.key, t.id, current.value, standard, body.reason, at)
         recordAudit(ctx, {
           action: 'SETTING_OVERRIDE_RESET',
-          resource: { type: 'SETTING', id: entry.key },
+          resource: { type: 'setting', id: entry.key },
           organizationId: t.id,
           before: { value: current.value },
           after: { value: standard },
@@ -199,7 +199,7 @@ export const settingsRoutes: RouteSpec[] = [
       const entry = entryOf(params.key!)
       const items = bo()
         .settingHistory.filter((h) => h.key === entry.key)
-        .map(({ key: _key, ...h }) => h)
+        .map(({ key: _key, ...h }) => ({ ...h, legalException: h.legalException ?? false }))
         .sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0))
       return listResult(items, query)
     },

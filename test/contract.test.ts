@@ -8,6 +8,8 @@ import * as pkg from '../src'
 import { backofficeFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp } from '../src/fixtures'
 import { MOCK_ROUTE_SPECS, mockMailbox } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
+import type { ErpDb } from '../src/erp/handlers/db'
+import { logView, treatmentView } from '../src/erp/handlers/views'
 import { uid } from '../src/shared/uuid'
 import { API } from './helpers'
 
@@ -18,15 +20,17 @@ import { API } from './helpers'
 // 3. Cada operación se ejecuta con una petición de ejemplo y su respuesta valida contra el
 //    esquema del OpenAPI (o el de pendientes.json cuando el contrato de ola lo cambia).
 //
-// Normalización (docs/CONTRATO.md punto 3), porque el OpenAPI de NestJS no declara `nullable`:
-// - los campos `T | null` salen como `{ type: 'object' }` sin propiedades: pasan a
-//   `{ type: <tipo del example>, nullable: true }`;
-// - los campos opcionales (fuera de `required`) aceptan también `null`, que es lo que devuelve
-//   Prisma para una columna vacía. Los requeridos siguen sin admitir `null`.
+// Validación estricta (docs/CONTRATO.md §5): desde la Ola 1 el OpenAPI del backend declara
+// `nullable` en cada campo que puede ser `null`, así que un `null` solo vale donde el DTO lo dice
+// y un campo opcional se omite (no se manda `null`). Normalización mínima de lo que genera NestJS:
+// - `{ type: 'object' }` sin propiedades (solo quedan en DTO de entrada) → tipo del `example`;
+// - `nullable` + `allOf: [ref]` (relación opcional) → `anyOf: [ref, null]`;
 // - ningún objeto admite campos que el DTO no declare (`additionalProperties: false`), salvo los
 //   `camposExtra` de pendientes.json: así un campo renombrado rompe la prueba.
 
 const root = join(import.meta.dirname, '..')
+/** Base con los fixtures, para convertir las filas de la semilla en respuestas. */
+const fixtureDb = { wineries: erpFixtures.wineries, tanks: erpFixtures.fermentationTanks } as unknown as ErpDb
 const readJson = <T>(path: string): T => JSON.parse(readFileSync(join(root, path), 'utf8')) as T
 
 type Json = Record<string, unknown>
@@ -72,17 +76,21 @@ function normalize(node: unknown): unknown {
     const example = obj.example
     const type = typeof example
     if (type === 'string' || type === 'number' || type === 'boolean') return { type, nullable: true }
-    if (example && type === 'object') return { type: Array.isArray(example) ? 'array' : 'object', nullable: true }
-    return {}
+    return obj
   }
   const out = Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, normalize(v)])) as Json
+  // `nullable` + `allOf: [ref]` (relación opcional de NestJS): el `allOf` no admitiría `null`.
+  if (out.nullable === true && Array.isArray(out.allOf)) {
+    const rest = Object.fromEntries(Object.entries(out).filter(([k]) => !['nullable', 'type', 'allOf'].includes(k)))
+    return { ...rest, anyOf: [...(out.allOf as Json[]), { type: 'null' }] }
+  }
+  // `nullable` + `oneOf` sin `type` (valor de un parámetro de configuración): `null` es otra opción.
+  if (out.nullable === true && !('type' in out) && Array.isArray(out.oneOf)) {
+    out.oneOf = [...(out.oneOf as Json[]), { type: 'null' }]
+    delete out.nullable
+  }
+  if (Array.isArray(out.enum) && out.nullable === true && !out.enum.includes(null)) out.enum = [...(out.enum as unknown[]), null]
   if (out.type === 'object' && out.properties && typeof out.properties === 'object') {
-    const required = new Set(Array.isArray(out.required) ? (out.required as string[]) : [])
-    const props = out.properties as Record<string, Json>
-    for (const [name, prop] of Object.entries(props)) {
-      if (required.has(name) || !prop.type) continue
-      props[name] = { ...prop, nullable: true, ...(Array.isArray(prop.enum) ? { enum: [...(prop.enum as unknown[]), null] } : {}) }
-    }
     if (!('additionalProperties' in out)) out.additionalProperties = false
   }
   return out
@@ -170,8 +178,9 @@ function responseSchema(key: string, status: number): { schema: Json | null; sou
     return { schema: override.respuesta.schema ?? null, source: override.contrato }
   }
   const [method, path] = key.split(' ') as [string, string]
-  const schema = spec.paths[path]?.[method.toLowerCase()]?.responses?.[String(status)]?.content?.['application/json']?.schema
-  return { schema: schema ?? null, source: 'openapi/erp.json' }
+  const content = spec.paths[path]?.[method.toLowerCase()]?.responses?.[String(status)]?.content
+  if (content?.['text/csv']) return { schema: { $csv: true }, source: 'openapi/erp.json' }
+  return { schema: content?.['application/json']?.schema ?? null, source: 'openapi/erp.json' }
 }
 
 // ---------------------------------------------------------------------------
@@ -186,6 +195,38 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
   it('cada RouteSpec existe en el OpenAPI o está adelantada por un contrato de ola', () => {
     expect(routeOps.filter((op) => !openApiOps.has(op) && !ahead.has(op))).toEqual([])
     expect(new Set(routeOps).size).toBe(routeOps.length)
+  })
+
+  it('las rutas obsoletas son las del OpenAPI, con la misma sustituta (x-replaced-by); tras H1, ninguna', () => {
+    type Op = { deprecated?: boolean; 'x-replaced-by'?: string }
+    const inSpec = Object.entries(spec.paths).flatMap(([p, ops]) =>
+      Object.entries(ops as Record<string, Op>)
+        .filter(([, op]) => op.deprecated)
+        .map(([m, op]) => [opKey(m, p), op['x-replaced-by']] as const),
+    )
+    const inMocks = MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated] as const)
+    expect(new Map(inMocks)).toEqual(new Map(inSpec))
+    expect(inMocks).toEqual([])
+  })
+
+  it('lo retirado en H1 no está en el OpenAPI ni en los mocks', () => {
+    const retired = [
+      'POST /v1/wineries',
+      'GET /v1/wineries/pending',
+      'POST /v1/wineries/{id}/approve',
+      'POST /v1/wineries/{id}/reject',
+      'GET /v1/wineries/my/members',
+      'POST /v1/wineries/my/members',
+      'POST /v1/wineries/my/members/create',
+    ]
+    expect(retired.filter((op) => openApiOps.has(op) || routeOps.includes(op))).toEqual([])
+    const props = (name: string) => Object.keys((spec.components.schemas[name]?.properties as Json | undefined) ?? {})
+    expect(props('AuthTokensDto')).not.toContain('refreshToken')
+    for (const name of ['AuthUserDto', 'MeUserDto']) {
+      expect(props(name).filter((p) => ['userRole', 'wineryId', 'memberRole'].includes(p))).toEqual([])
+    }
+    expect(props('SignupDto')).not.toContain('userRole')
+    expect(props('SwitchOrganizationDto')).toEqual(['organizationId'])
   })
 
   it('pendientes.json: las adelantadas aún no están en el OpenAPI (si llegan, se borran de aquí) y los cambios sí', () => {
@@ -216,19 +257,26 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
 
 const FIXTURE_COMPONENTS: Array<[name: string, rows: unknown[], dto: string]> = [
   ['wineries.json', erpFixtures.wineries, 'WineryResponseDto'],
-  // Sin `_mock` (credencial de demo, solo existe en los mocks).
-  ['users.json', erpFixtures.users.map(({ _mock: _meta, ...user }) => user), 'UserProfileResponseDto'],
+  // `user` de `GET /v1/users/me`: sin `_mock` (credencial de demo) y con la audiencia de la sesión.
+  [
+    'users.json',
+    erpFixtures.users.map(({ _mock: meta, ...user }) => ({ ...user, audience: erpFixtures.authLogin[meta.key]!.user.audience })),
+    'MeUserDto',
+  ],
   ['wallets.json', erpFixtures.wallets, 'WalletResponseDto'],
   ['auth-login.json', Object.values(erpFixtures.authLogin), 'AuthResponseDto'],
   ['terroirs.json', erpFixtures.terroirs, 'TerroirResponseDto'],
   ['harvest-batches.json', erpFixtures.harvestBatches, 'HarvestBatchResponseDto'],
   ['fermentation-tanks.json', erpFixtures.fermentationTanks, 'FermentationTankResponseDto'],
-  ['fermentation-logs.json', erpFixtures.fermentationLogs, 'CreateFermentationLogDto'],
-  ['enological-treatments.json', erpFixtures.enologicalTreatments, 'CreateEnologicalTreatmentDto'],
+  // Filas de la semilla (compartidas con la del backend) → respuesta de la API.
+  ['fermentation-logs.json', erpFixtures.fermentationLogs.map((l) => logView(l, fixtureDb)), 'FermentationLogResponseDto'],
+  ['enological-treatments.json', erpFixtures.enologicalTreatments.map((t) => treatmentView(t, fixtureDb)), 'EnologicalTreatmentResponseDto'],
   ['wine-aging.json', erpFixtures.wineAging, 'WineAgingResponseDto'],
   ['production-batches.json', erpFixtures.productionBatches, 'ProductionBatchResponseDto'],
+  ['production-rest-status.json', erpFixtures.productionRestStatus, 'RestStatusResponseDto'],
   ['bottling.json', erpFixtures.bottling, 'BottlingBatchResponseDto'],
   ['lab-analyses.json', erpFixtures.labAnalyses, 'BatchLabAnalysisResponseDto'],
+  ['traceability-public.json', Object.values(erpFixtures.traceabilityPublic), 'DagGraphResponseDto'],
 ]
 
 describe('fixtures ⇄ esquemas del OpenAPI', () => {
@@ -275,7 +323,6 @@ const winery = (name: string) => F.wineries.find((w) => w.commercialName === nam
 const ALTOS = winery('Bodega Altos de Calamuchita')
 const CINTI = winery('Destilería Cinti Viejo')
 const URIONDO = winery('Casa Uriondo')
-const PENDING = F.wineries.find((w) => w.certificationStatus === 'INVITED')!
 const altosTerroir = F.terroirs.find((t) => t.wineryId === ALTOS.id && t.altitudeMasl >= 1600)!
 const altosHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
 const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id)!
@@ -294,6 +341,8 @@ interface Sample {
   url: string | ((v: Vars) => string)
   body?: unknown | ((v: Vars) => unknown)
   form?: () => FormData
+  /** Cabecera `Cookie` (p. ej. el refresco `doc_rt`, que desde H1 solo viaja ahí). */
+  cookie?: string
   status: number
   /** Pasos previos (p. ej. pedir un enlace y leerlo del buzón). */
   setup?: () => Promise<Vars>
@@ -301,35 +350,20 @@ interface Sample {
 
 const SAMPLES: Record<string, Sample> = {
   'GET /v1/health': { url: '/v1/health', status: 200 },
+  'GET /v1/health/live': { url: '/v1/health/live', status: 200 },
+  'GET /v1/health/ready': { url: '/v1/health/ready', status: 200 },
   'POST /v1/auth/signup': { url: '/v1/auth/signup', body: { email: 'contrato@tribu.test', password: 'clave123', fullName: 'Contrato' }, status: 201 },
   'POST /v1/auth/login': { url: '/v1/auth/login', body: { email: 'sofia@aramayo.test', password: 'demo1234' }, status: 200 },
-  'POST /v1/auth/refresh': { url: '/v1/auth/refresh', body: { refreshToken: 'mock.refresh.altos_admin' }, status: 200 },
+  'POST /v1/auth/refresh': { url: '/v1/auth/refresh', cookie: 'doc_rt=mock.refresh.altos_admin', status: 200 },
   'POST /v1/auth/switch-organization': { as: 'sofia', url: '/v1/auth/switch-organization', body: { organizationId: URIONDO.id }, status: 200 },
   'POST /v1/auth/logout': { as: 'altos_admin', url: '/v1/auth/logout', body: {}, status: 204 },
   'POST /v1/auth/logout-all': { as: 'altos_admin', url: '/v1/auth/logout-all', body: {}, status: 204 },
   'GET /v1/users/me': { as: 'ines', url: '/v1/users/me', status: 200 },
   'PATCH /v1/users/me': { as: 'altos_admin', url: '/v1/users/me', body: { fullName: 'Martín C.' }, status: 200 },
   'GET /v1/users/me/wallet': { as: 'altos_admin', url: '/v1/users/me/wallet', status: 200 },
-  'POST /v1/wineries': {
-    as: 'maria',
-    url: '/v1/wineries',
-    body: { legalName: 'Nueva S.R.L.', commercialName: 'Nueva', beverageCategory: 'WINERY', taxIdNit: '5550001', geographicRegion: 'Valle Central de Tarija', contactEmail: 'hola@nueva.test' },
-    status: 201,
-  },
   'GET /v1/wineries': { as: 'admin', url: '/v1/wineries', status: 200 },
   'GET /v1/wineries/my': { as: 'altos_admin', url: '/v1/wineries/my', status: 200 },
   'PATCH /v1/wineries/my': { as: 'altos_admin', url: '/v1/wineries/my', body: { address: 'Camino a Calamuchita km 9' }, status: 200 },
-  'POST /v1/wineries/my/members': { as: 'altos_admin', url: '/v1/wineries/my/members', body: { userId: maria.id, memberRole: 'ACCOUNTANT' }, status: 201 },
-  'GET /v1/wineries/my/members': { as: 'altos_admin', url: '/v1/wineries/my/members', status: 200 },
-  'POST /v1/wineries/my/members/create': {
-    as: 'altos_admin',
-    url: '/v1/wineries/my/members/create',
-    body: { email: 'contable@altos.test', password: 'clave123', fullName: 'Contable', memberRole: 'ACCOUNTANT' },
-    status: 201,
-  },
-  'GET /v1/wineries/pending': { as: 'admin', url: '/v1/wineries/pending', status: 200 },
-  'POST /v1/wineries/{id}/approve': { as: 'admin', url: `/v1/wineries/${PENDING.id}/approve`, body: {}, status: 200 },
-  'POST /v1/wineries/{id}/reject': { as: 'admin', url: `/v1/wineries/${PENDING.id}/reject`, body: { rejectionReason: 'Falta el registro SENASAG' }, status: 200 },
   'POST /v1/terroirs': {
     as: 'altos_agronomo',
     url: '/v1/terroirs',
@@ -416,6 +450,11 @@ const SAMPLES: Record<string, Sample> = {
       return form
     },
     status: 201,
+  },
+  'GET /v1/uploads/url': {
+    as: 'altos_enologa',
+    url: `/v1/uploads/url?key=${encodeURIComponent(`org/${ALTOS.id}/inspections/2026/09/acta.pdf`)}`,
+    status: 200,
   },
 }
 
@@ -660,8 +699,14 @@ const OLA1_SAMPLES: Record<string, Sample> = {
   },
   'POST /v1/platform/organizations/{organizationId}/members/{membershipId}/unblock': {
     as: 'soporte',
-    url: `/v1/platform/organizations/${CINTI.id}/members/${member('cvj_contable', 'cintiviejo')}/unblock`,
+    // Altos: sin límite de colaboradores (Cinti Viejo está lleno: desbloquear → 422).
+    url: `/v1/platform/organizations/${ALTOS.id}/members/${member('ines', 'altos')}/unblock`,
     body: { reason: REASON },
+    status: 200,
+  },
+  'GET /v1/platform/organizations/{organizationId}/invitations': {
+    as: 'soporte',
+    url: `/v1/platform/organizations/${ALTOS.id}/invitations?status=PENDING`,
     status: 200,
   },
   'POST /v1/platform/organizations/{organizationId}/invitations': {
@@ -700,6 +745,7 @@ const OLA1_SAMPLES: Record<string, Sample> = {
     body: { reason: REASON },
     status: 200,
   },
+  'GET /v1/platform/accounts/{userId}': { as: 'soporte', url: `/v1/platform/accounts/${uid('user:sofia')}`, status: 200 },
   'POST /v1/platform/accounts/{userId}/block': {
     as: 'bo_admin',
     url: `/v1/platform/accounts/${maria.id}/block`,
@@ -766,6 +812,7 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
     const vars = sample.setup ? await sample.setup() : {}
     const headers: Record<string, string> = {}
     if (sample.as) headers.Authorization = `Bearer mock.access.${sample.as}`
+    if (sample.cookie) headers.Cookie = sample.cookie
     let body: BodyInit | undefined
     const rawBody = typeof sample.body === 'function' ? (sample.body as (v: Vars) => unknown)(vars) : sample.body
     if (sample.form) body = sample.form()
@@ -789,7 +836,7 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
     }
     const envelope = JSON.parse(text) as { success: boolean; data: unknown }
     expect(envelope.success).toBe(true)
-    if (!schema) return // el OpenAPI no declara esquema (docs/CONTRATO.md punto 4)
+    if (!schema) throw new Error(`${key}: sin esquema de respuesta en el OpenAPI`)
     expectValid(schema, envelope.data, `${key} ⇄ ${source}`)
   })
 
@@ -798,14 +845,7 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
       const sample = SAMPLES[key]!
       return sample.status !== 204 && !responseSchema(key, sample.status).schema
     })
-    expect(withoutSchema.sort()).toEqual(
-      [
-        'GET /v1/production-batches/{id}/rest-status',
-        'GET /v1/traceability/dag/{bottlingBatchId}',
-        'GET /v1/traceability/public/{lotCode}',
-        'POST /v1/fermentation-tanks/{id}/logs',
-        'POST /v1/fermentation-tanks/{id}/treatments',
-      ].sort(),
-    )
+    // Desde la Ola 1 el OpenAPI declara la respuesta de todas las operaciones.
+    expect(withoutSchema).toEqual([])
   })
 })
