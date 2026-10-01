@@ -5,12 +5,12 @@ import { listResult, ok, strParam, type RouteSpec } from '../../erp/handlers/htt
 import { PLATFORM_ORGANIZATION } from '../../erp/catalog'
 import { effectiveInvitationStatus, verifyAuditChain } from '../model'
 import { AUDIT_EXPORT_MAX_ROWS, type AuditEvent, type Dashboard } from '../schemas'
-import { bo, now } from './support'
+import { bo, now, nowMs } from './support'
 
-// Bitácora (contrato de la Ola 1 §7) y tablero del back office (§8).
+// Bitácora (contrato de la Ola 1 §7) y tablero del back office (§8, con el bloque `waitlist` de O1b §2).
 
 /** `from`/`to` aceptan `YYYY-MM-DD` (día completo) o fecha y hora ISO. */
-function dateParam(query: URLSearchParams, name: 'from' | 'to'): number | undefined {
+export function dateParam(query: URLSearchParams, name: 'from' | 'to'): number | undefined {
   const raw = strParam(query, name)
   if (!raw) return undefined
   const dayOnly = /^\d{4}-\d{2}-\d{2}$/.test(raw)
@@ -129,6 +129,12 @@ function dashboard(): Dashboard {
       blockedMembers:
         wineries.reduce((n, w) => n + (w.members ?? []).filter((m) => !m.isActive).length, 0) +
         state.blocks.filter((b) => b.organizationId === PLATFORM_ORGANIZATION.id).length,
+    },
+    // Lista de espera: totales por tipo y las inscripciones de las últimas 24 h (los dos tipos).
+    waitlist: {
+      consumers: count(state.waitlist, (e) => e.type === 'CONSUMER'),
+      wineries: count(state.waitlist, (e) => e.type === 'WINERY'),
+      last24h: count(state.waitlist, (e) => Date.parse(e.createdAt) >= nowMs() - 24 * 3_600_000),
     },
     alerts: [...state.alerts].sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
     recentAudit: [...state.audit].sort(byNewest).slice(0, 5),
