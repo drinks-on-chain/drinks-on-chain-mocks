@@ -3,7 +3,7 @@
 Paquete `@drinks-on-chain/mocks`: esquemas, fixtures y handlers MSW del ecosistema Drinks on Chain. Lee antes `README.md`, `docs/CONTRATO.md` y `docs/ROADMAP.md` (marca las casillas `- [x] … · fecha`).
 
 - **Fuente de verdad**: `openapi/erp.json` más el contrato de la ola en curso (`plan/contratos/` del plan maestro). Si cambia el backend: `pnpm openapi:pull -- <url|ruta>`, ajusta los esquemas, borra de `openapi/pendientes.json` lo que ya llegó y anota las diferencias en `docs/CONTRATO.md`. Lo que se adelante por contrato de ola va en `openapi/pendientes.json` con su referencia; la prueba de contrato (`test/contract.test.ts`) lo exige.
-- **Fixtures**: nunca se editan a mano. ERP: se cambia `test/reference/erp/generate.py` (y se ejecuta) y el mismo cambio en `src/erp/seed/generate.ts`; luego `pnpm seed`. `pnpm test` exige igualdad con Python. Ola 1 (`fixtures/backoffice/`): solo `src/backoffice/seed/generate.ts` (parte de los del ERP); los valida `test/backoffice-fixtures.test.ts`.
+- **Fixtures**: nunca se editan a mano. ERP: se cambia `test/reference/erp/generate.py` (y se ejecuta) y el mismo cambio en `src/erp/seed/generate.ts`; luego `pnpm seed`. `pnpm test` exige igualdad con Python. Ola 1 (`fixtures/backoffice/`): solo `src/backoffice/seed/generate.ts` (parte de los del ERP; la lista de espera, en `seed/waitlist.ts`); los valida `test/backoffice-fixtures.test.ts`.
 - **Forma de las listas**: solo en `src/shared/list.ts` (`{ items, total, limit, offset }`, `limit` 20/100).
 - **Sesión**: `src/erp/handlers/sessions.ts` (tokens, cookie `doc_rt`, rotación) y `auth-context.ts` (organización activa y roles efectivos).
 - **Entrada raíz sin msw**: `src/index.ts` no puede importar nada de `src/erp/handlers`, `msw` ni los fixtures (va a producción).

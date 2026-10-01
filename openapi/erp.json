@@ -3565,7 +3565,7 @@
     },
     "/v1/platform/dashboard": {
       "get": {
-        "description": "Solicitudes por estado, bodegas por estado, invitaciones pendientes y por caducar, miembros bloqueados, alertas y los 5 últimos eventos de la bitácora. Los bloques de tokenización, canjes y soporte se añaden en sus olas (cambio aditivo).",
+        "description": "Solicitudes por estado, bodegas por estado, invitaciones pendientes y por caducar, miembros bloqueados, lista de espera (totales por tipo y altas de las últimas 24 h), alertas y los 5 últimos eventos de la bitácora. Los bloques de tokenización, canjes y soporte se añaden en sus olas (cambio aditivo).",
         "operationId": "DashboardController_get_v1",
         "parameters": [],
         "responses": {
@@ -5368,6 +5368,445 @@
         ]
       }
     },
+    "/v1/platform/waitlist": {
+      "get": {
+        "description": "Más recientes primero. Filtros por tipo, estado, origen y fechas (AAAA-MM-DD = día completo UTC, o ISO); `q` busca en nombre, correo, bodega y teléfono.",
+        "operationId": "PlatformWaitlistController_list_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Resultados por página (1–100)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Resultados que se saltan desde el inicio",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "description": "Desde: AAAA-MM-DD (día completo, UTC) o fecha y hora ISO 8601",
+            "schema": {
+              "example": "2026-09-27",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "description": "Hasta (incluido): AAAA-MM-DD (día completo, UTC) o fecha y hora ISO 8601",
+            "schema": {
+              "example": "2026-09-27",
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WaitlistType"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WaitlistStatus"
+            }
+          },
+          {
+            "name": "source",
+            "required": false,
+            "in": "query",
+            "description": "Origen exacto de la inscripción",
+            "schema": {
+              "example": "tarija-2026",
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Busca en nombre, correo, bodega y teléfono",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página de resultados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items",
+                    "total",
+                    "limit",
+                    "offset"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WaitlistEntryDto"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "example": 1,
+                      "description": "Total de resultados con los filtros aplicados"
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100,
+                      "example": 20
+                    },
+                    "offset": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "example": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "AUTH_INSUFFICIENT_PERMISSIONS: sin la organización de plataforma activa o rol sin permiso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Lista de espera",
+        "tags": [
+          "Back office · lista de espera"
+        ]
+      }
+    },
+    "/v1/platform/waitlist/export": {
+      "get": {
+        "description": "Mismos filtros que la lista, en orden de llegada. Máximo 50.000 filas (más → 422 WAITLIST_EXPORT_TOO_LARGE). UTF-8 con BOM, separador coma, CRLF; las celdas que empiezan como una fórmula (= + - @) llevan un apóstrofo delante. Sin IP ni agente de usuario. Se envía por partes (streaming) y queda en la bitácora (WAITLIST_EXPORTED, con el número de filas).",
+        "operationId": "PlatformWaitlistController_export_v1",
+        "parameters": [
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "description": "Desde: AAAA-MM-DD (día completo, UTC) o fecha y hora ISO 8601",
+            "schema": {
+              "example": "2026-09-27",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "description": "Hasta (incluido): AAAA-MM-DD (día completo, UTC) o fecha y hora ISO 8601",
+            "schema": {
+              "example": "2026-09-27",
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WaitlistType"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WaitlistStatus"
+            }
+          },
+          {
+            "name": "source",
+            "required": false,
+            "in": "query",
+            "description": "Origen exacto de la inscripción",
+            "schema": {
+              "example": "tarija-2026",
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Busca en nombre, correo, bodega y teléfono",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archivo CSV (Content-Disposition: attachment)",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "AUTH_INSUFFICIENT_PERMISSIONS: sin la organización de plataforma activa o rol sin permiso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "VALIDATION_ERROR en los filtros o WAITLIST_EXPORT_TOO_LARGE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Exportar la lista de espera a CSV",
+        "tags": [
+          "Back office · lista de espera"
+        ]
+      }
+    },
+    "/v1/platform/waitlist/sources": {
+      "get": {
+        "description": "Cada origen (`source`; `null` = sin origen) con su número de inscritos, del más numeroso al menos. Para el filtro de la lista.",
+        "operationId": "PlatformWaitlistController_sources_v1",
+        "parameters": [
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WaitlistType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaitlistSourceDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "AUTH_INSUFFICIENT_PERMISSIONS: sin la organización de plataforma activa o rol sin permiso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "VALIDATION_ERROR en `type`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Orígenes de las inscripciones",
+        "tags": [
+          "Back office · lista de espera"
+        ]
+      }
+    },
+    "/v1/platform/waitlist/{id}": {
+      "patch": {
+        "description": "Al pasar a `CONTACTED` se guardan `contactedAt` y quién lo marcó; al volver a `NEW` se borran. `notes: null` borra las notas. Queda en la bitácora (WAITLIST_STATUS_CHANGED). Sin cambios, devuelve la inscripción tal cual.",
+        "operationId": "PlatformWaitlistController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWaitlistEntryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistEntryDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "AUTH_INSUFFICIENT_PERMISSIONS: sin la organización de plataforma activa o rol sin permiso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "VALIDATION_ERROR (`status`, `notes` de más de 1000 caracteres)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cambiar el estado o las notas de una inscripción",
+        "tags": [
+          "Back office · lista de espera"
+        ]
+      }
+    },
     "/v1/platform/wineries": {
       "get": {
         "description": "Ordenado por nombre comercial. `region` y `q` (razón social, nombre, NIT, slug) son coincidencias parciales.",
@@ -7029,6 +7468,94 @@
         "tags": [
           "Destilación y Procesos Especiales (Singani)"
         ]
+      }
+    },
+    "/v1/public/waitlist": {
+      "post": {
+        "description": "Consumidores (`CONSUMER`, con `isAdult: true`) y bodegas (`WINERY`, con `wineryName`). Responde 201 con la posición dentro de su tipo (desde 1). Un correo ya inscrito en ese tipo recibe la misma respuesta con la posición que ya tenía (no se duplica; solo se completan `phone`, `city` y `region` si estaban vacíos). Campo trampa `website` relleno → 201 con una posición verosímil sin guardar nada. Límites: 20 por minuto y 300 por hora por IP real, 3 por hora por correo (`WAITLIST_LIMIT_IP_MINUTE`, `WAITLIST_LIMIT_IP_HOUR`, `WAITLIST_LIMIT_EMAIL_HOUR`) → 429 con `Retry-After`. El captcha solo se exige con `WAITLIST_CAPTCHA_REQUIRED=true`.",
+        "operationId": "PublicWaitlistController_join_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinWaitlistDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistJoinResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "VALIDATION_ERROR (`details` por campo: `isAdult`, `consent`, `wineryName`, `email`…) o CAPTCHA_INVALID (en `captchaToken`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "TOO_MANY_REQUESTS (por IP o por correo), con Retry-After",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CAPTCHA_UNAVAILABLE (solo con el captcha exigido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Inscribirse en la lista de espera",
+        "tags": [
+          "Público"
+        ],
+        "security": []
+      }
+    },
+    "/v1/public/waitlist/stats": {
+      "get": {
+        "description": "Inscritos por tipo, para mostrar «ya somos N». Con caché de 60 s.",
+        "operationId": "PublicWaitlistController_stats_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistStatsDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Totales de la lista de espera",
+        "tags": [
+          "Público"
+        ],
+        "security": []
       }
     },
     "/v1/public/wineries/{slug}": {
@@ -10301,6 +10828,14 @@
           "team": {
             "$ref": "#/components/schemas/DashboardTeamDto"
           },
+          "waitlist": {
+            "description": "Lista de espera (contrato O1b §2)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DashboardWaitlistDto"
+              }
+            ]
+          },
           "alerts": {
             "type": "array",
             "items": {
@@ -10321,6 +10856,7 @@
           "wineries",
           "invitations",
           "team",
+          "waitlist",
           "alerts",
           "recentAudit"
         ]
@@ -10355,6 +10891,31 @@
         },
         "required": [
           "blockedMembers"
+        ]
+      },
+      "DashboardWaitlistDto": {
+        "type": "object",
+        "properties": {
+          "consumers": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Consumidores inscritos"
+          },
+          "wineries": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Bodegas inscritas"
+          },
+          "last24h": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Inscripciones de las últimas 24 h (los dos tipos)"
+          }
+        },
+        "required": [
+          "consumers",
+          "wineries",
+          "last24h"
         ]
       },
       "DashboardWineriesDto": {
@@ -11073,6 +11634,128 @@
           "userId",
           "fullName",
           "viaPlatform"
+        ]
+      },
+      "JoinWaitlistDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistType"
+              }
+            ]
+          },
+          "fullName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120,
+            "example": "Lucía Fernández",
+            "description": "Persona (consumidor) o persona de contacto (bodega)"
+          },
+          "email": {
+            "type": "string",
+            "example": "lucia@example.com",
+            "description": "Se normaliza a minúsculas y sin espacios"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 7,
+            "maxLength": 20,
+            "example": "+591 72110022",
+            "description": "WhatsApp: dígitos, espacios y + - ( )"
+          },
+          "city": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 80,
+            "example": "Tarija",
+            "description": "Consumidor"
+          },
+          "interest": {
+            "nullable": true,
+            "description": "Consumidor: qué le interesa",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistInterest"
+              }
+            ]
+          },
+          "wineryName": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 2,
+            "maxLength": 160,
+            "example": "Viñas del Alto Camargo",
+            "description": "Obligatorio si `type` = `WINERY`"
+          },
+          "region": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 80,
+            "example": "Valle de Cinti",
+            "description": "Bodega: valle o región"
+          },
+          "produces": {
+            "nullable": true,
+            "description": "Bodega: qué produce",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistProduces"
+              }
+            ]
+          },
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "isAdult": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Mayoría de edad (Ley 259). Obligatorio y `true` si `type` = `CONSUMER`"
+          },
+          "consent": {
+            "type": "boolean",
+            "enum": [
+              true
+            ],
+            "description": "Acepta ser contactado y el aviso de privacidad"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "es",
+              "en"
+            ],
+            "default": "es"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 40,
+            "pattern": "^[a-z0-9-]{1,40}$",
+            "example": "tarija-2026",
+            "description": "Origen de la inscripción (se pasa a minúsculas)"
+          },
+          "captchaToken": {
+            "type": "string",
+            "nullable": true,
+            "description": "Token de Cloudflare Turnstile. Solo se comprueba (y se exige) con `WAITLIST_CAPTCHA_REQUIRED=true`"
+          },
+          "website": {
+            "type": "string",
+            "nullable": true,
+            "description": "Campo trampa: debe llegar vacío (si no, 201 sin guardar nada). No se muestra al usuario",
+            "example": ""
+          }
+        },
+        "required": [
+          "type",
+          "fullName",
+          "email",
+          "consent"
         ]
       },
       "LivenessDataDto": {
@@ -13149,6 +13832,25 @@
           }
         }
       },
+      "UpdateWaitlistEntryDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Al pasar a `CONTACTED` se guardan `contactedAt` y quién; al volver a `NEW` se borran",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistStatus"
+              }
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1000,
+            "description": "Notas internas; `null` o vacío las borra"
+          }
+        }
+      },
       "UpdateWineryDto": {
         "type": "object",
         "properties": {
@@ -13278,6 +13980,226 @@
         },
         "required": [
           "token"
+        ]
+      },
+      "WaitlistEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistType"
+              }
+            ]
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistStatus"
+              }
+            ]
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "interest": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistInterest"
+              }
+            ]
+          },
+          "wineryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "region": {
+            "type": "string",
+            "nullable": true
+          },
+          "produces": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistProduces"
+              }
+            ]
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "es",
+              "en"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "nullable": true,
+            "example": "tarija-2026"
+          },
+          "consentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "contactedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "contactedBy": {
+            "type": "string",
+            "nullable": true,
+            "example": "Valeria Méndez",
+            "description": "Nombre de quien lo marcó como contactado"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "position",
+          "status",
+          "fullName",
+          "email",
+          "phone",
+          "city",
+          "interest",
+          "wineryName",
+          "region",
+          "produces",
+          "message",
+          "locale",
+          "source",
+          "consentAt",
+          "createdAt",
+          "contactedAt",
+          "contactedBy",
+          "notes"
+        ]
+      },
+      "WaitlistInterest": {
+        "type": "string",
+        "enum": [
+          "WINE",
+          "SINGANI",
+          "BOTH"
+        ],
+        "description": "Consumidor: qué le interesa"
+      },
+      "WaitlistJoinResponseDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WaitlistType"
+              }
+            ]
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 42,
+            "description": "Número de orden dentro de su tipo (desde 1)"
+          }
+        },
+        "required": [
+          "type",
+          "position"
+        ]
+      },
+      "WaitlistProduces": {
+        "type": "string",
+        "enum": [
+          "WINE",
+          "SINGANI",
+          "BOTH",
+          "OTHER"
+        ],
+        "description": "Bodega: qué produce"
+      },
+      "WaitlistSourceDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "nullable": true,
+            "example": "tarija-2026",
+            "description": "`null` = inscripciones sin origen"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "source",
+          "count"
+        ]
+      },
+      "WaitlistStatsDto": {
+        "type": "object",
+        "properties": {
+          "consumers": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 128
+          },
+          "wineries": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 14
+          }
+        },
+        "required": [
+          "consumers",
+          "wineries"
+        ]
+      },
+      "WaitlistStatus": {
+        "type": "string",
+        "enum": [
+          "NEW",
+          "CONTACTED",
+          "DISCARDED"
+        ]
+      },
+      "WaitlistType": {
+        "type": "string",
+        "enum": [
+          "CONSUMER",
+          "WINERY"
         ]
       },
       "WalletResponseDto": {

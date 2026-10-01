@@ -277,6 +277,8 @@ const FIXTURE_COMPONENTS: Array<[name: string, rows: unknown[], dto: string]> = 
   ['bottling.json', erpFixtures.bottling, 'BottlingBatchResponseDto'],
   ['lab-analyses.json', erpFixtures.labAnalyses, 'BatchLabAnalysisResponseDto'],
   ['traceability-public.json', Object.values(erpFixtures.traceabilityPublic), 'DagGraphResponseDto'],
+  // Lista de espera (contrato O1b): el fixture es la respuesta del back office tal cual.
+  ['backoffice/waitlist.json', backofficeFixtures.waitlist, 'WaitlistEntryDto'],
 ]
 
 describe('fixtures ⇄ esquemas del OpenAPI', () => {
@@ -346,6 +348,8 @@ interface Sample {
   status: number
   /** Pasos previos (p. ej. pedir un enlace y leerlo del buzón). */
   setup?: () => Promise<Vars>
+  /** Cabecera (primera línea) esperada de una respuesta `text/csv`. */
+  csvHeader?: RegExp
 }
 
 const SAMPLES: Record<string, Sample> = {
@@ -794,11 +798,41 @@ const OLA1_SAMPLES: Record<string, Sample> = {
   'GET /v1/organizations/current/settings': { as: 'altos_enologa', url: '/v1/organizations/current/settings', status: 200 },
   // Bitácora y tablero
   'GET /v1/platform/audit': { as: 'soporte', url: '/v1/platform/audit?limit=50', status: 200 },
-  'GET /v1/platform/audit/export': { as: 'soporte', url: '/v1/platform/audit/export?from=2026-09-01', status: 200 },
+  'GET /v1/platform/audit/export': { as: 'soporte', url: '/v1/platform/audit/export?from=2026-09-01', status: 200, csvHeader: /^seq,occurredAt,/ },
   'GET /v1/platform/audit/verify': { as: 'bo_admin', url: '/v1/platform/audit/verify', status: 200 },
   'GET /v1/organizations/current/audit': { as: 'altos_admin', url: '/v1/organizations/current/audit', status: 200 },
   'GET /v1/platform/dashboard': { as: 'operaciones', url: '/v1/platform/dashboard', status: 200 },
 }
+
+// ---------------------------------------------------------------------------
+// Lista de espera (plan/contratos/o1b-lista-de-espera.md, backend v0.1.1)
+// ---------------------------------------------------------------------------
+
+const waitlistEntry = backofficeFixtures.waitlist.find((e) => e.status === 'NEW')!
+
+const WAITLIST_SAMPLES: Record<string, Sample> = {
+  'POST /v1/public/waitlist': {
+    url: '/v1/public/waitlist',
+    body: { type: 'CONSUMER', fullName: 'Persona de Contrato', email: 'contrato@example.com', isAdult: true, consent: true, source: 'tarija-2026', website: '' },
+    status: 201,
+  },
+  'GET /v1/public/waitlist/stats': { url: '/v1/public/waitlist/stats', status: 200 },
+  'GET /v1/platform/waitlist': { as: 'soporte', url: '/v1/platform/waitlist?limit=100', status: 200 },
+  'GET /v1/platform/waitlist/sources': { as: 'soporte', url: '/v1/platform/waitlist/sources', status: 200 },
+  'PATCH /v1/platform/waitlist/{id}': {
+    as: 'operaciones',
+    url: `/v1/platform/waitlist/${waitlistEntry.id}`,
+    body: { status: 'CONTACTED', notes: 'Nota de la prueba de contrato' },
+    status: 200,
+  },
+  'GET /v1/platform/waitlist/export': {
+    as: 'operaciones',
+    url: '/v1/platform/waitlist/export?type=WINERY',
+    status: 200,
+    csvHeader: /^position,type,status,fullName,email,/,
+  },
+}
+Object.assign(OLA1_SAMPLES, WAITLIST_SAMPLES)
 Object.assign(SAMPLES, OLA1_SAMPLES)
 
 describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
@@ -831,7 +865,9 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
     }
     if (schema?.$csv) {
       expect(res.headers.get('content-type')).toMatch(/^text\/csv/)
-      expect(text.split('\r\n')[0]).toMatch(/^seq,occurredAt,/)
+      expect(sample.csvHeader, `${key}: falta csvHeader en la petición de ejemplo`).toBeDefined()
+      // `res.text()` ya quita el BOM (lo comprueba test/waitlist.test.ts sobre los bytes).
+      expect(text.split('\r\n')[0]).toMatch(sample.csvHeader!)
       return
     }
     const envelope = JSON.parse(text) as { success: boolean; data: unknown }

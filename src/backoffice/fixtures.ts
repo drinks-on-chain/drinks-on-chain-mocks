@@ -8,6 +8,7 @@ import historyJson from '../../fixtures/backoffice/setting-history.json'
 import overridesJson from '../../fixtures/backoffice/setting-overrides.json'
 import settingsJson from '../../fixtures/backoffice/settings.json'
 import staffMfaJson from '../../fixtures/backoffice/staff-mfa.json'
+import waitlistJson from '../../fixtures/backoffice/waitlist.json'
 import detailsJson from '../../fixtures/backoffice/winery-details.json'
 import profilesJson from '../../fixtures/backoffice/winery-profiles.json'
 import type {
@@ -20,7 +21,7 @@ import type {
   StoredSettingHistory,
   WineryProfile,
 } from './model'
-import type { AuditEvent, DashboardAlert, MockEmail, WineryDetail } from './schemas'
+import type { AuditEvent, DashboardAlert, MockEmail, WaitlistEntry, WineryDetail } from './schemas'
 
 // Fixtures de la Ola 1 tipados (`fixtures/backoffice/*.json`, generados por `pnpm seed`). Se
 // validan contra sus esquemas en test/backoffice-fixtures.test.ts.
@@ -46,6 +47,8 @@ export interface BackofficeFixtures {
   audit: AuditEvent[]
   /** Correos ya "enviados" (buzón simulado). */
   mailbox: MockEmail[]
+  /** Lista de espera (contrato O1b): consumidores y bodegas, más recientes primero. */
+  waitlist: WaitlistEntry[]
 }
 
 export const backofficeFixtures: BackofficeFixtures = {
@@ -61,4 +64,5 @@ export const backofficeFixtures: BackofficeFixtures = {
   alerts: alertsJson as unknown as DashboardAlert[],
   audit: auditJson as unknown as AuditEvent[],
   mailbox: mailboxJson as unknown as MockEmail[],
+  waitlist: waitlistJson as unknown as WaitlistEntry[],
 }

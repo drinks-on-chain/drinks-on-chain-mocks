@@ -27,8 +27,9 @@ import {
   type StoredSettingHistory,
   type WineryProfile,
 } from '../model'
-import type { ApplicationNote, AuditEvent, ClientApp, DashboardAlert, MockEmail, WineryDetail, WineryStatusChange } from '../schemas'
+import type { ApplicationNote, AuditEvent, ClientApp, DashboardAlert, MockEmail, WaitlistEntry, WineryDetail, WineryStatusChange } from '../schemas'
 import { SETTINGS_CATALOG } from '../settings-catalog'
+import { generateWaitlistFixtures } from './waitlist'
 
 // Generador determinista de los fixtures de la Ola 1 (`fixtures/backoffice/*.json`). Solo en
 // TypeScript: la referencia de Python cubre el ERP; estos datos se validan con las pruebas de
@@ -51,6 +52,8 @@ export interface BackofficeFixtureSet {
   'alerts.json': DashboardAlert[]
   'audit.json': AuditEvent[]
   'mailbox.json': MockEmail[]
+  /** Lista de espera (contrato O1b), más recientes primero. */
+  'waitlist.json': WaitlistEntry[]
 }
 export type BackofficeFixtureName = keyof BackofficeFixtureSet
 
@@ -924,5 +927,6 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
     'alerts.json': alerts,
     'audit.json': audit,
     'mailbox.json': mailbox,
+    'waitlist.json': generateWaitlistFixtures(),
   }
 }

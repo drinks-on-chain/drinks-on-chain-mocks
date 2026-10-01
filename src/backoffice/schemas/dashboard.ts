@@ -2,8 +2,10 @@ import { z } from 'zod'
 import { IsoDateTimeSchema } from '../../erp/schemas/common'
 import { MembershipRoleSchema } from '../../erp/schemas/organizations'
 import { AuditEventSchema } from './audit'
+import { DashboardWaitlistSchema } from './waitlist'
 
-// Tablero del back office (contrato de la Ola 1 §8) y matriz de permisos (§5, §9).
+// Tablero del back office (contrato de la Ola 1 §8, con el bloque de la lista de espera de O1b §2)
+// y matriz de permisos (§5, §9).
 
 export const ALERT_LEVELS = ['INFO', 'WARNING', 'CRITICAL'] as const
 export const AlertLevelSchema = z.enum(ALERT_LEVELS)
@@ -38,6 +40,8 @@ export const DashboardSchema = z.object({
   team: z.object({
     blockedMembers: z.number().int(),
   }),
+  /** Lista de espera (contrato O1b §2; aditivo desde mocks 0.4.1). */
+  waitlist: DashboardWaitlistSchema,
   alerts: z.array(DashboardAlertSchema),
   /** Los 5 eventos más recientes de la bitácora. */
   recentAudit: z.array(AuditEventSchema).max(5),
