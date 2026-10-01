@@ -80,6 +80,8 @@ export const API_ERROR_CODES = [
   'FILE_TYPE_NOT_ALLOWED',
   'FILE_TOO_LARGE',
   'FILE_NOT_FOUND',
+  // Lista de espera (contrato O1b, backend v0.1.1)
+  'WAITLIST_EXPORT_TOO_LARGE',
   // Del backend; los mocks no los emiten
   'BAD_GATEWAY',
   'SERVICE_UNAVAILABLE',
