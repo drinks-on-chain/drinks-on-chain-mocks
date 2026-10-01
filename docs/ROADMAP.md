@@ -79,6 +79,16 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Prueba de contrato estricta en verde; CHANGELOG 0.4.0-rc.2 y `docs/CONTRATO.md` §8 · 27-09-2026
 - [x] Etiqueta `v0.4.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.4.0-rc.2.tgz`, instalado y probado en un proyecto limpio · 27-09-2026
 
+## Lista de espera · `mocks` 0.4.1 (O1b, contrato `plan/contratos/o1b-lista-de-espera.md`)
+
+- [x] `pnpm openapi:pull` del backend desplegado (`v0.1.1`: 118 operaciones, 149 esquemas) · 01-10-2026
+- [x] Esquemas zod de la lista de espera (inscripción, respuesta, totales, inscripción del back office, orígenes, `PATCH`) y bloque `waitlist` del tablero · 01-10-2026
+- [x] Capacidad `waitlist` en la matriz de permisos (`platformRolesWith`) · 01-10-2026
+- [x] Fixtures deterministas: 52 inscripciones (`fixtures/backoffice/waitlist.json`) · 01-10-2026
+- [x] Handlers de las 6 rutas (campo trampa, duplicados, límite por correo, filtros, CSV con BOM, bitácora) · 01-10-2026
+- [x] Prueba de contrato estricta de las rutas nuevas y de `waitlist.json`; `test/waitlist.test.ts` · 01-10-2026
+- [x] Versión 0.4.1, CHANGELOG, README y `docs/CONTRATO.md` §9 (la etiqueta estable `v0.4.1` se publica desde `main` con `release.yml`) · 01-10-2026
+
 ## Más adelante
 
 - [ ] Página `/__mocks` de ejemplo (selector de escenario y de usuario) en la plantilla de aplicación

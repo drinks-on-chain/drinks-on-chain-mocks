@@ -1,6 +1,6 @@
 {
   "name": "@drinks-on-chain/mocks",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Datos de prueba, esquemas zod y handlers MSW del ecosistema Drinks on Chain",
   "type": "module",
   "repository": {

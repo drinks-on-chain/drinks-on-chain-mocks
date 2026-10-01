@@ -1,6 +1,6 @@
 # @drinks-on-chain/mocks
 
-Datos de prueba compartidos del ecosistema **Drinks on Chain**: esquemas zod de los DTO del backend, fixtures JSON deterministas, la vista derivada `LotView` y handlers [MSW](https://mswjs.io) que imitan el backend del ERP con su envoltorio, sesión (organizaciones, membresías y renovación rotativa en cookie), roles, multi-tenant y reglas de negocio. Desde 0.2 siguen el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro) y desde 0.3 el **de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`): back office, alta de bodegas, invitaciones, equipos, configuración, bitácora, tablero y segundo factor (TOTP), con un buzón simulado. Desde 0.4 están alineados con el **backend real de la Ola 1 completa** (OpenAPI de `drinks-on-chain-back`, sin operaciones adelantadas). Las apps se construyen contra estos mocks y pasan al backend real cambiando `NEXT_PUBLIC_API_URL` y apagando MSW.
+Datos de prueba compartidos del ecosistema **Drinks on Chain**: esquemas zod de los DTO del backend, fixtures JSON deterministas, la vista derivada `LotView` y handlers [MSW](https://mswjs.io) que imitan el backend del ERP con su envoltorio, sesión (organizaciones, membresías y renovación rotativa en cookie), roles, multi-tenant y reglas de negocio. Desde 0.2 siguen el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro) y desde 0.3 el **de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`): back office, alta de bodegas, invitaciones, equipos, configuración, bitácora, tablero y segundo factor (TOTP), con un buzón simulado. Desde 0.4 están alineados con el **backend real de la Ola 1 completa** (OpenAPI de `drinks-on-chain-back`, sin operaciones adelantadas). Desde 0.4.1 incluyen la **lista de espera** (`plan/contratos/o1b-lista-de-espera.md`, backend `v0.1.1`). Las apps se construyen contra estos mocks y pasan al backend real cambiando `NEXT_PUBLIC_API_URL` y apagando MSW.
 
 Planificación: [`drinks-on-chain-docsfront`](https://github.com/drinks-on-chain/drinks-on-chain-docsfront) (docs 08 y 09). Diferencias entre el OpenAPI y los mocks: [`docs/CONTRATO.md`](docs/CONTRATO.md). Avance: [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
@@ -8,16 +8,16 @@ Alcance actual: dominio **ERP** (el único con backend real) y **Backoffice/iden
 
 ## Instalación
 
-No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball. Las versiones `X.Y.Z-rc.N` son pre-releases publicadas desde `dev` para adelantar el contrato de una ola; las estables salen de `main`. Migraciones (0.1 → 0.2 → 0.3 → 0.4): ver [CHANGELOG](CHANGELOG.md).
+No hace falta registro de paquetes: cada versión se publica como GitHub Release con el tarball. Las versiones `X.Y.Z-rc.N` son pre-releases publicadas desde `dev` para adelantar el contrato de una ola; las estables salen de `main`. Migraciones (0.1 → 0.2 → 0.3 → 0.4 → 0.4.1): ver [CHANGELOG](CHANGELOG.md).
 
 ```bash
-pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.2/drinks-on-chain-mocks-0.4.0-rc.2.tgz
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.1/drinks-on-chain-mocks-0.4.1.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
 ```json
 "dependencies": {
-  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.0-rc.2/drinks-on-chain-mocks-0.4.0-rc.2.tgz"
+  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.1/drinks-on-chain-mocks-0.4.1.tgz"
 }
 ```
 
@@ -25,8 +25,8 @@ pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 
 | Import | Contenido | ¿Importa msw? |
 |---|---|---|
-| `@drinks-on-chain/mocks` | Esquemas zod (respuesta y alta/edición) y tipos de cada recurso, enumeraciones, sesión (`SessionResponseSchema`, `MeResponseSchema`, `MembershipSchema`, `OrganizationType`, roles de plataforma, bodega y punto de canje, `AccessTokenClaims`), envoltorio (`successEnvelopeSchema`, `ErrorEnvelopeSchema`, `ApiErrorDetail`), listas (`ListPage<T>`, `listPageSchema`, `DEFAULT_LIMIT`, `MAX_LIMIT`, `unwrapList`), `deriveLotViews`, `deriveRestStatus` y los esquemas de la Ola 1 (`InvitationSchema`, `WineryApplicationSchema`, `WineryDetailSchema`, `MemberSchema`, `PlatformUserSchema`, `SettingDefinitionSchema`, `AuditEventSchema`, `DashboardSchema`, `PermissionMatrixSchema`, `LoginResponseSchema`, `MfaChallengeSchema`, `isMfaChallenge`…) | No. Apto para producción |
-| `@drinks-on-chain/mocks/fixtures` | `erpFixtures`, `backofficeFixtures` (JSON tipados), `demoUsers` (con membresías, rol de plataforma y TOTP), `demoStaff`, `DEMO_PASSWORD`, `DEMO_NEW_PASSWORD`, `DEMO_TOTP_SECRET`, `MOCK_TOTP_BYPASS_CODE`, `generateTotp()` | No |
+| `@drinks-on-chain/mocks` | Esquemas zod (respuesta y alta/edición) y tipos de cada recurso, enumeraciones, sesión (`SessionResponseSchema`, `MeResponseSchema`, `MembershipSchema`, `OrganizationType`, roles de plataforma, bodega y punto de canje, `AccessTokenClaims`), envoltorio (`successEnvelopeSchema`, `ErrorEnvelopeSchema`, `ApiErrorDetail`), listas (`ListPage<T>`, `listPageSchema`, `DEFAULT_LIMIT`, `MAX_LIMIT`, `unwrapList`), `deriveLotViews`, `deriveRestStatus` y los esquemas de la Ola 1 (`InvitationSchema`, `WineryApplicationSchema`, `WineryDetailSchema`, `MemberSchema`, `PlatformUserSchema`, `SettingDefinitionSchema`, `AuditEventSchema`, `DashboardSchema`, `PermissionMatrixSchema`, `LoginResponseSchema`, `MfaChallengeSchema`, `isMfaChallenge`…) y los de la lista de espera (`WaitlistEntrySchema`, `WaitlistJoinRequestSchema`, `WaitlistStatsSchema`, `UpdateWaitlistEntrySchema`…) | No. Apto para producción |
+| `@drinks-on-chain/mocks/fixtures` | `erpFixtures`, `backofficeFixtures` (JSON tipados; `backofficeFixtures.waitlist` desde 0.4.1), `demoUsers` (con membresías, rol de plataforma y TOTP), `demoStaff`, `DEMO_PASSWORD`, `DEMO_NEW_PASSWORD`, `DEMO_TOTP_SECRET`, `MOCK_TOTP_BYPASS_CODE`, `generateTotp()` | No |
 | `@drinks-on-chain/mocks/fixtures/{erp,backoffice}/<archivo>.json` | JSON crudos | No |
 | `@drinks-on-chain/mocks/handlers` | `createErpHandlers()` (= `createMockHandlers()`, todos los dominios), `resetErpDb()`, `getErpDb()`, `advanceMockClock()`, `mockMailbox`, `setMockAppUrls()`, `resetSessions()`, `expireAccessTokens()`, `ERP_ROUTES`, `MOCK_ROUTE_SPECS`, escenarios, `demoUsers`, `mockAccessToken()` | Sí |
 | `@drinks-on-chain/mocks/browser` | `startMockWorker(options)` (Service Worker; publica `window.__docMocks`), `mockMailbox` | Sí (import dinámico) |
@@ -124,7 +124,7 @@ afterAll(() => server.close())
 
 ## Qué simulan los handlers
 
-- Las 48 operaciones (38 rutas, incluida `/v1/health`) del OpenAPI del backend (O0-BE-4) con el envoltorio real: `{ success, statusCode, timestamp, path, data | error: { code, message, details } }`, y las **66 de la Ola 1** (ver abajo). Todas devuelven `X-Correlation-ID`; los 9 POST de alta del ERP aceptan `Idempotency-Key` (repetición → `Idempotent-Replayed: true`).
+- Las 48 operaciones (38 rutas, incluida `/v1/health`) del OpenAPI del backend (O0-BE-4) con el envoltorio real: `{ success, statusCode, timestamp, path, data | error: { code, message, details } }`, las **66 de la Ola 1** y las **6 de la lista de espera** (ver abajo). Todas devuelven `X-Correlation-ID`; los 9 POST de alta del ERP aceptan `Idempotency-Key` (repetición → `Idempotent-Replayed: true`).
 - **Sesión** (contrato §4–§5): `POST /v1/auth/login` con cualquier usuario de `users.json` y `demo1234` devuelve `{ user, memberships, activeOrganizationId, tokens }` (lo de `auth-login.json` con tokens de sesión propios): acceso de 15 min con forma de JWT (claims `sub`, `aud`, `org`, `orgType`, `role`, `sid`…) y el refresco **solo** en la cookie `doc_rt` (`HttpOnly`, `SameSite=Lax`; desde H1 no va en el cuerpo). Como el backend (contrato §8): refresco `<sid>.<generación>.<secreto>`; `refresh` lee la cookie, rota siempre, tolera el anterior durante 20 s (dos pestañas) y detecta la reutilización (401 `AUTH_REFRESH_REUSED`; uno inventado → `AUTH_REFRESH_INVALID` sin revocar); `switch-organization` cambia la organización activa en la misma sesión y **exige el refresco de esa sesión** en la cookie (`refreshToken` en el cuerpo → 422); `logout`/`logout-all` revocan (204). `GET` y `PATCH /v1/users/me` → `{ user, memberships, activeOrganizationId }`. 5 logins fallidos del mismo correo → 429 `AUTH_TOO_MANY_ATTEMPTS` con `Retry-After`. Las sesiones sobreviven a una recarga (`localStorage`); `expireAccessTokens()` simula que pasaron 15 min y `expireRefreshGrace()` que pasaron los 20 s de gracia. El token estático `mock.access.<clave>` sigue valiendo (paneles y pruebas).
 - **Permisos** como los guards del backend: rol de la **membresía activa** (`OPERATOR` pesa y registra lecturas, `ACCOUNTANT` solo lee, `OWNER` dictamina; matriz en [docs/CONTRATO.md §3](docs/CONTRATO.md)) → 403 `AUTH_INSUFFICIENT_PERMISSIONS`; **multi-tenant** por la bodega activa (lo de otra bodega da 404). La plataforma lee todas las bodegas y opera sobre una con `?wineryId=` (obligatorio en escrituras → 422; `SUPPORT` solo lee). Bloquear la membresía activa revoca la sesión en la siguiente petición (401 `AUTH_SESSION_REVOKED`).
 - **Filtros** de las pantallas (`status`, `destinationType`, `harvestBatchId`, `restStatus`, `processType`, `varietyName`, `isDoEligible`, `isActive`, `harvestYear`, `phytosanitaryStatus`, `productType`, `isAnchoredOnChain`, `search`…) y `limit`/`offset` (por defecto 20/0; `limit` > 100 → 422).
@@ -141,6 +141,14 @@ afterAll(() => server.close())
 - **Invitaciones** (aceptar con cuenta nueva o existente, reenviar, anular), **solicitudes** (público con captcha y campo trampa → verificar → tomar → notas → reunión → aprobar/rechazar), **bodegas** (alta directa, directorio, ficha, suspender, reactivar, revocar, transferir, perfil público), **equipo** (dueño y back office, `blockedBy`, límite de colaboradores), **usuarios internos** y **matriz de permisos**, **configuración** (estándar, ajustes por bodega, masivo, volver al estándar, historial, mínimos legales con excepción), **bitácora** (filtros, CSV, verificación de la cadena, la del dueño) y **tablero**.
 - Las acciones del back office sobre terceros exigen `reason` (422 con `details[{ field: 'reason' }]`); toda escritura deja un evento encadenado por hash con la app de `X-Client-App`.
 - El estado vive en memoria y, en el navegador, en `localStorage` (`doc-mocks:state`), así el recorrido solicitud → aprobación → invitación → activación sobrevive a una recarga. Cada app tiene su propio estado; los enlaces de invitación que emiten los mocks funcionan también en otra app (se importan). `advanceMockClock(ms)` adelanta el reloj (caducidades). Decisiones y datos de demo: [docs/CONTRATO.md §6](docs/CONTRATO.md).
+
+### Lista de espera (`plan/contratos/o1b-lista-de-espera.md`, desde 0.4.1)
+
+- **Pública**: `POST /v1/public/waitlist` (`type: CONSUMER` con `isAdult: true`, o `WINERY` con `wineryName`) → 201 `{ type, position }` (número de orden dentro de su tipo). Un correo ya inscrito en ese tipo recibe la misma posición (no se duplica; solo completa teléfono, ciudad y región vacíos); el campo trampa `website` relleno → 201 sin guardar nada; más de 3 inscripciones por hora del mismo correo → 429 `TOO_MANY_REQUESTS` con `Retry-After`; 422 `VALIDATION_ERROR` con un detalle por campo y los mensajes del backend. `GET /v1/public/waitlist/stats` → `{ consumers, wineries }`.
+- **Back office**: `GET /v1/platform/waitlist` (filtros `type`, `status`, `source`, `q`, `from`, `to`, `limit`, `offset`; más reciente primero), `GET /v1/platform/waitlist/sources` (arreglo plano `{ source, count }[]`; `null` = sin origen; `?type=`), `PATCH /v1/platform/waitlist/{id}` (`{ status?, notes? }`: `CONTACTED` guarda `contactedAt` y `contactedBy`, `NEW` los borra, `notes: null` borra las notas) y `GET /v1/platform/waitlist/export` (CSV UTF-8 con BOM, CRLF, celdas protegidas contra fórmulas y `Content-Disposition: attachment; filename="lista-de-espera-AAAAMMDD-HHMM.csv"`; columnas = `WAITLIST_CSV_COLUMNS`).
+- **Permisos** (capacidad `waitlist` de la matriz): leen `SUPERADMIN`, `ADMIN`, `OPERATIONS` y `SUPPORT`; cambian el estado, las notas y exportan `SUPERADMIN`, `ADMIN` y `OPERATIONS` (soporte → 403 `AUTH_INSUFFICIENT_PERMISSIONS`).
+- **Tablero**: `GET /v1/platform/dashboard` añade `waitlist: { consumers, wineries, last24h }`.
+- **Datos**: 52 inscripciones en `backofficeFixtures.waitlist` (38 consumidores, 14 bodegas; orígenes `tarija-2026`, `instagram`, `boletin`, `qr-cata` y sin origen; estados `NEW`, `CONTACTED`, `DISCARDED`). Diferencias con el contrato escrito y decisiones: [docs/CONTRATO.md §9](docs/CONTRATO.md).
 
 ### Buzón simulado
 
@@ -245,10 +253,10 @@ src/erp/handlers/         MSW: base en memoria, sesión, roles, rutas
 src/erp/lot-view.ts       deriveLotViews / deriveRestStatus
 src/backoffice/schemas/   zod de la Ola 1 (entrada raíz)
 src/backoffice/seed/      fixtures de la Ola 1 (pnpm seed)
-src/backoffice/handlers/  rutas de la Ola 1, buzón y bitácora
+src/backoffice/handlers/  rutas de la Ola 1 y de la lista de espera, buzón y bitácora
 src/{marketplace,pos}/    dominios futuros
 fixtures/erp/             JSON generados (se publican en el paquete)
-fixtures/backoffice/      JSON de la Ola 1
+fixtures/backoffice/      JSON de la Ola 1 y de la lista de espera
 test/reference/erp/       salida de Python y generate.py de referencia
 ```
 
