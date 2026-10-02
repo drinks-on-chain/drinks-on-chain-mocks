@@ -228,6 +228,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     method: 'patch',
     path: '/v1/harvest-batches/:id/phyto-status',
     access: trace(['OWNER', 'AGRONOMIST', 'ENOLOGIST']),
+    deprecated: '/v1/harvest-batches/{id}/phyto-decisions',
     async handle({ request, auth, params }) {
       const h = findHarvest(auth, params.id!)
       const body = await parseBody(request, UpdatePhytoStatusSchema)

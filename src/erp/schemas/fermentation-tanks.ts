@@ -110,6 +110,8 @@ export const FermentationLogRecordSchema = z.object({
   recordedAt: IsoDateTimeSchema,
   notes: z.string().nullish(),
   recordedByMemberId: z.string().nullish(),
+  /** Persona que la registró (las lecturas dadas de alta por la API; las anteriores solo tienen el miembro). */
+  recordedByUserId: z.string().optional(),
 })
 export type FermentationLogRecord = z.infer<typeof FermentationLogRecordSchema>
 
@@ -157,6 +159,8 @@ export const EnologicalTreatmentRecordSchema = z.object({
   regulatoryAuthCode: z.string(),
   appliedAt: IsoDateTimeSchema,
   notes: z.string().nullish(),
+  /** Miembro que lo autorizó (los tratamientos dados de alta por la API). */
+  authorizedByMemberId: z.string().optional(),
 })
 export type EnologicalTreatmentRecord = z.infer<typeof EnologicalTreatmentRecordSchema>
 

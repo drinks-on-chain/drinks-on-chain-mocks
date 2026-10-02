@@ -300,6 +300,10 @@ export const LotAttachmentSchema = z.object({
 })
 export type LotAttachment = z.infer<typeof LotAttachmentSchema>
 
+/** Adjunto guardado (`lot-attachments.json`): sin la URL firmada, que se calcula al responder. */
+export const StoredLotAttachmentSchema = LotAttachmentSchema.omit({ url: true, urlExpiresAt: true }).extend({ lotId: z.string() })
+export type StoredLotAttachment = z.infer<typeof StoredLotAttachmentSchema>
+
 /** `POST /v1/lots/{id}/attachments`: referencia un archivo ya subido con `POST /v1/uploads`. */
 export const CreateLotAttachmentSchema = z.object({
   key: z.string().min(1),

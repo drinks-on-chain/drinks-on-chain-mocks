@@ -1,6 +1,33 @@
 {
-  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o<ola>-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta). `enumCambios`: `Dto.campo` → valores de una enumeración que un contrato de ola sustituye (p. ej. el estado de la bodega de la Ola 1). `{ \"$zod\": \"<Esquema>\" }` valida con el esquema zod que exporta el paquete (z.toJSONSchema) cuando el OpenAPI aún no tiene el DTO; `{ \"$page\": \"zod:<Esquema>\" }` es su página; `{ \"$csv\": true }`, una respuesta text/csv sin envoltorio.",
-  "adelantadas": [],
+  "$comment": "Operaciones y respuestas que los mocks adelantan por un contrato de ola y que openapi/erp.json aún no refleja. La prueba de contrato (test/contract.test.ts) exige que cada entrada cite su contrato en plan/contratos/o<ola>-…, que las «adelantadas» NO existan todavía en erp.json (al llegar el OpenAPI del backend hay que borrarlas de aquí) y que los «cambios» sí existan. `respuesta.schema` es JSON Schema con referencias a erp.json (#/components/schemas/…); `{ \"$page\": \"<ref>\" }` equivale a { items: <ref>[], total, limit, offset }. `camposExtra`: campos que los mocks devuelven además de los que declara un DTO del OpenAPI (el resto de campos desconocidos rompe la prueba, así un renombrado se detecta). `enumCambios`: `Dto.campo` → valores de una enumeración que un contrato de ola sustituye (p. ej. el estado de la bodega de la Ola 1). `{ \"$zod\": \"<Esquema>\" }` valida con el esquema zod que exporta el paquete (z.toJSONSchema) cuando el OpenAPI aún no tiene el DTO; `{ \"$page\": \"zod:<Esquema>\" }` es su página; `{ \"$csv\": true }`, una respuesta text/csv sin envoltorio. `borrador: true`: operación que el backend no implementa en la ola en curso (su OpenAPI no la tendrá hasta una etapa posterior) y que los mocks adelantan como borrador; queda fuera de la comparación estricta con el OpenAPI y solo se valida contra su esquema zod. Su `RouteSpec` lleva `draft` con la misma referencia y responde la cabecera `X-Mock-Draft`.",
+  "adelantadas": [
+    {
+      "method": "GET",
+      "path": "/v1/public/collections",
+      "contrato": "plan/contratos/o2-erp-confiable.md §17.1",
+      "motivo": "Borrador adelantado del catálogo sin cuenta (pantalla 2A del Marketplace). No lo implementa el backend en la Ola 2: lo fija el OpenAPI borrador de la Etapa 4 (O3-PK-1) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:PublicCollectionSummarySchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/public/collections/{slug}",
+      "contrato": "plan/contratos/o2-erp-confiable.md §17.1",
+      "motivo": "Borrador adelantado de la ficha de una colección (pantalla 2A del Marketplace). No lo implementa el backend en la Ola 2: lo fija el OpenAPI borrador de la Etapa 4 (O3-PK-1) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PublicCollectionSchema"
+        }
+      }
+    }
+  ],
   "cambios": [],
   "camposExtra": {},
   "enumCambios": {}

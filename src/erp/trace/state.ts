@@ -3,6 +3,7 @@ import { ApiError } from '../handlers/errors'
 import type {
   BatchLabAnalysisResponse,
   BottleCodeExport,
+  BottleLot,
   BottlingBatchResponse,
   Correction,
   CorrectionTargetType,
@@ -13,7 +14,6 @@ import type {
   FermentationTankResponse,
   HarvestBatchResponse,
   Lot,
-  LotAttachment,
   LotDossier,
   LotEventType,
   LotLockInfo,
@@ -24,6 +24,7 @@ import type {
   MaturityAnalysis,
   PhytoDecision,
   ProductionBatchResponse,
+  StoredLotAttachment,
   StoredLotEvent,
   TerroirResponse,
   TraceActor,
@@ -47,41 +48,13 @@ export type StoredLog = FermentationLogRecord & { recordedByUserId?: string }
 /** Tratamiento guardado (las altas guardan además el miembro que lo autorizó). */
 export type StoredTreatment = EnologicalTreatmentRecord & { authorizedByMemberId?: string }
 /** Adjunto del lote sin la URL firmada (se calcula al responder). */
-export type StoredAttachment = Omit<LotAttachment, 'url' | 'urlExpiresAt'> & { lotId: string }
+export type StoredAttachment = StoredLotAttachment
 /** Expediente con los bytes canónicos que se hashearon al cerrarlo. */
 export type StoredDossier = LotDossier & { canonical?: string }
 /** Exportación ZIP de códigos con su lote y su rango. */
 export type StoredBottleExport = BottleCodeExport & { lotId: string; fromSerial: number; toSerial: number; imageFormat: 'SVG' | 'PNG'; polls: number }
 
-/** Código de botella anulado (con o sin sustituto). */
-export interface VoidedBottleCode {
-  serial: number
-  code: string
-  generation: number
-  at: string
-  by: TraceActor
-  reason: string
-  replacedBy: string | null
-}
-
-/**
- * Códigos de botella de un lote. No se guarda un registro por botella: el código de la serie `n`
- * es `mockBottleCode(lotId, n, generación)`; solo se guardan las series sustituidas, los códigos
- * anulados y los rangos exportados.
- */
-export interface BottleLot {
-  lotId: string
-  bottlingBatchId: string
-  /** Botellas embotelladas (series `1…total`). */
-  total: number
-  /** Generación vigente de las series cuyo código se sustituyó (las demás, 0). */
-  generations: Record<string, number>
-  voided: VoidedBottleCode[]
-  /** Todos los códigos activos anulados de una vez (lote descartado). */
-  allVoided: { at: string; by: TraceActor | null; reason: string } | null
-  /** Rangos exportados (CSV o ZIP) con su fecha. */
-  exports: { fromSerial: number; toSerial: number; at: string }[]
-}
+export type { BottleLot, VoidedBottleCode } from '../schemas/bottle-codes'
 
 /** Colecciones de la trazabilidad. La base de los handlers (`ErpDb`) las contiene todas. */
 export interface TraceState {

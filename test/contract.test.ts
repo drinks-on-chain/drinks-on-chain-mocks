@@ -5,8 +5,8 @@ import addFormats from 'ajv-formats'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { z } from 'zod'
 import * as pkg from '../src'
-import { backofficeFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp } from '../src/fixtures'
-import { MOCK_ROUTE_SPECS, mockMailbox } from '../src/handlers'
+import { backofficeFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp, publicFixtures, SINGANI_CASE } from '../src/fixtures'
+import { COLLECTIONS_DRAFT_CONTRACT, MOCK_ROUTE_SPECS, mockMailbox, resetScenario, setScenario } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
 import type { ErpDb } from '../src/erp/handlers/db'
 import { logView, treatmentView } from '../src/erp/handlers/views'
@@ -43,6 +43,8 @@ interface PendingEntry {
   path: string
   contrato: string
   motivo: string
+  /** Borrador que no implementa el backend en esta ola: fuera de la comparación con el OpenAPI. */
+  borrador?: boolean
   respuesta?: { status: number; schema?: Json }
 }
 interface Pending {
@@ -179,7 +181,8 @@ function responseSchema(key: string, status: number): { schema: Json | null; sou
   }
   const [method, path] = key.split(' ') as [string, string]
   const content = spec.paths[path]?.[method.toLowerCase()]?.responses?.[String(status)]?.content
-  if (content?.['text/csv']) return { schema: { $csv: true }, source: 'openapi/erp.json' }
+  // Una operación que solo responde CSV se comprueba por su cabecera; con JSON y CSV, por el JSON.
+  if (content?.['text/csv'] && !content['application/json']) return { schema: { $csv: true }, source: 'openapi/erp.json' }
   return { schema: content?.['application/json']?.schema ?? null, source: 'openapi/erp.json' }
 }
 
@@ -197,16 +200,22 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     expect(new Set(routeOps).size).toBe(routeOps.length)
   })
 
-  it('las rutas obsoletas son las del OpenAPI, con la misma sustituta (x-replaced-by); tras H1, ninguna', () => {
+  it('las rutas obsoletas son las del OpenAPI (y su sustituta, la de x-replaced-by si la declara): las tres legadas que se retiran en H2', () => {
     type Op = { deprecated?: boolean; 'x-replaced-by'?: string }
     const inSpec = Object.entries(spec.paths).flatMap(([p, ops]) =>
       Object.entries(ops as Record<string, Op>)
         .filter(([, op]) => op.deprecated)
         .map(([m, op]) => [opKey(m, p), op['x-replaced-by']] as const),
     )
-    const inMocks = MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated] as const)
-    expect(new Map(inMocks)).toEqual(new Map(inSpec))
-    expect(inMocks).toEqual([])
+    const inMocks = new Map(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated] as const))
+    expect([...inMocks.keys()].sort()).toEqual(inSpec.map(([op]) => op).sort())
+    for (const [op, replacedBy] of inSpec) if (replacedBy) expect(inMocks.get(op), op).toBe(replacedBy)
+    // El OpenAPI de la apertura de la Ola 2 las marca `deprecated` sin `x-replaced-by`: la sustituta es la del contrato §16.2.
+    expect(Object.fromEntries(inMocks)).toEqual({
+      'PATCH /v1/harvest-batches/{id}/phyto-status': '/v1/harvest-batches/{id}/phyto-decisions',
+      'GET /v1/traceability/dag/{bottlingBatchId}': '/v1/lots/{id}/graph',
+      'GET /v1/traceability/public/{lotCode}': '/v1/public/passports/{code}',
+    })
   })
 
   it('lo retirado en H1 no está en el OpenAPI ni en los mocks', () => {
@@ -233,6 +242,21 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     expect([...ahead.keys()].filter((op) => openApiOps.has(op))).toEqual([])
     expect([...changed.keys()].filter((op) => !openApiOps.has(op))).toEqual([])
     expect([...ahead.keys(), ...changed.keys()].filter((op) => !routeOps.includes(op))).toEqual([])
+  })
+
+  it('los borradores fuera del OpenAPI están declarados en la ruta y en pendientes.json (catálogo, contrato de la Ola 2 §17.1)', () => {
+    // Exclusión explícita de la prueba estricta: el backend no implementa el catálogo en esta ola,
+    // así que estas rutas solo se validan contra el esquema zod de los mocks (`$zod`).
+    const drafts = MOCK_ROUTE_SPECS.filter((r) => r.draft).map((r) => opKey(r.method, r.path)).sort()
+    expect(drafts).toEqual(['GET /v1/public/collections', 'GET /v1/public/collections/{slug}'])
+    expect(pending.adelantadas.filter((e) => e.borrador).map((e) => opKey(e.method, e.path)).sort()).toEqual(drafts)
+    for (const r of MOCK_ROUTE_SPECS.filter((x) => x.draft)) {
+      expect(r.draft).toBe(COLLECTIONS_DRAFT_CONTRACT)
+      expect(ahead.get(opKey(r.method, r.path))?.contrato).toBe(COLLECTIONS_DRAFT_CONTRACT)
+      expect(openApiOps.has(opKey(r.method, r.path))).toBe(false)
+    }
+    // Todo lo demás es del OpenAPI: no queda ninguna otra operación adelantada.
+    expect(pending.adelantadas.filter((e) => !e.borrador)).toEqual([])
   })
 
   it('pendientes.json: cada entrada cita su contrato de ola y el motivo', () => {
@@ -279,6 +303,15 @@ const FIXTURE_COMPONENTS: Array<[name: string, rows: unknown[], dto: string]> = 
   ['traceability-public.json', Object.values(erpFixtures.traceabilityPublic), 'DagGraphResponseDto'],
   // Lista de espera (contrato O1b): el fixture es la respuesta del back office tal cual.
   ['backoffice/waitlist.json', backofficeFixtures.waitlist, 'WaitlistEntryDto'],
+  // Ola 2: lote del servidor y sus colecciones (los eventos y los adjuntos, sin el `lotId` con el que se guardan).
+  ['lots.json', erpFixtures.lots, 'LotDto'],
+  ['lot-events.json', erpFixtures.lotEvents.map(({ lotId: _lotId, ...event }) => event), 'LotEventDto'],
+  ['maturity-analyses.json', erpFixtures.maturityAnalyses, 'MaturityAnalysisResponseDto'],
+  ['phyto-decisions.json', erpFixtures.phytoDecisions, 'PhytoDecisionResponseDto'],
+  ['corrections.json', erpFixtures.corrections, 'CorrectionDto'],
+  ['lot-dossiers.json', erpFixtures.lotDossiers, 'LotDossierDto'],
+  ['public/passports.json', Object.values(publicFixtures.passports), 'PublicLotPassportDto'],
+  ['public/wineries.json', publicFixtures.wineries, 'PublicWineryProfileDto'],
 ]
 
 describe('fixtures ⇄ esquemas del OpenAPI', () => {
@@ -317,6 +350,7 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterEach(() => {
   server.resetHandlers()
   resetErpDb()
+  resetScenario()
 })
 afterAll(() => server.close())
 
@@ -327,13 +361,39 @@ const CINTI = winery('Destilería Cinti Viejo')
 const URIONDO = winery('Casa Uriondo')
 const altosTerroir = F.terroirs.find((t) => t.wineryId === ALTOS.id && t.altitudeMasl >= 1600)!
 const altosHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
-const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id)!
-const altosAging = F.wineAging.find((a) => a.wineryId === ALTOS.id)!
+/** Pesaje de Altos aún sin dictamen (y sin tanque). */
+const altosPendingHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id && h.phytosanitaryStatus === 'PENDING_INSPECTION')!
+/** Tanque de Altos en fermentación (TK-04, destino vino). */
+const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'FERMENTING')!
+const altosTransferredTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'TRANSFERRED')!
+const altosAging = F.wineAging.find((a) => a.wineryId === ALTOS.id && a.agingStatus === 'AGING')!
 const cintiTank = F.fermentationTanks.find((t) => t.wineryId === CINTI.id)!
-const readyProduction = F.productionBatches.find((p) => p.restStatus === 'READY')!
+const restingProduction = F.productionBatches.find((p) => p.restStatus === 'RESTING')!
+/** Destilación abierta de «Singani El Molino 2026» (5.800 L de entrada). */
+const openProduction = F.productionBatches.find((p) => p.wineryId === CINTI.id && !p.processEndDate)!
 const bottlingWithLab = F.bottling.find((b) => F.labAnalyses.some((l) => l.bottlingBatchId === b.id))!
 const bottlingWithoutLab = F.bottling.find((b) => !F.labAnalyses.some((l) => l.bottlingBatchId === b.id))!
 const maria = F.users.find((u) => u._mock.key === 'maria')!
+
+// Ola 2: lotes de los fixtures que sirven de ejemplo.
+const lotBy = (pick: (l: (typeof F.lots)[number]) => boolean) => F.lots.find(pick)!
+/** Caso del contrato §18: «Singani Gran Reserva 2026», certificado, 2.950 botellas. */
+const CASE = lotBy((l) => l.id === SINGANI_CASE.lotId)
+const originLot = lotBy((l) => l.stage === 'ORIGIN')
+const distillingLot = lotBy((l) => l.stage === 'DISTILLING')
+/** Lote migrado en reposo de Cinti Viejo (dos destilaciones abiertas). */
+const restingLot = lotBy((l) => l.wineryId === CINTI.id && l.stage === 'RESTING')
+/** Embotellado con laboratorio conforme y sin expediente: listo para cerrar. */
+const readyToCloseLot = lotBy((l) => l.wineryId === CINTI.id && l.stage === 'BOTTLED' && l.labStatus === 'CONFORMING')
+/** Embotellado sin laboratorio. */
+const bottledWithoutLabLot = lotBy((l) => l.wineryId === CINTI.id && l.stage === 'BOTTLED' && l.labStatus === 'NOT_RECORDED')
+const cintiPendingHarvest = F.harvestBatches.find((h) => h.wineryId === CINTI.id && h.phytosanitaryStatus === 'PENDING_INSPECTION' && h.lotId !== null)!
+const unassignedHarvest = F.harvestBatches.find((h) => h.lotId === null)!
+const caseCodes = publicFixtures.bottleCodes.find((b) => b.lotId === CASE.id)!
+const caseLabel = F.lotAttachments.find((a) => a.lotId === CASE.id && a.visibility === 'PUBLIC')!
+const anotherBottledCode = publicFixtures.bottleCodes.find((b) => b.lotId === readyToCloseLot.id)!.codes[0]!.code
+const cintiFile = (folder: string, name: string) => `org/${CINTI.id}/${folder}/2026/09/${name}`
+const BOTTLING_2950 = { bottlingDate: '2026-09-25', packagingFormatCl: 75, totalBottlesPackaged: 2950, finalAlcoholAbv: 40, waterDilutionLiters: 750 }
 
 type Vars = Record<string, string>
 
@@ -350,6 +410,8 @@ interface Sample {
   setup?: () => Promise<Vars>
   /** Cabecera (primera línea) esperada de una respuesta `text/csv`. */
   csvHeader?: RegExp
+  /** Respuesta JSON sin el envoltorio `data` (los bytes canónicos del expediente). */
+  raw?: boolean
 }
 
 const SAMPLES: Record<string, Sample> = {
@@ -387,17 +449,27 @@ const SAMPLES: Record<string, Sample> = {
   'GET /v1/harvest-batches/{id}': { as: 'altos_enologa', url: `/v1/harvest-batches/${altosHarvest.id}`, status: 200 },
   'PATCH /v1/harvest-batches/{id}/phyto-status': {
     as: 'altos_agronomo',
-    url: `/v1/harvest-batches/${altosHarvest.id}/phyto-status`,
+    url: `/v1/harvest-batches/${altosPendingHarvest.id}/phyto-status`,
     body: { phytosanitaryStatus: 'APPROVED' },
     status: 200,
   },
-  'POST /v1/fermentation-tanks': { as: 'altos_enologa', url: '/v1/fermentation-tanks', body: { harvestBatchId: altosHarvest.id, tankCode: 'TK-C1', startDate: '2026-09-25' }, status: 201 },
+  'POST /v1/fermentation-tanks': {
+    as: 'altos_enologa',
+    url: '/v1/fermentation-tanks',
+    // La uva entra a un tanque con el dictamen aprobado.
+    setup: async () => {
+      await post(`/v1/harvest-batches/${altosPendingHarvest.id}/phyto-decisions`, { decision: 'APPROVED' }, 'altos_agronomo')
+      return {}
+    },
+    body: { harvestBatchId: altosPendingHarvest.id, tankCode: 'TK-C1', capacityLiters: 6000, volumeFilledLiters: 4100, startDate: '2026-09-25' },
+    status: 201,
+  },
   'GET /v1/fermentation-tanks': { as: 'altos_enologa', url: '/v1/fermentation-tanks', status: 200 },
   'GET /v1/fermentation-tanks/{id}': { as: 'altos_enologa', url: `/v1/fermentation-tanks/${altosTank.id}`, status: 200 },
   'POST /v1/fermentation-tanks/{id}/logs': {
     as: 'altos_enologa',
     url: `/v1/fermentation-tanks/${altosTank.id}/logs`,
-    body: { temperatureCelsius: 22.4, recordedAt: '2026-09-26T08:00:00Z' },
+    body: { temperatureCelsius: 22.4, recordedAt: '2026-09-25T08:00:00Z' },
     status: 201,
   },
   'POST /v1/fermentation-tanks/{id}/treatments': {
@@ -406,7 +478,7 @@ const SAMPLES: Record<string, Sample> = {
     body: { treatmentType: 'SO2_ADDITION', additiveName: 'Metabisulfito', dosageAppliedGPerHl: 30, regulatoryAuthCode: 'SENASAG-1', appliedAt: '2026-09-25' },
     status: 201,
   },
-  'POST /v1/wine-aging': { as: 'altos_enologa', url: '/v1/wine-aging', body: { fermentationTankId: altosTank.id, containerType: 'Barrica', plannedMonths: 12 }, status: 201 },
+  'POST /v1/wine-aging': { as: 'altos_enologa', url: '/v1/wine-aging', body: { fermentationTankId: altosTank.id, containerType: 'Barrica', volumeLiters: 8000, plannedMonths: 12 }, status: 201 },
   'GET /v1/wine-aging': { as: 'altos_enologa', url: '/v1/wine-aging', status: 200 },
   'GET /v1/wine-aging/{id}': { as: 'altos_enologa', url: `/v1/wine-aging/${altosAging.id}`, status: 200 },
   'POST /v1/production-batches/distillation': {
@@ -415,26 +487,32 @@ const SAMPLES: Record<string, Sample> = {
     body: { fermentationTankId: cintiTank.id, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25' },
     status: 201,
   },
-  'GET /v1/production-batches/{id}/rest-status': { as: 'cvj_enologa', url: `/v1/production-batches/${readyProduction.id}/rest-status`, status: 200 },
-  'GET /v1/production-batches/{id}': { as: 'cvj_enologa', url: `/v1/production-batches/${readyProduction.id}`, status: 200 },
+  'GET /v1/production-batches/{id}/rest-status': { as: 'cvj_enologa', url: `/v1/production-batches/${restingProduction.id}/rest-status`, status: 200 },
+  'GET /v1/production-batches/{id}': { as: 'cvj_enologa', url: `/v1/production-batches/${restingProduction.id}`, status: 200 },
   'GET /v1/production-batches': { as: 'cvj_enologa', url: '/v1/production-batches', status: 200 },
   'POST /v1/bottling': {
+    // Ruta legada sobre el caso del §18 con el reposo cumplido (escenario `lote-listo`).
     as: 'cvj_enologa',
     url: '/v1/bottling',
-    body: { productionBatchId: readyProduction.id, productType: 'SINGANI', finalAlcoholAbv: 40, waterDilutionLiters: 300, totalBottlesPackaged: 1000, packagingFormatCl: 75, bottlingDate: '2026-09-25' },
+    setup: async () => {
+      setScenario('lote-listo')
+      const lot = await get(`/v1/lots/${CASE.id}`, 'cvj_enologa')
+      return { productionBatchId: (lot.links as { productionBatchIds: string[] }).productionBatchIds[0]! }
+    },
+    body: (v: Vars) => ({ productionBatchId: v.productionBatchId, productType: 'SINGANI', ...BOTTLING_2950 }),
     status: 201,
   },
   'GET /v1/bottling': { as: 'cvj_enologa', url: '/v1/bottling', status: 200 },
   'GET /v1/bottling/{id}': { as: 'admin', url: `/v1/bottling/${bottlingWithLab.id}`, status: 200 },
   'POST /v1/lab-analyses': {
-    // Plataforma sobre una bodega: `?wineryId=` obligatorio en las escrituras (OP-07).
-    as: 'admin',
-    url: `/v1/lab-analyses?wineryId=${bottlingWithoutLab.wineryId}`,
+    // Ruta legada. La plataforma ya no escribe la trazabilidad (S-25): lo registra la enóloga.
+    as: 'cvj_enologa',
+    url: '/v1/lab-analyses',
     body: {
       bottlingBatchId: bottlingWithoutLab.id,
       certifiedLaboratoryName: 'Laboratorio Tarija',
       accreditedLabCertificationCode: 'LAB-1',
-      testPerformedAt: '2026-09-26',
+      testPerformedAt: '2026-09-25',
       actualAlcoholAbv: 13.5,
       totalAcidityTartaricGl: 5,
       volatileAcidityAceticGl: 0.4,
@@ -463,6 +541,184 @@ const SAMPLES: Record<string, Sample> = {
 }
 
 // ---------------------------------------------------------------------------
+// Ola 2 (plan/contratos/o2-erp-confiable.md): lote del servidor, pasaporte público y catálogo
+// ---------------------------------------------------------------------------
+
+const OLA2_SAMPLES: Record<string, Sample> = {
+  // Lote
+  'GET /v1/lots': { as: 'cvj_enologa', url: '/v1/lots?limit=100', status: 200 },
+  'POST /v1/lots': {
+    as: 'cvj_enologa',
+    url: '/v1/lots',
+    body: { name: 'Singani de contrato 2026', harvestYear: 2026, productType: 'SINGANI', estimatedBottles: 1200, plannedFormatCl: 75, targetAbvPercent: 40, plannedTerroirIds: [F.terroirs.find((t) => t.wineryId === CINTI.id)!.id] },
+    status: 201,
+  },
+  'GET /v1/lots/{id}': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}`, status: 200 },
+  'PATCH /v1/lots/{id}': { as: 'cvj_enologa', url: `/v1/lots/${originLot.id}`, body: { estimatedBottles: 1900, reason: 'Ajuste de la previsión de la vendimia' }, status: 200 },
+  'POST /v1/lots/{id}/discard': { as: 'cvj_admin', url: `/v1/lots/${originLot.id}/discard`, body: { reason: 'Se cancela la edición de aniversario' }, status: 200 },
+  'GET /v1/lots/{id}/timeline': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}/timeline`, status: 200 },
+  'GET /v1/lots/{id}/graph': { as: 'soporte', url: `/v1/lots/${CASE.id}/graph`, status: 200 },
+  'GET /v1/lots/{id}/balance': { as: 'cvj_enologa', url: `/v1/lots/${CASE.id}/balance`, status: 200 },
+  // Embotellado
+  'POST /v1/lots/{id}/bottling/preview': {
+    as: 'cvj_enologa',
+    url: `/v1/lots/${restingLot.id}/bottling/preview`,
+    body: { bottlingDate: '2026-09-25', packagingFormatCl: 75, totalBottlesPackaged: 4000, finalAlcoholAbv: 40, waterDilutionLiters: 1200 },
+    status: 200,
+  },
+  'POST /v1/lots/{id}/bottling': {
+    as: 'cvj_enologa',
+    url: `/v1/lots/${CASE.id}/bottling`,
+    setup: async () => {
+      setScenario('lote-listo')
+      return {}
+    },
+    body: BOTTLING_2950,
+    status: 201,
+  },
+  // Códigos de botella
+  'GET /v1/lots/{id}/bottle-codes': { as: 'cvj_enologa', url: `/v1/lots/${CASE.id}/bottle-codes?fromSerial=10&toSerial=30`, status: 200 },
+  'GET /v1/lots/{id}/bottle-codes/export': {
+    as: 'cvj_enologa',
+    url: `/v1/lots/${CASE.id}/bottle-codes/export?format=csv&fromSerial=1&toSerial=50`,
+    status: 200,
+    csvHeader: /^serial,code,codeFormatted,qrUrl,lotCode,lotName,productType,bottlingDate$/,
+  },
+  'POST /v1/lots/{id}/bottle-codes/exports': {
+    as: 'cvj_enologa',
+    url: `/v1/lots/${CASE.id}/bottle-codes/exports`,
+    body: { format: 'ZIP', fromSerial: 1, toSerial: 500, qr: { imageFormat: 'SVG', sizePx: 512, margin: 2 } },
+    status: 202,
+  },
+  'GET /v1/lots/{id}/bottle-codes/exports/{exportId}': {
+    as: 'cvj_enologa',
+    setup: async () => {
+      const { data } = await post(`/v1/lots/${CASE.id}/bottle-codes/exports`, { format: 'ZIP', qr: { imageFormat: 'PNG' } }, 'cvj_enologa')
+      return { exportId: data.exportId as string }
+    },
+    url: (v: Vars) => `/v1/lots/${CASE.id}/bottle-codes/exports/${v.exportId}`,
+    status: 200,
+  },
+  'POST /v1/bottle-codes/{code}/void': {
+    as: 'cvj_enologa',
+    url: `/v1/bottle-codes/${anotherBottledCode}/void`,
+    body: { reason: 'Etiqueta dañada en el almacén', replace: true },
+    status: 200,
+  },
+  // Laboratorio
+  'POST /v1/lots/{id}/lab-analyses': {
+    as: 'cvj_enologa',
+    url: `/v1/lots/${bottledWithoutLabLot.id}/lab-analyses`,
+    body: {
+      certifiedLaboratoryName: 'Laboratorio de Servicios Analíticos ISO 17025',
+      accreditedLabCertificationCode: 'LAB-SENASAG-2026-901',
+      testPerformedAt: '2026-09-25',
+      actualAlcoholAbv: 13.8,
+      totalAcidityTartaricGl: 5.4,
+      volatileAcidityAceticGl: 0.5,
+      laboratoryReportKey: cintiFile('lab-reports', 'informe.pdf'),
+    },
+    status: 201,
+  },
+  'GET /v1/lots/{id}/lab-analyses': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}/lab-analyses`, status: 200 },
+  // Correcciones
+  'POST /v1/lots/{id}/corrections': {
+    as: 'cvj_operario',
+    url: `/v1/lots/${restingLot.id}/corrections`,
+    body: {
+      target: { type: 'HARVEST_BATCH', id: F.harvestBatches.find((h) => h.lotId === restingLot.id)!.id },
+      kind: 'AMEND',
+      changes: { temperatureAtIntakeC: 16.4 },
+      reason: 'Temperatura mal transcrita en la planilla de recepción',
+    },
+    status: 201,
+  },
+  'GET /v1/lots/{id}/corrections': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}/corrections`, status: 200 },
+  'POST /v1/terroirs/{id}/corrections': {
+    as: 'altos_agronomo',
+    url: `/v1/terroirs/${altosHarvest.terroirId}/corrections`,
+    body: { changes: { altitudeMasl: 1865 }, reason: 'Altitud corregida con el levantamiento topográfico' },
+    status: 201,
+  },
+  // Expediente
+  'GET /v1/lots/{id}/dossier/preview': { as: 'cvj_operario', url: `/v1/lots/${readyToCloseLot.id}/dossier/preview`, status: 200 },
+  'POST /v1/lots/{id}/dossier/close': { as: 'cvj_enologa', url: `/v1/lots/${readyToCloseLot.id}/dossier/close`, body: { confirm: true }, status: 200 },
+  'GET /v1/lots/{id}/dossier': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}/dossier`, status: 200 },
+  'GET /v1/lots/{id}/dossier/canonical': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}/dossier/canonical`, status: 200, raw: true },
+  // Archivos del lote
+  'POST /v1/lots/{id}/attachments': {
+    as: 'cvj_operario',
+    url: `/v1/lots/${distillingLot.id}/attachments`,
+    body: { key: cintiFile('photos', 'alambique.jpg'), kind: 'PHOTO', title: 'Alambique AL-02 en marcha' },
+    status: 201,
+  },
+  'GET /v1/lots/{id}/attachments': { as: 'cvj_operario', url: `/v1/lots/${CASE.id}/attachments`, status: 200 },
+  'POST /v1/lots/{id}/attachments/{attachmentId}/visibility': {
+    as: 'cvj_enologa',
+    url: `/v1/lots/${CASE.id}/attachments/${caseLabel.id}/visibility`,
+    body: { visibility: 'PRIVATE' },
+    status: 200,
+  },
+  // Vendimia: análisis de madurez y dictamen aparte
+  'POST /v1/harvest-batches/{id}/maturity-analyses': {
+    as: 'cvj_agronomo',
+    url: `/v1/harvest-batches/${cintiPendingHarvest.id}/maturity-analyses`,
+    body: { brixDegrees: 22.5, ph: 3.5, acidityGl: 6.1, measuredAt: '2026-09-25T10:00:00Z' },
+    status: 201,
+  },
+  'GET /v1/harvest-batches/{id}/maturity-analyses': { as: 'cvj_operario', url: `/v1/harvest-batches/${cintiPendingHarvest.id}/maturity-analyses`, status: 200 },
+  'POST /v1/harvest-batches/{id}/phyto-decisions': {
+    as: 'cvj_agronomo',
+    url: `/v1/harvest-batches/${cintiPendingHarvest.id}/phyto-decisions`,
+    body: { decision: 'QUARANTINE', notes: 'Focos de botritis en dos cajas', inspectionReportKey: cintiFile('inspections', 'acta.pdf') },
+    status: 201,
+  },
+  'GET /v1/harvest-batches/{id}/phyto-decisions': { as: 'cvj_operario', url: `/v1/harvest-batches/${F.harvestBatches.find((h) => h.lotId === CASE.id)!.id}/phyto-decisions`, status: 200 },
+  // Tanques: transiciones por acciones
+  'POST /v1/fermentation-tanks/{id}/start': {
+    as: 'cvj_enologa',
+    // Uva recibida sin lote → dictamen → tanque (crea su lote) → inicio de la fermentación.
+    setup: async () => {
+      await post(`/v1/harvest-batches/${unassignedHarvest.id}/phyto-decisions`, { decision: 'APPROVED' }, 'cvj_agronomo')
+      const { data } = await post('/v1/fermentation-tanks', { inputs: [{ harvestBatchId: unassignedHarvest.id }], tankCode: 'TK-C2', volumeFilledLiters: 2700, startDate: '2026-09-25' }, 'cvj_enologa')
+      return { tankId: data.id as string }
+    },
+    url: (v: Vars) => `/v1/fermentation-tanks/${v.tankId}/start`,
+    body: {},
+    status: 200,
+  },
+  'POST /v1/fermentation-tanks/{id}/complete': {
+    as: 'altos_enologa',
+    url: `/v1/fermentation-tanks/${altosTank.id}/complete`,
+    body: { endDate: '2026-09-25', finalVolumeLiters: 8000, destination: 'WINE_AGING' },
+    status: 200,
+  },
+  'POST /v1/fermentation-tanks/{id}/clean': { as: 'altos_enologa', url: `/v1/fermentation-tanks/${altosTransferredTank.id}/clean`, body: {}, status: 200 },
+  // Crianza y destilación
+  'POST /v1/wine-aging/{id}/discard': { as: 'altos_enologa', url: `/v1/wine-aging/${altosAging.id}/discard`, body: { reason: 'Barrica contaminada' }, status: 200 },
+  'POST /v1/production-batches/{id}/close': {
+    as: 'cvj_enologa',
+    url: `/v1/production-batches/${openProduction.id}/close`,
+    body: { processEndDate: '2026-09-25', cuts: { headsLiters: 60, heartLiters: 720, tailsLiters: 105 }, heartAbvPercent: 61.5 },
+    status: 200,
+  },
+  'POST /v1/production-batches/{id}/discard': { as: 'cvj_enologa', url: `/v1/production-batches/${restingProduction.id}/discard`, body: { reason: 'Corazón turbio tras el reposo' }, status: 200 },
+  // Panel y reportes
+  'GET /v1/traceability/dashboard': { as: 'cvj_enologa', url: '/v1/traceability/dashboard', status: 200 },
+  'GET /v1/traceability/reports/production': { as: 'cvj_admin', url: '/v1/traceability/reports/production?from=2025-01-01&to=2026-12-31', status: 200 },
+  // Público
+  'GET /v1/public/passports/{code}': { url: `/v1/public/passports/${caseCodes.codes[0]!.code}`, status: 200 },
+  'GET /v1/public/lots/{lotCode}': { url: `/v1/public/lots/${CASE.lotCode}`, status: 200 },
+  'GET /v1/public/bottles/{code}': { url: `/v1/public/bottles/${caseCodes.codes.at(-1)!.code}`, status: 200 },
+  'GET /v1/public/lots/{lotCode}/dossier': { url: `/v1/public/lots/${CASE.lotCode}/dossier`, status: 200, raw: true },
+  'GET /v1/public/lots/{lotCode}/attachments/{attachmentId}': { url: `/v1/public/lots/${CASE.lotCode}/attachments/${caseLabel.id}`, status: 302 },
+  'GET /v1/public/wineries': { url: '/v1/public/wineries?region=cinti', status: 200 },
+  // Borrador del catálogo (§17.1): fuera del OpenAPI; se valida con el esquema zod de pendientes.json.
+  'GET /v1/public/collections': { url: '/v1/public/collections?productType=SINGANI', status: 200 },
+  'GET /v1/public/collections/{slug}': { url: '/v1/public/collections/singani-gran-reserva-2026', status: 200 },
+}
+
+// ---------------------------------------------------------------------------
 // Ola 1 (plan/contratos/o1-backoffice-y-bodegas.md)
 // ---------------------------------------------------------------------------
 
@@ -473,6 +729,12 @@ const member = (userKey: string, wineryKey: string) =>
 const platformMembership = (userKey: string) => uid(`membership:platform:${uid(`user:${userKey}`)}`)
 const PADCAYA = F.wineries.find((w) => w.commercialName === 'Bodega Sol de Padcaya')!
 const REASON = 'Prueba de contrato de la Ola 1'
+
+/** `data` de un GET con el token estático de un usuario. */
+async function get(path: string, as: string): Promise<Record<string, unknown>> {
+  const res = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer mock.access.${as}` } })
+  return ((await res.json()) as { data: Record<string, unknown> }).data
+}
 
 async function post(path: string, body: unknown, as?: string): Promise<{ status: number; data: Record<string, unknown> }> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
@@ -833,7 +1095,7 @@ const WAITLIST_SAMPLES: Record<string, Sample> = {
   },
 }
 Object.assign(OLA1_SAMPLES, WAITLIST_SAMPLES)
-Object.assign(SAMPLES, OLA1_SAMPLES)
+Object.assign(SAMPLES, OLA1_SAMPLES, OLA2_SAMPLES)
 
 describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
   it('hay una petición de ejemplo por cada RouteSpec', () => {
@@ -855,12 +1117,25 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
       body = JSON.stringify(rawBody)
     }
     const url = typeof sample.url === 'function' ? sample.url(vars) : sample.url
-    const res = await fetch(`${API}${url}`, { method, headers, body })
+    const res = await fetch(`${API}${url}`, { method, headers, body, redirect: 'manual' })
     const text = await res.text()
     expect(res.status, text).toBe(sample.status)
     const { schema, source } = responseSchema(key, sample.status)
     if (sample.status === 204) {
       expect(text).toBe('')
+      return
+    }
+    if (sample.status === 302) {
+      // Redirección a la URL firmada del archivo: sin cuerpo.
+      expect(res.headers.get('location')).toMatch(/^\/mocks\/uploads\/org\//)
+      expect(text).toBe('')
+      return
+    }
+    if (sample.raw) {
+      // Bytes canónicos del expediente: JSON sin el envoltorio.
+      expect(res.headers.get('content-type')).toMatch(/^application\/json/)
+      if (!schema) throw new Error(`${key}: sin esquema de respuesta en el OpenAPI`)
+      expectValid(schema, JSON.parse(text), `${key} ⇄ ${source}`)
       return
     }
     if (schema?.$csv) {
@@ -879,7 +1154,7 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
   it('las operaciones sin esquema de respuesta en el OpenAPI están identificadas', () => {
     const withoutSchema = routeOps.filter((key) => {
       const sample = SAMPLES[key]!
-      return sample.status !== 204 && !responseSchema(key, sample.status).schema
+      return sample.status !== 204 && sample.status !== 302 && !responseSchema(key, sample.status).schema
     })
     // Desde la Ola 1 el OpenAPI declara la respuesta de todas las operaciones.
     expect(withoutSchema).toEqual([])

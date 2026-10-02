@@ -12,7 +12,7 @@ import {
 } from '../../shared/scenarios'
 import type { CertificationStatus } from '../schemas'
 import { checkAccess, checkOrgActive, readAuth, requireAuth, resolveTenant, type AccessRule, type AuthContext } from './auth-context'
-import { nowIso, persistErpDb } from './db'
+import { getErpDb, nowIso, persistErpDb } from './db'
 import { ApiError, badRequest, fieldError, invalid, tokenInvalid, validationError } from './errors'
 import { backupTrace, restoreTrace, runDailyTasks, syncDataScenario } from './trace-context'
 import { spanishErrorMap } from './zod-es'
@@ -94,8 +94,9 @@ export interface RouteSpec {
   /** Se ejecuta tras una respuesta 2xx (p. ej. la bitácora de las escrituras del ERP). */
   afterSuccess?: (ctx: RouteContext, result: RouteResult) => void
   /**
-   * Ruta obsoleta que se retira en H1 (contrato de la Ola 1 §11): la ruta que la sustituye. Como el
-   * backend, sigue funcionando y responde `Deprecation: true` y `Link: <sustituta>; rel="successor-version"`.
+   * Ruta obsoleta que se retira al cerrar la ola (H1 en la Ola 1; H2 en la Ola 2, contrato §16.2):
+   * la ruta que la sustituye. Sigue funcionando y responde `Deprecation: true` y
+   * `Link: <sustituta>; rel="successor-version"`.
    */
   deprecated?: string
   /**
@@ -243,6 +244,10 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
     syncDataScenario()
     runDailyTasks()
     const backup = writes ? backupTrace() : null
+    // Una escritura de la trazabilidad que falla tampoco avanza el reloj ni consume ids (el reloj
+    // de los mocks avanza un minuto por alta, no por intento).
+    const traceRoute = spec.access !== 'public' && spec.access.kind === 'winery'
+    const clockBefore = { clock: getErpDb().clock, counters: { ...getErpDb().counters } }
     try {
       if (scenario === 'error' && !spec.path.startsWith('/v1/auth/')) {
         throw new ApiError(500, 'INTERNAL_ERROR', 'Error interno del servidor (escenario de prueba "error")')
@@ -304,6 +309,7 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
       return successResponse(request, url, Object.keys(extra).length > 0 ? { ...result, headers: { ...result.headers, ...extra } } : result, correlationId)
     } catch (err) {
       if (backup) restoreTrace(backup)
+      if (backup && traceRoute) Object.assign(getErpDb(), clockBefore)
       // Las escrituras fallidas también pueden dejar rastro (bitácora de intentos, retos TOTP).
       if (writes) persistErpDb()
       const error = err instanceof ApiError ? err : new ApiError(500, 'INTERNAL_ERROR', err instanceof Error ? err.message : String(err))

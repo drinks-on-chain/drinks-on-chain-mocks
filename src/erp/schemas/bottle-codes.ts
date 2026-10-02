@@ -47,6 +47,39 @@ export const VoidBottleCodeSchema = z.object({
 })
 export type VoidBottleCodeDto = z.infer<typeof VoidBottleCodeSchema>
 
+/** Código de botella anulado, con o sin sustituto (fila de `bottle-lots.json`). */
+export const VoidedBottleCodeSchema = z.object({
+  serial: z.number().int().min(1),
+  code: z.string(),
+  /** Generación del código dentro de su serie (0 = el original). */
+  generation: z.number().int().min(0),
+  at: IsoDateTimeSchema,
+  by: TraceActorSchema,
+  reason: z.string(),
+  replacedBy: z.string().nullable(),
+})
+export type VoidedBottleCode = z.infer<typeof VoidedBottleCodeSchema>
+
+/**
+ * Códigos de botella de un lote en los mocks (`bottle-lots.json`). No hay un registro por botella:
+ * el código de la serie `n` es `mockBottleCode(lotId, n, generación)`; solo se guardan las series
+ * sustituidas, los códigos anulados y los rangos exportados.
+ */
+export const BottleLotSchema = z.object({
+  lotId: z.string(),
+  bottlingBatchId: z.string(),
+  /** Botellas embotelladas (series `1…total`). */
+  total: z.number().int().min(0),
+  /** Generación vigente de las series cuyo código se sustituyó (las demás, 0). */
+  generations: z.record(z.string(), z.number().int().min(1)),
+  voided: z.array(VoidedBottleCodeSchema),
+  /** Todos los códigos activos anulados de una vez (lote descartado). */
+  allVoided: z.object({ at: IsoDateTimeSchema, by: TraceActorSchema.nullable(), reason: z.string() }).nullable(),
+  /** Rangos exportados (CSV o ZIP) con su fecha. */
+  exports: z.array(z.object({ fromSerial: z.number().int().min(1), toSerial: z.number().int().min(1), at: IsoDateTimeSchema })),
+})
+export type BottleLot = z.infer<typeof BottleLotSchema>
+
 /** Cabecera del CSV de `GET /v1/lots/{id}/bottle-codes/export`. */
 export const BOTTLE_CODES_CSV_COLUMNS = ['serial', 'code', 'codeFormatted', 'qrUrl', 'lotCode', 'lotName', 'productType', 'bottlingDate'] as const
 

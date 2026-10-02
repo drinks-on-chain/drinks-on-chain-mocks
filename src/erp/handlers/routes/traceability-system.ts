@@ -59,6 +59,7 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/traceability/dag/:bottlingBatchId',
     access: anyUser,
+    deprecated: '/v1/lots/{id}/graph',
     // SE-07 (Ola 2): solo los miembros de la bodega dueña y el personal de plataforma; cualquier otra
     // sesión → 404. Legado: se retira en H2 por `GET /v1/lots/{id}/graph`.
     handle({ auth, params }) {
@@ -73,6 +74,7 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/traceability/public/:lotCode',
     access: 'public',
+    deprecated: '/v1/public/passports/{code}',
     handle({ params }) {
       // Legado hasta H2 (lo sustituye `GET /v1/public/passports/{code}`): solo por código de lote, ya no por id.
       const code = decodeURIComponent(params.lotCode!)

@@ -249,15 +249,18 @@ describe('relaciones del ERP como los include del backend', () => {
     expect(list.every((b) => 'labAnalysis' in b && !('productionBatch' in b))).toBe(true)
   })
 
-  it('un tratamiento lo autoriza un miembro activo: la plataforma (sin membresía) → 403', async () => {
+  it('un tratamiento lo autoriza un miembro activo; la plataforma solo lee la trazabilidad (Ola 2, S-25) → 403', async () => {
     const tank = F.fermentationTanks.find((t) => t.wineryId === W('altos').id)!
     const body = { treatmentType: 'SO2_ADDITION', additiveName: 'Metabisulfito', dosageAppliedGPerHl: 30, regulatoryAuthCode: 'SENASAG-1', appliedAt: '2026-09-25' }
     const res = await call(`/v1/fermentation-tanks/${tank.id}/treatments?wineryId=${W('altos').id}`, { token: staff('operaciones'), body })
     expect(res.status).toBe(403)
-    const log = await call<{ recordedByUserId: string }>(`/v1/fermentation-tanks/${tank.id}/logs?wineryId=${W('altos').id}`, {
-      token: staff('operaciones'),
-      body: { temperatureCelsius: 20, recordedAt: '2026-09-25T08:00:00Z' },
-    })
-    expect(dataOf(log.json).recordedByUserId).toBe(uid('user:operaciones'))
+    const logBody = { temperatureCelsius: 20, recordedAt: '2026-09-25T08:00:00Z' }
+    const asStaff = await call(`/v1/fermentation-tanks/${tank.id}/logs?wineryId=${W('altos').id}`, { token: staff('operaciones'), body: logBody })
+    expect(asStaff.status).toBe(403)
+    expect(asStaff.json).toMatchObject({ error: { code: 'TRC_PLATFORM_READ_ONLY' } })
+    const treatment = await call<{ authorizedByMemberId: string }>(`/v1/fermentation-tanks/${tank.id}/treatments`, { token: 'mock.access.altos_enologa', body })
+    expect(dataOf(treatment.json).authorizedByMemberId).toBe(uid('member:altos_enologa'))
+    const log = await call<{ recordedByUserId: string }>(`/v1/fermentation-tanks/${tank.id}/logs`, { token: 'mock.access.altos_operario', body: logBody })
+    expect(dataOf(log.json).recordedByUserId).toBe(uid('user:altos_operario'))
   })
 })
