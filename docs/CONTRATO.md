@@ -1,6 +1,6 @@
 # Contrato OpenAPI ↔ mocks
 
-Revisión del 25-09-2026, actualizada el 27-09-2026 con el **backend real de la Ola 1 completa** (mocks 0.4.0-rc.1: §7) y antes con el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro, §0 de este documento, con sus precisiones del §8), el OpenAPI del backend de la Ola 0 (O0-BE-2 y **O0-BE-4**: sesiones, membresías, estado `INVITED`) y el **contrato de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`, §6, con las precisiones del §11 bis). Comparado contra `openapi/erp.json` (el `openapi.json` de `drinks-on-chain-back` en `dev`, commit `eace713`, igual al de `https://136.243.223.39.sslip.io/docs-json` el 27-09-2026: 102 rutas, 119 operaciones, 144 esquemas; antes, el de O0-BE-4, commit `c224e0a`, 48 operaciones), contra los guards del backend (`AccessTokenGuard`, `AuthorizationGuard`, `TenantGuard`, `@Roles` de cada controlador) y `docs/arquitectura/identidad.md` de `drinks-on-chain-back` y contra respuestas reales del servidor sin credenciales (401, 400, 404). Complementa el doc 09 §8 de `drinks-on-chain-docsfront`. Regla: donde el catálogo o las guías del backend discrepan del OpenAPI, manda el OpenAPI.
+Revisión del 25-09-2026, actualizada el 01-10-2026 con el **ERP v2 y el dominio público de la Ola 2** (mocks 0.5.0-rc.1: §10), el 27-09-2026 con el **backend real de la Ola 1 completa** (mocks 0.4.0-rc.1: §7) y antes con el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro, §0 de este documento, con sus precisiones del §8), el OpenAPI del backend de la Ola 0 (O0-BE-2 y **O0-BE-4**: sesiones, membresías, estado `INVITED`) y el **contrato de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`, §6, con las precisiones del §11 bis). Comparado contra `openapi/erp.json` (el `openapi.json` de `drinks-on-chain-back` en `dev`, commit `eace713`, igual al de `https://136.243.223.39.sslip.io/docs-json` el 27-09-2026: 102 rutas, 119 operaciones, 144 esquemas; antes, el de O0-BE-4, commit `c224e0a`, 48 operaciones), contra los guards del backend (`AccessTokenGuard`, `AuthorizationGuard`, `TenantGuard`, `@Roles` de cada controlador) y `docs/arquitectura/identidad.md` de `drinks-on-chain-back` y contra respuestas reales del servidor sin credenciales (401, 400, 404). Complementa el doc 09 §8 de `drinks-on-chain-docsfront`. Regla: donde el catálogo o las guías del backend discrepan del OpenAPI, manda el OpenAPI.
 
 ## 0. Contrato de la Ola 0 (mocks 0.2, alineados con el backend O0-BE-4 en 0.3.0-rc.2)
 
@@ -57,7 +57,8 @@ Los 13 fixtures con DTO en el OpenAPI (`WineryResponseDto` y sus miembros, `User
 | 21 | Conteo de rutas | El doc 09 habla de "35 rutas" | Con la Ola 1 completa son 102 rutas y 119 operaciones, incluidas `GET /v1/health`, `/health/live` y `/health/ready` (públicas) y `GET /v1/uploads/url`. Hay un handler por operación (lo comprueba `test/contract.test.ts`) |
 | 22 | `GET /traceability/dag/:id` | Sin `@OrgType` ni `@Roles`: cualquier sesión, sin filtrar por bodega | Cualquier sesión; con una bodega activa solo sus lotes (404 los de otra), la plataforma y el resto ven todos. Confirmar con backend si el DAG debe filtrar por bodega |
 | 23 | Archivos | `POST /v1/uploads` solo personal, tipo por firma de bytes (JPEG, PNG, WEBP, GIF ≤ 5 MB; PDF ≤ 15 MB), clave privada `org/<id>/<carpeta>/<aaaa>/<mm>/<uuid>.<ext>` y URL firmada de 15 min; `GET /v1/uploads/url?key=` | Igual (0.4): consumidor → 403 `FORBIDDEN`; tipo que no coincide → 422 `FILE_TYPE_NOT_ALLOWED` en `file`; demasiado grande → 413 `FILE_TOO_LARGE`; clave de otra organización → 404 `FILE_NOT_FOUND`. La URL `/mocks/uploads/<clave>?expires=…&signature=mock` no sirve ningún archivo |
-| 24 | Rutas obsoletas | Retiradas en H1 (404): `POST /wineries`, `wineries/pending`, `wineries/{id}/approve|reject`, `wineries/my/members*`. La maquinaria `deprecated` + `x-replaced-by` + `Deprecation`/`Link` queda para próximas retiradas | Igual: sin rutas; `RouteSpec.deprecated` se conserva y la prueba de contrato exige las mismas obsoletas que el OpenAPI (hoy ninguna) |
+| 24 | Rutas obsoletas | Retiradas en H1 (404): `POST /wineries`, `wineries/pending`, `wineries/{id}/approve|reject`, `wineries/my/members*`. La maquinaria `deprecated` + `x-replaced-by` + `Deprecation`/`Link` queda para próximas retiradas | Igual: sin rutas; `RouteSpec.deprecated` se conserva y la prueba de contrato exige las mismas obsoletas que el OpenAPI (ninguna tras H1; desde 0.5, las tres legadas del §10.1) |
+| 25 | Trazabilidad de la Ola 2 | Lote como entidad, reglas en el servidor, códigos de botella, expediente y pasaportes públicos (163 operaciones) | §10. Desde 0.5 los puntos 10, 15, 16, 17, 18, 19 y 22 de esta tabla quedan sustituidos por las reglas del §10.2 (análisis opcional en el pesaje, candados en meses de calendario, D.O. calculada, tanque cerrado por la operación, QR del Marketplace, grafo restringido) |
 
 ## 3. Permisos aplicados por los handlers
 
@@ -219,3 +220,73 @@ Decisiones de los mocks:
 - No se guardan ni la IP ni el agente de usuario ni `isAdult` (el backend los guarda y no los devuelve).
 
 Datos de demo: 52 inscripciones (38 consumidores, 14 bodegas) entre el 12 y el 25 de septiembre de 2026; `tarija-2026` (32), `instagram` (6), `boletin` (3), `qr-cata` (3) y sin origen (8); 38 `NEW`, 10 `CONTACTED` (por Valeria Méndez, Camila Torrez o Jorge Salinas) y 4 `DISCARDED`; 7 de las últimas 24 h. Ven la lista `gestor@`, `administracion@`, `operaciones@`, `analista@` y `soporte@drinksonchain.test`; todos menos soporte la editan y la exportan.
+
+## 10. Ola 2 · ERP v2 y dominio público (mocks 0.5.0-rc.1)
+
+Contrato `plan/contratos/o2-erp-confiable.md` (§2–§13, §16–§18). OpenAPI de `drinks-on-chain-back` en `dev` en la apertura de la ola (`bfda9bd`, igual al del servidor de desarrollo el 01-10-2026: 141 rutas, 163 operaciones, 271 esquemas; 45 operaciones nuevas). El backend declara todas las rutas con sus DTO y responde **501** en las que aún no implementa (transiciones de tanque, descartes y cierre de la destilación, códigos de botella, laboratorio por lote, correcciones, expediente, vistas, adjuntos y pasaportes públicos); los mocks las implementan todas con las reglas del contrato, así que hasta `rc.2` el comportamiento de esas rutas es el del contrato escrito, no uno comprobado contra el servidor. Código de referencia portado: `src/modules/lots/domain/*` del backend (`src/erp/trace/` de este repo).
+
+### 10.1 Contrato escrito ↔ OpenAPI (manda el OpenAPI)
+
+| Tema | Contrato escrito | OpenAPI (y mocks) |
+|---|---|---|
+| Listas | Varias «devuelven la lista» | Análisis de madurez, dictámenes, correcciones, adjuntos, análisis del lote, códigos de botella y directorio de bodegas son páginas `{ items, total, limit, offset }` |
+| Tanque (`FermentationTankResponseDto`) | `availableLiters`, `transferLossLiters`, `transitions` | Solo añade `lotId`, `finalVolumeLiters` e `inputs`. Lo disponible y la merma de trasiego se leen en `GET /v1/lots/{id}/balance`; las transiciones, en la línea de tiempo |
+| Destilación (respuesta) | Objeto `cuts` | Campos planos `headsLiters`, `heartLiters`, `tailsLiters`, `vinasseLiters`, `heartAbvPercent` (el cierre sí recibe `cuts`) |
+| Destilación (alta) | `closeTank`; `inputVolumeLiters` obligatorio | No hay `closeTank` y `inputVolumeLiters` sigue opcional (sin él se toma lo disponible del tanque) |
+| Registros corregidos | `correctedFields`, `voided`, `correctionIds` en cada recurso | No existen: lo corregido se ve en `GET /v1/lots/{id}/corrections`, en `corrected` de la línea de tiempo y del grafo |
+| `TraceActor` | `role` enumerado; siempre presente | `role` es texto y `createdBy`/`decidedBy`/`by` son anulables (registros migrados sin autor) |
+| `MaturityAnalysis`, `PhytoDecision` | — | Llevan además `source` (`ERP` o `MIGRATION`) |
+| `POST …/phyto-decisions` | Devuelve el dictamen | 201 con el **pesaje** completo (con `phytoDecisions`) |
+| Informes (`report`, `inspectionReport`) | `{ key, sha256, url }` | `sha256` y `url` anulables |
+| Laboratorio (respuesta) | `conformity` | Además `conformityStatus` y `supersededAt` (obligatorios) y `methanolMg100mlAa` |
+| Reporte de producción | Totales por tipo | `totals` incluye `UNDECIDED` (lotes sin tipo decidido) |
+| Rutas obsoletas | Todas las legadas con `Deprecation` | Solo 3 están `deprecated` (`PATCH …/phyto-status`, `GET /v1/traceability/dag/{id}`, `GET /v1/traceability/public/{lotCode}`) y sin `x-replaced-by`; `POST /v1/bottling` y `POST /v1/lab-analyses` no lo están. Los mocks marcan esas tres, con la sustituta del contrato §16.2 |
+| Tanque sin completar | `TRC_TANK_NOT_COMPLETED` al crear crianza o destilación | El backend de la apertura no lo exige. Los mocks tampoco hasta H2: un tanque `FILLING`/`FERMENTING` se cierra con la operación (solo `CLEANED` → 409) |
+| Catálogo (`/v1/public/collections`) | §17.1, borrador | No está en el OpenAPI (10.4) |
+
+### 10.2 Reglas que aplican los handlers
+
+Mismas reglas por las rutas nuevas y por las legadas (`src/erp/trace/records.ts`, `bottling.ts`, `dossier.ts`). Cada incumplimiento responde su código `TRC_…` (`TRACE_ERROR_CODES`) y `details[{ field?, message, code, rule?, expected?, actual?, meta? }]`: `rule` es la clave del parámetro de configuración, `expected`/`actual` los valores y `meta` lo que la UI necesita (fecha de desbloqueo, días que faltan, ids).
+
+- **Instantánea de reglas** al crear el lote (configuración efectiva de la bodega, con sus excepciones legales A-31); un cambio posterior en el back office no afecta al lote. Los lotes migrados la llevan con `origin: 'MIGRATION'`.
+- **Etapa derivada** (`ORIGIN → HARVEST → FERMENTING → AGING | DISTILLING → RESTING → BOTTLED → CERTIFIED`; `REJECTED`, `DISCARDED`); un lote terminal no admite escrituras (409 `TRC_LOT_TERMINAL`).
+- **Dictamen** solo por inserción y bloqueante; **D.O.** calculada (`ELIGIBLE`, `ELIGIBLE_BY_EXCEPTION`, `NOT_ELIGIBLE`), nunca declarada.
+- **Candados** de crianza (meses de calendario) y de reposo (días desde el cierre de la destilación) con el reloj de los mocks en la zona `America/La_Paz`; `advanceMockClock(ms)` los libera (evento `LOCK_RELEASED` sin actor).
+- **Embotellado**: una sola vez por lote, con todas sus fuentes; balance de volumen, de alcohol puro (tolerancia 0,5 %) y merma (`trazabilidad.embotellado.mermaMaximaPorcentaje`); el vino no admite agua. `POST …/bottling/preview` devuelve las mismas infracciones sin escribir.
+- **Laboratorio**: conformidad calculada con los límites de la instantánea (singani: metanol en mg/100 mL de alcohol anhidro, cobre y grado; vino: acidez volátil y grado; falta uno → `INCOMPLETE`). Un grado que difiere más de 0,5 % vol del embotellado es un aviso, no un bloqueo. Un análisis nuevo sustituye al anterior.
+- **Correcciones** compensatorias con lista cerrada de campos y revisión de integridad (422 `TRC_CORRECTION_BREAKS_RULES` con la regla que se rompería); **expediente**: cierre con laboratorio conforme y sin incidencias, después solo lectura (409 `TRC_DOSSIER_CLOSED`).
+- **Permisos** (contrato §11): la plataforma solo lee (403 `TRC_PLATFORM_READ_ONLY`); lo de otra bodega, 404; el grafo, además, 404 para consumidores (SE-07).
+- Una escritura que falla no deja nada a medias ni avanza el reloj.
+
+### 10.3 Decisiones de los mocks (lo que ni el contrato ni el OpenAPI fijan)
+
+| Tema | Mocks |
+|---|---|
+| Códigos de botella | 8 caracteres Crockford con control Luhn mod 32, como el backend, pero **deterministas** (`mockBottleCode(lotId, serie, generación)`) y sin fila por botella: `bottle-lots.json` guarda el total, las series sustituidas, los anulados y los rangos exportados. El backend los generará al azar |
+| Huella del expediente | `doc-dossier/1`: JSON canónico (claves ordenadas, sin espacios), decimales como texto de escala fija, actores como `{ role, membershipId }`, sin nombres ni códigos de botella en claro; SHA-256. Definición de los mocks hasta el paso 2.8 del backend: la huella de un lote real no coincidirá con la de su copia en los mocks |
+| Raíz Merkle | Hoja = SHA-256(`{serie}:{código}:{sal}`), padre = SHA-256(izquierda + derecha en hex), nodo impar sube sin duplicar; solo los códigos activos al cierre. `merkleLeaf`, `merkleParent` y `merkleRootFromProof` se exportan para que el visor compruebe la prueba |
+| URL del QR | `{URL del Marketplace}/b/{código}` (`setMockAppUrls({ MARKETPLACE })`; `http://localhost:3005` en los fixtures) |
+| Referencias | Lote `{prefijo}-L{año}-{NNN}`; código de lote `{prefijo}-{año del embotellado}-{WINE\|SINGANI}-{NNN}`; pesaje `HARV-{año}-{parcela}-{NNN}` |
+| Exportación ZIP | `PENDING` en la solicitud y en la primera consulta; `READY` en la segunda, con una URL firmada que no sirve ningún archivo. El CSV es inmediato |
+| Enumeración de códigos | Más de 20 códigos **inexistentes** en 10 min desde una IP (`X-DOC-Client-IP` o `X-Forwarded-For`) → 429 con `Retry-After`, con el reloj de los mocks. Los mal formados (422) no cuentan. El límite general de 60 peticiones por minuto no se simula |
+| Caché pública | `Cache-Control: public, max-age=60` (3600 con el lote certificado) y `ETag`; el 404, 30 s |
+| Panel de la bodega | Avisos: última lectura > 32 °C, tanque en fermentación sin lecturas en 48 h, candados que vencen en 14 días |
+| Grafo legado | `GET /v1/traceability/dag/{id}` con datos reales: sin métricas fijas, `isCertified` = expediente cerrado, operador de la línea de tiempo o «No registrado» |
+| Bitácora | Las escrituras nuevas dejan su evento (`CORRECTION_REGISTERED`, `MATURITY_ANALYZED`, `PHYTO_DECIDED`, `TANK_TRANSITION`, `DISTILLATION_CLOSED`…). `audit.json` pasa de 163 a 161 eventos por las dos filas retiradas de la semilla |
+| Persistencia | La trazabilidad sigue solo en memoria: recargar la página vuelve a los fixtures (o al escenario de datos elegido). La identidad y el back office siguen en `localStorage`; un estado guardado por 0.4 se descarta |
+| El Portillo (Altos, 1.540 m) | Los fixtures de la Ola 1 dan a Altos `trazabilidad.singani.altitudMinimaMsnm` = 1.500 con excepción legal, así que allí es `ELIGIBLE_BY_EXCEPTION`. Para la prueba negativa del §18 sin tocar la configuración, usa la parcela de Vischoqueña de Cinti Viejo (cepa no admitida) o retira el ajuste (`POST /v1/platform/settings/{key}/overrides/reset`) |
+
+### 10.4 Borrador del catálogo (fuera de la prueba estricta)
+
+`GET /v1/public/collections` y `/v1/public/collections/{slug}` (contrato §17.1) **no están en el OpenAPI** ni lo estarán en esta ola: los fija el OpenAPI borrador de la Etapa 4 (O3-PK-1). Los mocks los adelantan solo para la pantalla 2A del Marketplace y pueden cambiar sin aviso. Están excluidos de la comparación estricta con el OpenAPI de forma explícita: `openapi/pendientes.json` → `adelantadas` con `"borrador": true`, su `RouteSpec` lleva `draft` y responden la cabecera `X-Mock-Draft: plan/contratos/o2-erp-confiable.md §17.1`. Se validan solo contra sus esquemas zod (`PublicCollectionSummarySchema`, `PublicCollectionSchema`, marcados `@experimental`). Las colecciones se derivan de los lotes (una por lote embotellado o en proceso); precios y disponibilidad son de ejemplo.
+
+### 10.5 Datos de demo
+
+| Dato | Para qué |
+|---|---|
+| **«Singani Gran Reserva 2026»** (Cinti Viejo, `SINGANI_CASE`; lote `CVJ-L2026-005`, código `CVJ-2026-SINGANI-004`): 18.400 kg de la Parcela 2 → 12.100 L → corazón de 1.500 L al 60 % → 180 días de reposo → 2.950 botellas de 75 cL al 40 % (agua 750 L, merma 1,67 %) → laboratorio conforme → expediente cerrado. Serie 17 con un código anulado y sustituido | Caso del contrato §18; pasaporte de botella con prueba Merkle |
+| Cinti Viejo: «Moscatel de Alejandría 2026» en reposo (candado al 13-10-2026), tres lotes embotellados (`CVJ-2026-SINGANI-001`, `-002`, `CVJ-2026-WINE-003` sin laboratorio), «Singani El Molino 2026» destilando, «Singani Edición Aniversario 2026» en origen, un lote en vendimia y un pesaje sin lote | Todas las etapas; panel (embotellado sin laboratorio, listos para cerrar, dictámenes pendientes) |
+| Altos: dos lotes en crianza (candados al 03-11-2026 y 28-02-2027), dos fermentando (uno con una lectura a 33,4 °C), `ALT-2026-WINE-001` embotellado, uno rechazado, uno descartado y dos en vendimia (pendiente y cuarentena) | Candados, alertas, dictamen bloqueante |
+| Escenarios de datos: `lote-en-reposo` (faltan 10 días), `lote-listo` (reposo cumplido, sin embotellar), `laboratorio-no-conforme` (embotellado, metanol sobre el límite), `lote-con-incidencia` (`CVJ-2026-SINGANI-002` con una incidencia de migración abierta) | Pantallas de embotellado, laboratorio, expediente e incidencias |
+| Personas de Cinti Viejo: `enologa@`, `operario@`, `agronomo@` y `admin@cintiviejo.test` (claves `cvj_enologa`, `cvj_operario`, `cvj_agronomo`, `cvj_admin`) | Roles del recorrido H2 |
+| `publicFixtures.bottleCodes`: códigos de muestra de cada lote embotellado (series 1–3 y la última; del caso, además la 17 activa y la anulada) | Visor `/b/{código}` y e2e |
