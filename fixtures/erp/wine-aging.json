@@ -12,7 +12,10 @@
     "lockUntilDate": "2026-11-03T00:00:00Z",
     "agingStatus": "AGING",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2025-11-03T10:00:00Z"
+    "createdAt": "2025-11-03T10:00:00Z",
+    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
+    "startDate": "2025-11-03",
+    "containerCount": null
   },
   {
     "id": "848d54be-3d51-5a62-93e6-d15eba6df89a",
@@ -27,7 +30,10 @@
     "lockUntilDate": "2027-02-28T00:00:00Z",
     "agingStatus": "AGING",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2026-06-30T10:00:00Z"
+    "createdAt": "2026-06-30T10:00:00Z",
+    "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
+    "startDate": "2026-06-30",
+    "containerCount": null
   },
   {
     "id": "a48ddc67-0e24-51fe-a43d-877f55ac9de6",
@@ -42,7 +48,10 @@
     "lockUntilDate": "2026-02-01T00:00:00Z",
     "agingStatus": "BOTTLED",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2025-04-01T10:00:00Z"
+    "createdAt": "2025-04-01T10:00:00Z",
+    "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
+    "startDate": "2025-04-01",
+    "containerCount": null
   },
   {
     "id": "a1370e1f-d1d9-5aad-b0a3-821677553361",
@@ -57,6 +66,27 @@
     "lockUntilDate": "2026-04-10T00:00:00Z",
     "agingStatus": "BOTTLED",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2025-04-10T10:00:00Z"
+    "createdAt": "2025-04-10T10:00:00Z",
+    "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
+    "startDate": "2025-04-10",
+    "containerCount": null
+  },
+  {
+    "id": "c32e9854-fdc7-5782-ac66-9aa3e337f794",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "fermentationTankId": "0357af1b-ac1f-5400-b52d-cb701cbbcf75",
+    "containerType": "Barrica",
+    "containerMaterial": "Roble francés, tostado medio",
+    "containerCode": "BAR-FR-2025-09",
+    "barrelUseCycle": 2,
+    "volumeLiters": 4300,
+    "plannedMonths": 10,
+    "lockUntilDate": "2027-02-10T00:00:00Z",
+    "agingStatus": "DISCARDED",
+    "notes": null,
+    "createdAt": "2026-04-10T14:00:00Z",
+    "lotId": "657df64b-8ef6-5d59-912c-27496c32faed",
+    "startDate": "2026-04-10",
+    "containerCount": 19
   }
 ]

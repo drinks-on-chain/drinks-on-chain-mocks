@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "altos-de-calamuchita",
+    "tradeName": "Bodega Altos de Calamuchita",
+    "region": "Valle Central de Tarija · Santa Ana",
+    "category": "WINERY",
+    "logoUrl": "/mocks/uploads/logos/altos.png",
+    "publicStory": "Bodega familiar en las lomas de Santa Ana, con viñedos en Santa Ana la Nueva y Calamuchita. Registra cada lote en el ERP desde la vendimia.",
+    "website": "https://altos.test"
+  },
+  {
+    "slug": "destileria-cinti-viejo",
+    "tradeName": "Destilería Cinti Viejo",
+    "region": "Valle de Cinti · Camargo",
+    "category": "DISTILLERY",
+    "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+    "publicStory": "Destilería del cañón de Cinti, con parrales de Moscatel de Alejandría en Camargo y Palca Grande. Singani de Denominación de Origen y un vino patrimonial de cepas criollas.",
+    "website": "https://cintiviejo.test"
+  }
+]

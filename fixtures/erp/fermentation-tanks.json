@@ -11,7 +11,15 @@
     "status": "TRANSFERRED",
     "startDate": "2026-03-06T14:30:00Z",
     "endDate": "2026-04-14T14:30:00Z",
-    "createdAt": "2026-03-06T14:35:00Z"
+    "createdAt": "2026-03-06T14:35:00Z",
+    "lotId": "4af50d09-875b-5d1d-b026-62d60ae13b35",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",
+        "kg": 12100
+      }
+    ]
   },
   {
     "id": "d4e37fed-41e1-5399-9b50-e8263a6ca797",
@@ -25,7 +33,15 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-11T14:30:00Z",
     "endDate": "2025-04-12T14:30:00Z",
-    "createdAt": "2025-03-11T14:35:00Z"
+    "createdAt": "2025-03-11T14:35:00Z",
+    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
+        "kg": 14850
+      }
+    ]
   },
   {
     "id": "576b3ce2-a007-592e-8491-27202f13a995",
@@ -39,7 +55,15 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-19T14:30:00Z",
     "endDate": "2025-04-20T14:30:00Z",
-    "createdAt": "2025-03-19T14:35:00Z"
+    "createdAt": "2025-03-19T14:35:00Z",
+    "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "b1452d63-b1bd-5f10-978f-75bd7f6081df",
+        "kg": 9000
+      }
+    ]
   },
   {
     "id": "6e49c5f9-adc8-503b-a1db-2b576bef7078",
@@ -53,7 +77,15 @@
     "status": "TRANSFERRED",
     "startDate": "2025-02-27T14:30:00Z",
     "endDate": "2025-03-20T14:30:00Z",
-    "createdAt": "2025-02-27T14:35:00Z"
+    "createdAt": "2025-02-27T14:35:00Z",
+    "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "f96daa52-78dd-533a-98b6-7d5b008edf6a",
+        "kg": 7200
+      }
+    ]
   },
   {
     "id": "f87af6c0-197d-5fa3-b85e-29d7b27f00d9",
@@ -67,7 +99,15 @@
     "status": "FERMENTING",
     "startDate": "2026-03-10T14:30:00Z",
     "endDate": null,
-    "createdAt": "2026-03-10T14:35:00Z"
+    "createdAt": "2026-03-10T14:35:00Z",
+    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
+        "kg": 8197.951
+      }
+    ]
   },
   {
     "id": "9da648ee-bdf1-5701-b362-83eced36156a",
@@ -81,7 +121,15 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-03T14:30:00Z",
     "endDate": "2025-03-24T14:30:00Z",
-    "createdAt": "2025-03-03T14:35:00Z"
+    "createdAt": "2025-03-03T14:35:00Z",
+    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
+        "kg": 8400
+      }
+    ]
   },
   {
     "id": "e8a31a4f-1593-5ffc-9b81-15410f404d2a",
@@ -95,7 +143,15 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-21T14:30:00Z",
     "endDate": "2025-04-11T14:30:00Z",
-    "createdAt": "2025-03-21T14:35:00Z"
+    "createdAt": "2025-03-21T14:35:00Z",
+    "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "ed733522-34e1-57c0-b03d-0c5ac52dd2ab",
+        "kg": 7700
+      }
+    ]
   },
   {
     "id": "5ecf8ac9-c9d8-5edd-a359-33956b6294f5",
@@ -109,7 +165,15 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-07T14:30:00Z",
     "endDate": "2025-03-28T14:30:00Z",
-    "createdAt": "2025-03-07T14:35:00Z"
+    "createdAt": "2025-03-07T14:35:00Z",
+    "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "75cb22bb-1e85-5d00-8439-d4dd6e10a914",
+        "kg": 9800
+      }
+    ]
   },
   {
     "id": "04e8d15f-24ff-5943-83db-6f915387071c",
@@ -123,7 +187,15 @@
     "status": "CLEANED",
     "startDate": "2026-01-05T14:30:00Z",
     "endDate": "2026-01-06T14:30:00Z",
-    "createdAt": "2026-01-05T14:35:00Z"
+    "createdAt": "2026-01-05T14:35:00Z",
+    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
+        "kg": 0
+      }
+    ]
   },
   {
     "id": "d78d6307-f96b-533b-8f6e-710f6533bb42",
@@ -137,7 +209,15 @@
     "status": "COMPLETED",
     "startDate": "2026-03-07T14:30:00Z",
     "endDate": "2026-04-02T14:30:00Z",
-    "createdAt": "2026-03-07T14:35:00Z"
+    "createdAt": "2026-03-07T14:35:00Z",
+    "lotId": "4af50d09-875b-5d1d-b026-62d60ae13b35",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",
+        "kg": 6300
+      }
+    ]
   },
   {
     "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2",
@@ -151,7 +231,15 @@
     "status": "CLEANED",
     "startDate": "2025-03-11T14:30:00Z",
     "endDate": "2025-04-13T14:30:00Z",
-    "createdAt": "2025-03-11T14:35:00Z"
+    "createdAt": "2025-03-11T14:35:00Z",
+    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
+        "kg": 0
+      }
+    ]
   },
   {
     "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae",
@@ -165,7 +253,15 @@
     "status": "CLEANED",
     "startDate": "2025-03-03T14:30:00Z",
     "endDate": "2025-03-25T14:30:00Z",
-    "createdAt": "2025-03-03T14:35:00Z"
+    "createdAt": "2025-03-03T14:35:00Z",
+    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
+        "kg": 0
+      }
+    ]
   },
   {
     "id": "aac59603-e058-50f8-9000-dd0a41f26aef",
@@ -179,6 +275,102 @@
     "status": "FERMENTING",
     "startDate": "2026-03-11T14:30:00Z",
     "endDate": null,
-    "createdAt": "2026-03-11T14:35:00Z"
+    "createdAt": "2026-03-11T14:35:00Z",
+    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
+        "kg": 3852.049
+      }
+    ]
+  },
+  {
+    "id": "ad5d5c1e-9b76-53c7-8047-d2ef82c4b3c6",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "harvestBatchId": "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712",
+    "tankCode": "TK-12",
+    "capacityLiters": 8000,
+    "material": "Acero inoxidable AISI 316",
+    "volumeFilledLiters": 5900,
+    "destinationType": "SINGANI_DIST",
+    "status": "TRANSFERRED",
+    "startDate": "2026-03-20T00:00:00Z",
+    "endDate": "2026-04-13T00:00:00Z",
+    "createdAt": "2026-03-20T16:00:00Z",
+    "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+    "finalVolumeLiters": 5800,
+    "inputs": [
+      {
+        "harvestBatchId": "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712",
+        "kg": 9000
+      }
+    ]
+  },
+  {
+    "id": "08d72dc0-fa96-5dbc-bc9b-39300d739c84",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "harvestBatchId": "da1eec24-39ab-5e9e-b351-1e0c1df94015",
+    "tankCode": "TK-15",
+    "capacityLiters": 8000,
+    "material": "Acero inoxidable AISI 304",
+    "volumeFilledLiters": 5200,
+    "destinationType": null,
+    "status": "FERMENTING",
+    "startDate": "2026-09-17T00:00:00Z",
+    "endDate": null,
+    "createdAt": "2026-09-17T16:00:00Z",
+    "lotId": "769be91a-ff12-59f9-9202-2f3953f9fa4c",
+    "finalVolumeLiters": null,
+    "inputs": [
+      {
+        "harvestBatchId": "da1eec24-39ab-5e9e-b351-1e0c1df94015",
+        "kg": 7400
+      }
+    ]
+  },
+  {
+    "id": "0357af1b-ac1f-5400-b52d-cb701cbbcf75",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "harvestBatchId": "924ad785-abfe-5e0b-9857-83de40cae076",
+    "tankCode": "TK-16",
+    "capacityLiters": 6000,
+    "material": "Acero inoxidable AISI 304",
+    "volumeFilledLiters": 4600,
+    "destinationType": "WINE_AGING",
+    "status": "TRANSFERRED",
+    "startDate": "2026-03-15T00:00:00Z",
+    "endDate": "2026-04-08T00:00:00Z",
+    "createdAt": "2026-03-15T16:00:00Z",
+    "lotId": "657df64b-8ef6-5d59-912c-27496c32faed",
+    "finalVolumeLiters": 4450,
+    "inputs": [
+      {
+        "harvestBatchId": "924ad785-abfe-5e0b-9857-83de40cae076",
+        "kg": 6800
+      }
+    ]
+  },
+  {
+    "id": "50fb50c9-1ce4-538f-a153-975c6bfb21f4",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "harvestBatchId": "260262b8-47be-5be5-8b71-d5391032200d",
+    "tankCode": "TK-11",
+    "capacityLiters": 15000,
+    "material": "Acero inoxidable AISI 316",
+    "volumeFilledLiters": 12100,
+    "destinationType": "SINGANI_DIST",
+    "status": "TRANSFERRED",
+    "startDate": "2026-03-10T00:00:00Z",
+    "endDate": "2026-03-21T00:00:00Z",
+    "createdAt": "2026-03-10T16:00:00Z",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "finalVolumeLiters": 12100,
+    "inputs": [
+      {
+        "harvestBatchId": "260262b8-47be-5be5-8b71-d5391032200d",
+        "kg": 18400
+      }
+    ]
   }
 ]

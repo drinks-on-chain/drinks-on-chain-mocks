@@ -1,0 +1,26 @@
+[
+  {
+    "id": "c1b6c7c3-c8d3-5221-a986-b46ab2874a22",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "target": {
+      "type": "HARVEST_BATCH",
+      "id": "260262b8-47be-5be5-8b71-d5391032200d"
+    },
+    "kind": "AMEND",
+    "changes": [
+      {
+        "field": "temperatureAtIntakeC",
+        "before": 15.8,
+        "after": 16.2
+      }
+    ],
+    "reason": "Lectura del termómetro mal transcrita en la planilla de recepción",
+    "createdAt": "2026-03-09T18:00:00Z",
+    "createdBy": {
+      "membershipId": "75b76250-9520-50b8-9563-49384bb7d560",
+      "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "fullName": "Rubén Flores",
+      "role": "OPERATOR"
+    }
+  }
+]

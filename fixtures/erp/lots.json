@@ -1,0 +1,2657 @@
+[
+  {
+    "id": "4af50d09-875b-5d1d-b026-62d60ae13b35",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2026-001",
+    "lotCode": null,
+    "name": "Moscatel de Alejandría 2026",
+    "productType": "SINGANI",
+    "stage": "RESTING",
+    "stageChangedAt": "2026-09-12T00:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": {
+      "kind": "REST",
+      "sourceId": "e58a7714-0a95-5cc4-8fd8-07999cb576e3",
+      "unlockDate": "2026-10-13",
+      "released": false,
+      "daysRemaining": 18,
+      "rule": {
+        "settingKey": "trazabilidad.singani.reposoMinimoDias",
+        "minimum": 180,
+        "applied": 180,
+        "unit": "días",
+        "legalException": false
+      }
+    },
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-04T09:45:00Z",
+    "updatedAt": "2026-09-12T00:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2027-03-11",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "e58a7714-0a95-5cc4-8fd8-07999cb576e3",
+        "unlockDate": "2026-10-13",
+        "released": false,
+        "daysRemaining": 18,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      },
+      {
+        "kind": "REST",
+        "sourceId": "303e1c89-ca47-5505-a0a5-0a6fe2993436",
+        "unlockDate": "2027-03-11",
+        "released": false,
+        "daysRemaining": 167,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2350,
+          "pass": true,
+          "terroirId": "e26c2890-b4e4-5973-aec2-0f092355ad3b"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "e26c2890-b4e4-5973-aec2-0f092355ad3b"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "2a643ce2-9f17-5017-9d6a-b4eb661d4648"
+      ],
+      "tankIds": [
+        "70893e8a-d534-5620-acbc-95e0e6090fd1",
+        "d78d6307-f96b-533b-8f6e-710f6533bb42"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "e58a7714-0a95-5cc4-8fd8-07999cb576e3",
+        "303e1c89-ca47-5505-a0a5-0a6fe2993436"
+      ],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2025-001",
+    "lotCode": "CVJ-2026-SINGANI-001",
+    "name": "CVJ-2026-SINGANI-001",
+    "productType": "SINGANI",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2026-03-01T00:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": null,
+    "projectedBottles": 4080,
+    "bottles": 4080,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "CONFORMING",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-10T09:45:00Z",
+    "updatedAt": "2026-03-01T00:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2025-11-21",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c",
+        "unlockDate": "2025-11-21",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2410,
+          "pass": true,
+          "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "19928e77-9724-5a4e-a7c4-3c494041add9"
+      ],
+      "tankIds": [
+        "d4e37fed-41e1-5399-9b50-e8263a6ca797",
+        "c66f62ff-e355-5e2c-8a47-1ac5282b77b2"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "c667fe6f-790b-5fe9-89b1-a13cdef77a4c"
+      ],
+      "bottlingBatchId": "afef7d2a-4817-556f-ae16-24b38eee217a",
+      "labAnalysisIds": [
+        "3ad42b33-75c5-5b16-8283-8d3e74d8ee5a"
+      ]
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2025-002",
+    "lotCode": "CVJ-2026-SINGANI-002",
+    "name": "CVJ-2026-SINGANI-002",
+    "productType": "SINGANI",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2026-02-10T00:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": null,
+    "projectedBottles": 2140,
+    "bottles": 2140,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "CONFORMING",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-18T09:45:00Z",
+    "updatedAt": "2026-02-10T00:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2025-10-31",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba",
+        "unlockDate": "2025-10-31",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2320,
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "b1452d63-b1bd-5f10-978f-75bd7f6081df"
+      ],
+      "tankIds": [
+        "576b3ce2-a007-592e-8491-27202f13a995"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "155b8e15-bdbc-54cf-ab72-b3c8c01439ba"
+      ],
+      "bottlingBatchId": "16887e29-6c0f-5820-85df-951b7372e1aa",
+      "labAnalysisIds": [
+        "e371629e-607f-5454-b111-8c3d5cf43527"
+      ]
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "a8d26a88-40cd-5152-850b-e22d01885c7e",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2025-003",
+    "lotCode": "CVJ-2026-WINE-003",
+    "name": "CVJ-2026-WINE-003",
+    "productType": "WINE",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2026-09-20T00:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": null,
+    "projectedBottles": 3860,
+    "bottles": 3860,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-02-26T09:45:00Z",
+    "updatedAt": "2026-09-20T00:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2026-02-01",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "AGING",
+        "sourceId": "a48ddc67-0e24-51fe-a43d-877f55ac9de6",
+        "unlockDate": "2026-02-01",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+          "minimum": 0,
+          "applied": 10,
+          "unit": "meses",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "f96daa52-78dd-533a-98b6-7d5b008edf6a"
+      ],
+      "tankIds": [
+        "6e49c5f9-adc8-503b-a1db-2b576bef7078"
+      ],
+      "wineAgingBatchIds": [
+        "a48ddc67-0e24-51fe-a43d-877f55ac9de6"
+      ],
+      "productionBatchIds": [],
+      "bottlingBatchId": "c95f78e7-f72a-556c-8bae-e6670da39e8b",
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "700fca35-50c3-51a0-a23c-b7ed1958e4f4",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2026-002",
+    "lotCode": null,
+    "name": "Negra Criolla 2026",
+    "productType": null,
+    "stage": "HARVEST",
+    "stageChangedAt": "2026-03-12T09:42:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 1,
+      "quarantine": 0,
+      "approved": 0,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-12T09:45:00Z",
+    "updatedAt": "2026-03-12T09:45:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "93bd36a1-673b-52ed-adec-539d805cd018"
+      ],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2025-001",
+    "lotCode": null,
+    "name": "Tannat 2025",
+    "productType": "WINE",
+    "stage": "AGING",
+    "stageChangedAt": "2025-11-03T10:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": {
+      "kind": "AGING",
+      "sourceId": "0086c315-a8e7-56f2-9554-0bcd9ed6e4f6",
+      "unlockDate": "2026-11-03",
+      "released": false,
+      "daysRemaining": 39,
+      "rule": {
+        "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+        "minimum": 0,
+        "applied": 12,
+        "unit": "meses",
+        "legalException": false
+      }
+    },
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-02T09:45:00Z",
+    "updatedAt": "2025-11-03T10:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2026-11-03",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "AGING",
+        "sourceId": "0086c315-a8e7-56f2-9554-0bcd9ed6e4f6",
+        "unlockDate": "2026-11-03",
+        "released": false,
+        "daysRemaining": 39,
+        "rule": {
+          "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+          "minimum": 0,
+          "applied": 12,
+          "unit": "meses",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f"
+      ],
+      "tankIds": [
+        "9da648ee-bdf1-5701-b362-83eced36156a",
+        "75d30fdf-eff5-596b-a2c3-d0d04db104ae"
+      ],
+      "wineAgingBatchIds": [
+        "0086c315-a8e7-56f2-9554-0bcd9ed6e4f6"
+      ],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-001",
+    "lotCode": null,
+    "name": "Moscatel de Alejandría 2026",
+    "productType": "WINE",
+    "stage": "FERMENTING",
+    "stageChangedAt": "2026-03-11T14:30:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-09T09:45:00Z",
+    "updatedAt": "2026-03-11T14:30:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "010ecdc8-6d52-5877-aecf-73bebb5c4d82"
+      ],
+      "tankIds": [
+        "04e8d15f-24ff-5943-83db-6f915387071c",
+        "f87af6c0-197d-5fa3-b85e-29d7b27f00d9",
+        "aac59603-e058-50f8-9000-dd0a41f26aef"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "f4536967-3999-53d5-851a-03c1bc26c7aa",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2025-002",
+    "lotCode": null,
+    "name": "Syrah 2025",
+    "productType": "WINE",
+    "stage": "AGING",
+    "stageChangedAt": "2026-06-30T10:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": {
+      "kind": "AGING",
+      "sourceId": "848d54be-3d51-5a62-93e6-d15eba6df89a",
+      "unlockDate": "2027-02-28",
+      "released": false,
+      "daysRemaining": 156,
+      "rule": {
+        "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+        "minimum": 0,
+        "applied": 8,
+        "unit": "meses",
+        "legalException": false
+      }
+    },
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-20T09:45:00Z",
+    "updatedAt": "2026-06-30T10:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2027-02-28",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "AGING",
+        "sourceId": "848d54be-3d51-5a62-93e6-d15eba6df89a",
+        "unlockDate": "2027-02-28",
+        "released": false,
+        "daysRemaining": 156,
+        "rule": {
+          "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+          "minimum": 0,
+          "applied": 8,
+          "unit": "meses",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "ed733522-34e1-57c0-b03d-0c5ac52dd2ab"
+      ],
+      "tankIds": [
+        "e8a31a4f-1593-5ffc-9b81-15410f404d2a"
+      ],
+      "wineAgingBatchIds": [
+        "848d54be-3d51-5a62-93e6-d15eba6df89a"
+      ],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2025-003",
+    "lotCode": "ALT-2026-WINE-001",
+    "name": "ALT-2026-WINE-001",
+    "productType": "WINE",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2026-05-12T00:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": null,
+    "projectedBottles": 5320,
+    "bottles": 5320,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "CONFORMING",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-06T09:45:00Z",
+    "updatedAt": "2026-05-12T00:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2026-04-10",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [],
+    "locks": [
+      {
+        "kind": "AGING",
+        "sourceId": "a1370e1f-d1d9-5aad-b0a3-821677553361",
+        "unlockDate": "2026-04-10",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+          "minimum": 0,
+          "applied": 12,
+          "unit": "meses",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "75cb22bb-1e85-5d00-8439-d4dd6e10a914"
+      ],
+      "tankIds": [
+        "5ecf8ac9-c9d8-5edd-a359-33956b6294f5"
+      ],
+      "wineAgingBatchIds": [
+        "a1370e1f-d1d9-5aad-b0a3-821677553361"
+      ],
+      "productionBatchIds": [],
+      "bottlingBatchId": "bc10077a-bf11-575c-8bba-331fbc6887c2",
+      "labAnalysisIds": [
+        "314156cd-cf40-5a03-a272-9424663a7d25"
+      ]
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-002",
+    "lotCode": null,
+    "name": "Moscatel de Alejandría 2026",
+    "productType": null,
+    "stage": "REJECTED",
+    "stageChangedAt": "2026-03-15T09:42:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 0,
+      "rejected": 1
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-15T09:45:00Z",
+    "updatedAt": "2026-03-15T09:45:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "95ed7865-429e-57e7-9fe4-e037a8063738"
+      ],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "f62144c5-2e11-5974-a269-500721ea5ec9",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-003",
+    "lotCode": null,
+    "name": "Tannat 2026",
+    "productType": null,
+    "stage": "HARVEST",
+    "stageChangedAt": "2026-03-22T09:42:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 1,
+      "approved": 0,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-22T09:45:00Z",
+    "updatedAt": "2026-03-22T09:45:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "be653b6b-868e-51f3-bc11-462afa764ca1"
+      ],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "41ec0cf8-6c30-5dd9-88d0-be0d8e9e667a",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-004",
+    "lotCode": null,
+    "name": "Moscatel de Alejandría 2026",
+    "productType": null,
+    "stage": "HARVEST",
+    "stageChangedAt": "2026-09-24T09:42:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": null,
+    "projectedBottles": null,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 1,
+      "quarantine": 0,
+      "approved": 0,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-09-24T09:45:00Z",
+    "updatedAt": "2026-09-24T09:45:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": null,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "00a123fd-d0bd-526c-b5bd-227250ec0ce4"
+      ],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": null
+  },
+  {
+    "id": "b45c5f2a-c906-5d3b-97db-c0bd88d84651",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2026-003",
+    "lotCode": null,
+    "name": "Singani Edición Aniversario 2026",
+    "productType": "SINGANI",
+    "stage": "ORIGIN",
+    "stageChangedAt": "2026-09-15T14:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 1800,
+    "projectedBottles": 1800,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 0,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-09-15T14:00:00Z",
+    "updatedAt": "2026-09-15T14:00:00Z",
+    "plannedTerroirIds": [
+      "0a623529-957a-5edd-92de-9c0acccb8bfc"
+    ],
+    "plannedFormatCl": 70,
+    "targetAbvPercent": 40,
+    "targetReadyDate": "2027-06-30",
+    "estimatedReadyDate": "2027-06-30",
+    "estimatedReadyBasis": "DECLARED",
+    "estimatedBottlesHistory": [
+      {
+        "value": 1800,
+        "at": "2026-09-15T14:00:00Z",
+        "by": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2320,
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": "Lote previsto para la preventa de aniversario.",
+    "createdBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    }
+  },
+  {
+    "id": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2026-004",
+    "lotCode": null,
+    "name": "Singani El Molino 2026",
+    "productType": "SINGANI",
+    "stage": "DISTILLING",
+    "stageChangedAt": "2026-09-22T13:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 1400,
+    "projectedBottles": 1400,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-18T14:00:00Z",
+    "updatedAt": "2026-09-22T13:00:00Z",
+    "plannedTerroirIds": [
+      "0a623529-957a-5edd-92de-9c0acccb8bfc"
+    ],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [
+      {
+        "value": 1400,
+        "at": "2026-03-18T14:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2320,
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712"
+      ],
+      "tankIds": [
+        "ad5d5c1e-9b76-53c7-8047-d2ef82c4b3c6"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "d5993d22-4689-5802-9ff8-4c844d8ab807"
+      ],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "769be91a-ff12-59f9-9202-2f3953f9fa4c",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-005",
+    "lotCode": null,
+    "name": "Moscatel Los Sauces 2026",
+    "productType": null,
+    "stage": "FERMENTING",
+    "stageChangedAt": "2026-09-17T16:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 5200,
+    "projectedBottles": 5200,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-09-16T13:30:00Z",
+    "updatedAt": "2026-09-24T22:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [
+      {
+        "value": 5200,
+        "at": "2026-09-16T13:30:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "da1eec24-39ab-5e9e-b351-1e0c1df94015"
+      ],
+      "tankIds": [
+        "08d72dc0-fa96-5dbc-bc9b-39300d739c84"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "657df64b-8ef6-5d59-912c-27496c32faed",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-006",
+    "lotCode": null,
+    "name": "Syrah Loma Alta 2026",
+    "productType": "WINE",
+    "stage": "DISCARDED",
+    "stageChangedAt": "2026-09-17T15:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 5600,
+    "projectedBottles": 5636,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-14T13:15:00Z",
+    "updatedAt": "2026-09-17T15:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [
+      {
+        "value": 5600,
+        "at": "2026-03-14T13:15:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "924ad785-abfe-5e0b-9857-83de40cae076"
+      ],
+      "tankIds": [
+        "0357af1b-ac1f-5400-b52d-cb701cbbcf75"
+      ],
+      "wineAgingBatchIds": [
+        "c32e9854-fdc7-5782-ac66-9aa3e337f794"
+      ],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": {
+      "at": "2026-09-17T15:00:00Z",
+      "by": {
+        "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+        "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+        "fullName": "Martín Calamuchita",
+        "role": "OWNER"
+      },
+      "reason": "Contaminación por Brettanomyces detectada en las barricas"
+    },
+    "notes": null,
+    "createdBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "05b7584c-13e0-5770-9336-9071197e3259",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2026-005",
+    "lotCode": "CVJ-2026-SINGANI-004",
+    "name": "Singani Gran Reserva 2026",
+    "productType": "SINGANI",
+    "stage": "CERTIFIED",
+    "stageChangedAt": "2026-09-24T15:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 2950,
+    "projectedBottles": 2950,
+    "bottles": 2950,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "CONFORMING",
+    "dossierStatus": "CLOSED",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-03-07T14:00:00Z",
+    "updatedAt": "2026-09-24T15:00:00Z",
+    "plannedTerroirIds": [
+      "536b1e93-996e-5835-9794-02c12f1319c4"
+    ],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2026-09-20",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [
+      {
+        "value": 3000,
+        "at": "2026-03-07T14:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      },
+      {
+        "value": 2950,
+        "at": "2026-03-25T14:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        },
+        "reason": "Rendimiento real del corazón tras la destilación"
+      }
+    ],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+        "unlockDate": "2026-09-20",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 300,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2410,
+          "pass": true,
+          "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "260262b8-47be-5be5-8b71-d5391032200d"
+      ],
+      "tankIds": [
+        "50fb50c9-1ce4-538f-a153-975c6bfb21f4"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "b7920625-c7f9-5615-b3d3-23ab147e7a36"
+      ],
+      "bottlingBatchId": "8f82c09a-bb21-5565-889a-ff2e30be7b5d",
+      "labAnalysisIds": [
+        "eb1118cd-a564-5ab4-83e3-dd15636d6184"
+      ]
+    },
+    "discarded": null,
+    "notes": "Edición de la vendimia 2026 con la uva de Cañón Viejo.",
+    "createdBy": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    }
+  }
+]

@@ -12,6 +12,10 @@ export {
   type ErpFixtures,
 } from './erp/fixtures'
 export { backofficeFixtures, type BackofficeFixtures } from './backoffice/fixtures'
+export { publicFixtures, type BottleCodeSample, type PublicFixtures } from './public/fixtures'
+export { SINGANI_CASE } from './erp/trace/demo'
+export { mockBottleCode } from './erp/trace/bottle-code'
+export type { BottleLot, StoredAttachment, VoidedBottleCode } from './erp/trace/state'
 export type {
   MemberBlock,
   StaffMfa,
