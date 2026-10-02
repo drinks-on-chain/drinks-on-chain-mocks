@@ -301,14 +301,15 @@ export interface PhytoDecisionInput {
  * en un tanque → 409 `TRC_PHYTO_DECISION_FINAL`.
  */
 export function decidePhyto(state: TraceState, ctx: TraceCtx, harvest: HarvestBatchResponse, input: PhytoDecisionInput): HarvestBatchResponse {
-  const lot = writableLotOf(state, harvest.lotId)
   const status = harvest.phytosanitaryStatus
+  // Antes que el estado del lote: un dictamen final lo es aunque su lote ya esté rechazado.
   if (status === 'APPROVED' || status === 'REJECTED' || harvestInTank(state, harvest.id)) {
     const inTank = harvestInTank(state, harvest.id)
     throw stateError('TRC_PHYTO_DECISION_FINAL', inTank ? 'La uva ya entró a un tanque: su dictamen no cambia' : `El dictamen ${status} es final`, [
       violation('TRC_PHYTO_DECISION_FINAL', inTank ? 'Uva ya en un tanque' : 'Dictamen final', { field: 'decision', meta: { status, inTank } }),
     ])
   }
+  const lot = writableLotOf(state, harvest.lotId)
   const notes = input.notes?.trim() || null
   if ((input.decision === 'REJECTED' || input.decision === 'QUARANTINE') && !notes) throw invalidField('notes', 'Indica el motivo del dictamen (obligatorio al rechazar o poner en cuarentena)')
   if (input.decidedAt) {
@@ -602,7 +603,8 @@ export function groupReadings(state: TraceState, ctx: TraceCtx, lot: Lot, tank: 
   const readings = state.logs.filter((l) => l.fermentationTankId === tank.id && dayOf(l.recordedAt) === day && !isVoided(state, 'FERMENTATION_LOG', l.id))
   if (readings.length === 0) return
   const temps = readings.map((l) => l.temperatureCelsius)
-  const last = readings.reduce((a, b) => (a.recordedAt >= b.recordedAt ? a : b))
+  // A igual hora, la última registrada.
+  const last = readings.reduce((a, b) => (a.recordedAt > b.recordedAt ? a : b))
   const data = { tankCode: tank.tankCode, day, readings: readings.length, minTemperatureC: Math.min(...temps), maxTemperatureC: Math.max(...temps), lastTemperatureC: last.temperatureCelsius, unit: '°C' }
   const summary = `${readings.length === 1 ? 'Lectura' : `${readings.length} lecturas`} en ${tank.tankCode}: ${String(last.temperatureCelsius).replace('.', ',')} °C`
   const existing = state.lotEvents.find((e) => e.lotId === lot.id && e.type === 'FERMENTATION_READINGS' && e.resource.id === tank.id && e.data.day === day)
