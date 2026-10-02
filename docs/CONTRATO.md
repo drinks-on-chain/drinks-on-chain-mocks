@@ -41,7 +41,7 @@ Los 13 fixtures con DTO en el OpenAPI (`WineryResponseDto` y sus miembros, `User
 | 5 | Detalles con relaciones | **Resuelto en la Ola 1**: los DTO declaran las relaciones de los `include` de Prisma (opcionales) | Igual desde 0.4 (`src/erp/handlers/views.ts`, esquemas `*DetailSchema` de `src/erp/schemas/details.ts`): vendimia con `terroir` (lista y detalle) y `fermentationTanks` (detalle); cuba con `harvestBatch` y, en el detalle, `logs` y `treatments`; crianza y destilación con `fermentationTank` (en el detalle con vendimia y parcela) y `bottlingBatches`; embotellado con `labAnalysis` y, en el detalle, `wineAgingBatch`/`productionBatch` con su cadena |
 | 6 | `GET /v1/wine-aging` | No declara `limit`/`offset` ni filtros (el resto de listas sí) | Acepta `limit`/`offset`; ningún filtro |
 | 7 | Esquema de seguridad | Las operaciones usan `JWT-auth`, pero `components.securitySchemes` solo define `bearer` (que usa `POST /v1/uploads`) | Sin efecto en los mocks; avisar a backend (el botón *Authorize* de Swagger puede no aplicarse) |
-| 8 | `GET /traceability/public/:lotCode` | Público (`@Public()`); responde el grafo DAG | Público. Acepta el código de lote (sin distinguir mayúsculas) o el UUID del embotellado |
+| 8 | `GET /traceability/public/:lotCode` | Público (`@Public()`); responde el grafo DAG | Retirada en el cierre H2 (§12): 404. La sustituye `GET /v1/public/passports/{code}` |
 | 9 | Códigos de error | Verificados: `VALIDATION_ERROR` (400, `details` = lista de mensajes), `BAD_REQUEST` (400, JSON mal formado), `UNAUTHORIZED` (401), `NOT_FOUND` (404, también `Cannot GET /v1/…`). `path` incluye la query | Desde 0.2, lo del contrato de la Ola 0 (§0): `VALIDATION_ERROR` es **422** con `details: [{ field, message }]`; `BAD_REQUEST` (400) queda para el JSON mal formado. Desde 0.3, como el backend O0-BE-2 (`error-codes.ts`): 500 `INTERNAL_ERROR`, 409 `WINERY_NOT_PENDING` y `FERMENTATION_TANK_ALREADY_TRANSFERRED`, 422 `IDEMPOTENCY_KEY_INVALID`, 409 `IDEMPOTENCY_KEY_REUSED`. Mensajes de validación en español (mapa común de zod) |
 | 10 | Pesaje sin laboratorio | Brix, pH y acidez son `required` en `CreateHarvestBatchDto` | 422 `VALIDATION_ERROR` con un detalle por campo (`brixDegrees`, `initialPh`, `initialAcidityGl`) |
 | 11 | Bruto ≤ tara | 400 "Peso bruto menor o igual a tara" | 422 `VALIDATION_ERROR` en `grossWeightKg` (contrato §1) |
@@ -55,7 +55,7 @@ Los 13 fixtures con DTO en el OpenAPI (`WineryResponseDto` y sus miembros, `User
 | 19 | `qrBatchUrl` | El backend fija `https://drinksonchain.com/trace/batch/{lotCode}` | Fixtures y altas usan la propuesta `https://app.drinksonchain.bo/b/{lotCode}` (doc 09 §8 punto 2) |
 | 20 | Código de lote | `{BODEGA}-{AÑO}-{TIPO}-{SEQ}` | La secuencia es por bodega y año (como en los fixtures: `CVJ-2026-WINE-003` sigue a dos singanis) |
 | 21 | Conteo de rutas | El doc 09 habla de "35 rutas" | Con la Ola 1 completa son 102 rutas y 119 operaciones, incluidas `GET /v1/health`, `/health/live` y `/health/ready` (públicas) y `GET /v1/uploads/url`. Hay un handler por operación (lo comprueba `test/contract.test.ts`) |
-| 22 | `GET /traceability/dag/:id` | Sin `@OrgType` ni `@Roles`: cualquier sesión, sin filtrar por bodega | Cualquier sesión; con una bodega activa solo sus lotes (404 los de otra), la plataforma y el resto ven todos. Confirmar con backend si el DAG debe filtrar por bodega |
+| 22 | `GET /traceability/dag/:id` | Sin `@OrgType` ni `@Roles`: cualquier sesión, sin filtrar por bodega | Retirada en el cierre H2 (§12): 404. La sustituye `GET /v1/lots/{id}/graph` (solo la bodega dueña y la plataforma) |
 | 23 | Archivos | `POST /v1/uploads` solo personal, tipo por firma de bytes (JPEG, PNG, WEBP, GIF ≤ 5 MB; PDF ≤ 15 MB), clave privada `org/<id>/<carpeta>/<aaaa>/<mm>/<uuid>.<ext>` y URL firmada de 15 min; `GET /v1/uploads/url?key=` | Igual (0.4): consumidor → 403 `FORBIDDEN`; tipo que no coincide → 422 `FILE_TYPE_NOT_ALLOWED` en `file`; demasiado grande → 413 `FILE_TOO_LARGE`; clave de otra organización → 404 `FILE_NOT_FOUND`. La URL `/mocks/uploads/<clave>?expires=…&signature=mock` no sirve ningún archivo |
 | 24 | Rutas obsoletas | Retiradas en H1 (404): `POST /wineries`, `wineries/pending`, `wineries/{id}/approve|reject`, `wineries/my/members*`. La maquinaria `deprecated` + `x-replaced-by` + `Deprecation`/`Link` queda para próximas retiradas | Igual: sin rutas; `RouteSpec.deprecated` se conserva y la prueba de contrato exige las mismas obsoletas que el OpenAPI (ninguna tras H1; desde 0.5, las tres legadas del §10.1) |
 | 25 | Trazabilidad de la Ola 2 | Lote como entidad, reglas en el servidor, códigos de botella, expediente y pasaportes públicos (163 operaciones) | §10. Desde 0.5 los puntos 10, 15, 16, 17, 18, 19 y 22 de esta tabla quedan sustituidos por las reglas del §10.2 (análisis opcional en el pesaje, candados en meses de calendario, D.O. calculada, tanque cerrado por la operación, QR del Marketplace, grafo restringido) |
@@ -70,7 +70,7 @@ Desde 0.3.0-rc.2, la matriz de los guards del backend (`@OrgType('WINERY') @Role
 | Parcelas: lectura | ✅ | ✅ | ✅ | ✅ (mínima, §11 bis; desde 0.4) | ✅ |
 | Vendimia (pesaje): alta | ✅ | ✅ | ✅ | ✅ | — |
 | Vendimia: lectura | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Dictamen fitosanitario (`phyto-status`) | ✅ | ✅ | ✅ | — | — |
+| Dictamen fitosanitario (`phyto-decisions`) | ✅ | ✅ | ✅ | — | — |
 | Cubas: alta y tratamientos | ✅ | ✅ | — | — | — |
 | Cubas: lectura | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Lecturas diarias (`…/logs`) | ✅ | ✅ | ✅ | ✅ | — |
@@ -84,7 +84,7 @@ Desde 0.3.0-rc.2, la matriz de los guards del backend (`@OrgType('WINERY') @Role
 - **Plataforma sobre una bodega** (OP-07): en todas las rutas de la tabla, `SUPERADMIN`, `ADMIN` y `OPERATIONS` leen y escriben y `SUPPORT` solo lee, con la bodega en `?wineryId=`. Las lecturas sin él ven todas las bodegas; las escrituras sin él → 422 `VALIDATION_ERROR` con `details[{ field: 'wineryId' }]`; `wineryId` que no es UUID → 422; bodega inexistente → 404 `ORG_NOT_FOUND`.
 - **Bodega activa**: si la petición apunta a otra bodega (`?wineryId=` o `wineryId` en el cuerpo) → 404 `NOT_FOUND` (nunca 403); lo de otra bodega por id también es 404.
 - **Rutas de plataforma**: `GET /wineries` (directorio): todo el personal de plataforma; `/platform/*` según la matriz de la Ola 1.
-- **Cualquier sesión**: `users/me*`, `POST /uploads`, `switch-organization`, `logout-all`, `GET /traceability/dag/:id` (§2 punto 22). **Públicas**: `GET /traceability/public/:lotCode`, `GET /health`, `signup`, `login`, `refresh`, `logout`.
+- **Cualquier sesión**: `users/me*`, `POST /uploads`, `switch-organization`, `logout-all`. **Públicas**: `GET /v1/public/*` (pasaporte, directorio y borrador del catálogo), `GET /health`, `signup`, `login`, `refresh`, `logout`.
 - Rol insuficiente, tipo de organización equivocado o `SUPPORT` escribiendo → 403 `AUTH_INSUFFICIENT_PERMISSIONS`. El personal de plataforma necesita además el segundo factor en la sesión (403 `AUTH_MFA_REQUIRED`; Ola 1).
 - Cambios frente a 0.3.0-rc.1: el operario ya no actúa como enólogo (pesa y registra lecturas, no crea cubas ni lee crianza/embotellado), el contador solo lee, el dueño dictamina, el agrónomo registra lecturas, el `POS_OPERATOR` global ya no registra lecturas y los consumidores ya no leen análisis de laboratorio por el ERP.
 
@@ -347,3 +347,84 @@ OpenAPI de `drinks-on-chain-back` en `dev` (`8e85935`), idéntico al del servido
 | `wineryInactive` | `CUR-2026-SINGANI-001` | Casa Uriondo, suspendida: `winery.active: false` |
 
 Códigos de botella de muestra de cada uno en `publicFixtures.bottleCodes`. Los escenarios de datos (`lote-en-reposo`, `lote-listo`, `laboratorio-no-conforme`, `lote-con-incidencia`) siguen rehaciendo el caso del §18.
+
+## 12. Ola 2 · cierre H2: sin rutas legadas (mocks 0.5.0-rc.3)
+
+Contrato: el OpenAPI de la **fase de cierre** del backend, rama `feat/o2-be-contraer` de `drinks-on-chain-back` (`9ca8111`): 137 rutas, 158 operaciones, 266 esquemas, ninguna operación `deprecated` ni con 501. Documento de referencia: `docs/arquitectura/trazabilidad.md` del backend, sección «Cierre H2: contracción (`v0.2.0`)», y `src/seed/corrections.ts`.
+
+### 12.1 De dónde sale `openapi/erp.json` en esta versión (y cómo volver al servidor)
+
+La fase de cierre **no está desplegada**: el servidor de desarrollo sigue sirviendo el OpenAPI de `rc.2` (163 operaciones, con las cinco rutas legadas). Por eso `openapi/erp.json` se fijó desde la rama, no desde el servidor:
+
+```bash
+git -C ../drinks-on-chain-back show origin/feat/o2-be-contraer:openapi.json > /tmp/openapi-h2.json
+pnpm openapi:pull -- /tmp/openapi-h2.json
+```
+
+**No ejecutes `pnpm openapi:pull` contra el servidor mientras siga en la versión anterior**: traería de vuelta las rutas retiradas y la prueba de contrato fallaría (cada operación del OpenAPI exige su `RouteSpec`). Cuando el backend despliegue el cierre (su `v0.2.0`):
+
+```bash
+pnpm openapi:pull -- https://136.243.223.39.sslip.io/docs-json
+pnpm test
+```
+
+El resumen del script debe decir «Mismas operaciones que antes» (158). Si añade o quita alguna, es un cambio del backend posterior a `9ca8111`: ajusta los esquemas y anótalo aquí.
+
+### 12.2 Lo retirado y cómo responden los mocks
+
+| Retirado | Respuesta de los mocks | En su lugar |
+|---|---|---|
+| `PATCH /v1/harvest-batches/{id}/phyto-status` | 404 | `POST /v1/harvest-batches/{id}/phyto-decisions` |
+| `POST /v1/bottling` | 404 | `POST /v1/lots/{id}/bottling` y `…/preview` |
+| `POST /v1/lab-analyses` | 404 | `POST /v1/lots/{id}/lab-analyses` |
+| `GET /v1/traceability/dag/{bottlingBatchId}` | 404 | `GET /v1/lots/{id}/graph` |
+| `GET /v1/traceability/public/{lotCode}` | 404 | `GET /v1/public/passports/{code}` o `/v1/public/lots/{lotCode}` |
+| Pesaje: `brixDegrees`, `initialPh`, `initialAcidityGl` | 422 `VALIDATION_ERROR` en el campo | `maturity` o `POST …/maturity-analyses` |
+| Pesaje: `phytosanitaryStatus` (cualquier valor) | 422 `TRC_PHYTO_IN_CREATE` | `POST …/phyto-decisions` |
+| Parcela (alta y edición) y destilación: `isDoEligible` | 422 `VALIDATION_ERROR` | Calculado (`isDoEligible`, `doEvaluation` en la respuesta) |
+| Tanque: `harvestBatchId` | 422 `VALIDATION_ERROR` | `inputs` (≥ 1) y `volumeFilledLiters`, obligatorios |
+| Destilación: `processEndDate`, `outputVolumeLiters`, `wasteVolumeLiters`, `additionalParams` | 422 `VALIDATION_ERROR` | `inputVolumeLiters` obligatorio; el cierre, en `POST …/{id}/close` |
+| Embotellado: `labelDesignUrl` | 422 `VALIDATION_ERROR` | `labelDesignKey` |
+| Laboratorio: `laboratoryReportPdfUrl` | 422 `VALIDATION_ERROR` | `laboratoryReportKey`, obligatorio |
+| Crianza o destilación desde un tanque sin completar | 409 `TRC_TANK_NOT_COMPLETED` | `POST /v1/fermentation-tanks/{id}/complete` antes |
+| `TRC_PRODUCT_TYPE_MISMATCH` | Ya no existe | El tipo se deriva de las fuentes |
+
+El 422 de un campo retirado copia el del backend (`forbidNonWhitelisted`): `details: [{ field: '<campo>', message: 'property <campo> should not exist' }]`. Los mocks solo rechazan así los campos de la tabla (`RETIRED_INPUT_FIELDS`); cualquier otro campo desconocido lo siguen descartando sin error, mientras que el backend responde el mismo 422 para **todos**. La prueba de contrato comprueba que cada campo de `RETIRED_INPUT_FIELDS` falta de verdad en su DTO del OpenAPI.
+
+Los campos de respuesta no cambian. En los registros nuevos, `laboratoryReportPdfUrl` y `phytoInspectionPdfUrl` llevan la `key` del archivo y `labelDesignUrl` es `null` (la etiqueta está en `labelDesign.key`).
+
+### 12.3 Aditivo
+
+- `UploadResponseDto.sha256`: los mocks calculan la SHA-256 real de los bytes subidos y la recuerdan por `key` durante la sesión (`getErpDb().uploads`). El dictamen (`inspectionReport.sha256`) y el laboratorio (`report.sha256`) guardan esa huella; si la `key` no se subió en la sesión (los mocks no comprueban que el archivo exista), una estable derivada de la clave.
+- `clean` de un tanque `COMPLETED` con alguna destilación ya salida y remanente: `TRANSFERRED` y `CLEANED` en el historial, en el mismo instante (`cleanedAt`). Sin ninguna salida → 409 `TRC_TANK_INVALID_TRANSITION`.
+
+### 12.4 Diferencias vistas contra el backend real y huecos del ERP
+
+| Tema | Antes (`rc.2`) | Ahora |
+|---|---|---|
+| `pendingPhyto[].intakeDate` del panel | Instante ISO | Fecha `AAAA-MM-DD` |
+| Nombre del CSV del reporte | `reporte-de-produccion.csv` | `reporte-produccion-AAAA-MM-DD.csv` (día de La Paz del reloj de los mocks) |
+| Escenario `empty` | Solo listas paginadas | También el panel y el reporte (bodega sin registros) |
+| `?mock=<escenario>` | Se leía con la primera petición | Se guarda al arrancar el worker |
+| `minAgingMonths` | 0 en todas las bodegas | Altos: 6 (ajuste por bodega); el resto, 0 |
+| Corregir el volumen de una fuente ya embotellada | El balance usaba el volumen guardado al embotellar: no abría incidencia | Usa el volumen vigente de las fuentes (como `lot-integrity.ts` del backend): abre `TRC_BOTTLING_EXCEEDS_VOLUME` u otra del balance |
+
+Lo que **no** cambia, porque el backend hace lo mismo:
+
+- **`OPERATOR` no ve el panel**: `GET /v1/traceability/dashboard` es de `OWNER`, `ENOLOGIST`, `AGRONOMIST` y `ACCOUNTANT`; el reporte, de `OWNER`, `ENOLOGIST` y `ACCOUNTANT`.
+- **`awaitingBifurcation`** solo es `true` con un tanque `COMPLETED` sin destino y sin usar. Como `complete` exige `destination`, con datos de la Ola 2 no ocurre (solo con registros anteriores). Es una incoherencia del contrato, no de los mocks.
+- **Mensajes de error**: llevan las cifras con punto decimal y las fechas en ISO, como los del backend. La UI debe construir su texto con `details[].expected`, `actual` y `meta`.
+
+### 12.5 Datos de demo
+
+Las tres correcciones de realismo del cierre (las mismas que la semilla del backend aplica al cargar los fixtures):
+
+| Registro | Corrección | Dónde |
+|---|---|---|
+| Tanques TK-06, TK-09 y TK-RED-04 | Se retiran, con sus eventos | Filas base (`generate.py` y `generate.ts`) |
+| TK-08 (lote `CVJ-L2026-001`) | `COMPLETED` → `TRANSFERRED` | Filas base |
+| TK-01 de Cinti Viejo (lote de `CVJ-2026-SINGANI-001`) | `TRANSFERRED` → `CLEANED` el 26-05-2025, con historial `FERMENTING`, `COMPLETED`, `TRANSFERRED`, `CLEANED` | `src/erp/seed/trace.ts` (tras la migración; cambiarlo en las filas base alteraría la secuencia pseudoaleatoria de las lecturas) |
+
+Con ellas el backend puede copiar los fixtures de esta versión sin aplicar correcciones. Quedan 18 tanques y ninguno `COMPLETED`: para probar la crianza o la destilación hay que completar antes uno en fermentación (TK-04 y TK-10 del lote `ALT-L2026-001`, con destino vino; TK-15 de `ALT-L2026-005`, sin tipo decidido).
+
+Pendiente: el mosto de `CVJ-L2026-001` y `ALT-L2026-001` equivale a ~1,0 L por kilo de uva (lo habitual es 0,65–0,75). No incumple ninguna regla; ajustarlo cambia los volúmenes de toda su cadena.

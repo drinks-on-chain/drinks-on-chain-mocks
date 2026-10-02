@@ -2,6 +2,75 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.5.0-rc.3] · 2026-10-02
+
+**Cierre H2 de la Ola 2: sin rutas legadas ni `LotView`.** Candidata a la estable `0.5.0`. El contrato es el OpenAPI de la **fase de cierre** del backend (`drinks-on-chain-back`, rama `feat/o2-be-contraer`, `9ca8111`: 137 rutas, 158 operaciones, 266 esquemas, ninguna obsoleta), **todavía sin desplegar**: el servidor de desarrollo sigue sirviendo las 163 de `rc.2` hasta que se actualice. Con los mocks activos (MSW) las apps ven ya el contrato final; contra el servidor, las rutas y los campos retirados siguen respondiendo hasta el despliegue. Detalle y cómo volver a `pnpm openapi:pull` en [docs/CONTRATO.md](docs/CONTRATO.md) §12.
+
+### Retirado (contrato §16.2 «H2»)
+
+- **Rutas** (404, sin cabeceras `Deprecation`): `PATCH /v1/harvest-batches/{id}/phyto-status`, `POST /v1/bottling`, `POST /v1/lab-analyses`, `GET /v1/traceability/dag/{bottlingBatchId}` y `GET /v1/traceability/public/{lotCode}`. Las lecturas `GET /v1/bottling`, `GET /v1/bottling/{id}` y `GET /v1/lab-analyses/batch/{bottlingBatchId}` siguen.
+- **Campos de entrada** (`RETIRED_INPUT_FIELDS`): `brixDegrees`, `initialPh`, `initialAcidityGl` (pesaje); `isDoEligible` (parcelas y destilación); `harvestBatchId` (tanque); `processEndDate`, `outputVolumeLiters`, `wasteVolumeLiters`, `additionalParams` (alta de destilación); `labelDesignUrl` (embotellado); `laboratoryReportPdfUrl` (laboratorio). Enviarlos responde **422 `VALIDATION_ERROR`** en ese campo con el mensaje del backend (`property <campo> should not exist`). `phytosanitaryStatus` en el pesaje, con cualquier valor (también `PENDING_INSPECTION`), responde 422 `TRC_PHYTO_IN_CREATE`.
+- **Obligatorios**: `inputs` y `volumeFilledLiters` (tanque), `inputVolumeLiters` (destilación), `laboratoryReportKey` (laboratorio).
+- **Crianza y destilación solo desde un tanque `COMPLETED`**: desde `FILLING`, `FERMENTING`, `TRANSFERRED` o `CLEANED` → 409 `TRC_TANK_NOT_COMPLETED` (`meta: { status, tankId }`). Antes, `POST /v1/fermentation-tanks/{id}/complete`.
+- **Código de error** `TRC_PRODUCT_TYPE_MISMATCH` (sale de `TRACE_ERROR_CODES`): el tipo del embotellado se deriva siempre de sus fuentes.
+- **De los mocks**: `LotView`, `LotViewSchema`, `deriveLotViews`, `deriveLotView`, `deriveRestStatus`, `SINGANI_REST_DAYS`, `LotChain`, `LotViewOptions`, `LOT_STAGES`/`LotStage`, `LOT_KINDS`/`LotKind`, `LotLock`; el grafo legado (`DagGraphSchema`, `DagNode`, `DagOperator`, `DagLabAnalysis`, `DAG_STAGE_NAMES`, `PublicPassportSchema`, `TraceabilityDagSchema` y sus mapas); `CreateBottlingBatchSchema`, `CreateBatchLabAnalysisSchema`, `UpdatePhytoStatusSchema`, `HARVEST_LAB_FIELDS`, `DistillationCutsSchema`; los fixtures `fixtures/erp/lots-view.json` y `traceability-public.json` (`erpFixtures.lotsView`, `erpFixtures.traceabilityPublic`).
+
+Los campos de **respuesta** no cambian (`labelDesignUrl`, `laboratoryReportPdfUrl`, `phytoInspectionPdfUrl`, `additionalParams`, `brixDegrees`, `isDoEligible`… siguen saliendo).
+
+### Añadido
+
+- `sha256` (64 hexadecimales, la huella real del contenido) en la respuesta de `POST /v1/uploads`; el informe del dictamen y el del laboratorio guardan esa huella (`inspectionReport.sha256`, `report.sha256`). De un archivo que no se subió en la sesión, una huella estable derivada de la clave.
+- `POST /v1/fermentation-tanks/{id}/clean` cierra también un tanque `COMPLETED` del que ya salió alguna destilación y queda un remanente: el historial anota `TRANSFERRED` y `CLEANED` y el resto cuenta como merma de trasiego. Sin ninguna salida → 409 `TRC_TANK_INVALID_TRANSITION`.
+- `RETIRED_INPUT_FIELDS` (entrada raíz): los campos retirados por DTO.
+
+### Corregido
+
+- `pendingPhyto[].intakeDate` del panel es una **fecha** `AAAA-MM-DD` (era un instante), como el backend.
+- El CSV del reporte de producción se llama `reporte-produccion-AAAA-MM-DD.csv` (día de La Paz en que se pide).
+- Escenario `empty`: también vacía `GET /v1/traceability/dashboard` y `GET /v1/traceability/reports/production` (JSON y CSV).
+- `?mock=<escenario>` se guarda al arrancar el worker (`startMockWorker`): ya no se pierde si la app navega antes de la primera petición.
+- Corregir `volumeLiters` de una crianza (o el corazón de una destilación) **ya embotellada** reevalúa el balance con el volumen vigente de las fuentes: si las botellas ya no caben, la corrección se registra y abre la incidencia `TRC_BOTTLING_EXCEEDS_VOLUME` (`source: 'CORRECTION'`), que bloquea el cierre del expediente.
+
+### Fixtures
+
+- Correcciones de la semilla del backend (`src/seed/corrections.ts`): se retiran los tanques vacíos **TK-06, TK-09 y TK-RED-04** (`CLEANED` con 0 L) y sus eventos; **TK-08** pasa de `COMPLETED` a `TRANSFERRED` (su destilación se llevó los 6.300 L); **TK-01 de Cinti Viejo** queda `CLEANED` el 26-05-2025 con su historial. 18 tanques (eran 21); ya no hay ninguno `COMPLETED` (complétalo desde uno `FERMENTING`: TK-04, TK-10 o TK-15 de Altos).
+- **Altos de Calamuchita fija 6 meses de crianza mínima** (`trazabilidad.vino.crianzaMinimaMeses`, ajuste por bodega): sus lotes llevan `rules.wine.minAgingMonths: 6` y una crianza más corta responde 422 `TRC_AGING_BELOW_MINIMUM`. El estándar de la plataforma sigue en 0.
+- El dictamen del caso del §18 guarda la huella de su acta, así que cambian la huella del expediente cerrado (`CVJ-2026-SINGANI-004`) y la bitácora (159 eventos; `setting-overrides.json`, 7; `setting-history.json`, 9).
+
+### Guía de migración `rc.2` → `rc.3`
+
+**ERP**
+
+1. Deja de llamar a las cinco rutas retiradas: dictamen con `POST …/phyto-decisions`; embotellado con `POST /v1/lots/{id}/bottling` (y `…/preview`); laboratorio con `POST /v1/lots/{id}/lab-analyses`; grafo con `GET /v1/lots/{id}/graph`; pasaporte con `GET /v1/public/passports/{code}`.
+2. Revisa los cuerpos: ninguno de los campos de «Retirado» (un 422 ahora, antes se ignoraban o se convertían). El análisis del pesaje va en `maturity: { brixDegrees, ph, acidityGl }` o en `POST …/maturity-analyses`; el tanque, con `inputs` y `volumeFilledLiters`; la destilación se abre con `inputVolumeLiters` y se cierra con `POST …/{id}/close`; la etiqueta, por `labelDesignKey`; el informe, por `laboratoryReportKey` (los dos, una `key` de `POST /v1/uploads`).
+3. Crianza y destilación: ofrece solo tanques `COMPLETED` y muestra el 409 `TRC_TANK_NOT_COMPLETED`. Quita lo que dependa de `TRC_PRODUCT_TYPE_MISMATCH`.
+4. Sustituye `LotView`/`deriveLotViews` por `Lot`/`LotSummary` de `GET /v1/lots`, y `deriveRestStatus` por `production.lock` o `GET /v1/production-batches/{id}/rest-status`. `erpFixtures.lotsView` y `erpFixtures.traceabilityPublic` ya no existen (`erpFixtures.lots`, `publicFixtures.passports`).
+5. Panel: `pendingPhyto[].intakeDate` es una fecha (no la formatees como instante). Reporte: usa el nombre de `Content-Disposition` (`reporte-produccion-AAAA-MM-DD.csv`).
+6. `UploadResponse` gana `sha256` (obligatorio en el tipo).
+7. Pruebas contra los fixtures: no hay tanques `COMPLETED` ni los tres vacíos, TK-01 de Cinti Viejo está `CLEANED`, los lotes de Altos exigen 6 meses de crianza y la huella del expediente del §18 cambió.
+
+**Marketplace**
+
+1. Nada cambia en el pasaporte, el expediente, el directorio ni el borrador del catálogo. Si algo consultaba todavía `GET /v1/traceability/public/{lotCode}` o usaba `PublicPassportSchema`/`DagGraphSchema` (el grafo legado), pasa a `GET /v1/public/passports/{code}` y `PublicLotPassportSchema`.
+2. Fixtures: `rules.items` de los vinos de Altos muestra «Crianza mínima: 6 meses» (era 0); la huella de `CVJ-2026-SINGANI-004` (`dossier.hash`) cambió; el pasaporte de `CVJ-2026-SINGANI-001` pierde los dos eventos del tanque vacío TK-09 y su `fermentation.endDate` pasa al 12-04-2025.
+
+**Backoffice** (sigue en `0.4.1`; esto es lo que le cambia al saltar a `0.5.0`)
+
+1. Los esquemas, tipos y rutas de la plataforma (`/v1/platform/*`, solicitudes, bodegas, equipos, configuración, bitácora, tablero, lista de espera) **no cambian**: no hay que tocar pantallas.
+2. **Límite de metanol por defecto: 200 mg/100 ml a.a.** (era 300) en `trazabilidad.laboratorio.limites` (`DEFAULT_LAB_LIMITS`, `settings.json`), el del catálogo del backend. Afecta a lo que muestre o pruebe el valor por defecto de ese parámetro.
+3. Fixtures del back office: un ajuste por bodega más (Altos, `trazabilidad.vino.crianzaMinimaMeses` = 6: `setting-overrides.json` 6 → 7, `setting-history.json` 8 → 9) y la bitácora pasa de 163 a 159 eventos, con otros ids y hashes (menos tanques y destilaciones de demostración, un `SETTING_OVERRIDE_SET` más). Las pruebas que cuenten filas o fijen un hash deben actualizarse.
+4. Bitácora del ERP: las escrituras de la sesión registran las acciones de la Ola 2 (`LOT_CREATED`, `LOT_UPDATED`, `LOT_DISCARDED`, `PHYTO_DECIDED`, `MATURITY_ANALYZED`, `TANK_TRANSITION`, `DISTILLATION_CLOSED`, `BOTTLED`, `LAB_REGISTERED`, `BOTTLE_CODE_VOIDED`, `BOTTLE_CODES_EXPORTED`, `CORRECTION_REGISTERED`, `ATTACHMENT_ADDED`, `ATTACHMENT_VISIBILITY_CHANGED`, `DOSSIER_CLOSED`) y ya no `HARVEST_BATCH_PHYTO_STATUS_CHANGED`, `BOTTLING_BATCH_CREATED` ni `LAB_ANALYSIS_CREATED` (las dos últimas siguen en los eventos de los fixtures). Si la pantalla traduce acciones con una lista cerrada, deja un texto por defecto.
+5. `ScenarioName` crece (`lote-en-reposo`, `lote-listo`, `lote-con-incidencia`, `laboratorio-no-conforme`, `pasaporte-saturado`): un `Record<ScenarioName, …>` escrito a mano deja de compilar; el panel `/__mocks` debe usar `SCENARIOS` y `SCENARIO_DESCRIPTIONS` (o `RESPONSE_SCENARIOS` si solo quiere los cinco de siempre).
+6. Los handlers sirven `/mocks/uploads/*` (logotipos y documentos de los fixtures) y las rutas `/v1/public/*`; con `uploads: 'passthrough'` no interceptan los archivos. El estado guardado en `localStorage` (`doc-mocks:state`) se descarta solo al cambiar de versión.
+7. La plataforma **solo lee** la trazabilidad (`GET /v1/lots?wineryId=…`, grafo, expediente): cualquier escritura responde 403 `TRC_PLATFORM_READ_ONLY`.
+
+### Pendiente (no cambia en `rc.3`)
+
+- `awaitingBifurcation` no llega a ser `true` con datos de la Ola 2: como en el backend, solo lo es un tanque `COMPLETED` sin destino, y `complete` exige `destination`.
+- El panel sigue sin admitir a `OPERATOR` (403), igual que el backend (`OWNER`, `ENOLOGIST`, `AGRONOMIST`, `ACCOUNTANT`).
+- Los mensajes de error llevan fechas ISO y punto decimal, como los del backend: la UI debe formatear con `details[].expected`/`actual`/`meta`, no con el texto.
+- Rendimiento del mosto de `CVJ-L2026-001` y `ALT-L2026-001` (~1,0 L/kg; lo habitual es 0,65–0,75): pendiente de ajustar en las filas base.
+
 ## [0.5.0-rc.2] · 2026-10-02
 
 **Precisiones del backend con la Etapa 2 de la Ola 2 completa** (`drinks-on-chain-back` en `dev`, `8e85935`, el mismo OpenAPI que sirve el servidor de desarrollo: 163 operaciones, 272 esquemas y **ninguna ruta con 501**). Lo que en `rc.1` seguía el contrato escrito ahora sigue el código del backend (`docs/arquitectura/trazabilidad.md`). Comprobado contra el servidor: un pasaporte real pasa `PublicLotPassportSchema` y coincide con el fixture del mismo lote. Detalle en [docs/CONTRATO.md](docs/CONTRATO.md) §11.
