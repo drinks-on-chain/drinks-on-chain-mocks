@@ -11,6 +11,7 @@ import {
   PublicCollectionSummarySchema,
   PublicLotPassportSchema,
   PublicWineryProfileSchema,
+  verifyMerkleProof,
   type Envelope,
   type Paged,
 } from '../src'
@@ -224,9 +225,12 @@ describe('pasaportes públicos', () => {
     expect((await call(`/v1/public/lots/${CASE_CODE}`)).status).toBe(404)
     resetScenario()
 
+    // Un código anulado **después** del cierre avisa «anulado» y conserva su prueba (entró en la raíz, S-14).
     const code = codeOf(3)
     await call(`/v1/bottle-codes/${code}/void`, { token: enologa, body: { reason: 'Botella rota en el almacén' } })
-    expect(PublicBottlePassportSchema.parse(dataOf((await call(`/v1/public/bottles/${code}`)).json)).bottle).toMatchObject({ status: 'VOIDED', merkleProof: null })
+    const voided = PublicBottlePassportSchema.parse(dataOf((await call(`/v1/public/bottles/${code}`)).json)).bottle
+    expect(voided.status).toBe('VOIDED')
+    expect(verifyMerkleProof(merkleLeaf({ serial: 3, code, salt: voided.merkleProof!.salt }), voided.merkleProof!.path, erpFixtures.lotDossiers[0]!.bottleCodes!.merkleRoot)).toBe(true)
 
     const suspended = await call(`/v1/platform/wineries/${uid('winery:cintiviejo')}/suspend`, { token: 'mock.access.bo_admin', body: { reason: 'Revisión documental pendiente' } })
     expect(suspended.status).toBe(200)
@@ -266,10 +270,25 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     // La fila no lleva la ficha.
     expect(page.items[0]).not.toHaveProperty('description')
     const slugs = async (query: string) => dataOf((await call<Paged<{ slug: string }>>(`/v1/public/collections?${query}`)).json).items.map((c) => c.slug)
-    expect(await slugs('status=PRESALE')).toEqual(['singani-el-molino-2026', 'singani-edicion-aniversario-2026'])
-    expect(await slugs('productType=WINE')).toEqual(['vino-las-carreras-2025', 'vino-la-compania-2025'])
-    expect(await slugs('winery=altos-de-calamuchita')).toEqual(['vino-la-compania-2025'])
+    expect(await slugs('status=PRESALE')).toEqual(['singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
+    expect(await slugs('productType=WINE')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025'])
+    expect(await slugs('winery=altos-de-calamuchita')).toEqual(['vino-la-compania-2025', 'singani-el-portillo-2025'])
     expect(await slugs('q=gran reserva')).toEqual(['singani-gran-reserva-2026'])
+    // Orden: por defecto las destacadas primero y, dentro, las más recientes.
+    expect(items.map((c) => c.featured)).toEqual([true, true, false, false, false, false, false, false])
+    expect(await slugs('featured=true')).toEqual(['singani-gran-reserva-2026', 'vino-la-compania-2025'])
+    expect((await slugs('sort=featured')).join()).toBe(items.map((c) => c.slug).join())
+    const byName = await slugs('sort=name')
+    expect([byName.at(0), byName.at(-1)]).toEqual(['singani-canon-viejo-2025', 'vino-las-carreras-2025'])
+    expect((await slugs('sort=newest')).slice(0, 3)).toEqual(['singani-edicion-aniversario-2026', 'singani-el-molino-2026', 'singani-gran-reserva-2026'])
+    // Por precio, las que aún no tienen precio van al final.
+    expect(await slugs('sort=price-asc')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025', 'singani-gran-reserva-2026', 'singani-el-portillo-2025', 'singani-canon-viejo-2025', 'singani-el-molino-2026', 'singani-el-molino-2025', 'singani-edicion-aniversario-2026'])
+    expect((await slugs('sort=price-desc')).at(0)).toBe('singani-el-molino-2025')
+    expect((await slugs('sort=price-desc')).at(-1)).toBe('singani-edicion-aniversario-2026')
+    expect((await call('/v1/public/collections?sort=caro')).status).toBe(422)
+    // No se ofrece un lote con el análisis no conforme ni los de una bodega que no está activa.
+    expect(items.map((c) => c.slug)).not.toContain('tannat-la-angostura-2024')
+    expect(items.some((c) => c.winery.slug === 'casa-uriondo')).toBe(false)
 
     const detail = await call('/v1/public/collections/singani-gran-reserva-2026')
     expect(detail.headers.get('x-mock-draft')).toBe(COLLECTIONS_DRAFT_CONTRACT)
@@ -322,7 +341,7 @@ describe('coherencia de los fixtures de la Ola 2', () => {
     expect(F.lots.filter((l) => l.complianceIssuesOpen > 0)).toEqual([])
   })
 
-  it('códigos de botella: 18.350 códigos válidos y únicos entre lotes; los 2.950 del caso con su raíz Merkle', () => {
+  it('códigos de botella: 25.790 códigos válidos y únicos entre lotes; los 2.950 del caso con su raíz Merkle', () => {
     const all = new Set<string>()
     let total = 0
     for (const bl of F.bottleLots) {
@@ -334,7 +353,7 @@ describe('coherencia de los fixtures de la Ola 2', () => {
       for (const v of bl.voided) all.add(v.code)
       total += bl.total + bl.voided.length
     }
-    expect(total).toBe(4080 + 2140 + 3860 + 5320 + 2950 + 1)
+    expect(total).toBe(4080 + 2140 + 3860 + 5320 + 4400 + 1040 + 1120 + 880 + 2950 + 1)
     expect(all.size).toBe(total)
     // Las muestras de `fixtures/public/bottle-codes.json` son esos mismos códigos.
     for (const sample of publicFixtures.bottleCodes) {
