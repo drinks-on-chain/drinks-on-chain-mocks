@@ -15,10 +15,10 @@
           241000
         ],
         "metadataHash": "0x877c5ee8447678169797020fe349bd6c32de13665dd4f9c0099cca13a4933a27",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Ingeniero Agrónomo",
-          "role": "Agronomist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -44,10 +44,10 @@
           680
         ],
         "metadataHash": "0x517add35356c590c00701fa21096662216425d901d2862ec13211a193520150e",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Jefe de Báscula",
-          "role": "Weigher",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -70,15 +70,12 @@
         ],
         "timestamp": "2025-03-11T14:30:00Z",
         "volumeOrUnits": 10100,
-        "metrics": [
-          1280,
-          28
-        ],
+        "metrics": [],
         "metadataHash": "0x0fa71782b8c1f2445bf53db3c291bcd58fd860f9814ebb8bb4eb63f6bb280bfc",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Enólogo de Planta",
-          "role": "Oenologist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -101,10 +98,10 @@
           7020
         ],
         "metadataHash": "0x4155831a0d4395b3efd9732c87c4041e0049479e6912885bc5bea701dbbb390d",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Maestro Destilador",
-          "role": "Distiller",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -129,11 +126,11 @@
           4000,
           750
         ],
-        "metadataHash": "0xfe1f5090be1ff575281bf815c57bc9ce2c431c3737674d9fc8d7efaa90798ab3",
-        "isCertified": true,
+        "metadataHash": "0x2d17dd0e8f509142b11fa0bc585db16f3951158c3525a0a36d7e61cd11d85d96",
+        "isCertified": false,
         "operator": {
-          "name": "Supervisor de Envasado",
-          "role": "Packer",
+          "name": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -143,7 +140,7 @@
           "waterDilutionLiters": 1321,
           "totalBottlesPackaged": 4080,
           "packagingFormatCl": 75,
-          "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-001",
+          "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-001",
           "labAnalysis": {
             "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
             "accreditedLabCertificationCode": "LAB-SENASAG-2026-881",
@@ -171,10 +168,10 @@
           232000
         ],
         "metadataHash": "0xe2d6f6f1ccc48d26417b33c34de9e2d1013497a03be2aed4e6bdc35d4e34310f",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Ingeniero Agrónomo",
-          "role": "Agronomist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -200,10 +197,10 @@
           640
         ],
         "metadataHash": "0x46d85fd88e5e7258ef956dbece8b4e5b29da56eae6a188cc55769e7786e68578",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Jefe de Báscula",
-          "role": "Weigher",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -226,15 +223,12 @@
         ],
         "timestamp": "2025-03-19T14:30:00Z",
         "volumeOrUnits": 6100,
-        "metrics": [
-          1280,
-          28
-        ],
+        "metrics": [],
         "metadataHash": "0x705d0080e2c28219f5e9634a644cb630458efd642e792cba9e57b5e052db73b4",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Enólogo de Planta",
-          "role": "Oenologist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -257,10 +251,10 @@
           6540
         ],
         "metadataHash": "0x8cd65880a044ec149751bb67768ce5d88f85f4381dc819c913df323490f47627",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Maestro Destilador",
-          "role": "Distiller",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -285,21 +279,21 @@
           4000,
           750
         ],
-        "metadataHash": "0x472d59a2f1dd7fa6d4086ae6772f897ac3034c1ce8d9977d6eb01d7135c19d90",
-        "isCertified": true,
+        "metadataHash": "0x50cb87648b4d0f94bae65c0b348f78989898be2a9aaabec4b9d2036bc8f5c20d",
+        "isCertified": false,
         "operator": {
-          "name": "Supervisor de Envasado",
-          "role": "Packer",
+          "name": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
           "internationalLotCode": "CVJ-2026-SINGANI-002",
           "productType": "SINGANI",
           "finalAlcoholAbv": 40,
-          "waterDilutionLiters": 620,
+          "waterDilutionLiters": 630,
           "totalBottlesPackaged": 2140,
           "packagingFormatCl": 75,
-          "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-002",
+          "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-002",
           "labAnalysis": {
             "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
             "accreditedLabCertificationCode": "LAB-SENASAG-2026-882",
@@ -326,11 +320,11 @@
         "metrics": [
           189000
         ],
-        "metadataHash": "0x34d0360b908aaabf558ed1e5f3f286f2725521cd10974c190550c9c0b994ffc4",
-        "isCertified": true,
+        "metadataHash": "0xe00c6acb02080bfccaee311cbaf572835017642a41ef19012bf0877b6b909379",
+        "isCertified": false,
         "operator": {
-          "name": "Ingeniero Agrónomo",
-          "role": "Agronomist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Bodega Altos de Calamuchita"
         },
         "details": {
@@ -338,7 +332,7 @@
           "varietyName": "Cabernet Sauvignon",
           "altitudeMasl": 1890,
           "surfaceHectares": 5,
-          "isDoEligible": true
+          "isDoEligible": false
         }
       },
       {
@@ -356,10 +350,10 @@
           560
         ],
         "metadataHash": "0x8901053d10ab3d1d71e6a1c215f4b5789b1bfdd738daa02fc00514179270745a",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Jefe de Báscula",
-          "role": "Weigher",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Bodega Altos de Calamuchita"
         },
         "details": {
@@ -382,15 +376,12 @@
         ],
         "timestamp": "2025-03-07T14:30:00Z",
         "volumeOrUnits": 6700,
-        "metrics": [
-          1280,
-          28
-        ],
+        "metrics": [],
         "metadataHash": "0xaa9cb413f2a3ffbf77d627bd3e09770354c425b4e1664dc081a2ad53ecc64277",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Enólogo de Planta",
-          "role": "Oenologist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Bodega Altos de Calamuchita"
         },
         "details": {
@@ -413,10 +404,10 @@
           1200
         ],
         "metadataHash": "0x00e891738621e99db6c6de6fc684d1816e804e0e56854d30efadbf4044411b01",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Maestro de Cava",
-          "role": "Oenologist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Bodega Altos de Calamuchita"
         },
         "details": {
@@ -439,26 +430,26 @@
           1420,
           750
         ],
-        "metadataHash": "0xffde70d508126760c7d619957dbf4ea17f0462245c7162b7f92874edbf5c0c72",
-        "isCertified": true,
+        "metadataHash": "0x96f07abc0fa669c0ef31a90853e18fe2360716f30d7a007380deaa00df7d19e8",
+        "isCertified": false,
         "operator": {
-          "name": "Supervisor de Envasado",
-          "role": "Packer",
+          "name": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST",
           "wineryName": "Bodega Altos de Calamuchita"
         },
         "details": {
           "internationalLotCode": "ALT-2026-WINE-001",
           "productType": "WINE",
           "finalAlcoholAbv": 14.2,
-          "waterDilutionLiters": 0,
+          "waterDilutionLiters": null,
           "totalBottlesPackaged": 5320,
           "packagingFormatCl": 75,
-          "qrBatchUrl": "https://app.drinksonchain.bo/b/ALT-2026-WINE-001",
+          "qrBatchUrl": "http://localhost:3005/b/ALT-2026-WINE-001",
           "labAnalysis": {
             "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
             "accreditedLabCertificationCode": "LAB-SENASAG-2026-883",
             "actualAlcoholAbv": 14.22,
-            "methanolContentMgL": 0,
+            "methanolContentMgL": null,
             "conformsToSenasagStandards": true
           }
         }
@@ -480,11 +471,11 @@
         "metrics": [
           228000
         ],
-        "metadataHash": "0x607bcd22c919e7358317d4ef17641dfe00d552292bb0bbd40c26ad3a524b89b2",
-        "isCertified": true,
+        "metadataHash": "0x709b585b6de043059a634772ac31ddf5e8d4499cb3948f2c4eb61909d609431b",
+        "isCertified": false,
         "operator": {
-          "name": "Ingeniero Agrónomo",
-          "role": "Agronomist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -492,7 +483,7 @@
           "varietyName": "Vischoqueña",
           "altitudeMasl": 2280,
           "surfaceHectares": 2.7,
-          "isDoEligible": true
+          "isDoEligible": false
         }
       },
       {
@@ -510,10 +501,10 @@
           570
         ],
         "metadataHash": "0x0f92ce90aedbade65d59d323d4a3ed0fccffcd7535c7d30f05282baa146adf14",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Jefe de Báscula",
-          "role": "Weigher",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -536,15 +527,12 @@
         ],
         "timestamp": "2025-02-27T14:30:00Z",
         "volumeOrUnits": 4900,
-        "metrics": [
-          1280,
-          28
-        ],
+        "metrics": [],
         "metadataHash": "0x115688b36d0ca123bc8643b3904dd68a2d74111be9a1e11706a1b0833ed3890e",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Enólogo de Planta",
-          "role": "Oenologist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -567,10 +555,10 @@
           1000
         ],
         "metadataHash": "0x6072840a913ac59a618aaee06cc77bbee027ba54af808776b5895cb7bce48b10",
-        "isCertified": true,
+        "isCertified": false,
         "operator": {
-          "name": "Maestro de Cava",
-          "role": "Oenologist",
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
@@ -593,22 +581,175 @@
           1380,
           750
         ],
-        "metadataHash": "0x59ebe52e1baf8bdf6a24914af5110fe103ccb2d23c1d3a6a419928b15f5fddc1",
+        "metadataHash": "0xd5bb7158a92161211f674b412a8fa01a6d9c13b108aa9ad0103555fe6aaa5b6f",
         "isCertified": false,
         "operator": {
-          "name": "Supervisor de Envasado",
-          "role": "Packer",
+          "name": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST",
           "wineryName": "Destilería Cinti Viejo"
         },
         "details": {
           "internationalLotCode": "CVJ-2026-WINE-003",
           "productType": "WINE",
           "finalAlcoholAbv": 13.8,
-          "waterDilutionLiters": 0,
+          "waterDilutionLiters": null,
           "totalBottlesPackaged": 3860,
           "packagingFormatCl": 75,
-          "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-WINE-003",
+          "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-WINE-003",
           "labAnalysis": null
+        }
+      }
+    ]
+  },
+  "CVJ-2026-SINGANI-004": {
+    "rootBatchId": "0xc1ae0a04bf4203a7704ee1e77568a6b0dbc08bf9474b4d22c4ea6ad635e34966",
+    "internationalLotCode": "CVJ-2026-SINGANI-004",
+    "productType": "SINGANI",
+    "nodes": [
+      {
+        "batchId": "0xdc58c730326f900d188f09a89b046a4dc23946ad868a6225a484b5dc4edc041b",
+        "stage": 0,
+        "stageName": "Plot",
+        "parents": [],
+        "timestamp": "2026-02-07T11:00:00Z",
+        "volumeOrUnits": 3.3,
+        "metrics": [
+          241000
+        ],
+        "metadataHash": "0x877c5ee8447678169797020fe349bd6c32de13665dd4f9c0099cca13a4933a27",
+        "isCertified": true,
+        "operator": {
+          "name": "No registrado",
+          "role": "NOT_RECORDED",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "parcelName": "Parcela 2 · Cañón Viejo",
+          "varietyName": "Moscatel de Alejandría",
+          "altitudeMasl": 2410,
+          "surfaceHectares": 3.3,
+          "isDoEligible": true
+        }
+      },
+      {
+        "batchId": "0x010125b29c0514c66a33242280bee434da80d6f9c1bd055d7ac26cfd6085e974",
+        "stage": 1,
+        "stageName": "Harvest",
+        "parents": [
+          "0xdc58c730326f900d188f09a89b046a4dc23946ad868a6225a484b5dc4edc041b"
+        ],
+        "timestamp": "2026-03-09T13:40:00Z",
+        "volumeOrUnits": 18400,
+        "metrics": [
+          2340,
+          340,
+          590
+        ],
+        "metadataHash": "0x8f2aea49e3ff9638fec9fa7ae978ecb317d96567a2b394a8ee507d54e98fcd21",
+        "isCertified": true,
+        "operator": {
+          "name": "Rubén Flores",
+          "role": "OPERATOR",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "harvestBatchCode": "HARV-2026-VIEJO-008",
+          "grossWeightKg": 18550,
+          "tareWeightKg": 150,
+          "netWeightKg": 18400,
+          "brixDegrees": 23.4,
+          "initialPh": 3.4,
+          "initialAcidityGl": 5.9,
+          "phytosanitaryStatus": "APPROVED"
+        }
+      },
+      {
+        "batchId": "0x91cb9457558f05f9d0c40b2eddd5c22cf4e954e4804a5531c8a46a893b77ece0",
+        "stage": 2,
+        "stageName": "Vinification",
+        "parents": [
+          "0x010125b29c0514c66a33242280bee434da80d6f9c1bd055d7ac26cfd6085e974"
+        ],
+        "timestamp": "2026-03-10T00:00:00Z",
+        "volumeOrUnits": 12100,
+        "metrics": [],
+        "metadataHash": "0xa23bae6146432da4498a37e38750c222562d31bfa3f409d3b9c7acd9e93cdc6b",
+        "isCertified": true,
+        "operator": {
+          "name": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "tankCode": "TK-11",
+          "material": "Acero inoxidable AISI 316",
+          "volumeFilledLiters": 12100,
+          "destinationType": "SINGANI_DIST"
+        }
+      },
+      {
+        "batchId": "0x808c5c1338d3c0a92de53a7150140cc15b7bb1fe36ab745d95c0966c1d40c791",
+        "stage": 4,
+        "stageName": "Distillation",
+        "parents": [
+          "0x91cb9457558f05f9d0c40b2eddd5c22cf4e954e4804a5531c8a46a893b77ece0"
+        ],
+        "timestamp": "2026-03-22T00:00:00Z",
+        "volumeOrUnits": 1500,
+        "metrics": [
+          6000
+        ],
+        "metadataHash": "0xb8c6d058f71b6da93f71856d64e764af3f463cb867868e0674a8610e60cca30f",
+        "isCertified": true,
+        "operator": {
+          "name": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "equipmentIdentifier": "Alambique de cobre Charentais AL-01",
+          "inputVolumeLiters": 12100,
+          "outputVolumeLiters": 1500,
+          "wasteVolumeLiters": 330,
+          "initialAlcoholPercentage": 60,
+          "restStatus": "BOTTLED"
+        }
+      },
+      {
+        "batchId": "0xc1ae0a04bf4203a7704ee1e77568a6b0dbc08bf9474b4d22c4ea6ad635e34966",
+        "stage": 5,
+        "stageName": "Bottling",
+        "parents": [
+          "0x808c5c1338d3c0a92de53a7150140cc15b7bb1fe36ab745d95c0966c1d40c791"
+        ],
+        "timestamp": "2026-09-22T00:00:00Z",
+        "volumeOrUnits": 2950,
+        "metrics": [
+          4000,
+          750
+        ],
+        "metadataHash": "0x27c3f0eed2ca5e188bba202c37dcf46b2c9a2b34d179896d0068749e704dfbd1",
+        "isCertified": true,
+        "operator": {
+          "name": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST",
+          "wineryName": "Destilería Cinti Viejo"
+        },
+        "details": {
+          "internationalLotCode": "CVJ-2026-SINGANI-004",
+          "productType": "SINGANI",
+          "finalAlcoholAbv": 40,
+          "waterDilutionLiters": 750,
+          "totalBottlesPackaged": 2950,
+          "packagingFormatCl": 75,
+          "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-004",
+          "labAnalysis": {
+            "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+            "accreditedLabCertificationCode": "LAB-SENASAG-2026-884",
+            "actualAlcoholAbv": 40.1,
+            "methanolContentMgL": null,
+            "conformsToSenasagStandards": true
+          }
         }
       }
     ]

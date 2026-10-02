@@ -2408,38 +2408,6 @@
   {
     "id": "dcbef2c9-d7a7-542a-a410-d50be7732191",
     "seq": 77,
-    "occurredAt": "2026-03-20T10:00:00Z",
-    "actor": {
-      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
-      "fullName": "Lic. Lucía Rojas",
-      "role": "ENOLOGIST",
-      "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "PRODUCTION_BATCH_CREATED",
-    "resource": {
-      "type": "production_batch",
-      "id": "a6dd3060-8612-5595-b9b4-33a7d039159c"
-    },
-    "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-    "before": null,
-    "after": {
-      "processType": "SINGANI_DISTILLATION",
-      "isDoEligible": true
-    },
-    "reason": null,
-    "correlationId": "fx-0077",
-    "prevHash": "f219b40acb03c1344f7689dfcf1441170a9f97f100aec9b132780ff2e4f10a80",
-    "hash": "5089a4723760d6b5b9001c02ab10befa53916ff84e5150d465a6c48e5162513d"
-  },
-  {
-    "id": "ac8c61b6-d75e-5252-bc8a-fe6b09ec72e5",
-    "seq": 78,
     "occurredAt": "2026-03-22T09:45:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -2465,13 +2433,13 @@
       "netWeightKg": 6100
     },
     "reason": null,
-    "correlationId": "fx-0078",
-    "prevHash": "5089a4723760d6b5b9001c02ab10befa53916ff84e5150d465a6c48e5162513d",
-    "hash": "8a1103a89630e24dee5b7135f743ab493660928df22e172f82c6346b4a6f56dc"
+    "correlationId": "fx-0077",
+    "prevHash": "f219b40acb03c1344f7689dfcf1441170a9f97f100aec9b132780ff2e4f10a80",
+    "hash": "24998d0c71bfb9c1a4edb6d8b9616b693c41c71b32d662d6557f3a76aa085029"
   },
   {
-    "id": "bb66cd44-3a31-5f0e-80ce-8f12f34f3ebd",
-    "seq": 79,
+    "id": "ac8c61b6-d75e-5252-bc8a-fe6b09ec72e5",
+    "seq": 78,
     "occurredAt": "2026-03-27T10:00:00Z",
     "actor": {
       "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
@@ -2496,13 +2464,13 @@
       "role": "OPERATOR"
     },
     "reason": null,
-    "correlationId": "fx-0079",
-    "prevHash": "8a1103a89630e24dee5b7135f743ab493660928df22e172f82c6346b4a6f56dc",
-    "hash": "326e1a8af106c35710e6984edda2df40ed0acd99c03b923d400287ec3db12456"
+    "correlationId": "fx-0078",
+    "prevHash": "24998d0c71bfb9c1a4edb6d8b9616b693c41c71b32d662d6557f3a76aa085029",
+    "hash": "f526bcfebd046a602ab1b3ce6b4a817488186afc2b9d02e1a24e1da3bf52ee6c"
   },
   {
-    "id": "954ddf58-5e10-5101-ac0d-5722f81b95a3",
-    "seq": 80,
+    "id": "bb66cd44-3a31-5f0e-80ce-8f12f34f3ebd",
+    "seq": 79,
     "occurredAt": "2026-04-01T10:00:00Z",
     "actor": {
       "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
@@ -2527,13 +2495,13 @@
       "role": "OPERATOR"
     },
     "reason": null,
-    "correlationId": "fx-0080",
-    "prevHash": "326e1a8af106c35710e6984edda2df40ed0acd99c03b923d400287ec3db12456",
-    "hash": "9f3d9d4b44e6b8665f0c4cc8e24bc1d123d3216ede36de30f71b7bb5601a2d1a"
+    "correlationId": "fx-0079",
+    "prevHash": "f526bcfebd046a602ab1b3ce6b4a817488186afc2b9d02e1a24e1da3bf52ee6c",
+    "hash": "b95afb07da8fc6c25b474e7a5b27b2cdd4641c1c3643b90a814c27807487eb86"
   },
   {
-    "id": "1ddc34d6-b458-546c-bd0f-709d93e6f85f",
-    "seq": 81,
+    "id": "954ddf58-5e10-5101-ac0d-5722f81b95a3",
+    "seq": 80,
     "occurredAt": "2026-04-04T09:00:00Z",
     "actor": {
       "userId": null,
@@ -2559,13 +2527,13 @@
       "role": "SUPERADMIN"
     },
     "reason": null,
-    "correlationId": "fx-0081",
-    "prevHash": "9f3d9d4b44e6b8665f0c4cc8e24bc1d123d3216ede36de30f71b7bb5601a2d1a",
-    "hash": "dba9d2673f9cfeef21e36df57315937c8ed8622118360f05ca550d5ad11dc999"
+    "correlationId": "fx-0080",
+    "prevHash": "b95afb07da8fc6c25b474e7a5b27b2cdd4641c1c3643b90a814c27807487eb86",
+    "hash": "e8fea85456b40edcb53002438d00c5fb080e5fb93ea2ce23678d6009b811610b"
   },
   {
-    "id": "00a909c0-fcd3-5eda-8610-8d1120d468a0",
-    "seq": 82,
+    "id": "1ddc34d6-b458-546c-bd0f-709d93e6f85f",
+    "seq": 81,
     "occurredAt": "2026-04-04T09:15:00Z",
     "actor": {
       "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
@@ -2588,13 +2556,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0082",
-    "prevHash": "dba9d2673f9cfeef21e36df57315937c8ed8622118360f05ca550d5ad11dc999",
-    "hash": "e316150895c16ec09651e3e81183e2d3392239d26a9d07c011752a786b800a25"
+    "correlationId": "fx-0081",
+    "prevHash": "e8fea85456b40edcb53002438d00c5fb080e5fb93ea2ce23678d6009b811610b",
+    "hash": "834c0e7ae2def71a2f9c8a2491cf84f3cfb2a77717f2117d93b51adbe6ef4299"
   },
   {
-    "id": "8c4fc791-d735-51f0-9663-955f9a4c1645",
-    "seq": 83,
+    "id": "00a909c0-fcd3-5eda-8610-8d1120d468a0",
+    "seq": 82,
     "occurredAt": "2026-04-10T09:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -2619,13 +2587,13 @@
       "role": "ADMIN"
     },
     "reason": null,
-    "correlationId": "fx-0083",
-    "prevHash": "e316150895c16ec09651e3e81183e2d3392239d26a9d07c011752a786b800a25",
-    "hash": "1f5374fb7a0a9145fc793833bf4c9fadbf8a69d10d8b7b161e22539db1669d89"
+    "correlationId": "fx-0082",
+    "prevHash": "834c0e7ae2def71a2f9c8a2491cf84f3cfb2a77717f2117d93b51adbe6ef4299",
+    "hash": "d92efecbc3c12ba7332afb35a41437700ac85f346e41b398e094db7d4ef29fec"
   },
   {
-    "id": "22281f14-2492-5634-9d65-c3c806d75df7",
-    "seq": 84,
+    "id": "8c4fc791-d735-51f0-9663-955f9a4c1645",
+    "seq": 83,
     "occurredAt": "2026-04-10T09:15:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -2648,13 +2616,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0084",
-    "prevHash": "1f5374fb7a0a9145fc793833bf4c9fadbf8a69d10d8b7b161e22539db1669d89",
-    "hash": "898a99386e0c60af4321c98978edd69c8f8904cab56bf2daf6a1fc130c0ec2ec"
+    "correlationId": "fx-0083",
+    "prevHash": "d92efecbc3c12ba7332afb35a41437700ac85f346e41b398e094db7d4ef29fec",
+    "hash": "4aebb6d97e4bdb079eba3b27e60725c5ec08ff02b97acea0fd0a0685b4e76471"
   },
   {
-    "id": "853dd9b0-f879-525b-92e0-48559a8b7a64",
-    "seq": 85,
+    "id": "22281f14-2492-5634-9d65-c3c806d75df7",
+    "seq": 84,
     "occurredAt": "2026-04-15T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -2680,13 +2648,13 @@
       "isDoEligible": true
     },
     "reason": null,
-    "correlationId": "fx-0085",
-    "prevHash": "898a99386e0c60af4321c98978edd69c8f8904cab56bf2daf6a1fc130c0ec2ec",
-    "hash": "3c33d70546e7687482a303ce7a3c68db9693d2146f1b59a77fe8979c9ad89d46"
+    "correlationId": "fx-0084",
+    "prevHash": "4aebb6d97e4bdb079eba3b27e60725c5ec08ff02b97acea0fd0a0685b4e76471",
+    "hash": "80910d5a596fa0d2fdcba3646bfb1ab1cd0d8b19d7dbbc6e4a29d43a123ff2cd"
   },
   {
-    "id": "4ca87ffb-7ed8-53d5-83eb-002a38b56c0a",
-    "seq": 86,
+    "id": "853dd9b0-f879-525b-92e0-48559a8b7a64",
+    "seq": 85,
     "occurredAt": "2026-05-02T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -2711,13 +2679,13 @@
       "role": "OPERATIONS"
     },
     "reason": null,
-    "correlationId": "fx-0086",
-    "prevHash": "3c33d70546e7687482a303ce7a3c68db9693d2146f1b59a77fe8979c9ad89d46",
-    "hash": "a6417467f9b684d731971f5de52f4f79423cf89aff8912b10d71b45e7d6cb8a6"
+    "correlationId": "fx-0085",
+    "prevHash": "80910d5a596fa0d2fdcba3646bfb1ab1cd0d8b19d7dbbc6e4a29d43a123ff2cd",
+    "hash": "091d06248bb4f03f22c0f5b73cecabbf8696833a6fab4c5974cefbea37689a1a"
   },
   {
-    "id": "18656cb2-0c00-58ae-84e6-d3a36ce2e9f3",
-    "seq": 87,
+    "id": "4ca87ffb-7ed8-53d5-83eb-002a38b56c0a",
+    "seq": 86,
     "occurredAt": "2026-05-02T09:15:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -2740,13 +2708,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0087",
-    "prevHash": "a6417467f9b684d731971f5de52f4f79423cf89aff8912b10d71b45e7d6cb8a6",
-    "hash": "9b5b5ee328b2320fc44f5ba71bb95138ffd16ca4f541bb26e0988d175d7d4bea"
+    "correlationId": "fx-0086",
+    "prevHash": "091d06248bb4f03f22c0f5b73cecabbf8696833a6fab4c5974cefbea37689a1a",
+    "hash": "19d3a92dc0f1e4b1fd7df5cf96e302ffdb8b914089457be6c9708b4237221c50"
   },
   {
-    "id": "68083b75-2e8d-579f-8d5d-2e6118bc1f6d",
-    "seq": 88,
+    "id": "18656cb2-0c00-58ae-84e6-d3a36ce2e9f3",
+    "seq": 87,
     "occurredAt": "2026-05-12T16:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2772,13 +2740,13 @@
       "bottles": 5320
     },
     "reason": null,
-    "correlationId": "fx-0088",
-    "prevHash": "9b5b5ee328b2320fc44f5ba71bb95138ffd16ca4f541bb26e0988d175d7d4bea",
-    "hash": "361eba81fdc87f20a33c1455da4fa01efe519ffe23489cc00f098ab609e7fbeb"
+    "correlationId": "fx-0087",
+    "prevHash": "19d3a92dc0f1e4b1fd7df5cf96e302ffdb8b914089457be6c9708b4237221c50",
+    "hash": "673d68dd0bbefa59787a7d3a993168f771d5eea0d644784d84ef7e6a24d0eebd"
   },
   {
-    "id": "5d465355-bc80-5d18-bad4-7a29c5a5268e",
-    "seq": 89,
+    "id": "68083b75-2e8d-579f-8d5d-2e6118bc1f6d",
+    "seq": 88,
     "occurredAt": "2026-05-15T10:00:00Z",
     "actor": {
       "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
@@ -2803,13 +2771,13 @@
       "role": "OWNER"
     },
     "reason": null,
-    "correlationId": "fx-0089",
-    "prevHash": "361eba81fdc87f20a33c1455da4fa01efe519ffe23489cc00f098ab609e7fbeb",
-    "hash": "47382d1e5b0c5485b8dc9ae9222ae86ef47c9f8b1810969c2894fb5f15a1ca7c"
+    "correlationId": "fx-0088",
+    "prevHash": "673d68dd0bbefa59787a7d3a993168f771d5eea0d644784d84ef7e6a24d0eebd",
+    "hash": "6d96fdbb4fac9f150b4b2a8e5b13271d74b37ea4ed93bc2eef2c8aaa0f599fb5"
   },
   {
-    "id": "84ccd165-eb12-5182-bd43-cc5b550de8e4",
-    "seq": 90,
+    "id": "5d465355-bc80-5d18-bad4-7a29c5a5268e",
+    "seq": 89,
     "occurredAt": "2026-05-15T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2834,13 +2802,13 @@
       "conformsToSenasagStandards": true
     },
     "reason": null,
-    "correlationId": "fx-0090",
-    "prevHash": "47382d1e5b0c5485b8dc9ae9222ae86ef47c9f8b1810969c2894fb5f15a1ca7c",
-    "hash": "89e68403b5440c30166ec60058ab2feecb7b092c2e16aa812cfa78a7e734fbe9"
+    "correlationId": "fx-0089",
+    "prevHash": "6d96fdbb4fac9f150b4b2a8e5b13271d74b37ea4ed93bc2eef2c8aaa0f599fb5",
+    "hash": "cc29c4ed26f971209cdabf682b9f0407abb69ac4271886a9a030bc25597e1087"
   },
   {
-    "id": "fdcfca9d-00a9-55f2-be26-f35c146b6889",
-    "seq": 91,
+    "id": "84ccd165-eb12-5182-bd43-cc5b550de8e4",
+    "seq": 90,
     "occurredAt": "2026-05-18T10:00:00Z",
     "actor": {
       "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
@@ -2867,13 +2835,13 @@
       "expiresAt": "2026-05-21T10:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0091",
-    "prevHash": "89e68403b5440c30166ec60058ab2feecb7b092c2e16aa812cfa78a7e734fbe9",
-    "hash": "623ca04557e574657c3b615b338bdb21fc73432ac1702f6109e9274515fd9d97"
+    "correlationId": "fx-0090",
+    "prevHash": "cc29c4ed26f971209cdabf682b9f0407abb69ac4271886a9a030bc25597e1087",
+    "hash": "9442e1859a8713f59434bd1528e88d807b49e400286df708fe6164175d548b07"
   },
   {
-    "id": "79ae26ee-fd2e-5bca-a2ce-df9789175086",
-    "seq": 92,
+    "id": "fdcfca9d-00a9-55f2-be26-f35c146b6889",
+    "seq": 91,
     "occurredAt": "2026-05-20T10:00:00Z",
     "actor": {
       "userId": "888314c6-9ce6-5b66-b68f-4804276de103",
@@ -2896,13 +2864,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0092",
-    "prevHash": "623ca04557e574657c3b615b338bdb21fc73432ac1702f6109e9274515fd9d97",
-    "hash": "b487fe47fd39813b46b73f9ec8b25d11a4994f1d150f072824e10ba6b495b452"
+    "correlationId": "fx-0091",
+    "prevHash": "9442e1859a8713f59434bd1528e88d807b49e400286df708fe6164175d548b07",
+    "hash": "50a5583e672c6dd2302d88007c7f5665e06dabc976d68089d0d92f0add8281d0"
   },
   {
-    "id": "c8f43eb0-7f71-59a9-a5e1-e807eb6afb47",
-    "seq": 93,
+    "id": "79ae26ee-fd2e-5bca-a2ce-df9789175086",
+    "seq": 92,
     "occurredAt": "2026-05-20T10:00:00Z",
     "actor": {
       "userId": "888314c6-9ce6-5b66-b68f-4804276de103",
@@ -2927,13 +2895,13 @@
       "role": "ACCOUNTANT"
     },
     "reason": null,
-    "correlationId": "fx-0093",
-    "prevHash": "b487fe47fd39813b46b73f9ec8b25d11a4994f1d150f072824e10ba6b495b452",
-    "hash": "c796e25cc24a56e74c00cbe4aa1b3e679fedc4b3c8ca5ec7c8ef4a7986081232"
+    "correlationId": "fx-0092",
+    "prevHash": "50a5583e672c6dd2302d88007c7f5665e06dabc976d68089d0d92f0add8281d0",
+    "hash": "47686df72609533114b94cdc60e56c5987e30928ba79ed234c1266242c27d8f6"
   },
   {
-    "id": "aa87e7fb-b451-5c5a-a800-261aa2581137",
-    "seq": 94,
+    "id": "c8f43eb0-7f71-59a9-a5e1-e807eb6afb47",
+    "seq": 93,
     "occurredAt": "2026-06-01T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -2961,13 +2929,13 @@
       "legalException": false
     },
     "reason": "Clientes de temporada alta: ventana ampliada acordada con la bodega.",
-    "correlationId": "fx-0094",
-    "prevHash": "c796e25cc24a56e74c00cbe4aa1b3e679fedc4b3c8ca5ec7c8ef4a7986081232",
-    "hash": "6ecc3507a9b7f8265e7b2af95d895cbca165bdb7ff17bacfa883ca807c8a7187"
+    "correlationId": "fx-0093",
+    "prevHash": "47686df72609533114b94cdc60e56c5987e30928ba79ed234c1266242c27d8f6",
+    "hash": "cde7500886f489d789ccf752901b4f35300ac57074c68b3acfbb1d242c9d6b0b"
   },
   {
-    "id": "306a4367-3756-5987-850d-2c0a51d7d978",
-    "seq": 95,
+    "id": "aa87e7fb-b451-5c5a-a800-261aa2581137",
+    "seq": 94,
     "occurredAt": "2026-06-04T10:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2992,13 +2960,13 @@
       "role": "ENOLOGIST"
     },
     "reason": null,
-    "correlationId": "fx-0095",
-    "prevHash": "6ecc3507a9b7f8265e7b2af95d895cbca165bdb7ff17bacfa883ca807c8a7187",
-    "hash": "09891ffd8fbca83396da1e31d2fd2550bf513e1ee1df19b7c32b33766c6c10ac"
+    "correlationId": "fx-0094",
+    "prevHash": "cde7500886f489d789ccf752901b4f35300ac57074c68b3acfbb1d242c9d6b0b",
+    "hash": "014f07dd926ed438b4da647096836c89c0d34ec150a955f8dbafbd637d790554"
   },
   {
-    "id": "45d2fddb-7c92-53f4-99df-86c3c069d0e5",
-    "seq": 96,
+    "id": "306a4367-3756-5987-850d-2c0a51d7d978",
+    "seq": 95,
     "occurredAt": "2026-06-29T10:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -3023,13 +2991,13 @@
       "role": "AGRONOMIST"
     },
     "reason": null,
-    "correlationId": "fx-0096",
-    "prevHash": "09891ffd8fbca83396da1e31d2fd2550bf513e1ee1df19b7c32b33766c6c10ac",
-    "hash": "f1e1b8cd9ee40b9ac243c81fc51e74bf20c3aa247fd5ae2b07230913c60c7040"
+    "correlationId": "fx-0095",
+    "prevHash": "014f07dd926ed438b4da647096836c89c0d34ec150a955f8dbafbd637d790554",
+    "hash": "f432d794ac254c5785240502c3c51e9a7f38127029d7b65edd31ef5476e12e8a"
   },
   {
-    "id": "e5b32d63-86e6-520b-a06b-3608e3c7afcb",
-    "seq": 97,
+    "id": "45d2fddb-7c92-53f4-99df-86c3c069d0e5",
+    "seq": 96,
     "occurredAt": "2026-06-30T10:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -3057,13 +3025,13 @@
       "blockedBy": "OWNER"
     },
     "reason": "Terminó su contrato de temporada.",
-    "correlationId": "fx-0097",
-    "prevHash": "f1e1b8cd9ee40b9ac243c81fc51e74bf20c3aa247fd5ae2b07230913c60c7040",
-    "hash": "c3402dc436d1ef5a9e95207ee1b1e4409a2b9b183e887a5ee544422ce0fdfe02"
+    "correlationId": "fx-0096",
+    "prevHash": "f432d794ac254c5785240502c3c51e9a7f38127029d7b65edd31ef5476e12e8a",
+    "hash": "683193d4690b4daff7cc85b6515f4fd4af391d84b129b66015fc26ea6ca87b11"
   },
   {
-    "id": "c62ef59d-cd18-54a3-bec4-7e32a0f9431c",
-    "seq": 98,
+    "id": "e5b32d63-86e6-520b-a06b-3608e3c7afcb",
+    "seq": 97,
     "occurredAt": "2026-06-30T10:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -3088,13 +3056,13 @@
       "lockUntilDate": "2027-02-28T00:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0098",
-    "prevHash": "c3402dc436d1ef5a9e95207ee1b1e4409a2b9b183e887a5ee544422ce0fdfe02",
-    "hash": "24058cd4dfde2ad46df18d0d8fa88ba3fc4e3a9ec84b8ab8cb91410850cd583a"
+    "correlationId": "fx-0097",
+    "prevHash": "683193d4690b4daff7cc85b6515f4fd4af391d84b129b66015fc26ea6ca87b11",
+    "hash": "f7317532240cdc5b1ebfdc6da96ffe12d04eb5af3106637f766f6695fb41f374"
   },
   {
-    "id": "5c8978b0-03c7-5080-8863-e5dcde7768bf",
-    "seq": 99,
+    "id": "c62ef59d-cd18-54a3-bec4-7e32a0f9431c",
+    "seq": 98,
     "occurredAt": "2026-07-01T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3122,13 +3090,13 @@
       "legalException": false
     },
     "reason": "Plan piloto de equipo reducido.",
-    "correlationId": "fx-0099",
-    "prevHash": "24058cd4dfde2ad46df18d0d8fa88ba3fc4e3a9ec84b8ab8cb91410850cd583a",
-    "hash": "b9dc863a4f74d37346f0b0fb3f8da93c951574210768c86b22048b98562412a3"
+    "correlationId": "fx-0098",
+    "prevHash": "f7317532240cdc5b1ebfdc6da96ffe12d04eb5af3106637f766f6695fb41f374",
+    "hash": "4e07e1638a168dcfbfbb5bafa64b6cd76aeb727d580fe2b6bc5c7a9949e40edf"
   },
   {
-    "id": "4d934622-0c8c-5a80-9799-80c15431c088",
-    "seq": 100,
+    "id": "5c8978b0-03c7-5080-8863-e5dcde7768bf",
+    "seq": 99,
     "occurredAt": "2026-07-25T09:00:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -3153,13 +3121,13 @@
       "role": "SUPPORT"
     },
     "reason": null,
-    "correlationId": "fx-0100",
-    "prevHash": "b9dc863a4f74d37346f0b0fb3f8da93c951574210768c86b22048b98562412a3",
-    "hash": "217e44d6a4e6abe24d5a3460a0fb30eb9b825509f6d3555e414f9631b1d0553e"
+    "correlationId": "fx-0099",
+    "prevHash": "4e07e1638a168dcfbfbb5bafa64b6cd76aeb727d580fe2b6bc5c7a9949e40edf",
+    "hash": "76582502223f0169625c3d0224512121094354978181f7dc17bc234bfe180fcd"
   },
   {
-    "id": "24f2dd89-d14b-59cc-b486-e3b7353179ec",
-    "seq": 101,
+    "id": "4d934622-0c8c-5a80-9799-80c15431c088",
+    "seq": 100,
     "occurredAt": "2026-07-25T09:15:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -3182,13 +3150,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0101",
-    "prevHash": "217e44d6a4e6abe24d5a3460a0fb30eb9b825509f6d3555e414f9631b1d0553e",
-    "hash": "22247f82cb8e0df0d7b1482271878ea7ca2dbeeb8b920a979a94704025d8d1d0"
+    "correlationId": "fx-0100",
+    "prevHash": "76582502223f0169625c3d0224512121094354978181f7dc17bc234bfe180fcd",
+    "hash": "a0ea7dc09a4e7aba9cd9cd7b0586b5c6317b4a34b676521610500dcf77a198fb"
   },
   {
-    "id": "54f7673f-2403-537a-a1b6-eafa86300105",
-    "seq": 102,
+    "id": "24f2dd89-d14b-59cc-b486-e3b7353179ec",
+    "seq": 101,
     "occurredAt": "2026-08-05T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3216,13 +3184,13 @@
       "legalException": false
     },
     "reason": "La destilería gestiona sus propios puntos de canje.",
-    "correlationId": "fx-0102",
-    "prevHash": "22247f82cb8e0df0d7b1482271878ea7ca2dbeeb8b920a979a94704025d8d1d0",
-    "hash": "e878f81380aeb5f931abe8d982fd1bdbea42099f263285f8639fda71bbc862b9"
+    "correlationId": "fx-0101",
+    "prevHash": "a0ea7dc09a4e7aba9cd9cd7b0586b5c6317b4a34b676521610500dcf77a198fb",
+    "hash": "4270077476554c4d0a071d00a6a92d0e327e543bb512172ab03360002c312695"
   },
   {
-    "id": "e41a10eb-5c2a-5bfb-bb5f-5b3e8e799f28",
-    "seq": 103,
+    "id": "54f7673f-2403-537a-a1b6-eafa86300105",
+    "seq": 102,
     "occurredAt": "2026-08-14T10:00:00Z",
     "actor": {
       "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
@@ -3249,13 +3217,13 @@
       "status": "REVOKED"
     },
     "reason": "Cierre de la bodega solicitado por su titular.",
-    "correlationId": "fx-0103",
-    "prevHash": "e878f81380aeb5f931abe8d982fd1bdbea42099f263285f8639fda71bbc862b9",
-    "hash": "e94d0cbc82b827a9e56d6a689a2c1b6ff5c5f3b33e5ec1a9bc69c43f8b393a3f"
+    "correlationId": "fx-0102",
+    "prevHash": "4270077476554c4d0a071d00a6a92d0e327e543bb512172ab03360002c312695",
+    "hash": "1a5bd98e88e105993174195704684a47a1d02811720c3b445ac7434b7758f2ba"
   },
   {
-    "id": "8b595363-605c-593b-a656-544e36d971b0",
-    "seq": 104,
+    "id": "e41a10eb-5c2a-5bfb-bb5f-5b3e8e799f28",
+    "seq": 103,
     "occurredAt": "2026-08-20T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3282,13 +3250,13 @@
       "status": "SUSPENDED"
     },
     "reason": "Registro SENASAG vencido; se reactiva al presentar la renovación.",
-    "correlationId": "fx-0104",
-    "prevHash": "e94d0cbc82b827a9e56d6a689a2c1b6ff5c5f3b33e5ec1a9bc69c43f8b393a3f",
-    "hash": "9d746ff87886e434037171cffc96b645521a6058c366072fd07aa26fef75ddea"
+    "correlationId": "fx-0103",
+    "prevHash": "1a5bd98e88e105993174195704684a47a1d02811720c3b445ac7434b7758f2ba",
+    "hash": "e397ed73c35fded6a795df37dc02b1d2a92f4ce3ff78999e29fc2e8efb7a4026"
   },
   {
-    "id": "8ed72018-0ee4-594b-9b86-3b680decfb75",
-    "seq": 105,
+    "id": "8b595363-605c-593b-a656-544e36d971b0",
+    "seq": 104,
     "occurredAt": "2026-09-01T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3316,13 +3284,13 @@
       "legalException": false
     },
     "reason": "Singani Gran Reserva de producción limitada.",
-    "correlationId": "fx-0105",
-    "prevHash": "9d746ff87886e434037171cffc96b645521a6058c366072fd07aa26fef75ddea",
-    "hash": "dda0acbed346d0cc0f7b0f3101d8061b2b4616896519e49b70e182954922e16b"
+    "correlationId": "fx-0104",
+    "prevHash": "e397ed73c35fded6a795df37dc02b1d2a92f4ce3ff78999e29fc2e8efb7a4026",
+    "hash": "8cdffc6dae4aaf1f4549b160543a920e42732431ab58d63597d563dfef8ead30"
   },
   {
-    "id": "df79d095-3781-570d-b9ee-e9de7c68e5d5",
-    "seq": 106,
+    "id": "8ed72018-0ee4-594b-9b86-3b680decfb75",
+    "seq": 105,
     "occurredAt": "2026-09-05T14:00:00Z",
     "actor": {
       "userId": null,
@@ -3349,13 +3317,13 @@
       "contactEmail": "ivan@licoresdelchaco.test"
     },
     "reason": null,
-    "correlationId": "fx-0106",
-    "prevHash": "dda0acbed346d0cc0f7b0f3101d8061b2b4616896519e49b70e182954922e16b",
-    "hash": "38de39da56d0c0e9334ef69a23a373cf2a20286df7a39640a3eed498fd778832"
+    "correlationId": "fx-0105",
+    "prevHash": "8cdffc6dae4aaf1f4549b160543a920e42732431ab58d63597d563dfef8ead30",
+    "hash": "e78ee3be39b8868e728aaa684c725d8b079682ccc9e7ea53ac8b0d35057455dd"
   },
   {
-    "id": "8c7d87fe-2404-530c-a9a9-ccf35f35e880",
-    "seq": 107,
+    "id": "df79d095-3781-570d-b9ee-e9de7c68e5d5",
+    "seq": 106,
     "occurredAt": "2026-09-05T14:03:00Z",
     "actor": {
       "userId": null,
@@ -3382,13 +3350,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0107",
-    "prevHash": "38de39da56d0c0e9334ef69a23a373cf2a20286df7a39640a3eed498fd778832",
-    "hash": "edb675813c89e80ef0453e6d076ea5faa38fddff147b2473be8dbc7bb227469d"
+    "correlationId": "fx-0106",
+    "prevHash": "e78ee3be39b8868e728aaa684c725d8b079682ccc9e7ea53ac8b0d35057455dd",
+    "hash": "640f0ebc037ffdd2c3b9150a81111dbd3212d301cafda5922145cc91172adb02"
   },
   {
-    "id": "639cc70a-cfa6-592a-abfc-b125dc52eb24",
-    "seq": 108,
+    "id": "8c7d87fe-2404-530c-a9a9-ccf35f35e880",
+    "seq": 107,
     "occurredAt": "2026-09-06T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3417,13 +3385,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0108",
-    "prevHash": "edb675813c89e80ef0453e6d076ea5faa38fddff147b2473be8dbc7bb227469d",
-    "hash": "c9ccdc6b087bf968964fa9b98059e191792221259c892310fa3befe8beb1b597"
+    "correlationId": "fx-0107",
+    "prevHash": "640f0ebc037ffdd2c3b9150a81111dbd3212d301cafda5922145cc91172adb02",
+    "hash": "9495d518127acc9980a7d34831d58ad9b487e8cb7744f81ebada310f4dc9e150"
   },
   {
-    "id": "e2f3dc88-c1d2-55bb-bae6-c982e2e2ca54",
-    "seq": 109,
+    "id": "639cc70a-cfa6-592a-abfc-b125dc52eb24",
+    "seq": 108,
     "occurredAt": "2026-09-08T10:00:00Z",
     "actor": {
       "userId": null,
@@ -3450,13 +3418,13 @@
       "contactEmail": "gerencia@guadalquivir.test"
     },
     "reason": null,
-    "correlationId": "fx-0109",
-    "prevHash": "c9ccdc6b087bf968964fa9b98059e191792221259c892310fa3befe8beb1b597",
-    "hash": "d86e0c4c06d517f40f0c669b86c3b0672b672587270c04a87cd5d4363aac1ddc"
+    "correlationId": "fx-0108",
+    "prevHash": "9495d518127acc9980a7d34831d58ad9b487e8cb7744f81ebada310f4dc9e150",
+    "hash": "b46da520aed5d4fb391059a220a5e22b7968e8043c6046701380d6d4fc4823f0"
   },
   {
-    "id": "3b05a3cd-b1ff-5fe9-93a2-f5d0fdd84a41",
-    "seq": 110,
+    "id": "e2f3dc88-c1d2-55bb-bae6-c982e2e2ca54",
+    "seq": 109,
     "occurredAt": "2026-09-08T10:10:00Z",
     "actor": {
       "userId": null,
@@ -3483,13 +3451,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0110",
-    "prevHash": "d86e0c4c06d517f40f0c669b86c3b0672b672587270c04a87cd5d4363aac1ddc",
-    "hash": "2b8441002f6c1510b116e1f91858db4518cba13f0cd945e9dc297ca729fac26e"
+    "correlationId": "fx-0109",
+    "prevHash": "b46da520aed5d4fb391059a220a5e22b7968e8043c6046701380d6d4fc4823f0",
+    "hash": "79803c4c2d55283e6c9d1bf493731e24b03581b06798c1e13d4a0a9c6d6e584a"
   },
   {
-    "id": "8846832d-4901-5c43-a3b2-d400db51b72e",
-    "seq": 111,
+    "id": "3b05a3cd-b1ff-5fe9-93a2-f5d0fdd84a41",
+    "seq": 110,
     "occurredAt": "2026-09-08T11:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3517,13 +3485,13 @@
       "wineryId": null
     },
     "reason": "No elabora a partir de materia prima propia: distribuye licores de terceros.",
-    "correlationId": "fx-0111",
-    "prevHash": "2b8441002f6c1510b116e1f91858db4518cba13f0cd945e9dc297ca729fac26e",
-    "hash": "396e91db2a946f52bf762781c57537ed2f714492e36860ee8411beffe77a4726"
+    "correlationId": "fx-0110",
+    "prevHash": "79803c4c2d55283e6c9d1bf493731e24b03581b06798c1e13d4a0a9c6d6e584a",
+    "hash": "5ad16dd8556a9df95b1efa0bbaf1a53cf2803aa3a3243b832d2c5015ee6a7e1f"
   },
   {
-    "id": "08f32e18-4168-5060-a562-da2b475f30cb",
-    "seq": 112,
+    "id": "8846832d-4901-5c43-a3b2-d400db51b72e",
+    "seq": 111,
     "occurredAt": "2026-09-09T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3552,13 +3520,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0112",
-    "prevHash": "396e91db2a946f52bf762781c57537ed2f714492e36860ee8411beffe77a4726",
-    "hash": "a7a9768e617ed06c76847468a67b9559f4f783a28c8821d90c96772828a6962e"
+    "correlationId": "fx-0111",
+    "prevHash": "5ad16dd8556a9df95b1efa0bbaf1a53cf2803aa3a3243b832d2c5015ee6a7e1f",
+    "hash": "249ea15df30deb649e5d3b924f1a0145733a31a8f391141cdf79f9d683260eed"
   },
   {
-    "id": "0f698a5a-a7a8-55c7-b0c4-38770b98e575",
-    "seq": 113,
+    "id": "08f32e18-4168-5060-a562-da2b475f30cb",
+    "seq": 112,
     "occurredAt": "2026-09-09T09:30:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3587,13 +3555,13 @@
       "channel": "IN_PERSON"
     },
     "reason": null,
-    "correlationId": "fx-0113",
-    "prevHash": "a7a9768e617ed06c76847468a67b9559f4f783a28c8821d90c96772828a6962e",
-    "hash": "08b37b1a8e503a5bbd1839230e47bd76239e6ba2aa5a4a08d09f481f5dc3da01"
+    "correlationId": "fx-0112",
+    "prevHash": "249ea15df30deb649e5d3b924f1a0145733a31a8f391141cdf79f9d683260eed",
+    "hash": "efef50ef12dc8c181f0f11c876995986524d7920acd43e69f1353ac0828b5548"
   },
   {
-    "id": "93b810da-5c55-593e-b0f9-4a76f01e663f",
-    "seq": 114,
+    "id": "0f698a5a-a7a8-55c7-b0c4-38770b98e575",
+    "seq": 113,
     "occurredAt": "2026-09-10T09:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3620,13 +3588,13 @@
       "value": 45
     },
     "reason": "Prueba de ventana de canje ampliada.",
-    "correlationId": "fx-0114",
-    "prevHash": "08b37b1a8e503a5bbd1839230e47bd76239e6ba2aa5a4a08d09f481f5dc3da01",
-    "hash": "5c4a3fe36cf4e3c47bba6dd435d32beefa4c25dda4258782652767b74d130375"
+    "correlationId": "fx-0113",
+    "prevHash": "efef50ef12dc8c181f0f11c876995986524d7920acd43e69f1353ac0828b5548",
+    "hash": "8c581360b3e3be5978c86647b5e02fd94d192e578532c675d79d70f48cb4b97e"
   },
   {
-    "id": "30d002a3-8edd-5354-b17e-8d753b1b6e2c",
-    "seq": 115,
+    "id": "93b810da-5c55-593e-b0f9-4a76f01e663f",
+    "seq": 114,
     "occurredAt": "2026-09-10T10:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -3653,13 +3621,13 @@
       "expiresAt": "2026-09-13T10:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0115",
-    "prevHash": "5c4a3fe36cf4e3c47bba6dd435d32beefa4c25dda4258782652767b74d130375",
-    "hash": "a0449f131e15971a594fc8def28596ed30e5e2c661eb4a6e21ed60951189ceff"
+    "correlationId": "fx-0114",
+    "prevHash": "8c581360b3e3be5978c86647b5e02fd94d192e578532c675d79d70f48cb4b97e",
+    "hash": "c2e10b28224b8727aa0de919cd3d7f399af5010e7cfb96e667326abf4cef8f2f"
   },
   {
-    "id": "61044661-f639-59df-abe5-1f79cd2c4be0",
-    "seq": 116,
+    "id": "30d002a3-8edd-5354-b17e-8d753b1b6e2c",
+    "seq": 115,
     "occurredAt": "2026-09-10T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -3685,13 +3653,13 @@
       "isDoEligible": true
     },
     "reason": null,
-    "correlationId": "fx-0116",
-    "prevHash": "a0449f131e15971a594fc8def28596ed30e5e2c661eb4a6e21ed60951189ceff",
-    "hash": "22cc05fbc0cc79a5b506f491ec7917a953d93e14430305f11a1b42c8a7b965fd"
+    "correlationId": "fx-0115",
+    "prevHash": "c2e10b28224b8727aa0de919cd3d7f399af5010e7cfb96e667326abf4cef8f2f",
+    "hash": "54a6feafaf0cb20fe3bcaa2a11ae14cb7c3e211c2537f8b6454ac973e24eeb69"
   },
   {
-    "id": "4f2869b2-38fc-59c3-bc67-6bc5597030ef",
-    "seq": 117,
+    "id": "61044661-f639-59df-abe5-1f79cd2c4be0",
+    "seq": 116,
     "occurredAt": "2026-09-10T11:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3719,13 +3687,13 @@
       "legalException": false
     },
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
-    "correlationId": "fx-0117",
-    "prevHash": "22cc05fbc0cc79a5b506f491ec7917a953d93e14430305f11a1b42c8a7b965fd",
-    "hash": "8820dcfb366bcb899feda8f9b248255ff9ae65646577eb1064aca72eca068def"
+    "correlationId": "fx-0116",
+    "prevHash": "54a6feafaf0cb20fe3bcaa2a11ae14cb7c3e211c2537f8b6454ac973e24eeb69",
+    "hash": "f21f5c117b94051130655d7918ff3d8881dd468529f082da2285f51d45a61561"
   },
   {
-    "id": "29c876ad-2931-57e7-9254-8cdca4dadd2e",
-    "seq": 118,
+    "id": "4f2869b2-38fc-59c3-bc67-6bc5597030ef",
+    "seq": 117,
     "occurredAt": "2026-09-10T11:05:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3753,13 +3721,13 @@
       "legalException": true
     },
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
-    "correlationId": "fx-0118",
-    "prevHash": "8820dcfb366bcb899feda8f9b248255ff9ae65646577eb1064aca72eca068def",
-    "hash": "9d6e92f82cab65ab3e44be364693161086b71faaf9604ba7e7525ca4a01767b7"
+    "correlationId": "fx-0117",
+    "prevHash": "f21f5c117b94051130655d7918ff3d8881dd468529f082da2285f51d45a61561",
+    "hash": "ae7fb4f425151c8d2cf3c6ab0be27b7346ad130fc35b31a9857092aae8b46461"
   },
   {
-    "id": "48163bea-86b4-591b-a2a9-db149b3744e2",
-    "seq": 119,
+    "id": "29c876ad-2931-57e7-9254-8cdca4dadd2e",
+    "seq": 118,
     "occurredAt": "2026-09-10T17:00:00Z",
     "actor": {
       "userId": null,
@@ -3786,13 +3754,13 @@
       "contactEmail": "marcelo@laangostura.test"
     },
     "reason": null,
-    "correlationId": "fx-0119",
-    "prevHash": "9d6e92f82cab65ab3e44be364693161086b71faaf9604ba7e7525ca4a01767b7",
-    "hash": "37972ada29e64c9285805c6403b54fee926b60cd46000221b630a471587a5df6"
+    "correlationId": "fx-0118",
+    "prevHash": "ae7fb4f425151c8d2cf3c6ab0be27b7346ad130fc35b31a9857092aae8b46461",
+    "hash": "6731974110b310cef4eede151e01d7438e7638bc0d8dac151af68b53469dfbd4"
   },
   {
-    "id": "1c0fdc36-7c33-5c02-b22b-f94d7eaa8bc5",
-    "seq": 120,
+    "id": "48163bea-86b4-591b-a2a9-db149b3744e2",
+    "seq": 119,
     "occurredAt": "2026-09-10T17:05:00Z",
     "actor": {
       "userId": null,
@@ -3819,13 +3787,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0120",
-    "prevHash": "37972ada29e64c9285805c6403b54fee926b60cd46000221b630a471587a5df6",
-    "hash": "6ad3da16ab0ab35446a109424bd43fd4749ef519f26ddf4b86ff3722c55fc292"
+    "correlationId": "fx-0119",
+    "prevHash": "6731974110b310cef4eede151e01d7438e7638bc0d8dac151af68b53469dfbd4",
+    "hash": "48d93c0a5b4455dce54d4ff91c0b112936338b4f4a389c118da676f4b5f32349"
   },
   {
-    "id": "6f3f8ab9-8d52-5a9b-850f-2e37446d1652",
-    "seq": 121,
+    "id": "1c0fdc36-7c33-5c02-b22b-f94d7eaa8bc5",
+    "seq": 120,
     "occurredAt": "2026-09-11T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3854,13 +3822,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0121",
-    "prevHash": "6ad3da16ab0ab35446a109424bd43fd4749ef519f26ddf4b86ff3722c55fc292",
-    "hash": "f3a3a4f824038d4b04b1cfa1963d3b3564f722c5d705f85b420da1acbd32943a"
+    "correlationId": "fx-0120",
+    "prevHash": "48d93c0a5b4455dce54d4ff91c0b112936338b4f4a389c118da676f4b5f32349",
+    "hash": "8e87d8f7c1449d7cb8d03186bb7f70429614d6e46b881aa957b5a01fd0851f7f"
   },
   {
-    "id": "cbf3bf74-4a65-56f8-ab11-809b03a93a29",
-    "seq": 122,
+    "id": "6f3f8ab9-8d52-5a9b-850f-2e37446d1652",
+    "seq": 121,
     "occurredAt": "2026-09-11T09:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -3887,13 +3855,13 @@
       "status": "REVOKED"
     },
     "reason": null,
-    "correlationId": "fx-0122",
-    "prevHash": "f3a3a4f824038d4b04b1cfa1963d3b3564f722c5d705f85b420da1acbd32943a",
-    "hash": "76ee430cb297fbce792d6cd1083ed62b87d88d8375e8417560ed0187f1e8a055"
+    "correlationId": "fx-0121",
+    "prevHash": "8e87d8f7c1449d7cb8d03186bb7f70429614d6e46b881aa957b5a01fd0851f7f",
+    "hash": "7063850f6f464e523f87ebbf09bf249bc539bc037344d15be578b27a771f5074"
   },
   {
-    "id": "776a5ded-9f7c-5427-9770-345c986d0d3e",
-    "seq": 123,
+    "id": "cbf3bf74-4a65-56f8-ab11-809b03a93a29",
+    "seq": 122,
     "occurredAt": "2026-09-11T09:20:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3918,13 +3886,13 @@
       "noteId": "1e3d0a2f-b471-5d1a-8569-58d6cee2a0a7"
     },
     "reason": null,
-    "correlationId": "fx-0123",
-    "prevHash": "76ee430cb297fbce792d6cd1083ed62b87d88d8375e8417560ed0187f1e8a055",
-    "hash": "d63dd293e16d8867a6ead0a5cee3a111a8e5ba94143b9deeb0db867ddfce552e"
+    "correlationId": "fx-0122",
+    "prevHash": "7063850f6f464e523f87ebbf09bf249bc539bc037344d15be578b27a771f5074",
+    "hash": "0db2861f39dfdb0b08f0e81e0d5e7174923660cf79ff1e01eec33f90fad0efdb"
   },
   {
-    "id": "45dc5ade-bd57-5c4e-983d-725916b9567f",
-    "seq": 124,
+    "id": "776a5ded-9f7c-5427-9770-345c986d0d3e",
+    "seq": 123,
     "occurredAt": "2026-09-12T09:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3951,13 +3919,13 @@
       "value": 30
     },
     "reason": "Se vuelve al estándar tras la prueba.",
-    "correlationId": "fx-0124",
-    "prevHash": "d63dd293e16d8867a6ead0a5cee3a111a8e5ba94143b9deeb0db867ddfce552e",
-    "hash": "eacfec36496e0034a46da65391c827da006188ceed3a4041c2a206ad613bfea4"
+    "correlationId": "fx-0123",
+    "prevHash": "0db2861f39dfdb0b08f0e81e0d5e7174923660cf79ff1e01eec33f90fad0efdb",
+    "hash": "64c2a79ff1d87cccfee5934cd8497c4b6004561437de303be654c9680b97539f"
   },
   {
-    "id": "1461ab86-b6dd-5428-8143-4c473a513f28",
-    "seq": 125,
+    "id": "45dc5ade-bd57-5c4e-983d-725916b9567f",
+    "seq": 124,
     "occurredAt": "2026-09-12T15:00:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -3985,13 +3953,13 @@
       "blockedBy": "PLATFORM"
     },
     "reason": "Acceso compartido detectado; pendiente de confirmar con la dueña.",
-    "correlationId": "fx-0125",
-    "prevHash": "eacfec36496e0034a46da65391c827da006188ceed3a4041c2a206ad613bfea4",
-    "hash": "8bc6a309ae43cd46504f2ffd87bac5f3e0978c76086578a5bc4652f3f9523c62"
+    "correlationId": "fx-0124",
+    "prevHash": "64c2a79ff1d87cccfee5934cd8497c4b6004561437de303be654c9680b97539f",
+    "hash": "70ee30b56e437f2ea5b0c85f69034d826d7fa0340a45d68b6dcd72ab6dd88e31"
   },
   {
-    "id": "7db0f126-2be7-5c6b-a3d7-68609e0991c2",
-    "seq": 126,
+    "id": "1461ab86-b6dd-5428-8143-4c473a513f28",
+    "seq": 125,
     "occurredAt": "2026-09-12T18:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4018,13 +3986,13 @@
       "status": "IN_REVIEW"
     },
     "reason": null,
-    "correlationId": "fx-0126",
-    "prevHash": "8bc6a309ae43cd46504f2ffd87bac5f3e0978c76086578a5bc4652f3f9523c62",
-    "hash": "29a5c98a5a81c1e38985e2e6259422ee40fbf58c46e8bda58d51f8cbf17d3e92"
+    "correlationId": "fx-0125",
+    "prevHash": "70ee30b56e437f2ea5b0c85f69034d826d7fa0340a45d68b6dcd72ab6dd88e31",
+    "hash": "bc37e5b8a3c36bc7e67d79d5c89499c4c54ee5e23673aa1f2d573e92142c0a1b"
   },
   {
-    "id": "2434ffa0-7090-5a9d-a776-275c646eff0a",
-    "seq": 127,
+    "id": "7db0f126-2be7-5c6b-a3d7-68609e0991c2",
+    "seq": 126,
     "occurredAt": "2026-09-15T11:00:00Z",
     "actor": {
       "userId": null,
@@ -4051,13 +4019,13 @@
       "contactEmail": "patricia@tierradecintis.test"
     },
     "reason": null,
-    "correlationId": "fx-0127",
-    "prevHash": "29a5c98a5a81c1e38985e2e6259422ee40fbf58c46e8bda58d51f8cbf17d3e92",
-    "hash": "dcdc0d35deb762abe4477ce83fb0840aec2bc7786cf60f4b11568df79545478d"
+    "correlationId": "fx-0126",
+    "prevHash": "bc37e5b8a3c36bc7e67d79d5c89499c4c54ee5e23673aa1f2d573e92142c0a1b",
+    "hash": "4630f68e32e0079c9d99391b5984aea6cfc20badf6fdc609ccc9141adf914f2f"
   },
   {
-    "id": "eccdfe26-d2cb-55f7-be7b-d6095ad4479a",
-    "seq": 128,
+    "id": "2434ffa0-7090-5a9d-a776-275c646eff0a",
+    "seq": 127,
     "occurredAt": "2026-09-15T11:10:00Z",
     "actor": {
       "userId": null,
@@ -4084,13 +4052,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0128",
-    "prevHash": "dcdc0d35deb762abe4477ce83fb0840aec2bc7786cf60f4b11568df79545478d",
-    "hash": "ca3eb2fa5dab4242821d56b8499463e93230ee5b72a06e0029468e055c7edc29"
+    "correlationId": "fx-0127",
+    "prevHash": "4630f68e32e0079c9d99391b5984aea6cfc20badf6fdc609ccc9141adf914f2f",
+    "hash": "2d3ad9b0ca02183e7940c9e92c0f6c60ba0e8f4054b51ac13a75db466069468e"
   },
   {
-    "id": "1e937b35-160c-5248-8260-a742c1b25eef",
-    "seq": 129,
+    "id": "eccdfe26-d2cb-55f7-be7b-d6095ad4479a",
+    "seq": 128,
     "occurredAt": "2026-09-16T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4119,13 +4087,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0129",
-    "prevHash": "ca3eb2fa5dab4242821d56b8499463e93230ee5b72a06e0029468e055c7edc29",
-    "hash": "6b219468595cf5a34771b469c62b51750f8ea455b2a3662d55cf04c659d82b4f"
+    "correlationId": "fx-0128",
+    "prevHash": "2d3ad9b0ca02183e7940c9e92c0f6c60ba0e8f4054b51ac13a75db466069468e",
+    "hash": "0f176134a75b21462cfb3eaa12c100847b520f1766ff6f804fdd26ac30a7e597"
   },
   {
-    "id": "ab330ffe-534c-58af-a990-d0feb1546ba1",
-    "seq": 130,
+    "id": "1e937b35-160c-5248-8260-a742c1b25eef",
+    "seq": 129,
     "occurredAt": "2026-09-16T09:30:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4150,13 +4118,13 @@
       "noteId": "b24c5d13-5ae0-5cef-a32f-79c45ad86e56"
     },
     "reason": null,
-    "correlationId": "fx-0130",
-    "prevHash": "6b219468595cf5a34771b469c62b51750f8ea455b2a3662d55cf04c659d82b4f",
-    "hash": "2b522bc0ef28b2a6e9f19aff62f470675a3a9e641f193cec3883857b6311295d"
+    "correlationId": "fx-0129",
+    "prevHash": "0f176134a75b21462cfb3eaa12c100847b520f1766ff6f804fdd26ac30a7e597",
+    "hash": "769f75fde3ccfab4472883ad47b6d1502244e6c779637c34acabca4e9d09c05e"
   },
   {
-    "id": "de36929c-7589-5bd4-b27e-7f6553403d8d",
-    "seq": 131,
+    "id": "ab330ffe-534c-58af-a990-d0feb1546ba1",
+    "seq": 130,
     "occurredAt": "2026-09-18T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4184,13 +4152,13 @@
       "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f"
     },
     "reason": null,
-    "correlationId": "fx-0131",
-    "prevHash": "2b522bc0ef28b2a6e9f19aff62f470675a3a9e641f193cec3883857b6311295d",
-    "hash": "f089e3b29ecfc3a08ef0a653e39be22ede2e6efbbeecc540a9f8877379a3325d"
+    "correlationId": "fx-0130",
+    "prevHash": "769f75fde3ccfab4472883ad47b6d1502244e6c779637c34acabca4e9d09c05e",
+    "hash": "15fa0e9d0d7d8d575c5c77470e0f7c0f759ecf19ff801a657f536f6b175f7982"
   },
   {
-    "id": "f10bf959-bb4e-570f-9d11-d53e77d2255b",
-    "seq": 132,
+    "id": "de36929c-7589-5bd4-b27e-7f6553403d8d",
+    "seq": 131,
     "occurredAt": "2026-09-18T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4215,13 +4183,13 @@
       "status": "INVITED"
     },
     "reason": "Solicitud aprobada",
-    "correlationId": "fx-0132",
-    "prevHash": "f089e3b29ecfc3a08ef0a653e39be22ede2e6efbbeecc540a9f8877379a3325d",
-    "hash": "d703a523767eb940f8ec45ad68fc5191b9ee6ec1616239ba49d4e7845a209499"
+    "correlationId": "fx-0131",
+    "prevHash": "15fa0e9d0d7d8d575c5c77470e0f7c0f759ecf19ff801a657f536f6b175f7982",
+    "hash": "18b297e3c2f49ca75486923581dee6720a3d3b5b1b76fcd1b8bfea9127fd999c"
   },
   {
-    "id": "37d308cf-114a-5c0b-a4b2-0e2deb74895c",
-    "seq": 133,
+    "id": "f10bf959-bb4e-570f-9d11-d53e77d2255b",
+    "seq": 132,
     "occurredAt": "2026-09-18T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4248,13 +4216,13 @@
       "expiresAt": "2026-09-21T09:00:00Z"
     },
     "reason": "Solicitud aprobada",
-    "correlationId": "fx-0133",
-    "prevHash": "d703a523767eb940f8ec45ad68fc5191b9ee6ec1616239ba49d4e7845a209499",
-    "hash": "76742d8fd7367883918b3dd72c4ffe8880aaf5e2029e07400c3f45d2e180c6dd"
+    "correlationId": "fx-0132",
+    "prevHash": "18b297e3c2f49ca75486923581dee6720a3d3b5b1b76fcd1b8bfea9127fd999c",
+    "hash": "ee18be0403bb5ebb272c541878f2e92c669276ed3cfcc0497abcc566d0c98651"
   },
   {
-    "id": "2c0f3657-b9f5-5d52-85fb-b3eea2a3ebd7",
-    "seq": 134,
+    "id": "37d308cf-114a-5c0b-a4b2-0e2deb74895c",
+    "seq": 133,
     "occurredAt": "2026-09-19T10:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4283,13 +4251,13 @@
       "channel": "VIDEO"
     },
     "reason": null,
-    "correlationId": "fx-0134",
-    "prevHash": "76742d8fd7367883918b3dd72c4ffe8880aaf5e2029e07400c3f45d2e180c6dd",
-    "hash": "ee7a89259ce7f52b2b5ff1a9590cfad52cb1864384fafd7e1a1f79f82b3dd612"
+    "correlationId": "fx-0133",
+    "prevHash": "ee18be0403bb5ebb272c541878f2e92c669276ed3cfcc0497abcc566d0c98651",
+    "hash": "dace7555d5b14a14d8c1367ae3ea15bf5d3bc5ec14135dfb06934fee46522738"
   },
   {
-    "id": "cd12dcd8-7f90-52b9-a424-8fe3bdfaa6bd",
-    "seq": 135,
+    "id": "2c0f3657-b9f5-5d52-85fb-b3eea2a3ebd7",
+    "seq": 134,
     "occurredAt": "2026-09-20T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -4316,13 +4284,13 @@
       "expiresAt": "2026-09-23T10:00:00Z"
     },
     "reason": "Refuerzo de operaciones para la temporada de altas",
-    "correlationId": "fx-0135",
-    "prevHash": "ee7a89259ce7f52b2b5ff1a9590cfad52cb1864384fafd7e1a1f79f82b3dd612",
-    "hash": "1fdd28eeb9213a93b77bee0792da90a691f6b6d9237134da6f3409ec4204bee0"
+    "correlationId": "fx-0134",
+    "prevHash": "dace7555d5b14a14d8c1367ae3ea15bf5d3bc5ec14135dfb06934fee46522738",
+    "hash": "466cb452c1157b418cf15b78b3a989c83ea63cfdbd9b8e0477538f4209b3f526"
   },
   {
-    "id": "f71cf218-7d3c-56b9-9051-559c1c9a9133",
-    "seq": 136,
+    "id": "cd12dcd8-7f90-52b9-a424-8fe3bdfaa6bd",
+    "seq": 135,
     "occurredAt": "2026-09-20T12:00:00Z",
     "actor": {
       "userId": null,
@@ -4349,13 +4317,13 @@
       "contactEmail": "duena@soldepadcaya.test"
     },
     "reason": null,
-    "correlationId": "fx-0136",
-    "prevHash": "1fdd28eeb9213a93b77bee0792da90a691f6b6d9237134da6f3409ec4204bee0",
-    "hash": "0fed7b880ba23037d9f4e291d60c641220cfa8bfce572f2dd1b88b25c402a173"
+    "correlationId": "fx-0135",
+    "prevHash": "466cb452c1157b418cf15b78b3a989c83ea63cfdbd9b8e0477538f4209b3f526",
+    "hash": "adea604242e33a6a4bcb93ec492620a17e93678f8aa03ef76f02beda96c429ee"
   },
   {
-    "id": "1f5c5cd8-0a27-5a93-9f86-a0d647bcac2c",
-    "seq": 137,
+    "id": "f71cf218-7d3c-56b9-9051-559c1c9a9133",
+    "seq": 136,
     "occurredAt": "2026-09-20T12:05:00Z",
     "actor": {
       "userId": null,
@@ -4382,13 +4350,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0137",
-    "prevHash": "0fed7b880ba23037d9f4e291d60c641220cfa8bfce572f2dd1b88b25c402a173",
-    "hash": "ba0b3091d8bb676e2d98cfb8bf13ab9a50c6bbb697529b6e9922aeadd06e3494"
+    "correlationId": "fx-0136",
+    "prevHash": "adea604242e33a6a4bcb93ec492620a17e93678f8aa03ef76f02beda96c429ee",
+    "hash": "5aa761eafd17c54d2c3ac0f4771be3b74a03faa906d553d5f927943846db0a6a"
   },
   {
-    "id": "666779f0-181a-59bf-8364-009a31d28017",
-    "seq": 138,
+    "id": "1f5c5cd8-0a27-5a93-9f86-a0d647bcac2c",
+    "seq": 137,
     "occurredAt": "2026-09-20T16:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -4414,13 +4382,13 @@
       "bottles": 3860
     },
     "reason": null,
-    "correlationId": "fx-0138",
-    "prevHash": "ba0b3091d8bb676e2d98cfb8bf13ab9a50c6bbb697529b6e9922aeadd06e3494",
-    "hash": "fb7a280ea6f87ea0b8f1e53779c97d6323e024359ad853eda568d3aa593ccf1f"
+    "correlationId": "fx-0137",
+    "prevHash": "5aa761eafd17c54d2c3ac0f4771be3b74a03faa906d553d5f927943846db0a6a",
+    "hash": "92e743e9d3ca6cc96d19c964e2f7f8c9a8ccc27ef0e15dfc53e89f21f5a97262"
   },
   {
-    "id": "be05cfa5-a945-542d-88cd-fabf53bee8db",
-    "seq": 139,
+    "id": "666779f0-181a-59bf-8364-009a31d28017",
+    "seq": 138,
     "occurredAt": "2026-09-21T08:30:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -4445,13 +4413,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0139",
-    "prevHash": "fb7a280ea6f87ea0b8f1e53779c97d6323e024359ad853eda568d3aa593ccf1f",
-    "hash": "0ace761e7f8e71307e464392696b2652bd4edaa53a7a64a2cfcdac7d8ed3f89d"
+    "correlationId": "fx-0138",
+    "prevHash": "92e743e9d3ca6cc96d19c964e2f7f8c9a8ccc27ef0e15dfc53e89f21f5a97262",
+    "hash": "a3ccb649e09535820c521e2891825cc6ae2da989ded98adf3713fd6be53630a1"
   },
   {
-    "id": "a88a9f2a-0b63-5dcb-aea1-77ac16e25c7e",
-    "seq": 140,
+    "id": "be05cfa5-a945-542d-88cd-fabf53bee8db",
+    "seq": 139,
     "occurredAt": "2026-09-21T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4480,13 +4448,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0140",
-    "prevHash": "0ace761e7f8e71307e464392696b2652bd4edaa53a7a64a2cfcdac7d8ed3f89d",
-    "hash": "0924baa915f84fdce4631e7e7c0cf0f3a7f15175978943b39a3d4a954fc94b28"
+    "correlationId": "fx-0139",
+    "prevHash": "a3ccb649e09535820c521e2891825cc6ae2da989ded98adf3713fd6be53630a1",
+    "hash": "8125bc7d1b1096f8b9c0082cd63b2fff6ac53bdeb2dd162da82ea54322842ad9"
   },
   {
-    "id": "a12117aa-e46e-57de-b8ac-df276ed4ac0c",
-    "seq": 141,
+    "id": "a88a9f2a-0b63-5dcb-aea1-77ac16e25c7e",
+    "seq": 140,
     "occurredAt": "2026-09-21T09:00:00Z",
     "actor": {
       "userId": null,
@@ -4509,13 +4477,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0141",
-    "prevHash": "0924baa915f84fdce4631e7e7c0cf0f3a7f15175978943b39a3d4a954fc94b28",
-    "hash": "c9541ff3647c8e821e2af4a8e51fccb2db305385694717215d3d5a1bf6a21c3c"
+    "correlationId": "fx-0140",
+    "prevHash": "8125bc7d1b1096f8b9c0082cd63b2fff6ac53bdeb2dd162da82ea54322842ad9",
+    "hash": "6bd1127876f7ef4ccb3c551ea1699033827598ca0195e2d0dd5bcfc7e57ee302"
   },
   {
-    "id": "5951e15e-b669-55af-a3b4-feae14b1b891",
-    "seq": 142,
+    "id": "a12117aa-e46e-57de-b8ac-df276ed4ac0c",
+    "seq": 141,
     "occurredAt": "2026-09-22T09:00:00Z",
     "actor": {
       "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
@@ -4538,13 +4506,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0142",
-    "prevHash": "c9541ff3647c8e821e2af4a8e51fccb2db305385694717215d3d5a1bf6a21c3c",
-    "hash": "d0926d15f57a350c7178f04c62d4f6ff4c7de1252f496257925c0f89b7b970a1"
+    "correlationId": "fx-0141",
+    "prevHash": "6bd1127876f7ef4ccb3c551ea1699033827598ca0195e2d0dd5bcfc7e57ee302",
+    "hash": "26f11f40a5e6ccc8c852fa2f4087d06f5e93a55979d07e3fe6669d9125e89c0e"
   },
   {
-    "id": "0b3d7abd-cb3b-5184-9512-22e8e879913e",
-    "seq": 143,
+    "id": "5951e15e-b669-55af-a3b4-feae14b1b891",
+    "seq": 142,
     "occurredAt": "2026-09-22T09:00:00Z",
     "actor": {
       "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
@@ -4569,13 +4537,13 @@
       "role": "OPERATIONS"
     },
     "reason": null,
-    "correlationId": "fx-0143",
-    "prevHash": "d0926d15f57a350c7178f04c62d4f6ff4c7de1252f496257925c0f89b7b970a1",
-    "hash": "1e7297fe57e6b7b296b940b9951924484d2b48f091c844f33cf43fe64c6df011"
+    "correlationId": "fx-0142",
+    "prevHash": "26f11f40a5e6ccc8c852fa2f4087d06f5e93a55979d07e3fe6669d9125e89c0e",
+    "hash": "c9ffb0374575e76f18b988ce2bbbb8736911e467e2c671823f948da26f985451"
   },
   {
-    "id": "6fc2c026-9128-5b53-873f-009334fd6538",
-    "seq": 144,
+    "id": "0b3d7abd-cb3b-5184-9512-22e8e879913e",
+    "seq": 143,
     "occurredAt": "2026-09-22T16:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4600,13 +4568,13 @@
       "noteId": "23c01d42-ec36-52dc-a21d-66b544cbe0f7"
     },
     "reason": null,
-    "correlationId": "fx-0144",
-    "prevHash": "1e7297fe57e6b7b296b940b9951924484d2b48f091c844f33cf43fe64c6df011",
-    "hash": "2a458a6771994fedf3d4b7bf292c7e7acbd16595ecfbbbc2cb757286f0a3525e"
+    "correlationId": "fx-0143",
+    "prevHash": "c9ffb0374575e76f18b988ce2bbbb8736911e467e2c671823f948da26f985451",
+    "hash": "97b60f7068e99a1f38ef0412d92816a6cc70f69881c53c45a031b2afd3044f8d"
   },
   {
-    "id": "b33df423-56da-59f8-847c-924f29941e0f",
-    "seq": 145,
+    "id": "6fc2c026-9128-5b53-873f-009334fd6538",
+    "seq": 144,
     "occurredAt": "2026-09-23T11:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4631,13 +4599,13 @@
       "noteId": "22667ca8-50ba-5ce9-a998-0b396709c905"
     },
     "reason": null,
-    "correlationId": "fx-0145",
-    "prevHash": "2a458a6771994fedf3d4b7bf292c7e7acbd16595ecfbbbc2cb757286f0a3525e",
-    "hash": "da84a9f656c8f0c3474b043acb0721503b74a25fcf84b9d2bedcad4407951ed4"
+    "correlationId": "fx-0144",
+    "prevHash": "97b60f7068e99a1f38ef0412d92816a6cc70f69881c53c45a031b2afd3044f8d",
+    "hash": "9c9b0ea3ecf4d59634020094c93b9b0be1a7e86896c2925eb507a2136eaf6531"
   },
   {
-    "id": "659bde6d-e481-56a2-85d2-80f75f32ce0f",
-    "seq": 146,
+    "id": "b33df423-56da-59f8-847c-924f29941e0f",
+    "seq": 145,
     "occurredAt": "2026-09-23T11:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -4664,13 +4632,13 @@
       "expiresAt": "2026-09-26T11:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0146",
-    "prevHash": "da84a9f656c8f0c3474b043acb0721503b74a25fcf84b9d2bedcad4407951ed4",
-    "hash": "41c9b74b586c7e0743464f2bdef3230a501b5b243b632e0280a9b4481436e987"
+    "correlationId": "fx-0145",
+    "prevHash": "9c9b0ea3ecf4d59634020094c93b9b0be1a7e86896c2925eb507a2136eaf6531",
+    "hash": "2374f574ae617c14e305efb3c7f58bc7bc7564cfe440213372724db4dec3269c"
   },
   {
-    "id": "76a71064-bbc4-589a-8867-a64a761c3b20",
-    "seq": 147,
+    "id": "659bde6d-e481-56a2-85d2-80f75f32ce0f",
+    "seq": 146,
     "occurredAt": "2026-09-23T15:10:00Z",
     "actor": {
       "userId": null,
@@ -4697,13 +4665,13 @@
       "contactEmail": "lucia@andinadealtura.test"
     },
     "reason": null,
-    "correlationId": "fx-0147",
-    "prevHash": "41c9b74b586c7e0743464f2bdef3230a501b5b243b632e0280a9b4481436e987",
-    "hash": "0dce6015a52b77e52f1077c120236b55f9585b6b6ebb92305d7d57909f4a5377"
+    "correlationId": "fx-0146",
+    "prevHash": "2374f574ae617c14e305efb3c7f58bc7bc7564cfe440213372724db4dec3269c",
+    "hash": "136b6783b6a66dd16c0920be2c3f75d30ff8194374fe91ff34aab743668d34cc"
   },
   {
-    "id": "d7230eed-31b5-5e6e-b5c6-ec4e89654787",
-    "seq": 148,
+    "id": "76a71064-bbc4-589a-8867-a64a761c3b20",
+    "seq": 147,
     "occurredAt": "2026-09-23T15:25:00Z",
     "actor": {
       "userId": null,
@@ -4730,13 +4698,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0148",
-    "prevHash": "0dce6015a52b77e52f1077c120236b55f9585b6b6ebb92305d7d57909f4a5377",
-    "hash": "6ae84db1f38bf0e1090cab03a44ac89ee0108e9d85da1305b8b3711c29a3d534"
+    "correlationId": "fx-0147",
+    "prevHash": "136b6783b6a66dd16c0920be2c3f75d30ff8194374fe91ff34aab743668d34cc",
+    "hash": "1670f57ae5d393bad939d9c222cdf40bc2b5cd31a05d017e49267d967ceaec6d"
   },
   {
-    "id": "2ee6cc83-aa4f-52a0-a141-87a92b510d40",
-    "seq": 149,
+    "id": "d7230eed-31b5-5e6e-b5c6-ec4e89654787",
+    "seq": 148,
     "occurredAt": "2026-09-24T08:30:00Z",
     "actor": {
       "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
@@ -4761,13 +4729,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0149",
-    "prevHash": "6ae84db1f38bf0e1090cab03a44ac89ee0108e9d85da1305b8b3711c29a3d534",
-    "hash": "12e2cd8c98cd219366656ff007e7dbc520a018d14eadc5e925735048e178c5d4"
+    "correlationId": "fx-0148",
+    "prevHash": "1670f57ae5d393bad939d9c222cdf40bc2b5cd31a05d017e49267d967ceaec6d",
+    "hash": "9b6166491b07e979845cc469ec40a2ac8cb4d245a7b37869477784d1ea50e059"
   },
   {
-    "id": "40a954c1-e27d-5667-adfa-b2e7744aea21",
-    "seq": 150,
+    "id": "2ee6cc83-aa4f-52a0-a141-87a92b510d40",
+    "seq": 149,
     "occurredAt": "2026-09-24T08:30:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -4792,13 +4760,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0150",
-    "prevHash": "12e2cd8c98cd219366656ff007e7dbc520a018d14eadc5e925735048e178c5d4",
-    "hash": "6451a707ec13323ea587d6d57fba9f644c1b78d6a945510438016b9c4ccf8587"
+    "correlationId": "fx-0149",
+    "prevHash": "9b6166491b07e979845cc469ec40a2ac8cb4d245a7b37869477784d1ea50e059",
+    "hash": "729818ad944786586d7e5160bfcac77f6cbb345bad458fb2338c02ea7cecdbdc"
   },
   {
-    "id": "79233513-8335-52a6-b331-70d8dc5354b7",
-    "seq": 151,
+    "id": "40a954c1-e27d-5667-adfa-b2e7744aea21",
+    "seq": 150,
     "occurredAt": "2026-09-24T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4826,13 +4794,13 @@
       "wineryId": "50ec6662-4f14-525d-8678-42dfd1afe5e1"
     },
     "reason": "Documentación completa",
-    "correlationId": "fx-0151",
-    "prevHash": "6451a707ec13323ea587d6d57fba9f644c1b78d6a945510438016b9c4ccf8587",
-    "hash": "4f42f67d676e6073d73a110e91f0e220f263c86c085ec4465393d9ab538d5bc1"
+    "correlationId": "fx-0150",
+    "prevHash": "729818ad944786586d7e5160bfcac77f6cbb345bad458fb2338c02ea7cecdbdc",
+    "hash": "106648e0c3552af5f6feacf497a855aa11eb065bef7b72dfb936f85faa2bcabb"
   },
   {
-    "id": "96d3b1b5-4dfa-584e-bf3c-71fbab40315e",
-    "seq": 152,
+    "id": "79233513-8335-52a6-b331-70d8dc5354b7",
+    "seq": 151,
     "occurredAt": "2026-09-24T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4857,13 +4825,13 @@
       "status": "INVITED"
     },
     "reason": "Documentación completa",
-    "correlationId": "fx-0152",
-    "prevHash": "4f42f67d676e6073d73a110e91f0e220f263c86c085ec4465393d9ab538d5bc1",
-    "hash": "a085220ac26f02a461d9fa5cda6e510b0da0add8e85d25c89293b7a68e2ec8a8"
+    "correlationId": "fx-0151",
+    "prevHash": "106648e0c3552af5f6feacf497a855aa11eb065bef7b72dfb936f85faa2bcabb",
+    "hash": "0b3e32519907529ed7b6b26c36080c50d830c96ec6989b8dbdb8f6068c87a864"
   },
   {
-    "id": "1340a1e7-a13b-5683-b4e9-23bac40e9e1f",
-    "seq": 153,
+    "id": "96d3b1b5-4dfa-584e-bf3c-71fbab40315e",
+    "seq": 152,
     "occurredAt": "2026-09-24T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4890,13 +4858,13 @@
       "expiresAt": "2026-09-27T09:00:00Z"
     },
     "reason": "Documentación completa",
-    "correlationId": "fx-0153",
-    "prevHash": "a085220ac26f02a461d9fa5cda6e510b0da0add8e85d25c89293b7a68e2ec8a8",
-    "hash": "79270ef4a718aa182e408b0ecc37cf03e0ccc5a76bf6d956f3f728ace9bb957d"
+    "correlationId": "fx-0152",
+    "prevHash": "0b3e32519907529ed7b6b26c36080c50d830c96ec6989b8dbdb8f6068c87a864",
+    "hash": "b6dc3ec7b29b0ae8c208a35c9759e8c552b46b6086e5e2a260a703ccb12218a5"
   },
   {
-    "id": "1e51f64b-2f81-5880-9249-0825e9dade9b",
-    "seq": 154,
+    "id": "1340a1e7-a13b-5683-b4e9-23bac40e9e1f",
+    "seq": 153,
     "occurredAt": "2026-09-24T09:45:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -4922,13 +4890,13 @@
       "netWeightKg": 6100
     },
     "reason": null,
-    "correlationId": "fx-0154",
-    "prevHash": "79270ef4a718aa182e408b0ecc37cf03e0ccc5a76bf6d956f3f728ace9bb957d",
-    "hash": "cd62e52f7895fd1c310705813dc83786921b52f7a2bbf97d123d22c6b8bb0551"
+    "correlationId": "fx-0153",
+    "prevHash": "b6dc3ec7b29b0ae8c208a35c9759e8c552b46b6086e5e2a260a703ccb12218a5",
+    "hash": "c9ba1f4cfa0d997f91835639621ed1d60b74a16c212a4e374bcafc8cdeed8b3b"
   },
   {
-    "id": "03617be5-1473-5211-a48b-fe61c7e8bd2a",
-    "seq": 155,
+    "id": "1e51f64b-2f81-5880-9249-0825e9dade9b",
+    "seq": 154,
     "occurredAt": "2026-09-24T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -4955,13 +4923,13 @@
       "expiresAt": "2026-09-27T10:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0155",
-    "prevHash": "cd62e52f7895fd1c310705813dc83786921b52f7a2bbf97d123d22c6b8bb0551",
-    "hash": "cee6fcaab211acc72cf24473bcfd24503a33d00ffedc341fd945089d8d6ecc13"
+    "correlationId": "fx-0154",
+    "prevHash": "c9ba1f4cfa0d997f91835639621ed1d60b74a16c212a4e374bcafc8cdeed8b3b",
+    "hash": "e9a8ae71d2dc2ee709d90b3809f4d1655e24620eb75ba19d5bb9ec5f84e1718b"
   },
   {
-    "id": "cab4647d-aa32-51f6-80dc-df25d3df384d",
-    "seq": 156,
+    "id": "03617be5-1473-5211-a48b-fe61c7e8bd2a",
+    "seq": 155,
     "occurredAt": "2026-09-24T10:05:00Z",
     "actor": {
       "userId": null,
@@ -4988,13 +4956,13 @@
       "contactEmail": "ernesto@riopilaya.test"
     },
     "reason": null,
-    "correlationId": "fx-0156",
-    "prevHash": "cee6fcaab211acc72cf24473bcfd24503a33d00ffedc341fd945089d8d6ecc13",
-    "hash": "2a965eb457a7aeb0dad129011b455e1ad64f9e540e9540b387266a21a7277593"
+    "correlationId": "fx-0155",
+    "prevHash": "e9a8ae71d2dc2ee709d90b3809f4d1655e24620eb75ba19d5bb9ec5f84e1718b",
+    "hash": "551288c36fdacb62f068f0a47488a91708b8357b22ebfee5e673fc768f80ab2c"
   },
   {
-    "id": "14d2c46e-b3d0-5f28-831b-0c8ca1556f6f",
-    "seq": 157,
+    "id": "cab4647d-aa32-51f6-80dc-df25d3df384d",
+    "seq": 156,
     "occurredAt": "2026-09-24T10:20:00Z",
     "actor": {
       "userId": null,
@@ -5021,45 +4989,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0157",
-    "prevHash": "2a965eb457a7aeb0dad129011b455e1ad64f9e540e9540b387266a21a7277593",
-    "hash": "9dbae0f2a68c05a32d196b839237637e2c9dc31f84d0d09708986dbf6ee87923"
+    "correlationId": "fx-0156",
+    "prevHash": "551288c36fdacb62f068f0a47488a91708b8357b22ebfee5e673fc768f80ab2c",
+    "hash": "5873c08b2c4a7965b01906007065e9db53395acbecb2b2c7f351b46bbff983f2"
   },
   {
-    "id": "2a0f8ecc-a8b4-508d-852c-e64e29074a24",
-    "seq": 158,
-    "occurredAt": "2026-09-24T14:35:00Z",
-    "actor": {
-      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
-      "fullName": "Lic. Carla Villarroel",
-      "role": "ENOLOGIST",
-      "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "FERMENTATION_TANK_CREATED",
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "f28ea298-cf7f-5d30-a92e-aad6379b8158"
-    },
-    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "before": null,
-    "after": {
-      "tankCode": "TK-07",
-      "status": "FILLING"
-    },
-    "reason": null,
-    "correlationId": "fx-0158",
-    "prevHash": "9dbae0f2a68c05a32d196b839237637e2c9dc31f84d0d09708986dbf6ee87923",
-    "hash": "1dd11e72396e79a3a38a82c75d41d1070f17cce55de5e7c0b41249e5346c87cc"
-  },
-  {
-    "id": "6f6d94cb-57c4-5ed9-9f35-bf5ec67cb0b4",
-    "seq": 159,
+    "id": "14d2c46e-b3d0-5f28-831b-0c8ca1556f6f",
+    "seq": 157,
     "occurredAt": "2026-09-25T07:15:00Z",
     "actor": {
       "userId": null,
@@ -5086,13 +5022,13 @@
       "contactEmail": "anamaria@chocloca.test"
     },
     "reason": null,
-    "correlationId": "fx-0159",
-    "prevHash": "1dd11e72396e79a3a38a82c75d41d1070f17cce55de5e7c0b41249e5346c87cc",
-    "hash": "7b24d8156c720ff8146e93879c235a7b35dafe875019262edb484b1b66d3f738"
+    "correlationId": "fx-0157",
+    "prevHash": "5873c08b2c4a7965b01906007065e9db53395acbecb2b2c7f351b46bbff983f2",
+    "hash": "6539dbc161b73d87f50305f467f2bee382e9e1fc6451043f968cef1dd15a0007"
   },
   {
-    "id": "5acad74f-b380-5821-9d57-af65e2f5fabc",
-    "seq": 160,
+    "id": "2a0f8ecc-a8b4-508d-852c-e64e29074a24",
+    "seq": 158,
     "occurredAt": "2026-09-25T07:20:00Z",
     "actor": {
       "userId": null,
@@ -5119,13 +5055,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0160",
-    "prevHash": "7b24d8156c720ff8146e93879c235a7b35dafe875019262edb484b1b66d3f738",
-    "hash": "7d7089f9255e36543879b90d4d59da885b34562f773a62bede9e12d6c2163e13"
+    "correlationId": "fx-0158",
+    "prevHash": "6539dbc161b73d87f50305f467f2bee382e9e1fc6451043f968cef1dd15a0007",
+    "hash": "aec3288cd051db66cb60b3f2103a865b8d8c3f607177068746d8f197d16593ca"
   },
   {
-    "id": "4ca0356e-11ff-5ea9-aa77-3a9fd88a2cec",
-    "seq": 161,
+    "id": "6f6d94cb-57c4-5ed9-9f35-bf5ec67cb0b4",
+    "seq": 159,
     "occurredAt": "2026-09-25T08:30:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -5150,13 +5086,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0161",
-    "prevHash": "7d7089f9255e36543879b90d4d59da885b34562f773a62bede9e12d6c2163e13",
-    "hash": "6d720eace079e4e70359211215c84a8956d259b582eb3a83e27807ccc3c5487a"
+    "correlationId": "fx-0159",
+    "prevHash": "aec3288cd051db66cb60b3f2103a865b8d8c3f607177068746d8f197d16593ca",
+    "hash": "7d989e3ba629d83f75f5c4dff2e09c8712f0c48c9e74e629914f8ab94f939a59"
   },
   {
-    "id": "e69da769-70f0-55eb-bce2-62c855f578aa",
-    "seq": 162,
+    "id": "5acad74f-b380-5821-9d57-af65e2f5fabc",
+    "seq": 160,
     "occurredAt": "2026-09-25T08:40:00Z",
     "actor": {
       "userId": null,
@@ -5183,13 +5119,13 @@
       "contactEmail": "rodrigo@altocamargo.test"
     },
     "reason": null,
-    "correlationId": "fx-0162",
-    "prevHash": "6d720eace079e4e70359211215c84a8956d259b582eb3a83e27807ccc3c5487a",
-    "hash": "f48ae2b133e9e796588671012600685c9a72955e148841efc7fcd859c4935618"
+    "correlationId": "fx-0160",
+    "prevHash": "7d989e3ba629d83f75f5c4dff2e09c8712f0c48c9e74e629914f8ab94f939a59",
+    "hash": "a92589b80618fc508e8e323e071d47149f3d31817a54cff81371c158871ca0b4"
   },
   {
-    "id": "f60946d5-d789-5a4b-9f12-dab33791ce10",
-    "seq": 163,
+    "id": "4ca0356e-11ff-5ea9-aa77-3a9fd88a2cec",
+    "seq": 161,
     "occurredAt": "2026-09-25T09:00:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -5216,8 +5152,8 @@
       "expiresAt": "2026-09-28T09:00:00Z"
     },
     "reason": "Pedido de la dueña por el canal de soporte",
-    "correlationId": "fx-0163",
-    "prevHash": "f48ae2b133e9e796588671012600685c9a72955e148841efc7fcd859c4935618",
-    "hash": "2dc6553acb99840c2006925eb49685ab4e2c1dc48e66d5ed4c1353b046a93691"
+    "correlationId": "fx-0161",
+    "prevHash": "a92589b80618fc508e8e323e071d47149f3d31817a54cff81371c158871ca0b4",
+    "hash": "a5ad0a03ad85da8afa46b8cb978da3457d1b3bbe382cfd6bf61453ee001ddee1"
   }
 ]

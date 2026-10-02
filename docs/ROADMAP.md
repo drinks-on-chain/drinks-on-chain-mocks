@@ -89,10 +89,28 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Prueba de contrato estricta de las rutas nuevas y de `waitlist.json`; `test/waitlist.test.ts` · 01-10-2026
 - [x] Versión 0.4.1, CHANGELOG, README y `docs/CONTRATO.md` §9 (la etiqueta estable `v0.4.1` se publica desde `main` con `release.yml`) · 01-10-2026
 
+## Ola 2 · `mocks` 0.5 (ERP v2 y dominio público; O2-PK-1, contrato `plan/contratos/o2-erp-confiable.md`)
+
+- [x] `openapi/erp.json` = backend de la apertura de la Ola 2 (`dev`, `bfda9bd`: 163 operaciones, 271 esquemas) · 01-10-2026
+- [x] Correcciones de la semilla del backend en `generate.py` y `generate.ts` (agua de un embotellado, tanque y destilación sin origen, crianza embotellada) · 01-10-2026
+- [x] Esquemas zod del ERP v2 (`Lot`, `LotEvent`, `BottleUnit`, `PhytoDecision`, `MaturityAnalysis`, `Correction`, `LotDossier`, `LabConformity`, instantánea de reglas, vista previa del embotellado, balance, grafo, panel, reporte) y errores `TRC_…`/`PUB_…` con `details` ampliados · 01-10-2026
+- [x] Reglas de la trazabilidad como servicios puros (`src/erp/trace/`): candados con el reloj simulado, D.O. calculada, dictamen bloqueante, balances, un embotellado por lote, correcciones y expediente · 01-10-2026
+- [x] Handlers de las 45 operaciones nuevas y cierres de la apertura (§16.2) en las legadas; la plataforma solo lee · 01-10-2026
+- [x] Dominio `public`: pasaportes de lote y de botella, expediente público, adjuntos, directorio de bodegas, 404/422/429 y código anulado · 01-10-2026
+- [x] Borrador del catálogo (`/v1/public/collections`, §17.1) marcado `draft` y fuera de la prueba estricta · 01-10-2026
+- [x] Fixtures: 17 lotes en todas las etapas, caso del §18 («Singani Gran Reserva 2026», 2.950 códigos), mismos UUID v5 que la semilla del backend, `fixtures/public/` · 01-10-2026
+- [x] Escenarios de datos `lote-en-reposo`, `lote-listo`, `lote-con-incidencia`, `laboratorio-no-conforme` · 01-10-2026
+- [x] Prueba de contrato estricta de las rutas nuevas; `test/trace-rules.test.ts` (recorrido H2 y elusión del §18) y `test/public.test.ts` · 01-10-2026
+- [x] Versión 0.5.0, CHANGELOG con rupturas y guía de migración del ERP, README y `docs/CONTRATO.md` §10 · 01-10-2026
+- [ ] Etiqueta `v0.5.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.1.tgz`
+- [ ] `rc.2`: alinear con el backend cuando implemente las rutas que hoy responden 501 (huella del expediente y raíz Merkle del paso 2.8, `TRC_TANK_NOT_COMPLETED`)
+- [ ] Retirada de H2 al cerrar la ola: `LotView`/`deriveLotViews`/`lots-view.json`, rutas legadas y entradas obsoletas (CHANGELOG 0.5.0-rc.1)
+- [ ] Etiqueta estable `v0.5.0` en `main` al cerrar la Ola 2 (coordinación)
+
 ## Más adelante
 
 - [ ] Página `/__mocks` de ejemplo (selector de escenario y de usuario) en la plantilla de aplicación
 - [ ] Dominio Marketplace (`src/marketplace/`, `fixtures/marketplace/`): colecciones, pedidos, pases, billeteras
 - [ ] Dominio Backoffice (`src/backoffice/`): alta de bodegas ✓ (Ola 1); emisión y tickets en sus olas
 - [ ] Dominio POS (`src/pos/`): dispositivos, turnos, entregas, cola sin conexión
-- [ ] Escenarios con nombre del doc 08 (`dia-de-vendimia`, `lote-listo`)
+- [ ] Escenario con nombre del doc 08 `dia-de-vendimia` (`lote-listo` y los demás de datos llegaron en 0.5)

@@ -2,10 +2,14 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { generateBackofficeFixtures } from '../../backoffice/seed/generate'
+import { generatePublicFixtures } from '../../public/seed'
 import { generateErpFixtures } from './generate'
+import { buildErpFixtureFiles } from './trace'
 
-// `pnpm seed`: escribe fixtures/erp/*.json y fixtures/backoffice/*.json (JSON con 2 espacios y
-// salto de línea final). Los de la Ola 1 parten de los del ERP (mismas bodegas y personas).
+// `pnpm seed`: escribe fixtures/erp/*.json, fixtures/backoffice/*.json y fixtures/public/*.json
+// (JSON con 2 espacios y salto de línea final). Los de la Ola 1 parten de las filas base del ERP
+// (mismas bodegas y personas); los de la Ola 2 (lotes, línea de tiempo, códigos de botella,
+// expediente) y los públicos, de esas filas migradas con la configuración del back office.
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 
@@ -20,7 +24,10 @@ function write(domain: string, set: object) {
   }
 }
 
-const erp = generateErpFixtures()
+const base = generateErpFixtures()
+const backoffice = generateBackofficeFixtures(base)
+const erp = buildErpFixtureFiles(base, backoffice)
 write('erp', erp)
-write('backoffice', generateBackofficeFixtures(erp))
+write('backoffice', backoffice)
+write('public', generatePublicFixtures(erp, backoffice))
 console.log('Listo.')

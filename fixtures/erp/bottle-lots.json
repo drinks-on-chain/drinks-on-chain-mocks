@@ -1,0 +1,70 @@
+[
+  {
+    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "bottlingBatchId": "afef7d2a-4817-556f-ae16-24b38eee217a",
+    "total": 4080,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
+    "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
+    "bottlingBatchId": "16887e29-6c0f-5820-85df-951b7372e1aa",
+    "total": 2140,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
+    "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
+    "bottlingBatchId": "c95f78e7-f72a-556c-8bae-e6670da39e8b",
+    "total": 3860,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
+    "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
+    "bottlingBatchId": "bc10077a-bf11-575c-8bba-331fbc6887c2",
+    "total": 5320,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "bottlingBatchId": "8f82c09a-bb21-5565-889a-ff2e30be7b5d",
+    "total": 2950,
+    "generations": {
+      "17": 1
+    },
+    "voided": [
+      {
+        "serial": 17,
+        "code": "7T6BZK39",
+        "generation": 0,
+        "at": "2026-09-22T17:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        },
+        "reason": "Etiqueta dañada en la línea de envasado",
+        "replacedBy": "NANABN6Z"
+      }
+    ],
+    "allVoided": null,
+    "exports": [
+      {
+        "fromSerial": 1,
+        "toSerial": 2950,
+        "at": "2026-09-22T18:00:00Z"
+      }
+    ]
+  }
+]

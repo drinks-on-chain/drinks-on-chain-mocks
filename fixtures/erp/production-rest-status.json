@@ -36,11 +36,20 @@
     "isRestCompleted": false
   },
   {
-    "id": "a6dd3060-8612-5595-b9b4-33a7d039159c",
-    "restStatus": "READY",
-    "processEndDate": "2026-03-22T00:00:00Z",
-    "mandatoryRestUntil": "2026-09-18T00:00:00Z",
-    "daysElapsed": 187,
+    "id": "d5993d22-4689-5802-9ff8-4c844d8ab807",
+    "restStatus": "NOT_REQUIRED",
+    "processEndDate": null,
+    "mandatoryRestUntil": null,
+    "daysElapsed": 0,
+    "daysRemaining": 0,
+    "isRestCompleted": false
+  },
+  {
+    "id": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+    "restStatus": "BOTTLED",
+    "processEndDate": "2026-03-24T00:00:00Z",
+    "mandatoryRestUntil": "2026-09-20T00:00:00Z",
+    "daysElapsed": 185,
     "daysRemaining": 0,
     "isRestCompleted": true
   }

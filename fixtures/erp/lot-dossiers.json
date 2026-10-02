@@ -1,0 +1,22 @@
+[
+  {
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "schema": "doc-dossier/1",
+    "status": "CLOSED",
+    "hash": "f4867f532d0179e211524c9f1aee5ec65e0d6c79a42f3ec923d4c2b29e291141",
+    "algorithm": "sha256/jcs-rfc8785",
+    "closedAt": "2026-09-24T15:00:00Z",
+    "closedBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    },
+    "bottleCodes": {
+      "count": 2950,
+      "merkleRoot": "83193856e24b73a5da9949cf19993c008fdb87c40be3f3c3c3468eee572bb243",
+      "algorithm": "sha256-merkle/serial-code-salt"
+    },
+    "anchor": null
+  }
+]

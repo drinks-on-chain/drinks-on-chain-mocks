@@ -1,0 +1,1344 @@
+{
+  "CVJ-2026-SINGANI-001": {
+    "kind": "LOT",
+    "lotCode": "CVJ-2026-SINGANI-001",
+    "name": "CVJ-2026-SINGANI-001",
+    "productType": "SINGANI",
+    "vintage": 2025,
+    "stage": "BOTTLED",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo",
+      "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+      "website": "https://cintiviejo.test",
+      "active": true
+    },
+    "denomination": {
+      "applies": true,
+      "status": "ELIGIBLE",
+      "rules": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ]
+      },
+      "legalException": false
+    },
+    "origin": {
+      "status": "RECORDED",
+      "terroirs": [
+        {
+          "parcelName": "Parcela 2 · Cañón Viejo",
+          "region": "Valle de Cinti · Camargo",
+          "altitudeMasl": 2410,
+          "variety": "Moscatel de Alejandría",
+          "doStatus": "ELIGIBLE"
+        }
+      ]
+    },
+    "harvest": {
+      "status": "RECORDED",
+      "firstIntakeDate": "2025-03-10",
+      "lastIntakeDate": "2025-03-10",
+      "phytosanitary": "APPROVED",
+      "maturity": {
+        "brixDegrees": 22.4,
+        "ph": 3.45,
+        "acidityGl": 6.8
+      }
+    },
+    "fermentation": {
+      "status": "RECORDED",
+      "startDate": "2025-03-11",
+      "endDate": "2025-04-13",
+      "readingsCount": 24,
+      "treatments": [
+        {
+          "type": "SO2_ADDITION",
+          "additive": "Metabisulfito de potasio grado alimentario",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-88",
+          "appliedAt": "2025-03-11T15:00:00Z"
+        }
+      ]
+    },
+    "aging": {
+      "status": "NOT_APPLICABLE",
+      "containerType": null,
+      "containerMaterial": null,
+      "plannedMonths": null,
+      "startDate": null,
+      "unlockDate": null
+    },
+    "distillation": {
+      "status": "RECORDED",
+      "startDate": "2025-05-20",
+      "endDate": "2025-05-25",
+      "heartAbvPercent": 70.2,
+      "restMinDays": 180,
+      "restUntil": "2025-11-21"
+    },
+    "bottling": {
+      "status": "RECORDED",
+      "date": "2026-03-01",
+      "bottles": 4080,
+      "formatCl": 75,
+      "finalAbv": 40
+    },
+    "lab": {
+      "status": "CONFORMING",
+      "laboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "testedAt": "2026-03-04",
+      "checks": [
+        {
+          "parameter": "metanol",
+          "value": 11.985,
+          "unit": "mg/100 mL de alcohol anhidro",
+          "limit": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "cobre",
+          "value": 0.02,
+          "unit": "mg/L",
+          "limit": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "grado",
+          "value": 40.05,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        },
+        {
+          "parameter": "acidezVolatil",
+          "value": 0.22,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "PASS"
+        }
+      ]
+    },
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "items": [
+        {
+          "key": "trazabilidad.singani.altitudMinimaMsnm",
+          "label": "Altitud mínima de la parcela (D.O. Singani)",
+          "value": 1600,
+          "unit": "msnm",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.singani.variedadesExigidas",
+          "label": "Cepas admitidas (D.O. Singani)",
+          "value": [
+            "Moscatel de Alejandría"
+          ],
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.singani.reposoMinimoDias",
+          "label": "Reposo mínimo tras la destilación",
+          "value": 180,
+          "unit": "días",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.fitosanitario.exigirAprobado",
+          "label": "Dictamen fitosanitario aprobado para fermentar",
+          "value": true,
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.embotellado.mermaMaximaPorcentaje",
+          "label": "Merma máxima tolerada al embotellar",
+          "value": 5,
+          "unit": "%",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.laboratorio.limites",
+          "label": "Límites de laboratorio",
+          "value": {
+            "metanol": {
+              "max": 300,
+              "unidad": "mg/100 ml a.a."
+            },
+            "cobre": {
+              "max": 6,
+              "unidad": "mg/l"
+            },
+            "acidezVolatil": {
+              "max": 1.2,
+              "unidad": "g/l"
+            }
+          },
+          "unit": null,
+          "legalException": false
+        }
+      ]
+    },
+    "timeline": [
+      {
+        "type": "HARVEST_WEIGHED",
+        "occurredAt": "2025-03-10T09:42:00Z",
+        "recordedAt": "2025-03-10T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Uva recibida y pesada en la bodega",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "PHYTO_DECIDED",
+        "occurredAt": "2025-03-10T09:45:00Z",
+        "recordedAt": "2025-03-10T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Dictamen fitosanitario: aprobado",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "TANK_FILLED",
+        "occurredAt": "2025-03-11T14:30:00Z",
+        "recordedAt": "2025-03-11T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Mosto en el tanque de fermentación",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_COMPLETED",
+        "occurredAt": "2025-04-13T14:30:00Z",
+        "recordedAt": "2025-03-11T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación completada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "TANK_FILLED",
+        "occurredAt": "2025-03-11T14:30:00Z",
+        "recordedAt": "2025-03-11T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Mosto en el tanque de fermentación",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_COMPLETED",
+        "occurredAt": "2025-04-12T14:30:00Z",
+        "recordedAt": "2025-03-11T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación completada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "DISTILLATION_STARTED",
+        "occurredAt": "2025-05-20T00:00:00Z",
+        "recordedAt": "2025-05-20T10:00:00Z",
+        "lateEntry": false,
+        "summary": "Destilación iniciada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "DISTILLATION_CLOSED",
+        "occurredAt": "2025-05-25T00:00:00Z",
+        "recordedAt": "2025-05-20T10:00:00Z",
+        "lateEntry": false,
+        "summary": "Destilación terminada: empieza el reposo",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "BOTTLED",
+        "occurredAt": "2026-03-01T00:00:00Z",
+        "recordedAt": "2026-03-01T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Embotellado: 4.080 botellas de 75 cL",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "LAB_REGISTERED",
+        "occurredAt": "2026-03-04T00:00:00Z",
+        "recordedAt": "2026-03-04T15:00:00Z",
+        "lateEntry": false,
+        "summary": "Análisis de laboratorio: conforme",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      }
+    ],
+    "corrections": {
+      "count": 0,
+      "lastAt": null
+    },
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "closedAt": null,
+      "canonicalUrl": null,
+      "anchor": null
+    },
+    "publicAttachments": [],
+    "generatedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2026-SINGANI-002": {
+    "kind": "LOT",
+    "lotCode": "CVJ-2026-SINGANI-002",
+    "name": "CVJ-2026-SINGANI-002",
+    "productType": "SINGANI",
+    "vintage": 2025,
+    "stage": "BOTTLED",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo",
+      "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+      "website": "https://cintiviejo.test",
+      "active": true
+    },
+    "denomination": {
+      "applies": true,
+      "status": "ELIGIBLE",
+      "rules": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ]
+      },
+      "legalException": false
+    },
+    "origin": {
+      "status": "RECORDED",
+      "terroirs": [
+        {
+          "parcelName": "Parcela 4 · El Molino",
+          "region": "Valle de Cinti · Camargo",
+          "altitudeMasl": 2320,
+          "variety": "Moscatel de Alejandría",
+          "doStatus": "ELIGIBLE"
+        }
+      ]
+    },
+    "harvest": {
+      "status": "RECORDED",
+      "firstIntakeDate": "2025-03-18",
+      "lastIntakeDate": "2025-03-18",
+      "phytosanitary": "APPROVED",
+      "maturity": {
+        "brixDegrees": 22.9,
+        "ph": 3.38,
+        "acidityGl": 6.4
+      }
+    },
+    "fermentation": {
+      "status": "RECORDED",
+      "startDate": "2025-03-19",
+      "endDate": "2025-04-20",
+      "readingsCount": 24,
+      "treatments": [
+        {
+          "type": "SO2_ADDITION",
+          "additive": "Metabisulfito de potasio grado alimentario",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-88",
+          "appliedAt": "2025-03-19T15:00:00Z"
+        }
+      ]
+    },
+    "aging": {
+      "status": "NOT_APPLICABLE",
+      "containerType": null,
+      "containerMaterial": null,
+      "plannedMonths": null,
+      "startDate": null,
+      "unlockDate": null
+    },
+    "distillation": {
+      "status": "RECORDED",
+      "startDate": "2025-05-02",
+      "endDate": "2025-05-04",
+      "heartAbvPercent": 65.4,
+      "restMinDays": 180,
+      "restUntil": "2025-10-31"
+    },
+    "bottling": {
+      "status": "RECORDED",
+      "date": "2026-02-10",
+      "bottles": 2140,
+      "formatCl": 75,
+      "finalAbv": 40
+    },
+    "lab": {
+      "status": "CONFORMING",
+      "laboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "testedAt": "2026-02-13",
+      "checks": [
+        {
+          "parameter": "metanol",
+          "value": 13.033,
+          "unit": "mg/100 mL de alcohol anhidro",
+          "limit": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "cobre",
+          "value": 0.03,
+          "unit": "mg/L",
+          "limit": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "grado",
+          "value": 39.9,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        },
+        {
+          "parameter": "acidezVolatil",
+          "value": 0.25,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "PASS"
+        }
+      ]
+    },
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "items": [
+        {
+          "key": "trazabilidad.singani.altitudMinimaMsnm",
+          "label": "Altitud mínima de la parcela (D.O. Singani)",
+          "value": 1600,
+          "unit": "msnm",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.singani.variedadesExigidas",
+          "label": "Cepas admitidas (D.O. Singani)",
+          "value": [
+            "Moscatel de Alejandría"
+          ],
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.singani.reposoMinimoDias",
+          "label": "Reposo mínimo tras la destilación",
+          "value": 180,
+          "unit": "días",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.fitosanitario.exigirAprobado",
+          "label": "Dictamen fitosanitario aprobado para fermentar",
+          "value": true,
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.embotellado.mermaMaximaPorcentaje",
+          "label": "Merma máxima tolerada al embotellar",
+          "value": 5,
+          "unit": "%",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.laboratorio.limites",
+          "label": "Límites de laboratorio",
+          "value": {
+            "metanol": {
+              "max": 300,
+              "unidad": "mg/100 ml a.a."
+            },
+            "cobre": {
+              "max": 6,
+              "unidad": "mg/l"
+            },
+            "acidezVolatil": {
+              "max": 1.2,
+              "unidad": "g/l"
+            }
+          },
+          "unit": null,
+          "legalException": false
+        }
+      ]
+    },
+    "timeline": [
+      {
+        "type": "HARVEST_WEIGHED",
+        "occurredAt": "2025-03-18T09:42:00Z",
+        "recordedAt": "2025-03-18T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Uva recibida y pesada en la bodega",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "PHYTO_DECIDED",
+        "occurredAt": "2025-03-18T09:45:00Z",
+        "recordedAt": "2025-03-18T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Dictamen fitosanitario: aprobado",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "TANK_FILLED",
+        "occurredAt": "2025-03-19T14:30:00Z",
+        "recordedAt": "2025-03-19T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Mosto en el tanque de fermentación",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_COMPLETED",
+        "occurredAt": "2025-04-20T14:30:00Z",
+        "recordedAt": "2025-03-19T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación completada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "DISTILLATION_STARTED",
+        "occurredAt": "2025-05-02T00:00:00Z",
+        "recordedAt": "2025-05-02T10:00:00Z",
+        "lateEntry": false,
+        "summary": "Destilación iniciada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "DISTILLATION_CLOSED",
+        "occurredAt": "2025-05-04T00:00:00Z",
+        "recordedAt": "2025-05-02T10:00:00Z",
+        "lateEntry": false,
+        "summary": "Destilación terminada: empieza el reposo",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "BOTTLED",
+        "occurredAt": "2026-02-10T00:00:00Z",
+        "recordedAt": "2026-02-10T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Embotellado: 2.140 botellas de 75 cL",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "LAB_REGISTERED",
+        "occurredAt": "2026-02-13T00:00:00Z",
+        "recordedAt": "2026-02-13T15:00:00Z",
+        "lateEntry": false,
+        "summary": "Análisis de laboratorio: conforme",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      }
+    ],
+    "corrections": {
+      "count": 0,
+      "lastAt": null
+    },
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "closedAt": null,
+      "canonicalUrl": null,
+      "anchor": null
+    },
+    "publicAttachments": [],
+    "generatedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2026-WINE-003": {
+    "kind": "LOT",
+    "lotCode": "CVJ-2026-WINE-003",
+    "name": "CVJ-2026-WINE-003",
+    "productType": "WINE",
+    "vintage": 2025,
+    "stage": "BOTTLED",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo",
+      "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+      "website": "https://cintiviejo.test",
+      "active": true
+    },
+    "denomination": {
+      "applies": false,
+      "status": "NOT_APPLICABLE",
+      "rules": null,
+      "legalException": false
+    },
+    "origin": {
+      "status": "RECORDED",
+      "terroirs": [
+        {
+          "parcelName": "Parcela 3 · Las Carreras",
+          "region": "Valle de Cinti · Camargo",
+          "altitudeMasl": 2280,
+          "variety": "Vischoqueña",
+          "doStatus": "NOT_APPLICABLE"
+        }
+      ]
+    },
+    "harvest": {
+      "status": "RECORDED",
+      "firstIntakeDate": "2025-02-26",
+      "lastIntakeDate": "2025-02-26",
+      "phytosanitary": "APPROVED",
+      "maturity": {
+        "brixDegrees": 24.1,
+        "ph": 3.55,
+        "acidityGl": 5.7
+      }
+    },
+    "fermentation": {
+      "status": "RECORDED",
+      "startDate": "2025-02-27",
+      "endDate": "2025-03-20",
+      "readingsCount": 21,
+      "treatments": [
+        {
+          "type": "SO2_ADDITION",
+          "additive": "Metabisulfito de potasio grado alimentario",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-88",
+          "appliedAt": "2025-02-27T15:00:00Z"
+        },
+        {
+          "type": "NUTRIENT_ADDITION",
+          "additive": "Fosfato diamónico y levadura Saccharomyces cerevisiae seleccionada",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-112",
+          "appliedAt": "2025-02-28T12:00:00Z"
+        }
+      ]
+    },
+    "aging": {
+      "status": "RECORDED",
+      "containerType": "Barrica",
+      "containerMaterial": "Roble francés, tostado ligero",
+      "plannedMonths": 10,
+      "startDate": "2025-04-01",
+      "unlockDate": "2026-02-01"
+    },
+    "distillation": {
+      "status": "NOT_APPLICABLE",
+      "startDate": null,
+      "endDate": null,
+      "heartAbvPercent": null,
+      "restMinDays": null,
+      "restUntil": null
+    },
+    "bottling": {
+      "status": "RECORDED",
+      "date": "2026-09-20",
+      "bottles": 3860,
+      "formatCl": 75,
+      "finalAbv": 13.8
+    },
+    "lab": {
+      "status": "NOT_RECORDED",
+      "laboratoryName": null,
+      "testedAt": null,
+      "checks": []
+    },
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "items": [
+        {
+          "key": "trazabilidad.vino.crianzaMinimaMeses",
+          "label": "Crianza mínima del vino",
+          "value": 0,
+          "unit": "meses",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.fitosanitario.exigirAprobado",
+          "label": "Dictamen fitosanitario aprobado para fermentar",
+          "value": true,
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.embotellado.mermaMaximaPorcentaje",
+          "label": "Merma máxima tolerada al embotellar",
+          "value": 5,
+          "unit": "%",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.laboratorio.limites",
+          "label": "Límites de laboratorio",
+          "value": {
+            "metanol": {
+              "max": 300,
+              "unidad": "mg/100 ml a.a."
+            },
+            "cobre": {
+              "max": 6,
+              "unidad": "mg/l"
+            },
+            "acidezVolatil": {
+              "max": 1.2,
+              "unidad": "g/l"
+            }
+          },
+          "unit": null,
+          "legalException": false
+        }
+      ]
+    },
+    "timeline": [
+      {
+        "type": "HARVEST_WEIGHED",
+        "occurredAt": "2025-02-26T09:42:00Z",
+        "recordedAt": "2025-02-26T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Uva recibida y pesada en la bodega",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "PHYTO_DECIDED",
+        "occurredAt": "2025-02-26T09:45:00Z",
+        "recordedAt": "2025-02-26T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Dictamen fitosanitario: aprobado",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "TANK_FILLED",
+        "occurredAt": "2025-02-27T14:30:00Z",
+        "recordedAt": "2025-02-27T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Mosto en el tanque de fermentación",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_COMPLETED",
+        "occurredAt": "2025-03-20T14:30:00Z",
+        "recordedAt": "2025-02-27T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación completada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "AGING_STARTED",
+        "occurredAt": "2025-04-01T00:00:00Z",
+        "recordedAt": "2025-04-01T10:00:00Z",
+        "lateEntry": false,
+        "summary": "Inicio de la crianza (10 meses)",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "BOTTLED",
+        "occurredAt": "2026-09-20T00:00:00Z",
+        "recordedAt": "2026-09-20T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Embotellado: 3.860 botellas de 75 cL",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      }
+    ],
+    "corrections": {
+      "count": 0,
+      "lastAt": null
+    },
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "closedAt": null,
+      "canonicalUrl": null,
+      "anchor": null
+    },
+    "publicAttachments": [],
+    "generatedAt": "2026-09-25T12:00:00Z"
+  },
+  "ALT-2026-WINE-001": {
+    "kind": "LOT",
+    "lotCode": "ALT-2026-WINE-001",
+    "name": "ALT-2026-WINE-001",
+    "productType": "WINE",
+    "vintage": 2025,
+    "stage": "BOTTLED",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita",
+      "region": "Valle Central de Tarija · Santa Ana",
+      "logoUrl": "/mocks/uploads/logos/altos.png",
+      "website": "https://altos.test",
+      "active": true
+    },
+    "denomination": {
+      "applies": false,
+      "status": "NOT_APPLICABLE",
+      "rules": null,
+      "legalException": false
+    },
+    "origin": {
+      "status": "RECORDED",
+      "terroirs": [
+        {
+          "parcelName": "Cuartel 5 · La Compañía",
+          "region": "Valle Central de Tarija · Santa Ana",
+          "altitudeMasl": 1890,
+          "variety": "Cabernet Sauvignon",
+          "doStatus": "NOT_APPLICABLE"
+        }
+      ]
+    },
+    "harvest": {
+      "status": "RECORDED",
+      "firstIntakeDate": "2025-03-06",
+      "lastIntakeDate": "2025-03-06",
+      "phytosanitary": "APPROVED",
+      "maturity": {
+        "brixDegrees": 24.8,
+        "ph": 3.62,
+        "acidityGl": 5.6
+      }
+    },
+    "fermentation": {
+      "status": "RECORDED",
+      "startDate": "2025-03-07",
+      "endDate": "2025-03-28",
+      "readingsCount": 21,
+      "treatments": [
+        {
+          "type": "SO2_ADDITION",
+          "additive": "Metabisulfito de potasio grado alimentario",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-88",
+          "appliedAt": "2025-03-07T15:00:00Z"
+        },
+        {
+          "type": "NUTRIENT_ADDITION",
+          "additive": "Fosfato diamónico y levadura Saccharomyces cerevisiae seleccionada",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-112",
+          "appliedAt": "2025-03-08T12:00:00Z"
+        }
+      ]
+    },
+    "aging": {
+      "status": "RECORDED",
+      "containerType": "Barrica",
+      "containerMaterial": "Roble francés (Nevers), tostado medio",
+      "plannedMonths": 12,
+      "startDate": "2025-04-10",
+      "unlockDate": "2026-04-10"
+    },
+    "distillation": {
+      "status": "NOT_APPLICABLE",
+      "startDate": null,
+      "endDate": null,
+      "heartAbvPercent": null,
+      "restMinDays": null,
+      "restUntil": null
+    },
+    "bottling": {
+      "status": "RECORDED",
+      "date": "2026-05-12",
+      "bottles": 5320,
+      "formatCl": 75,
+      "finalAbv": 14.2
+    },
+    "lab": {
+      "status": "CONFORMING",
+      "laboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "testedAt": "2026-05-15",
+      "checks": [
+        {
+          "parameter": "acidezVolatil",
+          "value": 0.45,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "grado",
+          "value": 14.22,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        }
+      ]
+    },
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "MIGRATION",
+      "items": [
+        {
+          "key": "trazabilidad.vino.crianzaMinimaMeses",
+          "label": "Crianza mínima del vino",
+          "value": 0,
+          "unit": "meses",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.fitosanitario.exigirAprobado",
+          "label": "Dictamen fitosanitario aprobado para fermentar",
+          "value": true,
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.embotellado.mermaMaximaPorcentaje",
+          "label": "Merma máxima tolerada al embotellar",
+          "value": 5,
+          "unit": "%",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.laboratorio.limites",
+          "label": "Límites de laboratorio",
+          "value": {
+            "metanol": {
+              "max": 300,
+              "unidad": "mg/100 ml a.a."
+            },
+            "cobre": {
+              "max": 6,
+              "unidad": "mg/l"
+            },
+            "acidezVolatil": {
+              "max": 1.2,
+              "unidad": "g/l"
+            }
+          },
+          "unit": null,
+          "legalException": false
+        }
+      ]
+    },
+    "timeline": [
+      {
+        "type": "HARVEST_WEIGHED",
+        "occurredAt": "2025-03-06T09:42:00Z",
+        "recordedAt": "2025-03-06T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Uva recibida y pesada en la bodega",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "PHYTO_DECIDED",
+        "occurredAt": "2025-03-06T09:45:00Z",
+        "recordedAt": "2025-03-06T09:45:00Z",
+        "lateEntry": false,
+        "summary": "Dictamen fitosanitario: aprobado",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "TANK_FILLED",
+        "occurredAt": "2025-03-07T14:30:00Z",
+        "recordedAt": "2025-03-07T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Mosto en el tanque de fermentación",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_COMPLETED",
+        "occurredAt": "2025-03-28T14:30:00Z",
+        "recordedAt": "2025-03-07T14:35:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación completada",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "AGING_STARTED",
+        "occurredAt": "2025-04-10T00:00:00Z",
+        "recordedAt": "2025-04-10T10:00:00Z",
+        "lateEntry": false,
+        "summary": "Inicio de la crianza (12 meses)",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "BOTTLED",
+        "occurredAt": "2026-05-12T00:00:00Z",
+        "recordedAt": "2026-05-12T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Embotellado: 5.320 botellas de 75 cL",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "LAB_REGISTERED",
+        "occurredAt": "2026-05-15T00:00:00Z",
+        "recordedAt": "2026-05-15T15:00:00Z",
+        "lateEntry": false,
+        "summary": "Análisis de laboratorio: conforme",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      }
+    ],
+    "corrections": {
+      "count": 0,
+      "lastAt": null
+    },
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "closedAt": null,
+      "canonicalUrl": null,
+      "anchor": null
+    },
+    "publicAttachments": [],
+    "generatedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2026-SINGANI-004": {
+    "kind": "LOT",
+    "lotCode": "CVJ-2026-SINGANI-004",
+    "name": "Singani Gran Reserva 2026",
+    "productType": "SINGANI",
+    "vintage": 2026,
+    "stage": "CERTIFIED",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo",
+      "logoUrl": "/mocks/uploads/logos/cintiviejo.png",
+      "website": "https://cintiviejo.test",
+      "active": true
+    },
+    "denomination": {
+      "applies": true,
+      "status": "ELIGIBLE",
+      "rules": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ]
+      },
+      "legalException": false
+    },
+    "origin": {
+      "status": "RECORDED",
+      "terroirs": [
+        {
+          "parcelName": "Parcela 2 · Cañón Viejo",
+          "region": "Valle de Cinti · Camargo",
+          "altitudeMasl": 2410,
+          "variety": "Moscatel de Alejandría",
+          "doStatus": "ELIGIBLE"
+        }
+      ]
+    },
+    "harvest": {
+      "status": "RECORDED",
+      "firstIntakeDate": "2026-03-09",
+      "lastIntakeDate": "2026-03-09",
+      "phytosanitary": "APPROVED",
+      "maturity": {
+        "brixDegrees": 23.4,
+        "ph": 3.4,
+        "acidityGl": 5.9
+      }
+    },
+    "fermentation": {
+      "status": "RECORDED",
+      "startDate": "2026-03-10",
+      "endDate": "2026-03-21",
+      "readingsCount": 5,
+      "treatments": [
+        {
+          "type": "SO2_ADDITION",
+          "additive": "Metabisulfito de potasio grado alimentario",
+          "regulatoryAuthCode": "SENASAG-REG-ADD-2024-88",
+          "appliedAt": "2026-03-10T17:00:00Z"
+        }
+      ]
+    },
+    "aging": {
+      "status": "NOT_APPLICABLE",
+      "containerType": null,
+      "containerMaterial": null,
+      "plannedMonths": null,
+      "startDate": null,
+      "unlockDate": null
+    },
+    "distillation": {
+      "status": "RECORDED",
+      "startDate": "2026-03-22",
+      "endDate": "2026-03-24",
+      "heartAbvPercent": 60,
+      "restMinDays": 180,
+      "restUntil": "2026-09-20"
+    },
+    "bottling": {
+      "status": "RECORDED",
+      "date": "2026-09-22",
+      "bottles": 2950,
+      "formatCl": 75,
+      "finalAbv": 40
+    },
+    "lab": {
+      "status": "CONFORMING",
+      "laboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
+      "testedAt": "2026-09-23",
+      "checks": [
+        {
+          "parameter": "metanol",
+          "value": 46.5,
+          "unit": "mg/100 mL de alcohol anhidro",
+          "limit": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "cobre",
+          "value": 0.8,
+          "unit": "mg/L",
+          "limit": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "grado",
+          "value": 40.1,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        },
+        {
+          "parameter": "acidezVolatil",
+          "value": 0.21,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "PASS"
+        }
+      ]
+    },
+    "rules": {
+      "takenAt": "2026-09-25T12:00:00Z",
+      "origin": "LOT_CREATION",
+      "items": [
+        {
+          "key": "trazabilidad.singani.altitudMinimaMsnm",
+          "label": "Altitud mínima de la parcela (D.O. Singani)",
+          "value": 1600,
+          "unit": "msnm",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.singani.variedadesExigidas",
+          "label": "Cepas admitidas (D.O. Singani)",
+          "value": [
+            "Moscatel de Alejandría"
+          ],
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.singani.reposoMinimoDias",
+          "label": "Reposo mínimo tras la destilación",
+          "value": 180,
+          "unit": "días",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.fitosanitario.exigirAprobado",
+          "label": "Dictamen fitosanitario aprobado para fermentar",
+          "value": true,
+          "unit": null,
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.embotellado.mermaMaximaPorcentaje",
+          "label": "Merma máxima tolerada al embotellar",
+          "value": 5,
+          "unit": "%",
+          "legalException": false
+        },
+        {
+          "key": "trazabilidad.laboratorio.limites",
+          "label": "Límites de laboratorio",
+          "value": {
+            "metanol": {
+              "max": 300,
+              "unidad": "mg/100 ml a.a."
+            },
+            "cobre": {
+              "max": 6,
+              "unidad": "mg/l"
+            },
+            "acidezVolatil": {
+              "max": 1.2,
+              "unidad": "g/l"
+            }
+          },
+          "unit": null,
+          "legalException": false
+        }
+      ]
+    },
+    "timeline": [
+      {
+        "type": "HARVEST_WEIGHED",
+        "occurredAt": "2026-03-09T13:40:00Z",
+        "recordedAt": "2026-03-09T13:40:00Z",
+        "lateEntry": false,
+        "summary": "Uva recibida y pesada en la bodega",
+        "actorRole": "OPERATOR",
+        "corrected": true
+      },
+      {
+        "type": "PHYTO_DECIDED",
+        "occurredAt": "2026-03-10T13:00:00Z",
+        "recordedAt": "2026-03-10T13:00:00Z",
+        "lateEntry": false,
+        "summary": "Dictamen fitosanitario: aprobado",
+        "actorRole": "AGRONOMIST",
+        "corrected": false
+      },
+      {
+        "type": "TANK_FILLED",
+        "occurredAt": "2026-03-10T00:00:00Z",
+        "recordedAt": "2026-03-10T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Mosto en el tanque de fermentación",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_STARTED",
+        "occurredAt": "2026-03-10T00:00:00Z",
+        "recordedAt": "2026-03-10T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación iniciada",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "FERMENTATION_COMPLETED",
+        "occurredAt": "2026-03-21T00:00:00Z",
+        "recordedAt": "2026-03-21T15:00:00Z",
+        "lateEntry": false,
+        "summary": "Fermentación completada",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "DISTILLATION_STARTED",
+        "occurredAt": "2026-03-22T00:00:00Z",
+        "recordedAt": "2026-03-22T13:00:00Z",
+        "lateEntry": false,
+        "summary": "Destilación iniciada",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "DISTILLATION_CLOSED",
+        "occurredAt": "2026-03-24T00:00:00Z",
+        "recordedAt": "2026-03-24T20:00:00Z",
+        "lateEntry": false,
+        "summary": "Destilación terminada: empieza el reposo",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "LOCK_RELEASED",
+        "occurredAt": "2026-09-20T04:05:00Z",
+        "recordedAt": "2026-09-20T04:05:00Z",
+        "lateEntry": false,
+        "summary": "Reposo cumplido",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "BOTTLED",
+        "occurredAt": "2026-09-22T00:00:00Z",
+        "recordedAt": "2026-09-22T15:00:00Z",
+        "lateEntry": false,
+        "summary": "Embotellado: 2.950 botellas de 75 cL",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "LAB_REGISTERED",
+        "occurredAt": "2026-09-23T00:00:00Z",
+        "recordedAt": "2026-09-23T16:00:00Z",
+        "lateEntry": false,
+        "summary": "Análisis de laboratorio: conforme",
+        "actorRole": "ENOLOGIST",
+        "corrected": false
+      },
+      {
+        "type": "DOSSIER_CLOSED",
+        "occurredAt": "2026-09-24T15:00:00Z",
+        "recordedAt": "2026-09-24T15:00:00Z",
+        "lateEntry": false,
+        "summary": "Expediente cerrado con su huella",
+        "actorRole": "OWNER",
+        "corrected": false
+      }
+    ],
+    "corrections": {
+      "count": 1,
+      "lastAt": "2026-03-09T18:00:00Z"
+    },
+    "dossier": {
+      "status": "CLOSED",
+      "hash": "f4867f532d0179e211524c9f1aee5ec65e0d6c79a42f3ec923d4c2b29e291141",
+      "closedAt": "2026-09-24T15:00:00Z",
+      "canonicalUrl": "/v1/public/lots/CVJ-2026-SINGANI-004/dossier",
+      "anchor": null
+    },
+    "publicAttachments": [
+      {
+        "id": "923821ce-5b36-5088-9625-d778d410312d",
+        "kind": "LABEL",
+        "title": "Etiqueta frontal aprobada",
+        "url": "/v1/public/lots/CVJ-2026-SINGANI-004/attachments/923821ce-5b36-5088-9625-d778d410312d"
+      }
+    ],
+    "generatedAt": "2026-09-25T12:00:00Z"
+  }
+}

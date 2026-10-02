@@ -1,8 +1,19 @@
 import { z } from 'zod'
 import { DateInputSchema, IsoDateTimeSchema } from './common'
 import { DestinationTypeSchema, TankStatusSchema, TreatmentTypeSchema } from './enums'
+import { CreateLotSchema } from './lots'
 
-// /v1/fermentation-tanks · tanque, lecturas (logs) y tratamientos enológicos
+// /v1/fermentation-tanks · tanque, lecturas (logs) y tratamientos enológicos. Desde la Ola 2
+// (contrato §4): entradas por pesaje (`inputs`), lote, volumen final y transiciones por acciones.
+
+/** Kilos de un pesaje que entraron al tanque (`TankInputResponseDto`). */
+export const TankInputSchema = z.object({ harvestBatchId: z.string(), kg: z.number() })
+export type TankInput = z.infer<typeof TankInputSchema>
+
+/** Destinos de la bifurcación en el MVP: vino o singani (§4.3). */
+export const BIFURCATION_DESTINATIONS = ['WINE_AGING', 'SINGANI_DIST'] as const
+export const BifurcationDestinationSchema = z.enum(BIFURCATION_DESTINATIONS)
+export type BifurcationDestination = z.infer<typeof BifurcationDestinationSchema>
 
 export const FermentationTankResponseSchema = z.object({
   id: z.string(),
@@ -17,20 +28,63 @@ export const FermentationTankResponseSchema = z.object({
   startDate: IsoDateTimeSchema,
   endDate: IsoDateTimeSchema.nullish(),
   createdAt: IsoDateTimeSchema,
+  /** Lote (Ola 2). */
+  lotId: z.string().nullable(),
+  /** Volumen al completar la fermentación (Ola 2). */
+  finalVolumeLiters: z.number().nullable(),
+  /** Pesajes que entraron al tanque, con sus kilos (lista y detalle). */
+  inputs: z.array(TankInputSchema).optional(),
 })
 export type FermentationTankResponse = z.infer<typeof FermentationTankResponseSchema>
 
-export const CreateFermentationTankSchema = z.object({
-  harvestBatchId: z.string().min(1),
-  tankCode: z.string().min(1),
-  capacityLiters: z.number().positive().optional(),
-  material: z.string().optional(),
-  volumeFilledLiters: z.number().min(0).optional(),
-  destinationType: DestinationTypeSchema.optional(),
-  status: TankStatusSchema.optional(),
-  startDate: DateInputSchema,
-})
+export const CreateFermentationTankSchema = z
+  .object({
+    /** Lote del tanque (o `newLot`; si falta, el de las entradas). */
+    lotId: z.string().min(1).optional(),
+    /** Crea el lote desde el tanque y lo asigna a las entradas sin lote. */
+    newLot: CreateLotSchema.optional(),
+    /** Pesajes que entran al tanque (≥ 1), todos del mismo lote; `kg` por defecto = lo disponible. */
+    inputs: z.array(z.object({ harvestBatchId: z.string().min(1), kg: z.number().positive().optional() })).min(1).optional(),
+    /** @deprecated Legado hasta H2: equivale a `inputs: [{ harvestBatchId }]` (todo lo disponible). */
+    harvestBatchId: z.string().min(1).optional(),
+    /** Código físico del tanque; no se reutiliza hasta limpiarlo (S-7). */
+    tankCode: z.string().min(1),
+    capacityLiters: z.number().positive().optional(),
+    material: z.string().optional(),
+    /** Mosto cargado (≤ capacidad). Obligatorio desde H2. */
+    volumeFilledLiters: z.number().min(0).optional(),
+    /** Legado: predeclara la bifurcación; debe coincidir con el tipo del lote (y lo fija si no lo tiene). */
+    destinationType: BifurcationDestinationSchema.optional(),
+    /** `true`: el tanque nace en `FERMENTING`. */
+    startFermentation: z.boolean().optional(),
+    /** @deprecated Legado: estado inicial. `COMPLETED`, `TRANSFERRED` y `CLEANED` → 422. */
+    status: z.enum(['FILLING', 'FERMENTING']).optional(),
+    startDate: DateInputSchema,
+  })
+  .superRefine((b, ctx) => {
+    if (!b.inputs && !b.harvestBatchId) {
+      ctx.addIssue({ code: 'custom', message: 'Indica los pesajes que entran al tanque (inputs)', path: ['inputs'] })
+    }
+    if (b.lotId && b.newLot) ctx.addIssue({ code: 'custom', message: 'Indica lotId o newLot, no ambos', path: ['newLot'] })
+  })
 export type CreateFermentationTankDto = z.infer<typeof CreateFermentationTankSchema>
+
+/** `POST /v1/fermentation-tanks/{id}/start`: `FILLING → FERMENTING`. */
+export const StartFermentationTankSchema = z.object({ startedAt: DateInputSchema.optional() })
+export type StartFermentationTankDto = z.infer<typeof StartFermentationTankSchema>
+
+/** `POST /v1/fermentation-tanks/{id}/complete`: `FERMENTING → COMPLETED` con la bifurcación (§4.3). */
+export const CompleteFermentationTankSchema = z.object({
+  endDate: DateInputSchema,
+  /** ≤ `volumeFilledLiters` del tanque. */
+  finalVolumeLiters: z.number().min(0),
+  destination: BifurcationDestinationSchema,
+})
+export type CompleteFermentationTankDto = z.infer<typeof CompleteFermentationTankSchema>
+
+/** `POST /v1/fermentation-tanks/{id}/clean`: `TRANSFERRED → CLEANED`; libera el `tankCode`. */
+export const CleanFermentationTankSchema = z.object({ cleanedAt: DateInputSchema.optional() })
+export type CleanFermentationTankDto = z.infer<typeof CleanFermentationTankSchema>
 
 export const CreateFermentationLogSchema = z.object({
   temperatureCelsius: z.number(),
@@ -56,6 +110,8 @@ export const FermentationLogRecordSchema = z.object({
   recordedAt: IsoDateTimeSchema,
   notes: z.string().nullish(),
   recordedByMemberId: z.string().nullish(),
+  /** Persona que la registró (las lecturas dadas de alta por la API; las anteriores solo tienen el miembro). */
+  recordedByUserId: z.string().optional(),
 })
 export type FermentationLogRecord = z.infer<typeof FermentationLogRecordSchema>
 
@@ -103,6 +159,8 @@ export const EnologicalTreatmentRecordSchema = z.object({
   regulatoryAuthCode: z.string(),
   appliedAt: IsoDateTimeSchema,
   notes: z.string().nullish(),
+  /** Miembro que lo autorizó (los tratamientos dados de alta por la API). */
+  authorizedByMemberId: z.string().optional(),
 })
 export type EnologicalTreatmentRecord = z.infer<typeof EnologicalTreatmentRecordSchema>
 

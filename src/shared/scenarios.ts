@@ -4,15 +4,41 @@
 //   3. localStorage (`doc-mocks:scenario`),
 //   4. 'normal'.
 
-export const SCENARIOS = ['normal', 'empty', 'error', 'slow', 'offline'] as const
+export const SCENARIOS = [
+  'normal',
+  'empty',
+  'error',
+  'slow',
+  'offline',
+  'lote-en-reposo',
+  'lote-listo',
+  'lote-con-incidencia',
+  'laboratorio-no-conforme',
+] as const
 export type ScenarioName = (typeof SCENARIOS)[number]
 
 export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
-  normal: 'Datos completos de la red de prueba',
+  normal: 'Datos completos de la red de prueba («Singani Gran Reserva 2026» con el expediente cerrado)',
   empty: 'Listas vacías (estados vacíos de las pantallas)',
   error: 'Error 500 con el envoltorio del backend (salvo /v1/auth)',
   slow: 'Respuestas con 2,5 s de retraso',
   offline: 'Error de red (sin conexión)',
+  'lote-en-reposo': '«Singani Gran Reserva 2026» en reposo: faltan 10 días (embotellar → TRC_LOCK_NOT_RELEASED)',
+  'lote-listo': '«Singani Gran Reserva 2026» con el reposo cumplido, listo para la vista previa y el embotellado',
+  'lote-con-incidencia': 'CVJ-2026-SINGANI-002 con una incidencia de migración abierta (TRC_BOTTLING_EXCEEDS_VOLUME)',
+  'laboratorio-no-conforme': '«Singani Gran Reserva 2026» embotellado con un análisis no conforme (el expediente no se puede cerrar)',
+}
+
+/**
+ * Escenarios de datos de la Ola 2: no cambian cómo responde el backend simulado sino en qué etapa
+ * está el lote de demostración. Al elegir uno, la trazabilidad de la base en memoria se rehace
+ * desde los fixtures (lo creado en la sesión se descarta; la identidad y el back office, no).
+ */
+export const DATA_SCENARIOS = ['lote-en-reposo', 'lote-listo', 'lote-con-incidencia', 'laboratorio-no-conforme'] as const satisfies readonly ScenarioName[]
+export type DataScenarioName = (typeof DATA_SCENARIOS)[number]
+
+export function isDataScenario(name: ScenarioName): name is DataScenarioName {
+  return (DATA_SCENARIOS as readonly string[]).includes(name)
 }
 
 /** Retraso extra del escenario `slow`, en milisegundos. */

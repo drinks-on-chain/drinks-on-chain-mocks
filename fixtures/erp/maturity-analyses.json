@@ -1,0 +1,202 @@
+[
+  {
+    "id": "2b4a6c74-c708-572c-83c4-4ed505cf6178",
+    "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",
+    "brixDegrees": 23.4,
+    "ph": 3.4,
+    "acidityGl": 5.9,
+    "measuredAt": "2026-03-04T09:42:00Z",
+    "recordedAt": "2026-03-04T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "342007d3-0dd1-5696-9308-965b5b03ee99",
+    "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
+    "brixDegrees": 22.4,
+    "ph": 3.45,
+    "acidityGl": 6.8,
+    "measuredAt": "2025-03-10T09:42:00Z",
+    "recordedAt": "2025-03-10T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "c0dd84c2-fd37-5d93-942f-6ed29a6db551",
+    "harvestBatchId": "b1452d63-b1bd-5f10-978f-75bd7f6081df",
+    "brixDegrees": 22.9,
+    "ph": 3.38,
+    "acidityGl": 6.4,
+    "measuredAt": "2025-03-18T09:42:00Z",
+    "recordedAt": "2025-03-18T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "e416cd7e-e891-5364-ae48-a1da1c4c8826",
+    "harvestBatchId": "f96daa52-78dd-533a-98b6-7d5b008edf6a",
+    "brixDegrees": 24.1,
+    "ph": 3.55,
+    "acidityGl": 5.7,
+    "measuredAt": "2025-02-26T09:42:00Z",
+    "recordedAt": "2025-02-26T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "b4a4796e-0379-5f86-a655-654c7a785782",
+    "harvestBatchId": "93bd36a1-673b-52ed-adec-539d805cd018",
+    "brixDegrees": 23,
+    "ph": 3.5,
+    "acidityGl": 6,
+    "measuredAt": "2026-03-12T09:42:00Z",
+    "recordedAt": "2026-03-12T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "812f3b16-728c-56c9-be18-82d1df970f73",
+    "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
+    "brixDegrees": 24.5,
+    "ph": 3.6,
+    "acidityGl": 5.8,
+    "measuredAt": "2025-03-02T09:42:00Z",
+    "recordedAt": "2025-03-02T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "e71467c4-87e4-549c-b5d9-7de2c33e334b",
+    "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
+    "brixDegrees": 22.8,
+    "ph": 3.42,
+    "acidityGl": 6.5,
+    "measuredAt": "2026-03-09T09:42:00Z",
+    "recordedAt": "2026-03-09T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "c460a48a-7a4a-556e-8e8e-6eaf7ffaabb6",
+    "harvestBatchId": "ed733522-34e1-57c0-b03d-0c5ac52dd2ab",
+    "brixDegrees": 25.1,
+    "ph": 3.65,
+    "acidityGl": 5.5,
+    "measuredAt": "2025-03-20T09:42:00Z",
+    "recordedAt": "2025-03-20T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "101c57ed-c7ce-56ea-ba59-b58063310855",
+    "harvestBatchId": "75cb22bb-1e85-5d00-8439-d4dd6e10a914",
+    "brixDegrees": 24.8,
+    "ph": 3.62,
+    "acidityGl": 5.6,
+    "measuredAt": "2025-03-06T09:42:00Z",
+    "recordedAt": "2025-03-06T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "3bdb620e-593a-5002-98dc-d871f264b926",
+    "harvestBatchId": "95ed7865-429e-57e7-9fe4-e037a8063738",
+    "brixDegrees": 21.2,
+    "ph": 3.7,
+    "acidityGl": 5,
+    "measuredAt": "2026-03-15T09:42:00Z",
+    "recordedAt": "2026-03-15T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "2e981372-efed-5bf9-9400-93f07f46ca70",
+    "harvestBatchId": "be653b6b-868e-51f3-bc11-462afa764ca1",
+    "brixDegrees": 23.9,
+    "ph": 3.58,
+    "acidityGl": 5.9,
+    "measuredAt": "2026-03-22T09:42:00Z",
+    "recordedAt": "2026-03-22T09:45:00Z",
+    "recordedBy": null,
+    "notes": null,
+    "source": "MIGRATION"
+  },
+  {
+    "id": "b1fdf4cf-5151-54f8-86be-1f6dcce8a604",
+    "harvestBatchId": "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712",
+    "brixDegrees": 22.9,
+    "ph": 3.38,
+    "acidityGl": 6.4,
+    "measuredAt": "2026-03-19T13:20:00Z",
+    "recordedAt": "2026-03-19T13:20:00Z",
+    "recordedBy": {
+      "membershipId": "75b76250-9520-50b8-9563-49384bb7d560",
+      "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "fullName": "Rubén Flores",
+      "role": "OPERATOR"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
+    "id": "d71bbdd5-ac31-5bc6-87b6-2907ca03a536",
+    "harvestBatchId": "da1eec24-39ab-5e9e-b351-1e0c1df94015",
+    "brixDegrees": 22.6,
+    "ph": 3.44,
+    "acidityGl": 6.3,
+    "measuredAt": "2026-09-16T13:30:00Z",
+    "recordedAt": "2026-09-16T13:30:00Z",
+    "recordedBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
+    "id": "00e23954-5ebd-5793-bbe6-b375c1e21d2d",
+    "harvestBatchId": "924ad785-abfe-5e0b-9857-83de40cae076",
+    "brixDegrees": 24.8,
+    "ph": 3.6,
+    "acidityGl": 5.6,
+    "measuredAt": "2026-03-14T13:15:00Z",
+    "recordedAt": "2026-03-14T13:15:00Z",
+    "recordedBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
+    "id": "f338ade4-f9b5-57b5-8831-fb706b6ad862",
+    "harvestBatchId": "260262b8-47be-5be5-8b71-d5391032200d",
+    "brixDegrees": 23.4,
+    "ph": 3.4,
+    "acidityGl": 5.9,
+    "measuredAt": "2026-03-09T14:30:00Z",
+    "recordedAt": "2026-03-09T15:10:00Z",
+    "recordedBy": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "notes": null,
+    "source": "ERP"
+  }
+]

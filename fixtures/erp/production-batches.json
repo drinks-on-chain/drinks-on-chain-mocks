@@ -20,7 +20,13 @@
       "tailDiscardLiters": 231
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2026-04-15T10:00:00Z"
+    "createdAt": "2026-04-15T10:00:00Z",
+    "lotId": "4af50d09-875b-5d1d-b026-62d60ae13b35",
+    "headsLiters": 99,
+    "heartLiters": 1500,
+    "tailsLiters": 231,
+    "vinasseLiters": null,
+    "heartAbvPercent": 60
   },
   {
     "id": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c",
@@ -43,7 +49,13 @@
       "tailDiscardLiters": 399
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2025-05-20T10:00:00Z"
+    "createdAt": "2025-05-20T10:00:00Z",
+    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "headsLiters": 171,
+    "heartLiters": 1750,
+    "tailsLiters": 399,
+    "vinasseLiters": null,
+    "heartAbvPercent": 70.2
   },
   {
     "id": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba",
@@ -66,7 +78,13 @@
       "tailDiscardLiters": 203
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2025-05-02T10:00:00Z"
+    "createdAt": "2025-05-02T10:00:00Z",
+    "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
+    "headsLiters": 87,
+    "heartLiters": 980,
+    "tailsLiters": 203,
+    "vinasseLiters": null,
+    "heartAbvPercent": 65.4
   },
   {
     "id": "303e1c89-ca47-5505-a0a5-0a6fe2993436",
@@ -89,29 +107,62 @@
       "tailDiscardLiters": 182
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2026-09-10T10:00:00Z"
+    "createdAt": "2026-09-10T10:00:00Z",
+    "lotId": "4af50d09-875b-5d1d-b026-62d60ae13b35",
+    "headsLiters": 78,
+    "heartLiters": 900,
+    "tailsLiters": 182,
+    "vinasseLiters": null,
+    "heartAbvPercent": 62.1
   },
   {
-    "id": "a6dd3060-8612-5595-b9b4-33a7d039159c",
+    "id": "d5993d22-4689-5802-9ff8-4c844d8ab807",
     "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-    "fermentationTankId": "576b3ce2-a007-592e-8491-27202f13a995",
+    "fermentationTankId": "ad5d5c1e-9b76-53c7-8047-d2ef82c4b3c6",
     "processType": "SINGANI_DISTILLATION",
     "equipmentIdentifier": "Alambique de cobre AL-02",
-    "processStartDate": "2026-03-20T00:00:00Z",
-    "processEndDate": "2026-03-22T00:00:00Z",
-    "inputVolumeLiters": 3000,
-    "outputVolumeLiters": 450,
-    "wasteVolumeLiters": 120,
-    "initialAlcoholPercentage": 64,
+    "processStartDate": "2026-09-22T00:00:00Z",
+    "processEndDate": null,
+    "inputVolumeLiters": 5800,
+    "outputVolumeLiters": null,
+    "wasteVolumeLiters": null,
+    "initialAlcoholPercentage": null,
     "isDoEligible": true,
-    "mandatoryRestUntil": "2026-09-18T00:00:00Z",
-    "restStatus": "READY",
-    "additionalParams": {
-      "headDiscardLiters": 36,
-      "heartYieldLiters": 450,
-      "tailDiscardLiters": 84
-    },
+    "mandatoryRestUntil": null,
+    "restStatus": "NOT_REQUIRED",
+    "additionalParams": null,
+    "notes": null,
+    "createdAt": "2026-09-22T13:00:00Z",
+    "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+    "headsLiters": null,
+    "heartLiters": null,
+    "tailsLiters": null,
+    "vinasseLiters": null,
+    "heartAbvPercent": null
+  },
+  {
+    "id": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "fermentationTankId": "50fb50c9-1ce4-538f-a153-975c6bfb21f4",
+    "processType": "SINGANI_DISTILLATION",
+    "equipmentIdentifier": "Alambique de cobre Charentais AL-01",
+    "processStartDate": "2026-03-22T00:00:00Z",
+    "processEndDate": "2026-03-24T00:00:00Z",
+    "inputVolumeLiters": 12100,
+    "outputVolumeLiters": 1500,
+    "wasteVolumeLiters": 330,
+    "initialAlcoholPercentage": null,
+    "isDoEligible": true,
+    "mandatoryRestUntil": "2026-09-20T00:00:00Z",
+    "restStatus": "BOTTLED",
+    "additionalParams": null,
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2026-03-20T10:00:00Z"
+    "createdAt": "2026-03-22T13:00:00Z",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "headsLiters": 120,
+    "heartLiters": 1500,
+    "tailsLiters": 210,
+    "vinasseLiters": null,
+    "heartAbvPercent": 60
   }
 ]

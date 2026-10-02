@@ -1,13 +1,17 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { generateBackofficeFixtures } from '../src/backoffice/seed/generate'
 import { generateErpFixtures } from '../src/erp/seed/generate'
+import { buildErpFixtureFiles } from '../src/erp/seed/trace'
+import { generatePublicFixtures } from '../src/public/seed'
 import { PyRandom, pyRound } from '../src/erp/seed/py-random'
 import { uid } from '../src/shared/uuid'
 
 const root = join(import.meta.dirname, '..')
 const referenceDir = join(root, 'test', 'reference', 'erp')
 const fixturesDir = join(root, 'fixtures', 'erp')
+const publicDir = join(root, 'fixtures', 'public')
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'))
 const roundTrip = (data: unknown): unknown => JSON.parse(JSON.stringify(data))
 
@@ -43,9 +47,15 @@ describe('PyRandom (compatible con random.Random de CPython)', () => {
   })
 })
 
+// Las filas base del ERP (los datos anteriores a la migración de la Ola 2) son iguales a las de
+// `generate.py`. Lo que se escribe en `fixtures/erp/` son esas filas ya migradas más las colecciones
+// de la Ola 2 (`buildErpFixtureFiles`, solo en TypeScript), y de ellas salen los de `fixtures/public/`.
 describe('generador del ERP', () => {
   const set = generateErpFixtures()
   const names = Object.keys(set).sort()
+  const files = buildErpFixtureFiles(set, generateBackofficeFixtures(set))
+  const fileNames = Object.keys(files).sort()
+  const publicFiles = generatePublicFixtures(files, generateBackofficeFixtures(set))
 
   it('produce los mismos archivos que la referencia de Python', () => {
     const reference = readdirSync(referenceDir).filter((f) => f.endsWith('.json')).sort()
@@ -57,12 +67,32 @@ describe('generador del ERP', () => {
     expect(generated).toStrictEqual(readJson(join(referenceDir, name)))
   })
 
-  it.each(names)('fixtures/erp/%s está al día con el generador', (name) => {
-    const generated = roundTrip(set[name as keyof typeof set])
+  it('fixtures/erp tiene las filas del ERP y las colecciones de la Ola 2', () => {
+    expect(readdirSync(fixturesDir).filter((f) => f.endsWith('.json')).sort()).toEqual(fileNames)
+    expect(fileNames.filter((n) => !names.includes(n))).toEqual([
+      'bottle-lots.json',
+      'corrections.json',
+      'lot-attachments.json',
+      'lot-dossiers.json',
+      'lot-events.json',
+      'lots.json',
+      'maturity-analyses.json',
+      'phyto-decisions.json',
+    ])
+  })
+
+  it.each(fileNames)('fixtures/erp/%s está al día con el generador', (name) => {
+    const generated = roundTrip(files[name as keyof typeof files])
     expect(readJson(join(fixturesDir, name))).toStrictEqual(generated)
+  })
+
+  it.each(Object.keys(publicFiles))('fixtures/public/%s está al día con el generador', (name) => {
+    const generated = roundTrip(publicFiles[name as keyof typeof publicFiles])
+    expect(readJson(join(publicDir, name))).toStrictEqual(generated)
   })
 
   it('es determinista', () => {
     expect(roundTrip(generateErpFixtures())).toStrictEqual(roundTrip(set))
+    expect(roundTrip(buildErpFixtureFiles(set, generateBackofficeFixtures(set)))).toStrictEqual(roundTrip(files))
   })
 })

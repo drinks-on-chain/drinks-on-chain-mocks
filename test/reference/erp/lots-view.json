@@ -262,12 +262,10 @@
       "isDoEligible": true
     },
     "kind": null,
-    "stage": "fermentacion",
+    "stage": "pesaje",
     "phytosanitaryStatus": "QUARANTINE",
     "netWeightKg": 6100,
-    "tankIds": [
-      "f28ea298-cf7f-5d30-a92e-aad6379b8158"
-    ],
+    "tankIds": [],
     "wineAgingBatchId": null,
     "productionBatchId": null,
     "bottlingBatchId": null,

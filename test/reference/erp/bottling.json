@@ -19,7 +19,8 @@
     "isAnchoredOnChain": true,
     "anchoredAt": "2026-03-02T12:00:00Z",
     "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-001",
-    "createdAt": "2026-03-01T16:00:00Z"
+    "createdAt": "2026-03-01T16:00:00Z",
+    "lotId": null
   },
   {
     "id": "16887e29-6c0f-5820-85df-951b7372e1aa",
@@ -29,7 +30,7 @@
     "productType": "SINGANI",
     "internationalLotCode": "CVJ-2026-SINGANI-002",
     "finalAlcoholAbv": 40.0,
-    "waterDilutionLiters": 620,
+    "waterDilutionLiters": 630,
     "totalBottlesPackaged": 2140,
     "packagingFormatCl": 75,
     "bottleType": "Vidrio flint 750 ml",
@@ -41,7 +42,8 @@
     "isAnchoredOnChain": true,
     "anchoredAt": "2026-02-11T12:00:00Z",
     "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-002",
-    "createdAt": "2026-02-10T16:00:00Z"
+    "createdAt": "2026-02-10T16:00:00Z",
+    "lotId": null
   },
   {
     "id": "bc10077a-bf11-575c-8bba-331fbc6887c2",
@@ -63,7 +65,8 @@
     "isAnchoredOnChain": true,
     "anchoredAt": "2026-05-13T12:00:00Z",
     "qrBatchUrl": "https://app.drinksonchain.bo/b/ALT-2026-WINE-001",
-    "createdAt": "2026-05-12T16:00:00Z"
+    "createdAt": "2026-05-12T16:00:00Z",
+    "lotId": null
   },
   {
     "id": "c95f78e7-f72a-556c-8bae-e6670da39e8b",
@@ -85,6 +88,7 @@
     "isAnchoredOnChain": false,
     "anchoredAt": null,
     "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-WINE-003",
-    "createdAt": "2026-09-20T16:00:00Z"
+    "createdAt": "2026-09-20T16:00:00Z",
+    "lotId": null
   }
 ]

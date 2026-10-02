@@ -1,4 +1,3 @@
-import { buildDagGraph, type PassportChain } from '../../derive'
 import {
   UPLOAD_MAX_BYTES,
   UPLOAD_MAX_IMAGE_BYTES,
@@ -9,6 +8,7 @@ import {
   type UploadMimeType,
   type UploadResponse,
 } from '../../schemas'
+import { legacyDagGraph } from '../../trace/legacy-dag'
 import { anyUser, type AuthContext } from '../auth-context'
 import { CLOCK_START, getErpDb, newId, tick } from '../db'
 import { ApiError, badRequest, fieldError, invalid, notFound } from '../errors'
@@ -17,20 +17,7 @@ import { findBottling } from './bottling-lab'
 
 // /v1/traceability/*, /v1/uploads*, /v1/health*
 
-function chainOf(): PassportChain {
-  const db = getErpDb()
-  return {
-    wineries: db.wineries,
-    terroirs: db.terroirs,
-    harvestBatches: db.harvestBatches,
-    tanks: db.tanks,
-    wineAgings: db.wineAgings,
-    productionBatches: db.productionBatches,
-    labAnalyses: db.labAnalyses,
-  }
-}
-
-const dagOf = (b: BottlingBatchResponse) => buildDagGraph(b, chainOf())
+const dagOf = (b: BottlingBatchResponse) => legacyDagGraph(getErpDb(), b)
 
 // ----- Archivos (almacenamiento privado con URL firmada, como `UploadsService` del backend) -----
 
@@ -72,16 +59,26 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/traceability/dag/:bottlingBatchId',
     access: anyUser,
-    // El backend no filtra por bodega (cualquier sesión); los mocks sí: una bodega activa solo ve sus lotes.
-    handle: ({ auth, params }) => ok(dagOf(findBottling(auth.organizationType === 'WINERY' ? auth : null, params.bottlingBatchId!))),
+    deprecated: '/v1/lots/{id}/graph',
+    // SE-07 (Ola 2): solo los miembros de la bodega dueña y el personal de plataforma; cualquier otra
+    // sesión → 404. Legado: se retira en H2 por `GET /v1/lots/{id}/graph`.
+    handle({ auth, params }) {
+      const b = findBottling(null, params.bottlingBatchId!)
+      const owner = auth.organizationType === 'WINERY' && auth.wineryId === b.wineryId
+      const staff = auth.organizationType === 'PLATFORM' && auth.platformRole !== null
+      if (!owner && !staff) throw notFound(`Lote de embotellado con identificador "${params.bottlingBatchId}" no encontrado`)
+      return ok(dagOf(b))
+    },
   },
   {
     method: 'get',
     path: '/v1/traceability/public/:lotCode',
     access: 'public',
+    deprecated: '/v1/public/passports/{code}',
     handle({ params }) {
+      // Legado hasta H2 (lo sustituye `GET /v1/public/passports/{code}`): solo por código de lote, ya no por id.
       const code = decodeURIComponent(params.lotCode!)
-      const b = getErpDb().bottlings.find((x) => x.internationalLotCode.toUpperCase() === code.toUpperCase() || x.id === code)
+      const b = getErpDb().bottlings.find((x) => x.internationalLotCode.toUpperCase() === code.toUpperCase())
       if (!b) throw notFound(`Lote de embotellado con identificador "${code}" no encontrado`)
       return ok(dagOf(b))
     },

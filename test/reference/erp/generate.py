@@ -443,6 +443,8 @@ for key, tkey, intake, gross, tare, brix, ph, acid, temp, status, cert in HARVES
         "certifiedByMemberId": uid(f"member:{cert}") if cert else None,
         "notes": rng.choice(["Cosecha manual matutina en cajas de 15 kg.", "Uva sana, sin botritis.", "Ingreso por camión, tara verificada en báscula.", None]),
         "createdAt": iso(intake, 9, 45),
+        "lotId": None,
+        "terroirSnapshot": None,
     })
 H = {key: next(h for h in harvests if h["id"] == uid(f"harvest:{key}")) for key, *_ in HARVESTS}
 
@@ -460,7 +462,8 @@ TANKS = [
     ("t07", "h08", "TK-RED-02", 10000, 5300, "WINE_AGING", "TRANSFERRED", date(2025, 3, 21), date(2025, 4, 11)),
     ("t08", "h09", "TK-RED-03", 12000, 6700, "WINE_AGING", "TRANSFERRED", date(2025, 3, 7), date(2025, 3, 28)),
     ("t09", "h07", "TK-06", 10000, 0, "WINE_AGING", "CLEANED", date(2026, 1, 5), date(2026, 1, 6)),
-    ("t10", "h11", "TK-07", 8000, 4200, "OTHER", "FILLING", date(2026, 9, 24), None),
+    # t10 (TK-07, FILLING con el pesaje h11 en cuarentena) se retiró en la Ola 2: la uva sin dictamen
+    # aprobado no entra a un tanque (EA-04; mismas correcciones que `src/seed/corrections.ts` del backend).
     ("t11", "h01", "TK-08", 8000, 6300, "SINGANI_DIST", "COMPLETED", date(2026, 3, 7), date(2026, 4, 2)),   # listo para bifurcar/destilar
     ("t12", "h02", "TK-09", 15000, 0, "SINGANI_DIST", "CLEANED", date(2025, 3, 11), date(2025, 4, 13)),
     ("t13", "h06", "TK-RED-04", 10000, 0, "WINE_AGING", "CLEANED", date(2025, 3, 3), date(2025, 3, 25)),
@@ -483,6 +486,8 @@ for key, hkey, code, cap, filled, dest, status, start, end in TANKS:
         "startDate": iso(start, 14, 30),
         "endDate": iso(end, 14, 30) if end else None,
         "createdAt": iso(start, 14, 35),
+        "lotId": None,
+        "finalVolumeLiters": None,
     })
     if status in ("FERMENTING", "COMPLETED", "TRANSFERRED"):
         last = end or TODAY
@@ -539,7 +544,7 @@ TN = {key: next(t for t in tanks if t["id"] == uid(f"tank:{key}")) for key, *_ i
 AGING = [
     ("a01", "t06", "Roble francés grano fino (Allier), tostado medio", "BAR-FR-2024-01", 1, 3375, 12, date(2025, 11, 3), "AGING"),     # 38 d restantes
     ("a02", "t07", "Roble americano, tostado medio plus", "BAR-US-2024-07", 2, 3150, 8, date(2026, 6, 30), "AGING"),                 # 156 d restantes
-    ("a03", "t04", "Roble francés, tostado ligero", "BAR-FR-2023-11", 3, 2925, 10, date(2025, 4, 1), "READY"),                        # liberado
+    ("a03", "t04", "Roble francés, tostado ligero", "BAR-FR-2023-11", 3, 2925, 10, date(2025, 4, 1), "BOTTLED"),                      # embotellado el 20-09-2026 (b04): estado terminal (EA-02)
     ("a04", "t08", "Roble francés (Nevers), tostado medio", "BAR-FR-2023-04", 1, 4050, 12, date(2025, 4, 10), "BOTTLED"),            # embotellado
 ]
 agings = []
@@ -560,6 +565,9 @@ for key, tkey, mat, code, cycle, liters, months, start, status in AGING:
         "agingStatus": status,
         "notes": "Cava subterránea a 14 °C y 75 % HR",
         "createdAt": iso(start, 10),
+        "lotId": None,
+        "startDate": None,
+        "containerCount": None,
     })
 AG = {key: next(a for a in agings if a["id"] == uid(f"aging:{key}")) for key, *_ in AGING}
 
@@ -572,7 +580,8 @@ DIST = [
     ("p02", "t02", "Alambique de cobre Charentais AL-01", date(2025, 5, 20), date(2025, 5, 25), 10000, 1750, 570, 70.2, "BOTTLED"),   # Singani aniversario
     ("p03", "t03", "Alambique de cobre AL-02", date(2025, 5, 2), date(2025, 5, 4), 6100, 980, 290, 65.4, "BOTTLED"),                  # Clásico 2025
     ("p04", "t11", "Alambique de cobre AL-02", date(2026, 9, 10), date(2026, 9, 12), 6300, 900, 260, 62.1, "RESTING"),                # recién destilado · 168 d
-    ("p05", "t03", "Alambique de cobre AL-02", date(2026, 3, 20), date(2026, 3, 22), 3000, 450, 120, 64.0, "READY"),                  # reposo cumplido
+    # p05 (segunda destilación de TK-02, marzo de 2026) se retiró en la Ola 2: el tanque ya se había
+    # destilado entero y su lote estaba embotellado (un embotellado por lote, S-10).
 ]
 productions = []
 for key, tkey, equip, start, end, vin, vout, waste, abv, status in DIST:
@@ -596,6 +605,12 @@ for key, tkey, equip, start, end, vin, vout, waste, abv, status in DIST:
         "additionalParams": {"headDiscardLiters": round(waste * 0.3), "heartYieldLiters": vout, "tailDiscardLiters": round(waste * 0.7)},
         "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
         "createdAt": iso(start, 10),
+        "lotId": None,
+        "headsLiters": None,
+        "heartLiters": None,
+        "tailsLiters": None,
+        "vinasseLiters": None,
+        "heartAbvPercent": None,
     })
 PR = {key: next(p for p in productions if p["id"] == uid(f"production:{key}")) for key, *_ in DIST}
 
@@ -617,7 +632,7 @@ rest_statuses = [rest_status(p) for p in productions]
 # key, source ('aging'|'production'), srcKey, productType, abv, water, bottles, cl, bottleType, date, anchored, seq, releasedBy
 BOTTLING = [
     ("b01", "production", "p02", "SINGANI", 40.0, 1321, 4080, 75, "Vidrio extra-flint 750 ml", date(2026, 3, 1), True, 1, "cvj_enologa"),
-    ("b02", "production", "p03", "SINGANI", 40.0, 620, 2140, 75, "Vidrio flint 750 ml", date(2026, 2, 10), True, 2, "cvj_enologa"),
+    ("b02", "production", "p03", "SINGANI", 40.0, 630, 2140, 75, "Vidrio flint 750 ml", date(2026, 2, 10), True, 2, "cvj_enologa"),
     ("b03", "aging", "a04", "WINE", 14.2, None, 5320, 75, "Bordelesa cónica verde antiguo 750 ml", date(2026, 5, 12), True, 1, "altos_enologa"),
     ("b04", "aging", "a03", "WINE", 13.8, None, 3860, 75, "Borgoña 750 ml", date(2026, 9, 20), False, 3, "cvj_enologa"),   # recién embotellado, sin anclar
 ]
@@ -647,6 +662,7 @@ for key, src, skey, ptype, abv, water, bottles, cl, btype, bdate, anchored, seq,
         "anchoredAt": iso(bdate + timedelta(days=1), 12) if anchored else None,
         "qrBatchUrl": f"https://app.drinksonchain.bo/b/{lot}",
         "createdAt": iso(bdate, 16),
+        "lotId": None,
     })
 BT = {key: next(b for b in bottlings if b["id"] == uid(f"bottling:{key}")) for key, *_ in BOTTLING}
 
@@ -688,6 +704,10 @@ for key, bkey, abv, tac, vac, fso2, tso2, rs, meth, cu, rev in LAB:
         "conformsToUsaStandards": b["productType"] == "SINGANI",
         "reviewedByMemberId": uid(f"member:{rev}"),
         "createdAt": iso(bdate + timedelta(days=3), 15),
+        "lotId": None,
+        "methanolMg100mlAa": None,
+        "conformityStatus": None,
+        "supersededAt": None,
     })
 LB = {l["bottlingBatchId"]: l for l in labs}
 
