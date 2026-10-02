@@ -179,8 +179,8 @@
         {
           "type": "PHYTO_DECIDED",
           "occurredAt": "2025-03-06T09:45:00Z",
-          "recordedAt": "2025-03-06T09:45:00Z",
-          "lateEntry": false,
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
           "summary": "Dictamen fitosanitario: aprobado",
           "actorRole": "ENOLOGIST",
           "corrected": false
@@ -400,8 +400,8 @@
         {
           "type": "PHYTO_DECIDED",
           "occurredAt": "2025-03-18T09:45:00Z",
-          "recordedAt": "2025-03-18T09:45:00Z",
-          "lateEntry": false,
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
           "summary": "Dictamen fitosanitario: aprobado",
           "actorRole": "ENOLOGIST",
           "corrected": false
@@ -634,8 +634,8 @@
         {
           "type": "PHYTO_DECIDED",
           "occurredAt": "2025-03-10T09:45:00Z",
-          "recordedAt": "2025-03-10T09:45:00Z",
-          "lateEntry": false,
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
           "summary": "Dictamen fitosanitario: aprobado",
           "actorRole": "ENOLOGIST",
           "corrected": false
@@ -760,8 +760,8 @@
         {
           "type": "PHYTO_DECIDED",
           "occurredAt": "2025-02-26T09:45:00Z",
-          "recordedAt": "2025-02-26T09:45:00Z",
-          "lateEntry": false,
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
           "summary": "Dictamen fitosanitario: aprobado",
           "actorRole": "ENOLOGIST",
           "corrected": false

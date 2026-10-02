@@ -47,7 +47,7 @@
     "key": "trazabilidad.laboratorio.limites",
     "value": {
       "metanol": {
-        "max": 300,
+        "max": 200,
         "unidad": "mg/100 ml a.a."
       },
       "cobre": {

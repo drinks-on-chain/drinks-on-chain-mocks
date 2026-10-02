@@ -322,6 +322,19 @@ export function correctLot(state: TraceState, ctx: TraceCtx, lot: Lot, body: Cre
   return correction
 }
 
+/**
+ * Ejecuta una escritura que puede dejar de incumplir una regla (descartar una fuente abierta de un
+ * lote ya embotellado) y resuelve las incidencias abiertas cuyo código se incumplía antes y ya no.
+ */
+export function withIssueReevaluation<T>(state: TraceState, ctx: TraceCtx, lot: Lot | null, write: () => T): T {
+  if (!lot) return write()
+  const previous = new Set(reviewLot(state, ctx, lot).map((i) => i.code))
+  const result = write()
+  const remaining = new Set(reviewLot(state, ctx, lot).map((i) => i.code))
+  for (const issue of lot.complianceIssues) if (!issue.resolvedAt && previous.has(issue.code) && !remaining.has(issue.code)) issue.resolvedAt = ctx.now
+  return result
+}
+
 const TARGET_LABELS: Record<CorrectionTargetType, string> = {
   TERROIR: 'la parcela',
   HARVEST_BATCH: 'el pesaje',

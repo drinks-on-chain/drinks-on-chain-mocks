@@ -3,7 +3,7 @@
     "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
     "schema": "doc-dossier/1",
     "status": "CLOSED",
-    "hash": "7797f844452dfcf741e00115898f5f67894992cccf88a0aea5a00d446f1b79de",
+    "hash": "96204f58e5b47a3929ca42cf38d3d4ab2816107c581a62c1dfe7a6aa99549d5c",
     "algorithm": "sha256/jcs-rfc8785",
     "closedAt": "2026-09-24T15:00:00Z",
     "closedBy": {

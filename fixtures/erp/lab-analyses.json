@@ -41,7 +41,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -130,7 +130,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -348,7 +348,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -434,7 +434,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -520,7 +520,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },

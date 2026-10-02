@@ -96,7 +96,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -169,7 +169,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -198,8 +198,8 @@
       {
         "type": "PHYTO_DECIDED",
         "occurredAt": "2025-03-10T09:45:00Z",
-        "recordedAt": "2025-03-10T09:45:00Z",
-        "lateEntry": false,
+        "recordedAt": "2026-09-25T12:00:00Z",
+        "lateEntry": true,
         "summary": "Dictamen fitosanitario: aprobado",
         "actorRole": "ENOLOGIST",
         "corrected": false
@@ -388,7 +388,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -461,7 +461,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -490,8 +490,8 @@
       {
         "type": "PHYTO_DECIDED",
         "occurredAt": "2025-03-18T09:45:00Z",
-        "recordedAt": "2025-03-18T09:45:00Z",
-        "lateEntry": false,
+        "recordedAt": "2026-09-25T12:00:00Z",
+        "lateEntry": true,
         "summary": "Dictamen fitosanitario: aprobado",
         "actorRole": "ENOLOGIST",
         "corrected": false
@@ -682,7 +682,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -711,8 +711,8 @@
       {
         "type": "PHYTO_DECIDED",
         "occurredAt": "2025-02-26T09:45:00Z",
-        "recordedAt": "2025-02-26T09:45:00Z",
-        "lateEntry": false,
+        "recordedAt": "2026-09-25T12:00:00Z",
+        "lateEntry": true,
         "summary": "Dictamen fitosanitario: aprobado",
         "actorRole": "ENOLOGIST",
         "corrected": false
@@ -903,7 +903,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -932,8 +932,8 @@
       {
         "type": "PHYTO_DECIDED",
         "occurredAt": "2025-03-06T09:45:00Z",
-        "recordedAt": "2025-03-06T09:45:00Z",
-        "lateEntry": false,
+        "recordedAt": "2026-09-25T12:00:00Z",
+        "lateEntry": true,
         "summary": "Dictamen fitosanitario: aprobado",
         "actorRole": "ENOLOGIST",
         "corrected": false
@@ -1120,7 +1120,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -1323,7 +1323,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -1396,7 +1396,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -1643,7 +1643,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -1855,7 +1855,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -1928,7 +1928,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -2147,7 +2147,7 @@
           "unit": "mg/100 mL de alcohol anhidro",
           "limit": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "result": "PASS"
         },
@@ -2220,7 +2220,7 @@
           "value": {
             "metanol": {
               "unidad": "mg/100 ml a.a.",
-              "max": 300
+              "max": 200
             },
             "cobre": {
               "unidad": "mg/l",
@@ -2343,7 +2343,7 @@
     },
     "dossier": {
       "status": "CLOSED",
-      "hash": "7797f844452dfcf741e00115898f5f67894992cccf88a0aea5a00d446f1b79de",
+      "hash": "96204f58e5b47a3929ca42cf38d3d4ab2816107c581a62c1dfe7a6aa99549d5c",
       "closedAt": "2026-09-24T15:00:00Z",
       "canonicalUrl": "/v1/public/lots/CVJ-2026-SINGANI-004/dossier",
       "anchor": null
