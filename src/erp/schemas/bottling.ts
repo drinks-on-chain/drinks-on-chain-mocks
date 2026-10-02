@@ -4,7 +4,7 @@ import { ProductTypeSchema } from './enums'
 import { ErrorDetailSchema } from './lots'
 
 // /v1/bottling y /v1/lots/{id}/bottling · embotellado seguro (contrato de la Ola 2 §6):
-// BottlingBatchResponseDto, CreateBottlingBatchDto (legado), CreateLotBottlingDto, BottlingPreviewDto.
+// BottlingBatchResponseDto, CreateLotBottlingDto, BottlingPreviewDto.
 
 /** Balance del embotellado (`BottlingBalanceDto`, §6.1). */
 export const BottlingBalanceSchema = z.object({
@@ -86,37 +86,6 @@ export const BottlingBatchResponseSchema = z.object({
 })
 export type BottlingBatchResponse = z.infer<typeof BottlingBatchResponseSchema>
 
-/**
- * Alta de embotellado por la ruta legada (`POST /v1/bottling`, alias hasta H2): exactamente una
- * fuente. `productType` se deriva del origen; si el enviado no coincide → 422
- * `TRC_PRODUCT_TYPE_MISMATCH` (EA-01).
- */
-export const CreateBottlingBatchSchema = z
-  .object({
-    wineAgingBatchId: z.string().min(1).optional(),
-    productionBatchId: z.string().min(1).optional(),
-    productType: ProductTypeSchema,
-    finalAlcoholAbv: z.number().min(0).max(100),
-    waterDilutionLiters: z.number().min(0).optional(),
-    totalBottlesPackaged: z.number().int().positive(),
-    packagingFormatCl: z.number().positive(),
-    bottleType: z.string().optional(),
-    labelDesignUrl: z.string().optional(),
-    bottlingDate: DateInputSchema,
-  })
-  .superRefine((b, ctx) => {
-    if (!b.wineAgingBatchId && !b.productionBatchId) {
-      // Mismo mensaje y campos que el backend (O0-BE-2).
-      const message =
-        'Debe especificar un lote de crianza (wineAgingBatchId) o un lote de producción/destilación (productionBatchId)'
-      ctx.addIssue({ code: 'custom', message, path: ['wineAgingBatchId'] })
-      ctx.addIssue({ code: 'custom', message, path: ['productionBatchId'] })
-    } else if (b.wineAgingBatchId && b.productionBatchId) {
-      ctx.addIssue({ code: 'custom', message: 'Indique wineAgingBatchId o productionBatchId (uno y solo uno)', path: ['wineAgingBatchId'] })
-    }
-  })
-export type CreateBottlingBatchDto = z.infer<typeof CreateBottlingBatchSchema>
-
 /** Fuente del embotellado del lote (`LotBottlingSourceDto`): una crianza o una destilación. */
 export const LotBottlingSourceSchema = z
   .object({
@@ -148,10 +117,8 @@ export const CreateLotBottlingSchema = z.object({
     .object({ liters: z.number().min(0), disposition: z.enum(LEFTOVER_DISPOSITIONS), notes: z.string().max(500).optional() })
     .optional(),
   bottleType: z.string().max(120).optional(),
-  /** `key` de `POST /v1/uploads`. */
+  /** `key` de la etiqueta (`POST /v1/uploads`), de esta bodega. */
   labelDesignKey: z.string().min(1).optional(),
-  /** @deprecated Alias de `labelDesignKey` hasta H2. */
-  labelDesignUrl: z.string().min(1).optional(),
 })
 export type CreateLotBottlingDto = z.infer<typeof CreateLotBottlingSchema>
 

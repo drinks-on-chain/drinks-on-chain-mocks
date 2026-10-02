@@ -108,7 +108,11 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] `rc.2`: instantánea de reglas anterior al primer evento del lote; `docs/CONTRATO.md` §11 y CHANGELOG con lo que obliga a tocar código en el ERP y el Marketplace · 02-10-2026
 - [x] Etiqueta `v0.5.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.2.tgz`, instalado y probado en un proyecto limpio · 02-10-2026
 - [ ] Imágenes de QR dentro del ZIP de códigos (`qr/{serial}-{code}.svg|png`): hoy el ZIP de los mocks lleva solo `codigos.csv`
-- [ ] Retirada de H2 al cerrar la ola: `LotView`/`deriveLotViews`/`lots-view.json`, rutas legadas y entradas obsoletas (CHANGELOG 0.5.0-rc.1)
+- [x] `rc.3`: retirada de H2 con el OpenAPI de la fase de cierre del backend (`feat/o2-be-contraer`, `9ca8111`: 158 operaciones, fijado desde la rama; `docs/CONTRATO.md` §12.1): fuera las cinco rutas legadas, los campos de entrada retirados (422 «property … should not exist»), `LotView`/`deriveLotViews`/`lots-view.json` y el grafo DAG; crianza y destilación solo desde un tanque `COMPLETED`; `sha256` en las subidas y `clean` con remanente · 02-10-2026
+- [x] `rc.3`: correcciones de la semilla del backend en los fixtures (tanques vacíos fuera, TK-08 `TRANSFERRED`, TK-01 `CLEANED`), crianza mínima real en Altos y los huecos que anotó el ERP (fecha del panel, nombre del CSV, escenario `empty`, `?mock=` al arrancar, incidencia al corregir una fuente ya embotellada); guía de migración `rc.2` → `rc.3` para ERP, Marketplace y Backoffice · 02-10-2026
+- [ ] Etiqueta `v0.5.0-rc.3` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.3.tgz`
+- [ ] Volver a `pnpm openapi:pull` contra el servidor cuando despliegue el cierre H2 (debe dar las mismas 158 operaciones; `docs/CONTRATO.md` §12.1)
+- [ ] Rendimiento del mosto de `CVJ-L2026-001` y `ALT-L2026-001` (~1,0 L/kg) en las filas base
 - [ ] Etiqueta estable `v0.5.0` en `main` al cerrar la Ola 2 (coordinación)
 
 ## Más adelante

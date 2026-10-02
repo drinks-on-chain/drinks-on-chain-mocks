@@ -12,6 +12,7 @@ import {
   DiscardWineAgingSchema,
   PROCESS_TYPES,
   REST_STATUSES,
+  RETIRED_INPUT_FIELDS,
   StartFermentationTankSchema,
   TANK_STATUSES,
   type FermentationTankResponse,
@@ -74,7 +75,7 @@ export const winemakingRoutes: RouteSpec[] = [
     access: trace(WINEMAKERS),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
-      const body = await parseCreateBody(request, CreateFermentationTankSchema)
+      const body = await parseCreateBody(request, CreateFermentationTankSchema, { retired: RETIRED_INPUT_FIELDS.CreateFermentationTankDto })
       if (body.newLot) assertCanCreateLot(auth)
       tick()
       return created(tankView(createTank(getErpDb(), traceCtx(auth), wineryId, body)))
@@ -217,7 +218,7 @@ export const winemakingRoutes: RouteSpec[] = [
     access: trace(WINEMAKERS),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
-      const body = await parseCreateBody(request, CreateDistillationBatchSchema)
+      const body = await parseCreateBody(request, CreateDistillationBatchSchema, { retired: RETIRED_INPUT_FIELDS.CreateDistillationBatchDto })
       tick()
       return created(productionView(createDistillation(getErpDb(), traceCtx(auth), wineryId, body)))
     },

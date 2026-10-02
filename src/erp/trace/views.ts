@@ -247,7 +247,7 @@ export function agingView(state: TraceState, ctx: TraceCtx, a: WineAgingResponse
   }
 }
 
-/** Embotellado de una fuente: el suyo por la ruta legada o, en la Ola 2, el de su lote si entró en él. */
+/** Embotellado de una fuente: el suyo en las filas anteriores a la Ola 2 o el de su lote si entró en él. */
 function bottlingsOfSource(state: TraceState, lotId: string | null, sourceId: string, key: 'wineAgingBatchId' | 'productionBatchId', bottled: boolean): BottlingBatchResponse[] {
   return state.bottlings.filter((b) => b[key] === sourceId || (bottled && lotId !== null && b.lotId === lotId))
 }
@@ -578,7 +578,7 @@ export function traceDashboard(state: TraceState, ctx: TraceCtx, wineryId: strin
     pendingPhyto: harvests
       .filter((h) => h.phytosanitaryStatus === 'PENDING_INSPECTION' || h.phytosanitaryStatus === 'QUARANTINE')
       .sort(asc((h) => h.intakeDate))
-      .map((h) => ({ harvestBatchId: h.id, harvestBatchCode: h.harvestBatchCode, lotId: h.lotId, intakeDate: h.intakeDate, status: h.phytosanitaryStatus })),
+      .map((h) => ({ harvestBatchId: h.id, harvestBatchCode: h.harvestBatchCode, lotId: h.lotId, intakeDate: dayOf(h.intakeDate), status: h.phytosanitaryStatus })),
     bottledWithoutLab: bottled.filter((l) => !currentLab(state, l.id)).map((l) => toLotSummary(state, l, ctx)),
     readyToClose: bottled.filter((l) => dossierPreview(state, ctx, l).ready).map((l) => toLotSummary(state, l, ctx)),
     complianceIssuesOpen: sum(lots.map((l) => l.complianceIssues.filter((i) => !i.resolvedAt).length)),

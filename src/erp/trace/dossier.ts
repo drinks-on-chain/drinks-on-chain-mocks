@@ -18,7 +18,6 @@ import type {
 import { CORRECTABLE_FIELDS, DOSSIER_HASH_ALGORITHM, DOSSIER_SCHEMA_VERSION, VOIDABLE_TARGET_TYPES } from '../schemas/lot-views'
 import { bottlingInputOf, reviewLot, type IntegrityIssue } from './backfill'
 import { BOTTLE_MERKLE_ALGORITHM, merkleLeaf, merkleLevels, merkleProof, mockBottleCode, mockBottleSalt, type MerkleStep } from './bottle-code'
-import { fileSha256 } from './bottling'
 import { addDaysYmd, addMonthsYmd, dayOf, toDateField } from './dates'
 import { computeBottlingBalance, computeLabConformity, methanolToAnhydrous } from './domain'
 import { allHarvestAnalyses, allHarvestDecisions, assertOwnFile, groupReadings, harvestDecisions, syncHarvest } from './records'
@@ -34,6 +33,7 @@ import {
   bottleGeneration,
   bottleLotOf,
   currentLab,
+  fileSha256,
   harvestInTank,
   isAgingOpen,
   isProductionOpen,
@@ -438,7 +438,7 @@ export function addAttachment(state: TraceState, ctx: TraceCtx, lot: Lot, body: 
     key: body.key,
     mimeType: mimeOf(body.key),
     sizeBytes: sizeOf(body.key),
-    sha256: fileSha256(body.key),
+    sha256: fileSha256(body.key, state),
     visibility: body.visibility ?? (body.kind === 'LABEL' ? 'PUBLIC' : 'PRIVATE'),
     createdAt: ctx.now,
     createdBy: ctx.actor,
@@ -467,7 +467,7 @@ export function lotAttachments(state: TraceState, lot: Lot): StoredAttachment[] 
   const add = (id: string, kind: 'PHYTO_REPORT' | 'LAB_REPORT', title: string, key: string, at: string, by: TraceActor | null | undefined) => {
     if (keys.has(key) || !key.startsWith('org/')) return
     keys.add(key)
-    derived.push({ id, lotId: lot.id, kind, title, key, mimeType: mimeOf(key), sizeBytes: sizeOf(key), sha256: fileSha256(key), visibility: 'PRIVATE', createdAt: at, createdBy: by ?? null })
+    derived.push({ id, lotId: lot.id, kind, title, key, mimeType: mimeOf(key), sizeBytes: sizeOf(key), sha256: fileSha256(key, state), visibility: 'PRIVATE', createdAt: at, createdBy: by ?? null })
   }
   for (const h of lotHarvests(state, lot.id)) {
     for (const d of harvestDecisions(state, h.id)) if (d.inspectionReport) add(d.id, 'PHYTO_REPORT', `Informe de inspección de ${h.harvestBatchCode}`, d.inspectionReport.key, d.recordedAt, d.decidedBy)

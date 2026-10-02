@@ -389,51 +389,6 @@
     "lateEntry": false,
     "stage": "FERMENTING",
     "actor": null,
-    "summary": "Tanque TK-09 lleno con 0 L",
-    "data": {
-      "tankCode": "TK-09",
-      "volumeFilledLiters": 0,
-      "unit": "L"
-    },
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2"
-    },
-    "visibility": "PUBLIC",
-    "corrected": false
-  },
-  {
-    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "33479b93-f902-5996-909a-a118a6220ddb",
-    "seq": 6,
-    "type": "FERMENTATION_COMPLETED",
-    "occurredAt": "2025-04-13T14:30:00Z",
-    "recordedAt": "2025-03-11T14:35:00Z",
-    "lateEntry": false,
-    "stage": "FERMENTING",
-    "actor": null,
-    "summary": "Fermentación completada en TK-09",
-    "data": {
-      "tankCode": "TK-09",
-      "destinationType": "SINGANI_DIST"
-    },
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2"
-    },
-    "visibility": "PUBLIC",
-    "corrected": false
-  },
-  {
-    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "cfcc538c-ef85-54a0-927b-231362a3cf30",
-    "seq": 7,
-    "type": "TANK_FILLED",
-    "occurredAt": "2025-03-11T14:30:00Z",
-    "recordedAt": "2025-03-11T14:35:00Z",
-    "lateEntry": false,
-    "stage": "FERMENTING",
-    "actor": null,
     "summary": "Tanque TK-01 lleno con 10.100 L",
     "data": {
       "tankCode": "TK-01",
@@ -449,8 +404,8 @@
   },
   {
     "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "14d918b2-b99d-520e-9955-1323bbeb84de",
-    "seq": 8,
+    "id": "33479b93-f902-5996-909a-a118a6220ddb",
+    "seq": 6,
     "type": "FERMENTATION_COMPLETED",
     "occurredAt": "2025-04-12T14:30:00Z",
     "recordedAt": "2025-03-11T14:35:00Z",
@@ -471,8 +426,8 @@
   },
   {
     "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "01e160d5-272b-5ed9-bf9e-5ae2fb8e006c",
-    "seq": 9,
+    "id": "cfcc538c-ef85-54a0-927b-231362a3cf30",
+    "seq": 7,
     "type": "DISTILLATION_STARTED",
     "occurredAt": "2025-05-20T00:00:00Z",
     "recordedAt": "2025-05-20T10:00:00Z",
@@ -493,8 +448,8 @@
   },
   {
     "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "4bd582b6-125c-52c9-9bfa-80e3d4ca4a42",
-    "seq": 10,
+    "id": "14d918b2-b99d-520e-9955-1323bbeb84de",
+    "seq": 8,
     "type": "DISTILLATION_CLOSED",
     "occurredAt": "2025-05-25T00:00:00Z",
     "recordedAt": "2025-05-20T10:00:00Z",
@@ -516,8 +471,8 @@
   },
   {
     "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "bdcf50b7-b828-571a-84f1-c6d431c9ea1a",
-    "seq": 11,
+    "id": "01e160d5-272b-5ed9-bf9e-5ae2fb8e006c",
+    "seq": 9,
     "type": "BOTTLED",
     "occurredAt": "2026-03-01T00:00:00Z",
     "recordedAt": "2026-03-01T16:00:00Z",
@@ -545,8 +500,8 @@
   },
   {
     "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "29298e8a-5aee-50af-afcd-ec7a05d528b7",
-    "seq": 12,
+    "id": "4bd582b6-125c-52c9-9bfa-80e3d4ca4a42",
+    "seq": 10,
     "type": "BOTTLE_CODES_GENERATED",
     "occurredAt": "2026-09-25T12:00:00Z",
     "recordedAt": "2026-09-25T12:00:00Z",
@@ -566,8 +521,8 @@
   },
   {
     "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "id": "120caa5e-6356-5af1-960b-118e62764735",
-    "seq": 13,
+    "id": "bdcf50b7-b828-571a-84f1-c6d431c9ea1a",
+    "seq": 11,
     "type": "LAB_REGISTERED",
     "occurredAt": "2026-03-04T00:00:00Z",
     "recordedAt": "2026-03-04T15:00:00Z",
@@ -593,7 +548,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "45ddd690-101a-5c29-bc57-eb1636b85c69",
+    "id": "29298e8a-5aee-50af-afcd-ec7a05d528b7",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2025-03-18T09:45:00Z",
@@ -618,7 +573,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "782d7d48-d52d-598c-a0d8-89d2027af756",
+    "id": "120caa5e-6356-5af1-960b-118e62764735",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2025-03-18T09:42:00Z",
@@ -641,7 +596,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "7cd9167e-cd6a-5785-bc4e-913c016ba35d",
+    "id": "45ddd690-101a-5c29-bc57-eb1636b85c69",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2025-03-18T09:42:00Z",
@@ -665,7 +620,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "4692dd73-cc2a-5420-bbe8-2b4f189a1916",
+    "id": "782d7d48-d52d-598c-a0d8-89d2027af756",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-18T09:45:00Z",
@@ -693,7 +648,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "48c78bb2-6f4c-5f77-9fc8-d58ebb146ef9",
+    "id": "7cd9167e-cd6a-5785-bc4e-913c016ba35d",
     "seq": 5,
     "type": "TANK_FILLED",
     "occurredAt": "2025-03-19T14:30:00Z",
@@ -716,7 +671,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "9c2207e0-f124-53fb-933e-713e2d49dd34",
+    "id": "4692dd73-cc2a-5420-bbe8-2b4f189a1916",
     "seq": 6,
     "type": "FERMENTATION_COMPLETED",
     "occurredAt": "2025-04-20T14:30:00Z",
@@ -738,7 +693,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "adb8f9f8-c6ce-58ad-9cb5-272d7d0f6abd",
+    "id": "48c78bb2-6f4c-5f77-9fc8-d58ebb146ef9",
     "seq": 7,
     "type": "DISTILLATION_STARTED",
     "occurredAt": "2025-05-02T00:00:00Z",
@@ -760,7 +715,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "a4312a67-726f-54e2-8e15-20d2b6d90e7f",
+    "id": "9c2207e0-f124-53fb-933e-713e2d49dd34",
     "seq": 8,
     "type": "DISTILLATION_CLOSED",
     "occurredAt": "2025-05-04T00:00:00Z",
@@ -783,7 +738,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "4b77ed70-a1f0-50c5-afa7-32ad55cbeb08",
+    "id": "adb8f9f8-c6ce-58ad-9cb5-272d7d0f6abd",
     "seq": 9,
     "type": "BOTTLED",
     "occurredAt": "2026-02-10T00:00:00Z",
@@ -812,7 +767,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "aa51f6cc-e75c-51d4-818f-acc48130dd43",
+    "id": "a4312a67-726f-54e2-8e15-20d2b6d90e7f",
     "seq": 10,
     "type": "BOTTLE_CODES_GENERATED",
     "occurredAt": "2026-09-25T12:00:00Z",
@@ -833,7 +788,7 @@
   },
   {
     "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
-    "id": "090e2a1f-c715-5c1a-9c09-2314cf3dc8fc",
+    "id": "4b77ed70-a1f0-50c5-afa7-32ad55cbeb08",
     "seq": 11,
     "type": "LAB_REGISTERED",
     "occurredAt": "2026-02-13T00:00:00Z",
@@ -860,7 +815,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "7b00d93f-2f39-5e2e-8535-455d2a8c3403",
+    "id": "aa51f6cc-e75c-51d4-818f-acc48130dd43",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2025-02-26T09:45:00Z",
@@ -885,7 +840,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "2903648b-cfd6-5766-9fb6-080d3b3442e6",
+    "id": "090e2a1f-c715-5c1a-9c09-2314cf3dc8fc",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2025-02-26T09:42:00Z",
@@ -908,7 +863,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "e220178d-1582-53de-9cf6-3807fe913fee",
+    "id": "7b00d93f-2f39-5e2e-8535-455d2a8c3403",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2025-02-26T09:42:00Z",
@@ -932,7 +887,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "7af1706a-90d6-5f52-abda-6e551a59aff6",
+    "id": "2903648b-cfd6-5766-9fb6-080d3b3442e6",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-02-26T09:45:00Z",
@@ -960,7 +915,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "c35e200b-a7d4-56d0-b478-c60d44fd57d0",
+    "id": "e220178d-1582-53de-9cf6-3807fe913fee",
     "seq": 5,
     "type": "TANK_FILLED",
     "occurredAt": "2025-02-27T14:30:00Z",
@@ -983,7 +938,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "78df4d1a-24cb-56a4-8b50-a924e1a8a5a3",
+    "id": "7af1706a-90d6-5f52-abda-6e551a59aff6",
     "seq": 6,
     "type": "FERMENTATION_COMPLETED",
     "occurredAt": "2025-03-20T14:30:00Z",
@@ -1005,7 +960,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "ada2435a-7039-51ba-afe3-a32342706843",
+    "id": "c35e200b-a7d4-56d0-b478-c60d44fd57d0",
     "seq": 7,
     "type": "AGING_STARTED",
     "occurredAt": "2025-04-01T00:00:00Z",
@@ -1028,7 +983,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "4498821a-7856-5190-8d62-be8b92f0f234",
+    "id": "78df4d1a-24cb-56a4-8b50-a924e1a8a5a3",
     "seq": 8,
     "type": "BOTTLED",
     "occurredAt": "2026-09-20T00:00:00Z",
@@ -1057,7 +1012,7 @@
   },
   {
     "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
-    "id": "b1e6503a-3a49-5563-9c66-15bdf5a08996",
+    "id": "ada2435a-7039-51ba-afe3-a32342706843",
     "seq": 9,
     "type": "BOTTLE_CODES_GENERATED",
     "occurredAt": "2026-09-25T12:00:00Z",
@@ -1078,7 +1033,7 @@
   },
   {
     "lotId": "700fca35-50c3-51a0-a23c-b7ed1958e4f4",
-    "id": "41e5258f-b2b0-5c60-a75e-75099eac6038",
+    "id": "4498821a-7856-5190-8d62-be8b92f0f234",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2026-03-12T09:45:00Z",
@@ -1103,7 +1058,7 @@
   },
   {
     "lotId": "700fca35-50c3-51a0-a23c-b7ed1958e4f4",
-    "id": "99612752-3dec-5966-b94d-7d4f423c9e4f",
+    "id": "b1e6503a-3a49-5563-9c66-15bdf5a08996",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2026-03-12T09:42:00Z",
@@ -1126,7 +1081,7 @@
   },
   {
     "lotId": "700fca35-50c3-51a0-a23c-b7ed1958e4f4",
-    "id": "6e615c67-3be3-5018-a849-f12ae8a8ba03",
+    "id": "41e5258f-b2b0-5c60-a75e-75099eac6038",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2026-03-12T09:42:00Z",
@@ -1150,7 +1105,7 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "d7daa572-c888-5caa-9047-80c640d085f9",
+    "id": "99612752-3dec-5966-b94d-7d4f423c9e4f",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2025-03-02T09:45:00Z",
@@ -1175,7 +1130,7 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "18e59d72-d1db-598e-9e6c-f9f21408ae4e",
+    "id": "6e615c67-3be3-5018-a849-f12ae8a8ba03",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2025-03-02T09:42:00Z",
@@ -1198,7 +1153,7 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "fb1805c6-f4cb-59d0-986c-f03a807047ef",
+    "id": "d7daa572-c888-5caa-9047-80c640d085f9",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2025-03-02T09:42:00Z",
@@ -1222,7 +1177,7 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "5873d8a8-7300-5f88-9187-ee6d37cacb2c",
+    "id": "18e59d72-d1db-598e-9e6c-f9f21408ae4e",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-02T09:45:00Z",
@@ -1250,53 +1205,8 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "d68b8e65-aa17-5c4e-a80e-82bd8c484abf",
+    "id": "fb1805c6-f4cb-59d0-986c-f03a807047ef",
     "seq": 5,
-    "type": "TANK_FILLED",
-    "occurredAt": "2025-03-03T14:30:00Z",
-    "recordedAt": "2025-03-03T14:35:00Z",
-    "lateEntry": false,
-    "stage": "FERMENTING",
-    "actor": null,
-    "summary": "Tanque TK-RED-04 lleno con 0 L",
-    "data": {
-      "tankCode": "TK-RED-04",
-      "volumeFilledLiters": 0,
-      "unit": "L"
-    },
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae"
-    },
-    "visibility": "PUBLIC",
-    "corrected": false
-  },
-  {
-    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "2cb76a18-c9df-5258-bad3-005f56ede66d",
-    "seq": 6,
-    "type": "FERMENTATION_COMPLETED",
-    "occurredAt": "2025-03-25T14:30:00Z",
-    "recordedAt": "2025-03-03T14:35:00Z",
-    "lateEntry": false,
-    "stage": "FERMENTING",
-    "actor": null,
-    "summary": "Fermentación completada en TK-RED-04",
-    "data": {
-      "tankCode": "TK-RED-04",
-      "destinationType": "WINE_AGING"
-    },
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae"
-    },
-    "visibility": "PUBLIC",
-    "corrected": false
-  },
-  {
-    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "b5ec927d-08f5-5b28-b3c4-3cd109bfb736",
-    "seq": 7,
     "type": "TANK_FILLED",
     "occurredAt": "2025-03-03T14:30:00Z",
     "recordedAt": "2025-03-03T14:35:00Z",
@@ -1318,8 +1228,8 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "1dd03adc-d346-56f4-83b3-071609f1ef23",
-    "seq": 8,
+    "id": "5873d8a8-7300-5f88-9187-ee6d37cacb2c",
+    "seq": 6,
     "type": "FERMENTATION_COMPLETED",
     "occurredAt": "2025-03-24T14:30:00Z",
     "recordedAt": "2025-03-03T14:35:00Z",
@@ -1340,8 +1250,8 @@
   },
   {
     "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "id": "88afa7dc-d3e0-537b-bb2d-a27ca7ba68fd",
-    "seq": 9,
+    "id": "d68b8e65-aa17-5c4e-a80e-82bd8c484abf",
+    "seq": 7,
     "type": "AGING_STARTED",
     "occurredAt": "2025-11-03T00:00:00Z",
     "recordedAt": "2025-11-03T10:00:00Z",
@@ -1363,7 +1273,7 @@
   },
   {
     "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "2fd8fa15-e92d-5092-a57b-8f7ba57d2766",
+    "id": "2cb76a18-c9df-5258-bad3-005f56ede66d",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2026-03-09T09:45:00Z",
@@ -1388,7 +1298,7 @@
   },
   {
     "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "7d4a68e0-b9d5-55a0-beb9-ea46ce47fb38",
+    "id": "b5ec927d-08f5-5b28-b3c4-3cd109bfb736",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2026-03-09T09:42:00Z",
@@ -1411,7 +1321,7 @@
   },
   {
     "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "1d90335b-7e5e-51d6-b62e-589c46e1299c",
+    "id": "1dd03adc-d346-56f4-83b3-071609f1ef23",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2026-03-09T09:42:00Z",
@@ -1435,7 +1345,7 @@
   },
   {
     "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "92bc43a8-f59e-5398-8ec2-cff57b8d3916",
+    "id": "88afa7dc-d3e0-537b-bb2d-a27ca7ba68fd",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-09T09:45:00Z",
@@ -1463,53 +1373,8 @@
   },
   {
     "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "6ca76505-1ab8-531f-b48c-80021cdc6515",
+    "id": "2fd8fa15-e92d-5092-a57b-8f7ba57d2766",
     "seq": 5,
-    "type": "TANK_FILLED",
-    "occurredAt": "2026-01-05T14:30:00Z",
-    "recordedAt": "2026-01-05T14:35:00Z",
-    "lateEntry": false,
-    "stage": "FERMENTING",
-    "actor": null,
-    "summary": "Tanque TK-06 lleno con 0 L",
-    "data": {
-      "tankCode": "TK-06",
-      "volumeFilledLiters": 0,
-      "unit": "L"
-    },
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "04e8d15f-24ff-5943-83db-6f915387071c"
-    },
-    "visibility": "PUBLIC",
-    "corrected": false
-  },
-  {
-    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "475bce6e-48b3-59ac-9165-dab78dbeb49b",
-    "seq": 6,
-    "type": "FERMENTATION_COMPLETED",
-    "occurredAt": "2026-01-06T14:30:00Z",
-    "recordedAt": "2026-01-05T14:35:00Z",
-    "lateEntry": false,
-    "stage": "FERMENTING",
-    "actor": null,
-    "summary": "Fermentación completada en TK-06",
-    "data": {
-      "tankCode": "TK-06",
-      "destinationType": "WINE_AGING"
-    },
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "04e8d15f-24ff-5943-83db-6f915387071c"
-    },
-    "visibility": "PUBLIC",
-    "corrected": false
-  },
-  {
-    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "c506775a-3f41-54e0-8a1d-6d2bea41a05c",
-    "seq": 7,
     "type": "TANK_FILLED",
     "occurredAt": "2026-03-10T14:30:00Z",
     "recordedAt": "2026-03-10T14:35:00Z",
@@ -1531,8 +1396,8 @@
   },
   {
     "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "id": "e2517ae5-1648-5ecd-8471-767f81480e69",
-    "seq": 8,
+    "id": "7d4a68e0-b9d5-55a0-beb9-ea46ce47fb38",
+    "seq": 6,
     "type": "TANK_FILLED",
     "occurredAt": "2026-03-11T14:30:00Z",
     "recordedAt": "2026-03-11T14:35:00Z",
@@ -1554,7 +1419,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "5717833a-4a82-5e2d-922c-33a1a1e5d53d",
+    "id": "1d90335b-7e5e-51d6-b62e-589c46e1299c",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2025-03-20T09:45:00Z",
@@ -1579,7 +1444,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "19374bf4-444d-571d-9bee-8c60234db86f",
+    "id": "92bc43a8-f59e-5398-8ec2-cff57b8d3916",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2025-03-20T09:42:00Z",
@@ -1602,7 +1467,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "730e9d9b-2e27-5b56-bd98-e1931dfe39ea",
+    "id": "6ca76505-1ab8-531f-b48c-80021cdc6515",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2025-03-20T09:42:00Z",
@@ -1626,7 +1491,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "d2008c2b-5807-520e-953d-beba88f2d37d",
+    "id": "475bce6e-48b3-59ac-9165-dab78dbeb49b",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-20T09:45:00Z",
@@ -1654,7 +1519,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "5233210d-3bb7-5ab3-b870-e85b63b74a1b",
+    "id": "c506775a-3f41-54e0-8a1d-6d2bea41a05c",
     "seq": 5,
     "type": "TANK_FILLED",
     "occurredAt": "2025-03-21T14:30:00Z",
@@ -1677,7 +1542,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "4926b349-d63d-55e2-a476-479ccce856ce",
+    "id": "e2517ae5-1648-5ecd-8471-767f81480e69",
     "seq": 6,
     "type": "FERMENTATION_COMPLETED",
     "occurredAt": "2025-04-11T14:30:00Z",
@@ -1699,7 +1564,7 @@
   },
   {
     "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
-    "id": "43f6b434-9600-5db2-aa0b-db55d63cf067",
+    "id": "5717833a-4a82-5e2d-922c-33a1a1e5d53d",
     "seq": 7,
     "type": "AGING_STARTED",
     "occurredAt": "2026-06-30T00:00:00Z",
@@ -1722,7 +1587,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "7c9e971a-a2da-5265-a789-d4d44277a701",
+    "id": "19374bf4-444d-571d-9bee-8c60234db86f",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2025-03-06T09:45:00Z",
@@ -1747,7 +1612,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "316856be-6c10-58c7-8734-12a6dac97f90",
+    "id": "730e9d9b-2e27-5b56-bd98-e1931dfe39ea",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2025-03-06T09:42:00Z",
@@ -1770,7 +1635,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "ce6157cd-5341-5c5b-8467-7c5a72f73036",
+    "id": "d2008c2b-5807-520e-953d-beba88f2d37d",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2025-03-06T09:42:00Z",
@@ -1794,7 +1659,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "e0f9b362-f0ea-5bb7-85d4-1af7a288d2c4",
+    "id": "5233210d-3bb7-5ab3-b870-e85b63b74a1b",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-06T09:45:00Z",
@@ -1822,7 +1687,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "f93a6d33-2263-568b-b00e-19bf885c4dad",
+    "id": "4926b349-d63d-55e2-a476-479ccce856ce",
     "seq": 5,
     "type": "TANK_FILLED",
     "occurredAt": "2025-03-07T14:30:00Z",
@@ -1845,7 +1710,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "ab2b3f94-de8f-5be5-aede-f504828fd142",
+    "id": "43f6b434-9600-5db2-aa0b-db55d63cf067",
     "seq": 6,
     "type": "FERMENTATION_COMPLETED",
     "occurredAt": "2025-03-28T14:30:00Z",
@@ -1867,7 +1732,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "85cfe76e-3b07-568a-94c4-ea8bb83c0acf",
+    "id": "7c9e971a-a2da-5265-a789-d4d44277a701",
     "seq": 7,
     "type": "AGING_STARTED",
     "occurredAt": "2025-04-10T00:00:00Z",
@@ -1890,7 +1755,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "182b6314-86e7-5f18-8304-680521f2b615",
+    "id": "316856be-6c10-58c7-8734-12a6dac97f90",
     "seq": 8,
     "type": "BOTTLED",
     "occurredAt": "2026-05-12T00:00:00Z",
@@ -1919,7 +1784,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "d3f63bc5-d3df-5da8-9566-e9bebc8d7cd1",
+    "id": "ce6157cd-5341-5c5b-8467-7c5a72f73036",
     "seq": 9,
     "type": "BOTTLE_CODES_GENERATED",
     "occurredAt": "2026-09-25T12:00:00Z",
@@ -1940,7 +1805,7 @@
   },
   {
     "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
-    "id": "8fff0060-fc1f-5934-a520-02d778dc66e6",
+    "id": "e0f9b362-f0ea-5bb7-85d4-1af7a288d2c4",
     "seq": 10,
     "type": "LAB_REGISTERED",
     "occurredAt": "2026-05-15T00:00:00Z",
@@ -1967,7 +1832,7 @@
   },
   {
     "lotId": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
-    "id": "0f7fd4ba-5561-5046-9558-b2bcd910bbc3",
+    "id": "f93a6d33-2263-568b-b00e-19bf885c4dad",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2026-03-15T09:45:00Z",
@@ -1992,7 +1857,7 @@
   },
   {
     "lotId": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
-    "id": "2a067003-2bc7-5710-ac29-3ed7c58b770b",
+    "id": "ab2b3f94-de8f-5be5-aede-f504828fd142",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2026-03-15T09:42:00Z",
@@ -2015,7 +1880,7 @@
   },
   {
     "lotId": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
-    "id": "ef73bfcd-1db6-5811-9c1b-6155b09bd4c6",
+    "id": "85cfe76e-3b07-568a-94c4-ea8bb83c0acf",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2026-03-15T09:42:00Z",
@@ -2039,7 +1904,7 @@
   },
   {
     "lotId": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
-    "id": "fe4c0bed-6dd8-5344-ae5b-c3a2b7761a76",
+    "id": "182b6314-86e7-5f18-8304-680521f2b615",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-15T09:45:00Z",
@@ -2067,7 +1932,7 @@
   },
   {
     "lotId": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
-    "id": "3663b4ea-09ae-53da-bec3-0901270aa4f9",
+    "id": "d3f63bc5-d3df-5da8-9566-e9bebc8d7cd1",
     "seq": 5,
     "type": "LOT_REJECTED",
     "occurredAt": "2026-03-15T09:42:00Z",
@@ -2086,7 +1951,7 @@
   },
   {
     "lotId": "f62144c5-2e11-5974-a269-500721ea5ec9",
-    "id": "69ea273c-a022-5064-8e4c-db58ffc13db0",
+    "id": "8fff0060-fc1f-5934-a520-02d778dc66e6",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2026-03-22T09:45:00Z",
@@ -2111,7 +1976,7 @@
   },
   {
     "lotId": "f62144c5-2e11-5974-a269-500721ea5ec9",
-    "id": "4b557fd7-2edc-5b1c-99d3-ccd56e04e4a7",
+    "id": "0f7fd4ba-5561-5046-9558-b2bcd910bbc3",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2026-03-22T09:42:00Z",
@@ -2134,7 +1999,7 @@
   },
   {
     "lotId": "f62144c5-2e11-5974-a269-500721ea5ec9",
-    "id": "396ea30d-20f7-5ddd-a712-b6f6c45fd5f9",
+    "id": "2a067003-2bc7-5710-ac29-3ed7c58b770b",
     "seq": 3,
     "type": "MATURITY_ANALYZED",
     "occurredAt": "2026-03-22T09:42:00Z",
@@ -2158,7 +2023,7 @@
   },
   {
     "lotId": "f62144c5-2e11-5974-a269-500721ea5ec9",
-    "id": "b74ceb90-547c-54f2-9682-b7a2c666e1bb",
+    "id": "ef73bfcd-1db6-5811-9c1b-6155b09bd4c6",
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-22T09:45:00Z",
@@ -2186,7 +2051,7 @@
   },
   {
     "lotId": "41ec0cf8-6c30-5dd9-88d0-be0d8e9e667a",
-    "id": "5596ccc9-2468-5915-837a-981e697f2266",
+    "id": "fe4c0bed-6dd8-5344-ae5b-c3a2b7761a76",
     "seq": 1,
     "type": "LOT_CREATED",
     "occurredAt": "2026-09-24T09:45:00Z",
@@ -2211,7 +2076,7 @@
   },
   {
     "lotId": "41ec0cf8-6c30-5dd9-88d0-be0d8e9e667a",
-    "id": "f1ed75de-95a5-5698-ac73-967d3c011ca0",
+    "id": "3663b4ea-09ae-53da-bec3-0901270aa4f9",
     "seq": 2,
     "type": "HARVEST_WEIGHED",
     "occurredAt": "2026-09-24T09:42:00Z",
@@ -5290,9 +5155,9 @@
       "fullName": "Rosa Camargo",
       "role": "OWNER"
     },
-    "summary": "Expediente cerrado con la huella 96204f58e5b4…",
+    "summary": "Expediente cerrado con la huella cc05144cfa9e…",
     "data": {
-      "hash": "96204f58e5b47a3929ca42cf38d3d4ab2816107c581a62c1dfe7a6aa99549d5c",
+      "hash": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
       "algorithm": "sha256/jcs-rfc8785",
       "bottleCodes": 2950,
       "bottleMerkleRoot": "7a1caa0a457bbfaeea8f64c57adf82a85c5e7c1d454f6a21f53bd96f56914ff1"

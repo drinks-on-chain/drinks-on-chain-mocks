@@ -1,3 +1,4 @@
+import { sha256Hex } from '../../shared/crypto'
 import type { ApiErrorDetail } from '../../shared/envelope'
 import { ApiError } from '../handlers/errors'
 import type {
@@ -80,14 +81,22 @@ export interface TraceState {
   bottleExports: StoredBottleExport[]
   /** Registros anulados por una corrección `VOID` (`TIPO:id`): dejan de contar. */
   voidedRecords: string[]
+  /** Huella SHA-256 de los archivos subidos en la sesión con `POST /v1/uploads`, por su `key`. */
+  uploads: Record<string, string>
 }
+
+/**
+ * Huella SHA-256 de un archivo por su `key`: la del contenido si se subió en la sesión con
+ * `POST /v1/uploads`; si no (los mocks no guardan los archivos), una estable derivada de la clave.
+ */
+export const fileSha256 = (key: string, state?: Pick<TraceState, 'uploads'>): string => state?.uploads[key] ?? sha256Hex(`file:${key}`)
 
 /** Colecciones nuevas de la Ola 2, vacías. */
 export function emptyTraceCollections(): Pick<
   TraceState,
-  'lots' | 'lotEvents' | 'maturityAnalyses' | 'phytoDecisions' | 'corrections' | 'attachments' | 'dossiers' | 'bottleLots' | 'bottleExports' | 'voidedRecords'
+  'lots' | 'lotEvents' | 'maturityAnalyses' | 'phytoDecisions' | 'corrections' | 'attachments' | 'dossiers' | 'bottleLots' | 'bottleExports' | 'voidedRecords' | 'uploads'
 > {
-  return { lots: [], lotEvents: [], maturityAnalyses: [], phytoDecisions: [], corrections: [], attachments: [], dossiers: [], bottleLots: [], bottleExports: [], voidedRecords: [] }
+  return { lots: [], lotEvents: [], maturityAnalyses: [], phytoDecisions: [], corrections: [], attachments: [], dossiers: [], bottleLots: [], bottleExports: [], voidedRecords: [], uploads: {} }
 }
 
 /** Contexto de una operación: reloj del servidor, autor e identificadores. */
@@ -266,7 +275,7 @@ export function recordTankTransition(tank: FermentationTankResponse, status: Fer
   tank.transitions = [...history, { status, at, by }]
 }
 
-/** Corazón de una destilación: `heartLiters` (Ola 2) o `outputVolumeLiters` (legado), con su grado. */
+/** Corazón de una destilación: `heartLiters` (Ola 2) o `outputVolumeLiters` (filas anteriores), con su grado. */
 export function distillationHeart(p: ProductionBatchResponse): { liters: number | null; abv: number | null } {
   return { liters: p.heartLiters ?? p.outputVolumeLiters ?? null, abv: p.heartAbvPercent ?? p.initialAlcoholPercentage ?? null }
 }

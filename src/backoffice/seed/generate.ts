@@ -801,6 +801,8 @@ export function generateBackofficeFixtures(erp: ErpFixtureSet): BackofficeFixtur
   override('trazabilidad.excepcionMinimoLegal', 'altos', true, at(2026, 9, 10, 11), LEGAL)
   override('trazabilidad.singani.altitudMinimaMsnm', 'altos', 1500, at(2026, 9, 10, 11, 5), LEGAL, true)
   changeGlobal('canje.ventanaDias', 45, 30, at(2026, 9, 12, 9), 'Se vuelve al estándar tras la prueba.')
+  // Un mínimo de crianza real en una bodega, para probar `TRC_AGING_BELOW_MINIMUM` (el estándar es 0).
+  override('trazabilidad.vino.crianzaMinimaMeses', 'altos', 6, at(2026, 9, 15, 10), 'La bodega no saca al mercado tintos con menos de seis meses de crianza.')
 
   // ---------------------------------------------------------------------------
   // ERP: registros de trazabilidad (quién los hizo según su rol en la bodega)

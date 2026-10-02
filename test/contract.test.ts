@@ -5,6 +5,7 @@ import addFormats from 'ajv-formats'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { z } from 'zod'
 import * as pkg from '../src'
+import { RETIRED_INPUT_FIELDS } from '../src'
 import { backofficeFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp, publicFixtures, SINGANI_CASE } from '../src/fixtures'
 import { COLLECTIONS_DRAFT_CONTRACT, MOCK_ROUTE_SPECS, mockMailbox, resetScenario, setScenario } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
@@ -200,22 +201,41 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     expect(new Set(routeOps).size).toBe(routeOps.length)
   })
 
-  it('las rutas obsoletas son las del OpenAPI (y su sustituta, la de x-replaced-by si la declara): las tres legadas que se retiran en H2', () => {
-    type Op = { deprecated?: boolean; 'x-replaced-by'?: string }
+  it('no queda ninguna ruta obsoleta: ni el OpenAPI del cierre H2 ni los mocks marcan `deprecated`', () => {
+    type Op = { deprecated?: boolean }
     const inSpec = Object.entries(spec.paths).flatMap(([p, ops]) =>
       Object.entries(ops as Record<string, Op>)
         .filter(([, op]) => op.deprecated)
-        .map(([m, op]) => [opKey(m, p), op['x-replaced-by']] as const),
+        .map(([m]) => opKey(m, p)),
     )
-    const inMocks = new Map(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated] as const))
-    expect([...inMocks.keys()].sort()).toEqual(inSpec.map(([op]) => op).sort())
-    for (const [op, replacedBy] of inSpec) if (replacedBy) expect(inMocks.get(op), op).toBe(replacedBy)
-    // El OpenAPI de la apertura de la Ola 2 las marca `deprecated` sin `x-replaced-by`: la sustituta es la del contrato §16.2.
-    expect(Object.fromEntries(inMocks)).toEqual({
-      'PATCH /v1/harvest-batches/{id}/phyto-status': '/v1/harvest-batches/{id}/phyto-decisions',
-      'GET /v1/traceability/dag/{bottlingBatchId}': '/v1/lots/{id}/graph',
-      'GET /v1/traceability/public/{lotCode}': '/v1/public/passports/{code}',
-    })
+    expect(inSpec).toEqual([])
+    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => opKey(r.method, r.path))).toEqual([])
+  })
+
+  it('lo retirado en el cierre H2 (contrato de la Ola 2 §16.2) no está en el OpenAPI ni en los mocks: rutas, DTO y campos de entrada', () => {
+    const retired = [
+      'PATCH /v1/harvest-batches/{id}/phyto-status',
+      'POST /v1/bottling',
+      'POST /v1/lab-analyses',
+      'GET /v1/traceability/dag/{bottlingBatchId}',
+      'GET /v1/traceability/public/{lotCode}',
+    ]
+    expect(retired.filter((op) => openApiOps.has(op) || routeOps.includes(op))).toEqual([])
+    const schemas = spec.components.schemas
+    for (const name of ['CreateBatchLabAnalysisDto', 'CreateBottlingBatchDto', 'DagGraphResponseDto', 'DagNodeDto', 'DagOperatorDto', 'UpdatePhytoStatusDto']) expect(schemas[name], name).toBeUndefined()
+    // Cada campo que los mocks rechazan como retirado falta de verdad en el DTO de entrada del OpenAPI.
+    const props = (name: string) => Object.keys((schemas[name]?.properties as Json | undefined) ?? {})
+    for (const [dto, fields] of Object.entries(RETIRED_INPUT_FIELDS)) {
+      expect(schemas[dto], dto).toBeDefined()
+      expect(props(dto).filter((p) => (fields as readonly string[]).includes(p)), dto).toEqual([])
+    }
+    expect(props('CreateHarvestBatchDto')).not.toContain('phytosanitaryStatus')
+    // Los que pasaron a obligatorios.
+    const required = (name: string) => (schemas[name]?.required as string[] | undefined) ?? []
+    expect(required('CreateFermentationTankDto')).toEqual(expect.arrayContaining(['inputs', 'volumeFilledLiters']))
+    expect(required('CreateDistillationBatchDto')).toContain('inputVolumeLiters')
+    expect(required('CreateLotLabAnalysisDto')).toContain('laboratoryReportKey')
+    expect(required('UploadResponseDto')).toContain('sha256')
   })
 
   it('lo retirado en H1 no está en el OpenAPI ni en los mocks', () => {
@@ -300,7 +320,6 @@ const FIXTURE_COMPONENTS: Array<[name: string, rows: unknown[], dto: string]> = 
   ['production-rest-status.json', erpFixtures.productionRestStatus, 'RestStatusResponseDto'],
   ['bottling.json', erpFixtures.bottling, 'BottlingBatchResponseDto'],
   ['lab-analyses.json', erpFixtures.labAnalyses, 'BatchLabAnalysisResponseDto'],
-  ['traceability-public.json', Object.values(erpFixtures.traceabilityPublic), 'DagGraphResponseDto'],
   // Lista de espera (contrato O1b): el fixture es la respuesta del back office tal cual.
   ['backoffice/waitlist.json', backofficeFixtures.waitlist, 'WaitlistEntryDto'],
   // Ola 2: lote del servidor y sus colecciones (los eventos y los adjuntos, sin el `lotId` con el que se guardan).
@@ -367,13 +386,10 @@ const altosPendingHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id
 const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'FERMENTING')!
 const altosTransferredTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'TRANSFERRED')!
 const altosAging = F.wineAging.find((a) => a.wineryId === ALTOS.id && a.agingStatus === 'AGING')!
-/** Tanque completado con destino singani y vino por trasladar (TK-08 del lote en reposo). */
-const cintiTank = F.fermentationTanks.find((t) => t.wineryId === CINTI.id && t.status === 'COMPLETED' && t.destinationType === 'SINGANI_DIST')!
 const restingProduction = F.productionBatches.find((p) => p.restStatus === 'RESTING')!
 /** Destilación abierta de «Singani El Molino 2026» (5.800 L de entrada). */
 const openProduction = F.productionBatches.find((p) => p.wineryId === CINTI.id && !p.processEndDate)!
 const bottlingWithLab = F.bottling.find((b) => F.labAnalyses.some((l) => l.bottlingBatchId === b.id))!
-const bottlingWithoutLab = F.bottling.find((b) => !F.labAnalyses.some((l) => l.bottlingBatchId === b.id))!
 const maria = F.users.find((u) => u._mock.key === 'maria')!
 
 // Ola 2: lotes de los fixtures que sirven de ejemplo.
@@ -443,17 +459,11 @@ const SAMPLES: Record<string, Sample> = {
   'POST /v1/harvest-batches': {
     as: 'altos_enologa',
     url: '/v1/harvest-batches',
-    body: { terroirId: altosTerroir.id, intakeDate: '2026-09-25', harvestYear: 2026, grossWeightKg: 5200, tareWeightKg: 100, brixDegrees: 24, initialPh: 3.5, initialAcidityGl: 6 },
+    body: { terroirId: altosTerroir.id, intakeDate: '2026-09-25', harvestYear: 2026, grossWeightKg: 5200, tareWeightKg: 100, maturity: { brixDegrees: 24, ph: 3.5, acidityGl: 6 } },
     status: 201,
   },
   'GET /v1/harvest-batches': { as: 'altos_enologa', url: '/v1/harvest-batches', status: 200 },
   'GET /v1/harvest-batches/{id}': { as: 'altos_enologa', url: `/v1/harvest-batches/${altosHarvest.id}`, status: 200 },
-  'PATCH /v1/harvest-batches/{id}/phyto-status': {
-    as: 'altos_agronomo',
-    url: `/v1/harvest-batches/${altosPendingHarvest.id}/phyto-status`,
-    body: { phytosanitaryStatus: 'APPROVED' },
-    status: 200,
-  },
   'POST /v1/fermentation-tanks': {
     as: 'altos_enologa',
     url: '/v1/fermentation-tanks',
@@ -462,7 +472,7 @@ const SAMPLES: Record<string, Sample> = {
       await post(`/v1/harvest-batches/${altosPendingHarvest.id}/phyto-decisions`, { decision: 'APPROVED' }, 'altos_agronomo')
       return {}
     },
-    body: { harvestBatchId: altosPendingHarvest.id, tankCode: 'TK-C1', capacityLiters: 6000, volumeFilledLiters: 4100, startDate: '2026-09-25' },
+    body: { inputs: [{ harvestBatchId: altosPendingHarvest.id }], tankCode: 'TK-C1', capacityLiters: 6000, volumeFilledLiters: 4100, startDate: '2026-09-25' },
     status: 201,
   },
   'GET /v1/fermentation-tanks': { as: 'altos_enologa', url: '/v1/fermentation-tanks', status: 200 },
@@ -479,51 +489,39 @@ const SAMPLES: Record<string, Sample> = {
     body: { treatmentType: 'SO2_ADDITION', additiveName: 'Metabisulfito', dosageAppliedGPerHl: 30, regulatoryAuthCode: 'SENASAG-1', appliedAt: '2026-09-25' },
     status: 201,
   },
-  'POST /v1/wine-aging': { as: 'altos_enologa', url: '/v1/wine-aging', body: { fermentationTankId: altosTank.id, containerType: 'Barrica', volumeLiters: 8000, plannedMonths: 12 }, status: 201 },
+  'POST /v1/wine-aging': {
+    as: 'altos_enologa',
+    url: '/v1/wine-aging',
+    // Solo un tanque `COMPLETED` es origen de una crianza (cierre H2).
+    setup: async () => {
+      await post(`/v1/fermentation-tanks/${altosTank.id}/complete`, { endDate: '2026-09-25', finalVolumeLiters: 8000, destination: 'WINE_AGING' }, 'altos_enologa')
+      return {}
+    },
+    body: { fermentationTankId: altosTank.id, containerType: 'Barrica', volumeLiters: 8000, plannedMonths: 12 },
+    status: 201,
+  },
   'GET /v1/wine-aging': { as: 'altos_enologa', url: '/v1/wine-aging', status: 200 },
   'GET /v1/wine-aging/{id}': { as: 'altos_enologa', url: `/v1/wine-aging/${altosAging.id}`, status: 200 },
   'POST /v1/production-batches/distillation': {
     as: 'cvj_enologa',
     url: '/v1/production-batches/distillation',
-    body: { fermentationTankId: cintiTank.id, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25' },
+    // Uva recibida sin lote → dictamen → tanque → fermentación completada con destino singani: solo entonces se destila (cierre H2).
+    setup: async () => {
+      await post(`/v1/harvest-batches/${unassignedHarvest.id}/phyto-decisions`, { decision: 'APPROVED' }, 'cvj_agronomo')
+      const { data } = await post('/v1/fermentation-tanks', { inputs: [{ harvestBatchId: unassignedHarvest.id }], tankCode: 'TK-C3', volumeFilledLiters: 2700, startFermentation: true, startDate: '2026-09-25' }, 'cvj_enologa')
+      const done = await post(`/v1/fermentation-tanks/${data.id as string}/complete`, { endDate: '2026-09-25', finalVolumeLiters: 2600, destination: 'SINGANI_DIST' }, 'cvj_enologa')
+      if (done.status !== 200) throw new Error(`El tanque de la muestra no se completó (${done.status})`)
+      return { tankId: data.id as string }
+    },
+    body: (v: Vars) => ({ fermentationTankId: v.tankId, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25', inputVolumeLiters: 2600 }),
     status: 201,
   },
   'GET /v1/production-batches/{id}/rest-status': { as: 'cvj_enologa', url: `/v1/production-batches/${restingProduction.id}/rest-status`, status: 200 },
   'GET /v1/production-batches/{id}': { as: 'cvj_enologa', url: `/v1/production-batches/${restingProduction.id}`, status: 200 },
   'GET /v1/production-batches': { as: 'cvj_enologa', url: '/v1/production-batches', status: 200 },
-  'POST /v1/bottling': {
-    // Ruta legada sobre el caso del §18 con el reposo cumplido (escenario `lote-listo`).
-    as: 'cvj_enologa',
-    url: '/v1/bottling',
-    setup: async () => {
-      setScenario('lote-listo')
-      const lot = await get(`/v1/lots/${CASE.id}`, 'cvj_enologa')
-      return { productionBatchId: (lot.links as { productionBatchIds: string[] }).productionBatchIds[0]! }
-    },
-    body: (v: Vars) => ({ productionBatchId: v.productionBatchId, productType: 'SINGANI', ...BOTTLING_2950 }),
-    status: 201,
-  },
   'GET /v1/bottling': { as: 'cvj_enologa', url: '/v1/bottling', status: 200 },
   'GET /v1/bottling/{id}': { as: 'admin', url: `/v1/bottling/${bottlingWithLab.id}`, status: 200 },
-  'POST /v1/lab-analyses': {
-    // Ruta legada. La plataforma ya no escribe la trazabilidad (S-25): lo registra la enóloga.
-    as: 'cvj_enologa',
-    url: '/v1/lab-analyses',
-    body: {
-      bottlingBatchId: bottlingWithoutLab.id,
-      certifiedLaboratoryName: 'Laboratorio Tarija',
-      accreditedLabCertificationCode: 'LAB-1',
-      testPerformedAt: '2026-09-25',
-      actualAlcoholAbv: 13.5,
-      totalAcidityTartaricGl: 5,
-      volatileAcidityAceticGl: 0.4,
-      laboratoryReportPdfUrl: '/mocks/uploads/lab-reports/x.pdf',
-    },
-    status: 201,
-  },
   'GET /v1/lab-analyses/batch/{bottlingBatchId}': { as: 'admin', url: `/v1/lab-analyses/batch/${bottlingWithLab.id}`, status: 200 },
-  'GET /v1/traceability/dag/{bottlingBatchId}': { as: 'admin', url: `/v1/traceability/dag/${bottlingWithLab.id}`, status: 200 },
-  'GET /v1/traceability/public/{lotCode}': { url: `/v1/traceability/public/${bottlingWithLab.internationalLotCode}`, status: 200 },
   'POST /v1/uploads': {
     as: 'altos_enologa',
     url: '/v1/uploads?folder=inspections',
@@ -730,12 +728,6 @@ const member = (userKey: string, wineryKey: string) =>
 const platformMembership = (userKey: string) => uid(`membership:platform:${uid(`user:${userKey}`)}`)
 const PADCAYA = F.wineries.find((w) => w.commercialName === 'Bodega Sol de Padcaya')!
 const REASON = 'Prueba de contrato de la Ola 1'
-
-/** `data` de un GET con el token estático de un usuario. */
-async function get(path: string, as: string): Promise<Record<string, unknown>> {
-  const res = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer mock.access.${as}` } })
-  return ((await res.json()) as { data: Record<string, unknown> }).data
-}
 
 async function post(path: string, body: unknown, as?: string): Promise<{ status: number; data: Record<string, unknown> }> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }

@@ -45,8 +45,6 @@ export const CreateTerroirSchema = z.object({
   varietyName: z.string().min(1),
   soilType: z.string().optional(),
   irrigationSystem: z.string().optional(),
-  /** @deprecated Se ignora: la aptitud D.O. la calcula el servidor. Sale de la entrada en H2. */
-  isDoEligible: z.boolean().optional(),
   doType: z.string().optional(),
   doCertificateUrl: z.string().optional(),
 })

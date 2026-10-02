@@ -651,24 +651,6 @@
         },
         {
           "type": "FERMENTATION_COMPLETED",
-          "occurredAt": "2025-04-13T14:30:00Z",
-          "recordedAt": "2025-03-11T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Fermentación completada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "TANK_FILLED",
-          "occurredAt": "2025-03-11T14:30:00Z",
-          "recordedAt": "2025-03-11T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Mosto en tanque de fermentación",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "FERMENTATION_COMPLETED",
           "occurredAt": "2025-04-12T14:30:00Z",
           "recordedAt": "2025-03-11T14:35:00Z",
           "lateEntry": false,

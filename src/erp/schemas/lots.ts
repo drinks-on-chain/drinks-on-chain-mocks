@@ -3,10 +3,10 @@ import { ApiErrorDetailSchema } from '../../shared/envelope'
 
 // Lote del servidor (contrato de la Ola 2 §2 y §11.1; `LotDto`, `LotSummaryDto`, `LotEventDto` del
 // OpenAPI). El lote agrupa la cadena pesajes → tanques → crianzas | destilaciones → embotellado →
-// laboratorio y sustituye a la vista derivada `LotView`, que sigue exportada hasta H2 (§16.3).
+// laboratorio. Sustituyó a la vista derivada `LotView` de 0.1–0.4, retirada en el cierre H2 (§16.3).
 //
-// Nombres: `LotStage`, `LotLock` y `LOT_STAGES` son los de `LotView` (0.1–0.4); los del lote del
-// servidor son `LotStageCode`, `LotLockInfo` y `LOT_STAGE_CODES` hasta que `LotView` se retire.
+// Nombres: `LotStageCode`, `LotLockInfo` y `LOT_STAGE_CODES` (los de `LotView` eran `LotStage`,
+// `LotLock` y `LOT_STAGES`, que ya no existen).
 
 /** Etapas del lote. Las calcula el servidor; ninguna ruta las fija salvo el descarte (§2.2). */
 export const LOT_STAGE_CODES = [

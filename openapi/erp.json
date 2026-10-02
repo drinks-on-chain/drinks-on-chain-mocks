@@ -914,73 +914,6 @@
         "tags": [
           "Fraccionamiento y Embotellado"
         ]
-      },
-      "post": {
-        "description": "Alias hasta H2 de `POST /v1/lots/{id}/bottling` (contrato O2 §6): el lote se deduce del origen y aplican las mismas reglas desde la apertura. Tipo derivado del origen (EA-01), candados con el reloj de la base y la instantánea del lote, un embotellado por lote (S-10), balance de volumen con la merma de la instantánea y de alcohol (EA-02), fuentes y tanques a estados terminales, código de lote con secuencia sin carreras (EA-07), URL del QR `{PASSPORT_BASE_URL}/b/{lotCode}` y un código por botella.",
-        "operationId": "BottlingController_create_v1",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "description": "UUID que identifica la operación. Misma clave y mismo cuerpo en 24 h → la misma respuesta (cabecera `Idempotent-Replayed: true`); otro cuerpo → 409 `IDEMPOTENCY_KEY_REUSED`; mientras la primera sigue en curso → 409 `IDEMPOTENCY_IN_PROGRESS`; no UUID → 422 `IDEMPOTENCY_KEY_INVALID`.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBottlingBatchDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Lote de embotellado registrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BottlingBatchResponseDto"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "TRC_LOT_ALREADY_BOTTLED · TRC_LOT_TERMINAL",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "VALIDATION_ERROR · TRC_PRODUCT_TYPE_MISMATCH · TRC_LOCK_NOT_RELEASED · TRC_BOTTLING_SOURCE_INVALID · TRC_BOTTLING_SOURCES_PENDING · TRC_VOLUME_MISSING · TRC_VOLUME_EXCEEDS_AVAILABLE · TRC_BOTTLING_EXCEEDS_VOLUME · TRC_BOTTLING_LOSS_ABOVE_TOLERANCE · TRC_ALCOHOL_BALANCE_EXCEEDED · TRC_DILUTION_NOT_ALLOWED · TRC_COMPLIANCE_ISSUES_OPEN · TRC_DATE_IN_FUTURE (un detalle por regla incumplida)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Registrar lote de embotellado y fraccionamiento (legado)",
-        "tags": [
-          "Fraccionamiento y Embotellado"
-        ]
       }
     },
     "/v1/bottling/{id}": {
@@ -1273,7 +1206,7 @@
     },
     "/v1/fermentation-tanks/{id}/clean": {
       "post": {
-        "description": "Contrato O2 §4.2: `TRANSFERRED → CLEANED`; libera el `tankCode` para otro tanque (S-7). El tanque de un lote descartado o rechazado se limpia desde cualquier estado (su contenido se retiró con el lote).",
+        "description": "Contrato O2 §4.2: `TRANSFERRED → CLEANED`; libera el `tankCode` para otro tanque (S-7). El tanque de un lote descartado o rechazado se limpia desde cualquier estado (su contenido se retiró con el lote). Un tanque `COMPLETED` del que ya salió alguna destilación y al que le queda un remanente se cierra aquí: pasa por `TRANSFERRED` (el remanente queda como merma de trasiego, `transferLossLiters`) y queda `CLEANED`; sin ninguna salida → 409 (el vino base sigue dentro).",
         "operationId": "TankTransitionsController_clean_v1",
         "parameters": [
           {
@@ -1853,7 +1786,7 @@
         ]
       },
       "post": {
-        "description": "Pesaje neto con lote existente (`lotId`), nuevo (`newLot`, solo OWNER y ENOLOGIST) o sin lote (uva recibida). El análisis de madurez es opcional (`maturity`) y el dictamen va aparte: un `phytosanitaryStatus` distinto de `PENDING_INSPECTION` → 422 `TRC_PHYTO_IN_CREATE` (EA-04). El código `HARV-{año}-{parcela}-{NNN}` sale de la secuencia de la bodega (EA-07). Contrato O2 §3.2.",
+        "description": "Pesaje neto con lote existente (`lotId`), nuevo (`newLot`, solo OWNER y ENOLOGIST) o sin lote (uva recibida). El análisis de madurez es opcional (`maturity`) y el dictamen va aparte (`POST …/phyto-decisions`): el alta no tiene `phytosanitaryStatus` y enviarlo → 422 `TRC_PHYTO_IN_CREATE` (EA-04). El código `HARV-{año}-{parcela}-{NNN}` sale de la secuencia de la bodega (EA-07). Contrato O2 §3.2.",
         "operationId": "HarvestBatchesController_create_v1",
         "parameters": [
           {
@@ -2320,77 +2253,6 @@
         ]
       }
     },
-    "/v1/harvest-batches/{id}/phyto-status": {
-      "patch": {
-        "deprecated": true,
-        "description": "Alias de `POST /v1/harvest-batches/{id}/phyto-decisions` hasta H2 (contrato O2 §3.4): mismas reglas y ya no sobrescribe las notas del pesaje.",
-        "operationId": "HarvestBatchesController_updatePhytoStatus_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePhytoStatusDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Estado fitosanitario actualizado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HarvestBatchResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Lote de vendimia no encontrado"
-          },
-          "409": {
-            "description": "TRC_PHYTO_DECISION_FINAL · TRC_LOT_TERMINAL",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "VALIDATION_ERROR (motivo obligatorio en REJECTED y QUARANTINE)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Dictaminar estado fitosanitario del lote (legado)",
-        "tags": [
-          "Vendimia y Pesaje"
-        ]
-      }
-    },
     "/v1/health": {
       "get": {
         "description": "Endpoint público para monitoreo y balanceadores de carga. Retorna el estado de conectividad con PostgreSQL y Redis.",
@@ -2791,75 +2653,6 @@
           {
             "bearer": []
           }
-        ]
-      }
-    },
-    "/v1/lab-analyses": {
-      "post": {
-        "description": "Alias hasta H2 de `POST /v1/lots/{id}/lab-analyses` (contrato O2 §8): la conformidad la calcula el servidor con los límites y las unidades de la instantánea del lote (EA-08; `conformsToSenasagStandards` de la entrada se ignora y falta un parámetro exigido → no conforme). Un análisis nuevo sustituye al anterior (reanálisis, sin 409).",
-        "operationId": "LabAnalysesController_create_v1",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "description": "UUID que identifica la operación. Misma clave y mismo cuerpo en 24 h → la misma respuesta (cabecera `Idempotent-Replayed: true`); otro cuerpo → 409 `IDEMPOTENCY_KEY_REUSED`; mientras la primera sigue en curso → 409 `IDEMPOTENCY_IN_PROGRESS`; no UUID → 422 `IDEMPOTENCY_KEY_INVALID`.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBatchLabAnalysisDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Informe de laboratorio registrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatchLabAnalysisResponseDto"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "TRC_LOT_TERMINAL",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "VALIDATION_ERROR (p. ej. metanol en mg/L y en mg/100 mL a.a. que no coinciden) · TRC_DATE_IN_FUTURE",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Registrar informe analítico oficial de laboratorio (legado)",
-        "tags": [
-          "Laboratorio Físico-Químico"
         ]
       }
     },
@@ -4966,7 +4759,7 @@
         ]
       },
       "post": {
-        "description": "Contrato O2 §8.1–§8.3: un análisis nuevo sustituye al anterior (reanálisis). La conformidad se calcula contra `rules.lab.limits` de la instantánea del lote (singani: metanol, cobre y grado; vino: acidez volátil y grado); falta alguno → `INCOMPLETE`. Unidades de §8.2. El informe va por su `key` de `POST /v1/uploads` (de la bodega y existente; si no, 422 `TRC_FILE_NOT_FOUND`) o por su URL (alias hasta H2); el ensayo no puede ser anterior al embotellado.",
+        "description": "Contrato O2 §8.1–§8.3: un análisis nuevo sustituye al anterior (reanálisis). La conformidad se calcula contra `rules.lab.limits` de la instantánea del lote (singani: metanol, cobre y grado; vino: acidez volátil y grado); falta alguno → `INCOMPLETE`. Unidades de §8.2. El informe va por su `key` de `POST /v1/uploads` (de la bodega y existente; si no, 422 `TRC_FILE_NOT_FOUND`) y se guarda con su huella SHA-256 (`report.sha256`); el ensayo no puede ser anterior al embotellado.",
         "operationId": "LotLabAnalysesController_create_v1",
         "parameters": [
           {
@@ -10356,7 +10149,7 @@
     },
     "/v1/production-batches/distillation": {
       "post": {
-        "description": "Registra la destilación en alambique con balance de masa (cabeza, corazón, cola) y fija el reposo inerte obligatorio de 180 días.",
+        "description": "Abre la destilación de un tanque `COMPLETED` con destino singani (contrato O2 §5.2): `inputVolumeLiters` obligatorio y ≤ lo disponible del tanque; D.O. del lote calculada con su instantánea (EA-03). El fin, los cortes tipados (`cuts`) y el grado del corazón van en `POST /v1/production-batches/{id}/close`, que abre el reposo.",
         "operationId": "ProductionBatchesController_createDistillationBatch_v1",
         "parameters": [
           {
@@ -10392,7 +10185,7 @@
             }
           },
           "409": {
-            "description": "TRC_TANK_NOT_COMPLETED (tanque ya transferido o limpio) · TRC_INVALID_STAGE · TRC_LOT_TERMINAL",
+            "description": "TRC_TANK_NOT_COMPLETED (tanque sin completar, ya transferido o limpio) · TRC_INVALID_STAGE · TRC_LOT_TERMINAL",
             "content": {
               "application/json": {
                 "schema": {
@@ -10402,7 +10195,7 @@
             }
           },
           "422": {
-            "description": "VALIDATION_ERROR · TRC_DO_NOT_ELIGIBLE (D.O. calculada sobre los pesajes del lote con su instantánea; `isDoEligible` se ignora) · TRC_DESTINATION_MISMATCH · TRC_VOLUME_EXCEEDS_AVAILABLE · TRC_MASS_BALANCE_EXCEEDED · TRC_DATE_IN_FUTURE · TRC_DATE_BEFORE_PREVIOUS_STAGE",
+            "description": "VALIDATION_ERROR · TRC_DO_NOT_ELIGIBLE (D.O. calculada sobre los pesajes del lote con su instantánea) · TRC_DESTINATION_MISMATCH · TRC_VOLUME_EXCEEDS_AVAILABLE · TRC_DATE_IN_FUTURE · TRC_DATE_BEFORE_PREVIOUS_STAGE",
             "content": {
               "application/json": {
                 "schema": {
@@ -10417,7 +10210,7 @@
             "bearer": []
           }
         ],
-        "summary": "Registrar proceso de destilación de Singani",
+        "summary": "Abrir una destilación de singani",
         "tags": [
           "Destilación y Procesos Especiales (Singani)"
         ]
@@ -11820,54 +11613,6 @@
         ]
       }
     },
-    "/v1/traceability/dag/{bottlingBatchId}": {
-      "get": {
-        "deprecated": true,
-        "description": "Cadena de custodia del embotellado con datos reales (sin métricas de relleno; operador desde la membresía; `isCertified` = expediente cerrado). **SE-07**: solo los miembros de la bodega dueña y el personal de plataforma (ADMIN, OPERATIONS, SUPPORT); cualquier otra sesión → 404. Se retira en H2 por `GET /v1/lots/{id}/graph`.",
-        "operationId": "TraceabilityDagController_getDagByBottlingBatchId_v1",
-        "parameters": [
-          {
-            "name": "bottlingBatchId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Grafo DAG de linaje",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DagGraphResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Embotellado inexistente o de otra bodega (SE-07)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Consultar árbol genealógico DAG de trazabilidad",
-        "tags": [
-          "Grafo DAG de Trazabilidad"
-        ]
-      }
-    },
     "/v1/traceability/dashboard": {
       "get": {
         "description": "Contrato O2 §11.2: lotes por etapa, candados que se liberan en ≤ 14 días, alertas de fermentación (> 32 °C en la última lectura o 48 h sin lecturas en un tanque `FERMENTING`, S-18), dictámenes pendientes, lotes embotellados sin laboratorio, lotes listos para cerrar, incidencias abiertas y uva sin lote. Plataforma con `?wineryId=`.",
@@ -11904,50 +11649,6 @@
         "summary": "Panel de la trazabilidad de la bodega",
         "tags": [
           "Lotes (Ola 2)"
-        ]
-      }
-    },
-    "/v1/traceability/public/{lotCode}": {
-      "get": {
-        "deprecated": true,
-        "description": "Endpoint público (legado hasta H2, se sustituye por `GET /v1/public/passports/{code}`): linaje del lote por su **código de lote** (ya no por id del embotellado) con datos registrados.",
-        "operationId": "TraceabilityDagController_getPublicPassportByLotCode_v1",
-        "parameters": [
-          {
-            "name": "lotCode",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Pasaporte digital de trazabilidad pública",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DagGraphResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Código de lote no encontrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [],
-        "summary": "Pasaporte Digital Público de Trazabilidad (Acceso QR consumidor)",
-        "tags": [
-          "Grafo DAG de Trazabilidad"
         ]
       }
     },
@@ -12461,7 +12162,7 @@
         ]
       },
       "post": {
-        "description": "Traslada vino de cuba a barricas calculando automáticamente la fecha de bloqueo (lockUntilDate).",
+        "description": "Traslada el vino de un tanque `COMPLETED` con destino vino a su crianza (contrato O2 §5.1) y calcula el candado (`unlockDate`) con el mínimo de la instantánea del lote.",
         "operationId": "WineAgingController_createAgingBatch_v1",
         "parameters": [
           {
@@ -12497,7 +12198,7 @@
             }
           },
           "409": {
-            "description": "FERMENTATION_TANK_ALREADY_TRANSFERRED · TRC_TANK_NOT_COMPLETED (tanque ya transferido o limpio) · TRC_INVALID_STAGE · TRC_LOT_TERMINAL",
+            "description": "FERMENTATION_TANK_ALREADY_TRANSFERRED · TRC_TANK_NOT_COMPLETED (tanque sin completar, ya transferido o limpio) · TRC_INVALID_STAGE · TRC_LOT_TERMINAL",
             "content": {
               "application/json": {
                 "schema": {
@@ -14700,140 +14401,6 @@
           "id"
         ]
       },
-      "CreateBatchLabAnalysisDto": {
-        "type": "object",
-        "properties": {
-          "bottlingBatchId": {
-            "type": "string",
-            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-            "description": "ID del lote de embotellado certificado"
-          },
-          "certifiedLaboratoryName": {
-            "type": "string",
-            "example": "Laboratorio de Servicios Analíticos y Control de Calidad LAB-ISO 17025",
-            "description": "Nombre del laboratorio acreditado"
-          },
-          "accreditedLabCertificationCode": {
-            "type": "string",
-            "example": "LAB-SENASAG-ISO-2026-991",
-            "description": "Código de acreditación o matrícula oficial del laboratorio"
-          },
-          "analysisRequestDate": {
-            "type": "string",
-            "example": "2026-10-02",
-            "description": "Fecha de solicitud de ensayo (YYYY-MM-DD)"
-          },
-          "testPerformedAt": {
-            "type": "string",
-            "example": "2026-10-04",
-            "description": "Fecha de emisión del informe analítico (YYYY-MM-DD)"
-          },
-          "actualAlcoholAbv": {
-            "type": "number",
-            "example": 40.05,
-            "description": "Graduación alcohólica real cuantificada (% ABV)"
-          },
-          "totalAlcoholAbv": {
-            "type": "number",
-            "example": 40.05,
-            "description": "Grado alcohólico total potencial (% ABV)"
-          },
-          "totalAcidityTartaricGl": {
-            "type": "number",
-            "example": 4.8,
-            "description": "Acidez total expresada en g/L de ácido tartárico"
-          },
-          "volatileAcidityAceticGl": {
-            "type": "number",
-            "example": 0.22,
-            "description": "Acidez volátil expresada en g/L de ácido acético"
-          },
-          "freeSulfurDioxideMgL": {
-            "type": "number",
-            "example": 22,
-            "description": "Dióxido de azufre libre (SO2 libre) en mg/L"
-          },
-          "totalSulfurDioxideMgL": {
-            "type": "number",
-            "example": 65,
-            "description": "Dióxido de azufre total (SO2 total) en mg/L"
-          },
-          "reducingSugarsGl": {
-            "type": "number",
-            "example": 1.2,
-            "description": "Azúcares reductores en g/L"
-          },
-          "totalDryExtractGl": {
-            "type": "number",
-            "example": 18.5,
-            "description": "Extracto seco total en g/L"
-          },
-          "sugarFreeDryExtractGl": {
-            "type": "number",
-            "example": 17.3,
-            "description": "Extracto seco libre de azúcar en g/L"
-          },
-          "overpressureBar": {
-            "type": "number",
-            "example": 0,
-            "description": "Sobrepresión de CO2 a 20°C en bar (para espumosos)"
-          },
-          "methanolContentMgL": {
-            "type": "number",
-            "example": 48,
-            "description": "Metanol en **mg/L de producto** (EA-08). Si no llega `methanolMg100mlAa`, el servidor lo convierte: 10 × mgL / grado"
-          },
-          "methanolMg100mlAa": {
-            "type": "number",
-            "example": 12,
-            "description": "Metanol en mg/100 mL de alcohol anhidro (la unidad del límite). Si llegan ambos y difieren > 1 % → 422 VALIDATION_ERROR"
-          },
-          "copperContentMgL": {
-            "type": "number",
-            "example": 0.02,
-            "description": "Cobre en mg/L (límite de la instantánea del lote)"
-          },
-          "additionalParams": {
-            "type": "object",
-            "example": {
-              "leadMgL": 0,
-              "aldehydesMgL": 12.5
-            },
-            "description": "Ensayos cromatográficos adicionales"
-          },
-          "laboratoryReportPdfUrl": {
-            "type": "string",
-            "example": "https://storage.drinksonchain.com/certs/lab-report-2026-991.pdf",
-            "description": "URL del PDF del Certificado Analítico oficial firmado"
-          },
-          "conformsToSenasagStandards": {
-            "type": "boolean",
-            "example": true,
-            "deprecated": true,
-            "description": "Se ignora: la conformidad la calcula el servidor con los límites y unidades de la instantánea del lote (EA-08). Sale de la entrada en H2"
-          },
-          "conformsToEuStandards": {
-            "type": "boolean",
-            "example": true,
-            "description": "Declarado por el laboratorio (sin verificar; fuera del pasaporte)"
-          },
-          "conformsToUsaStandards": {
-            "type": "boolean",
-            "example": true,
-            "description": "Declarado por el laboratorio (sin verificar; fuera del pasaporte)"
-          }
-        },
-        "required": [
-          "bottlingBatchId",
-          "certifiedLaboratoryName",
-          "accreditedLabCertificationCode",
-          "testPerformedAt",
-          "actualAlcoholAbv",
-          "totalAcidityTartaricGl",
-          "volatileAcidityAceticGl",
-          "laboratoryReportPdfUrl"
-        ]
-      },
       "CreateBottleCodeExportDto": {
         "type": "object",
         "properties": {
@@ -14862,84 +14429,13 @@
           "qr"
         ]
       },
-      "CreateBottlingBatchDto": {
-        "type": "object",
-        "properties": {
-          "wineAgingBatchId": {
-            "type": "string",
-            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-            "description": "ID del lote de crianza en barrica (para vinos)"
-          },
-          "productionBatchId": {
-            "type": "string",
-            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-            "description": "ID del lote de destilación/producción (para Singani o licores)"
-          },
-          "productType": {
-            "type": "string",
-            "enum": [
-              "WINE",
-              "SINGANI",
-              "BEER",
-              "SPIRITS",
-              "CIDER",
-              "MEAD",
-              "OTHER"
-            ],
-            "example": "SINGANI",
-            "description": "Se deriva del origen (crianza → WINE, destilación → SINGANI, EA-01): si no coincide → 422 `TRC_PRODUCT_TYPE_MISMATCH`"
-          },
-          "finalAlcoholAbv": {
-            "type": "number",
-            "example": 40,
-            "description": "Graduación alcohólica final comercial (% ABV)"
-          },
-          "waterDilutionLiters": {
-            "type": "number",
-            "example": 1321,
-            "description": "Volumen de agua osmotizada agregada para dilución (litros)"
-          },
-          "totalBottlesPackaged": {
-            "type": "number",
-            "example": 4080,
-            "description": "Cantidad total de botellas envasadas"
-          },
-          "packagingFormatCl": {
-            "type": "number",
-            "example": 75,
-            "description": "Formato o volumen nominal de la botella en centilitros (cL: 75, 70, 50, 37, 33)"
-          },
-          "bottleType": {
-            "type": "string",
-            "example": "Vidrio Extra-Flint 750ml con grabado",
-            "description": "Tipo o referencia de botella de vidrio"
-          },
-          "labelDesignUrl": {
-            "type": "string",
-            "example": "https://storage.drinksonchain.com/labels/singani-anniversary-750.png",
-            "description": "URL del arte o diseño de etiqueta aprobado"
-          },
-          "bottlingDate": {
-            "type": "string",
-            "example": "2026-10-01",
-            "description": "Fecha oficial de fraccionamiento y embotellado (YYYY-MM-DD)"
-          }
-        },
-        "required": [
-          "productType",
-          "finalAlcoholAbv",
-          "totalBottlesPackaged",
-          "packagingFormatCl",
-          "bottlingDate"
-        ]
-      },
       "CreateDistillationBatchDto": {
         "type": "object",
         "properties": {
           "fermentationTankId": {
             "type": "string",
             "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-            "description": "ID del tanque de vino base fermentado a destilar"
+            "description": "Tanque `COMPLETED` con destino `SINGANI_DIST` del que sale el vino base"
           },
           "equipmentIdentifier": {
             "type": "string",
@@ -14949,53 +14445,22 @@
           "processStartDate": {
             "type": "string",
             "example": "2026-04-01",
-            "description": "Fecha de inicio del ciclo de destilación (YYYY-MM-DD)"
-          },
-          "processEndDate": {
-            "type": "string",
-            "example": "2026-04-03",
-            "description": "Fecha de finalización y corte definitivo (YYYY-MM-DD)"
+            "description": "Inicio de la destilación (YYYY-MM-DD): no futuro ni anterior al fin de la fermentación"
           },
           "inputVolumeLiters": {
             "type": "number",
             "example": 10000,
-            "description": "Volumen total de vino base cargado al alambique (litros)"
-          },
-          "outputVolumeLiters": {
-            "type": "number",
-            "example": 1750,
-            "description": "Volumen obtenido de corazón noble de destilado (litros)"
-          },
-          "wasteVolumeLiters": {
-            "type": "number",
-            "example": 570,
-            "description": "Volumen total de descarte (cabezas + colas) en litros"
+            "description": "Vino base cargado al alambique (litros): ≤ lo disponible del tanque"
           },
           "initialAlcoholPercentage": {
             "type": "number",
-            "example": 70.2,
-            "description": "Graduación alcohólica del corazón de destilación (% ABV)"
-          },
-          "isDoEligible": {
-            "type": "boolean",
-            "example": true,
-            "deprecated": true,
-            "description": "Se ignora: la D.O. del lote se calcula en el servidor con su instantánea (EA-03). Sale de la entrada en H2"
+            "example": 11.8,
+            "description": "Grado alcohólico del vino base que entra (% v/v)"
           },
           "closeTank": {
             "type": "boolean",
             "example": true,
             "description": "Última destilación del tanque: pasa a `TRANSFERRED` aunque le quede volumen (queda como merma de trasiego). Sin él, el tanque se transfiere solo al agotarse su volumen (contrato O2 §4.2)"
-          },
-          "additionalParams": {
-            "type": "object",
-            "example": {
-              "headDiscardLiters": 120,
-              "heartYieldLiters": 1750,
-              "tailDiscardLiters": 450,
-              "vaporTempC": 84.5
-            },
-            "description": "Parámetros técnicos de corte y balance térmico"
           },
           "notes": {
             "type": "string",
@@ -15006,7 +14471,8 @@
         "required": [
           "fermentationTankId",
           "equipmentIdentifier",
-          "processStartDate"
+          "processStartDate",
+          "inputVolumeLiters"
         ]
       },
       "CreateEnologicalTreatmentDto": {
@@ -15135,12 +14601,6 @@
               "$ref": "#/components/schemas/TankInputDto"
             }
           },
-          "harvestBatchId": {
-            "type": "string",
-            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-            "deprecated": true,
-            "description": "Legado hasta H2: equivale a `inputs: [{ harvestBatchId }]` (todo lo disponible)"
-          },
           "tankCode": {
             "type": "string",
             "example": "TK-03",
@@ -15159,7 +14619,7 @@
           "volumeFilledLiters": {
             "type": "number",
             "example": 10100,
-            "description": "Mosto cargado en litros (≤ capacidad). Obligatorio desde H2; sin él, el balance del embotellado no se puede verificar"
+            "description": "Mosto cargado en litros (≤ capacidad): la base del balance del lote"
           },
           "destinationType": {
             "type": "string",
@@ -15168,7 +14628,7 @@
               "SINGANI_DIST"
             ],
             "example": "SINGANI_DIST",
-            "description": "Legado: predeclara la bifurcación; debe coincidir con el tipo del lote (y lo fija si no lo tiene; singani exige la D.O.)"
+            "description": "Predeclara la bifurcación (se decide al completar, `POST …/complete`): debe coincidir con el tipo del lote (y lo fija si no lo tiene; singani exige la D.O.)"
           },
           "startFermentation": {
             "type": "boolean",
@@ -15191,7 +14651,9 @@
           }
         },
         "required": [
+          "inputs",
           "tankCode",
+          "volumeFilledLiters",
           "startDate"
         ]
       },
@@ -15248,35 +14710,6 @@
                 "$ref": "#/components/schemas/MaturityInputDto"
               }
             ]
-          },
-          "brixDegrees": {
-            "type": "number",
-            "example": 22.4,
-            "deprecated": true,
-            "description": "Compatibilidad hasta H2: con `initialPh` e `initialAcidityGl` se convierte en `maturity`"
-          },
-          "initialPh": {
-            "type": "number",
-            "example": 3.45,
-            "deprecated": true,
-            "description": "Compatibilidad hasta H2"
-          },
-          "initialAcidityGl": {
-            "type": "number",
-            "example": 6.8,
-            "deprecated": true,
-            "description": "Compatibilidad hasta H2"
-          },
-          "phytosanitaryStatus": {
-            "type": "string",
-            "enum": [
-              "PENDING_INSPECTION",
-              "APPROVED",
-              "REJECTED",
-              "QUARANTINE"
-            ],
-            "deprecated": true,
-            "description": "Solo se admite `PENDING_INSPECTION`: el dictamen va aparte (`POST …/phyto-decisions`). Otro valor → 422 `TRC_PHYTO_IN_CREATE` (EA-04). Sale en H2"
           },
           "notes": {
             "type": "string",
@@ -15402,11 +14835,6 @@
             "type": "string",
             "example": "uploads/2026/10/etiqueta.png",
             "description": "`key` de `POST /v1/uploads`"
-          },
-          "labelDesignUrl": {
-            "type": "string",
-            "deprecated": true,
-            "description": "Alias de `labelDesignKey` hasta H2"
           }
         },
         "required": [
@@ -15613,14 +15041,8 @@
           },
           "laboratoryReportKey": {
             "type": "string",
-            "example": "uploads/2026/10/informe-lab-991.pdf",
-            "description": "`key` del informe firmado (`POST /v1/uploads`); obligatorio salvo que llegue el alias `laboratoryReportPdfUrl`"
-          },
-          "laboratoryReportPdfUrl": {
-            "type": "string",
-            "deprecated": true,
-            "example": "https://storage.drinksonchain.com/certs/lab-report-2026-991.pdf",
-            "description": "Alias de `laboratoryReportKey` hasta H2"
+            "example": "org/0b5c1f3e-8a2d-4c1e-9f7a-2d3e4f5a6b7c/lab-reports/2026/10/1b2c3d4e-5f60-4a7b-8c9d-0e1f2a3b4c5d.pdf",
+            "description": "`key` del informe firmado (`POST /v1/uploads`), de esta bodega; se guarda con su huella SHA-256"
           },
           "conformsToEuStandards": {
             "type": "boolean",
@@ -15639,7 +15061,8 @@
           "testPerformedAt",
           "actualAlcoholAbv",
           "totalAcidityTartaricGl",
-          "volatileAcidityAceticGl"
+          "volatileAcidityAceticGl",
+          "laboratoryReportKey"
         ]
       },
       "CreateMaturityAnalysisDto": {
@@ -15931,12 +15354,6 @@
             "example": "Riego por goteo computarizado",
             "description": "Sistema de irrigación instalado"
           },
-          "isDoEligible": {
-            "type": "boolean",
-            "example": true,
-            "deprecated": true,
-            "description": "Se ignora: la aptitud D.O. la calcula el servidor (EA-03, contrato O2 §3.1). Sale de la entrada en H2"
-          },
           "doType": {
             "type": "string",
             "example": "D.O. Singani",
@@ -16104,143 +15521,6 @@
         "required": [
           "id",
           "status"
-        ]
-      },
-      "DagGraphResponseDto": {
-        "type": "object",
-        "properties": {
-          "rootBatchId": {
-            "type": "string",
-            "example": "0x5d2e…",
-            "description": "batchId del embotellado"
-          },
-          "internationalLotCode": {
-            "type": "string",
-            "example": "CVJ-2026-SINGANI-001"
-          },
-          "productType": {
-            "type": "string",
-            "example": "SINGANI"
-          },
-          "nodes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DagNodeDto"
-            }
-          }
-        },
-        "required": [
-          "rootBatchId",
-          "internationalLotCode",
-          "productType",
-          "nodes"
-        ]
-      },
-      "DagNodeDto": {
-        "type": "object",
-        "properties": {
-          "batchId": {
-            "type": "string",
-            "example": "0x3f1c…",
-            "description": "Hash SHA-256 (0x…) que identifica el nodo en el contrato"
-          },
-          "stage": {
-            "type": "number",
-            "example": 4,
-            "description": "0 parcela, 1 vendimia, 2 vinificación, 3 crianza, 4 destilación, 5 embotellado"
-          },
-          "stageName": {
-            "type": "string",
-            "example": "Distillation",
-            "enum": [
-              "Plot",
-              "Harvest",
-              "Vinification",
-              "Aging",
-              "Distillation",
-              "Bottling"
-            ]
-          },
-          "parents": {
-            "description": "batchId de los padres",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "volumeOrUnits": {
-            "type": "number",
-            "example": 1750,
-            "description": "Hectáreas, kg, litros o botellas según la etapa"
-          },
-          "metrics": {
-            "example": [
-              7020
-            ],
-            "description": "Métricas registradas escaladas ×100 (enteros); vacía si la etapa no tiene datos (sin valores de relleno, EA-05)",
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "metadataHash": {
-            "type": "string",
-            "example": "0x9a0b…"
-          },
-          "isCertified": {
-            "type": "boolean",
-            "example": false,
-            "description": "Expediente del lote cerrado (§10); ya no es un valor fijo"
-          },
-          "operator": {
-            "$ref": "#/components/schemas/DagOperatorDto"
-          },
-          "details": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Datos de la etapa (números como números JSON; en el embotellado, `labAnalysis` o `null`)"
-          }
-        },
-        "required": [
-          "batchId",
-          "stage",
-          "stageName",
-          "parents",
-          "timestamp",
-          "volumeOrUnits",
-          "metrics",
-          "metadataHash",
-          "isCertified",
-          "operator",
-          "details"
-        ]
-      },
-      "DagOperatorDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Lic. Valeria Soliz",
-            "description": "Persona de la membresía que registró la etapa; \"No registrado\" si no consta"
-          },
-          "role": {
-            "type": "string",
-            "example": "ENOLOGIST",
-            "description": "Rol en la bodega; `NOT_RECORDED` si no consta"
-          },
-          "wineryName": {
-            "type": "string",
-            "example": "Destilería Cinti Viejo"
-          }
-        },
-        "required": [
-          "name",
-          "role",
-          "wineryName"
         ]
       },
       "DashboardAlertDto": {
@@ -23269,35 +22549,6 @@
           "role"
         ]
       },
-      "UpdatePhytoStatusDto": {
-        "type": "object",
-        "properties": {
-          "phytosanitaryStatus": {
-            "type": "string",
-            "enum": [
-              "PENDING_INSPECTION",
-              "APPROVED",
-              "REJECTED",
-              "QUARANTINE"
-            ],
-            "example": "APPROVED",
-            "description": "Nuevo dictamen (`APPROVED`, `REJECTED`, `QUARANTINE`). Ruta legada: alias de `POST …/phyto-decisions` hasta H2"
-          },
-          "phytoInspectionPdfUrl": {
-            "type": "string",
-            "example": "https://storage.drinksonchain.com/inspections/phyto-2026-04.pdf",
-            "description": "URL del informe o acta de inspección fitosanitaria firmada"
-          },
-          "notes": {
-            "type": "string",
-            "example": "Lote aprobado sin presencia de botritis ni plagas cuarentenarias.",
-            "description": "Motivo del dictamen (obligatorio en `REJECTED` y `QUARANTINE`); queda en el dictamen y ya no pisa las notas del pesaje"
-          }
-        },
-        "required": [
-          "phytosanitaryStatus"
-        ]
-      },
       "UpdatePlatformUserDto": {
         "type": "object",
         "properties": {
@@ -23515,12 +22766,6 @@
             "example": "Riego por goteo computarizado",
             "description": "Sistema de irrigación instalado"
           },
-          "isDoEligible": {
-            "type": "boolean",
-            "example": true,
-            "deprecated": true,
-            "description": "Se ignora: la aptitud D.O. la calcula el servidor (EA-03, contrato O2 §3.1). Sale de la entrada en H2"
-          },
           "doType": {
             "type": "string",
             "example": "D.O. Singani",
@@ -23653,6 +22898,12 @@
             "type": "number",
             "description": "Tamaño en bytes del archivo",
             "example": 204850
+          },
+          "sha256": {
+            "type": "string",
+            "description": "Huella SHA-256 (hexadecimal) del contenido: la que guardan los registros de la trazabilidad junto a la `key` (contrato O2 §0)",
+            "example": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+            "pattern": "^[0-9a-f]{64}$"
           }
         },
         "required": [
@@ -23661,7 +22912,8 @@
           "expiresAt",
           "originalName",
           "mimeType",
-          "sizeBytes"
+          "sizeBytes",
+          "sha256"
         ]
       },
       "UserAccountStatusDto": {

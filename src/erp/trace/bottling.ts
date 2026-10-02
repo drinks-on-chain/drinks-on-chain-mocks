@@ -1,12 +1,10 @@
 import type { ApiErrorDetail } from '../../shared/envelope'
-import { sha256Hex } from '../../shared/crypto'
 import { ApiError } from '../handlers/errors'
 import type {
   BatchLabAnalysisResponse,
   BottleUnit,
   BottlingBalance,
   BottlingBatchResponse,
-  CreateBatchLabAnalysisDto,
   CreateLotBottlingDto,
   CreateLotLabAnalysisDto,
   Lot,
@@ -31,6 +29,7 @@ import {
   bottleGeneration,
   bottleLotOf,
   distillationHeart,
+  fileSha256,
   isAgingOpen,
   isProductionOpen,
   isSerialVoided,
@@ -63,8 +62,6 @@ export interface BottlingSourceRef {
 
 export interface BottlingRequest {
   sources: BottlingSourceRef[]
-  /** Ruta legada: el tipo enviado (se compara con el derivado, EA-01). */
-  declaredProductType?: string
   bottlingDate: string
   packagingFormatCl: number
   totalBottlesPackaged: number
@@ -73,7 +70,6 @@ export interface BottlingRequest {
   leftover?: { liters: number; disposition: 'RETAINED' | 'DISCARDED'; notes?: string }
   bottleType?: string
   labelDesignKey?: string
-  labelDesignUrl?: string
 }
 
 export interface BottlingEvaluation {
@@ -112,7 +108,6 @@ export function lotBottlingRequest(state: TraceState, lot: Lot, body: CreateLotB
     leftover: body.leftover,
     bottleType: body.bottleType,
     labelDesignKey: body.labelDesignKey,
-    labelDesignUrl: body.labelDesignUrl,
   }
 }
 
@@ -177,15 +172,6 @@ export function evaluateBottling(state: TraceState, ctx: TraceCtx, lot: Lot, req
   }
   if (productType && lot.productType && productType !== lot.productType) {
     violations.push(violation('TRC_BOTTLING_SOURCE_INVALID', `El lote es ${lot.productType} y la fuente es de ${productType}`, { field: 'sources', expected: lot.productType, actual: productType }))
-  }
-  if (request.declaredProductType !== undefined && productType && request.declaredProductType !== productType) {
-    violations.push(
-      violation('TRC_PRODUCT_TYPE_MISMATCH', `El tipo de producto se deriva del origen: ${productType === 'WINE' ? 'crianza → WINE' : 'destilación → SINGANI'}`, {
-        field: 'productType',
-        expected: productType,
-        actual: request.declaredProductType,
-      }),
-    )
   }
   for (const s of requested) {
     if (s.lotId !== lot.id) {
@@ -305,7 +291,7 @@ export function executeBottling(state: TraceState, ctx: TraceCtx, lot: Lot, requ
   const productType = evaluation.productType as LotProductType
   const lotCode = nextLotCode(state, ctx, lot.wineryId, Number(evaluation.bottlingDay.slice(0, 4)), productType)
   const single = request.sources.length === 1 ? request.sources[0] : undefined
-  const labelKey = request.labelDesignKey ?? request.labelDesignUrl ?? null
+  const labelKey = request.labelDesignKey ?? null
   const bottling: BottlingBatchResponse = {
     id: ctx.newId('bottling'),
     wineryId: lot.wineryId,
@@ -318,7 +304,8 @@ export function executeBottling(state: TraceState, ctx: TraceCtx, lot: Lot, requ
     totalBottlesPackaged: request.totalBottlesPackaged,
     packagingFormatCl: request.packagingFormatCl,
     bottleType: request.bottleType ?? null,
-    labelDesignUrl: request.labelDesignUrl ?? null,
+    // Campo anterior a la Ola 2: los embotellados nuevos guardan la `key` en `labelDesign`.
+    labelDesignUrl: null,
     bottlingDate: toDateField(evaluation.bottlingDay),
     releasedByMemberId: ctx.actor?.membershipId ?? null,
     blockchainAnchorTxHash: null,
@@ -331,7 +318,7 @@ export function executeBottling(state: TraceState, ctx: TraceCtx, lot: Lot, requ
     lotId: lot.id,
     balance: evaluation.balance,
     leftover: request.leftover ? { liters: request.leftover.liters, disposition: request.leftover.disposition, notes: request.leftover.notes ?? null } : null,
-    labelDesign: labelKey ? { key: labelKey, url: request.labelDesignUrl ?? null } : null,
+    labelDesign: labelKey ? { key: labelKey, url: null } : null,
   }
   state.bottlings.push(bottling)
 
@@ -642,16 +629,11 @@ export function voidBottleCode(state: TraceState, ctx: TraceCtx, wineryId: strin
 // Laboratorio (§8)
 // ---------------------------------------------------------------------------
 
-/** Huella simulada de un archivo por su clave (los mocks no guardan los archivos). */
-export const fileSha256 = (key: string): string => sha256Hex(`file:${key}`)
-
-type LabBody = Omit<CreateLotLabAnalysisDto, 'laboratoryReportKey' | 'laboratoryReportPdfUrl'> & { laboratoryReportKey?: string; laboratoryReportPdfUrl?: string }
-
 /**
  * Análisis de laboratorio del lote: la conformidad se calcula con los límites y las unidades de la
  * instantánea (EA-08) y un análisis nuevo sustituye al anterior (reanálisis, sin 409).
  */
-export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: LabBody | CreateBatchLabAnalysisDto): BatchLabAnalysisResponse {
+export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: CreateLotLabAnalysisDto): BatchLabAnalysisResponse {
   const bottling = lotBottling(state, lot.id)
   const dossier = lotDossier(state, lot.id)
   if (dossier?.status === 'CLOSED') {
@@ -673,9 +655,9 @@ export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: La
       { field: 'methanolMg100mlAa', message: `El metanol en mg/L de producto (${body.methanolContentMgL}) equivale a ${converted} mg/100 mL de alcohol anhidro y se indicó ${body.methanolMg100mlAa}: revisa las unidades` },
     ])
   }
-  const key = 'laboratoryReportKey' in body ? body.laboratoryReportKey : undefined
-  if (key) assertOwnFile(lot.wineryId, 'laboratoryReportKey', key)
-  const legacyUrl = body.laboratoryReportPdfUrl
+  // El informe, por su `key` de `POST /v1/uploads`, de esta bodega; se guarda con su huella SHA-256.
+  const key = body.laboratoryReportKey
+  assertOwnFile(lot.wineryId, 'laboratoryReportKey', key)
   const methanolAa = body.methanolMg100mlAa ?? converted
   const conformity = computeLabConformity({
     productType: lot.productType,
@@ -685,7 +667,6 @@ export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: La
     rulesTakenAt: lot.rules.takenAt,
   })
   for (const previous of lotLabs(state, lot.id)) previous.supersededAt ??= ctx.now
-  const reportKey = key ?? legacyUrl ?? ''
   const lab: BatchLabAnalysisResponse = {
     id: ctx.newId('lab'),
     bottlingBatchId: bottling.id,
@@ -706,7 +687,7 @@ export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: La
     methanolContentMgL: body.methanolContentMgL ?? null,
     copperContentMgL: body.copperContentMgL ?? null,
     additionalParams: body.additionalParams ?? null,
-    laboratoryReportPdfUrl: legacyUrl ?? reportKey,
+    laboratoryReportPdfUrl: key,
     // Calculado: el valor enviado se ignora (EA-08).
     conformsToSenasagStandards: conformity.status === 'CONFORMING',
     conformsToEuStandards: body.conformsToEuStandards ?? false,
@@ -719,7 +700,7 @@ export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: La
     supersededAt: null,
     conformity,
     recordedBy: ctx.actor,
-    report: { key: reportKey, sha256: key ? fileSha256(key) : null, url: legacyUrl ?? null },
+    report: { key, sha256: fileSha256(key, state), url: null },
   }
   state.labAnalyses.push(lab)
   appendLotEvent(state, ctx, lot, {

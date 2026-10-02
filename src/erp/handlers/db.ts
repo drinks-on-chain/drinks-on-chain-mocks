@@ -171,6 +171,7 @@ export function traceFromFixtures(): Omit<TraceState, 'wineries'> {
     bottleLots: f.bottleLots,
     bottleExports: [],
     voidedRecords: voidedRecordsOf(f.corrections),
+    uploads: {},
   }
 }
 
@@ -195,6 +196,7 @@ export const TRACE_KEYS = [
   'bottleLots',
   'bottleExports',
   'voidedRecords',
+  'uploads',
 ] as const satisfies readonly (keyof TraceState)[]
 
 function createErpDb(fresh = false): ErpDb {

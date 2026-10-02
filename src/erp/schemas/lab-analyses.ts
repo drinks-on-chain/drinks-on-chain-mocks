@@ -4,8 +4,8 @@ import { FileReferenceSchema } from './harvest-batches'
 import { ErrorDetailSchema, LabLimitSchema, TraceActorSchema } from './lots'
 
 // /v1/lab-analyses y /v1/lots/{id}/lab-analyses · laboratorio con conformidad calculada y unidades
-// (contrato de la Ola 2 §8; EA-08): BatchLabAnalysisResponseDto, CreateBatchLabAnalysisDto (legado),
-// CreateLotLabAnalysisDto, LabConformityDto.
+// (contrato de la Ola 2 §8; EA-08): BatchLabAnalysisResponseDto, CreateLotLabAnalysisDto,
+// LabConformityDto.
 
 export const LAB_CONFORMITY_STATUSES = ['CONFORMING', 'NON_CONFORMING', 'INCOMPLETE'] as const
 export const LabConformityStatusSchema = z.enum(LAB_CONFORMITY_STATUSES)
@@ -142,28 +142,10 @@ const labValues = {
   conformsToUsaStandards: z.boolean().optional(),
 }
 
-/** `POST /v1/lab-analyses` (legado, alias hasta H2): un análisis nuevo sustituye al anterior. */
-export const CreateBatchLabAnalysisSchema = z.object({
-  bottlingBatchId: z.string().min(1),
+/** `POST /v1/lots/{id}/lab-analyses` (`CreateLotLabAnalysisDto`): un análisis nuevo sustituye al anterior. */
+export const CreateLotLabAnalysisSchema = z.object({
   ...labValues,
-  laboratoryReportPdfUrl: z.string().min(1),
-  /** @deprecated Se ignora: la conformidad la calcula el servidor (EA-08). Sale de la entrada en H2. */
-  conformsToSenasagStandards: z.boolean().optional(),
+  /** `key` del informe firmado (`POST /v1/uploads`), de esta bodega; se guarda con su huella SHA-256. */
+  laboratoryReportKey: z.string().min(1),
 })
-export type CreateBatchLabAnalysisDto = z.infer<typeof CreateBatchLabAnalysisSchema>
-
-/** `POST /v1/lots/{id}/lab-analyses` (`CreateLotLabAnalysisDto`). */
-export const CreateLotLabAnalysisSchema = z
-  .object({
-    ...labValues,
-    /** `key` del informe firmado (`POST /v1/uploads`). */
-    laboratoryReportKey: z.string().min(1).optional(),
-    /** @deprecated Alias de `laboratoryReportKey` hasta H2. */
-    laboratoryReportPdfUrl: z.string().min(1).optional(),
-  })
-  .superRefine((b, ctx) => {
-    if (!b.laboratoryReportKey && !b.laboratoryReportPdfUrl) {
-      ctx.addIssue({ code: 'custom', message: 'Adjunta el informe del laboratorio (laboratoryReportKey)', path: ['laboratoryReportKey'] })
-    }
-  })
 export type CreateLotLabAnalysisDto = z.infer<typeof CreateLotLabAnalysisSchema>

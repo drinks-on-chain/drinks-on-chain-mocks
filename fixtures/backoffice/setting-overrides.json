@@ -52,5 +52,14 @@
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
     "updatedAt": "2026-09-10T11:05:00Z",
     "updatedBy": "Jorge Salinas"
+  },
+  {
+    "key": "trazabilidad.vino.crianzaMinimaMeses",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "value": 6,
+    "legalException": false,
+    "reason": "La bodega no saca al mercado tintos con menos de seis meses de crianza.",
+    "updatedAt": "2026-09-15T10:00:00Z",
+    "updatedBy": "Jorge Salinas"
   }
 ]

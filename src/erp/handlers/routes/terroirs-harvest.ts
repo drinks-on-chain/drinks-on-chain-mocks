@@ -5,8 +5,8 @@ import {
   CreateTerroirCorrectionSchema,
   CreateTerroirSchema,
   PHYTOSANITARY_STATUSES,
+  RETIRED_INPUT_FIELDS,
   TERROIR_NORMATIVE_FIELDS,
-  UpdatePhytoStatusSchema,
   UpdateTerroirSchema,
   type HarvestBatchResponse,
   type TerroirResponse,
@@ -15,10 +15,10 @@ import { correctTerroir } from '../../trace/dossier'
 import { addMaturityAnalysis, allHarvestAnalyses, allHarvestDecisions, createHarvest, decidePhyto } from '../../trace/records'
 import { maturityView, phytoDecisionView } from '../../trace/views'
 import { violation } from '../../trace/rules'
-import { stateError } from '../../trace/state'
+import { ruleError, stateError } from '../../trace/state'
 import { canSee, scoped, trace, TRACE_READERS, type AuthContext } from '../auth-context'
 import { getErpDb, newId, tick } from '../db'
-import { fieldError, forbidden, invalid, notFound } from '../errors'
+import { forbidden, notFound } from '../errors'
 import { applyPatch, boolParam, created, enumParam, intParam, listResult, ok, parseBody, parseCreateBody, strParam, type RouteSpec } from '../http'
 import { traceCtx } from '../trace-context'
 import { harvestView, terroirView } from '../views'
@@ -58,7 +58,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     access: trace(['OWNER', 'AGRONOMIST']),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
-      const body = await parseCreateBody(request, CreateTerroirSchema)
+      const body = await parseCreateBody(request, CreateTerroirSchema, { retired: RETIRED_INPUT_FIELDS.CreateTerroirDto })
       const terroir: TerroirResponse = {
         id: newId('terroir'),
         wineryId,
@@ -73,7 +73,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
         varietyName: body.varietyName,
         soilType: body.soilType ?? null,
         irrigationSystem: body.irrigationSystem ?? null,
-        // Se calcula al responder: el valor enviado se ignora (EA-03).
+        // Se calcula al responder con los valores vigentes de la bodega (EA-03).
         isDoEligible: false,
         doType: body.doType ?? null,
         doCertificateUrl: body.doCertificateUrl ?? null,
@@ -118,9 +118,8 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     access: trace(['OWNER', 'AGRONOMIST']),
     async handle({ request, auth, params }) {
       const t = findTerroir(auth, params.id!)
-      const body = await parseBody(request, UpdateTerroirSchema)
-      // La aptitud D.O. se calcula: el valor enviado se ignora (EA-03).
-      delete body.isDoEligible
+      // La aptitud D.O. se calcula (EA-03): `isDoEligible` ya no se admite en la entrada.
+      const body = await parseBody(request, UpdateTerroirSchema, { retired: RETIRED_INPUT_FIELDS.UpdateTerroirDto })
       // Una parcela usada no cambia por PATCH sus campos con efecto normativo: se corrigen aparte (§3.1).
       const used = getErpDb().harvestBatches.some((h) => h.terroirId === t.id)
       const changed = TERROIR_NORMATIVE_FIELDS.filter((f) => body[f] !== undefined && body[f] !== t[f])
@@ -153,7 +152,16 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     access: trace(['OWNER', 'AGRONOMIST', 'ENOLOGIST', 'OPERATOR']),
     async handle({ request, auth }) {
       const wineryId = requireWinery(auth)
-      const body = await parseCreateBody(request, CreateHarvestBatchSchema)
+      const body = await parseCreateBody(request, CreateHarvestBatchSchema, {
+        retired: RETIRED_INPUT_FIELDS.CreateHarvestBatchDto,
+        // El alta no tiene dictamen (EA-04): enviarlo, con cualquier valor, es el intento de autoaprobación que el contrato rechaza.
+        before(raw) {
+          if (raw.phytosanitaryStatus === undefined) return
+          throw ruleError('TRC_PHYTO_IN_CREATE', 'El dictamen fitosanitario no se registra en el alta del pesaje: usa POST /v1/harvest-batches/{id}/phyto-decisions', [
+            violation('TRC_PHYTO_IN_CREATE', 'Dictamen en el alta del pesaje', { field: 'phytosanitaryStatus', actual: raw.phytosanitaryStatus }),
+          ])
+        },
+      })
       if (body.newLot) assertCanCreateLot(auth)
       tick()
       return created(harvestView(createHarvest(getErpDb(), traceCtx(auth), wineryId, body)))
@@ -224,26 +232,5 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     access: trace(TRACE_READERS),
     list: 'paged',
     handle: ({ query, auth, params }) => listResult(allHarvestDecisions(getErpDb(), findHarvest(auth, params.id!).id).map((d) => phytoDecisionView(getErpDb(), d)), query),
-  },
-  {
-    // Legado: alias de `POST …/phyto-decisions` hasta H2. Mismas reglas; ya no pisa las notas del pesaje.
-    method: 'patch',
-    path: '/v1/harvest-batches/:id/phyto-status',
-    access: trace(['OWNER', 'AGRONOMIST', 'ENOLOGIST']),
-    deprecated: '/v1/harvest-batches/{id}/phyto-decisions',
-    async handle({ request, auth, params }) {
-      const h = findHarvest(auth, params.id!)
-      const body = await parseBody(request, UpdatePhytoStatusSchema)
-      if (body.phytosanitaryStatus === 'PENDING_INSPECTION') {
-        throw invalid([fieldError('phytosanitaryStatus', 'Indica el dictamen: APPROVED, REJECTED o QUARANTINE')])
-      }
-      tick()
-      const harvest = decidePhyto(getErpDb(), traceCtx(auth), h, {
-        decision: body.phytosanitaryStatus,
-        legacyReportUrl: body.phytoInspectionPdfUrl ?? null,
-        notes: body.notes ?? null,
-      })
-      return ok(harvestView(harvest, true))
-    },
   },
 ]
