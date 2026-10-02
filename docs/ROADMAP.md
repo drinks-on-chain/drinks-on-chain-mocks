@@ -106,7 +106,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] `rc.2`: alineado con el backend de la Etapa 2 completa (`8e85935`, sin rutas con 501): marcas de corrección y registros anulados, volúmenes e historial del tanque, exportaciones de códigos, expediente `doc-dossier/1` y raíz Merkle sobre bytes, escrituras tras el cierre y pasaporte · 02-10-2026
 - [x] `rc.2`: pedidos del Marketplace: casos del pasaporte en los fixtures (`PASSPORT_CASES`), archivos de `/mocks/uploads` servidos por los handlers, escenario `pasaporte-saturado`, destacados y orden del catálogo, lista de escenarios exportada · 02-10-2026
 - [x] `rc.2`: instantánea de reglas anterior al primer evento del lote; `docs/CONTRATO.md` §11 y CHANGELOG con lo que obliga a tocar código en el ERP y el Marketplace · 02-10-2026
-- [ ] Etiqueta `v0.5.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.2.tgz`
+- [x] Etiqueta `v0.5.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.2.tgz`, instalado y probado en un proyecto limpio · 02-10-2026
 - [ ] Imágenes de QR dentro del ZIP de códigos (`qr/{serial}-{code}.svg|png`): hoy el ZIP de los mocks lleva solo `codigos.csv`
 - [ ] Retirada de H2 al cerrar la ola: `LotView`/`deriveLotViews`/`lots-view.json`, rutas legadas y entradas obsoletas (CHANGELOG 0.5.0-rc.1)
 - [ ] Etiqueta estable `v0.5.0` en `main` al cerrar la Ola 2 (coordinación)
