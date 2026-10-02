@@ -13,6 +13,7 @@ import {
   evaluateDo,
   methanolToAnhydrous,
   restLock,
+  roundTo,
   type BottlingBalanceInput,
 } from './domain'
 import { formatQuantity, LOT_RULE_KEYS, violation } from './rules'
@@ -80,7 +81,8 @@ export function bottlingInputOf(state: TraceState, lot: Lot, b: BottlingBatchRes
     sources,
     input: {
       productType: (lot.productType ?? (aging.length > 0 ? 'WINE' : 'SINGANI')) as LotProductType,
-      availableLiters: b.balance?.availableLiters ?? (liters as number[]).reduce((s, l) => s + l, 0),
+      // Siempre el volumen vigente de las fuentes (como el backend): una corrección de la crianza o del corazón cambia el balance.
+      availableLiters: roundTo((liters as number[]).reduce((s, l) => s + l, 0)),
       waterDilutionLiters: b.waterDilutionLiters ?? 0,
       bottles: b.totalBottlesPackaged,
       formatCl: b.packagingFormatCl,
@@ -233,7 +235,7 @@ export interface BackfillResult {
 }
 
 /**
- * Relleno de un pesaje anterior a la Ola 2: crea su lote (uno por pesaje, como `LotView`) y le
+ * Relleno de un pesaje anterior a la Ola 2: crea su lote (uno por pesaje) y le
  * cuelga la cadena. Idempotente: un pesaje que ya tiene lote no se toca. `ctx.now` es el momento
  * de la migración (el de la instantánea `MIGRATION`).
  */

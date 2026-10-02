@@ -63,27 +63,22 @@ export const CreateFermentationTankSchema = z
     /** Crea el lote desde el tanque y lo asigna a las entradas sin lote. */
     newLot: CreateLotSchema.optional(),
     /** Pesajes que entran al tanque (≥ 1), todos del mismo lote; `kg` por defecto = lo disponible. */
-    inputs: z.array(z.object({ harvestBatchId: z.string().min(1), kg: z.number().positive().optional() })).min(1).optional(),
-    /** @deprecated Legado hasta H2: equivale a `inputs: [{ harvestBatchId }]` (todo lo disponible). */
-    harvestBatchId: z.string().min(1).optional(),
+    inputs: z.array(z.object({ harvestBatchId: z.string().min(1), kg: z.number().positive().optional() })).min(1),
     /** Código físico del tanque; no se reutiliza hasta limpiarlo (S-7). */
     tankCode: z.string().min(1),
     capacityLiters: z.number().positive().optional(),
     material: z.string().optional(),
-    /** Mosto cargado (≤ capacidad). Obligatorio desde H2. */
-    volumeFilledLiters: z.number().min(0).optional(),
-    /** Legado: predeclara la bifurcación; debe coincidir con el tipo del lote (y lo fija si no lo tiene). */
+    /** Mosto cargado en litros (≤ capacidad): la base del balance del lote. */
+    volumeFilledLiters: z.number().positive(),
+    /** Predeclara la bifurcación (se decide al completar): debe coincidir con el tipo del lote (y lo fija si no lo tiene). */
     destinationType: BifurcationDestinationSchema.optional(),
     /** `true`: el tanque nace en `FERMENTING`. */
     startFermentation: z.boolean().optional(),
-    /** @deprecated Legado: estado inicial. `COMPLETED`, `TRANSFERRED` y `CLEANED` → 422. */
+    /** Estado inicial (equivale a `startFermentation`). `COMPLETED`, `TRANSFERRED` y `CLEANED` → 422. */
     status: z.enum(['FILLING', 'FERMENTING']).optional(),
     startDate: DateInputSchema,
   })
   .superRefine((b, ctx) => {
-    if (!b.inputs && !b.harvestBatchId) {
-      ctx.addIssue({ code: 'custom', message: 'Indica los pesajes que entran al tanque (inputs)', path: ['inputs'] })
-    }
     if (b.lotId && b.newLot) ctx.addIssue({ code: 'custom', message: 'Indica lotId o newLot, no ambos', path: ['newLot'] })
   })
 export type CreateFermentationTankDto = z.infer<typeof CreateFermentationTankSchema>

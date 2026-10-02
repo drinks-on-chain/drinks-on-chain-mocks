@@ -567,7 +567,7 @@ describe('ERP: lo que cambió con la Ola 1 y el backend O0-BE-2', () => {
     expect(errorOf(res.json).code).toBe('FERMENTATION_TANK_ALREADY_TRANSFERRED')
   })
 
-  it('balance de masa (422 TRC_MASS_BALANCE_EXCEEDED desde la Ola 2) y embotellado sin origen → 422 VALIDATION_ERROR con los campos del backend', async () => {
+  it('balance de masa (422 TRC_MASS_BALANCE_EXCEEDED desde la Ola 2) y fuente del embotellado sin crianza ni destilación → 422 VALIDATION_ERROR', async () => {
     // Destilación abierta de «Singani El Molino 2026» (5.800 L de entrada): cortes mayores que la entrada.
     const open = F.productionBatches.find((p) => p.wineryId === CINTI.id && !p.processEndDate)!
     const mass = await call(`/v1/production-batches/${open.id}/close`, {
@@ -576,11 +576,12 @@ describe('ERP: lo que cambió con la Ola 1 y el backend O0-BE-2', () => {
     })
     expect(mass.status).toBe(422)
     expect(errorOf(mass.json)).toMatchObject({ code: 'TRC_MASS_BALANCE_EXCEEDED', details: [{ field: 'cuts', expected: 5800, actual: 6000, meta: { inputLiters: 5800, outputLiters: 6000 } }] })
-    const noSource = await call('/v1/bottling', {
+    const noSource = await call(`/v1/lots/${open.lotId}/bottling`, {
       token: staticToken('cvj_enologa'),
-      body: { productType: 'SINGANI', finalAlcoholAbv: 40, totalBottlesPackaged: 10, packagingFormatCl: 75, bottlingDate: '2026-09-25' },
+      body: { sources: [{ liters: 10 }], finalAlcoholAbv: 40, totalBottlesPackaged: 10, packagingFormatCl: 75, bottlingDate: '2026-09-25' },
     })
-    expect(errorOf(noSource.json).details!.map((d) => d.field)).toEqual(['wineAgingBatchId', 'productionBatchId'])
+    expect(noSource.status).toBe(422)
+    expect(errorOf(noSource.json)).toMatchObject({ code: 'VALIDATION_ERROR', details: [{ field: 'sources.0.wineAgingBatchId' }] })
   })
 
   it('Idempotency-Key en los POST de alta: repetición, otro cuerpo y clave inválida', async () => {

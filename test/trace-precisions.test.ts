@@ -178,6 +178,21 @@ describe('marcas de corrección y registros anulados (§9)', () => {
     expect(breaks).toMatchObject({ status: 422, code: 'TRC_CORRECTION_BREAKS_RULES' })
     expect(breaks.details.map((d) => d.code)).toContain('TRC_MASS_BALANCE_EXCEEDED')
   })
+
+  it('corregir el volumen de una crianza ya embotellada reevalúa el balance con el volumen vigente: menos litros que los embotellados → incidencia CORRECTION', async () => {
+    const token = as('altos_enologa')
+    const lot = lotByCode('ALT-2026-WINE-001')
+    const agingId = lot.links.wineAgingBatchIds[0]!
+    const amend = (volumeLiters: number, reason: string) => post(`/v1/lots/${lot.id}/corrections`, token, { target: { type: 'WINE_AGING', id: agingId }, kind: 'AMEND', changes: { volumeLiters }, reason })
+    // 5.320 botellas de 75 cl son 3.990 L: con 3.000 L de crianza no salen.
+    expect((await amend(3000, 'La barrica tenía menos vino del anotado al trasiego')).status).toBe(201)
+    const withIssue = await lotOf(lot.id, token)
+    expect(withIssue.complianceIssues.filter((i) => !i.resolvedAt)).toMatchObject([{ code: 'TRC_BOTTLING_EXCEEDS_VOLUME', source: 'CORRECTION', details: [{ field: 'totalBottlesPackaged', expected: 4000, actual: 5320 }] }])
+    expect(failure(await post(`/v1/lots/${lot.id}/dossier/close`, as('altos_admin'), { confirm: true })).details.map((d) => d.meta?.requirement)).toContain('NO_OPEN_COMPLIANCE_ISSUES')
+    // Con el volumen bueno la incidencia se resuelve.
+    expect((await amend(4050, 'Se confirma el volumen original con el aforo de la barrica')).status).toBe(201)
+    expect((await lotOf(lot.id, token)).complianceIssuesOpen).toBe(0)
+  })
 })
 
 describe('tanque: lo que le queda, merma de trasiego e historial (§4.2)', () => {
@@ -206,9 +221,18 @@ describe('tanque: lo que le queda, merma de trasiego e historial (§4.2)', () =>
     expect(failure(await distill({ inputVolumeLiters: 50 }))).toMatchObject({ status: 409, code: 'TRC_TANK_NOT_COMPLETED', details: [{ field: 'fermentationTankId', meta: { status: 'TRANSFERRED' } }] })
     expect(dataOf((await post(`/v1/fermentation-tanks/${created.id}/clean`, enologa)).json)).toMatchObject({ status: 'CLEANED', availableLiters: 0, transferLossLiters: 100 })
 
-    // Un tanque migrado no guarda su historial: su único punto conocido es el llenado.
+    // Un tanque migrado no guarda su historial: su único punto conocido es el llenado. TK-08 sale
+    // `TRANSFERRED` de los fixtures (su destilación se llevó los 6.300 L: corrección del cierre H2).
     const migrated = F.fermentationTanks.find((t) => t.wineryId === CINTI && t.tankCode === 'TK-08')!
+    expect(migrated.status).toBe('TRANSFERRED')
     expect((await get<{ transitions: unknown[] }>(`/v1/fermentation-tanks/${migrated.id}`, enologa)).transitions).toEqual([{ status: 'FERMENTING', at: migrated.startDate, by: null }])
+    // El ejemplo de `CLEANED` es TK-01 de Cinti Viejo, con su historial reconstruido; los tanques vacíos (0 L) ya no existen.
+    const cleaned = F.fermentationTanks.filter((t) => t.status === 'CLEANED')
+    expect(cleaned.map((t) => [t.tankCode, t.lotId])).toEqual([['TK-01', F.lots.find((l) => l.lotCode === 'CVJ-2026-SINGANI-001')!.id]])
+    expect(cleaned[0]!.transitions!.map((t) => t.status)).toEqual(['FERMENTING', 'COMPLETED', 'TRANSFERRED', 'CLEANED'])
+    expect(cleaned[0]!.transitions!.at(-1)).toEqual({ status: 'CLEANED', at: '2025-05-26T14:00:00Z', by: null })
+    expect(F.fermentationTanks.filter((t) => !((t.volumeFilledLiters ?? 0) > 0))).toEqual([])
+    expect(F.fermentationTanks.map((t) => t.tankCode)).not.toEqual(expect.arrayContaining(['TK-06', 'TK-09', 'TK-RED-04']))
 
     // El tanque de un lote descartado se limpia desde cualquier estado (si no, quedaría ocupado para siempre).
     const altos = as('altos_enologa')
@@ -217,6 +241,24 @@ describe('tanque: lo que le queda, merma de trasiego e historial (§4.2)', () =>
     expect(failure(await post(`/v1/fermentation-tanks/${fermenting.id}/clean`, altos))).toMatchObject({ status: 409, code: 'TRC_TANK_INVALID_TRANSITION', details: [{ meta: { from: 'FERMENTING', to: 'CLEANED', allowedFrom: 'TRANSFERRED' } }] })
     await post(`/v1/lots/${discardedLot.id}/discard`, as('altos_admin'), { reason: 'Fermentación detenida' })
     expect(dataOf((await post(`/v1/fermentation-tanks/${fermenting.id}/clean`, altos)).json)).toMatchObject({ status: 'CLEANED' })
+  })
+
+  it('clean cierra un tanque COMPLETED con remanente (queda TRANSFERRED y CLEANED en el historial); sin ninguna salida → 409', async () => {
+    const lot = dataOf((await post<{ id: string }>('/v1/lots', enologa, { name: 'Singani con remanente 2026', harvestYear: 2026, productType: 'SINGANI' })).json)
+    const harvest = dataOf((await post<{ id: string }>('/v1/harvest-batches', operario, { lotId: lot.id, terroirId: T('cvj_04'), intakeDate: '2026-09-25', grossWeightKg: 9150, tareWeightKg: 150 })).json)
+    await post(`/v1/harvest-batches/${harvest.id}/phyto-decisions`, agronomo, { decision: 'APPROVED' })
+    const tank = dataOf((await post<{ id: string }>('/v1/fermentation-tanks', enologa, { lotId: lot.id, inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-51', volumeFilledLiters: 6000, startFermentation: true, startDate: '2026-09-25' })).json)
+    await post(`/v1/fermentation-tanks/${tank.id}/complete`, enologa, { endDate: '2026-09-25', finalVolumeLiters: 5800, destination: 'SINGANI_DIST' })
+    // Completado y con todo su vino base dentro: no se limpia.
+    expect(failure(await post(`/v1/fermentation-tanks/${tank.id}/clean`, enologa))).toMatchObject({ status: 409, code: 'TRC_TANK_INVALID_TRANSITION', details: [{ meta: { from: 'COMPLETED', to: 'CLEANED' } }] })
+    expect((await post('/v1/production-batches/distillation', enologa, { fermentationTankId: tank.id, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25', inputVolumeLiters: 5500 })).status).toBe(201)
+    // Quedan 300 L sin destilar: la limpieza cierra el tanque y los deja como merma de trasiego.
+    const cleaned = FermentationTankDetailSchema.parse(dataOf((await post(`/v1/fermentation-tanks/${tank.id}/clean`, enologa, { cleanedAt: '2026-09-25T11:00:00Z' })).json))
+    expect(cleaned).toMatchObject({ status: 'CLEANED', availableLiters: 0, transferLossLiters: 300 })
+    expect(cleaned.transitions!.map((t) => [t.status, t.at]).slice(-2)).toEqual([['TRANSFERRED', '2026-09-25T11:00:00Z'], ['CLEANED', '2026-09-25T11:00:00Z']])
+    // Su código físico queda libre.
+    const reused = await post('/v1/fermentation-tanks', enologa, { lotId: lot.id, inputs: [{ harvestBatchId: harvest.id, kg: 100 }], tankCode: 'TK-51', volumeFilledLiters: 60, startDate: '2026-09-25' })
+    if (reused.status !== 201) expect(failure(reused).code).not.toBe('TRC_TANK_CODE_IN_USE')
   })
 
   it('descartar una fuente deja un evento interno LOT_DISCARDED con data.scope SOURCE', async () => {
@@ -308,9 +350,9 @@ describe('códigos de botella: búsqueda y exportaciones (§7.2)', () => {
     await post(`/v1/harvest-batches/${harvest.id}/phyto-decisions`, as('altos_agronomo'), { decision: 'APPROVED' })
     const tank = dataOf((await post<{ id: string }>('/v1/fermentation-tanks', token, { inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-60', volumeFilledLiters: 16000, startFermentation: true, startDate: '2026-09-25' })).json)
     await post(`/v1/fermentation-tanks/${tank.id}/complete`, token, { endDate: '2026-09-25', finalVolumeLiters: 15800, destination: 'WINE_AGING' })
-    expect((await post('/v1/wine-aging', token, { fermentationTankId: tank.id, containerType: 'Depósito', volumeLiters: 15600, plannedMonths: 1 })).status).toBe(201)
-    advanceMockClock(31 * DAY_MS)
-    const bottled = await post(`/v1/lots/${harvest.lotId}/bottling`, token, { bottlingDate: '2026-10-26', packagingFormatCl: 75, totalBottlesPackaged: 20500, finalAlcoholAbv: 13.5 })
+    expect((await post('/v1/wine-aging', token, { fermentationTankId: tank.id, containerType: 'Depósito', volumeLiters: 15600, plannedMonths: 6 })).status).toBe(201)
+    advanceMockClock(182 * DAY_MS)
+    const bottled = await post(`/v1/lots/${harvest.lotId}/bottling`, token, { bottlingDate: '2027-03-26', packagingFormatCl: 75, totalBottlesPackaged: 20500, finalAlcoholAbv: 13.5 })
     expect(bottled.status).toBe(201)
     const exports = `/v1/lots/${harvest.lotId}/bottle-codes/exports`
     expect(failure(await post(exports, token, { format: 'ZIP', qr: { imageFormat: 'SVG' } }))).toMatchObject({
@@ -438,11 +480,8 @@ describe('expediente canónico doc-dossier/1 y raíz Merkle (§10, §20)', () =>
     const harvest = F.harvestBatches.find((h) => h.lotId === lotId)!
     const tank = F.fermentationTanks.find((t) => t.lotId === lotId)!
     const lab = { certifiedLaboratoryName: 'Laboratorio ISO 17025', accreditedLabCertificationCode: 'LAB-9', testPerformedAt: '2026-09-25', actualAlcoholAbv: 40, totalAcidityTartaricGl: 4.6, volatileAcidityAceticGl: 0.2, methanolMg100mlAa: 50, copperContentMgL: 0.5, laboratoryReportKey: file(CINTI, 'informe-tardio.pdf') }
-    const bottlingId = F.bottling.find((b) => b.lotId === lotId)!.id
     const closedWrites = [
       post(`/v1/lots/${lotId}/lab-analyses`, enologa, lab),
-      // El alias legado responde lo mismo.
-      post('/v1/lab-analyses', enologa, { ...lab, laboratoryReportKey: undefined, bottlingBatchId: bottlingId, laboratoryReportPdfUrl: 'https://laboratorio.test/informe.pdf' }),
       post(`/v1/lots/${lotId}/corrections`, enologa, { target: { type: 'HARVEST_BATCH', id: harvest.id }, kind: 'AMEND', changes: { notes: 'Otra nota' }, reason: 'Corrección tras el cierre del expediente' }),
       post(`/v1/lots/${lotId}/attachments`, enologa, { key: file(CINTI, 'foto.jpg'), kind: 'PHOTO', title: 'Foto' }),
       post(`/v1/lots/${lotId}/dossier/close`, enologa, { confirm: true }),

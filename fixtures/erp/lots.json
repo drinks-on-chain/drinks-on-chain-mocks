@@ -353,8 +353,7 @@
         "19928e77-9724-5a4e-a7c4-3c494041add9"
       ],
       "tankIds": [
-        "d4e37fed-41e1-5399-9b50-e8263a6ca797",
-        "c66f62ff-e355-5e2c-8a47-1ac5282b77b2"
+        "d4e37fed-41e1-5399-9b50-e8263a6ca797"
       ],
       "wineAgingBatchIds": [],
       "productionBatchIds": [
@@ -835,7 +834,7 @@
       "daysRemaining": 39,
       "rule": {
         "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
-        "minimum": 0,
+        "minimum": 6,
         "applied": 12,
         "unit": "meses",
         "legalException": false
@@ -868,7 +867,7 @@
         "daysRemaining": 39,
         "rule": {
           "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
-          "minimum": 0,
+          "minimum": 6,
           "applied": 12,
           "unit": "meses",
           "legalException": false
@@ -886,7 +885,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -917,7 +916,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -929,7 +928,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -961,8 +960,7 @@
         "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f"
       ],
       "tankIds": [
-        "9da648ee-bdf1-5701-b362-83eced36156a",
-        "75d30fdf-eff5-596b-a2c3-d0d04db104ae"
+        "9da648ee-bdf1-5701-b362-83eced36156a"
       ],
       "wineAgingBatchIds": [
         "0086c315-a8e7-56f2-9554-0bcd9ed6e4f6"
@@ -1020,7 +1018,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -1051,7 +1049,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -1063,7 +1061,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -1095,7 +1093,6 @@
         "010ecdc8-6d52-5877-aecf-73bebb5c4d82"
       ],
       "tankIds": [
-        "04e8d15f-24ff-5943-83db-6f915387071c",
         "f87af6c0-197d-5fa3-b85e-29d7b27f00d9",
         "aac59603-e058-50f8-9000-dd0a41f26aef"
       ],
@@ -1130,7 +1127,7 @@
       "daysRemaining": 156,
       "rule": {
         "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
-        "minimum": 0,
+        "minimum": 6,
         "applied": 8,
         "unit": "meses",
         "legalException": false
@@ -1163,7 +1160,7 @@
         "daysRemaining": 156,
         "rule": {
           "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
-          "minimum": 0,
+          "minimum": 6,
           "applied": 8,
           "unit": "meses",
           "legalException": false
@@ -1181,7 +1178,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -1212,7 +1209,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -1224,7 +1221,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -1311,7 +1308,7 @@
         "daysRemaining": 0,
         "rule": {
           "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
-          "minimum": 0,
+          "minimum": 6,
           "applied": 12,
           "unit": "meses",
           "legalException": false
@@ -1329,7 +1326,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -1360,7 +1357,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -1372,7 +1369,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -1464,7 +1461,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -1495,7 +1492,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -1507,7 +1504,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -1593,7 +1590,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -1624,7 +1621,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -1636,7 +1633,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -1722,7 +1719,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -1753,7 +1750,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -1765,7 +1762,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -2203,7 +2200,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -2234,7 +2231,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -2246,7 +2243,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -2351,7 +2348,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -2382,7 +2379,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -2394,7 +2391,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -2507,7 +2504,7 @@
         "daysRemaining": 0,
         "rule": {
           "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
-          "minimum": 0,
+          "minimum": 6,
           "applied": 12,
           "unit": "meses",
           "legalException": false
@@ -2525,7 +2522,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -2556,7 +2553,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -2568,7 +2565,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,
@@ -2694,7 +2691,7 @@
         "minRestDays": 180
       },
       "wine": {
-        "minAgingMonths": 0
+        "minAgingMonths": 6
       },
       "phytosanitary": {
         "requireApproved": true
@@ -2725,7 +2722,7 @@
         "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
         "trazabilidad.singani.variedadesExigidas": "GLOBAL",
         "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
-        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
         "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
         "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
         "trazabilidad.excepcionMinimoLegal": "WINERY",
@@ -2737,7 +2734,7 @@
           "Moscatel de Alejandría"
         ],
         "trazabilidad.singani.reposoMinimoDias": 180,
-        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
         "trazabilidad.fitosanitario.exigirAprobado": true,
         "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
         "trazabilidad.excepcionMinimoLegal": true,

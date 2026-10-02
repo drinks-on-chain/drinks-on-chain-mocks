@@ -127,12 +127,6 @@ export const HarvestBatchResponseSchema = z.object({
 })
 export type HarvestBatchResponse = z.infer<typeof HarvestBatchResponseSchema>
 
-/**
- * @deprecated Desde la Ola 2 el análisis es opcional en el alta (`maturity`) y se registra aparte.
- * Los tres campos planos se admiten hasta H2: si llegan los tres, se convierten en `maturity`.
- */
-export const HARVEST_LAB_FIELDS = ['brixDegrees', 'initialPh', 'initialAcidityGl'] as const
-
 export const CreateHarvestBatchSchema = z
   .object({
     /** Lote al que entra la uva (o `newLot`, o ninguno: uva recibida sin lote, §2.4). */
@@ -146,27 +140,11 @@ export const CreateHarvestBatchSchema = z
     grossWeightKg: z.number().positive(),
     tareWeightKg: z.number().min(0),
     temperatureAtIntakeC: z.number().optional(),
+    /** Primer análisis de madurez (opcional): también se registra aparte, con `POST …/maturity-analyses`. */
     maturity: MaturityInputSchema.optional(),
-    /** @deprecated Hasta H2: con `initialPh` e `initialAcidityGl` se convierte en `maturity`. */
-    brixDegrees: z.number().min(0).max(40).optional(),
-    /** @deprecated Hasta H2. */
-    initialPh: z.number().min(0).max(14).optional(),
-    /** @deprecated Hasta H2. */
-    initialAcidityGl: z.number().min(0).max(30).optional(),
-    /** @deprecated Solo se admite `PENDING_INSPECTION`; otro valor → 422 `TRC_PHYTO_IN_CREATE` (EA-04). */
-    phytosanitaryStatus: PhytosanitaryStatusSchema.optional(),
     notes: z.string().optional(),
   })
   .superRefine((b, ctx) => {
     if (b.lotId && b.newLot) ctx.addIssue({ code: 'custom', message: 'Indica lotId o newLot, no ambos', path: ['newLot'] })
   })
 export type CreateHarvestBatchDto = z.infer<typeof CreateHarvestBatchSchema>
-
-/** `PATCH …/phyto-status` (legado, alias de `POST …/phyto-decisions` hasta H2). */
-export const UpdatePhytoStatusSchema = z.object({
-  phytosanitaryStatus: PhytosanitaryStatusSchema,
-  phytoInspectionPdfUrl: z.string().nullish(),
-  /** Motivo del dictamen (obligatorio en `REJECTED` y `QUARANTINE`); ya no pisa las notas del pesaje. */
-  notes: z.string().nullish(),
-})
-export type UpdatePhytoStatusDto = z.infer<typeof UpdatePhytoStatusSchema>

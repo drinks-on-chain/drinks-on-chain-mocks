@@ -11,13 +11,11 @@ import lotAttachmentsJson from '../../fixtures/erp/lot-attachments.json'
 import lotDossiersJson from '../../fixtures/erp/lot-dossiers.json'
 import lotEventsJson from '../../fixtures/erp/lot-events.json'
 import lotsV2Json from '../../fixtures/erp/lots.json'
-import lotsJson from '../../fixtures/erp/lots-view.json'
 import maturityJson from '../../fixtures/erp/maturity-analyses.json'
 import phytoJson from '../../fixtures/erp/phyto-decisions.json'
 import productionJson from '../../fixtures/erp/production-batches.json'
 import restStatusJson from '../../fixtures/erp/production-rest-status.json'
 import terroirsJson from '../../fixtures/erp/terroirs.json'
-import publicJson from '../../fixtures/erp/traceability-public.json'
 import usersJson from '../../fixtures/erp/users.json'
 import walletsJson from '../../fixtures/erp/wallets.json'
 import agingJson from '../../fixtures/erp/wine-aging.json'
@@ -36,7 +34,6 @@ import type {
   HarvestBatchResponse,
   Lot,
   LotDossier,
-  LotView,
   MaturityAnalysis,
   Membership,
   MembershipRole,
@@ -44,7 +41,6 @@ import type {
   PhytoDecision,
   PlatformRole,
   ProductionBatchResponse,
-  PublicPassport,
   RestStatusResponse,
   SessionResponse,
   StoredLotEvent,
@@ -73,10 +69,6 @@ export interface ErpFixtures {
   productionRestStatus: RestStatusResponse[]
   bottling: BottlingBatchResponse[]
   labAnalyses: BatchLabAnalysisResponse[]
-  /** Grafo DAG legado por código de lote (`GET /v1/traceability/public/{lotCode}`, hasta H2). */
-  traceabilityPublic: Record<string, PublicPassport>
-  /** @deprecated Vista derivada de 0.1–0.4; se retira en H2 por `lots`. */
-  lotsView: LotView[]
   /**
    * Lotes del servidor (Ola 2) tal como los devuelve `GET /v1/lots/{id}` el día de referencia: los
    * migrados (uno por pesaje anterior, con el id de la semilla del backend) y los nativos de
@@ -110,8 +102,6 @@ export const erpFixtures: ErpFixtures = {
   productionRestStatus: restStatusJson as unknown as RestStatusResponse[],
   bottling: bottlingJson as unknown as BottlingBatchResponse[],
   labAnalyses: labJson as unknown as BatchLabAnalysisResponse[],
-  traceabilityPublic: publicJson as unknown as Record<string, PublicPassport>,
-  lotsView: lotsJson as unknown as LotView[],
   lots: lotsV2Json as unknown as Lot[],
   lotEvents: lotEventsJson as unknown as StoredLotEvent[],
   maturityAnalyses: maturityJson as unknown as MaturityAnalysis[],

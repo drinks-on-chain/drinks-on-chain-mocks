@@ -5,14 +5,6 @@ import { LotLockInfoSchema } from './lots'
 
 // /v1/production-batches · destilación de singani y reposo obligatorio
 
-/** Cortes del alambique en `additionalParams` (cabezas, corazón y colas). */
-export const DistillationCutsSchema = z.looseObject({
-  headDiscardLiters: z.number().nullish(),
-  heartYieldLiters: z.number().nullish(),
-  tailDiscardLiters: z.number().nullish(),
-})
-export type DistillationCuts = z.infer<typeof DistillationCutsSchema>
-
 export const ProductionBatchResponseSchema = z.object({
   ...CorrectionMarksShape,
   id: z.string(),
@@ -29,7 +21,7 @@ export const ProductionBatchResponseSchema = z.object({
   isDoEligible: z.boolean(),
   mandatoryRestUntil: IsoDateTimeSchema.nullish(),
   restStatus: RestStatusSchema,
-  additionalParams: DistillationCutsSchema.nullish(),
+  additionalParams: JsonObjectSchema.nullish(),
   notes: z.string().nullish(),
   createdAt: IsoDateTimeSchema,
   /** Lote (Ola 2). */
@@ -51,23 +43,21 @@ export const ProductionBatchResponseSchema = z.object({
 })
 export type ProductionBatchResponse = z.infer<typeof ProductionBatchResponseSchema>
 
+/** `POST /v1/production-batches/distillation`: abre la destilación; se cierra con `POST …/{id}/close` y sus cortes. */
 export const CreateDistillationBatchSchema = z.object({
+  /** Tanque `COMPLETED` con destino `SINGANI_DIST` del que sale el vino base. */
   fermentationTankId: z.string().min(1),
   equipmentIdentifier: z.string().min(1),
   processStartDate: DateInputSchema,
-  processEndDate: DateInputSchema.optional(),
-  inputVolumeLiters: z.number().min(0).optional(),
+  /** Vino base cargado al alambique (litros): ≤ lo disponible del tanque. */
+  inputVolumeLiters: z.number().positive(),
   /**
    * Última destilación del tanque: pasa a `TRANSFERRED` aunque le quede volumen (queda como merma
    * de trasiego). Sin él, el tanque se transfiere solo al agotarse su volumen (§4.2).
    */
   closeTank: z.boolean().optional(),
-  outputVolumeLiters: z.number().min(0).optional(),
-  wasteVolumeLiters: z.number().min(0).optional(),
+  /** Grado alcohólico del vino base que entra (% v/v). */
   initialAlcoholPercentage: z.number().min(0).max(100).optional(),
-  /** @deprecated Se ignora: la D.O. del lote se calcula en el servidor (EA-03). Sale de la entrada en H2. */
-  isDoEligible: z.boolean().optional(),
-  additionalParams: JsonObjectSchema.optional(),
   notes: z.string().optional(),
 })
 export type CreateDistillationBatchDto = z.infer<typeof CreateDistillationBatchSchema>

@@ -107,7 +107,8 @@ export const TraceDashboardSchema = z.object({
       harvestBatchId: z.string(),
       harvestBatchCode: z.string(),
       lotId: z.string().nullable(),
-      intakeDate: IsoDateTimeSchema,
+      /** Día del pesaje (`AAAA-MM-DD`), no un instante. */
+      intakeDate: z.iso.date(),
       status: PhytosanitaryStatusSchema,
     }),
   ),

@@ -344,17 +344,39 @@ export function buildFallbackHandlers(options: ErpHandlerOptions): HttpHandler[]
 // Cuerpo y query
 // ---------------------------------------------------------------------------
 
+export interface ParseOptions {
+  /**
+   * Campos retirados de la entrada (`RETIRED_INPUT_FIELDS`): como el backend
+   * (`forbidNonWhitelisted`), enviarlos responde 422 `VALIDATION_ERROR` en ese campo.
+   */
+  retired?: readonly string[]
+  /** Comprobación sobre el cuerpo tal como llegó, antes de validarlo. */
+  before?: (raw: Record<string, unknown>) => void
+}
+
+function preflight(raw: unknown, options: ParseOptions): void {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return
+  const body = raw as Record<string, unknown>
+  options.before?.(body)
+  const sent = (options.retired ?? []).filter((field) => field in body)
+  if (sent.length > 0) throw invalid(sent.map((field) => fieldError(field, `property ${field} should not exist`)))
+}
+
 /** Lee y valida el cuerpo JSON con un esquema zod (422 VALIDATION_ERROR con los campos). */
-export async function parseBody<S extends z.ZodType>(request: Request, schema: S): Promise<z.infer<S>> {
-  return validate(await readJson(request), schema)
+export async function parseBody<S extends z.ZodType>(request: Request, schema: S, options: ParseOptions = {}): Promise<z.infer<S>> {
+  const raw = await readJson(request)
+  preflight(raw, options)
+  return validate(raw, schema)
 }
 
 /**
  * Cuerpo de un alta (`Create*`): como el backend (`@IsOptional()` de class-validator), un
  * `null` en un campo opcional cuenta como omitido. Los esquemas `Create*` no lo declaran.
  */
-export async function parseCreateBody<S extends z.ZodType>(request: Request, schema: S): Promise<z.infer<S>> {
-  return validate(omitNulls(await readJson(request)), schema)
+export async function parseCreateBody<S extends z.ZodType>(request: Request, schema: S, options: ParseOptions = {}): Promise<z.infer<S>> {
+  const raw = await readJson(request)
+  preflight(raw, options)
+  return validate(omitNulls(raw), schema)
 }
 
 /** Quita las claves de primer nivel con valor `null` (altas: `null` = omitido). */

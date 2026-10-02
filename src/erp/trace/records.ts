@@ -43,6 +43,7 @@ import {
   nextHarvestCode,
   parseProductType,
   recordTankTransition,
+  fileSha256,
   refreshLotStage,
   releaseLocks,
   restLockOf,
@@ -57,7 +58,7 @@ import {
 
 // Registros de la cadena con las reglas de la Ola 2 (contrato §3–§5): pesaje, análisis de madurez,
 // dictamen, tanques y sus transiciones, lecturas, tratamientos, crianza, destilación y reposo.
-// Las rutas legadas y las nuevas pasan por aquí: las reglas no dependen de por dónde se entre.
+// Todas las rutas pasan por aquí: las reglas no dependen de por dónde se entre.
 
 const notFound = (message: string) => new ApiError(404, 'NOT_FOUND', message)
 const invalidField = (field: string, message: string) => new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', [{ field, message }])
@@ -191,11 +192,6 @@ function doTerroirCheck(ctx: TraceCtx, rules: Lot['rules'], terroir: TerroirResp
 
 /** Pesaje (§3.2): con lote, con lote nuevo (`newLot`) o sin lote (uva recibida). El dictamen va aparte (EA-04). */
 export function createHarvest(state: TraceState, ctx: TraceCtx, wineryId: string, body: CreateHarvestBatchDto): HarvestBatchResponse {
-  if (body.phytosanitaryStatus !== undefined && body.phytosanitaryStatus !== 'PENDING_INSPECTION') {
-    throw ruleError('TRC_PHYTO_IN_CREATE', 'El dictamen fitosanitario no se registra en el alta del pesaje: usa POST …/phyto-decisions', [
-      violation('TRC_PHYTO_IN_CREATE', 'El dictamen se registra aparte, con su autor', { field: 'phytosanitaryStatus', expected: 'PENDING_INSPECTION', actual: body.phytosanitaryStatus }),
-    ])
-  }
   if (body.grossWeightKg <= body.tareWeightKg) throw invalidField('grossWeightKg', 'El peso bruto debe ser estrictamente mayor al peso tara')
   const terroir = state.terroirs.find((t) => t.id === body.terroirId && t.wineryId === wineryId)
   if (!terroir) throw notFound('Parcela no encontrada en esta bodega')
@@ -219,8 +215,7 @@ export function createHarvest(state: TraceState, ctx: TraceCtx, wineryId: string
   if (productType === 'SINGANI') doTerroirCheck(ctx, lot?.rules ?? buildLotRules(ctx.snapshot(wineryId), 'LOT_CREATION'), terroir, 'terroirId')
   if (body.newLot) lot = createLot(state, ctx, wineryId, body.newLot, { field: 'newLot' })
 
-  const flat = body.brixDegrees !== undefined && body.initialPh !== undefined && body.initialAcidityGl !== undefined
-  const maturity = body.maturity ?? (flat ? { brixDegrees: body.brixDegrees!, ph: body.initialPh!, acidityGl: body.initialAcidityGl! } : null)
+  const maturity = body.maturity ?? null
   const intakeDate = toInstant(body.intakeDate)
   const harvest: HarvestBatchResponse = {
     id: ctx.newId('harvest'),
@@ -261,7 +256,7 @@ export function createHarvest(state: TraceState, ctx: TraceCtx, wineryId: string
     })
     refreshLotStage(state, ctx, lot)
   }
-  if (maturity) addMaturityAnalysis(state, ctx, harvest, { ...maturity, measuredAt: body.maturity?.measuredAt ?? body.intakeDate })
+  if (maturity) addMaturityAnalysis(state, ctx, harvest, { ...maturity, measuredAt: maturity.measuredAt ?? body.intakeDate })
   return harvest
 }
 
@@ -299,8 +294,6 @@ export function addMaturityAnalysis(state: TraceState, ctx: TraceCtx, harvest: H
 export interface PhytoDecisionInput {
   decision: PhytoDecisionValue
   inspectionReportKey?: string
-  /** Ruta legada: URL del informe (alias de la `key` hasta H2). */
-  legacyReportUrl?: string | null
   notes?: string | null
   decidedAt?: string
 }
@@ -327,7 +320,7 @@ export function decidePhyto(state: TraceState, ctx: TraceCtx, harvest: HarvestBa
     assertNotBefore('decidedAt', dayOf(input.decidedAt), dayOf(harvest.intakeDate))
   }
   if (input.inspectionReportKey) assertOwnFile(harvest.wineryId, 'inspectionReportKey', input.inspectionReportKey)
-  const key = input.inspectionReportKey ?? input.legacyReportUrl ?? null
+  const key = input.inspectionReportKey ?? null
   const decision: PhytoDecision = {
     id: ctx.newId('phyto-decision'),
     harvestBatchId: harvest.id,
@@ -335,13 +328,13 @@ export function decidePhyto(state: TraceState, ctx: TraceCtx, harvest: HarvestBa
     decidedAt: input.decidedAt ? toInstant(input.decidedAt) : ctx.now,
     recordedAt: ctx.now,
     decidedBy: ctx.actor,
-    inspectionReport: key ? { key, sha256: null, url: input.legacyReportUrl ?? null } : null,
+    inspectionReport: key ? { key, sha256: fileSha256(key, state), url: null } : null,
     notes,
     source: 'ERP',
   }
   state.phytoDecisions.push(decision)
   syncHarvest(state, harvest)
-  if (key) harvest.phytoInspectionPdfUrl = input.legacyReportUrl ?? key
+  if (key) harvest.phytoInspectionPdfUrl = key
   if (lot) {
     appendLotEvent(state, ctx, lot, {
       type: 'PHYTO_DECIDED',
@@ -377,7 +370,7 @@ function lotOfTank(state: TraceState, tank: FermentationTankResponse, writable =
 
 /** Tanque lleno con pesajes de un mismo lote (§4.1). */
 export function createTank(state: TraceState, ctx: TraceCtx, wineryId: string, body: CreateFermentationTankDto): FermentationTankResponse {
-  const requested = body.inputs ?? [{ harvestBatchId: body.harvestBatchId as string }]
+  const requested = body.inputs
   const harvests = requested.map((i) => findHarvestIn(state, i.harvestBatchId, wineryId))
   const startDay = dayOf(body.startDate)
   assertNotFuture(ctx, 'startDate', startDay)
@@ -430,7 +423,7 @@ export function createTank(state: TraceState, ctx: TraceCtx, wineryId: string, b
     if (kg > available + 1e-6 || available <= 0) {
       throw ruleError('TRC_VOLUME_EXCEEDS_AVAILABLE', `Del pesaje ${h.harvestBatchCode} quedan ${formatQuantity(available, 3)} kg`, [
         violation('TRC_VOLUME_EXCEEDS_AVAILABLE', 'Kilos por encima de lo disponible', {
-          field: body.inputs ? `inputs.${i}.kg` : 'harvestBatchId',
+          field: `inputs.${i}.kg`,
           expected: available,
           actual: kg,
           meta: { available, requested: kg, unit: 'kg', harvestBatchId: h.id },
@@ -439,7 +432,7 @@ export function createTank(state: TraceState, ctx: TraceCtx, wineryId: string, b
     }
     return { harvestBatchId: h.id, kg }
   })
-  if (body.capacityLiters !== undefined && body.volumeFilledLiters !== undefined && body.volumeFilledLiters > body.capacityLiters) {
+  if (body.capacityLiters !== undefined && body.volumeFilledLiters > body.capacityLiters) {
     throw ruleError('TRC_TANK_CAPACITY_EXCEEDED', `El tanque tiene ${formatQuantity(body.capacityLiters, 2)} L de capacidad`, [
       violation('TRC_TANK_CAPACITY_EXCEEDED', 'Llenado mayor que la capacidad', {
         field: 'volumeFilledLiters',
@@ -466,7 +459,7 @@ export function createTank(state: TraceState, ctx: TraceCtx, wineryId: string, b
     tankCode: body.tankCode,
     capacityLiters: body.capacityLiters ?? null,
     material: body.material ?? null,
-    volumeFilledLiters: body.volumeFilledLiters ?? null,
+    volumeFilledLiters: body.volumeFilledLiters,
     destinationType: body.destinationType ?? null,
     status: fermenting ? 'FERMENTING' : 'FILLING',
     startDate,
@@ -574,19 +567,26 @@ export function completeTank(state: TraceState, ctx: TraceCtx, tank: Fermentatio
 }
 
 /**
- * `TRANSFERRED → CLEANED`: libera el `tankCode` (S-7). El tanque de un lote descartado o rechazado
- * se limpia desde cualquier estado (si no, quedaría ocupado para siempre). No escribe en la línea
- * de tiempo del lote: queda en el historial del tanque y en la bitácora.
+ * `TRANSFERRED → CLEANED`: libera el `tankCode` (S-7). Dos casos más, para que un código físico no
+ * quede ocupado para siempre: el tanque de un lote descartado o rechazado se limpia desde cualquier
+ * estado, y un tanque `COMPLETED` del que ya salió alguna destilación y al que le queda un remanente
+ * se cierra aquí (pasa por `TRANSFERRED`; el remanente queda como `transferLossLiters`). No escribe
+ * en la línea de tiempo del lote: queda en el historial del tanque y en la bitácora.
  */
 export function cleanTank(state: TraceState, ctx: TraceCtx, tank: FermentationTankResponse, cleanedAt?: string): FermentationTankResponse {
   const lot = state.lots.find((l) => l.id === tank.lotId)
   const lotGone = lot?.stage === 'DISCARDED' || lot?.stage === 'REJECTED'
-  if (tank.status === 'CLEANED' || (tank.status !== 'TRANSFERRED' && !lotGone)) throw invalidTransition(tank, 'CLEANED')
+  // Completado, con alguna destilación ya salida y un remanente por cerrar; sin ninguna salida, el vino base sigue dentro.
+  const drained = tank.status === 'COMPLETED' && state.productionBatches.some((p) => p.fermentationTankId === tank.id)
+  if (tank.status === 'CLEANED' || (tank.status !== 'TRANSFERRED' && !lotGone && !drained)) throw invalidTransition(tank, 'CLEANED')
   if (cleanedAt) {
     assertInstantNotFuture(ctx, 'cleanedAt', cleanedAt)
     assertNotBefore('cleanedAt', dayOf(cleanedAt), dayOf(tank.endDate ?? tank.startDate))
   }
-  moveTank(ctx, tank, 'CLEANED', cleanedAt ? toInstant(cleanedAt) : ctx.now)
+  const at = cleanedAt ? toInstant(cleanedAt) : ctx.now
+  // Con remanente: el cierre (`TRANSFERRED`) queda en el historial y el resto, como merma de trasiego.
+  if (drained) moveTank(ctx, tank, 'TRANSFERRED', at)
+  moveTank(ctx, tank, 'CLEANED', at)
   if (lot && !lotGone && ctx.now > lot.updatedAt) lot.updatedAt = ctx.now
   return tank
 }
@@ -673,29 +673,24 @@ export function addTreatment(state: TraceState, ctx: TraceCtx, tank: Fermentatio
 }
 
 /**
- * Tanque del que sale una crianza o una destilación. Contrato §5: exige `COMPLETED` (409
- * `TRC_TANK_NOT_COMPLETED`). Hasta H2, como el backend, un tanque `FILLING` o `FERMENTING` también
- * vale (el ERP de la Ola 1 no conoce las transiciones) y queda completado por la propia operación;
- * se rechaza el que ya se transfirió o se limpió.
+ * Solo un tanque `COMPLETED` es origen de una crianza o de una destilación (§5.1, §5.2): sin
+ * completar (`FILLING`/`FERMENTING`) aún no tiene volumen final ni destino decidido, y
+ * `TRANSFERRED`/`CLEANED` ya no tiene volumen que transferir → 409 `TRC_TANK_NOT_COMPLETED`.
  */
-function assertTankTransferable(tank: FermentationTankResponse): void {
-  if (tank.status !== 'TRANSFERRED' && tank.status !== 'CLEANED') return
-  throw stateError('TRC_TANK_NOT_COMPLETED', `El tanque ${tank.tankCode} está ${tank.status}: ya no tiene vino que trasladar`, [
-    violation('TRC_TANK_NOT_COMPLETED', 'El tanque ya se transfirió', { field: 'fermentationTankId', meta: { status: tank.status } }),
-  ])
+function assertTankIsSource(tank: FermentationTankResponse): void {
+  if (tank.status === 'COMPLETED') return
+  const pending = tank.status === 'FILLING' || tank.status === 'FERMENTING'
+  throw stateError(
+    'TRC_TANK_NOT_COMPLETED',
+    pending ? `El tanque ${tank.tankCode} está ${tank.status}: completa la fermentación antes de transferirlo` : `El tanque ${tank.tankCode} está ${tank.status}: ya no tiene volumen que transferir`,
+    [violation('TRC_TANK_NOT_COMPLETED', pending ? 'Tanque sin completar' : 'Tanque ya transferido', { field: 'fermentationTankId', meta: { status: tank.status, tankId: tank.id } })],
+  )
 }
 
-/**
- * Cierra un tanque que la ruta legada usa sin completar (fecha de fin y destino de la operación) y
- * lo pasa a `TRANSFERRED` cuando se agota (o con `closeTank`).
- */
-function settleTank(ctx: TraceCtx, tank: FermentationTankResponse, destination: 'WINE_AGING' | 'SINGANI_DIST', day: string, exhausted: boolean): void {
+/** `COMPLETED → TRANSFERRED` (automática): al crear la crianza del tanque, al agotarse su volumen o con `closeTank`. */
+function transferTank(ctx: TraceCtx, tank: FermentationTankResponse, destination: 'WINE_AGING' | 'SINGANI_DIST'): void {
   tank.destinationType = destination
-  if (tank.status === 'FILLING' || tank.status === 'FERMENTING') {
-    tank.endDate ??= toDateField(day)
-    moveTank(ctx, tank, 'COMPLETED', tank.endDate)
-  }
-  if (exhausted && tank.status === 'COMPLETED') moveTank(ctx, tank, 'TRANSFERRED')
+  moveTank(ctx, tank, 'TRANSFERRED')
 }
 
 // ---------------------------------------------------------------------------
@@ -716,7 +711,7 @@ export function createAging(state: TraceState, ctx: TraceCtx, wineryId: string, 
     throw new ApiError(409, 'FERMENTATION_TANK_ALREADY_TRANSFERRED', `La cuba ${tank.tankCode} ya ha sido transferida a un lote de crianza previo`)
   }
   assertStage(lot, ['FERMENTING', 'AGING'], 'crianzas')
-  assertTankTransferable(tank)
+  assertTankIsSource(tank)
   const product = assertDestination(lot, tank.destinationType ?? 'WINE_AGING', 'fermentationTankId')
   if (product !== 'WINE') {
     throw ruleError('TRC_DESTINATION_MISMATCH', `El tanque ${tank.tankCode} tiene destino ${tank.destinationType}: no admite crianza`, [
@@ -770,7 +765,7 @@ export function createAging(state: TraceState, ctx: TraceCtx, wineryId: string, 
   const resource = { type: 'wine_aging_batch', id: aging.id }
   decideProductType(state, ctx, lot, 'WINE', toDateField(startDay), resource)
   // Una crianza por tanque: lo que no se traslada queda como merma de trasiego.
-  settleTank(ctx, tank, 'WINE_AGING', startDay, true)
+  transferTank(ctx, tank, 'WINE_AGING')
   appendLotEvent(state, ctx, lot, {
     type: 'AGING_STARTED',
     occurredAt: toDateField(startDay),
@@ -834,21 +829,16 @@ function massBalance(field: string, input: number, total: number): ApiError {
   ])
 }
 
-const legacyCut = (params: unknown, key: string): number | null => {
-  const v = typeof params === 'object' && params !== null ? (params as Record<string, unknown>)[key] : undefined
-  return typeof v === 'number' && Number.isFinite(v) ? v : null
-}
-
 /**
- * Destilación (§5.2). La D.O. del lote se comprueba con su instantánea (`isDoEligible` se ignora).
- * Compatibilidad hasta H2: con `processEndDate` (y `outputVolumeLiters` o los cortes de
- * `additionalParams`) crea y cierra en una llamada.
+ * Destilación (§5.2): abre el lote de destilación desde un tanque `COMPLETED` con destino singani.
+ * La D.O. del lote se comprueba con su instantánea. Los cortes, el grado del corazón y el reposo
+ * llegan con el cierre (`POST …/close`).
  */
 export function createDistillation(state: TraceState, ctx: TraceCtx, wineryId: string, body: CreateDistillationBatchDto): ProductionBatchResponse {
   const tank = findTankIn(state, body.fermentationTankId, wineryId)
   const lot = lotOfTank(state, tank)
+  assertTankIsSource(tank)
   assertStage(lot, ['FERMENTING', 'DISTILLING', 'RESTING'], 'destilaciones')
-  assertTankTransferable(tank)
   const product = assertDestination(lot, tank.destinationType ?? 'SINGANI_DIST', 'fermentationTankId')
   if (product !== 'SINGANI') {
     throw ruleError('TRC_DESTINATION_MISMATCH', `El tanque ${tank.tankCode} tiene destino ${tank.destinationType}: no admite destilación`, [
@@ -856,16 +846,13 @@ export function createDistillation(state: TraceState, ctx: TraceCtx, wineryId: s
     ])
   }
   const startDay = dayOf(body.processStartDate)
-  const endDay = body.processEndDate ? dayOf(body.processEndDate) : null
-  const resource = { type: 'fermentation_tank', id: tank.id }
-  decideProductType(state, ctx, lot, 'SINGANI', toDateField(startDay), resource)
+  decideProductType(state, ctx, lot, 'SINGANI', toDateField(startDay), { type: 'fermentation_tank', id: tank.id })
   assertLotDo(state, ctx, lot)
+  // Inicio no futuro ni anterior al fin de la fermentación.
   assertNotFuture(ctx, 'processStartDate', startDay)
-  if (endDay) assertNotFuture(ctx, 'processEndDate', endDay)
-  assertNotBefore('processStartDate', startDay, dayOf(tank.startDate))
-  if (endDay) assertNotBefore('processEndDate', endDay, startDay)
+  assertNotBefore('processStartDate', startDay, dayOf(tank.endDate ?? tank.startDate))
   const available = tankAvailableLiters(state, tank)
-  if (body.inputVolumeLiters !== undefined && available !== null && body.inputVolumeLiters > available + 1e-6) {
+  if (available !== null && body.inputVolumeLiters > available + 1e-6) {
     throw ruleError('TRC_VOLUME_EXCEEDS_AVAILABLE', `Del tanque ${tank.tankCode} quedan ${formatQuantity(available, 2)} L`, [
       violation('TRC_VOLUME_EXCEEDS_AVAILABLE', 'Litros por encima de lo disponible', {
         field: 'inputVolumeLiters',
@@ -875,13 +862,6 @@ export function createDistillation(state: TraceState, ctx: TraceCtx, wineryId: s
       }),
     ])
   }
-  const heads = legacyCut(body.additionalParams, 'headDiscardLiters')
-  const tails = legacyCut(body.additionalParams, 'tailDiscardLiters')
-  const heart = legacyCut(body.additionalParams, 'heartYieldLiters') ?? body.outputVolumeLiters ?? null
-  const cutsTotal = heads !== null || tails !== null ? (heads ?? 0) + (heart ?? 0) + (tails ?? 0) : (body.outputVolumeLiters ?? 0) + (body.wasteVolumeLiters ?? 0)
-  if (endDay && body.inputVolumeLiters !== undefined && cutsTotal > body.inputVolumeLiters + 1e-6) throw massBalance('outputVolumeLiters', body.inputVolumeLiters, cutsTotal)
-
-  const restUntil = endDay ? addDaysYmd(endDay, lot.rules.singani.minRestDays) : null
   const production: ProductionBatchResponse = {
     id: ctx.newId('production'),
     wineryId,
@@ -889,47 +869,39 @@ export function createDistillation(state: TraceState, ctx: TraceCtx, wineryId: s
     processType: 'SINGANI_DISTILLATION',
     equipmentIdentifier: body.equipmentIdentifier,
     processStartDate: toDateField(startDay),
-    processEndDate: endDay ? toDateField(endDay) : null,
-    inputVolumeLiters: body.inputVolumeLiters ?? null,
-    outputVolumeLiters: body.outputVolumeLiters ?? null,
-    wasteVolumeLiters: body.wasteVolumeLiters ?? null,
+    processEndDate: null,
+    inputVolumeLiters: body.inputVolumeLiters,
+    outputVolumeLiters: null,
+    wasteVolumeLiters: null,
     initialAlcoholPercentage: body.initialAlcoholPercentage ?? null,
-    // D.O. calculada: el valor enviado se ignora (EA-03).
+    // D.O. calculada sobre el lote (acaba de comprobarse, EA-03).
     isDoEligible: true,
-    mandatoryRestUntil: restUntil ? toDateField(restUntil) : null,
-    restStatus: endDay ? 'RESTING' : 'NOT_REQUIRED',
-    additionalParams: body.additionalParams ?? null,
+    mandatoryRestUntil: null,
+    // El reposo se abre al cerrar la destilación.
+    restStatus: 'NOT_REQUIRED',
+    additionalParams: null,
     notes: body.notes ?? null,
     createdAt: ctx.now,
     lotId: lot.id,
-    headsLiters: endDay ? heads : null,
-    heartLiters: endDay ? heart : null,
-    tailsLiters: endDay ? tails : null,
+    headsLiters: null,
+    heartLiters: null,
+    tailsLiters: null,
     vinasseLiters: null,
-    heartAbvPercent: endDay ? (body.initialAlcoholPercentage ?? null) : null,
+    heartAbvPercent: null,
   }
   state.productionBatches.push(production)
-  const remaining = tankAvailableLiters(state, tank)
-  settleTank(ctx, tank, 'SINGANI_DIST', startDay, body.closeTank === true || (remaining !== null && remaining <= 1e-6))
-  const own = { type: 'production_batch', id: production.id }
   appendLotEvent(state, ctx, lot, {
     type: 'DISTILLATION_STARTED',
     occurredAt: production.processStartDate,
     stage: 'DISTILLING',
-    summary: `Destilación en ${body.equipmentIdentifier}${body.inputVolumeLiters ? ` de ${formatQuantity(body.inputVolumeLiters, 3)} L` : ''}`,
-    data: { inputVolumeLiters: body.inputVolumeLiters ?? null, unit: 'L', equipmentIdentifier: body.equipmentIdentifier },
-    resource: own,
+    summary: `Destilación en ${body.equipmentIdentifier} de ${formatQuantity(body.inputVolumeLiters, 3)} L`,
+    data: { inputVolumeLiters: body.inputVolumeLiters, unit: 'L', equipmentIdentifier: body.equipmentIdentifier },
+    resource: { type: 'production_batch', id: production.id },
   })
+  // → TRANSFERRED al agotarse el tanque o con `closeTank` (§4.2).
+  const remaining = tankAvailableLiters(state, tank)
+  if (body.closeTank === true || (remaining !== null && remaining <= 1e-6)) transferTank(ctx, tank, 'SINGANI_DIST')
   refreshLotStage(state, ctx, lot)
-  if (endDay) {
-    appendLotEvent(state, ctx, lot, {
-      type: 'DISTILLATION_CLOSED',
-      occurredAt: toDateField(endDay),
-      summary: `Destilación cerrada: corazón de ${formatQuantity(heart ?? 0, 3)} L; reposo hasta ${restUntil}`,
-      data: { heartLiters: heart, heartAbvPercent: body.initialAlcoholPercentage ?? null, restUntil, unit: 'L' },
-      resource: own,
-    })
-  }
   return production
 }
 

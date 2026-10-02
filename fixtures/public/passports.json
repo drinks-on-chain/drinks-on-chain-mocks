@@ -51,7 +51,7 @@
     "fermentation": {
       "status": "RECORDED",
       "startDate": "2025-03-11T14:30:00Z",
-      "endDate": "2025-04-13T14:30:00Z",
+      "endDate": "2025-04-12T14:30:00Z",
       "readingsCount": 24,
       "treatments": [
         {
@@ -202,24 +202,6 @@
         "lateEntry": true,
         "summary": "Dictamen fitosanitario: aprobado",
         "actorRole": "ENOLOGIST",
-        "corrected": false
-      },
-      {
-        "type": "TANK_FILLED",
-        "occurredAt": "2025-03-11T14:30:00Z",
-        "recordedAt": "2025-03-11T14:35:00Z",
-        "lateEntry": false,
-        "summary": "Mosto en tanque de fermentación",
-        "actorRole": null,
-        "corrected": false
-      },
-      {
-        "type": "FERMENTATION_COMPLETED",
-        "occurredAt": "2025-04-13T14:30:00Z",
-        "recordedAt": "2025-03-11T14:35:00Z",
-        "lateEntry": false,
-        "summary": "Fermentación completada",
-        "actorRole": null,
         "corrected": false
       },
       {
@@ -886,7 +868,7 @@
         {
           "key": "trazabilidad.vino.crianzaMinimaMeses",
           "label": "Crianza mínima",
-          "value": 0,
+          "value": 6,
           "unit": "meses",
           "legalException": false
         },
@@ -1103,7 +1085,7 @@
         {
           "key": "trazabilidad.vino.crianzaMinimaMeses",
           "label": "Crianza mínima",
-          "value": 0,
+          "value": 6,
           "unit": "meses",
           "legalException": false
         },
@@ -2343,7 +2325,7 @@
     },
     "dossier": {
       "status": "CLOSED",
-      "hash": "96204f58e5b47a3929ca42cf38d3d4ab2816107c581a62c1dfe7a6aa99549d5c",
+      "hash": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
       "closedAt": "2026-09-24T15:00:00Z",
       "canonicalUrl": "/v1/public/lots/CVJ-2026-SINGANI-004/dossier",
       "anchor": null

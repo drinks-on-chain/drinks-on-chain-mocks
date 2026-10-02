@@ -30,7 +30,7 @@
     "material": "Acero inoxidable AISI 316",
     "volumeFilledLiters": 10100,
     "destinationType": "SINGANI_DIST",
-    "status": "TRANSFERRED",
+    "status": "CLEANED",
     "startDate": "2025-03-11T14:30:00Z",
     "endDate": "2025-04-12T14:30:00Z",
     "createdAt": "2025-03-11T14:35:00Z",
@@ -40,6 +40,28 @@
       {
         "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
         "kg": 14850
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2025-03-11T14:30:00Z",
+        "by": null
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2025-04-12T14:30:00Z",
+        "by": null
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2025-05-20T00:00:00Z",
+        "by": null
+      },
+      {
+        "status": "CLEANED",
+        "at": "2025-05-26T14:00:00Z",
+        "by": null
       }
     ]
   },
@@ -176,28 +198,6 @@
     ]
   },
   {
-    "id": "04e8d15f-24ff-5943-83db-6f915387071c",
-    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
-    "tankCode": "TK-06",
-    "capacityLiters": 10000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 0,
-    "destinationType": "WINE_AGING",
-    "status": "CLEANED",
-    "startDate": "2026-01-05T14:30:00Z",
-    "endDate": "2026-01-06T14:30:00Z",
-    "createdAt": "2026-01-05T14:35:00Z",
-    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
-    "finalVolumeLiters": null,
-    "inputs": [
-      {
-        "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
-        "kg": 0
-      }
-    ]
-  },
-  {
     "id": "d78d6307-f96b-533b-8f6e-710f6533bb42",
     "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
     "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",
@@ -206,7 +206,7 @@
     "material": "Acero inoxidable AISI 316",
     "volumeFilledLiters": 6300,
     "destinationType": "SINGANI_DIST",
-    "status": "COMPLETED",
+    "status": "TRANSFERRED",
     "startDate": "2026-03-07T14:30:00Z",
     "endDate": "2026-04-02T14:30:00Z",
     "createdAt": "2026-03-07T14:35:00Z",
@@ -216,50 +216,6 @@
       {
         "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",
         "kg": 6300
-      }
-    ]
-  },
-  {
-    "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2",
-    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-    "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
-    "tankCode": "TK-09",
-    "capacityLiters": 15000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 0,
-    "destinationType": "SINGANI_DIST",
-    "status": "CLEANED",
-    "startDate": "2025-03-11T14:30:00Z",
-    "endDate": "2025-04-13T14:30:00Z",
-    "createdAt": "2025-03-11T14:35:00Z",
-    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
-    "finalVolumeLiters": null,
-    "inputs": [
-      {
-        "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
-        "kg": 0
-      }
-    ]
-  },
-  {
-    "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae",
-    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
-    "tankCode": "TK-RED-04",
-    "capacityLiters": 10000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 0,
-    "destinationType": "WINE_AGING",
-    "status": "CLEANED",
-    "startDate": "2025-03-03T14:30:00Z",
-    "endDate": "2025-03-25T14:30:00Z",
-    "createdAt": "2025-03-03T14:35:00Z",
-    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
-    "finalVolumeLiters": null,
-    "inputs": [
-      {
-        "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
-        "kg": 0
       }
     ]
   },

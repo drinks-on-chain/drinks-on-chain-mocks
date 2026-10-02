@@ -32,12 +32,10 @@ const harvestBody = {
   harvestYear: 2026,
   grossWeightKg: 1200,
   tareWeightKg: 200,
-  brixDegrees: 23,
-  initialPh: 3.4,
-  initialAcidityGl: 6,
+  maturity: { brixDegrees: 23, ph: 3.4, acidityGl: 6 },
 }
 const logBody = { temperatureCelsius: 22, recordedAt: '2026-09-25T08:00:00Z' }
-const tankBody = { harvestBatchId: altosHarvest.id, tankCode: 'TK-PERM', startDate: '2026-09-25' }
+const tankBody = { inputs: [{ harvestBatchId: altosHarvest.id }], tankCode: 'TK-PERM', volumeFilledLiters: 500, startDate: '2026-09-25' }
 
 /** Contadora activa en Altos (en los fixtures la única contadora está bloqueada): invitada y aceptada. */
 async function altosAccountant(): Promise<string> {
@@ -62,7 +60,7 @@ describe('matriz de roles de bodega (docs-back/05 §3)', () => {
     expect((await call(`/v1/fermentation-tanks/${altosTank.id}/logs`, { token: op, body: logBody })).status).toBe(201)
     expect((await call('/v1/harvest-batches', { token: op })).status).toBe(200)
     expect((await call(`/v1/fermentation-tanks/${altosTank.id}`, { token: op })).status).toBe(200)
-    const phyto = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-status`, { token: op, method: 'PATCH', body: { phytosanitaryStatus: 'APPROVED' } })
+    const phyto = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-decisions`, { token: op, body: { decision: 'APPROVED' } })
     expect(phyto.status).toBe(403)
     expect(code(phyto.json)).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
     expect((await call('/v1/fermentation-tanks', { token: op, body: tankBody })).status).toBe(403)
@@ -89,9 +87,9 @@ describe('matriz de roles de bodega (docs-back/05 §3)', () => {
     const owner = await login('admin@altos.test')
     // Un pesaje aún sin dictamen (uno ya aprobado es final: 409 `TRC_PHYTO_DECISION_FINAL`).
     const pending = F.harvestBatches.find((h) => h.wineryId === ALTOS.id && h.phytosanitaryStatus === 'PENDING_INSPECTION')!
-    const phyto = await call(`/v1/harvest-batches/${pending.id}/phyto-status`, { token: owner, method: 'PATCH', body: { phytosanitaryStatus: 'APPROVED' } })
-    expect(phyto.status).toBe(200)
-    const final = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-status`, { token: owner, method: 'PATCH', body: { phytosanitaryStatus: 'APPROVED' } })
+    const phyto = await call(`/v1/harvest-batches/${pending.id}/phyto-decisions`, { token: owner, body: { decision: 'APPROVED' } })
+    expect(phyto.status).toBe(201)
+    const final = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-decisions`, { token: owner, body: { decision: 'APPROVED' } })
     expect(final.status).toBe(409)
     expect(code(final.json)).toBe('TRC_PHYTO_DECISION_FINAL')
     const agro = await login('agronomo@altos.test')

@@ -24,6 +24,21 @@ export const CorrectionMarksShape = {
 export const CorrectionMarksSchema = z.object(CorrectionMarksShape)
 export type CorrectionMarks = Required<z.infer<typeof CorrectionMarksSchema>>
 
+/**
+ * Campos de entrada retirados en el cierre H2 de la Ola 2 (contrato §16.2), por DTO. Como el
+ * backend (`forbidNonWhitelisted`), enviar uno responde 422 `VALIDATION_ERROR` en ese campo
+ * («property … should not exist»); `phytosanitaryStatus` del pesaje responde 422 `TRC_PHYTO_IN_CREATE`.
+ */
+export const RETIRED_INPUT_FIELDS = {
+  CreateHarvestBatchDto: ['brixDegrees', 'initialPh', 'initialAcidityGl'],
+  CreateTerroirDto: ['isDoEligible'],
+  UpdateTerroirDto: ['isDoEligible'],
+  CreateFermentationTankDto: ['harvestBatchId'],
+  CreateDistillationBatchDto: ['processEndDate', 'outputVolumeLiters', 'wasteVolumeLiters', 'additionalParams', 'isDoEligible'],
+  CreateLotBottlingDto: ['labelDesignUrl'],
+  CreateLotLabAnalysisDto: ['laboratoryReportPdfUrl'],
+} as const satisfies Record<string, readonly string[]>
+
 /** Objeto libre (`additionalParams`, polígonos GeoJSON…). */
 export const JsonObjectSchema = z.record(z.string(), z.unknown())
 

@@ -11,6 +11,7 @@ import {
   DiscardLotSchema,
   LOT_PRODUCT_TYPES,
   LOT_STAGE_CODES,
+  RETIRED_INPUT_FIELDS,
   UpdateLotSchema,
   VoidBottleCodeSchema,
   type BottlingPreview,
@@ -36,7 +37,8 @@ import {
 } from '../../trace/dossier'
 import { discardLot, updateLot } from '../../trace/lots'
 import { violation } from '../../trace/rules'
-import { allLotLabs, createLot, findLot, lotDossier, toLotSummary, toLotView, type StoredBottleExport } from '../../trace/state'
+import { allLotLabs, createLot, emptyTraceCollections, findLot, lotDossier, toLotSummary, toLotView, type StoredBottleExport, type TraceState } from '../../trace/state'
+import { getScenario } from '../../../shared/scenarios'
 import {
   lotBalance,
   lotGraph,
@@ -63,6 +65,18 @@ const LOT_WRITERS = ['OWNER', 'ENOLOGIST'] as const
 
 /** Lote de la bodega de la petición (o de cualquiera, para la plataforma sin `?wineryId=`). */
 const lotOf = (auth: AuthContext, id: string, writable = false): Lot => findLot(getErpDb(), id, auth.tenantId, { writable })
+/**
+ * Estado del que leen el panel y el reporte: en el escenario `empty`, una bodega sin registros
+ * (no son listas paginadas, así que el vaciado genérico de las listas no las alcanza).
+ */
+const insightsState = (): TraceState =>
+  getScenario() === 'empty'
+    ? { wineries: [], terroirs: [], harvestBatches: [], tanks: [], logs: [], treatments: [], wineAgings: [], productionBatches: [], bottlings: [], labAnalyses: [], ...emptyTraceCollections() }
+    : getErpDb()
+
+/** Nombre del CSV del reporte de producción: `reporte-produccion-AAAA-MM-DD.csv` (día de La Paz en que se pide). */
+export const productionReportFilename = (today: string): string => `reporte-produccion-${today}.csv`
+
 const lotViewOf = (auth: AuthContext, lot: Lot) => toLotView(getErpDb(), lot, traceCtx(auth))
 
 /** Etapas de un filtro `stage=A,B`; una desconocida → 422. */
@@ -248,7 +262,7 @@ export const lotRoutes: RouteSpec[] = [
       const db = getErpDb()
       const lot = lotOf(auth, params.id!, true)
       assertNotBottled(db, lot)
-      const body = await parseCreateBody(request, CreateLotBottlingSchema)
+      const body = await parseCreateBody(request, CreateLotBottlingSchema, { retired: RETIRED_INPUT_FIELDS.CreateLotBottlingDto })
       const evaluation = evaluateBottling(db, traceCtx(auth), lot, lotBottlingRequest(db, lot, body))
       const preview: BottlingPreview = { valid: evaluation.valid, balance: evaluation.balance, violations: evaluation.violations }
       return ok(preview)
@@ -263,7 +277,7 @@ export const lotRoutes: RouteSpec[] = [
       const { request, auth, params } = ctx
       const db = getErpDb()
       const lot = lotOf(auth, params.id!)
-      const body = await parseCreateBody(request, CreateLotBottlingSchema)
+      const body = await parseCreateBody(request, CreateLotBottlingSchema, { retired: RETIRED_INPUT_FIELDS.CreateLotBottlingDto })
       tick()
       const bottling = bottleLot(db, traceCtx(auth), lot, lotBottlingRequest(db, lot, body))
       audit(ctx, 'BOTTLED', lot, { type: 'bottling_batch', id: bottling.id }, { lotCode: bottling.internationalLotCode, bottles: bottling.totalBottlesPackaged })
@@ -382,7 +396,7 @@ export const lotRoutes: RouteSpec[] = [
     async handle(ctx) {
       const { request, auth, params } = ctx
       const lot = lotOf(auth, params.id!)
-      const body = await parseCreateBody(request, CreateLotLabAnalysisSchema)
+      const body = await parseCreateBody(request, CreateLotLabAnalysisSchema, { retired: RETIRED_INPUT_FIELDS.CreateLotLabAnalysisDto })
       tick()
       const lab = registerLab(getErpDb(), traceCtx(auth), lot, body)
       audit(ctx, 'LAB_REGISTERED', lot, { type: 'lab_analysis', id: lab.id }, { conformity: lab.conformityStatus })
@@ -542,7 +556,7 @@ export const lotRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/traceability/dashboard',
     access: trace(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
-    handle: ({ auth }) => ok(traceDashboard(getErpDb(), traceCtx(auth), auth.tenantId)),
+    handle: ({ auth }) => ok(traceDashboard(insightsState(), traceCtx(auth), auth.tenantId)),
   },
   {
     method: 'get',
@@ -555,7 +569,7 @@ export const lotRoutes: RouteSpec[] = [
         if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) throw invalid([fieldError(name, `${name} debe tener el formato YYYY-MM-DD`)])
         return value
       }
-      const report = productionReport(getErpDb(), {
+      const report = productionReport(insightsState(), {
         wineryId: auth.tenantId,
         from: day('from'),
         to: day('to'),
@@ -572,7 +586,7 @@ export const lotRoutes: RouteSpec[] = [
         status: 200,
         data: undefined,
         raw: { body: productionReportCsv(report), contentType: 'text/csv; charset=utf-8' },
-        headers: { 'Content-Disposition': 'attachment; filename="reporte-de-produccion.csv"', 'Cache-Control': 'no-store', 'X-Export-Rows': String(report.rows.length) },
+        headers: { 'Content-Disposition': `attachment; filename="${productionReportFilename(traceCtx(auth).today)}"`, 'Cache-Control': 'no-store', 'X-Export-Rows': String(report.rows.length) },
       }
     },
   },

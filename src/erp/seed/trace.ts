@@ -2,16 +2,14 @@ import type { BackofficeFixtureSet } from '../../backoffice/seed/generate'
 import { REFERENCE_DAY } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
 import { WINERY_CODES_BY_ID } from '../catalog'
-import { deriveLotViews } from '../lot-view'
-import type { Correction, DagGraph, Lot, LotDossier, MaturityAnalysis, PhytoDecision, StoredLotEvent } from '../schemas'
+import type { Correction, Lot, LotDossier, MaturityAnalysis, PhytoDecision, StoredLotEvent } from '../schemas'
 import { backfillAll } from '../trace/backfill'
 import { runDemoLots } from '../trace/demo'
 import { dossierCanonical, dossierOf } from '../trace/dossier'
 import { isDoEligible } from '../trace/domain'
-import { legacyDagGraph } from '../trace/legacy-dag'
 import { restStatusOf } from '../trace/records'
 import { takeSettingsSnapshot } from '../trace/rules'
-import { emptyTraceCollections, releaseLocks, terroirDoEvaluation, toLotView, type BottleLot, type StoredAttachment, type TraceCtx, type TraceState } from '../trace/state'
+import { emptyTraceCollections, initialTankTransition, recordTankTransition, releaseLocks, terroirDoEvaluation, toLotView, type BottleLot, type StoredAttachment, type TraceCtx, type TraceState } from '../trace/state'
 import type { ErpFixtureSet } from './generate'
 
 // Fixtures de la Ola 2 (solo en TypeScript, como los del back office): parten de las filas del
@@ -61,6 +59,29 @@ export function seedTraceCtx(backoffice: Pick<BackofficeFixtureSet, 'settings.js
   }
 }
 
+/** TK-01 de Cinti Viejo (lote CVJ-2026-SINGANI-001): el ejemplo de tanque `CLEANED` desde el cierre H2. */
+export const CLEANED_TANK_ID = 'd4e37fed-41e1-5399-9b50-e8263a6ca797'
+const CLEANED_TANK_AT = '2025-05-26T14:00:00Z'
+
+/**
+ * Correcciones del cierre H2 que no caben en las filas base (las mismas que el backend aplica a
+ * su semilla, `src/seed/corrections.ts`): TK-01 se limpió al día siguiente de terminar su
+ * destilación y su código queda libre. Su historial se reconstruye con las fechas que ya tenía
+ * (fin de la fermentación y comienzo de la destilación). Los tanques vacíos TK-06, TK-09 y
+ * TK-RED-04 ya no existen en las filas base y TK-08 sale `TRANSFERRED` de ellas.
+ */
+function applyClosingCorrections(state: TraceState): void {
+  const tank = state.tanks.find((t) => t.id === CLEANED_TANK_ID)
+  if (!tank || tank.status !== 'TRANSFERRED') throw new Error('Semilla: TK-01 de Cinti Viejo debe llegar TRANSFERRED a la corrección del cierre H2')
+  const distillation = state.productionBatches.find((p) => p.fermentationTankId === tank.id)
+  tank.transitions = [
+    initialTankTransition({ ...tank, status: 'FERMENTING' }),
+    ...(tank.endDate ? [{ status: 'COMPLETED' as const, at: tank.endDate, by: null }] : []),
+    ...(distillation ? [{ status: 'TRANSFERRED' as const, at: distillation.processStartDate, by: null }] : []),
+  ]
+  recordTankTransition(tank, 'CLEANED', CLEANED_TANK_AT, null)
+}
+
 /** Estado de la trazabilidad a partir de las filas base, migrado y con los lotes de demostración. */
 export function buildTraceState(base: ErpFixtureSet, ctx: TraceCtx): TraceState {
   const copy = structuredClone(base)
@@ -78,6 +99,7 @@ export function buildTraceState(base: ErpFixtureSet, ctx: TraceCtx): TraceState 
     ...emptyTraceCollections(),
   }
   backfillAll(state, ctx)
+  applyClosingCorrections(state)
   releaseLocks(state, ctx)
   runDemoLots(state, ctx)
   // La aptitud D.O. de las parcelas es la calculada con los valores vigentes de cada bodega.
@@ -87,22 +109,10 @@ export function buildTraceState(base: ErpFixtureSet, ctx: TraceCtx): TraceState 
   return state
 }
 
-/** Archivos de `fixtures/erp/`: las filas del ERP ya migradas, las vistas legadas recalculadas y las colecciones de la Ola 2. */
+/** Archivos de `fixtures/erp/`: las filas del ERP ya migradas y las colecciones de la Ola 2. */
 export function buildErpFixtureFiles(base: ErpFixtureSet, backoffice: BackofficeFixtureSet): ErpFixtureFiles {
   const ctx = seedTraceCtx(backoffice)
   const state = buildTraceState(base, ctx)
-  const chain = {
-    wineries: state.wineries,
-    terroirs: state.terroirs,
-    harvestBatches: state.harvestBatches,
-    tanks: state.tanks,
-    wineAgings: state.wineAgings,
-    productionBatches: state.productionBatches,
-    bottlings: state.bottlings,
-    labAnalyses: state.labAnalyses,
-  }
-  const publicPassports: Record<string, DagGraph> = {}
-  for (const b of state.bottlings) publicPassports[b.internationalLotCode] = legacyDagGraph(state, b)
   return {
     ...base,
     'terroirs.json': state.terroirs,
@@ -115,8 +125,6 @@ export function buildErpFixtureFiles(base: ErpFixtureSet, backoffice: Backoffice
     'production-rest-status.json': state.productionBatches.map((p) => restStatusOf(state, ctx, p)),
     'bottling.json': state.bottlings,
     'lab-analyses.json': state.labAnalyses,
-    'traceability-public.json': publicPassports,
-    'lots-view.json': deriveLotViews(chain, { today: REFERENCE_DAY }),
     'lots.json': state.lots.map((lot) => toLotView(state, lot, ctx)),
     'lot-events.json': state.lotEvents,
     'maturity-analyses.json': state.maturityAnalyses,

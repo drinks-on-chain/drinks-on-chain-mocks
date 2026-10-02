@@ -1,23 +1,19 @@
+import { sha256, toHex } from '../../../shared/crypto'
 import {
   UPLOAD_MAX_BYTES,
   UPLOAD_MAX_IMAGE_BYTES,
-  type BottlingBatchResponse,
   type HealthStatus,
   type Liveness,
   type SignedUrlResponse,
   type UploadMimeType,
   type UploadResponse,
 } from '../../schemas'
-import { legacyDagGraph } from '../../trace/legacy-dag'
 import { anyUser, type AuthContext } from '../auth-context'
 import { CLOCK_START, getErpDb, newId, tick } from '../db'
-import { ApiError, badRequest, fieldError, invalid, notFound } from '../errors'
+import { ApiError, badRequest, fieldError, invalid } from '../errors'
 import { created, ok, strParam, type RouteSpec } from '../http'
-import { findBottling } from './bottling-lab'
 
-// /v1/traceability/*, /v1/uploads*, /v1/health*
-
-const dagOf = (b: BottlingBatchResponse) => legacyDagGraph(getErpDb(), b)
+// /v1/uploads*, /v1/health*
 
 // ----- Archivos (almacenamiento privado con URL firmada, como `UploadsService` del backend) -----
 
@@ -56,34 +52,6 @@ function signedUrl(key: string): SignedUrlResponse {
 
 export const traceabilitySystemRoutes: RouteSpec[] = [
   {
-    method: 'get',
-    path: '/v1/traceability/dag/:bottlingBatchId',
-    access: anyUser,
-    deprecated: '/v1/lots/{id}/graph',
-    // SE-07 (Ola 2): solo los miembros de la bodega dueña y el personal de plataforma; cualquier otra
-    // sesión → 404. Legado: se retira en H2 por `GET /v1/lots/{id}/graph`.
-    handle({ auth, params }) {
-      const b = findBottling(null, params.bottlingBatchId!)
-      const owner = auth.organizationType === 'WINERY' && auth.wineryId === b.wineryId
-      const staff = auth.organizationType === 'PLATFORM' && auth.platformRole !== null
-      if (!owner && !staff) throw notFound(`Lote de embotellado con identificador "${params.bottlingBatchId}" no encontrado`)
-      return ok(dagOf(b))
-    },
-  },
-  {
-    method: 'get',
-    path: '/v1/traceability/public/:lotCode',
-    access: 'public',
-    deprecated: '/v1/public/passports/{code}',
-    handle({ params }) {
-      // Legado hasta H2 (lo sustituye `GET /v1/public/passports/{code}`): solo por código de lote, ya no por id.
-      const code = decodeURIComponent(params.lotCode!)
-      const b = getErpDb().bottlings.find((x) => x.internationalLotCode.toUpperCase() === code.toUpperCase())
-      if (!b) throw notFound(`Lote de embotellado con identificador "${code}" no encontrado`)
-      return ok(dagOf(b))
-    },
-  },
-  {
     method: 'post',
     path: '/v1/uploads',
     access: anyUser,
@@ -114,11 +82,15 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
       const now = new Date(Date.parse(tick()))
       const month = String(now.getUTCMonth() + 1).padStart(2, '0')
       const key = `${prefix}/${folder}/${now.getUTCFullYear()}/${month}/${newId('upload')}${detected.extension}`
+      // Huella del contenido: la que guardan los registros de la trazabilidad junto a la `key`.
+      const hash = toHex(sha256(bytes))
+      getErpDb().uploads[key] = hash
       const upload: UploadResponse = {
         ...signedUrl(key),
         originalName: (file.name || 'archivo').replace(/[\r\n"]/g, '').slice(0, 255),
         mimeType: detected.mimeType,
         sizeBytes: bytes.length,
+        sha256: hash,
       }
       return created(upload)
     },

@@ -1,7 +1,6 @@
 import { addMonthsClamped, day, dayFromIso, dayParts, isoAt, REFERENCE_DAY, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
-import { buildDagGraph, buildSessionResponse } from '../derive'
-import { deriveLotViews, deriveRestStatus } from '../lot-view'
+import { buildSessionResponse } from '../derive'
 import { PLATFORM_ROLE_BY_KEY, WINERY_CODES } from '../catalog'
 import type {
   BatchLabAnalysisResponse,
@@ -10,11 +9,9 @@ import type {
   FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
-  LotView,
   MemberRole,
   MockUser,
   ProductionBatchResponse,
-  DagGraph,
   RestStatusResponse,
   SessionResponse,
   TerroirResponse,
@@ -64,10 +61,23 @@ export interface ErpFixtureSet {
   'production-rest-status.json': RestStatusResponse[]
   'bottling.json': BottlingBatchResponse[]
   'lab-analyses.json': BatchLabAnalysisResponse[]
-  'traceability-public.json': Record<string, DagGraph>
-  'lots-view.json': LotView[]
 }
 export type ErpFixtureName = keyof ErpFixtureSet
+
+/** Reposo de una destilación en las filas base (`rest_status` de `generate.py`: 180 días desde el fin). */
+function baseRestStatus(p: ProductionBatchResponse, today: Day): RestStatusResponse {
+  const elapsed = today - dayFromIso(p.processEndDate ?? p.processStartDate)
+  const remaining = Math.max(0, 180 - elapsed)
+  return {
+    id: p.id,
+    restStatus: p.restStatus,
+    processEndDate: p.processEndDate ?? null,
+    mandatoryRestUntil: p.mandatoryRestUntil ?? null,
+    daysElapsed: Math.max(0, elapsed),
+    daysRemaining: remaining,
+    isRestCompleted: remaining === 0,
+  }
+}
 
 export function generateErpFixtures(): ErpFixtureSet {
   const rng = new PyRandom(20260925)
@@ -445,12 +455,10 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['t06', 'h06', 'TK-RED-01', 10000, 5800, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 3), day(2025, 3, 24)],
     ['t07', 'h08', 'TK-RED-02', 10000, 5300, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 21), day(2025, 4, 11)],
     ['t08', 'h09', 'TK-RED-03', 12000, 6700, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 7), day(2025, 3, 28)],
-    ['t09', 'h07', 'TK-06', 10000, 0, 'WINE_AGING', 'CLEANED', day(2026, 1, 5), day(2026, 1, 6)],
+    // t09 (TK-06), t12 (TK-09) y t13 (TK-RED-04) se retiraron en el cierre H2: CLEANED con 0 L de 0 kg (como el backend).
     // t10 (TK-07, FILLING con el pesaje h11 en cuarentena) se retiró en la Ola 2: la uva sin dictamen
     // aprobado no entra a un tanque (EA-04; mismas correcciones que `src/seed/corrections.ts` del backend).
-    ['t11', 'h01', 'TK-08', 8000, 6300, 'SINGANI_DIST', 'COMPLETED', day(2026, 3, 7), day(2026, 4, 2)],
-    ['t12', 'h02', 'TK-09', 15000, 0, 'SINGANI_DIST', 'CLEANED', day(2025, 3, 11), day(2025, 4, 13)],
-    ['t13', 'h06', 'TK-RED-04', 10000, 0, 'WINE_AGING', 'CLEANED', day(2025, 3, 3), day(2025, 3, 25)],
+    ['t11', 'h01', 'TK-08', 8000, 6300, 'SINGANI_DIST', 'TRANSFERRED', day(2026, 3, 7), day(2026, 4, 2)],
     ['t14', 'h07', 'TK-10', 5000, 3900, 'WINE_AGING', 'FERMENTING', day(2026, 3, 11), null],
   ]
   const tanks: FermentationTankResponse[] = []
@@ -615,7 +623,7 @@ export function generateErpFixtures(): ErpFixtureSet {
   const PR: Record<string, ProductionBatchResponse> = {}
   for (const [key] of DIST) PR[key] = productions.find((p) => p.id === uid(`production:${key}`))!
 
-  const restStatuses = productions.map((p) => deriveRestStatus(p, { today: REFERENCE_DAY }))
+  const restStatuses = productions.map((p) => baseRestStatus(p, TODAY))
 
   // -------------------------------------------------------------------------
   // 8. Embotellado (BottlingBatchResponseDto)
@@ -705,15 +713,6 @@ export function generateErpFixtures(): ErpFixtureSet {
     })
   }
 
-  // -------------------------------------------------------------------------
-  // 10. Trazabilidad pública y 11. vista derivada LotView
-  // -------------------------------------------------------------------------
-  const chain = { wineries, terroirs, harvestBatches: harvests, tanks, wineAgings: agings, productionBatches: productions, bottlings, labAnalyses: labs }
-  const publicPassports: Record<string, DagGraph> = {}
-  for (const b of bottlings) publicPassports[b.internationalLotCode] = buildDagGraph(b, chain)
-
-  const lots = deriveLotViews(chain, { today: REFERENCE_DAY })
-
   return {
     'wineries.json': wineries,
     'users.json': users,
@@ -729,7 +728,5 @@ export function generateErpFixtures(): ErpFixtureSet {
     'production-rest-status.json': restStatuses,
     'bottling.json': bottlings,
     'lab-analyses.json': labs,
-    'traceability-public.json': publicPassports,
-    'lots-view.json': lots,
   }
 }
