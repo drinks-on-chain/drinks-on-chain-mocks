@@ -4,6 +4,11 @@
 //   3. localStorage (`doc-mocks:scenario`),
 //   4. 'normal'.
 
+/**
+ * Todos los escenarios. La lista **crece** con las olas: para un panel usa `SCENARIOS` y
+ * `SCENARIO_DESCRIPTIONS` (o `Partial<Record<ScenarioName, …>>`) en lugar de un
+ * `Record<ScenarioName, …>` escrito a mano, que deja de compilar cuando se añade uno.
+ */
 export const SCENARIOS = [
   'normal',
   'empty',
@@ -14,8 +19,13 @@ export const SCENARIOS = [
   'lote-listo',
   'lote-con-incidencia',
   'laboratorio-no-conforme',
+  'pasaporte-saturado',
 ] as const
 export type ScenarioName = (typeof SCENARIOS)[number]
+
+/** Escenarios que cambian **cómo responde** el backend simulado (los de 0.1; no tocan los datos). */
+export const RESPONSE_SCENARIOS = ['normal', 'empty', 'error', 'slow', 'offline'] as const satisfies readonly ScenarioName[]
+export type ResponseScenarioName = (typeof RESPONSE_SCENARIOS)[number]
 
 export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
   normal: 'Datos completos de la red de prueba («Singani Gran Reserva 2026» con el expediente cerrado)',
@@ -27,6 +37,7 @@ export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
   'lote-listo': '«Singani Gran Reserva 2026» con el reposo cumplido, listo para la vista previa y el embotellado',
   'lote-con-incidencia': 'CVJ-2026-SINGANI-002 con una incidencia de migración abierta (TRC_BOTTLING_EXCEEDS_VOLUME)',
   'laboratorio-no-conforme': '«Singani Gran Reserva 2026» embotellado con un análisis no conforme (el expediente no se puede cerrar)',
+  'pasaporte-saturado': 'Pasaporte público: límite de 60 consultas por minuto superado (429 TOO_MANY_REQUESTS con Retry-After)',
 }
 
 /**

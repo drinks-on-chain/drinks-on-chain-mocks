@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DateInputSchema, IsoDateTimeSchema } from './common'
+import { CorrectionMarksShape, DateInputSchema, IsoDateTimeSchema } from './common'
 import { ProductTypeSchema } from './enums'
 import { ErrorDetailSchema } from './lots'
 
@@ -50,6 +50,7 @@ export const LabelDesignSchema = z.object({ key: z.string(), url: z.string().nul
 export type LabelDesign = z.infer<typeof LabelDesignSchema>
 
 export const BottlingBatchResponseSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   wineryId: z.string(),
   wineAgingBatchId: z.string().nullish(),

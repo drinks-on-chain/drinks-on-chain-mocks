@@ -69,8 +69,9 @@ export const PublicLotPassportSchema = z.object({
   }),
   fermentation: z.object({
     status: RecordStatusSchema,
-    startDate: CalendarDateSchema.nullable(),
-    endDate: CalendarDateSchema.nullable(),
+    /** Instantes ISO 8601 (no fechas de calendario): cuándo se llenó el primer tanque y cuándo terminó el último. */
+    startDate: Instant.nullable(),
+    endDate: Instant.nullable(),
     readingsCount: z.number().int().min(0),
     /** Sin dosis (S-22). */
     treatments: z.array(z.object({ type: z.string(), additive: z.string(), regulatoryAuthCode: z.string(), appliedAt: Instant })),
@@ -118,11 +119,15 @@ export const PublicLotPassportSchema = z.object({
     status: z.enum(['OPEN', 'CLOSED']),
     hash: z.string().nullable(),
     closedAt: Instant.nullable(),
-    /** `/v1/public/lots/{lotCode}/dossier` (bytes canónicos, para recalcular la huella). */
+    /**
+     * `/v1/public/lots/{lotCode}/dossier` (bytes canónicos, para recalcular la huella). Puede ser
+     * absoluta o una ruta relativa de la API (`/v1/public/…`) que la app resuelve contra su proxy.
+     */
     canonicalUrl: z.string().nullable(),
     /** Siempre `null` en esta ola (anclaje: Ola 3). */
     anchor: z.null(),
   }),
+  /** `url`: `/v1/public/lots/{lotCode}/attachments/{id}` (redirige a una URL firmada); absoluta o relativa, como `canonicalUrl`. */
   publicAttachments: z.array(z.object({ id: z.string(), kind: z.string(), title: z.string(), url: z.string() })),
   generatedAt: Instant,
 })
@@ -139,7 +144,11 @@ export const PublicBottlePassportSchema = z.object({
     lotTotal: z.number().int().min(1),
     /** `VOIDED`: el visor avisa «código anulado». */
     status: z.enum(['ACTIVE', 'VOIDED']),
-    /** Prueba frente a la raíz Merkle del expediente; `null` hasta cerrarlo. */
+    /**
+     * Prueba frente a la raíz Merkle del expediente (`bottleCodes.merkleRoot` de sus bytes
+     * canónicos): `null` hasta cerrarlo y para un código anulado antes del cierre. Se comprueba con
+     * `verifyMerkleProof(merkleLeaf({ serial, code, salt }), path, raíz)`.
+     */
     merkleProof: z.object({ salt: z.string(), path: z.array(z.object({ side: z.enum(['L', 'R']), hash: z.string() })) }).nullable(),
   }),
   lot: PublicLotPassportSchema,
@@ -156,6 +165,10 @@ export type PublicCodePassport = z.infer<typeof PublicCodePassportSchema>
 // Borrador del catálogo (contrato §17.1). NO está en el OpenAPI del backend: lo fija el OpenAPI
 // borrador de la Etapa 4 (O3-PK-1) y puede cambiar. Solo para los mocks de la pantalla 2A.
 // ---------------------------------------------------------------------------
+
+/** Orden de `GET /v1/public/collections?sort=` (por defecto, `featured`: destacadas primero y después las más recientes). */
+export const COLLECTION_SORTS = ['featured', 'newest', 'price-asc', 'price-desc', 'name'] as const
+export type PublicCollectionSort = (typeof COLLECTION_SORTS)[number]
 
 export const COLLECTION_STATUSES = ['PRESALE', 'ON_SALE', 'SOLD_OUT'] as const
 export const PublicCollectionStatusSchema = z.enum(COLLECTION_STATUSES)
@@ -174,6 +187,9 @@ export const PublicCollectionSummarySchema = z.object({
   price: z.object({ amountMinor: z.number().int(), currency: z.literal('BOB') }).nullable(),
   availability: z.object({ total: z.number().int().min(0), available: z.number().int().min(0) }),
   status: PublicCollectionStatusSchema,
+  /** Destacada en la portada del catálogo (el orden por defecto las pone primero). */
+  featured: z.boolean(),
+  /** Puede faltar. En los mocks, `/mocks/uploads/collections/{slug}.jpg`, que sirven los handlers. */
   imageUrl: z.string().nullable(),
 })
 export type PublicCollectionSummary = z.infer<typeof PublicCollectionSummarySchema>

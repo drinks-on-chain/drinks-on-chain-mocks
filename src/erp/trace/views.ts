@@ -15,11 +15,14 @@ import type {
   LotGraphNode,
   LotStageCode,
   LotTimeline,
+  MaturityAnalysis,
+  PhytoDecision,
   ProductionBatchDetail,
   ProductionBatchResponse,
   ProductionReport,
   ProductionReportRow,
   ProductionReportTotals,
+  TankTransition,
   TerroirDetail,
   TerroirResponse,
   TraceActor,
@@ -33,22 +36,24 @@ import { PRODUCTION_REPORT_CSV_COLUMNS } from '../schemas/lot-views'
 import { dayOf, daysBetween, laPazDate } from './dates'
 import { doRulesFromLot, evaluateDo, isDoEligible, readyDateFromLocks, roundTo } from './domain'
 import { dossierPreview } from './dossier'
-import { harvestAnalyses, harvestDecisions } from './records'
+import { allHarvestAnalyses, allHarvestDecisions } from './records'
 import {
   agingLockOf,
+  allLotLabs,
   bottleCodesSummary,
   bottleLotOf,
+  correctionMarks,
   correctionsOf,
   currentLab,
   distillationHeart,
   harvestAvailableKg,
   harvestTerroir,
+  initialTankTransition,
   isVoided,
   lotAgings,
   lotBottling,
   lotDenomination,
   lotHarvests,
-  lotLabs,
   lotLocks,
   lotProductions,
   lotProjection,
@@ -58,6 +63,7 @@ import {
   tankLiters,
   terroirDoEvaluation,
   toLotSummary,
+  voidedAtOf,
   type StoredLog,
   type StoredTreatment,
   type TraceCtx,
@@ -88,9 +94,12 @@ function treatmentAuthorizer(state: TraceState, tankId: string): string {
   return (members.find((m) => m.memberRole === 'ENOLOGIST') ?? members.find((m) => m.memberRole === 'OWNER'))?.id ?? ''
 }
 
-/** `FermentationLogResponseDto` de una lectura guardada. */
-export function logView(log: StoredLog, state: Pick<TraceState, 'wineries'>): FermentationLog {
+type MarkSource = Partial<Pick<TraceState, 'corrections'>>
+
+/** `FermentationLogResponseDto` de una lectura guardada, con sus marcas de corrección. */
+export function logView(log: StoredLog, state: Pick<TraceState, 'wineries'> & MarkSource): FermentationLog {
   return {
+    ...(state.corrections && { ...correctionMarks({ corrections: state.corrections }, 'FERMENTATION_LOG', log.id), voidedAt: voidedAtOf({ corrections: state.corrections }, 'FERMENTATION_LOG', log.id) }),
     id: log.id,
     fermentationTankId: log.fermentationTankId,
     temperatureCelsius: log.temperatureCelsius,
@@ -103,9 +112,10 @@ export function logView(log: StoredLog, state: Pick<TraceState, 'wineries'>): Fe
   }
 }
 
-/** `EnologicalTreatmentResponseDto` de un tratamiento guardado. */
-export function treatmentView(t: StoredTreatment, state: Pick<TraceState, 'wineries' | 'tanks'>): EnologicalTreatment {
+/** `EnologicalTreatmentResponseDto` de un tratamiento guardado, con sus marcas de corrección. */
+export function treatmentView(t: StoredTreatment, state: Pick<TraceState, 'wineries' | 'tanks'> & MarkSource): EnologicalTreatment {
   return {
+    ...(state.corrections && { ...correctionMarks({ corrections: state.corrections }, 'TREATMENT', t.id), voidedAt: voidedAtOf({ corrections: state.corrections }, 'TREATMENT', t.id) }),
     id: t.id,
     fermentationTankId: t.fermentationTankId,
     treatmentType: t.treatmentType,
@@ -130,11 +140,18 @@ export function terroirView(state: TraceState, ctx: TraceCtx, t: TerroirResponse
   const doEvaluation = terroirDoEvaluation(ctx, t)
   return {
     ...t,
+    ...correctionMarks(state, 'TERROIR', t.id),
     isDoEligible: isDoEligible(doEvaluation.status),
     doEvaluation,
     ...(detail && { harvestBatches: state.harvestBatches.filter((h) => h.terroirId === t.id).sort(desc((h) => h.intakeDate)) }),
   }
 }
+
+/** Análisis de madurez con sus marcas de corrección. */
+export const maturityView = (state: TraceState, m: MaturityAnalysis): MaturityAnalysis => ({ ...m, ...correctionMarks(state, 'MATURITY_ANALYSIS', m.id) })
+
+/** Dictamen con sus marcas de corrección. */
+export const phytoDecisionView = (state: TraceState, d: PhytoDecision): PhytoDecision => ({ ...d, ...correctionMarks(state, 'PHYTO_DECISION', d.id) })
 
 /** `GET /v1/harvest-batches` (con `terroir`) y `/:id` (además `fermentationTanks`), con análisis, dictámenes, kilos disponibles y D.O. */
 export function harvestView(state: TraceState, ctx: TraceCtx, h: HarvestBatchResponse, detail = false): HarvestBatchDetail {
@@ -142,8 +159,10 @@ export function harvestView(state: TraceState, ctx: TraceCtx, h: HarvestBatchRes
   const lot = h.lotId ? state.lots.find((l) => l.id === h.lotId) : undefined
   return {
     ...h,
-    maturityAnalyses: harvestAnalyses(state, h.id),
-    phytoDecisions: harvestDecisions(state, h.id),
+    ...correctionMarks(state, 'HARVEST_BATCH', h.id),
+    // Todos, también los anulados (marcados `voided`): el valor vigente del pesaje ya no los cuenta.
+    maturityAnalyses: allHarvestAnalyses(state, h.id).map((m) => maturityView(state, m)),
+    phytoDecisions: allHarvestDecisions(state, h.id).map((d) => phytoDecisionView(state, d)),
     availableKg: harvestAvailableKg(state, h),
     doEvaluation: lot?.productType === 'SINGANI' ? evaluateDo([harvestTerroir(state, h)], doRulesFromLot(lot.rules), 'LOT_SNAPSHOT', ctx.now) : null,
     lateEntry: daysBetween(dayOf(h.intakeDate), laPazDate(h.createdAt)) > 7,
@@ -152,19 +171,51 @@ export function harvestView(state: TraceState, ctx: TraceCtx, h: HarvestBatchRes
   }
 }
 
-/** `GET /v1/fermentation-tanks` (con `harvestBatch`) y `/:id` (además lecturas y tratamientos, en orden cronológico). */
+/**
+ * Litros que quedan en el tanque y merma de trasiego (§4.2; `tankVolumes` del backend): el volumen
+ * final (o el de llenado) menos lo transferido. Con el tanque `TRANSFERRED` o `CLEANED` ya no queda
+ * nada y la diferencia es la merma.
+ */
+export function tankVolumes(state: TraceState, t: FermentationTankResponse): { availableLiters: number | null; transferLossLiters: number | null } {
+  const liters = tankLiters(t)
+  if (liters === null) return { availableLiters: null, transferLossLiters: null }
+  const drawn =
+    state.wineAgings.filter((a) => a.fermentationTankId === t.id).reduce((s, a) => s + (a.volumeLiters ?? 0), 0) +
+    state.productionBatches.filter((p) => p.fermentationTankId === t.id).reduce((s, p) => s + (p.inputVolumeLiters ?? 0), 0)
+  const remaining = Math.max(0, Math.round((liters - drawn) * 1000) / 1000)
+  if (t.status === 'TRANSFERRED' || t.status === 'CLEANED') return { availableLiters: 0, transferLossLiters: remaining }
+  return { availableLiters: remaining, transferLossLiters: null }
+}
+
+/**
+ * Historial de estados del tanque, empezando por el llenado. Los tanques anteriores a las
+ * transiciones (migrados) no lo guardan: su único punto conocido es el llenado.
+ */
+export function tankTransitions(t: FermentationTankResponse): TankTransition[] {
+  return t.transitions && t.transitions.length > 0 ? t.transitions : [initialTankTransition(t)]
+}
+
+/** Tanque con los campos de la Ola 2 (§4.2): lo que le queda, merma de trasiego, historial y marcas de corrección. */
+export function tankRow(state: TraceState, t: FermentationTankResponse): FermentationTankResponse {
+  return { ...t, ...correctionMarks(state, 'FERMENTATION_TANK', t.id), ...tankVolumes(state, t), transitions: tankTransitions(t) }
+}
+
+/**
+ * `GET /v1/fermentation-tanks` (con `harvestBatch`) y `/:id` (además lecturas y tratamientos, en
+ * orden cronológico; los anulados se devuelven marcados con `voided` y `voidedAt`).
+ */
 export function tankView(state: TraceState, t: FermentationTankResponse, detail = false): FermentationTankDetail {
   const harvestBatch = state.harvestBatches.find((h) => h.id === t.harvestBatchId)
   return {
-    ...t,
+    ...tankRow(state, t),
     ...(harvestBatch && { harvestBatch }),
     ...(detail && {
       logs: state.logs
-        .filter((l) => l.fermentationTankId === t.id && !isVoided(state, 'FERMENTATION_LOG', l.id))
+        .filter((l) => l.fermentationTankId === t.id)
         .sort(asc((l) => l.recordedAt))
         .map((l) => logView(l, state)),
       treatments: state.treatments
-        .filter((x) => x.fermentationTankId === t.id && !isVoided(state, 'TREATMENT', x.id))
+        .filter((x) => x.fermentationTankId === t.id)
         .sort(asc((x) => x.appliedAt))
         .map((x) => treatmentView(x, state)),
     }),
@@ -187,6 +238,7 @@ export function agingView(state: TraceState, ctx: TraceCtx, a: WineAgingResponse
   const fermentationTank = detail ? tankWithChain(state, ctx, a.fermentationTankId) : state.tanks.find((t) => t.id === a.fermentationTankId)
   return {
     ...a,
+    ...correctionMarks(state, 'WINE_AGING', a.id),
     unlockDate: lock?.unlockDate ?? a.lockUntilDate.slice(0, 10),
     lock,
     availableLiters: a.agingStatus === 'AGING' || a.agingStatus === 'READY' ? (a.volumeLiters ?? null) : 0,
@@ -208,6 +260,7 @@ export function productionView(state: TraceState, ctx: TraceCtx, p: ProductionBa
   const fermentationTank = detail ? tankWithChain(state, ctx, p.fermentationTankId) : state.tanks.find((t) => t.id === p.fermentationTankId)
   return {
     ...p,
+    ...correctionMarks(state, 'PRODUCTION_BATCH', p.id),
     // D.O. del lote calculada en el servidor (EA-03).
     isDoEligible: lot ? isDoEligible(lotDenomination(state, lot, ctx.now).status) : p.isDoEligible,
     lock: lot && p.restStatus !== 'DISCARDED' ? restLockOf(p, lot.rules, ctx.today) : null,
@@ -218,10 +271,11 @@ export function productionView(state: TraceState, ctx: TraceCtx, p: ProductionBa
   }
 }
 
-/** Análisis de laboratorio con sus unidades y si es el vigente. */
+/** Análisis de laboratorio con sus unidades, sus marcas de corrección y si es el vigente (ni sustituido ni anulado). */
 export function labView(state: TraceState, l: BatchLabAnalysisResponse): BatchLabAnalysisResponse {
-  const current = l.lotId ? currentLab(state, l.lotId)?.id === l.id : !l.supersededAt
-  return { ...l, units: LAB_UNITS, current }
+  const voidedAt = voidedAtOf(state, 'LAB_ANALYSIS', l.id)
+  const current = voidedAt === null && (l.lotId ? currentLab(state, l.lotId)?.id === l.id : !l.supersededAt)
+  return { ...l, ...correctionMarks(state, 'LAB_ANALYSIS', l.id), voidedAt, units: LAB_UNITS, current }
 }
 
 /** `GET /v1/bottling` (con `labAnalysis`, el vigente) y `/:id` (además el origen con su cadena), con balance y códigos. */
@@ -229,6 +283,7 @@ export function bottlingView(state: TraceState, ctx: TraceCtx, b: BottlingBatchR
   const labAnalysis = (b.lotId ? currentLab(state, b.lotId) : state.labAnalyses.filter((l) => l.bottlingBatchId === b.id).at(-1)) ?? null
   const base: BottlingBatchDetail = {
     ...b,
+    ...correctionMarks(state, 'BOTTLING', b.id),
     lotCode: b.internationalLotCode,
     bottleCodes: bottleCodesSummary(b.lotId ? bottleLotOf(state, b.lotId) : null),
     labAnalysis,
@@ -330,6 +385,15 @@ export function lotGraph(state: TraceState, lot: Lot): LotGraph {
   const nodes: LotGraphNode[] = []
   const edges: LotGraph['edges'] = []
   const corrected = (type: string, id: string) => correctionsOf(state, type, id).length > 0
+  // La corrección de un análisis de madurez o de un dictamen marca el pesaje; la de una lectura o un tratamiento, el tanque.
+  const harvestCorrected = (id: string) =>
+    corrected('HARVEST_BATCH', id) ||
+    state.maturityAnalyses.some((m) => m.harvestBatchId === id && corrected('MATURITY_ANALYSIS', m.id)) ||
+    state.phytoDecisions.some((d) => d.harvestBatchId === id && corrected('PHYTO_DECISION', d.id))
+  const tankCorrected = (id: string) =>
+    corrected('FERMENTATION_TANK', id) ||
+    state.logs.some((l) => l.fermentationTankId === id && corrected('FERMENTATION_LOG', l.id)) ||
+    state.treatments.some((x) => x.fermentationTankId === id && corrected('TREATMENT', x.id))
   const harvests = lotHarvests(state, lot.id)
   const seenTerroirs = new Set<string>()
   for (const h of harvests) {
@@ -361,7 +425,7 @@ export function lotGraph(state: TraceState, lot: Lot): LotGraph {
       metrics: [metric('brixDegrees', 'Brix', h.brixDegrees, '°Bx'), metric('ph', 'pH', h.initialPh), metric('acidityGl', 'Acidez total', h.initialAcidityGl, 'g/L'), metric('temperatureAtIntakeC', 'Temperatura al ingreso', h.temperatureAtIntakeC, '°C')],
       actor: who.actor,
       status: h.phytosanitaryStatus,
-      corrected: corrected('HARVEST_BATCH', h.id),
+      corrected: harvestCorrected(h.id),
     })
     edges.push({ from: h.terroirId, to: h.id, quantity: { value: h.netWeightKg, unit: 'kg' } })
   }
@@ -381,10 +445,11 @@ export function lotGraph(state: TraceState, lot: Lot): LotGraph {
         metric('readings', 'Lecturas', readings.length),
         metric('lastTemperatureC', 'Última temperatura', last?.temperatureCelsius, '°C'),
         metric('lastSpecificGravity', 'Última densidad', last?.specificGravity),
+        metric('treatments', 'Tratamientos', state.treatments.filter((x) => x.fermentationTankId === t.id && !isVoided(state, 'TREATMENT', x.id)).length),
       ],
       actor: who.actor,
       status: t.status,
-      corrected: corrected('FERMENTATION_TANK', t.id),
+      corrected: tankCorrected(t.id),
     })
     for (const input of t.inputs ?? []) edges.push({ from: input.harvestBatchId, to: t.id, quantity: { value: input.kg, unit: 'kg' } })
   }
@@ -446,7 +511,8 @@ export function lotGraph(state: TraceState, lot: Lot): LotGraph {
       status: lot.stage === 'CERTIFIED' || lot.stage === 'ANCHORED' ? 'CERTIFIED' : 'BOTTLED',
       corrected: corrected('BOTTLING', bottling.id),
     })
-    for (const l of lotLabs(state, lot.id)) {
+    // Un análisis anulado sigue como nodo, con `status: 'VOIDED'`.
+    for (const l of allLotLabs(state, lot.id)) {
       nodes.push({
         id: l.id,
         type: 'LAB_ANALYSIS',
@@ -461,7 +527,7 @@ export function lotGraph(state: TraceState, lot: Lot): LotGraph {
           metric('volatileAcidityAceticGl', 'Acidez volátil', l.volatileAcidityAceticGl, LAB_UNITS.volatileAcidityAceticGl),
         ],
         actor: l.recordedBy ?? null,
-        status: l.supersededAt ? 'SUPERSEDED' : (l.conformityStatus ?? 'NOT_RECORDED'),
+        status: isVoided(state, 'LAB_ANALYSIS', l.id) ? 'VOIDED' : l.supersededAt ? 'SUPERSEDED' : (l.conformityStatus ?? 'NOT_RECORDED'),
         corrected: corrected('LAB_ANALYSIS', l.id),
       })
       edges.push({ from: bottling.id, to: l.id, quantity: null })

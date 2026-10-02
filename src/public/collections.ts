@@ -1,8 +1,8 @@
 import { slugify } from '../backoffice/model'
 import type { Lot } from '../erp/schemas'
-import { bottleCodesSummary, bottleLotOf, harvestTerroir, lotHarvests, lotProjection, toLotView, type TraceState } from '../erp/trace/state'
+import { bottleCodesSummary, bottleLotOf, currentLab, harvestTerroir, lotHarvests, lotProjection, toLotView, type TraceState } from '../erp/trace/state'
 import { publicTimeline, type WineryResolver } from './passport'
-import type { PublicCollection, PublicCollectionStatus } from './schemas'
+import type { PublicCollection, PublicCollectionSort, PublicCollectionStatus } from './schemas'
 
 // BORRADOR del catálogo de colecciones (contrato de la Ola 2 §17.1). No lo implementa el backend
 // en esta ola ni está en su OpenAPI: lo fija el OpenAPI borrador de la Etapa 4 (O3-PK-1) y puede
@@ -38,17 +38,52 @@ function collectionName(state: TraceState, lot: Lot): string {
   return `${lot.productType === 'SINGANI' ? 'Singani' : 'Vino'} ${parcel} ${lot.harvestYear}`.replace(/\s+/g, ' ')
 }
 
+/** Una colección con lo que hace falta para ordenarla (`createdAt` del lote; no sale en la respuesta). */
+export type RankedCollection = PublicCollection & { createdAt: string }
+
+const priceOf = (c: PublicCollection): number | null => c.price?.amountMinor ?? null
+
+/**
+ * @experimental Borrador. Orden del catálogo: `featured` (por defecto: destacadas primero y, dentro,
+ * las más recientes), `newest`, `price-asc`, `price-desc` (las que no tienen precio, al final) o `name`.
+ */
+export function sortCollections<T extends RankedCollection>(collections: readonly T[], sort: PublicCollectionSort = 'featured'): T[] {
+  const createdAt = (c: T) => c.createdAt
+  const newest = (a: T, b: T) => b.vintage - a.vintage || createdAt(b).localeCompare(createdAt(a)) || a.slug.localeCompare(b.slug)
+  const byPrice = (direction: 1 | -1) => (a: T, b: T) => {
+    const pa = priceOf(a)
+    const pb = priceOf(b)
+    if (pa === null || pb === null) return pa === pb ? newest(a, b) : pa === null ? 1 : -1
+    return (pa - pb) * direction || newest(a, b)
+  }
+  const order: Record<PublicCollectionSort, (a: T, b: T) => number> = {
+    featured: (a, b) => Number(b.featured) - Number(a.featured) || newest(a, b),
+    newest,
+    'price-asc': byPrice(1),
+    'price-desc': byPrice(-1),
+    name: (a, b) => a.name.localeCompare(b.name, 'es') || newest(a, b),
+  }
+  return [...collections].sort(order[sort])
+}
+
 /**
  * @experimental Borrador (§17.1). Colecciones del catálogo público a partir de los lotes con tipo
- * de producto y botellas (embotelladas, proyectadas o estimadas) de las bodegas activas.
+ * de producto y botellas (embotelladas, proyectadas o estimadas) de las bodegas activas, en el
+ * orden por defecto (`featured`). No se ofrece un lote cuyo análisis vigente no es conforme.
  */
 export function buildCollections(state: TraceState, wineryOf: WineryResolver, now: string): PublicCollection[] {
+  return rankedCollections(state, wineryOf, now).map(({ createdAt: _createdAt, ...collection }) => collection)
+}
+
+/** Las colecciones en el orden por defecto, con la fecha de su lote para poder reordenarlas. */
+export function rankedCollections(state: TraceState, wineryOf: WineryResolver, now: string): RankedCollection[] {
   const today = now.slice(0, 10)
   const slugs = new Set<string>()
-  const out: PublicCollection[] = []
+  const out: RankedCollection[] = []
   for (const lot of [...state.lots].sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id))) {
     const winery = wineryOf(lot.wineryId)
     if (!winery.active || !lot.productType || lot.stage === 'REJECTED' || lot.stage === 'DISCARDED') continue
+    if (currentLab(state, lot.id)?.conformityStatus === 'NON_CONFORMING') continue
     const bottled = lot.stage === 'BOTTLED' || lot.stage === 'CERTIFIED' || lot.stage === 'ANCHORED'
     const total = bottled ? bottleCodesSummary(bottleLotOf(state, lot.id)).active : (lot.estimatedBottles ?? lotProjection(state, lot).bottles)
     if (!total) continue
@@ -74,13 +109,16 @@ export function buildCollections(state: TraceState, wineryOf: WineryResolver, no
       price: lot.stage === 'ORIGIN' ? null : { amountMinor: base + (seed % 9) * 500, currency: 'BOB' },
       availability: { total, available: Math.max(0, total - sold) },
       status,
+      // Destacadas: los lotes con el expediente cerrado y una parte del resto en venta.
+      featured: lot.stage === 'CERTIFIED' || lot.stage === 'ANCHORED' || (status === 'ON_SALE' && seed % 3 === 0),
       imageUrl,
       description: COPY[lot.productType].description,
       tastingNotes: COPY[lot.productType].tastingNotes,
       pairing: COPY[lot.productType].pairing,
       gallery: [imageUrl, `/mocks/uploads/collections/${slug}-2.jpg`],
       lot: { lotCode: lot.lotCode, timeline: publicTimeline(state, lot.id) },
+      createdAt: lot.createdAt,
     })
   }
-  return out
+  return sortCollections(out)
 }

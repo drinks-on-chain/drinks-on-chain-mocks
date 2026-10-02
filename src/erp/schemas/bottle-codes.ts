@@ -24,7 +24,8 @@ export const BottleUnitSchema = z.object({
   voided: z
     .object({
       at: IsoDateTimeSchema,
-      by: TraceActorSchema,
+      /** `null` = no registrado (membresía que ya no existe; lote descartado por el sistema). */
+      by: TraceActorSchema.nullable(),
       reason: z.string(),
       /** Código que lo sustituye (misma serie). */
       replacedBy: z.string().nullable(),
@@ -101,14 +102,22 @@ export type CreateBottleCodeExportDto = z.infer<typeof CreateBottleCodeExportSch
 export const BottleCodeExportAcceptedSchema = z.object({ exportId: z.string(), status: z.literal('PENDING') })
 export type BottleCodeExportAccepted = z.infer<typeof BottleCodeExportAcceptedSchema>
 
-/** Estado de una exportación ZIP (`BottleCodeExportDto`). */
+/** Máximo de códigos de una exportación ZIP; un lote mayor se exporta por rangos de serie (422). */
+export const BOTTLE_ZIP_MAX_CODES = 20_000
+
+/** Estado de una exportación (`BottleCodeExportDto`): la ZIP y, también, cada descarga CSV. */
 export const BottleCodeExportSchema = z.object({
   exportId: z.string(),
   status: z.enum(['PENDING', 'READY', 'FAILED']),
+  format: z.enum(['CSV', 'ZIP']),
+  fromSerial: z.number().int().min(1),
+  toSerial: z.number().int().min(1),
+  /** Códigos activos del rango. */
   rows: z.number().int().min(0),
   createdAt: IsoDateTimeSchema,
-  createdBy: TraceActorSchema,
-  /** URL firmada de 15 min (solo `READY`). */
+  /** `null` = no registrado (membresía que ya no existe). */
+  createdBy: TraceActorSchema.nullable(),
+  /** URL firmada de 15 min del ZIP (solo `READY` y sin caducar; una exportación CSV se descarga al pedirla). */
   downloadUrl: z.string().nullable(),
   /** Caducidad del ZIP (7 días). */
   expiresAt: IsoDateTimeSchema,

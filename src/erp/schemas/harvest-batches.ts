@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DateInputSchema, IsoDateTimeSchema } from './common'
+import { CorrectionMarksShape, DateInputSchema, IsoDateTimeSchema } from './common'
 import { PhytosanitaryStatusSchema } from './enums'
 import { CreateLotSchema, DoEvaluationSchema, TraceActorSchema } from './lots'
 
@@ -18,6 +18,7 @@ export type TerroirSnapshot = z.infer<typeof TerroirSnapshotSchema>
 
 /** Análisis de madurez (`MaturityAnalysisResponseDto`, §3.3): solo inserción; el último es el vigente. */
 export const MaturityAnalysisSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   harvestBatchId: z.string(),
   brixDegrees: z.number(),
@@ -66,6 +67,7 @@ export type FileReference = z.infer<typeof FileReferenceSchema>
 
 /** Dictamen fitosanitario (`PhytoDecisionResponseDto`, §3.4): solo inserción. */
 export const PhytoDecisionSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   harvestBatchId: z.string(),
   decision: PhytoDecisionValueSchema,
@@ -89,6 +91,7 @@ export const CreatePhytoDecisionSchema = z.object({
 export type CreatePhytoDecisionDto = z.infer<typeof CreatePhytoDecisionSchema>
 
 export const HarvestBatchResponseSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   wineryId: z.string(),
   terroirId: z.string(),

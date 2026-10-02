@@ -42,7 +42,9 @@ import {
   lotProductions,
   nextHarvestCode,
   parseProductType,
+  recordTankTransition,
   refreshLotStage,
+  releaseLocks,
   restLockOf,
   ruleError,
   stateError,
@@ -149,6 +151,14 @@ export const harvestAnalyses = (state: TraceState, harvestId: string): MaturityA
 /** Dictámenes vigentes de un pesaje (sin los anulados), en orden de registro. */
 export const harvestDecisions = (state: TraceState, harvestId: string): PhytoDecision[] =>
   state.phytoDecisions.filter((d) => d.harvestBatchId === harvestId && !isVoided(state, 'PHYTO_DECISION', d.id)).sort((a, b) => a.recordedAt.localeCompare(b.recordedAt))
+
+/** Todos los análisis de madurez de un pesaje, también los anulados (las vistas los devuelven marcados). */
+export const allHarvestAnalyses = (state: TraceState, harvestId: string): MaturityAnalysis[] =>
+  state.maturityAnalyses.filter((m) => m.harvestBatchId === harvestId).sort((a, b) => a.measuredAt.localeCompare(b.measuredAt) || a.recordedAt.localeCompare(b.recordedAt))
+
+/** Todos los dictámenes de un pesaje, también los anulados. */
+export const allHarvestDecisions = (state: TraceState, harvestId: string): PhytoDecision[] =>
+  state.phytoDecisions.filter((d) => d.harvestBatchId === harvestId).sort((a, b) => a.recordedAt.localeCompare(b.recordedAt))
 
 /** El pesaje refleja su último análisis (Brix, pH, acidez) y su último dictamen. */
 export function syncHarvest(state: TraceState, h: HarvestBatchResponse): void {
@@ -465,6 +475,8 @@ export function createTank(state: TraceState, ctx: TraceCtx, wineryId: string, b
     lotId: lot.id,
     finalVolumeLiters: null,
     inputs,
+    // El historial empieza por el llenado; un tanque que nace fermentando no pasa por `start`.
+    transitions: [{ status: fermenting ? 'FERMENTING' : 'FILLING', at: startDate, by: ctx.actor }],
   }
   for (const h of harvests) h.lotId = lot.id
   state.tanks.push(tank)
@@ -489,10 +501,18 @@ export function createTank(state: TraceState, ctx: TraceCtx, wineryId: string, b
   return tank
 }
 
+const TRANSITION_FROM: Record<string, string> = { FERMENTING: 'FILLING', COMPLETED: 'FERMENTING', CLEANED: 'TRANSFERRED' }
+
 function invalidTransition(tank: FermentationTankResponse, to: string): ApiError {
-  return stateError('TRC_TANK_INVALID_TRANSITION', `El tanque ${tank.tankCode} está ${tank.status}: no puede pasar a ${to}`, [
-    violation('TRC_TANK_INVALID_TRANSITION', 'Transición de tanque no válida', { meta: { from: tank.status, to } }),
+  const allowedFrom = TRANSITION_FROM[to]
+  return stateError('TRC_TANK_INVALID_TRANSITION', `El tanque ${tank.tankCode} está ${tank.status}: solo pasa a ${to} desde ${allowedFrom}`, [
+    violation('TRC_TANK_INVALID_TRANSITION', `El tanque ${tank.tankCode} está ${tank.status}: solo pasa a ${to} desde ${allowedFrom}`, { meta: { from: tank.status, to, allowedFrom } }),
   ])
+}
+
+/** Cambia el estado del tanque y lo anota en su historial (`transitions`). */
+function moveTank(ctx: TraceCtx, tank: FermentationTankResponse, status: FermentationTankResponse['status'], at: string = ctx.now): void {
+  recordTankTransition(tank, status, at, ctx.actor)
 }
 
 /** `FILLING → FERMENTING` (§4.2). */
@@ -503,7 +523,7 @@ export function startTank(state: TraceState, ctx: TraceCtx, tank: FermentationTa
     assertInstantNotFuture(ctx, 'startedAt', startedAt)
     assertNotBefore('startedAt', dayOf(startedAt), dayOf(tank.startDate))
   }
-  tank.status = 'FERMENTING'
+  moveTank(ctx, tank, 'FERMENTING', startedAt ? toInstant(startedAt) : ctx.now)
   appendLotEvent(state, ctx, lot, {
     type: 'FERMENTATION_STARTED',
     occurredAt: startedAt ? toInstant(startedAt) : ctx.now,
@@ -538,7 +558,7 @@ export function completeTank(state: TraceState, ctx: TraceCtx, tank: Fermentatio
   const resource = { type: 'fermentation_tank', id: tank.id }
   decideProductType(state, ctx, lot, product, endDate, resource)
   if (product === 'SINGANI') assertLotDo(state, ctx, lot)
-  tank.status = 'COMPLETED'
+  moveTank(ctx, tank, 'COMPLETED', endDate)
   tank.endDate = endDate
   tank.finalVolumeLiters = body.finalVolumeLiters
   tank.destinationType = body.destination
@@ -553,16 +573,21 @@ export function completeTank(state: TraceState, ctx: TraceCtx, tank: Fermentatio
   return tank
 }
 
-/** `TRANSFERRED → CLEANED`: libera el `tankCode` (S-7). */
+/**
+ * `TRANSFERRED → CLEANED`: libera el `tankCode` (S-7). El tanque de un lote descartado o rechazado
+ * se limpia desde cualquier estado (si no, quedaría ocupado para siempre). No escribe en la línea
+ * de tiempo del lote: queda en el historial del tanque y en la bitácora.
+ */
 export function cleanTank(state: TraceState, ctx: TraceCtx, tank: FermentationTankResponse, cleanedAt?: string): FermentationTankResponse {
-  if (tank.status !== 'TRANSFERRED') throw invalidTransition(tank, 'CLEANED')
+  const lot = state.lots.find((l) => l.id === tank.lotId)
+  const lotGone = lot?.stage === 'DISCARDED' || lot?.stage === 'REJECTED'
+  if (tank.status === 'CLEANED' || (tank.status !== 'TRANSFERRED' && !lotGone)) throw invalidTransition(tank, 'CLEANED')
   if (cleanedAt) {
     assertInstantNotFuture(ctx, 'cleanedAt', cleanedAt)
     assertNotBefore('cleanedAt', dayOf(cleanedAt), dayOf(tank.endDate ?? tank.startDate))
   }
-  tank.status = 'CLEANED'
-  const lot = state.lots.find((l) => l.id === tank.lotId)
-  if (lot && ctx.now > lot.updatedAt) lot.updatedAt = ctx.now
+  moveTank(ctx, tank, 'CLEANED', cleanedAt ? toInstant(cleanedAt) : ctx.now)
+  if (lot && !lotGone && ctx.now > lot.updatedAt) lot.updatedAt = ctx.now
   return tank
 }
 
@@ -649,25 +674,28 @@ export function addTreatment(state: TraceState, ctx: TraceCtx, tank: Fermentatio
 
 /**
  * Tanque del que sale una crianza o una destilación. Contrato §5: exige `COMPLETED` (409
- * `TRC_TANK_NOT_COMPLETED`). Hasta H2, como el backend en la apertura, un tanque `FILLING` o
- * `FERMENTING` también vale (el ERP de la Ola 1 no conoce las transiciones) y queda completado
- * por la propia operación; solo se rechaza el que ya está limpio.
+ * `TRC_TANK_NOT_COMPLETED`). Hasta H2, como el backend, un tanque `FILLING` o `FERMENTING` también
+ * vale (el ERP de la Ola 1 no conoce las transiciones) y queda completado por la propia operación;
+ * se rechaza el que ya se transfirió o se limpió.
  */
 function assertTankTransferable(tank: FermentationTankResponse): void {
-  if (tank.status !== 'CLEANED') return
-  throw stateError('TRC_TANK_NOT_COMPLETED', `El tanque ${tank.tankCode} está ${tank.status}: no tiene vino que trasladar`, [
-    violation('TRC_TANK_NOT_COMPLETED', 'Tanque sin fermentación completada', { field: 'fermentationTankId', meta: { status: tank.status } }),
+  if (tank.status !== 'TRANSFERRED' && tank.status !== 'CLEANED') return
+  throw stateError('TRC_TANK_NOT_COMPLETED', `El tanque ${tank.tankCode} está ${tank.status}: ya no tiene vino que trasladar`, [
+    violation('TRC_TANK_NOT_COMPLETED', 'El tanque ya se transfirió', { field: 'fermentationTankId', meta: { status: tank.status } }),
   ])
 }
 
-/** Cierra un tanque que la ruta legada usa sin completar: fecha de fin y destino de la operación. */
-function settleTank(tank: FermentationTankResponse, destination: 'WINE_AGING' | 'SINGANI_DIST', day: string, exhausted: boolean): void {
+/**
+ * Cierra un tanque que la ruta legada usa sin completar (fecha de fin y destino de la operación) y
+ * lo pasa a `TRANSFERRED` cuando se agota (o con `closeTank`).
+ */
+function settleTank(ctx: TraceCtx, tank: FermentationTankResponse, destination: 'WINE_AGING' | 'SINGANI_DIST', day: string, exhausted: boolean): void {
   tank.destinationType = destination
   if (tank.status === 'FILLING' || tank.status === 'FERMENTING') {
-    tank.status = 'COMPLETED'
     tank.endDate ??= toDateField(day)
+    moveTank(ctx, tank, 'COMPLETED', tank.endDate)
   }
-  if (exhausted && tank.status === 'COMPLETED') tank.status = 'TRANSFERRED'
+  if (exhausted && tank.status === 'COMPLETED') moveTank(ctx, tank, 'TRANSFERRED')
 }
 
 // ---------------------------------------------------------------------------
@@ -742,7 +770,7 @@ export function createAging(state: TraceState, ctx: TraceCtx, wineryId: string, 
   const resource = { type: 'wine_aging_batch', id: aging.id }
   decideProductType(state, ctx, lot, 'WINE', toDateField(startDay), resource)
   // Una crianza por tanque: lo que no se traslada queda como merma de trasiego.
-  settleTank(tank, 'WINE_AGING', startDay, true)
+  settleTank(ctx, tank, 'WINE_AGING', startDay, true)
   appendLotEvent(state, ctx, lot, {
     type: 'AGING_STARTED',
     occurredAt: toDateField(startDay),
@@ -775,7 +803,18 @@ export function discardAging(state: TraceState, ctx: TraceCtx, aging: WineAgingR
   }
   aging.agingStatus = 'DISCARDED'
   aging.notes = [aging.notes, `Descartada: ${body.reason}`].filter(Boolean).join(' · ')
-  if (lot) refreshLotStage(state, ctx, lot)
+  if (lot) {
+    refreshLotStage(state, ctx, lot)
+    // Interno: los motivos y las mermas no son públicos (S-22).
+    appendLotEvent(state, ctx, lot, {
+      type: 'LOT_DISCARDED',
+      occurredAt: ctx.now,
+      visibility: 'INTERNAL',
+      summary: `Crianza descartada (${formatQuantity(body.discardedLiters ?? available, 2)} L): ${body.reason}`,
+      data: { scope: 'SOURCE', sourceType: 'WINE_AGING', discardedLiters: body.discardedLiters ?? available, unit: 'L', reason: body.reason },
+      resource: { type: 'wine_aging_batch', id: aging.id },
+    })
+  }
   return aging
 }
 
@@ -871,7 +910,7 @@ export function createDistillation(state: TraceState, ctx: TraceCtx, wineryId: s
   }
   state.productionBatches.push(production)
   const remaining = tankAvailableLiters(state, tank)
-  settleTank(tank, 'SINGANI_DIST', startDay, remaining !== null && remaining <= 1e-6)
+  settleTank(ctx, tank, 'SINGANI_DIST', startDay, body.closeTank === true || (remaining !== null && remaining <= 1e-6))
   const own = { type: 'production_batch', id: production.id }
   appendLotEvent(state, ctx, lot, {
     type: 'DISTILLATION_STARTED',
@@ -938,6 +977,8 @@ export function closeDistillation(state: TraceState, ctx: TraceCtx, production: 
       data: { ...body.cuts, heartAbvPercent: body.heartAbvPercent, vinasseLiters: body.vinasseLiters ?? null, restUntil, unit: 'L' },
       resource: { type: 'production_batch', id: production.id },
     })
+    // Cierre tardío con el reposo ya cumplido: el candado se libera en el momento.
+    if (restUntil <= ctx.today) releaseLocks(state, { ...ctx, actor: null }, lot.id)
   }
   return production
 }
@@ -952,7 +993,17 @@ export function discardDistillation(state: TraceState, ctx: TraceCtx, production
   }
   production.restStatus = 'DISCARDED'
   production.notes = [production.notes, `Descartada: ${reason}`].filter(Boolean).join(' · ')
-  if (lot) refreshLotStage(state, ctx, lot)
+  if (lot) {
+    refreshLotStage(state, ctx, lot)
+    appendLotEvent(state, ctx, lot, {
+      type: 'LOT_DISCARDED',
+      occurredAt: ctx.now,
+      visibility: 'INTERNAL',
+      summary: `Destilación descartada: ${reason}`,
+      data: { scope: 'SOURCE', sourceType: 'PRODUCTION_BATCH', reason },
+      resource: { type: 'production_batch', id: production.id },
+    })
+  }
   return production
 }
 

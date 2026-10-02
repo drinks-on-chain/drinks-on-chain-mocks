@@ -2,6 +2,7 @@ import { canonicalJson, sha256Hex } from '../../shared/crypto'
 import type { ApiErrorDetail } from '../../shared/envelope'
 import { ApiError } from '../handlers/errors'
 import type {
+  CanonicalDossier,
   ChangeLotAttachmentVisibilityDto,
   Correction,
   CorrectionTargetType,
@@ -20,12 +21,16 @@ import { BOTTLE_MERKLE_ALGORITHM, merkleLeaf, merkleLevels, merkleProof, mockBot
 import { fileSha256 } from './bottling'
 import { addDaysYmd, addMonthsYmd, dayOf, toDateField } from './dates'
 import { computeBottlingBalance, computeLabConformity, methanolToAnhydrous } from './domain'
-import { assertOwnFile, groupReadings, harvestAnalyses, harvestDecisions, syncHarvest } from './records'
+import { allHarvestAnalyses, allHarvestDecisions, assertOwnFile, groupReadings, harvestDecisions, syncHarvest } from './records'
 import { violation } from './rules'
 import {
   addComplianceIssue,
+  agingLockOf,
+  agingStartDay,
+  allLotLabs,
   appendLotEvent,
   assertLotWritable,
+  bottleCodesSummary,
   bottleGeneration,
   bottleLotOf,
   currentLab,
@@ -41,8 +46,10 @@ import {
   lotProductions,
   lotTanks,
   refreshLotStage,
+  restLockOf,
   ruleError,
   stateError,
+  voidedAtOf,
   type BottleLot,
   type StoredAttachment,
   type StoredDossier,
@@ -51,15 +58,23 @@ import {
 } from './state'
 
 // Correcciones compensatorias (contrato de la Ola 2 §9), archivos del lote (§11.5) y expediente
-// con hash canónico (§10). El backend los trae en los pasos 2.7–2.9: aquí se adelantan con las
-// formas del OpenAPI; el contenido canónico y el árbol Merkle son los de los mocks hasta entonces.
+// con hash canónico (§10), como los pasos 2.7–2.9 del backend (`corrections.service.ts`,
+// `lot-attachments.service.ts`, `domain/dossier.ts`, `domain/merkle.ts`).
 
-function assertDossierOpen(state: TraceState, lot: Lot): void {
+/** 409 `TRC_DOSSIER_CLOSED` con `meta: { closedAt, hash }` (`dossierClosedError` del backend). */
+export function dossierClosedError(dossier: { closedAt: string | null; hash: string | null } | null, message = 'El expediente del lote está cerrado: ya no admite registros', field?: string): ApiError {
+  return stateError('TRC_DOSSIER_CLOSED', message, [violation('TRC_DOSSIER_CLOSED', 'Expediente cerrado', { ...(field && { field }), meta: { closedAt: dossier?.closedAt ?? null, hash: dossier?.hash ?? null } })])
+}
+
+/**
+ * 409 `TRC_DOSSIER_CLOSED` si el expediente ya está cerrado. Para las escrituras que el contrato
+ * marca con ese código (laboratorio §8.1, correcciones §9, archivos §11.5, sustituir un código §7.2
+ * y un segundo cierre §10): se comprueba **antes** que la etapa del lote, que respondería
+ * `TRC_LOT_TERMINAL` (el código de las demás escrituras sobre un lote `CERTIFIED`).
+ */
+export function assertDossierOpen(state: TraceState, lot: Lot, message?: string): void {
   const dossier = lotDossier(state, lot.id)
-  if (dossier?.status !== 'CLOSED') return
-  throw stateError('TRC_DOSSIER_CLOSED', 'El expediente del lote está cerrado: ya no admite cambios', [
-    violation('TRC_DOSSIER_CLOSED', 'Expediente cerrado', { meta: { closedAt: dossier.closedAt } }),
-  ])
+  if (dossier?.status === 'CLOSED') throw dossierClosedError(dossier, message)
 }
 
 // ---------------------------------------------------------------------------
@@ -74,7 +89,17 @@ function findTarget(state: TraceState, lot: Lot, type: CorrectionTargetType, id:
   switch (type) {
     case 'HARVEST_BATCH': {
       const h = lotHarvests(state, lot.id).find((x) => x.id === id)
-      return h ? { record: h as AnyRecord, after: () => void (h.netWeightKg = Math.round((h.grossWeightKg - h.tareWeightKg) * 1000) / 1000) } : null
+      if (!h) return null
+      return {
+        record: h as AnyRecord,
+        after: () => {
+          // Derivados: el neto y, si toda la uva del pesaje estaba en un solo tanque, su entrada.
+          const before = h.netWeightKg
+          h.netWeightKg = Math.round((h.grossWeightKg - h.tareWeightKg) * 1000) / 1000
+          const inputs = state.tanks.flatMap((t) => (t.inputs ?? []).filter((i) => i.harvestBatchId === h.id))
+          if (inputs.length === 1 && Math.abs(inputs[0]!.kg - before) < 1e-6) inputs[0]!.kg = h.netWeightKg
+        },
+      }
     }
     case 'MATURITY_ANALYSIS': {
       const m = state.maturityAnalyses.find((x) => x.id === id)
@@ -159,7 +184,23 @@ function findTarget(state: TraceState, lot: Lot, type: CorrectionTargetType, id:
 }
 
 const DATE_FIELDS = new Set(['intakeDate', 'measuredAt', 'recordedAt', 'appliedAt', 'startDate', 'endDate', 'processStartDate', 'processEndDate', 'testPerformedAt'])
-const TEXT_FIELDS = new Set(['notes', 'additiveName', 'bottleType'])
+const TEXT_FIELDS = new Set(['notes', 'additiveName', 'additiveSupplier', 'co2Observations', 'bottleType'])
+
+/**
+ * Reglas de un embotellado **ya hecho** (`BOTTLED_RULE_CODES` del backend): no se puede deshacer,
+ * así que una corrección que las incumple no se rechaza; queda registrada y abre una incidencia
+ * `CORRECTION` que bloquea el cierre del expediente.
+ */
+const BOTTLED_RULE_CODES: readonly string[] = [
+  'TRC_LOCK_NOT_RELEASED',
+  'TRC_BOTTLING_EXCEEDS_VOLUME',
+  'TRC_BOTTLING_LOSS_ABOVE_TOLERANCE',
+  'TRC_ALCOHOL_BALANCE_EXCEEDED',
+  'TRC_DILUTION_NOT_ALLOWED',
+  'TRC_VOLUME_MISSING',
+  'TRC_BOTTLING_SOURCE_INVALID',
+  'TRC_BOTTLING_SOURCES_PENDING',
+]
 
 function checkValue(field: string, value: unknown): string | null {
   if (DATE_FIELDS.has(field)) return typeof value === 'string' && !Number.isNaN(Date.parse(value)) ? null : 'Debe ser una fecha (YYYY-MM-DD o ISO 8601)'
@@ -178,7 +219,12 @@ const issueKey = (i: IntegrityIssue) => `${i.code}:${i.details.map((d) => JSON.s
  */
 export function correctLot(state: TraceState, ctx: TraceCtx, lot: Lot, body: CreateLotCorrectionDto): Correction {
   assertDossierOpen(state, lot)
-  assertLotWritable(lot)
+  if (lot.stage === 'CERTIFIED' || lot.stage === 'ANCHORED') throw dossierClosedError(null)
+  // Un lote rechazado solo admite anular un dictamen: así se deshace un rechazo erróneo (§3.4).
+  const rejectedVoid = lot.stage === 'REJECTED' && body.target.type === 'PHYTO_DECISION' && body.kind === 'VOID'
+  if (lot.stage === 'DISCARDED' || (lot.stage === 'REJECTED' && !rejectedVoid)) {
+    throw stateError('TRC_LOT_TERMINAL', `El lote está en etapa ${lot.stage}: no admite correcciones`, [violation('TRC_LOT_TERMINAL', `Etapa terminal: ${lot.stage}`, { meta: { stage: lot.stage } })])
+  }
   if (!ctx.actor) throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Solo un miembro de la bodega puede corregir registros')
   const target = findTarget(state, lot, body.target.type, body.target.id)
   if (!target) throw new ApiError(404, 'NOT_FOUND', 'El registro que se corrige no existe en este lote')
@@ -192,16 +238,16 @@ export function correctLot(state: TraceState, ctx: TraceCtx, lot: Lot, body: Cre
         violation('TRC_CORRECTION_FIELD_NOT_CORRECTABLE', 'Registro no anulable', { field: 'kind', meta: { field: 'kind', targetType: body.target.type } }),
       ])
     }
-    if (isVoided(state, body.target.type, body.target.id)) throw stateError('TRC_INVALID_STAGE', 'El registro ya estaba anulado', [violation('TRC_INVALID_STAGE', 'Registro ya anulado')])
+    if (isVoided(state, body.target.type, body.target.id)) throw new ApiError(409, 'CONFLICT', 'El registro ya estaba anulado')
     if (body.target.type === 'PHYTO_DECISION' && harvestInTank(state, record.harvestBatchId as string)) {
-      throw ruleError('TRC_CORRECTION_BREAKS_RULES', 'La uva ya entró a un tanque: su dictamen no cambia', [
-        violation('TRC_PHYTO_DECISION_FINAL', 'Uva ya en un tanque', { meta: { harvestBatchId: record.harvestBatchId } }),
+      throw stateError('TRC_PHYTO_DECISION_FINAL', 'La uva ya entró a un tanque: su dictamen no cambia', [
+        violation('TRC_PHYTO_DECISION_FINAL', 'Dictamen final', { meta: { harvestBatchId: record.harvestBatchId, inTank: true } }),
       ])
     }
+    const wasCurrent = body.target.type === 'LAB_ANALYSIS' && !record.supersededAt
     state.voidedRecords.push(`${body.target.type}:${body.target.id}`)
-    changes.push({ field: 'voided', before: false, after: true })
-    if (body.target.type === 'LAB_ANALYSIS') {
-      // El análisis anterior vuelve a ser el vigente.
+    if (wasCurrent) {
+      // Anular el análisis vigente devuelve la vigencia al anterior.
       const previous = lotLabs(state, lot.id).at(-1)
       if (previous) previous.supersededAt = null
     }
@@ -220,38 +266,74 @@ export function correctLot(state: TraceState, ctx: TraceCtx, lot: Lot, body: Cre
     if (invalid.length > 0) {
       throw new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', invalid.map(([f, error]) => ({ field: `changes.${f}`, message: error as string })))
     }
+    const netBefore = body.target.type === 'HARVEST_BATCH' ? (record.netWeightKg as number) : null
     for (const field of fields) {
       const raw = (body.changes as AnyRecord)[field]
       const value = DATE_FIELDS.has(field) && typeof raw === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw) && field !== 'startDate' ? toDateField(raw) : raw
+      // Solo cuenta lo que cambia de verdad.
+      if (JSON.stringify(record[field] ?? null) === JSON.stringify(value ?? null)) continue
       changes.push({ field, before: record[field] ?? null, after: value ?? null })
       record[field] = value
     }
+    if (changes.length === 0) {
+      throw new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', [{ field: 'changes', message: 'La corrección no cambia ningún valor del registro' }])
+    }
+    target.after(ctx)
+    // Valor derivado: el neto del pesaje queda también en la corrección.
+    if (netBefore !== null && record.netWeightKg !== netBefore) changes.push({ field: 'netWeightKg', before: netBefore, after: record.netWeightKg as number })
   }
-  target.after(ctx)
+  if (body.kind === 'VOID') target.after(ctx)
 
-  // El resultado no puede incumplir una regla que antes se cumplía.
+  // El resultado no puede incumplir una regla que antes se cumplía (`compareIntegrity` del backend):
+  // lo que la corrección introduce se rechaza, salvo las reglas de un embotellado ya hecho.
   const after = reviewLot(state, ctx, lot)
   const known = new Set(before.map(issueKey))
-  const broken = after.filter((i) => !known.has(issueKey(i)))
-  if (broken.length > 0) {
-    throw ruleError('TRC_CORRECTION_BREAKS_RULES', 'La corrección dejaría el lote incumpliendo una regla', broken.flatMap((i) => i.details))
+  const introduced = after.filter((i) => !known.has(issueKey(i)))
+  const rejected = introduced.filter((i) => !BOTTLED_RULE_CODES.includes(i.code))
+  if (rejected.length > 0) {
+    throw ruleError('TRC_CORRECTION_BREAKS_RULES', 'La corrección dejaría el lote incumpliendo una regla', rejected.flatMap((i) => i.details))
   }
-  // Incidencias que la corrección resuelve.
-  const remaining = new Set(after.map((i) => i.code))
-  for (const issue of lot.complianceIssues) if (!issue.resolvedAt && !remaining.has(issue.code)) issue.resolvedAt = ctx.now
-
   const correction: Correction = { id: ctx.newId('correction'), lotId: lot.id, target: body.target, kind: body.kind, changes, reason: body.reason, createdAt: ctx.now, createdBy: ctx.actor }
   state.corrections.push(correction)
+  // De un embotellado ya hecho: el dato corregido es el verdadero; queda una incidencia que bloquea el cierre.
+  const openedIssueIds: string[] = []
+  for (const issue of introduced.filter((i) => BOTTLED_RULE_CODES.includes(i.code))) {
+    addComplianceIssue(ctx, lot, { ...issue, source: 'CORRECTION' })
+    openedIssueIds.push(lot.complianceIssues.at(-1)!.id)
+  }
+  // Incidencias que la corrección resuelve: las de un código que se incumplía antes y ya no.
+  const previous = new Set(before.map((i) => i.code))
+  const remaining = new Set(after.map((i) => i.code))
+  const resolvedIssueIds: string[] = []
+  for (const issue of lot.complianceIssues) {
+    if (issue.resolvedAt || !previous.has(issue.code) || remaining.has(issue.code)) continue
+    issue.resolvedAt = ctx.now
+    resolvedIssueIds.push(issue.id)
+  }
   for (const event of state.lotEvents) if (event.lotId === lot.id && event.resource.id === body.target.id) event.corrected = true
   appendLotEvent(state, ctx, lot, {
     type: 'CORRECTION',
     occurredAt: ctx.now,
-    summary: `${body.kind === 'VOID' ? 'Registro anulado' : `Corrección de ${changes.map((c) => c.field).join(', ')}`}: ${body.reason}`,
-    data: { targetType: body.target.type, kind: body.kind, fields: changes.map((c) => c.field) },
+    summary: `${body.kind === 'VOID' ? 'Anulación' : 'Corrección'} de ${TARGET_LABELS[body.target.type]}: ${body.reason}`,
+    data: { correctionId: correction.id, target: body.target, targetType: body.target.type, kind: body.kind, fields: changes.map((c) => c.field), reason: body.reason, openedIssueIds, resolvedIssueIds },
     resource: { type: 'correction', id: correction.id },
   })
   refreshLotStage(state, ctx, lot)
   return correction
+}
+
+const TARGET_LABELS: Record<CorrectionTargetType, string> = {
+  TERROIR: 'la parcela',
+  HARVEST_BATCH: 'el pesaje',
+  MATURITY_ANALYSIS: 'el análisis de madurez',
+  PHYTO_DECISION: 'el dictamen fitosanitario',
+  FERMENTATION_TANK: 'el tanque',
+  FERMENTATION_LOG: 'la lectura',
+  TREATMENT: 'el tratamiento',
+  WINE_AGING: 'la crianza',
+  PRODUCTION_BATCH: 'la destilación',
+  BOTTLING: 'el embotellado',
+  LAB_ANALYSIS: 'el análisis de laboratorio',
 }
 
 /**
@@ -327,9 +409,11 @@ export function toAttachment(ctx: Pick<TraceCtx, 'now'>, a: StoredAttachment): L
   return { id: a.id, kind: a.kind, title: a.title, key: a.key, mimeType: a.mimeType, sizeBytes: a.sizeBytes, sha256: a.sha256, visibility: a.visibility, url: signed.url, urlExpiresAt: signed.expiresAt, createdAt: a.createdAt, createdBy: a.createdBy }
 }
 
+const VISIBILITY_LABEL = { PUBLIC: 'público', PRIVATE: 'privado' } as const
+
 /** Adjunta al lote un archivo ya subido con `POST /v1/uploads`. Por defecto `PRIVATE`; la etiqueta nace `PUBLIC` (S-20). */
 export function addAttachment(state: TraceState, ctx: TraceCtx, lot: Lot, body: CreateLotAttachmentDto): StoredAttachment {
-  assertDossierOpen(state, lot)
+  assertDossierOpen(state, lot, 'El expediente del lote está cerrado: ya no admite archivos')
   assertLotWritable(lot)
   if (!ctx.actor) throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Solo un miembro de la bodega puede adjuntar archivos')
   assertOwnFile(lot.wineryId, 'key', body.key)
@@ -350,8 +434,8 @@ export function addAttachment(state: TraceState, ctx: TraceCtx, lot: Lot, body: 
   appendLotEvent(state, ctx, lot, {
     type: 'FILE_ATTACHED',
     occurredAt: ctx.now,
-    summary: `Archivo adjunto: ${body.title}`,
-    data: { kind: body.kind, visibility: attachment.visibility },
+    summary: `Archivo adjuntado: ${body.title} (${VISIBILITY_LABEL[attachment.visibility]})`,
+    data: { action: 'ATTACHED', kind: body.kind, title: body.title, visibility: attachment.visibility, sha256: attachment.sha256 },
     resource: { type: 'lot_attachment', id: attachment.id },
   })
   refreshLotStage(state, ctx, lot)
@@ -366,10 +450,11 @@ export function lotAttachments(state: TraceState, lot: Lot): StoredAttachment[] 
   const own = state.attachments.filter((a) => a.lotId === lot.id)
   const keys = new Set(own.map((a) => a.key))
   const derived: StoredAttachment[] = []
+  // Los informes de un dictamen o de un análisis anulado no se listan; los de registros anteriores a la Ola 2 no tienen autor.
   const add = (id: string, kind: 'PHYTO_REPORT' | 'LAB_REPORT', title: string, key: string, at: string, by: TraceActor | null | undefined) => {
-    if (!by || keys.has(key) || !key.startsWith('org/')) return
+    if (keys.has(key) || !key.startsWith('org/')) return
     keys.add(key)
-    derived.push({ id, lotId: lot.id, kind, title, key, mimeType: mimeOf(key), sizeBytes: sizeOf(key), sha256: fileSha256(key), visibility: 'PRIVATE', createdAt: at, createdBy: by })
+    derived.push({ id, lotId: lot.id, kind, title, key, mimeType: mimeOf(key), sizeBytes: sizeOf(key), sha256: fileSha256(key), visibility: 'PRIVATE', createdAt: at, createdBy: by ?? null })
   }
   for (const h of lotHarvests(state, lot.id)) {
     for (const d of harvestDecisions(state, h.id)) if (d.inspectionReport) add(d.id, 'PHYTO_REPORT', `Informe de inspección de ${h.harvestBatchCode}`, d.inspectionReport.key, d.recordedAt, d.decidedBy)
@@ -378,24 +463,56 @@ export function lotAttachments(state: TraceState, lot: Lot): StoredAttachment[] 
   return [...own, ...derived].sort((a, b) => a.createdAt.localeCompare(b.createdAt))
 }
 
-export function changeAttachmentVisibility(state: TraceState, ctx: TraceCtx, lot: Lot, attachmentId: string, body: ChangeLotAttachmentVisibilityDto): StoredAttachment {
+/**
+ * Cambia la visibilidad de un adjunto. Como en el backend, queda como un evento `FILE_ATTACHED`
+ * con `data.action = 'VISIBILITY_CHANGED'` en la línea de tiempo (la vigente es la del último);
+ * repetir la visibilidad vigente no registra nada.
+ */
+export function changeAttachmentVisibility(state: TraceState, ctx: TraceCtx, lot: Lot, attachmentId: string, body: ChangeLotAttachmentVisibilityDto): { attachment: StoredAttachment; changed: boolean } {
   const attachment = state.attachments.find((a) => a.id === attachmentId && a.lotId === lot.id)
   if (!attachment) throw new ApiError(404, 'NOT_FOUND', 'Archivo no encontrado en este lote')
+  const previous = attachment.visibility
+  if (previous === body.visibility) return { attachment, changed: false }
   attachment.visibility = body.visibility
+  appendLotEvent(state, ctx, lot, {
+    type: 'FILE_ATTACHED',
+    occurredAt: ctx.now,
+    summary: `Visibilidad del archivo «${attachment.title}»: ${VISIBILITY_LABEL[previous]} → ${VISIBILITY_LABEL[body.visibility]}`,
+    data: { action: 'VISIBILITY_CHANGED', attachmentId: attachment.id, kind: attachment.kind, previous, visibility: body.visibility },
+    resource: { type: 'lot_attachment', id: attachment.id },
+  })
   if (ctx.now > lot.updatedAt) lot.updatedAt = ctx.now
-  return attachment
+  return { attachment, changed: true }
 }
 
 // ---------------------------------------------------------------------------
-// Expediente y hash canónico (§10)
+// Expediente y hash canónico (§10; `domain/dossier.ts` y `domain/merkle.ts` del backend)
 // ---------------------------------------------------------------------------
 
-const fixed = (value: number | null | undefined, scale: number): string | null => (value === null || value === undefined ? null : value.toFixed(scale))
-const kg = (v: number | null | undefined) => fixed(v, 3)
-const liters = (v: number | null | undefined) => fixed(v, 3)
-const degrees = (v: number | null | undefined) => fixed(v, 2)
-/** Actores del expediente: rol y membresía, sin nombres ni correos. */
-const actorRef = (a: TraceActor | null | undefined) => (a ? { role: a.role, membershipId: a.membershipId } : null)
+/** Decimal como cadena de escala fija (`"18400.000"`), o `null`. Sin `-0.000`. */
+export function fixed(value: number | null | undefined, scale: number): string | null {
+  if (value === null || value === undefined || !Number.isFinite(value)) return null
+  const text = value.toFixed(scale)
+  return Number(text) === 0 ? (0).toFixed(scale) : text
+}
+
+/** Instante en ISO 8601 UTC con milisegundos, como en el expediente del backend. */
+const instant = (value: string | null | undefined): string | null => (value ? new Date(Date.parse(value)).toISOString() : null)
+/** Personas del expediente: membresía y rol, sin nombres ni correos. */
+const actorRef = (a: TraceActor | null | undefined) => (a ? { membershipId: a.membershipId, role: a.role } : null)
+
+/** Orden estable: por `key` (fecha ISO o texto) y después por id, con comparación binaria. */
+function byKeyThenId<T extends { id: string }>(rows: readonly T[], key: (row: T) => string): T[] {
+  return [...rows].sort((a, b) => {
+    const ka = key(a)
+    const kb = key(b)
+    if (ka !== kb) return ka < kb ? -1 : 1
+    return a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+  })
+}
+
+/** Campos de texto libre que no van en el expediente público: de su corrección queda solo el campo. */
+const FREE_TEXT_FIELD = /(^|\.)(notes|reason|discardReason|voidReason)$/i
 
 /** ¿Estaba vigente y activo el código de la serie al cerrar el expediente? */
 function leafOf(bl: BottleLot, serial: number, closedAt: string | null): { serial: number; code: string; salt: string } | null {
@@ -408,7 +525,13 @@ function leafOf(bl: BottleLot, serial: number, closedAt: string | null): { seria
 
 const merkleCache = new WeakMap<BottleLot, { signature: string; serials: number[]; levels: string[][] }>()
 
-/** Árbol Merkle de los códigos activos del lote al cierre: hojas `SHA-256("{serie}:{código}:{sal}")` por serie. */
+/**
+ * Árbol Merkle de los códigos del lote (`sha256-merkle/serial-code-salt`): hojas
+ * `SHA-256("{serie}:{código}:{sal}")` de los códigos **activos al cerrar**, por serie; cada nivel
+ * empareja de izquierda a derecha con `SHA-256(izquierdo ‖ derecho)` sobre los bytes; el nodo sin
+ * pareja sube tal cual; sin hojas, `SHA-256("")`. Los códigos anulados después del cierre siguen
+ * en el árbol (tras el cierre no se emiten códigos nuevos).
+ */
 export function bottleMerkleTree(bl: BottleLot, closedAt: string | null): { serials: number[]; levels: string[][]; root: string; count: number } {
   const signature = `${bl.total}:${bl.voided.length}:${bl.allVoided?.at ?? ''}:${closedAt ?? ''}`
   let cached = merkleCache.get(bl)
@@ -427,157 +550,354 @@ export function bottleMerkleTree(bl: BottleLot, closedAt: string | null): { seri
   return { serials: cached.serials, levels: cached.levels, root: cached.levels.at(-1)?.[0] ?? sha256Hex(''), count: cached.serials.length }
 }
 
-/** Prueba Merkle de una botella frente a la raíz del expediente cerrado (`null` si no entró en él). */
+/**
+ * Prueba Merkle de una botella frente a la raíz del expediente cerrado: `null` si el expediente
+ * no está cerrado, si el código no entró en la raíz (anulado o sustituido antes del cierre) o si
+ * las hojas no reproducen la raíz guardada. Un código anulado **después** del cierre la conserva.
+ */
 export function bottleMerkleProof(state: TraceState, lot: Lot, serial: number, generation: number): { salt: string; path: MerkleStep[] } | null {
   const dossier = lotDossier(state, lot.id)
   const bl = bottleLotOf(state, lot.id)
-  if (!bl || dossier?.status !== 'CLOSED' || generation !== bottleGeneration(bl, serial)) return null
+  if (!bl || dossier?.status !== 'CLOSED' || !dossier.bottleCodes || generation !== bottleGeneration(bl, serial)) return null
   const tree = bottleMerkleTree(bl, dossier.closedAt)
+  if (tree.root !== dossier.bottleCodes.merkleRoot) return null
   const index = tree.serials.indexOf(serial)
   if (index < 0) return null
   return { salt: mockBottleSalt(bl.lotId, serial, generation), path: merkleProof(tree.levels, index) }
 }
 
-/**
- * Contenido canónico del expediente (`doc-dossier/1`): JSON canónico (claves ordenadas, sin
- * espacios; RFC 8785), decimales como cadenas de escala fija, actores sin nombre y los códigos de
- * botella solo como raíz Merkle con sal por botella. No depende de la fecha de consulta.
- */
-export function canonicalDossier(state: TraceState, lot: Lot, closedAt: string | null, lotPrefix: string): string {
-  const winery = state.wineries.find((w) => w.id === lot.wineryId)
-  const harvests = lotHarvests(state, lot.id)
-  const tanks = lotTanks(state, lot.id)
-  const bottling = lotBottling(state, lot.id)
-  const bl = bottleLotOf(state, lot.id)
-  const tree = bl ? bottleMerkleTree(bl, closedAt) : null
-  const attachments = lotAttachments(state, lot)
-  const doc = {
-    schema: DOSSIER_SCHEMA_VERSION,
-    winery: { id: lot.wineryId, lotPrefix, tradeName: winery?.commercialName ?? '' },
-    lot: { id: lot.id, reference: lot.reference, lotCode: lot.lotCode, name: lot.name, productType: lot.productType, harvestYear: lot.harvestYear, createdAt: lot.createdAt },
-    rules: lot.rules,
-    harvestBatches: harvests.map((h) => ({
-      id: h.id,
-      code: h.harvestBatchCode,
-      intakeDate: h.intakeDate,
-      grossWeightKg: kg(h.grossWeightKg),
-      tareWeightKg: kg(h.tareWeightKg),
-      netWeightKg: kg(h.netWeightKg),
-      terroir: h.terroirSnapshot ? { id: h.terroirId, ...h.terroirSnapshot, altitudeMasl: fixed(h.terroirSnapshot.altitudeMasl, 0) } : null,
-      maturityAnalyses: harvestAnalyses(state, h.id).map((m) => ({ id: m.id, brixDegrees: degrees(m.brixDegrees), ph: degrees(m.ph), acidityGl: degrees(m.acidityGl), measuredAt: m.measuredAt, recordedBy: actorRef(m.recordedBy) })),
-      phytoDecisions: harvestDecisions(state, h.id).map((d) => ({ id: d.id, decision: d.decision, decidedAt: d.decidedAt, decidedBy: actorRef(d.decidedBy), reportSha256: d.inspectionReport?.sha256 ?? null })),
-    })),
-    tanks: tanks.map((t) => ({
-      id: t.id,
-      tankCode: t.tankCode,
-      startDate: t.startDate,
-      endDate: t.endDate ?? null,
-      destinationType: t.destinationType ?? null,
-      volumeFilledLiters: liters(t.volumeFilledLiters),
-      finalVolumeLiters: liters(t.finalVolumeLiters),
-      inputs: (t.inputs ?? []).map((i) => ({ harvestBatchId: i.harvestBatchId, kg: kg(i.kg) })),
-      readings: state.logs
-        .filter((l) => l.fermentationTankId === t.id && !isVoided(state, 'FERMENTATION_LOG', l.id))
-        .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt) || a.id.localeCompare(b.id))
-        .map((l) => ({ id: l.id, recordedAt: l.recordedAt, temperatureCelsius: degrees(l.temperatureCelsius), specificGravity: fixed(l.specificGravity, 3), phValue: degrees(l.phValue) })),
-      treatments: state.treatments
-        .filter((x) => x.fermentationTankId === t.id && !isVoided(state, 'TREATMENT', x.id))
-        .sort((a, b) => a.appliedAt.localeCompare(b.appliedAt) || a.id.localeCompare(b.id))
-        .map((x) => ({ id: x.id, treatmentType: x.treatmentType, additiveName: x.additiveName, dosageAppliedGPerHl: degrees(x.dosageAppliedGPerHl), regulatoryAuthCode: x.regulatoryAuthCode, appliedAt: x.appliedAt })),
-    })),
-    agings: lotAgings(state, lot.id).map((a) => ({ id: a.id, fermentationTankId: a.fermentationTankId, containerType: a.containerType, containerMaterial: a.containerMaterial ?? null, plannedMonths: a.plannedMonths, volumeLiters: liters(a.volumeLiters), startDate: a.startDate, unlockDate: a.lockUntilDate.slice(0, 10), status: a.agingStatus })),
-    distillations: lotProductions(state, lot.id).map((p) => ({
-      id: p.id,
-      fermentationTankId: p.fermentationTankId,
-      equipmentIdentifier: p.equipmentIdentifier,
-      processStartDate: p.processStartDate.slice(0, 10),
-      processEndDate: p.processEndDate?.slice(0, 10) ?? null,
-      inputVolumeLiters: liters(p.inputVolumeLiters),
-      headsLiters: liters(p.headsLiters),
-      heartLiters: liters(p.heartLiters ?? p.outputVolumeLiters),
-      tailsLiters: liters(p.tailsLiters),
-      vinasseLiters: liters(p.vinasseLiters),
-      heartAbvPercent: degrees(p.heartAbvPercent ?? p.initialAlcoholPercentage),
-      restUntil: p.mandatoryRestUntil?.slice(0, 10) ?? null,
-      status: p.restStatus,
-    })),
-    bottling: bottling
-      ? {
-          id: bottling.id,
-          lotCode: bottling.internationalLotCode,
-          bottlingDate: bottling.bottlingDate.slice(0, 10),
-          bottles: bottling.totalBottlesPackaged,
-          formatCl: bottling.packagingFormatCl,
-          finalAlcoholAbv: degrees(bottling.finalAlcoholAbv),
-          waterDilutionLiters: liters(bottling.waterDilutionLiters ?? 0),
-          balance: bottling.balance
-            ? {
-                availableLiters: liters(bottling.balance.availableLiters),
-                bottledLiters: liters(bottling.balance.bottledLiters),
-                leftoverLiters: liters(bottling.balance.leftoverLiters),
-                lossLiters: liters(bottling.balance.lossLiters),
-                lossPercent: degrees(bottling.balance.lossPercent),
-                maxLossPercent: degrees(bottling.balance.maxLossPercent),
-                pureAlcohol: bottling.balance.pureAlcohol ? { availableLiters: liters(bottling.balance.pureAlcohol.availableLiters), bottledLiters: liters(bottling.balance.pureAlcohol.bottledLiters) } : null,
-              }
-            : null,
-          releasedBy: bottling.releasedByMemberId ? { membershipId: bottling.releasedByMemberId } : null,
-        }
-      : null,
-    labAnalyses: lotLabs(state, lot.id).map((l) => ({
-      id: l.id,
-      laboratory: l.certifiedLaboratoryName,
-      certificationCode: l.accreditedLabCertificationCode,
-      testPerformedAt: l.testPerformedAt.slice(0, 10),
-      actualAlcoholAbv: degrees(l.actualAlcoholAbv),
-      volatileAcidityAceticGl: degrees(l.volatileAcidityAceticGl),
-      methanolMg100mlAa: fixed(l.methanolMg100mlAa, 3),
-      copperContentMgL: fixed(l.copperContentMgL, 3),
-      conformity: l.conformity ? { status: l.conformity.status, checks: l.conformity.checks.map((c) => ({ parameter: c.parameter, value: fixed(c.value, 3), unit: c.unit, limit: c.limit, result: c.result })) } : null,
-      current: !l.supersededAt,
-      reportSha256: l.report?.sha256 ?? null,
-    })),
-    corrections: state.corrections
-      .filter((c) => c.lotId === lot.id)
-      .sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id))
-      .map((c) => ({ id: c.id, target: c.target, kind: c.kind, changes: c.changes, reason: c.reason, createdAt: c.createdAt, createdBy: actorRef(c.createdBy) })),
-    attachments: attachments.map((a) => ({ kind: a.kind, sha256: a.sha256 })).sort((a, b) => a.sha256.localeCompare(b.sha256)),
-    bottleCodes: tree ? { count: tree.count, merkleRoot: tree.root, algorithm: BOTTLE_MERKLE_ALGORITHM } : null,
-    closedAt,
-  }
-  return canonicalJson(doc)
+/** Autor del evento de la línea de tiempo que registró un recurso (los registros no guardan su autor). */
+function recorderOf(state: TraceState, lotId: string, resourceId: string): TraceActor | null {
+  return state.lotEvents.filter((e) => e.lotId === lotId && e.resource.id === resourceId).sort((a, b) => a.seq - b.seq)[0]?.actor ?? null
 }
 
-/** Requisitos del cierre del expediente (§10) y la huella que tendría si se cerrara ahora. */
-export function dossierPreview(state: TraceState, ctx: TraceCtx, lot: Lot): DossierPreview {
+/** Cuándo se descartó una crianza o una destilación (su evento o, si se descartó con el lote, el del lote). */
+function discardedAtOf(state: TraceState, lot: Lot, sourceId: string, discarded: boolean): string | null {
+  if (!discarded) return null
+  const own = state.lotEvents.find((e) => e.lotId === lot.id && e.type === 'LOT_DISCARDED' && e.resource.id === sourceId)
+  return instant(own?.occurredAt ?? lot.discarded?.at ?? null)
+}
+
+/**
+ * Contenido canónico del expediente, `doc-dossier/1` (`buildCanonicalDossier` del backend): las
+ * medidas como cadenas de escala fija con la escala de su columna, instantes en ISO 8601 con
+ * milisegundos, fechas `YYYY-MM-DD`, listas ordenadas por fecha e id, personas como
+ * `{ membershipId, role }`, sin textos libres ni claves de archivos, los registros anulados
+ * marcados con `voidedAt` y los códigos de botella solo como raíz Merkle. Las propiedades sin dato
+ * van con `null`. Con `closedAt: null` es la vista previa: no cambia mientras no cambien los registros.
+ */
+export function buildCanonicalDossier(state: TraceState, lot: Lot, closing: { closedAt: string; closedBy: TraceActor | null } | null, lotPrefix: string | null): CanonicalDossier {
+  const winery = state.wineries.find((w) => w.id === lot.wineryId)
+  const bl = bottleLotOf(state, lot.id)
+  const tree = bl ? bottleMerkleTree(bl, closing?.closedAt ?? null) : null
+
+  const harvests = byKeyThenId(lotHarvests(state, lot.id), (h) => dayOf(h.intakeDate)).map((h) => {
+    const terroir = state.terroirs.find((t) => t.id === h.terroirId)
+    return {
+      id: h.id,
+      code: h.harvestBatchCode,
+      intakeDate: dayOf(h.intakeDate),
+      harvestYear: h.harvestYear,
+      grossWeightKg: fixed(h.grossWeightKg, 3),
+      tareWeightKg: fixed(h.tareWeightKg, 3),
+      netWeightKg: fixed(h.netWeightKg, 3),
+      temperatureAtIntakeC: fixed(h.temperatureAtIntakeC, 2),
+      phytosanitaryStatus: h.phytosanitaryStatus,
+      terroir: {
+        id: h.terroirId,
+        parcelName: h.terroirSnapshot?.parcelName ?? terroir?.parcelName ?? '',
+        altitudeMasl: fixed(h.terroirSnapshot?.altitudeMasl ?? terroir?.altitudeMasl, 2),
+        varietyName: h.terroirSnapshot?.varietyName ?? terroir?.varietyName ?? '',
+        rawMaterialType: h.terroirSnapshot?.rawMaterialType ?? terroir?.rawMaterialType ?? '',
+        takenAt: instant(h.terroirSnapshot?.takenAt),
+      },
+      recordedAt: instant(h.createdAt),
+      recordedBy: actorRef(recorderOf(state, lot.id, h.id)),
+      maturityAnalyses: byKeyThenId(allHarvestAnalyses(state, h.id), (m) => instant(m.measuredAt) as string).map((m) => ({
+        id: m.id,
+        brixDegrees: fixed(m.brixDegrees, 2),
+        ph: fixed(m.ph, 2),
+        acidityGl: fixed(m.acidityGl, 3),
+        measuredAt: instant(m.measuredAt),
+        recordedAt: instant(m.recordedAt),
+        recordedBy: actorRef(m.recordedBy),
+        source: m.source,
+        voidedAt: instant(voidedAtOf(state, 'MATURITY_ANALYSIS', m.id)),
+      })),
+      phytoDecisions: byKeyThenId(allHarvestDecisions(state, h.id), (d) => instant(d.decidedAt) as string).map((d) => ({
+        id: d.id,
+        decision: d.decision,
+        decidedAt: instant(d.decidedAt),
+        recordedAt: instant(d.recordedAt),
+        decidedBy: actorRef(d.decidedBy),
+        inspectionReportSha256: d.inspectionReport?.sha256 ?? null,
+        source: d.source,
+        voidedAt: instant(voidedAtOf(state, 'PHYTO_DECISION', d.id)),
+      })),
+    }
+  })
+
+  const tanks = byKeyThenId(lotTanks(state, lot.id), (t) => instant(t.startDate) as string).map((t) => ({
+    id: t.id,
+    tankCode: t.tankCode,
+    material: t.material ?? null,
+    capacityLiters: fixed(t.capacityLiters, 2),
+    volumeFilledLiters: fixed(t.volumeFilledLiters, 2),
+    finalVolumeLiters: fixed(t.finalVolumeLiters, 2),
+    destinationType: t.destinationType ?? null,
+    status: t.status,
+    startDate: instant(t.startDate),
+    endDate: instant(t.endDate),
+    recordedAt: instant(t.createdAt),
+    recordedBy: actorRef(recorderOf(state, lot.id, t.id)),
+    inputs: [...(t.inputs ?? [])]
+      .sort((a, b) => (a.harvestBatchId < b.harvestBatchId ? -1 : a.harvestBatchId > b.harvestBatchId ? 1 : 0))
+      .map((i) => ({ harvestBatchId: i.harvestBatchId, kg: fixed(i.kg, 3) })),
+    readings: byKeyThenId(
+      state.logs.filter((l) => l.fermentationTankId === t.id),
+      (l) => instant(l.recordedAt) as string,
+    ).map((l) => ({
+      id: l.id,
+      recordedAt: instant(l.recordedAt),
+      temperatureCelsius: fixed(l.temperatureCelsius, 2),
+      specificGravity: fixed(l.specificGravity, 4),
+      phValue: fixed(l.phValue, 2),
+      voidedAt: instant(voidedAtOf(state, 'FERMENTATION_LOG', l.id)),
+    })),
+    treatments: byKeyThenId(
+      state.treatments.filter((x) => x.fermentationTankId === t.id),
+      (x) => instant(x.appliedAt) as string,
+    ).map((x) => ({
+      id: x.id,
+      treatmentType: x.treatmentType,
+      additiveName: x.additiveName,
+      dosageAppliedGPerHl: fixed(x.dosageAppliedGPerHl, 4),
+      totalAppliedG: fixed(x.totalAppliedG, 4),
+      regulatoryAuthCode: x.regulatoryAuthCode,
+      appliedAt: instant(x.appliedAt),
+      voidedAt: instant(voidedAtOf(state, 'TREATMENT', x.id)),
+    })),
+  }))
+
+  const agings = byKeyThenId(lotAgings(state, lot.id), agingStartDay).map((a) => ({
+    id: a.id,
+    fermentationTankId: a.fermentationTankId,
+    containerType: a.containerType,
+    containerMaterial: a.containerMaterial ?? null,
+    containerCount: a.containerCount ?? null,
+    barrelUseCycle: a.barrelUseCycle ?? null,
+    volumeLiters: fixed(a.volumeLiters, 2),
+    plannedMonths: a.plannedMonths,
+    startDate: agingStartDay(a),
+    unlockDate: agingLockOf(a, lot.rules, agingStartDay(a)).unlockDate,
+    status: a.agingStatus,
+    discardedAt: discardedAtOf(state, lot, a.id, a.agingStatus === 'DISCARDED'),
+    recordedAt: instant(a.createdAt),
+    recordedBy: actorRef(recorderOf(state, lot.id, a.id)),
+  }))
+
+  const distillations = byKeyThenId(lotProductions(state, lot.id), (p) => dayOf(p.processStartDate)).map((p) => {
+    const end = p.processEndDate ? dayOf(p.processEndDate) : null
+    return {
+      id: p.id,
+      fermentationTankId: p.fermentationTankId,
+      processType: p.processType,
+      equipmentIdentifier: p.equipmentIdentifier,
+      processStartDate: dayOf(p.processStartDate),
+      processEndDate: end,
+      inputVolumeLiters: fixed(p.inputVolumeLiters, 3),
+      headsLiters: fixed(p.headsLiters, 3),
+      heartLiters: fixed(p.heartLiters ?? p.outputVolumeLiters, 3),
+      tailsLiters: fixed(p.tailsLiters, 3),
+      vinasseLiters: fixed(p.vinasseLiters, 3),
+      heartAbvPercent: fixed(p.heartAbvPercent ?? p.initialAlcoholPercentage, 2),
+      restUntil: restLockOf(p, lot.rules, end ?? dayOf(p.processStartDate))?.unlockDate ?? null,
+      status: p.restStatus,
+      discardedAt: discardedAtOf(state, lot, p.id, p.restStatus === 'DISCARDED'),
+      recordedAt: instant(p.createdAt),
+      recordedBy: actorRef(recorderOf(state, lot.id, p.id)),
+    }
+  })
+
+  const b = lotBottling(state, lot.id)
+  // El balance se recalcula con los registros vigentes y el volumen entero de las fuentes embotelladas.
+  const input = b ? bottlingInputOf(state, lot, b).input : null
+  const balance = input ? computeBottlingBalance(input) : null
+  const bottling = b
+    ? {
+        id: b.id,
+        lotCode: b.internationalLotCode,
+        productType: b.productType,
+        bottlingDate: dayOf(b.bottlingDate),
+        packagingFormatCl: b.packagingFormatCl,
+        totalBottlesPackaged: b.totalBottlesPackaged,
+        finalAlcoholAbv: fixed(b.finalAlcoholAbv, 2),
+        waterDilutionLiters: fixed(b.waterDilutionLiters, 3),
+        bottleType: b.bottleType ?? null,
+        leftover: b.leftover ? { liters: fixed(b.leftover.liters, 3), disposition: b.leftover.disposition } : null,
+        balance: balance
+          ? {
+              availableLiters: fixed(balance.availableLiters, 3) as string,
+              waterDilutionLiters: fixed(balance.waterDilutionLiters, 3) as string,
+              bottledLiters: fixed(balance.bottledLiters, 3) as string,
+              leftoverLiters: fixed(balance.leftoverLiters, 3) as string,
+              lossLiters: fixed(balance.lossLiters, 3) as string,
+              lossPercent: fixed(balance.lossPercent, 2) as string,
+              pureAlcohol: balance.pureAlcohol
+                ? { availableLiters: fixed(balance.pureAlcohol.availableLiters, 3) as string, bottledLiters: fixed(balance.pureAlcohol.bottledLiters, 3) as string }
+                : null,
+            }
+          : null,
+        recordedAt: instant(b.createdAt),
+        recordedBy: actorRef(recorderOf(state, lot.id, b.id)),
+      }
+    : null
+
+  const current = currentLab(state, lot.id)?.id ?? null
+  const labAnalyses = byKeyThenId(allLotLabs(state, lot.id), (l) => instant(l.createdAt) as string).map((l) => ({
+    id: l.id,
+    laboratoryName: l.certifiedLaboratoryName,
+    certificationCode: l.accreditedLabCertificationCode,
+    analysisRequestDate: l.analysisRequestDate ? dayOf(l.analysisRequestDate) : null,
+    testPerformedAt: dayOf(l.testPerformedAt),
+    actualAlcoholAbv: fixed(l.actualAlcoholAbv, 2),
+    totalAlcoholAbv: fixed(l.totalAlcoholAbv, 2),
+    totalAcidityTartaricGl: fixed(l.totalAcidityTartaricGl, 3),
+    volatileAcidityAceticGl: fixed(l.volatileAcidityAceticGl, 3),
+    freeSulfurDioxideMgL: fixed(l.freeSulfurDioxideMgL, 3),
+    totalSulfurDioxideMgL: fixed(l.totalSulfurDioxideMgL, 3),
+    reducingSugarsGl: fixed(l.reducingSugarsGl, 3),
+    totalDryExtractGl: fixed(l.totalDryExtractGl, 3),
+    sugarFreeDryExtractGl: fixed(l.sugarFreeDryExtractGl, 3),
+    overpressureBar: fixed(l.overpressureBar, 2),
+    methanolContentMgL: fixed(l.methanolContentMgL, 3),
+    methanolMg100mlAa: fixed(l.methanolMg100mlAa, 3),
+    copperContentMgL: fixed(l.copperContentMgL, 3),
+    conformityStatus: l.conformityStatus ?? null,
+    conformity: l.conformity ?? null,
+    current: l.id === current,
+    supersededAt: instant(l.supersededAt),
+    voidedAt: instant(voidedAtOf(state, 'LAB_ANALYSIS', l.id)),
+    recordedAt: instant(l.createdAt),
+    recordedBy: actorRef(l.recordedBy),
+  }))
+
+  const corrections = byKeyThenId(
+    state.corrections.filter((c) => c.lotId === lot.id),
+    (c) => instant(c.createdAt) as string,
+  ).map((c) => ({
+    id: c.id,
+    target: { type: c.target.type, id: c.target.id },
+    kind: c.kind,
+    // Los textos libres no son públicos: queda constancia del campo.
+    changes: c.changes.map((change) => (FREE_TEXT_FIELD.test(change.field) ? { field: change.field } : { field: change.field, before: change.before ?? null, after: change.after ?? null })),
+    createdAt: instant(c.createdAt),
+    createdBy: actorRef(c.createdBy),
+  }))
+
+  const attachments = byKeyThenId(
+    state.attachments.filter((a) => a.lotId === lot.id),
+    (a) => instant(a.createdAt) as string,
+  ).map((a) => ({ kind: a.kind, sha256: a.sha256 }))
+
+  return {
+    schema: DOSSIER_SCHEMA_VERSION,
+    closedAt: instant(closing?.closedAt),
+    closedBy: actorRef(closing?.closedBy),
+    winery: { id: lot.wineryId, lotPrefix, tradeName: winery?.commercialName ?? '' },
+    lot: {
+      id: lot.id,
+      reference: lot.reference,
+      lotCode: lot.lotCode,
+      name: lot.name,
+      productType: lot.productType,
+      harvestYear: lot.harvestYear,
+      createdAt: instant(lot.createdAt) as string,
+      createdBy: actorRef(lot.createdBy),
+      bottledAt: b ? dayOf(b.bottlingDate) : null,
+    },
+    // La instantánea de reglas, tal como se guardó.
+    rules: JSON.parse(JSON.stringify(lot.rules)) as Record<string, unknown>,
+    harvests,
+    tanks,
+    agings,
+    distillations,
+    bottling,
+    labAnalyses,
+    corrections,
+    attachments,
+    bottleCodes: tree ? { count: tree.count, merkleRoot: tree.root, algorithm: BOTTLE_MERKLE_ALGORITHM } : null,
+  }
+}
+
+/** Bytes canónicos (JSON canónico RFC 8785, UTF-8) del expediente y su huella SHA-256. */
+export function sealDossier(state: TraceState, lot: Lot, closing: { closedAt: string; closedBy: TraceActor | null } | null, lotPrefix: string | null): { canonical: string; hash: string } {
+  const canonical = canonicalJson(buildCanonicalDossier(state, lot, closing, lotPrefix))
+  return { canonical, hash: sha256Hex(canonical) }
+}
+
+const LAB_REQUIREMENT_MESSAGES: Record<string, string> = {
+  CONFORMING: 'El análisis de laboratorio vigente es conforme',
+  NOT_RECORDED: 'Falta el análisis de laboratorio del lote',
+  INCOMPLETE: 'El análisis de laboratorio vigente está incompleto: faltan parámetros exigidos',
+  NON_CONFORMING: 'El análisis de laboratorio vigente no es conforme',
+}
+
+/** Lo que cada requisito sin cumplir añade a `meta` en el 422 `TRC_DOSSIER_NOT_READY`. */
+function requirementMeta(state: TraceState, lot: Lot, key: string): Record<string, unknown> {
+  if (key === 'LAB_CONFORMING') return { labStatus: currentLab(state, lot.id)?.conformityStatus ?? 'NOT_RECORDED' }
+  if (key === 'NO_OPEN_COMPLIANCE_ISSUES') return { issueIds: lot.complianceIssues.filter((i) => !i.resolvedAt).map((i) => i.id) }
+  if (key === 'NO_OPEN_SOURCES') return { sourceIds: [...lotAgings(state, lot.id).filter(isAgingOpen), ...lotProductions(state, lot.id).filter(isProductionOpen)].map((s) => s.id) }
+  return {}
+}
+
+/**
+ * Requisitos del cierre del expediente (§10), en el orden del contrato (`dossierRequirements` del
+ * backend). `hashPreview` de la vista previa es la huella del documento con `closedAt` y `closedBy`
+ * en `null` (no cambia mientras no cambien los registros del lote); con el expediente cerrado, la
+ * definitiva.
+ */
+export function dossierRequirements(state: TraceState, lot: Lot): DossierPreview['requirements'] {
   const bottling = lotBottling(state, lot.id)
   const bl = bottleLotOf(state, lot.id)
-  const lab = currentLab(state, lot.id)
+  const labStatus = currentLab(state, lot.id)?.conformityStatus ?? 'NOT_RECORDED'
   const openIssues = lot.complianceIssues.filter((i) => !i.resolvedAt).length
   const openSources = lotAgings(state, lot.id).filter(isAgingOpen).length + lotProductions(state, lot.id).filter(isProductionOpen).length
-  const labMessage = !lab
-    ? 'Falta registrar el análisis de laboratorio'
-    : lab.conformityStatus === 'CONFORMING'
-      ? 'Laboratorio conforme'
-      : lab.conformityStatus === 'NON_CONFORMING'
-        ? 'El análisis vigente no es conforme: reanaliza o descarta el lote'
-        : 'El análisis vigente está incompleto: falta un parámetro exigido'
-  const requirements: DossierPreview['requirements'] = [
-    { key: 'BOTTLED', met: Boolean(bottling), message: bottling ? `Embotellado ${bottling.internationalLotCode} registrado` : 'El lote aún no está embotellado' },
-    { key: 'LAB_CONFORMING', met: lab?.conformityStatus === 'CONFORMING', message: labMessage },
+  const bottled = bottling !== null
+  const active = bottleCodesSummary(bl).active
+  const codesReady = bottled && bl !== null && active > 0 && bl.total === bottling.totalBottlesPackaged
+  const codesMessage = !bottled
+    ? 'Los códigos de botella se generan al embotellar'
+    : codesReady
+      ? `${active} códigos de botella activos`
+      : active === 0
+        ? 'El lote no tiene ningún código de botella activo'
+        : `Hay códigos para ${bl?.total ?? 0} de las ${bottling.totalBottlesPackaged} botellas`
+  return [
+    { key: 'BOTTLED', met: bottled, message: bottled ? 'El lote está embotellado' : 'El lote aún no está embotellado' },
+    { key: 'LAB_CONFORMING', met: labStatus === 'CONFORMING', message: LAB_REQUIREMENT_MESSAGES[labStatus] ?? LAB_REQUIREMENT_MESSAGES.NOT_RECORDED! },
+    { key: 'BOTTLE_CODES_READY', met: codesReady, message: codesMessage },
     {
-      key: 'BOTTLE_CODES_READY',
-      met: Boolean(bottling && bl && bl.total === bottling.totalBottlesPackaged),
-      message: bl ? `${bl.total} códigos de botella generados` : 'Los códigos de botella se generan al embotellar',
+      key: 'NO_OPEN_COMPLIANCE_ISSUES',
+      met: openIssues === 0,
+      message: openIssues === 0 ? 'Sin incidencias de cumplimiento abiertas' : `${openIssues} incidencias de cumplimiento abiertas: corrígelas o descarta el lote`,
     },
-    { key: 'NO_OPEN_COMPLIANCE_ISSUES', met: openIssues === 0, message: openIssues === 0 ? 'Sin incidencias de cumplimiento abiertas' : `${openIssues} incidencia(s) de cumplimiento abierta(s)` },
-    { key: 'NO_OPEN_SOURCES', met: openSources === 0, message: openSources === 0 ? 'Todas las crianzas y destilaciones están cerradas' : `${openSources} fuente(s) abierta(s) sin embotellar ni descartar` },
+    {
+      key: 'NO_OPEN_SOURCES',
+      met: openSources === 0,
+      message: openSources === 0 ? 'Sin crianzas ni destilaciones abiertas' : `${openSources} crianzas o destilaciones abiertas: descártalas antes de cerrar`,
+    },
   ]
+}
+
+/** `GET /v1/lots/{id}/dossier/preview`. */
+export function dossierPreview(state: TraceState, ctx: Pick<TraceCtx, 'lotPrefix'>, lot: Lot): DossierPreview {
+  const requirements = dossierRequirements(state, lot)
   const closed = lotDossier(state, lot.id)
   return {
     ready: requirements.every((r) => r.met),
     requirements,
-    hashPreview: closed?.status === 'CLOSED' ? closed.hash : bottling ? sha256Hex(canonicalDossier(state, lot, ctx.now, ctx.lotPrefix(lot.wineryId))) : null,
+    hashPreview: closed?.status === 'CLOSED' ? closed.hash : sealDossier(state, lot, null, ctx.lotPrefix(lot.wineryId)).hash,
   }
 }
 
@@ -592,14 +912,17 @@ export function dossierOf(state: TraceState, lot: Lot): LotDossier {
   return { lotId: lot.id, schema: DOSSIER_SCHEMA_VERSION, status: 'OPEN', hash: null, algorithm: DOSSIER_HASH_ALGORITHM, closedAt: null, closedBy: null, bottleCodes: null, anchor: null }
 }
 
-/** Bytes canónicos del expediente: los que se hashearon al cerrarlo o los que se hashearían ahora. */
+/**
+ * Bytes canónicos del expediente: los que se hashearon al cerrarlo (tal como se guardaron) o, con
+ * el expediente abierto, la vista previa (`closedAt` y `closedBy` en `null`).
+ */
 export function dossierCanonical(state: TraceState, ctx: Pick<TraceCtx, 'lotPrefix'>, lot: Lot): string {
   const stored = lotDossier(state, lot.id)
-  if (stored?.status === 'CLOSED') {
-    stored.canonical ??= canonicalDossier(state, lot, stored.closedAt, ctx.lotPrefix(lot.wineryId))
+  if (stored?.status === 'CLOSED' && stored.closedAt) {
+    stored.canonical ??= sealDossier(state, lot, { closedAt: stored.closedAt, closedBy: stored.closedBy }, ctx.lotPrefix(lot.wineryId)).canonical
     return stored.canonical
   }
-  return canonicalDossier(state, lot, null, ctx.lotPrefix(lot.wineryId))
+  return sealDossier(state, lot, null, ctx.lotPrefix(lot.wineryId)).canonical
 }
 
 /**
@@ -614,23 +937,23 @@ export function closeDossier(state: TraceState, ctx: TraceCtx, lot: Lot): Stored
     throw ruleError(
       'TRC_DOSSIER_NOT_READY',
       'El expediente aún no se puede cerrar',
-      preview.requirements.filter((r) => !r.met).map((r) => violation('TRC_DOSSIER_NOT_READY', r.message, { meta: { requirement: r.key } })),
+      preview.requirements.filter((r) => !r.met).map((r) => violation('TRC_DOSSIER_NOT_READY', r.message, { meta: { requirement: r.key, ...requirementMeta(state, lot, r.key) } })),
     )
   }
   const bl = bottleLotOf(state, lot.id) as BottleLot
-  const canonical = canonicalDossier(state, lot, ctx.now, ctx.lotPrefix(lot.wineryId))
   const tree = bottleMerkleTree(bl, ctx.now)
+  const sealed = sealDossier(state, lot, { closedAt: ctx.now, closedBy: ctx.actor }, ctx.lotPrefix(lot.wineryId))
   const dossier: StoredDossier = {
     lotId: lot.id,
     schema: DOSSIER_SCHEMA_VERSION,
     status: 'CLOSED',
-    hash: sha256Hex(canonical),
+    hash: sealed.hash,
     algorithm: DOSSIER_HASH_ALGORITHM,
     closedAt: ctx.now,
     closedBy: ctx.actor,
     bottleCodes: { count: tree.count, merkleRoot: tree.root, algorithm: BOTTLE_MERKLE_ALGORITHM },
     anchor: null,
-    canonical,
+    canonical: sealed.canonical,
   }
   state.dossiers = state.dossiers.filter((d) => d.lotId !== lot.id)
   state.dossiers.push(dossier)
@@ -638,8 +961,8 @@ export function closeDossier(state: TraceState, ctx: TraceCtx, lot: Lot): Stored
   appendLotEvent(state, ctx, lot, {
     type: 'DOSSIER_CLOSED',
     occurredAt: ctx.now,
-    summary: `Expediente cerrado con la huella ${dossier.hash?.slice(0, 12)}…`,
-    data: { hash: dossier.hash, algorithm: DOSSIER_HASH_ALGORITHM, bottleCodes: tree.count },
+    summary: `Expediente cerrado con la huella ${sealed.hash.slice(0, 12)}…`,
+    data: { hash: sealed.hash, algorithm: DOSSIER_HASH_ALGORITHM, bottleCodes: tree.count, bottleMerkleRoot: tree.root },
     resource: { type: 'lot_dossier', id: lot.id },
   })
   return dossier

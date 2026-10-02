@@ -15,7 +15,7 @@ import { uid } from '../../shared/uuid'
 import { erpFixtures } from '../fixtures'
 import type { MockUser, NotificationPrefs, WalletResponse, WineryResponse } from '../schemas'
 import { laPazDate } from '../trace/dates'
-import type { TraceState } from '../trace/state'
+import { voidedRecordsOf, type TraceState } from '../trace/state'
 import { resetSessions } from './sessions'
 
 // Base de datos en memoria de los handlers: una copia de los fixtures que las mutaciones
@@ -170,7 +170,7 @@ export function traceFromFixtures(): Omit<TraceState, 'wineries'> {
     dossiers: f.lotDossiers,
     bottleLots: f.bottleLots,
     bottleExports: [],
-    voidedRecords: [],
+    voidedRecords: voidedRecordsOf(f.corrections),
   }
 }
 

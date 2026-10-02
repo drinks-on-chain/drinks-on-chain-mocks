@@ -16,7 +16,7 @@ import type {
   WineAgingResponse,
 } from '../schemas'
 import { BOTTLE_CODES_CSV_COLUMNS } from '../schemas/bottle-codes'
-import { formatBottleCode, isValidBottleCode, mockBottleCode, normalizeBottleCode } from './bottle-code'
+import { CROCKFORD_ALPHABET, formatBottleCode, isValidBottleCode, mockBottleCode, normalizeBottleCode } from './bottle-code'
 import { dayOf, toDateField } from './dates'
 import { bottlingBalanceViolations, computeBottlingBalance, computeLabConformity, methanolToAnhydrous, type BottlingBalanceInput } from './domain'
 import { assertOwnFile } from './records'
@@ -40,11 +40,13 @@ import {
   lotLabs,
   lotProductions,
   nextLotCode,
+  recordTankTransition,
   refreshLotStage,
   restLockOf,
   stateError,
   throwViolations,
   type BottleLot,
+  type StoredBottleExport,
   type TraceCtx,
   type TraceState,
 } from './state'
@@ -351,7 +353,7 @@ export function executeBottling(state: TraceState, ctx: TraceCtx, lot: Lot, requ
     }
   }
   for (const tank of state.tanks) {
-    if (tankIds.has(tank.id) && (tank.status === 'FILLING' || tank.status === 'FERMENTING' || tank.status === 'COMPLETED')) tank.status = 'TRANSFERRED'
+    if (tankIds.has(tank.id) && (tank.status === 'FILLING' || tank.status === 'FERMENTING' || tank.status === 'COMPLETED')) recordTankTransition(tank, 'TRANSFERRED', ctx.now, ctx.actor)
   }
   lot.lotCode = lotCode
   refreshLotStage(state, ctx, lot)
@@ -438,7 +440,7 @@ export function bottleUnit(ctx: Pick<TraceCtx, 'passportBaseUrl'>, lot: Lot, bl:
   const own = bl.voided.find((v) => v.serial === serial && v.generation === generation)
   const voided = own
     ? { at: own.at, by: own.by, reason: own.reason, replacedBy: own.replacedBy }
-    : bl.allVoided && bl.allVoided.by
+    : bl.allVoided
       ? { at: bl.allVoided.at, by: bl.allVoided.by, reason: bl.allVoided.reason, replacedBy: null }
       : null
   const previous = generation > 0 ? bl.voided.find((v) => v.serial === serial && v.replacedBy === code) : undefined
@@ -449,7 +451,7 @@ export function bottleUnit(ctx: Pick<TraceCtx, 'passportBaseUrl'>, lot: Lot, bl:
     serial,
     lotId: lot.id,
     lotCode: lot.lotCode ?? '',
-    status: voided || bl.allVoided ? 'VOIDED' : 'ACTIVE',
+    status: voided ? 'VOIDED' : 'ACTIVE',
     qrUrl: passportUrl(ctx.passportBaseUrl, code),
     voided,
     replaces: previous?.code ?? null,
@@ -478,12 +480,25 @@ export function serialRange(bl: BottleLot, fromSerial?: number, toSerial?: numbe
   return { from, to }
 }
 
+/**
+ * Búsqueda `q` (`searchFilter` del backend): un fragmento del código tal como se teclea (se
+ * normaliza: mayúsculas, sin espacios ni guiones, `O → 0`, `I`/`L → 1`) o el número de serie exacto.
+ * Con caracteres fuera del alfabeto y sin ser una serie, no hay resultados.
+ */
+function matchesSearch(q: string): (unit: BottleUnit) => boolean {
+  const fragment = normalizeBottleCode(q)
+  const byCode = fragment.length > 0 && [...fragment].every((c) => CROCKFORD_ALPHABET.includes(c))
+  const digits = q.replace(/[\s.]/g, '')
+  const serial = /^\d{1,9}$/.test(digits) ? Number(digits) : null
+  return (unit) => (byCode && unit.code.includes(fragment)) || (serial !== null && unit.serial === serial)
+}
+
 /** Códigos del lote por número de serie (los anulados y sustituidos, antes del vigente de su serie). */
 export function listBottleUnits(
   state: TraceState,
   ctx: Pick<TraceCtx, 'passportBaseUrl'>,
   lot: Lot,
-  filter: { status?: 'ACTIVE' | 'VOIDED'; fromSerial?: number; toSerial?: number } = {},
+  filter: { status?: 'ACTIVE' | 'VOIDED'; fromSerial?: number; toSerial?: number; q?: string } = {},
 ): BottleUnit[] {
   const bl = assertBottled(state, lot)
   const { from, to } = serialRange(bl, filter.fromSerial, filter.toSerial)
@@ -497,27 +512,85 @@ export function listBottleUnits(
     for (const generation of (replacedBySerial.get(serial) ?? []).sort((a, b) => a - b)) units.push(bottleUnit(ctx, lot, bl, serial, generation))
     units.push(bottleUnit(ctx, lot, bl, serial))
   }
-  return filter.status ? units.filter((u) => u.status === filter.status) : units
+  const matches = filter.q ? matchesSearch(filter.q) : null
+  return units.filter((u) => (!filter.status || u.status === filter.status) && (!matches || matches(u)))
 }
 
-const csvCell = (value: unknown): string => {
-  const text = value === null || value === undefined ? '' : String(value)
+/** Marca de orden de bytes: Excel abre bien las tildes del CSV (como los demás CSV del backend). */
+export const CSV_BOM = '\uFEFF'
+
+/** Celda de CSV (RFC 4180) con las que empiezan como una fórmula neutralizadas con un apóstrofo. */
+export const csvCell = (value: unknown): string => {
+  let text = value === null || value === undefined ? '' : String(value)
+  if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`
   return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
 }
 
-/** CSV de los códigos vigentes del rango (`text/csv; charset=utf-8`, CRLF); deja constancia del rango exportado. */
-export function exportBottleCodesCsv(state: TraceState, ctx: TraceCtx, lot: Lot, fromSerial?: number, toSerial?: number): { body: string; rows: number; from: number; to: number } {
+/** `codigos-CVJ-2026-SINGANI-004-1-2950.csv` (o `.zip`). */
+export function bottleExportFilename(lotCode: string, range: { from: number; to: number }, extension: 'csv' | 'zip'): string {
+  const safe = lotCode.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '')
+  return `codigos-${safe || 'lote'}-${range.from}-${range.to}.${extension}`
+}
+
+/** Códigos **activos** del rango, por serie (un código anulado no se imprime; de una serie sustituida sale el sustituto). */
+export function activeCodes(bl: BottleLot, from: number, to: number): { serial: number; code: string }[] {
+  const out: { serial: number; code: string }[] = []
+  for (let serial = from; serial <= to; serial++) if (!isSerialVoided(bl, serial)) out.push({ serial, code: bottleCodeOf(bl, serial) })
+  return out
+}
+
+/** CSV de unos códigos del lote: cabecera del contrato, UTF-8 con BOM, separador coma y CRLF. */
+export function bottleCodesCsv(ctx: Pick<TraceCtx, 'passportBaseUrl'>, lot: Lot, bottlingDate: string, codes: readonly { serial: number; code: string }[]): string {
+  const rows = codes.map(({ serial, code }) => [serial, code, formatBottleCode(code), passportUrl(ctx.passportBaseUrl, code), lot.lotCode, lot.name, lot.productType, bottlingDate.slice(0, 10)].map(csvCell).join(','))
+  return `${CSV_BOM}${[BOTTLE_CODES_CSV_COLUMNS.join(','), ...rows].join('\r\n')}\r\n`
+}
+
+/**
+ * Registra una exportación de códigos (`bottle_code_exports` del backend): cuenta los códigos
+ * activos del rango (ninguno → 422; más de `maxRows` → 422: se exporta por rangos) y suma en
+ * `exportsCount`/`firstExportedAt` de cada código. La CSV nace `READY`; la ZIP, `PENDING`.
+ */
+export function registerBottleExport(
+  state: TraceState,
+  ctx: TraceCtx,
+  lot: Lot,
+  options: { format: 'CSV' | 'ZIP'; fromSerial?: number; toSerial?: number; imageFormat?: 'SVG' | 'PNG'; maxRows?: number },
+): { record: StoredBottleExport; codes: { serial: number; code: string }[]; bottleLot: BottleLot } {
   const bl = assertBottled(state, lot)
-  const { from, to } = serialRange(bl, fromSerial, toSerial)
-  const bottling = lotBottling(state, lot.id) as BottlingBatchResponse
-  const lines = [BOTTLE_CODES_CSV_COLUMNS.join(',')]
-  for (let serial = from; serial <= to; serial++) {
-    if (isSerialVoided(bl, serial)) continue
-    const code = bottleCodeOf(bl, serial)
-    lines.push([serial, code, formatBottleCode(code), passportUrl(ctx.passportBaseUrl, code), lot.lotCode, lot.name, lot.productType, bottling.bottlingDate.slice(0, 10)].map(csvCell).join(','))
+  const { from, to } = serialRange(bl, options.fromSerial, options.toSerial)
+  const codes = activeCodes(bl, from, to)
+  if (codes.length === 0) throw new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', [{ field: 'fromSerial', message: 'No hay códigos activos en ese rango de series' }])
+  if (options.maxRows !== undefined && codes.length > options.maxRows) {
+    throw new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', [
+      { field: 'toSerial', message: `Una exportación ${options.format} admite como máximo ${options.maxRows} códigos (el rango tiene ${codes.length}): expórtalo por rangos de serie` },
+    ])
   }
+  const record: StoredBottleExport = {
+    lotId: lot.id,
+    exportId: ctx.newId('bottle-export'),
+    status: options.format === 'CSV' ? 'READY' : 'PENDING',
+    format: options.format,
+    fromSerial: from,
+    toSerial: to,
+    rows: codes.length,
+    createdAt: ctx.now,
+    createdBy: ctx.actor,
+    downloadUrl: null,
+    expiresAt: new Date(Date.parse(ctx.now) + 7 * 86_400_000).toISOString().replace(/\.\d{3}Z$/, 'Z'),
+    ...(options.imageFormat && { imageFormat: options.imageFormat }),
+    polls: 0,
+  }
+  state.bottleExports.push(record)
   bl.exports.push({ fromSerial: from, toSerial: to, at: ctx.now })
-  return { body: `${lines.join('\r\n')}\r\n`, rows: lines.length - 1, from, to }
+  return { record, codes, bottleLot: bl }
+}
+
+/** CSV de los códigos activos del rango; la exportación queda registrada antes de enviar nada. */
+export function exportBottleCodesCsv(state: TraceState, ctx: TraceCtx, lot: Lot, fromSerial?: number, toSerial?: number): { body: string; rows: number; from: number; to: number; exportId: string; filename: string } {
+  const { record, codes } = registerBottleExport(state, ctx, lot, { format: 'CSV', fromSerial, toSerial })
+  const bottling = lotBottling(state, lot.id) as BottlingBatchResponse
+  const range = { from: record.fromSerial, to: record.toSerial }
+  return { body: bottleCodesCsv(ctx, lot, bottling.bottlingDate, codes), rows: codes.length, ...range, exportId: record.exportId, filename: bottleExportFilename(lot.lotCode ?? lot.reference, range, 'csv') }
 }
 
 /**
@@ -530,13 +603,17 @@ export function voidBottleCode(state: TraceState, ctx: TraceCtx, wineryId: strin
   if (!found || found.lot.wineryId !== wineryId) throw new ApiError(404, 'TRC_BOTTLE_CODE_NOT_FOUND', 'Código de botella no encontrado')
   const { ref, bottleLot: bl, lot } = found
   if (lot.stage === 'DISCARDED') assertLotWritable(lot)
-  if (bl.allVoided || bl.voided.some((v) => v.code === code)) {
-    throw stateError('TRC_BOTTLE_CODE_ALREADY_VOIDED', 'El código ya estaba anulado', [violation('TRC_BOTTLE_CODE_ALREADY_VOIDED', 'Código anulado', { meta: { code } })])
+  const already = bl.voided.find((v) => v.code === code)
+  if (bl.allVoided || already) {
+    throw stateError('TRC_BOTTLE_CODE_ALREADY_VOIDED', 'El código ya estaba anulado', [
+      violation('TRC_BOTTLE_CODE_ALREADY_VOIDED', 'Código anulado', { meta: { voidedAt: already?.at ?? bl.allVoided?.at ?? null, replacedBy: already?.replacedBy ?? null } }),
+    ])
   }
   const dossier = lotDossier(state, lot.id)
   if (body.replace && dossier?.status === 'CLOSED') {
+    // S-14: la raíz Merkle del expediente ya está fijada.
     throw stateError('TRC_DOSSIER_CLOSED', 'Con el expediente cerrado un código se puede anular, pero no sustituir', [
-      violation('TRC_DOSSIER_CLOSED', 'Expediente cerrado', { field: 'replace', meta: { closedAt: dossier.closedAt } }),
+      violation('TRC_DOSSIER_CLOSED', 'Expediente cerrado', { field: 'replace', meta: { closedAt: dossier.closedAt, hash: dossier.hash } }),
     ])
   }
   if (!ctx.actor) throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Solo un miembro de la bodega puede anular códigos')
@@ -552,6 +629,7 @@ export function voidBottleCode(state: TraceState, ctx: TraceCtx, wineryId: strin
   appendLotEvent(state, ctx, lot, {
     type: 'BOTTLE_CODE_VOIDED',
     occurredAt: ctx.now,
+    // Interno, con la serie pero sin el código.
     summary: `Código de la botella n.º ${formatQuantity(ref.serial)} anulado${replacedBy ? ' y sustituido' : ''}: ${body.reason}`,
     data: { serial: ref.serial, replaced: replacedBy !== null, reason: body.reason },
     resource: { type: 'bottle_unit', id: bl.bottlingBatchId },
@@ -578,7 +656,7 @@ export function registerLab(state: TraceState, ctx: TraceCtx, lot: Lot, body: La
   const dossier = lotDossier(state, lot.id)
   if (dossier?.status === 'CLOSED') {
     throw stateError('TRC_DOSSIER_CLOSED', 'El expediente del lote está cerrado: ya no admite análisis', [
-      violation('TRC_DOSSIER_CLOSED', 'Expediente cerrado', { meta: { closedAt: dossier.closedAt } }),
+      violation('TRC_DOSSIER_CLOSED', 'Expediente cerrado', { meta: { closedAt: dossier.closedAt, hash: dossier.hash } }),
     ])
   }
   assertLotWritable(lot)

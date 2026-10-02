@@ -361,13 +361,302 @@ function runDiscardedLot(state: TraceState, ctx: TraceCtx): void {
   discardLot(state, as('altos_admin', 8, 15), lot, 'Contaminación por Brettanomyces detectada en las barricas')
 }
 
-/** Lotes nativos de la Ola 2 de los fixtures: uno en cada etapa que la migración no cubre y, el último, el caso del §18. */
+// ---------------------------------------------------------------------------
+// Casos del pasaporte público (los pide el visor `/b/{código}` del Marketplace)
+// ---------------------------------------------------------------------------
+
+/**
+ * Códigos de lote de los fixtures que cubren cada caso del pasaporte público. Sirven para abrir el
+ * visor en cada estado (`/b/{lotCode}`) y para las pruebas del Marketplace.
+ */
+export const PASSPORT_CASES = {
+  /** Caso del contrato §18: expediente cerrado, laboratorio conforme, prueba Merkle. */
+  certified: 'CVJ-2026-SINGANI-004',
+  /** Embotellado, con laboratorio conforme y el expediente abierto (lote migrado). */
+  bottled: 'CVJ-2026-SINGANI-001',
+  /** Embotellado sin análisis de laboratorio: «No registrado». */
+  labNotRecorded: 'CVJ-2026-WINE-003',
+  /** Embotellado con el análisis vigente no conforme. */
+  labNonConforming: 'ALT-2025-WINE-001',
+  /** D.O. Singani por excepción legal (parcela a 1.540 m con el mínimo de la bodega en 1.500 m, A-31). */
+  doByException: 'ALT-2025-SINGANI-002',
+  /** Con un registro tardío en su línea de tiempo (pesaje anotado 12 días después). */
+  lateEntry: 'ALT-2025-SINGANI-002',
+  /** Lote retirado por la bodega tras embotellarse: `stage: DISCARDED` y todos sus códigos anulados. */
+  discarded: 'CVJ-2025-SINGANI-001',
+  /** Bodega suspendida: el pasaporte sigue visible con `winery.active: false` (S-23). */
+  wineryInactive: 'CUR-2026-SINGANI-001',
+} as const
+export type PassportCase = keyof typeof PASSPORT_CASES
+
+const LAB_ALTOS = { certifiedLaboratoryName: 'Laboratorio CENAVIT Tarija', accreditedLabCertificationCode: 'LAB-SENASAG-2025-417' }
+
+/** Vino de Altos embotellado con el análisis vigente **no conforme** (acidez volátil sobre el límite). */
+function runNonConformingLot(state: TraceState, ctx: TraceCtx): void {
+  const { at, day, as } = stepper(state, ctx, 'angostura-2024')
+  const W = uid('winery:altos')
+  const harvest = createHarvest(state, as('altos_operario', 925, 13, 10), W, {
+    newLot: undefined,
+    lotId: createLot(state, as('altos_enologa', 926), W, { name: 'Tannat La Angostura 2024', harvestYear: Number(day(925).slice(0, 4)), productType: 'WINE', estimatedBottles: 4500, plannedFormatCl: 75 }).id,
+    terroirId: uid('terroir:altos_01'),
+    intakeDate: at(925, 13, 10),
+    grossWeightKg: 5100,
+    tareWeightKg: 100,
+    temperatureAtIntakeC: 15.2,
+    maturity: { brixDegrees: 24.6, ph: 3.62, acidityGl: 5.4 },
+  })
+  const lot = state.lots.find((l) => l.id === harvest.lotId) as Lot
+  decidePhyto(state, as('altos_agronomo', 924, 13), harvest, { decision: 'APPROVED', notes: 'Uva sana.' })
+  const tank = createTank(state, as('altos_enologa', 924, 16), W, {
+    lotId: lot.id,
+    inputs: [{ harvestBatchId: harvest.id }],
+    tankCode: 'TK-31',
+    capacityLiters: 5000,
+    material: 'Acero inoxidable AISI 304',
+    volumeFilledLiters: 3600,
+    startFermentation: true,
+    startDate: day(924),
+  })
+  completeTank(state, as('altos_enologa', 900, 15), tank, { endDate: day(900), finalVolumeLiters: 3500, destination: 'WINE_AGING' })
+  createAging(state, as('altos_enologa', 880, 14), W, {
+    fermentationTankId: tank.id,
+    containerType: 'Barrica',
+    containerMaterial: 'Roble americano, tostado medio',
+    containerCode: 'BAR-AM-2024-03',
+    barrelUseCycle: 3,
+    containerCount: 15,
+    volumeLiters: 3400,
+    plannedMonths: 12,
+    startDate: day(880),
+  })
+  releaseLocks(state, as(null, 514, 4, 5), lot.id)
+  bottleLot(state, as('altos_enologa', 420, 15), lot, lotBottlingRequest(state, lot, { bottlingDate: day(420), packagingFormatCl: 75, totalBottlesPackaged: 4400, finalAlcoholAbv: 13.8, bottleType: 'Bordelesa 750 ml' }))
+  registerLab(state, as('altos_enologa', 415, 16), lot, {
+    ...LAB_ALTOS,
+    analysisRequestDate: day(418),
+    testPerformedAt: day(415),
+    actualAlcoholAbv: 13.9,
+    totalAcidityTartaricGl: 5.6,
+    // Por encima del límite de la instantánea (1,2 g/L): no conforme.
+    volatileAcidityAceticGl: 1.45,
+    freeSulfurDioxideMgL: 22,
+    totalSulfurDioxideMgL: 96,
+    laboratoryReportKey: fileKey(W, 'lab-reports', 'informe-tannat-la-angostura-2024.pdf'),
+  })
+}
+
+/** Singani de Altos con D.O. por excepción legal (El Portillo, 1.540 m) y el pesaje anotado con retraso. */
+function runExceptionLot(state: TraceState, ctx: TraceCtx): void {
+  const { at, day, as } = stepper(state, ctx, 'portillo-2025')
+  const W = uid('winery:altos')
+  const lot = createLot(state, as('altos_enologa', 562), W, {
+    name: 'Singani El Portillo 2025',
+    harvestYear: Number(day(560).slice(0, 4)),
+    productType: 'SINGANI',
+    estimatedBottles: 1050,
+    plannedFormatCl: 70,
+    targetAbvPercent: 40,
+    plannedTerroirIds: [uid('terroir:altos_03')],
+  })
+  // Registro tardío (S-9): la uva entró hace 560 días y el pesaje se anotó 12 días después.
+  const harvest = createHarvest(state, as('altos_operario', 548, 14), W, {
+    lotId: lot.id,
+    terroirId: uid('terroir:altos_03'),
+    intakeDate: at(560, 13, 20),
+    grossWeightKg: 6120,
+    tareWeightKg: 120,
+    temperatureAtIntakeC: 16.8,
+    notes: 'Pesaje pasado al ERP desde la planilla de recepción.',
+  })
+  addMaturityAnalysis(state, as('altos_enologa', 548, 15), harvest, { brixDegrees: 22.8, ph: 3.41, acidityGl: 6.1, measuredAt: at(560, 15) })
+  decidePhyto(state, as('altos_agronomo', 548, 16), harvest, { decision: 'APPROVED', notes: 'Inspección en campo sin incidencias.', decidedAt: at(559, 13) })
+  const tank = createTank(state, as('altos_enologa', 547, 14), W, {
+    lotId: lot.id,
+    inputs: [{ harvestBatchId: harvest.id }],
+    tankCode: 'TK-32',
+    capacityLiters: 5000,
+    material: 'Acero inoxidable AISI 304',
+    volumeFilledLiters: 4000,
+    startFermentation: true,
+    startDate: day(559),
+  })
+  completeTank(state, as('altos_enologa', 540, 15), tank, { endDate: day(540), finalVolumeLiters: 3900, destination: 'SINGANI_DIST' })
+  const distillation = createDistillation(state, as('altos_enologa', 534, 13), W, {
+    fermentationTankId: tank.id,
+    equipmentIdentifier: 'Alambique de cobre AL-A1',
+    processStartDate: day(534),
+    inputVolumeLiters: 3900,
+  })
+  closeDistillation(state, as('altos_enologa', 530, 19), distillation, { processEndDate: day(530), cuts: { headsLiters: 40, heartLiters: 480, tailsLiters: 70 }, heartAbvPercent: 62 })
+  releaseLocks(state, as(null, 350, 4, 5), lot.id)
+  bottleLot(
+    state,
+    as('altos_enologa', 300, 15),
+    lot,
+    lotBottlingRequest(state, lot, { bottlingDate: day(300), packagingFormatCl: 70, totalBottlesPackaged: 1040, finalAlcoholAbv: 40, waterDilutionLiters: 260, bottleType: 'Vidrio extra-flint 700 ml' }),
+  )
+  registerLab(state, as('altos_enologa', 297, 16), lot, {
+    ...LAB_ALTOS,
+    analysisRequestDate: day(299),
+    testPerformedAt: day(297),
+    actualAlcoholAbv: 40,
+    totalAcidityTartaricGl: 4.5,
+    volatileAcidityAceticGl: 0.19,
+    methanolMg100mlAa: 58,
+    copperContentMgL: 1.1,
+    laboratoryReportKey: fileKey(W, 'lab-reports', 'informe-singani-el-portillo-2025.pdf'),
+  })
+}
+
+/** Singani de Cinti Viejo retirado por la bodega después de embotellarse: lote `DISCARDED` y códigos anulados. */
+function runWithdrawnLot(state: TraceState, ctx: TraceCtx): void {
+  const { at, day, as } = stepper(state, ctx, 'san-roque-2024')
+  const W = uid('winery:cintiviejo')
+  const lot = createLot(state, as('cvj_enologa', 932), W, {
+    name: 'Singani Los Parrales 2024',
+    harvestYear: Number(day(930).slice(0, 4)),
+    productType: 'SINGANI',
+    estimatedBottles: 1150,
+    plannedFormatCl: 75,
+    targetAbvPercent: 40,
+    plannedTerroirIds: [uid('terroir:cvj_01')],
+  })
+  const harvest = createHarvest(state, as('cvj_operario', 930, 13, 30), W, {
+    lotId: lot.id,
+    terroirId: uid('terroir:cvj_01'),
+    intakeDate: at(930, 13, 30),
+    grossWeightKg: 7150,
+    tareWeightKg: 150,
+    temperatureAtIntakeC: 15.4,
+    maturity: { brixDegrees: 23.1, ph: 3.39, acidityGl: 6 },
+  })
+  decidePhyto(state, as('cvj_agronomo', 929, 13), harvest, { decision: 'APPROVED', notes: 'Sin incidencias.' })
+  const tank = createTank(state, as('cvj_enologa', 929, 16), W, {
+    lotId: lot.id,
+    inputs: [{ harvestBatchId: harvest.id }],
+    tankCode: 'TK-33',
+    capacityLiters: 6000,
+    material: 'Acero inoxidable AISI 316',
+    volumeFilledLiters: 4700,
+    startFermentation: true,
+    startDate: day(929),
+  })
+  completeTank(state, as('cvj_enologa', 910, 15), tank, { endDate: day(910), finalVolumeLiters: 4600, destination: 'SINGANI_DIST' })
+  const distillation = createDistillation(state, as('cvj_enologa', 905, 13), W, {
+    fermentationTankId: tank.id,
+    equipmentIdentifier: 'Alambique de cobre AL-02',
+    processStartDate: day(905),
+    inputVolumeLiters: 4600,
+  })
+  closeDistillation(state, as('cvj_enologa', 902, 19), distillation, { processEndDate: day(902), cuts: { headsLiters: 50, heartLiters: 560, tailsLiters: 85 }, heartAbvPercent: 61 })
+  releaseLocks(state, as(null, 722, 4, 5), lot.id)
+  bottleLot(
+    state,
+    as('cvj_enologa', 500, 15),
+    lot,
+    lotBottlingRequest(state, lot, { bottlingDate: day(500), packagingFormatCl: 75, totalBottlesPackaged: 1120, finalAlcoholAbv: 40, waterDilutionLiters: 290, bottleType: 'Vidrio extra-flint 750 ml' }),
+  )
+  discardLot(state, as('cvj_admin', 30, 15), lot, 'Partida retirada por turbidez detectada en el control de almacén')
+}
+
+/** Singani de Casa Uriondo, una bodega **suspendida**: su pasaporte sigue visible con `winery.active: false`. */
+function runSuspendedWineryLot(state: TraceState, ctx: TraceCtx): void {
+  const { at, day, as } = stepper(state, ctx, 'uriondo-2025')
+  const W = uid('winery:uriondo')
+  const terroirId = uid('terroir:uriondo_01')
+  state.terroirs.push({
+    id: terroirId,
+    wineryId: W,
+    parcelName: 'Finca La Cabaña · Parrales del Río',
+    cadastreCode: 'CAT-URI-0412',
+    surfaceHectares: 2.8,
+    altitudeMasl: 1740,
+    latitude: -21.692,
+    longitude: -64.668,
+    geographicPolygonGeojson: null,
+    rawMaterialType: 'uva',
+    varietyName: 'Moscatel de Alejandría',
+    soilType: 'Franco-limoso',
+    irrigationSystem: 'Riego por goteo',
+    isDoEligible: true,
+    doType: 'D.O. Singani',
+    doCertificateUrl: null,
+    isActive: true,
+    createdAt: at(700, 11),
+  })
+  const owner = 'sofia:uriondo'
+  const lot = createLot(state, as(owner, 562), W, {
+    name: 'Singani Casa Uriondo 2025',
+    harvestYear: Number(day(560).slice(0, 4)),
+    productType: 'SINGANI',
+    estimatedBottles: 900,
+    plannedFormatCl: 75,
+    targetAbvPercent: 40,
+    plannedTerroirIds: [terroirId],
+  })
+  const harvest = createHarvest(state, as(owner, 560, 13, 45), W, {
+    lotId: lot.id,
+    terroirId,
+    intakeDate: at(560, 13, 45),
+    grossWeightKg: 5600,
+    tareWeightKg: 100,
+    temperatureAtIntakeC: 17.3,
+    maturity: { brixDegrees: 22.4, ph: 3.45, acidityGl: 6.2 },
+  })
+  decidePhyto(state, as(owner, 559, 13), harvest, { decision: 'APPROVED', notes: 'Uva sana.' })
+  const tank = createTank(state, as(owner, 559, 16), W, {
+    lotId: lot.id,
+    inputs: [{ harvestBatchId: harvest.id }],
+    tankCode: 'TK-01',
+    capacityLiters: 5000,
+    material: 'Acero inoxidable AISI 304',
+    volumeFilledLiters: 3700,
+    startFermentation: true,
+    startDate: day(559),
+  })
+  completeTank(state, as(owner, 541, 15), tank, { endDate: day(541), finalVolumeLiters: 3600, destination: 'SINGANI_DIST' })
+  const distillation = createDistillation(state, as(owner, 536, 13), W, {
+    fermentationTankId: tank.id,
+    equipmentIdentifier: 'Alambique de cobre CU-01',
+    processStartDate: day(536),
+    inputVolumeLiters: 3600,
+  })
+  closeDistillation(state, as(owner, 533, 19), distillation, { processEndDate: day(533), cuts: { headsLiters: 38, heartLiters: 440, tailsLiters: 66 }, heartAbvPercent: 61 })
+  releaseLocks(state, as(null, 353, 4, 5), lot.id)
+  bottleLot(
+    state,
+    as(owner, 200, 15),
+    lot,
+    lotBottlingRequest(state, lot, { bottlingDate: day(200), packagingFormatCl: 75, totalBottlesPackaged: 880, finalAlcoholAbv: 40, waterDilutionLiters: 228, bottleType: 'Vidrio extra-flint 750 ml' }),
+  )
+  registerLab(state, as(owner, 197, 16), lot, {
+    certifiedLaboratoryName: 'Laboratorio CENAVIT Tarija',
+    accreditedLabCertificationCode: 'LAB-SENASAG-2026-052',
+    analysisRequestDate: day(199),
+    testPerformedAt: day(197),
+    actualAlcoholAbv: 40.2,
+    totalAcidityTartaricGl: 4.4,
+    volatileAcidityAceticGl: 0.2,
+    methanolMg100mlAa: 51,
+    copperContentMgL: 0.9,
+    laboratoryReportKey: fileKey(W, 'lab-reports', 'informe-singani-casa-uriondo-2025.pdf'),
+  })
+}
+
+/**
+ * Lotes nativos de la Ola 2 de los fixtures: uno en cada etapa que la migración no cubre, los casos
+ * del pasaporte público (`PASSPORT_CASES`) y, el último, el caso del §18.
+ */
 export function runDemoLots(state: TraceState, ctx: TraceCtx): void {
   runOriginLot(state, ctx)
   runDistillingLot(state, ctx)
   runUnassignedHarvest(state, ctx)
   runFermentingLot(state, ctx)
   runDiscardedLot(state, ctx)
+  runNonConformingLot(state, ctx)
+  runExceptionLot(state, ctx)
+  runWithdrawnLot(state, ctx)
+  runSuspendedWineryLot(state, ctx)
   runSinganiCase(state, ctx)
 }
 
