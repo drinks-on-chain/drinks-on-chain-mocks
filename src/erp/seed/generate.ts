@@ -425,6 +425,8 @@ export function generateErpFixtures(): ErpFixtureSet {
         null,
       ]),
       createdAt: isoAt(intake, 9, 45),
+      lotId: null,
+      terroirSnapshot: null,
     })
   }
   const H: Record<string, HarvestBatchResponse> = {}
@@ -470,6 +472,8 @@ export function generateErpFixtures(): ErpFixtureSet {
       startDate: isoAt(start, 14, 30),
       endDate: end !== null ? isoAt(end, 14, 30) : null,
       createdAt: isoAt(start, 14, 35),
+      lotId: null,
+      finalVolumeLiters: null,
     })
     if (status === 'FERMENTING' || status === 'COMPLETED' || status === 'TRANSFERRED') {
       const last = end ?? TODAY
@@ -555,6 +559,9 @@ export function generateErpFixtures(): ErpFixtureSet {
       agingStatus: status,
       notes: 'Cava subterránea a 14 °C y 75 % HR',
       createdAt: isoAt(start, 10),
+      lotId: null,
+      startDate: null,
+      containerCount: null,
     })
   }
   const AG: Record<string, WineAgingResponse> = {}
@@ -597,6 +604,12 @@ export function generateErpFixtures(): ErpFixtureSet {
       },
       notes: 'Destilación lenta a fuego directo con separación estricta de cabezas',
       createdAt: isoAt(start, 10),
+      lotId: null,
+      headsLiters: null,
+      heartLiters: null,
+      tailsLiters: null,
+      vinasseLiters: null,
+      heartAbvPercent: null,
     })
   }
   const PR: Record<string, ProductionBatchResponse> = {}
@@ -639,6 +652,7 @@ export function generateErpFixtures(): ErpFixtureSet {
       anchoredAt: anchored ? isoAt(addDays(bdate, 1), 12) : null,
       qrBatchUrl: `https://app.drinksonchain.bo/b/${lot}`,
       createdAt: isoAt(bdate, 16),
+      lotId: null,
     })
   }
   const BT: Record<string, BottlingBatchResponse> = {}
@@ -684,6 +698,10 @@ export function generateErpFixtures(): ErpFixtureSet {
       conformsToUsaStandards: b.productType === 'SINGANI',
       reviewedByMemberId: uid(`member:${rev}`),
       createdAt: isoAt(addDays(bdate, 3), 15),
+      lotId: null,
+      methanolMg100mlAa: null,
+      conformityStatus: null,
+      supersededAt: null,
     })
   }
 

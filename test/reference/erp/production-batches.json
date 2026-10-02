@@ -20,7 +20,13 @@
       "tailDiscardLiters": 231
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2026-04-15T10:00:00Z"
+    "createdAt": "2026-04-15T10:00:00Z",
+    "lotId": null,
+    "headsLiters": null,
+    "heartLiters": null,
+    "tailsLiters": null,
+    "vinasseLiters": null,
+    "heartAbvPercent": null
   },
   {
     "id": "c667fe6f-790b-5fe9-89b1-a13cdef77a4c",
@@ -43,7 +49,13 @@
       "tailDiscardLiters": 399
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2025-05-20T10:00:00Z"
+    "createdAt": "2025-05-20T10:00:00Z",
+    "lotId": null,
+    "headsLiters": null,
+    "heartLiters": null,
+    "tailsLiters": null,
+    "vinasseLiters": null,
+    "heartAbvPercent": null
   },
   {
     "id": "155b8e15-bdbc-54cf-ab72-b3c8c01439ba",
@@ -66,7 +78,13 @@
       "tailDiscardLiters": 203
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2025-05-02T10:00:00Z"
+    "createdAt": "2025-05-02T10:00:00Z",
+    "lotId": null,
+    "headsLiters": null,
+    "heartLiters": null,
+    "tailsLiters": null,
+    "vinasseLiters": null,
+    "heartAbvPercent": null
   },
   {
     "id": "303e1c89-ca47-5505-a0a5-0a6fe2993436",
@@ -89,6 +107,12 @@
       "tailDiscardLiters": 182
     },
     "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
-    "createdAt": "2026-09-10T10:00:00Z"
+    "createdAt": "2026-09-10T10:00:00Z",
+    "lotId": null,
+    "headsLiters": null,
+    "heartLiters": null,
+    "tailsLiters": null,
+    "vinasseLiters": null,
+    "heartAbvPercent": null
   }
 ]

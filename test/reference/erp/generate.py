@@ -443,6 +443,8 @@ for key, tkey, intake, gross, tare, brix, ph, acid, temp, status, cert in HARVES
         "certifiedByMemberId": uid(f"member:{cert}") if cert else None,
         "notes": rng.choice(["Cosecha manual matutina en cajas de 15 kg.", "Uva sana, sin botritis.", "Ingreso por camión, tara verificada en báscula.", None]),
         "createdAt": iso(intake, 9, 45),
+        "lotId": None,
+        "terroirSnapshot": None,
     })
 H = {key: next(h for h in harvests if h["id"] == uid(f"harvest:{key}")) for key, *_ in HARVESTS}
 
@@ -484,6 +486,8 @@ for key, hkey, code, cap, filled, dest, status, start, end in TANKS:
         "startDate": iso(start, 14, 30),
         "endDate": iso(end, 14, 30) if end else None,
         "createdAt": iso(start, 14, 35),
+        "lotId": None,
+        "finalVolumeLiters": None,
     })
     if status in ("FERMENTING", "COMPLETED", "TRANSFERRED"):
         last = end or TODAY
@@ -561,6 +565,9 @@ for key, tkey, mat, code, cycle, liters, months, start, status in AGING:
         "agingStatus": status,
         "notes": "Cava subterránea a 14 °C y 75 % HR",
         "createdAt": iso(start, 10),
+        "lotId": None,
+        "startDate": None,
+        "containerCount": None,
     })
 AG = {key: next(a for a in agings if a["id"] == uid(f"aging:{key}")) for key, *_ in AGING}
 
@@ -598,6 +605,12 @@ for key, tkey, equip, start, end, vin, vout, waste, abv, status in DIST:
         "additionalParams": {"headDiscardLiters": round(waste * 0.3), "heartYieldLiters": vout, "tailDiscardLiters": round(waste * 0.7)},
         "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
         "createdAt": iso(start, 10),
+        "lotId": None,
+        "headsLiters": None,
+        "heartLiters": None,
+        "tailsLiters": None,
+        "vinasseLiters": None,
+        "heartAbvPercent": None,
     })
 PR = {key: next(p for p in productions if p["id"] == uid(f"production:{key}")) for key, *_ in DIST}
 
@@ -649,6 +662,7 @@ for key, src, skey, ptype, abv, water, bottles, cl, btype, bdate, anchored, seq,
         "anchoredAt": iso(bdate + timedelta(days=1), 12) if anchored else None,
         "qrBatchUrl": f"https://app.drinksonchain.bo/b/{lot}",
         "createdAt": iso(bdate, 16),
+        "lotId": None,
     })
 BT = {key: next(b for b in bottlings if b["id"] == uid(f"bottling:{key}")) for key, *_ in BOTTLING}
 
@@ -690,6 +704,10 @@ for key, bkey, abv, tac, vac, fso2, tso2, rs, meth, cu, rev in LAB:
         "conformsToUsaStandards": b["productType"] == "SINGANI",
         "reviewedByMemberId": uid(f"member:{rev}"),
         "createdAt": iso(bdate + timedelta(days=3), 15),
+        "lotId": None,
+        "methanolMg100mlAa": None,
+        "conformityStatus": None,
+        "supersededAt": None,
     })
 LB = {l["bottlingBatchId"]: l for l in labs}
 
