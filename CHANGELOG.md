@@ -2,6 +2,49 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.5.0-rc.2] · 2026-10-02
+
+**Precisiones del backend con la Etapa 2 de la Ola 2 completa** (`drinks-on-chain-back` en `dev`, `8e85935`, el mismo OpenAPI que sirve el servidor de desarrollo: 163 operaciones, 272 esquemas y **ninguna ruta con 501**). Lo que en `rc.1` seguía el contrato escrito ahora sigue el código del backend (`docs/arquitectura/trazabilidad.md`). Comprobado contra el servidor: un pasaporte real pasa `PublicLotPassportSchema` y coincide con el fixture del mismo lote. Detalle en [docs/CONTRATO.md](docs/CONTRATO.md) §11.
+
+### Añadido
+
+- **Marcas de corrección** en los recursos (`correctedFields`, `voided`, `correctionIds`; `CorrectionMarksSchema`) y `voidedAt` en lecturas, tratamientos y análisis de laboratorio.
+- **Tanque**: `availableLiters`, `transferLossLiters` y `transitions` (`TankTransitionSchema`); `closeTank` en el alta de la destilación.
+- **Códigos de botella**: búsqueda `q`; `BottleCodeExportSchema` con `format`, `fromSerial` y `toSerial` (también registra cada descarga CSV, cabecera `X-Export-Id`); `BOTTLE_ZIP_MAX_CODES` (20.000 por ZIP); el ZIP se descarga de verdad (con `codigos.csv`).
+- **Expediente**: `CanonicalDossierSchema` y `CANONICAL_DOSSIER_KEYS` (la forma `doc-dossier/1` del backend), `sha256Hex` y `canonicalJson` en la entrada raíz; `merkleRoot` y `verifyMerkleProof`; cabeceras `X-Dossier-Status` y `X-Dossier-Hash`.
+- **Pasaporte**: `ETag` con `If-None-Match` → 304; escenario `pasaporte-saturado` (429 `TOO_MANY_REQUESTS`, el límite de 60 consultas por minuto; `PUBLIC_RATE_LIMIT`); `PASSPORT_CASES` con un lote de los fixtures para cada caso (certificado, sin laboratorio, no conforme, D.O. por excepción, registro tardío, lote retirado, bodega suspendida).
+- **Catálogo (borrador)**: `featured`, `?featured=` y `?sort=featured|newest|price-asc|price-desc|name` (`COLLECTION_SORTS`).
+- **Archivos de `/mocks/uploads/…`**: los handlers los sirven (imagen SVG, PDF de una página, ZIP de códigos), así ninguna imagen de los fixtures queda rota con MSW activo. Opción `uploads: 'passthrough'` para no interceptarlos.
+- `RESPONSE_SCENARIOS` (los cinco escenarios de respuesta) junto a `DATA_SCENARIOS`.
+- Pruebas: `test/trace-precisions.test.ts`.
+
+### Cambiado: lo que obliga a tocar código
+
+**ERP** (respecto a `rc.1`):
+
+1. **Registros anulados**: ahora se devuelven **marcados** (`voided: true`) en `logs` y `treatments` del tanque, `maturityAnalyses` y `phytoDecisions` del pesaje y en sus listas y la de laboratorio (`rc.1` los omitía). La UI debe distinguirlos; el valor vigente del recurso ya no los cuenta.
+2. **Correcciones**: una `VOID` tiene `changes: []` (antes un cambio `voided`); corregir pesos añade el cambio derivado `netWeightKg`; anular dos veces → 409 `CONFLICT` (antes `TRC_INVALID_STAGE`); anular un dictamen con la uva en tanque → 409 `TRC_PHYTO_DECISION_FINAL` (antes 422); una `AMEND` que no cambia nada → 422 en `changes`; `target.type: 'TERROIR'` por la ruta del lote → 422; un lote `REJECTED` solo admite anular un dictamen; en un lote **ya embotellado**, la corrección que incumple una regla del embotellado ya no es 422: se registra (201) y abre una incidencia `source: 'CORRECTION'`.
+3. **Tipos**: `BottleCodeExport` gana `format`, `fromSerial`, `toSerial` (obligatorios) y `createdBy` es anulable, como `BottleUnit.voided.by` y `LotAttachment.createdBy`.
+4. **Tanque**: una segunda destilación (o crianza) desde un tanque `TRANSFERRED` → 409 `TRC_TANK_NOT_COMPLETED`; el detalle de `TRC_TANK_INVALID_TRANSITION` lleva `meta.allowedFrom`.
+5. **CSV de códigos**: empieza con BOM (`\uFEFF`), solo lleva códigos activos y el archivo se llama `codigos-{lotCode}-{desde}-{hasta}.csv`; un rango sin códigos activos → 422. La plataforma no exporta (403) y soporte no lista códigos.
+6. **Expediente**: mensajes de `requirements` (los del backend), `hashPreview` nunca es `null` y no cambia con el reloj; `TRC_DOSSIER_CLOSED` lleva `meta: { closedAt, hash }`; `TRC_DOSSIER_NOT_READY` añade `labStatus`, `issueIds` o `sourceIds`. La huella y la raíz Merkle de los fixtures cambian.
+7. **Archivos del lote**: agronomía y operación solo ven los que adjuntaron; publicar al adjuntar es de dirección y enología (403); el cambio de visibilidad queda como evento `FILE_ATTACHED` (`data.action: 'VISIBILITY_CHANGED'`).
+8. **Laboratorio**: el límite de metanol por defecto baja de 300 a **200 mg/100 ml a.a.** (el del backend).
+9. `ScenarioName` crece (`pasaporte-saturado`): un `Record<ScenarioName, …>` escrito a mano deja de compilar. Usa `SCENARIOS` + `SCENARIO_DESCRIPTIONS` o `Partial<Record<…>>`.
+
+**Marketplace**:
+
+1. `PublicLotPassport.fermentation.startDate` y `endDate` son **instantes ISO 8601**, no fechas de calendario.
+2. **Prueba Merkle**: el nodo padre es SHA-256 de los **bytes** concatenados (no del texto hexadecimal). Quien la verifique por su cuenta debe usar `verifyMerkleProof` / `merkleRootFromProof` de esta versión. Un código anulado **después** del cierre conserva su prueba (`status: 'VOIDED'` con `merkleProof`).
+3. Textos de `timeline[].summary` y `rules.items` (sin la merma máxima; etiquetas del backend): no dependas de su texto.
+4. Catálogo: `featured` es obligatorio en la fila; el orden por defecto cambia (destacadas primero); un lote con el análisis no conforme ya no se ofrece.
+5. El pasaporte de una botella se guarda 60 s aunque el lote esté certificado; 422 y 429 llevan `no-store`; el 404 dice «Código no encontrado».
+
+### Fixtures
+
+- 21 lotes (4 nuevos): `ALT-2025-WINE-001` (laboratorio no conforme), `ALT-2025-SINGANI-002` (D.O. por excepción y registro tardío), `CVJ-2025-SINGANI-001` (retirado tras embotellarse) y `CUR-2026-SINGANI-001` (Casa Uriondo, bodega suspendida, con su parcela). 9 lotes con códigos (25.790), 8 colecciones.
+- La instantánea de reglas de un lote nativo se toma al crearlo (`rules.takenAt` = `createdAt`, antes del primer evento); los tanques nativos guardan su `transitions`; el dictamen de un lote migrado sale como registro tardío (se anota al migrar, como en el backend).
+
 ## [0.5.0-rc.1] · 2026-10-01
 
 **ERP v2 y dominio público de la Ola 2** («ERP completo y trazabilidad confiable», `plan/contratos/o2-erp-confiable.md`), contra el OpenAPI del backend en la apertura de la ola (`dev`, `bfda9bd`: 141 rutas, 163 operaciones, 271 esquemas). Pre-release sobre `dev` para que el ERP (O2-ERP-*) y el Marketplace (O2-MK-1) construyan contra ella; se ajustará en `rc.2` cuando el backend cierre sus pasos. El backend responde 501 en buena parte de las rutas nuevas; los mocks las implementan todas con las reglas del contrato. Diferencias entre el contrato escrito y el OpenAPI, decisiones y datos de demo: [docs/CONTRATO.md](docs/CONTRATO.md) §10. La lista de espera y el back office no cambian.
