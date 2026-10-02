@@ -7,6 +7,63 @@ import { z } from 'zod'
 // `{ field, message }` en los errores de validación y de reglas (422) y `null` en el resto.
 
 /**
+ * Códigos de las reglas de la trazabilidad y del pasaporte público (contrato de la Ola 2 §13).
+ * Estado del recurso → 409; regla de negocio incumplida → 422; plataforma escribiendo → 403.
+ */
+export const TRACE_ERROR_CODES = [
+  'TRC_LOT_NOT_FOUND',
+  'TRC_INVALID_STAGE',
+  'TRC_LOT_TERMINAL',
+  'TRC_PRODUCT_NOT_SUPPORTED',
+  'TRC_HARVEST_YEAR_MISMATCH',
+  'TRC_DO_TERROIR_NOT_ELIGIBLE',
+  'TRC_DO_NOT_ELIGIBLE',
+  'TRC_TERROIR_IN_USE',
+  'TRC_PHYTO_IN_CREATE',
+  'TRC_PHYTO_NOT_APPROVED',
+  'TRC_PHYTO_DECISION_FINAL',
+  'TRC_MIXED_LOTS',
+  'TRC_TANK_CODE_IN_USE',
+  'TRC_TANK_CAPACITY_EXCEEDED',
+  'TRC_TANK_INVALID_TRANSITION',
+  'TRC_TANK_NOT_ACTIVE',
+  'TRC_TANK_NOT_COMPLETED',
+  'TRC_DESTINATION_MISMATCH',
+  'TRC_VOLUME_EXCEEDS_AVAILABLE',
+  'TRC_VOLUME_MISSING',
+  'TRC_AGING_BELOW_MINIMUM',
+  'TRC_MASS_BALANCE_EXCEEDED',
+  'TRC_DISTILLATION_ALREADY_CLOSED',
+  'TRC_LOCK_NOT_RELEASED',
+  'TRC_PRODUCT_TYPE_MISMATCH',
+  'TRC_BOTTLING_SOURCE_INVALID',
+  'TRC_BOTTLING_SOURCES_PENDING',
+  'TRC_LOT_ALREADY_BOTTLED',
+  'TRC_BOTTLING_EXCEEDS_VOLUME',
+  'TRC_BOTTLING_LOSS_ABOVE_TOLERANCE',
+  'TRC_ALCOHOL_BALANCE_EXCEEDED',
+  'TRC_DILUTION_NOT_ALLOWED',
+  'TRC_COMPLIANCE_ISSUES_OPEN',
+  'TRC_LOT_NOT_BOTTLED',
+  'TRC_BOTTLE_CODE_NOT_FOUND',
+  'TRC_BOTTLE_CODE_ALREADY_VOIDED',
+  'TRC_EXPORT_NOT_READY',
+  'TRC_CORRECTION_FIELD_NOT_CORRECTABLE',
+  'TRC_CORRECTION_BREAKS_RULES',
+  'TRC_DOSSIER_NOT_READY',
+  'TRC_DOSSIER_CLOSED',
+  'TRC_DATE_IN_FUTURE',
+  'TRC_DATE_BEFORE_PREVIOUS_STAGE',
+  'TRC_FILE_NOT_FOUND',
+  'TRC_REPORT_TOO_LARGE',
+  'TRC_PLATFORM_READ_ONLY',
+  'PUB_CODE_NOT_FOUND',
+  'PUB_CODE_MALFORMED',
+  'PUB_TOO_MANY_LOOKUPS',
+] as const
+export type TraceErrorCode = (typeof TRACE_ERROR_CODES)[number]
+
+/**
  * Códigos de error que devuelven los mocks. Los genéricos son los del backend
  * (`src/shared/exceptions/error-codes.ts`: el nombre del estado HTTP, `INTERNAL_ERROR` para el
  * 500); los de dominio (`AUTH_…`, `ORG_…`, `INVITATION_…`…) vienen de los contratos de ola
@@ -82,6 +139,8 @@ export const API_ERROR_CODES = [
   'FILE_NOT_FOUND',
   // Lista de espera (contrato O1b, backend v0.1.1)
   'WAITLIST_EXPORT_TOO_LARGE',
+  // Ola 2: reglas de la trazabilidad (contrato O2 §13) y pasaporte público
+  ...TRACE_ERROR_CODES,
   // Del backend; los mocks no los emiten
   'BAD_GATEWAY',
   'SERVICE_UNAVAILABLE',
@@ -91,14 +150,25 @@ export const API_ERROR_CODES = [
   'IDEMPOTENCY_STORE_UNAVAILABLE',
   'CAPTCHA_UNAVAILABLE',
   'TRACEABILITY_STRATEGY_NOT_FOUND',
+  'NOT_IMPLEMENTED',
 ] as const
 /** Código de error: uno de `API_ERROR_CODES` o cualquier otro que añada el backend. */
 export type ApiErrorCode = (typeof API_ERROR_CODES)[number] | (string & {})
 
-/** Detalle de un error: campo (notación de puntos, `items.0.quantity`) o `null` si no es de un campo. */
+/**
+ * Detalle de un error: campo (notación de puntos, `items.0.quantity`) o `null` si no es de un campo.
+ * Las reglas de la trazabilidad (contrato de la Ola 2 §0) lo amplían de forma aditiva: `code`
+ * (`TRC_…` de esa violación; una respuesta puede traer varias), `rule` (clave del parámetro de la
+ * instantánea), `expected`, `actual` y `meta` (datos para que la UI arme su explicación).
+ */
 export const ApiErrorDetailSchema = z.object({
   field: z.string().nullable(),
   message: z.string(),
+  code: z.string().optional(),
+  rule: z.string().optional(),
+  expected: z.unknown().optional(),
+  actual: z.unknown().optional(),
+  meta: z.record(z.string(), z.unknown()).optional(),
 })
 export type ApiErrorDetail = z.infer<typeof ApiErrorDetailSchema>
 
