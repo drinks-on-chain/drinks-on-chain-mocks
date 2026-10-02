@@ -18,6 +18,9 @@ export {
   mockAccessToken,
   mockMailbox,
   MOCK_ROUTE_SPECS,
+  PUBLIC_ROUTE_SPECS,
+  COLLECTIONS_DRAFT_CONTRACT,
+  PUBLIC_LOOKUP_LIMIT,
   LOGIN_LOCK_POLICY,
   REFRESH_COOKIE,
   REFRESH_GRACE_SECONDS,
@@ -36,7 +39,9 @@ export type {
   RouteSpec,
 } from './erp/handlers'
 export {
+  DATA_SCENARIOS,
   getScenario,
+  isDataScenario,
   isScenarioName,
   resetScenario,
   SCENARIO_DESCRIPTIONS,
@@ -45,9 +50,11 @@ export {
   SCENARIOS,
   setScenario,
   SLOW_SCENARIO_DELAY_MS,
+  type DataScenarioName,
   type LatencyOption,
   type ScenarioName,
 } from './shared/scenarios'
 export { DEMO_NEW_PASSWORD, DEMO_PASSWORD, demoStaff, demoUsers, type DemoUser } from './erp/fixtures'
+export { SINGANI_CASE } from './erp/trace/demo'
 export { DEFAULT_APP_URLS, type AppUrls } from './backoffice/mail'
 export { DEMO_TOTP_SECRET, generateTotp, MOCK_TOTP_BYPASS_CODE } from './shared/totp'

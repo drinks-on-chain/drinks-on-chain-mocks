@@ -175,7 +175,7 @@ export function requireAuth(request: Request): AuthContext {
  */
 export type AccessRule =
   | { kind: 'authenticated' }
-  | { kind: 'winery'; roles: readonly WineryRole[] | null }
+  | { kind: 'winery'; roles: readonly WineryRole[] | null; platformReadOnly?: boolean }
   | { kind: 'platform'; roles: readonly PlatformRole[] }
   | { kind: 'org'; roles: readonly MembershipRole[] | null }
 
@@ -194,6 +194,16 @@ export const anyStaff = platform(['SUPERADMIN', 'ADMIN', 'OPERATIONS', 'SUPPORT'
 
 /** Ruta de bodega del ERP (`@OrgType('WINERY') @Roles(...)` del backend); `null` = cualquier rol de bodega. */
 export const winery = (list: readonly WineryRole[] | null = null): AccessRule => ({ kind: 'winery', roles: list })
+
+/**
+ * Ruta de la trazabilidad (parcelas, vendimia, tanques, crianza, destilación, embotellado,
+ * laboratorio y lotes): como `winery`, pero la plataforma **solo lee** (S-25, contrato de la Ola 2
+ * §20); sus escrituras → 403 `TRC_PLATFORM_READ_ONLY`.
+ */
+export const trace = (list: readonly WineryRole[] | null = null): AccessRule => ({ kind: 'winery', roles: list, platformReadOnly: true })
+
+/** Roles de bodega que leen la trazabilidad (todos). */
+export const TRACE_READERS: readonly WineryRole[] = ['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'OPERATOR', 'ACCOUNTANT']
 
 /** Personal de plataforma que opera sobre una bodega (OP-07): lectura y escritura; `SUPPORT` solo lee. */
 export const PLATFORM_WINERY_OPERATORS: readonly PlatformRole[] = ['SUPERADMIN', 'ADMIN', 'OPERATIONS']
@@ -221,6 +231,9 @@ export function checkAccess(ctx: AuthContext, rule: AccessRule, method = 'GET'):
           throw forbidden(`Acceso denegado: el rol '${ctx.membershipRole}' no tiene los permisos necesarios`)
         }
         return
+      }
+      if (rule.platformReadOnly && ctx.organizationType === 'PLATFORM' && ctx.platformRole && !isReadMethod(method)) {
+        throw new ApiError(403, 'TRC_PLATFORM_READ_ONLY', 'La plataforma solo lee la trazabilidad: las escrituras son de la bodega')
       }
       const allowed = isReadMethod(method) ? PLATFORM_WINERY_READERS : PLATFORM_WINERY_OPERATORS
       if (ctx.organizationType === 'PLATFORM' && ctx.platformRole && allowed.includes(ctx.platformRole)) {

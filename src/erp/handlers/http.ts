@@ -14,6 +14,7 @@ import type { CertificationStatus } from '../schemas'
 import { checkAccess, checkOrgActive, readAuth, requireAuth, resolveTenant, type AccessRule, type AuthContext } from './auth-context'
 import { nowIso, persistErpDb } from './db'
 import { ApiError, badRequest, fieldError, invalid, tokenInvalid, validationError } from './errors'
+import { backupTrace, restoreTrace, runDailyTasks, syncDataScenario } from './trace-context'
 import { spanishErrorMap } from './zod-es'
 
 // Infraestructura común de los handlers: envoltorio, escenarios, latencia, sesión, roles,
@@ -97,6 +98,12 @@ export interface RouteSpec {
    * backend, sigue funcionando y responde `Deprecation: true` y `Link: <sustituta>; rel="successor-version"`.
    */
   deprecated?: string
+  /**
+   * Ruta en BORRADOR que no está en el OpenAPI del backend (su valor es el contrato que la adelanta,
+   * p. ej. el catálogo del contrato de la Ola 2 §17.1). Responde `X-Mock-Draft` con esa referencia
+   * y la prueba de contrato la valida solo contra el esquema zod de los mocks.
+   */
+  draft?: string
 }
 
 /** Cabeceras de una ruta obsoleta (`DeprecatedRoute` del backend). */
@@ -126,7 +133,8 @@ function correlationIdOf(request: Request | undefined): string {
 
 function successResponse(request: Request, url: URL, result: RouteResult, correlationId = correlationIdOf(request)) {
   const headers = { 'X-Correlation-ID': correlationId, ...result.headers }
-  if (result.status === 204) return new HttpResponse(null, { status: 204, headers })
+  // 204 sin cuerpo y redirecciones (302 a la URL firmada de un adjunto público).
+  if (result.status === 204 || (result.status >= 300 && result.status < 400)) return new HttpResponse(null, { status: result.status, headers })
   if (result.raw) {
     return new HttpResponse(result.raw.body, { status: result.status, headers: { ...headers, 'Content-Type': result.raw.contentType } })
   }
@@ -230,6 +238,11 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
     await applyLatency(latency, scenario === 'slow' ? SLOW_SCENARIO_DELAY_MS : 0)
     const correlationId = correlationIdOf(request)
     const writes = spec.method !== 'get'
+    // Ola 2: escenario de datos activo, tarea diaria de los candados y copia de la trazabilidad
+    // para deshacer una escritura que falle a medias (como la transacción del backend).
+    syncDataScenario()
+    runDailyTasks()
+    const backup = writes ? backupTrace() : null
     try {
       if (scenario === 'error' && !spec.path.startsWith('/v1/auth/')) {
         throw new ApiError(500, 'INTERNAL_ERROR', 'Error interno del servidor (escenario de prueba "error")')
@@ -287,9 +300,10 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
       }
       spec.afterSuccess?.(ctx, result)
       if (writes) persistErpDb()
-      const extra = spec.deprecated ? deprecationHeaders(spec.deprecated) : undefined
-      return successResponse(request, url, extra ? { ...result, headers: { ...result.headers, ...extra } } : result, correlationId)
+      const extra = { ...(spec.deprecated ? deprecationHeaders(spec.deprecated) : {}), ...(spec.draft ? { 'X-Mock-Draft': spec.draft } : {}) }
+      return successResponse(request, url, Object.keys(extra).length > 0 ? { ...result, headers: { ...result.headers, ...extra } } : result, correlationId)
     } catch (err) {
+      if (backup) restoreTrace(backup)
       // Las escrituras fallidas también pueden dejar rastro (bitácora de intentos, retos TOTP).
       if (writes) persistErpDb()
       const error = err instanceof ApiError ? err : new ApiError(500, 'INTERNAL_ERROR', err instanceof Error ? err.message : String(err))
