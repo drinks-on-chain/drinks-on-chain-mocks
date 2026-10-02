@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { DateInputSchema, IsoDateTimeSchema } from './common'
+import { CorrectionMarksShape, DateInputSchema, IsoDateTimeSchema } from './common'
 import { DestinationTypeSchema, TankStatusSchema, TreatmentTypeSchema } from './enums'
-import { CreateLotSchema } from './lots'
+import { CreateLotSchema, TraceActorSchema } from './lots'
 
 // /v1/fermentation-tanks · tanque, lecturas (logs) y tratamientos enológicos. Desde la Ola 2
 // (contrato §4): entradas por pesaje (`inputs`), lote, volumen final y transiciones por acciones.
@@ -15,7 +15,17 @@ export const BIFURCATION_DESTINATIONS = ['WINE_AGING', 'SINGANI_DIST'] as const
 export const BifurcationDestinationSchema = z.enum(BIFURCATION_DESTINATIONS)
 export type BifurcationDestination = z.infer<typeof BifurcationDestinationSchema>
 
+/** Un cambio de estado del tanque (`TankTransitionResponseDto`), empezando por el llenado. */
+export const TankTransitionSchema = z.object({
+  status: TankStatusSchema,
+  at: IsoDateTimeSchema,
+  /** Quién lo registró (`null` = no registrado). */
+  by: TraceActorSchema.nullable(),
+})
+export type TankTransition = z.infer<typeof TankTransitionSchema>
+
 export const FermentationTankResponseSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   wineryId: z.string(),
   harvestBatchId: z.string(),
@@ -34,6 +44,15 @@ export const FermentationTankResponseSchema = z.object({
   finalVolumeLiters: z.number().nullable(),
   /** Pesajes que entraron al tanque, con sus kilos (lista y detalle). */
   inputs: z.array(TankInputSchema).optional(),
+  /**
+   * Litros que quedan por transferir: el volumen final (o el de llenado) menos lo que ya pasó a la
+   * crianza o a las destilaciones; 0 con el tanque `TRANSFERRED` o `CLEANED` (lista y detalle).
+   */
+  availableLiters: z.number().nullable().optional(),
+  /** Merma de trasiego: lo que quedó sin transferir al pasar a `TRANSFERRED`; `null` mientras no se ha transferido. */
+  transferLossLiters: z.number().nullable().optional(),
+  /** Historial de estados, empezando por el llenado (lista y detalle). */
+  transitions: z.array(TankTransitionSchema).optional(),
 })
 export type FermentationTankResponse = z.infer<typeof FermentationTankResponseSchema>
 
@@ -120,6 +139,9 @@ export type FermentationLogRecord = z.infer<typeof FermentationLogRecordSchema>
  * detalle de la cuba. El autor es la **persona** (`recordedByUserId`).
  */
 export const FermentationLogSchema = z.object({
+  ...CorrectionMarksShape,
+  /** Anulada por una corrección `VOID` (§9). */
+  voidedAt: IsoDateTimeSchema.nullable().optional(),
   id: z.string(),
   fermentationTankId: z.string(),
   temperatureCelsius: z.number(),
@@ -169,6 +191,9 @@ export type EnologicalTreatmentRecord = z.infer<typeof EnologicalTreatmentRecord
  * y `treatments` del detalle de la cuba, con el miembro que lo autorizó.
  */
 export const EnologicalTreatmentSchema = z.object({
+  ...CorrectionMarksShape,
+  /** Anulado por una corrección `VOID` (§9). */
+  voidedAt: IsoDateTimeSchema.nullable().optional(),
   id: z.string(),
   fermentationTankId: z.string(),
   treatmentType: TreatmentTypeSchema,

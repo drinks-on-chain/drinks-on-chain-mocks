@@ -6,6 +6,7 @@ import type {
   BottleLot,
   BottlingBatchResponse,
   Correction,
+  CorrectionMarks,
   CorrectionTargetType,
   CreateLotDto,
   DoEvaluation,
@@ -51,8 +52,8 @@ export type StoredTreatment = EnologicalTreatmentRecord & { authorizedByMemberId
 export type StoredAttachment = StoredLotAttachment
 /** Expediente con los bytes canónicos que se hashearon al cerrarlo. */
 export type StoredDossier = LotDossier & { canonical?: string }
-/** Exportación ZIP de códigos con su lote y su rango. */
-export type StoredBottleExport = BottleCodeExport & { lotId: string; fromSerial: number; toSerial: number; imageFormat: 'SVG' | 'PNG'; polls: number }
+/** Exportación de códigos (CSV o ZIP) con su lote; `polls` simula el trabajo del worker con el ZIP. */
+export type StoredBottleExport = BottleCodeExport & { lotId: string; imageFormat?: 'SVG' | 'PNG'; polls: number }
 
 export type { BottleLot, VoidedBottleCode } from '../schemas/bottle-codes'
 
@@ -160,6 +161,28 @@ export function assertNotBefore(field: string, day: string, minimum: string): vo
 const byText = <T>(key: (x: T) => string) => (a: T, b: T) => key(a).localeCompare(key(b))
 
 export const isVoided = (state: TraceState, type: CorrectionTargetType, id: string) => state.voidedRecords.includes(`${type}:${id}`)
+
+/** Instante en que una corrección `VOID` anuló el registro (`null` si sigue contando). */
+export const voidedAtOf = (state: Pick<TraceState, 'corrections'>, type: CorrectionTargetType, id: string): string | null =>
+  state.corrections.find((c) => c.kind === 'VOID' && c.target.type === type && c.target.id === id)?.createdAt ?? null
+
+/** Registros anulados (`TIPO:id`) según las correcciones `VOID` guardadas. */
+export const voidedRecordsOf = (corrections: readonly Correction[]): string[] => corrections.filter((c) => c.kind === 'VOID').map((c) => `${c.target.type}:${c.target.id}`)
+
+/**
+ * Marcas de corrección de un registro (§9; `correction-marks.ts` del backend): qué campos tienen el
+ * valor corregido, si está anulado y con qué correcciones, de la más antigua a la más nueva.
+ */
+export function correctionMarks(state: Pick<TraceState, 'corrections'>, type: CorrectionTargetType, id: string): CorrectionMarks {
+  const marks: CorrectionMarks = { correctedFields: [], voided: false, correctionIds: [] }
+  const rows = state.corrections.filter((c) => c.target.type === type && c.target.id === id).sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id))
+  for (const row of rows) {
+    marks.correctionIds.push(row.id)
+    if (row.kind === 'VOID') marks.voided = true
+    for (const change of row.changes) if (!marks.correctedFields.includes(change.field)) marks.correctedFields.push(change.field)
+  }
+  return marks
+}
 export const correctionsOf = (state: TraceState, type: CorrectionTargetType | string, id: string) =>
   state.corrections.filter((c) => c.target.id === id && (c.target.type === type || RESOURCE_TARGETS[type] === c.target.type))
 
@@ -191,7 +214,10 @@ export const bottleLotOf = (state: TraceState, lotId: string) => state.bottleLot
 export const lotLabs = (state: TraceState, lotId: string) =>
   state.labAnalyses.filter((l) => l.lotId === lotId && !isVoided(state, 'LAB_ANALYSIS', l.id)).sort(byText((l) => l.createdAt))
 
-/** Análisis vigente del lote: el último sin sustituir. */
+/** Todos los análisis de laboratorio del lote, también los anulados, del más antiguo al más reciente. */
+export const allLotLabs = (state: TraceState, lotId: string) => state.labAnalyses.filter((l) => l.lotId === lotId).sort(byText((l) => l.createdAt))
+
+/** Análisis vigente del lote: el último sin sustituir ni anular. */
 export const currentLab = (state: TraceState, lotId: string) =>
   lotLabs(state, lotId)
     .filter((l) => !l.supersededAt)
@@ -228,6 +254,16 @@ export function tankAvailableLiters(state: TraceState, tank: FermentationTankRes
     state.wineAgings.filter((a) => a.fermentationTankId === tank.id).reduce((s, a) => s + (a.volumeLiters ?? 0), 0) +
     state.productionBatches.filter((p) => p.fermentationTankId === tank.id).reduce((s, p) => s + (p.inputVolumeLiters ?? 0), 0)
   return Math.max(0, Math.round((liters - drawn) * 1000) / 1000)
+}
+
+/** Punto de partida del historial de un tanque que no lo guarda (migrado): el llenado. */
+export const initialTankTransition = (t: FermentationTankResponse) => ({ status: t.status === 'FILLING' ? ('FILLING' as const) : ('FERMENTING' as const), at: t.startDate, by: null })
+
+/** Cambia el estado del tanque y lo anota en su historial (`transitions`, que empieza por el llenado). */
+export function recordTankTransition(tank: FermentationTankResponse, status: FermentationTankResponse['status'], at: string, by: TraceActor | null): void {
+  const history = tank.transitions && tank.transitions.length > 0 ? tank.transitions : [initialTankTransition(tank)]
+  tank.status = status
+  tank.transitions = [...history, { status, at, by }]
 }
 
 /** Corazón de una destilación: `heartLiters` (Ola 2) o `outputVolumeLiters` (legado), con su grado. */
@@ -359,6 +395,8 @@ export interface LotEventInput {
   data?: Record<string, unknown>
   resource: { type: string; id: string }
   recordedAt?: string
+  /** Por defecto, la del tipo de evento (`PUBLIC_LOT_EVENT_TYPES`). */
+  visibility?: 'PUBLIC' | 'INTERNAL'
 }
 
 /** Añade un evento a la línea de tiempo del lote, con `seq` consecutivo. */
@@ -378,7 +416,7 @@ export function appendLotEvent(state: TraceState, ctx: TraceCtx, lot: Lot, input
     summary: input.summary,
     data: input.data ?? {},
     resource: input.resource,
-    visibility: PUBLIC_LOT_EVENT_TYPES.includes(input.type) ? 'PUBLIC' : 'INTERNAL',
+    visibility: input.visibility ?? (PUBLIC_LOT_EVENT_TYPES.includes(input.type) ? 'PUBLIC' : 'INTERNAL'),
     corrected: false,
   }
   state.lotEvents.push(event)
@@ -576,6 +614,8 @@ export function createLot(state: TraceState, ctx: TraceCtx, wineryId: string, bo
     )
   }
   const rules = buildLotRules(ctx.snapshot(wineryId), options.origin ?? 'LOT_CREATION')
+  // La instantánea se toma al crear el lote (la de un lote migrado, al migrar): es anterior a su primer evento.
+  if (rules.origin === 'LOT_CREATION') rules.takenAt = options.createdAt ?? ctx.now
   if (productType === 'SINGANI' && planned.length > 0) {
     const terroirs = planned as TerroirResponse[]
     const evaluation = evaluateDo(terroirs.map((t) => ({ id: t.id, altitudeMasl: t.altitudeMasl, varietyName: t.varietyName })), doRulesFromLot(rules), 'LOT_SNAPSHOT', ctx.now)

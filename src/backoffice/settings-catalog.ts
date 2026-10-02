@@ -18,9 +18,12 @@ export interface SettingCatalogEntry {
   legalMinimum?: number | string[] | null
 }
 
-/** Límites de laboratorio de ejemplo ("norma vigente"): valores de demo, no normativos. */
+/**
+ * Límites de laboratorio por defecto ("norma vigente"), los mismos que `settings.catalog.ts` del
+ * backend (metanol < 200 mg/100 ml de alcohol anhidro). Pendientes de confirmar contra la norma.
+ */
 export const DEFAULT_LAB_LIMITS = {
-  metanol: { max: 300, unidad: 'mg/100 ml a.a.' },
+  metanol: { max: 200, unidad: 'mg/100 ml a.a.' },
   cobre: { max: 6, unidad: 'mg/l' },
   acidezVolatil: { max: 1.2, unidad: 'g/l' },
 }

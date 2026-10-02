@@ -1,424 +1,5 @@
 [
   {
-    "slug": "vino-las-carreras-2025",
-    "name": "Vino Las Carreras 2025",
-    "productType": "WINE",
-    "vintage": 2025,
-    "winery": {
-      "slug": "destileria-cinti-viejo",
-      "tradeName": "Destilería Cinti Viejo",
-      "region": "Valle de Cinti · Camargo"
-    },
-    "lotStage": "BOTTLED",
-    "estimatedReadyDate": null,
-    "price": {
-      "amountMinor": 12500,
-      "currency": "BOB"
-    },
-    "availability": {
-      "total": 3860,
-      "available": 0
-    },
-    "status": "SOLD_OUT",
-    "imageUrl": "/mocks/uploads/collections/vino-las-carreras-2025.jpg",
-    "description": "Vino de altura de los valles del sur de Bolivia, criado en barrica y embotellado en la propia bodega.",
-    "tastingNotes": "Fruta negra madura, especias y un tanino firme que la altura afina; final largo y fresco.",
-    "pairing": "Carnes a la parrilla, quesos curados y guisos de la cocina chapaca.",
-    "gallery": [
-      "/mocks/uploads/collections/vino-las-carreras-2025.jpg",
-      "/mocks/uploads/collections/vino-las-carreras-2025-2.jpg"
-    ],
-    "lot": {
-      "lotCode": "CVJ-2026-WINE-003",
-      "timeline": [
-        {
-          "type": "HARVEST_WEIGHED",
-          "occurredAt": "2025-02-26T09:42:00Z",
-          "recordedAt": "2025-02-26T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Uva recibida y pesada en la bodega",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "PHYTO_DECIDED",
-          "occurredAt": "2025-02-26T09:45:00Z",
-          "recordedAt": "2025-02-26T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Dictamen fitosanitario: aprobado",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "TANK_FILLED",
-          "occurredAt": "2025-02-27T14:30:00Z",
-          "recordedAt": "2025-02-27T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "FERMENTATION_COMPLETED",
-          "occurredAt": "2025-03-20T14:30:00Z",
-          "recordedAt": "2025-02-27T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Fermentación completada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "AGING_STARTED",
-          "occurredAt": "2025-04-01T00:00:00Z",
-          "recordedAt": "2025-04-01T10:00:00Z",
-          "lateEntry": false,
-          "summary": "Inicio de la crianza (10 meses)",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "BOTTLED",
-          "occurredAt": "2026-09-20T00:00:00Z",
-          "recordedAt": "2026-09-20T16:00:00Z",
-          "lateEntry": false,
-          "summary": "Embotellado: 3.860 botellas de 75 cL",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        }
-      ]
-    }
-  },
-  {
-    "slug": "vino-la-compania-2025",
-    "name": "Vino La Compañía 2025",
-    "productType": "WINE",
-    "vintage": 2025,
-    "winery": {
-      "slug": "altos-de-calamuchita",
-      "tradeName": "Bodega Altos de Calamuchita",
-      "region": "Valle Central de Tarija · Santa Ana"
-    },
-    "lotStage": "BOTTLED",
-    "estimatedReadyDate": null,
-    "price": {
-      "amountMinor": 11000,
-      "currency": "BOB"
-    },
-    "availability": {
-      "total": 5320,
-      "available": 1384
-    },
-    "status": "ON_SALE",
-    "imageUrl": "/mocks/uploads/collections/vino-la-compania-2025.jpg",
-    "description": "Vino de altura de los valles del sur de Bolivia, criado en barrica y embotellado en la propia bodega.",
-    "tastingNotes": "Fruta negra madura, especias y un tanino firme que la altura afina; final largo y fresco.",
-    "pairing": "Carnes a la parrilla, quesos curados y guisos de la cocina chapaca.",
-    "gallery": [
-      "/mocks/uploads/collections/vino-la-compania-2025.jpg",
-      "/mocks/uploads/collections/vino-la-compania-2025-2.jpg"
-    ],
-    "lot": {
-      "lotCode": "ALT-2026-WINE-001",
-      "timeline": [
-        {
-          "type": "HARVEST_WEIGHED",
-          "occurredAt": "2025-03-06T09:42:00Z",
-          "recordedAt": "2025-03-06T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Uva recibida y pesada en la bodega",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "PHYTO_DECIDED",
-          "occurredAt": "2025-03-06T09:45:00Z",
-          "recordedAt": "2025-03-06T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Dictamen fitosanitario: aprobado",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "TANK_FILLED",
-          "occurredAt": "2025-03-07T14:30:00Z",
-          "recordedAt": "2025-03-07T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "FERMENTATION_COMPLETED",
-          "occurredAt": "2025-03-28T14:30:00Z",
-          "recordedAt": "2025-03-07T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Fermentación completada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "AGING_STARTED",
-          "occurredAt": "2025-04-10T00:00:00Z",
-          "recordedAt": "2025-04-10T10:00:00Z",
-          "lateEntry": false,
-          "summary": "Inicio de la crianza (12 meses)",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "BOTTLED",
-          "occurredAt": "2026-05-12T00:00:00Z",
-          "recordedAt": "2026-05-12T16:00:00Z",
-          "lateEntry": false,
-          "summary": "Embotellado: 5.320 botellas de 75 cL",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "LAB_REGISTERED",
-          "occurredAt": "2026-05-15T00:00:00Z",
-          "recordedAt": "2026-05-15T15:00:00Z",
-          "lateEntry": false,
-          "summary": "Análisis de laboratorio: conforme",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        }
-      ]
-    }
-  },
-  {
-    "slug": "singani-canon-viejo-2025",
-    "name": "Singani Cañón Viejo 2025",
-    "productType": "SINGANI",
-    "vintage": 2025,
-    "winery": {
-      "slug": "destileria-cinti-viejo",
-      "tradeName": "Destilería Cinti Viejo",
-      "region": "Valle de Cinti · Camargo"
-    },
-    "lotStage": "BOTTLED",
-    "estimatedReadyDate": null,
-    "price": {
-      "amountMinor": 18500,
-      "currency": "BOB"
-    },
-    "availability": {
-      "total": 4080,
-      "available": 1143
-    },
-    "status": "ON_SALE",
-    "imageUrl": "/mocks/uploads/collections/singani-canon-viejo-2025.jpg",
-    "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
-    "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
-    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
-    "gallery": [
-      "/mocks/uploads/collections/singani-canon-viejo-2025.jpg",
-      "/mocks/uploads/collections/singani-canon-viejo-2025-2.jpg"
-    ],
-    "lot": {
-      "lotCode": "CVJ-2026-SINGANI-001",
-      "timeline": [
-        {
-          "type": "HARVEST_WEIGHED",
-          "occurredAt": "2025-03-10T09:42:00Z",
-          "recordedAt": "2025-03-10T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Uva recibida y pesada en la bodega",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "PHYTO_DECIDED",
-          "occurredAt": "2025-03-10T09:45:00Z",
-          "recordedAt": "2025-03-10T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Dictamen fitosanitario: aprobado",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "TANK_FILLED",
-          "occurredAt": "2025-03-11T14:30:00Z",
-          "recordedAt": "2025-03-11T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "FERMENTATION_COMPLETED",
-          "occurredAt": "2025-04-13T14:30:00Z",
-          "recordedAt": "2025-03-11T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Fermentación completada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "TANK_FILLED",
-          "occurredAt": "2025-03-11T14:30:00Z",
-          "recordedAt": "2025-03-11T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "FERMENTATION_COMPLETED",
-          "occurredAt": "2025-04-12T14:30:00Z",
-          "recordedAt": "2025-03-11T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Fermentación completada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "DISTILLATION_STARTED",
-          "occurredAt": "2025-05-20T00:00:00Z",
-          "recordedAt": "2025-05-20T10:00:00Z",
-          "lateEntry": false,
-          "summary": "Destilación iniciada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "DISTILLATION_CLOSED",
-          "occurredAt": "2025-05-25T00:00:00Z",
-          "recordedAt": "2025-05-20T10:00:00Z",
-          "lateEntry": false,
-          "summary": "Destilación terminada: empieza el reposo",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "BOTTLED",
-          "occurredAt": "2026-03-01T00:00:00Z",
-          "recordedAt": "2026-03-01T16:00:00Z",
-          "lateEntry": false,
-          "summary": "Embotellado: 4.080 botellas de 75 cL",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "LAB_REGISTERED",
-          "occurredAt": "2026-03-04T00:00:00Z",
-          "recordedAt": "2026-03-04T15:00:00Z",
-          "lateEntry": false,
-          "summary": "Análisis de laboratorio: conforme",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        }
-      ]
-    }
-  },
-  {
-    "slug": "singani-el-molino-2025",
-    "name": "Singani El Molino 2025",
-    "productType": "SINGANI",
-    "vintage": 2025,
-    "winery": {
-      "slug": "destileria-cinti-viejo",
-      "tradeName": "Destilería Cinti Viejo",
-      "region": "Valle de Cinti · Camargo"
-    },
-    "lotStage": "BOTTLED",
-    "estimatedReadyDate": null,
-    "price": {
-      "amountMinor": 20000,
-      "currency": "BOB"
-    },
-    "availability": {
-      "total": 2140,
-      "available": 1563
-    },
-    "status": "ON_SALE",
-    "imageUrl": "/mocks/uploads/collections/singani-el-molino-2025.jpg",
-    "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
-    "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
-    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
-    "gallery": [
-      "/mocks/uploads/collections/singani-el-molino-2025.jpg",
-      "/mocks/uploads/collections/singani-el-molino-2025-2.jpg"
-    ],
-    "lot": {
-      "lotCode": "CVJ-2026-SINGANI-002",
-      "timeline": [
-        {
-          "type": "HARVEST_WEIGHED",
-          "occurredAt": "2025-03-18T09:42:00Z",
-          "recordedAt": "2025-03-18T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Uva recibida y pesada en la bodega",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "PHYTO_DECIDED",
-          "occurredAt": "2025-03-18T09:45:00Z",
-          "recordedAt": "2025-03-18T09:45:00Z",
-          "lateEntry": false,
-          "summary": "Dictamen fitosanitario: aprobado",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "TANK_FILLED",
-          "occurredAt": "2025-03-19T14:30:00Z",
-          "recordedAt": "2025-03-19T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "FERMENTATION_COMPLETED",
-          "occurredAt": "2025-04-20T14:30:00Z",
-          "recordedAt": "2025-03-19T14:35:00Z",
-          "lateEntry": false,
-          "summary": "Fermentación completada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "DISTILLATION_STARTED",
-          "occurredAt": "2025-05-02T00:00:00Z",
-          "recordedAt": "2025-05-02T10:00:00Z",
-          "lateEntry": false,
-          "summary": "Destilación iniciada",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "DISTILLATION_CLOSED",
-          "occurredAt": "2025-05-04T00:00:00Z",
-          "recordedAt": "2025-05-02T10:00:00Z",
-          "lateEntry": false,
-          "summary": "Destilación terminada: empieza el reposo",
-          "actorRole": null,
-          "corrected": false
-        },
-        {
-          "type": "BOTTLED",
-          "occurredAt": "2026-02-10T00:00:00Z",
-          "recordedAt": "2026-02-10T16:00:00Z",
-          "lateEntry": false,
-          "summary": "Embotellado: 2.140 botellas de 75 cL",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        },
-        {
-          "type": "LAB_REGISTERED",
-          "occurredAt": "2026-02-13T00:00:00Z",
-          "recordedAt": "2026-02-13T15:00:00Z",
-          "lateEntry": false,
-          "summary": "Análisis de laboratorio: conforme",
-          "actorRole": "ENOLOGIST",
-          "corrected": false
-        }
-      ]
-    }
-  },
-  {
     "slug": "singani-gran-reserva-2026",
     "name": "Singani Gran Reserva 2026",
     "productType": "SINGANI",
@@ -439,6 +20,7 @@
       "available": 1269
     },
     "status": "ON_SALE",
+    "featured": true,
     "imageUrl": "/mocks/uploads/collections/singani-gran-reserva-2026.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
     "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
@@ -473,7 +55,7 @@
           "occurredAt": "2026-03-10T00:00:00Z",
           "recordedAt": "2026-03-10T16:00:00Z",
           "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
+          "summary": "Mosto en tanque de fermentación",
           "actorRole": "ENOLOGIST",
           "corrected": false
         },
@@ -509,7 +91,7 @@
           "occurredAt": "2026-03-24T00:00:00Z",
           "recordedAt": "2026-03-24T20:00:00Z",
           "lateEntry": false,
-          "summary": "Destilación terminada: empieza el reposo",
+          "summary": "Destilación cerrada: empieza el reposo",
           "actorRole": "ENOLOGIST",
           "corrected": false
         },
@@ -518,7 +100,7 @@
           "occurredAt": "2026-09-20T04:05:00Z",
           "recordedAt": "2026-09-20T04:05:00Z",
           "lateEntry": false,
-          "summary": "Reposo cumplido",
+          "summary": "Tiempo mínimo de crianza o reposo cumplido",
           "actorRole": null,
           "corrected": false
         },
@@ -527,7 +109,7 @@
           "occurredAt": "2026-09-22T00:00:00Z",
           "recordedAt": "2026-09-22T15:00:00Z",
           "lateEntry": false,
-          "summary": "Embotellado: 2.950 botellas de 75 cL",
+          "summary": "Lote embotellado",
           "actorRole": "ENOLOGIST",
           "corrected": false
         },
@@ -536,7 +118,7 @@
           "occurredAt": "2026-09-23T00:00:00Z",
           "recordedAt": "2026-09-23T16:00:00Z",
           "lateEntry": false,
-          "summary": "Análisis de laboratorio: conforme",
+          "summary": "Análisis de laboratorio registrado",
           "actorRole": "ENOLOGIST",
           "corrected": false
         },
@@ -545,11 +127,142 @@
           "occurredAt": "2026-09-24T15:00:00Z",
           "recordedAt": "2026-09-24T15:00:00Z",
           "lateEntry": false,
-          "summary": "Expediente cerrado con su huella",
+          "summary": "Expediente del lote cerrado",
           "actorRole": "OWNER",
           "corrected": false
         }
       ]
+    }
+  },
+  {
+    "slug": "vino-la-compania-2025",
+    "name": "Vino La Compañía 2025",
+    "productType": "WINE",
+    "vintage": 2025,
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita",
+      "region": "Valle Central de Tarija · Santa Ana"
+    },
+    "lotStage": "BOTTLED",
+    "estimatedReadyDate": null,
+    "price": {
+      "amountMinor": 11000,
+      "currency": "BOB"
+    },
+    "availability": {
+      "total": 5320,
+      "available": 1384
+    },
+    "status": "ON_SALE",
+    "featured": true,
+    "imageUrl": "/mocks/uploads/collections/vino-la-compania-2025.jpg",
+    "description": "Vino de altura de los valles del sur de Bolivia, criado en barrica y embotellado en la propia bodega.",
+    "tastingNotes": "Fruta negra madura, especias y un tanino firme que la altura afina; final largo y fresco.",
+    "pairing": "Carnes a la parrilla, quesos curados y guisos de la cocina chapaca.",
+    "gallery": [
+      "/mocks/uploads/collections/vino-la-compania-2025.jpg",
+      "/mocks/uploads/collections/vino-la-compania-2025-2.jpg"
+    ],
+    "lot": {
+      "lotCode": "ALT-2026-WINE-001",
+      "timeline": [
+        {
+          "type": "HARVEST_WEIGHED",
+          "occurredAt": "2025-03-06T09:42:00Z",
+          "recordedAt": "2025-03-06T09:45:00Z",
+          "lateEntry": false,
+          "summary": "Uva recibida y pesada en la bodega",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "PHYTO_DECIDED",
+          "occurredAt": "2025-03-06T09:45:00Z",
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
+          "summary": "Dictamen fitosanitario: aprobado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "TANK_FILLED",
+          "occurredAt": "2025-03-07T14:30:00Z",
+          "recordedAt": "2025-03-07T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Mosto en tanque de fermentación",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_COMPLETED",
+          "occurredAt": "2025-03-28T14:30:00Z",
+          "recordedAt": "2025-03-07T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Fermentación completada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "AGING_STARTED",
+          "occurredAt": "2025-04-10T00:00:00Z",
+          "recordedAt": "2025-04-10T10:00:00Z",
+          "lateEntry": false,
+          "summary": "Crianza iniciada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "BOTTLED",
+          "occurredAt": "2026-05-12T00:00:00Z",
+          "recordedAt": "2026-05-12T16:00:00Z",
+          "lateEntry": false,
+          "summary": "Lote embotellado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "LAB_REGISTERED",
+          "occurredAt": "2026-05-15T00:00:00Z",
+          "recordedAt": "2026-05-15T15:00:00Z",
+          "lateEntry": false,
+          "summary": "Análisis de laboratorio registrado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        }
+      ]
+    }
+  },
+  {
+    "slug": "singani-edicion-aniversario-2026",
+    "name": "Singani Edición Aniversario 2026",
+    "productType": "SINGANI",
+    "vintage": 2026,
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo"
+    },
+    "lotStage": "ORIGIN",
+    "estimatedReadyDate": "2027-06-30",
+    "price": null,
+    "availability": {
+      "total": 1800,
+      "available": 864
+    },
+    "status": "PRESALE",
+    "featured": false,
+    "imageUrl": "/mocks/uploads/collections/singani-edicion-aniversario-2026.jpg",
+    "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
+    "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
+    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
+    "gallery": [
+      "/mocks/uploads/collections/singani-edicion-aniversario-2026.jpg",
+      "/mocks/uploads/collections/singani-edicion-aniversario-2026-2.jpg"
+    ],
+    "lot": {
+      "lotCode": null,
+      "timeline": []
     }
   },
   {
@@ -573,6 +286,7 @@
       "available": 1246
     },
     "status": "PRESALE",
+    "featured": false,
     "imageUrl": "/mocks/uploads/collections/singani-el-molino-2026.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
     "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
@@ -607,7 +321,7 @@
           "occurredAt": "2026-03-20T00:00:00Z",
           "recordedAt": "2026-03-20T16:00:00Z",
           "lateEntry": false,
-          "summary": "Mosto en el tanque de fermentación",
+          "summary": "Mosto en tanque de fermentación",
           "actorRole": "ENOLOGIST",
           "corrected": false
         },
@@ -642,34 +356,453 @@
     }
   },
   {
-    "slug": "singani-edicion-aniversario-2026",
-    "name": "Singani Edición Aniversario 2026",
+    "slug": "singani-el-molino-2025",
+    "name": "Singani El Molino 2025",
     "productType": "SINGANI",
-    "vintage": 2026,
+    "vintage": 2025,
     "winery": {
       "slug": "destileria-cinti-viejo",
       "tradeName": "Destilería Cinti Viejo",
       "region": "Valle de Cinti · Camargo"
     },
-    "lotStage": "ORIGIN",
-    "estimatedReadyDate": "2027-06-30",
-    "price": null,
-    "availability": {
-      "total": 1800,
-      "available": 864
+    "lotStage": "BOTTLED",
+    "estimatedReadyDate": null,
+    "price": {
+      "amountMinor": 20000,
+      "currency": "BOB"
     },
-    "status": "PRESALE",
-    "imageUrl": "/mocks/uploads/collections/singani-edicion-aniversario-2026.jpg",
+    "availability": {
+      "total": 2140,
+      "available": 1563
+    },
+    "status": "ON_SALE",
+    "featured": false,
+    "imageUrl": "/mocks/uploads/collections/singani-el-molino-2025.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
     "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
     "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
     "gallery": [
-      "/mocks/uploads/collections/singani-edicion-aniversario-2026.jpg",
-      "/mocks/uploads/collections/singani-edicion-aniversario-2026-2.jpg"
+      "/mocks/uploads/collections/singani-el-molino-2025.jpg",
+      "/mocks/uploads/collections/singani-el-molino-2025-2.jpg"
     ],
     "lot": {
-      "lotCode": null,
-      "timeline": []
+      "lotCode": "CVJ-2026-SINGANI-002",
+      "timeline": [
+        {
+          "type": "HARVEST_WEIGHED",
+          "occurredAt": "2025-03-18T09:42:00Z",
+          "recordedAt": "2025-03-18T09:45:00Z",
+          "lateEntry": false,
+          "summary": "Uva recibida y pesada en la bodega",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "PHYTO_DECIDED",
+          "occurredAt": "2025-03-18T09:45:00Z",
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
+          "summary": "Dictamen fitosanitario: aprobado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "TANK_FILLED",
+          "occurredAt": "2025-03-19T14:30:00Z",
+          "recordedAt": "2025-03-19T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Mosto en tanque de fermentación",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_COMPLETED",
+          "occurredAt": "2025-04-20T14:30:00Z",
+          "recordedAt": "2025-03-19T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Fermentación completada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "DISTILLATION_STARTED",
+          "occurredAt": "2025-05-02T00:00:00Z",
+          "recordedAt": "2025-05-02T10:00:00Z",
+          "lateEntry": false,
+          "summary": "Destilación iniciada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "DISTILLATION_CLOSED",
+          "occurredAt": "2025-05-04T00:00:00Z",
+          "recordedAt": "2025-05-02T10:00:00Z",
+          "lateEntry": false,
+          "summary": "Destilación cerrada: empieza el reposo",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "BOTTLED",
+          "occurredAt": "2026-02-10T00:00:00Z",
+          "recordedAt": "2026-02-10T16:00:00Z",
+          "lateEntry": false,
+          "summary": "Lote embotellado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "LAB_REGISTERED",
+          "occurredAt": "2026-02-13T00:00:00Z",
+          "recordedAt": "2026-02-13T15:00:00Z",
+          "lateEntry": false,
+          "summary": "Análisis de laboratorio registrado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        }
+      ]
+    }
+  },
+  {
+    "slug": "singani-el-portillo-2025",
+    "name": "Singani El Portillo 2025",
+    "productType": "SINGANI",
+    "vintage": 2025,
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita",
+      "region": "Valle Central de Tarija · Santa Ana"
+    },
+    "lotStage": "BOTTLED",
+    "estimatedReadyDate": null,
+    "price": {
+      "amountMinor": 18500,
+      "currency": "BOB"
+    },
+    "availability": {
+      "total": 1040,
+      "available": 229
+    },
+    "status": "ON_SALE",
+    "featured": false,
+    "imageUrl": "/mocks/uploads/collections/singani-el-portillo-2025.jpg",
+    "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
+    "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
+    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
+    "gallery": [
+      "/mocks/uploads/collections/singani-el-portillo-2025.jpg",
+      "/mocks/uploads/collections/singani-el-portillo-2025-2.jpg"
+    ],
+    "lot": {
+      "lotCode": "ALT-2025-SINGANI-002",
+      "timeline": [
+        {
+          "type": "HARVEST_WEIGHED",
+          "occurredAt": "2025-03-14T13:20:00Z",
+          "recordedAt": "2025-03-26T14:00:00Z",
+          "lateEntry": true,
+          "summary": "Uva recibida y pesada en la bodega",
+          "actorRole": "OPERATOR",
+          "corrected": false
+        },
+        {
+          "type": "PHYTO_DECIDED",
+          "occurredAt": "2025-03-15T13:00:00Z",
+          "recordedAt": "2025-03-26T16:00:00Z",
+          "lateEntry": true,
+          "summary": "Dictamen fitosanitario: aprobado",
+          "actorRole": "AGRONOMIST",
+          "corrected": false
+        },
+        {
+          "type": "TANK_FILLED",
+          "occurredAt": "2025-03-15T00:00:00Z",
+          "recordedAt": "2025-03-27T14:00:00Z",
+          "lateEntry": true,
+          "summary": "Mosto en tanque de fermentación",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_STARTED",
+          "occurredAt": "2025-03-15T00:00:00Z",
+          "recordedAt": "2025-03-27T14:00:00Z",
+          "lateEntry": true,
+          "summary": "Fermentación iniciada",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_COMPLETED",
+          "occurredAt": "2025-04-03T00:00:00Z",
+          "recordedAt": "2025-04-03T15:00:00Z",
+          "lateEntry": false,
+          "summary": "Fermentación completada",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "DISTILLATION_STARTED",
+          "occurredAt": "2025-04-09T00:00:00Z",
+          "recordedAt": "2025-04-09T13:00:00Z",
+          "lateEntry": false,
+          "summary": "Destilación iniciada",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "DISTILLATION_CLOSED",
+          "occurredAt": "2025-04-13T00:00:00Z",
+          "recordedAt": "2025-04-13T19:00:00Z",
+          "lateEntry": false,
+          "summary": "Destilación cerrada: empieza el reposo",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "LOCK_RELEASED",
+          "occurredAt": "2025-10-10T04:05:00Z",
+          "recordedAt": "2025-10-10T04:05:00Z",
+          "lateEntry": false,
+          "summary": "Tiempo mínimo de crianza o reposo cumplido",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "BOTTLED",
+          "occurredAt": "2025-11-29T00:00:00Z",
+          "recordedAt": "2025-11-29T15:00:00Z",
+          "lateEntry": false,
+          "summary": "Lote embotellado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "LAB_REGISTERED",
+          "occurredAt": "2025-12-02T00:00:00Z",
+          "recordedAt": "2025-12-02T16:00:00Z",
+          "lateEntry": false,
+          "summary": "Análisis de laboratorio registrado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        }
+      ]
+    }
+  },
+  {
+    "slug": "singani-canon-viejo-2025",
+    "name": "Singani Cañón Viejo 2025",
+    "productType": "SINGANI",
+    "vintage": 2025,
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo"
+    },
+    "lotStage": "BOTTLED",
+    "estimatedReadyDate": null,
+    "price": {
+      "amountMinor": 18500,
+      "currency": "BOB"
+    },
+    "availability": {
+      "total": 4080,
+      "available": 1143
+    },
+    "status": "ON_SALE",
+    "featured": false,
+    "imageUrl": "/mocks/uploads/collections/singani-canon-viejo-2025.jpg",
+    "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
+    "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
+    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
+    "gallery": [
+      "/mocks/uploads/collections/singani-canon-viejo-2025.jpg",
+      "/mocks/uploads/collections/singani-canon-viejo-2025-2.jpg"
+    ],
+    "lot": {
+      "lotCode": "CVJ-2026-SINGANI-001",
+      "timeline": [
+        {
+          "type": "HARVEST_WEIGHED",
+          "occurredAt": "2025-03-10T09:42:00Z",
+          "recordedAt": "2025-03-10T09:45:00Z",
+          "lateEntry": false,
+          "summary": "Uva recibida y pesada en la bodega",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "PHYTO_DECIDED",
+          "occurredAt": "2025-03-10T09:45:00Z",
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
+          "summary": "Dictamen fitosanitario: aprobado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "TANK_FILLED",
+          "occurredAt": "2025-03-11T14:30:00Z",
+          "recordedAt": "2025-03-11T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Mosto en tanque de fermentación",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_COMPLETED",
+          "occurredAt": "2025-04-13T14:30:00Z",
+          "recordedAt": "2025-03-11T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Fermentación completada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "TANK_FILLED",
+          "occurredAt": "2025-03-11T14:30:00Z",
+          "recordedAt": "2025-03-11T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Mosto en tanque de fermentación",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_COMPLETED",
+          "occurredAt": "2025-04-12T14:30:00Z",
+          "recordedAt": "2025-03-11T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Fermentación completada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "DISTILLATION_STARTED",
+          "occurredAt": "2025-05-20T00:00:00Z",
+          "recordedAt": "2025-05-20T10:00:00Z",
+          "lateEntry": false,
+          "summary": "Destilación iniciada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "DISTILLATION_CLOSED",
+          "occurredAt": "2025-05-25T00:00:00Z",
+          "recordedAt": "2025-05-20T10:00:00Z",
+          "lateEntry": false,
+          "summary": "Destilación cerrada: empieza el reposo",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "BOTTLED",
+          "occurredAt": "2026-03-01T00:00:00Z",
+          "recordedAt": "2026-03-01T16:00:00Z",
+          "lateEntry": false,
+          "summary": "Lote embotellado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "LAB_REGISTERED",
+          "occurredAt": "2026-03-04T00:00:00Z",
+          "recordedAt": "2026-03-04T15:00:00Z",
+          "lateEntry": false,
+          "summary": "Análisis de laboratorio registrado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        }
+      ]
+    }
+  },
+  {
+    "slug": "vino-las-carreras-2025",
+    "name": "Vino Las Carreras 2025",
+    "productType": "WINE",
+    "vintage": 2025,
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo"
+    },
+    "lotStage": "BOTTLED",
+    "estimatedReadyDate": null,
+    "price": {
+      "amountMinor": 12500,
+      "currency": "BOB"
+    },
+    "availability": {
+      "total": 3860,
+      "available": 0
+    },
+    "status": "SOLD_OUT",
+    "featured": false,
+    "imageUrl": "/mocks/uploads/collections/vino-las-carreras-2025.jpg",
+    "description": "Vino de altura de los valles del sur de Bolivia, criado en barrica y embotellado en la propia bodega.",
+    "tastingNotes": "Fruta negra madura, especias y un tanino firme que la altura afina; final largo y fresco.",
+    "pairing": "Carnes a la parrilla, quesos curados y guisos de la cocina chapaca.",
+    "gallery": [
+      "/mocks/uploads/collections/vino-las-carreras-2025.jpg",
+      "/mocks/uploads/collections/vino-las-carreras-2025-2.jpg"
+    ],
+    "lot": {
+      "lotCode": "CVJ-2026-WINE-003",
+      "timeline": [
+        {
+          "type": "HARVEST_WEIGHED",
+          "occurredAt": "2025-02-26T09:42:00Z",
+          "recordedAt": "2025-02-26T09:45:00Z",
+          "lateEntry": false,
+          "summary": "Uva recibida y pesada en la bodega",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "PHYTO_DECIDED",
+          "occurredAt": "2025-02-26T09:45:00Z",
+          "recordedAt": "2026-09-25T12:00:00Z",
+          "lateEntry": true,
+          "summary": "Dictamen fitosanitario: aprobado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        },
+        {
+          "type": "TANK_FILLED",
+          "occurredAt": "2025-02-27T14:30:00Z",
+          "recordedAt": "2025-02-27T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Mosto en tanque de fermentación",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "FERMENTATION_COMPLETED",
+          "occurredAt": "2025-03-20T14:30:00Z",
+          "recordedAt": "2025-02-27T14:35:00Z",
+          "lateEntry": false,
+          "summary": "Fermentación completada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "AGING_STARTED",
+          "occurredAt": "2025-04-01T00:00:00Z",
+          "recordedAt": "2025-04-01T10:00:00Z",
+          "lateEntry": false,
+          "summary": "Crianza iniciada",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "BOTTLED",
+          "occurredAt": "2026-09-20T00:00:00Z",
+          "recordedAt": "2026-09-20T16:00:00Z",
+          "lateEntry": false,
+          "summary": "Lote embotellado",
+          "actorRole": "ENOLOGIST",
+          "corrected": false
+        }
+      ]
     }
   }
 ]

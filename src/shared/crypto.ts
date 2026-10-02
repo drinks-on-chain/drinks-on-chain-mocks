@@ -79,6 +79,14 @@ export function toHex(bytes: Uint8Array): string {
   return s
 }
 
+/** Bytes de un texto hexadecimal (p. ej. un SHA-256 de 64 caracteres). */
+export function fromHex(hex: string): Uint8Array {
+  if (hex.length % 2 !== 0 || !/^[0-9a-f]*$/i.test(hex)) throw new TypeError('Texto hexadecimal inválido')
+  const out = new Uint8Array(hex.length / 2)
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16)
+  return out
+}
+
 /** SHA-256 en hexadecimal (64 caracteres) de un texto UTF-8. */
 export function sha256Hex(text: string): string {
   return toHex(sha256(encoder.encode(text)))
@@ -103,8 +111,9 @@ export function hmacSha1(key: Uint8Array, message: Uint8Array): Uint8Array {
 }
 
 /**
- * JSON canónico: claves ordenadas en todos los niveles, sin espacios; `undefined` se omite como
- * en `JSON.stringify`. Es la entrada del hash de la bitácora.
+ * JSON canónico (RFC 8785, JCS): propiedades ordenadas por unidades de código UTF-16 en todos los
+ * niveles, sin espacios, cadenas y números con la serialización de ECMAScript; `undefined` se
+ * omite como en `JSON.stringify`. Es la entrada del hash de la bitácora y del expediente del lote.
  */
 export function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== 'object') return JSON.stringify(value) ?? 'null'

@@ -12,7 +12,8 @@ import {
   type TerroirResponse,
 } from '../../schemas'
 import { correctTerroir } from '../../trace/dossier'
-import { addMaturityAnalysis, createHarvest, decidePhyto, harvestAnalyses, harvestDecisions } from '../../trace/records'
+import { addMaturityAnalysis, allHarvestAnalyses, allHarvestDecisions, createHarvest, decidePhyto } from '../../trace/records'
+import { maturityView, phytoDecisionView } from '../../trace/views'
 import { violation } from '../../trace/rules'
 import { stateError } from '../../trace/state'
 import { canSee, scoped, trace, TRACE_READERS, type AuthContext } from '../auth-context'
@@ -194,7 +195,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
       const h = findHarvest(auth, params.id!)
       const body = await parseCreateBody(request, CreateMaturityAnalysisSchema)
       tick()
-      return created(addMaturityAnalysis(getErpDb(), traceCtx(auth), h, body))
+      return created(maturityView(getErpDb(), addMaturityAnalysis(getErpDb(), traceCtx(auth), h, body)))
     },
   },
   {
@@ -202,7 +203,8 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     path: '/v1/harvest-batches/:id/maturity-analyses',
     access: trace(TRACE_READERS),
     list: 'paged',
-    handle: ({ query, auth, params }) => listResult(harvestAnalyses(getErpDb(), findHarvest(auth, params.id!).id), query),
+    // Todos, también los anulados (marcados `voided`): el vigente es el último sin anular.
+    handle: ({ query, auth, params }) => listResult(allHarvestAnalyses(getErpDb(), findHarvest(auth, params.id!).id).map((m) => maturityView(getErpDb(), m)), query),
   },
   {
     method: 'post',
@@ -221,7 +223,7 @@ export const terroirHarvestRoutes: RouteSpec[] = [
     path: '/v1/harvest-batches/:id/phyto-decisions',
     access: trace(TRACE_READERS),
     list: 'paged',
-    handle: ({ query, auth, params }) => listResult(harvestDecisions(getErpDb(), findHarvest(auth, params.id!).id), query),
+    handle: ({ query, auth, params }) => listResult(allHarvestDecisions(getErpDb(), findHarvest(auth, params.id!).id).map((d) => phytoDecisionView(getErpDb(), d)), query),
   },
   {
     // Legado: alias de `POST …/phyto-decisions` hasta H2. Mismas reglas; ya no pisa las notas del pesaje.

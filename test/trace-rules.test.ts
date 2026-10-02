@@ -326,7 +326,7 @@ describe('pruebas de elusión (contrato §18)', () => {
     const token = as('altos_enologa')
     const harvest = await approvedHarvest({ weigh: token, decide: as('altos_agronomo') }, { terroirId: T('altos_04'), newLot: { name: 'Syrah de prueba 2026', harvestYear: 2026, productType: 'WINE' } })
     expect((await lotOf(harvest.lotId!, token)).rules.wine.minAgingMonths).toBe(6)
-    const tank = dataOf((await post<{ id: string }>('/v1/fermentation-tanks', token, { inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-32', volumeFilledLiters: 3600, startFermentation: true, startDate: '2026-09-25' })).json)
+    const tank = dataOf((await post<{ id: string }>('/v1/fermentation-tanks', token, { inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-42', volumeFilledLiters: 3600, startFermentation: true, startDate: '2026-09-25' })).json)
     await post(`/v1/fermentation-tanks/${tank.id}/complete`, token, { endDate: '2026-09-25', finalVolumeLiters: 3500, destination: 'WINE_AGING' })
     const aging = { fermentationTankId: tank.id, containerType: 'Barrica', volumeLiters: 3400 }
     const short = failure(await post('/v1/wine-aging', token, { ...aging, plannedMonths: 3 }))
@@ -345,13 +345,13 @@ describe('pruebas de elusión (contrato §18)', () => {
     const withoutLab = F.lots.find((l) => l.wineryId === CINTI && l.stage === 'BOTTLED' && l.labStatus === 'NOT_RECORDED')!
     const res = failure(await post(`/v1/lots/${withoutLab.id}/dossier/close`, enologa, { confirm: true }))
     expect(res).toMatchObject({ status: 422, code: 'TRC_DOSSIER_NOT_READY' })
-    expect(res.details).toMatchObject([{ code: 'TRC_DOSSIER_NOT_READY', message: 'Falta registrar el análisis de laboratorio', meta: { requirement: 'LAB_CONFORMING' } }])
+    expect(res.details).toMatchObject([{ code: 'TRC_DOSSIER_NOT_READY', message: 'Falta el análisis de laboratorio del lote', meta: { requirement: 'LAB_CONFORMING', labStatus: 'NOT_RECORDED' } }])
     expect(failure(await post(`/v1/lots/${withoutLab.id}/dossier/close`, enologa, {})).code).toBe('VALIDATION_ERROR')
 
     setScenario('laboratorio-no-conforme')
     const preview = await get<{ ready: boolean; requirements: { key: string; met: boolean; message: string }[]; hashPreview: string | null }>(`/v1/lots/${SINGANI_CASE.lotId}/dossier/preview`, operario)
     expect(preview.ready).toBe(false)
-    expect(preview.requirements.filter((r) => !r.met)).toEqual([{ key: 'LAB_CONFORMING', met: false, message: 'El análisis vigente no es conforme: reanaliza o descarta el lote' }])
+    expect(preview.requirements.filter((r) => !r.met)).toEqual([{ key: 'LAB_CONFORMING', met: false, message: 'El análisis de laboratorio vigente no es conforme' }])
     expect(preview.hashPreview).toMatch(/^[0-9a-f]{64}$/)
     expect(await lotOf(SINGANI_CASE.lotId)).toMatchObject({ stage: 'BOTTLED', labStatus: 'NON_CONFORMING', dossierStatus: 'OPEN' })
     // Un reanálisis conforme sustituye al anterior y desbloquea el cierre.
@@ -365,7 +365,7 @@ describe('pruebas de elusión (contrato §18)', () => {
     const harvest = F.harvestBatches.find((h) => h.lotId === SINGANI_CASE.lotId)!
     const closed = failure(await post(`/v1/lots/${SINGANI_CASE.lotId}/corrections`, enologa, { target: { type: 'HARVEST_BATCH', id: harvest.id }, kind: 'AMEND', changes: { notes: 'Otra nota' }, reason: 'Corrección tras el cierre del expediente' }))
     expect(closed).toMatchObject({ status: 409, code: 'TRC_DOSSIER_CLOSED' })
-    expect(closed.details[0]!.meta).toMatchObject({ closedAt: '2026-09-24T15:00:00Z' })
+    expect(closed.details[0]!.meta).toEqual({ closedAt: '2026-09-24T15:00:00Z', hash: F.lotDossiers[0]!.hash })
     expect(failure(await post(`/v1/lots/${SINGANI_CASE.lotId}/dossier/close`, enologa, { confirm: true })).code).toBe('TRC_DOSSIER_CLOSED')
   })
 
@@ -568,7 +568,16 @@ describe('códigos de botella, correcciones, adjuntos, panel y reportes', () => 
     const tank = F.fermentationTanks.find((t) => t.lotId === lot.id)!
     const correct = (token: string, body: unknown) => post(`/v1/lots/${lot.id}/corrections`, token, body)
     const ok = await correct(operario, { target: { type: 'HARVEST_BATCH', id: harvest.id }, kind: 'AMEND', changes: { grossWeightKg: 18560 }, reason: 'Báscula mal tarada ese día' })
-    expect(dataOf(ok.json)).toMatchObject({ lotId: lot.id, kind: 'AMEND', changes: [{ field: 'grossWeightKg', before: 18550, after: 18560 }], createdBy: { role: 'OPERATOR' } })
+    // El neto es un valor derivado: queda también en la corrección.
+    expect(dataOf(ok.json)).toMatchObject({
+      lotId: lot.id,
+      kind: 'AMEND',
+      changes: [
+        { field: 'grossWeightKg', before: 18550, after: 18560 },
+        { field: 'netWeightKg', before: 18400, after: 18410 },
+      ],
+      createdBy: { role: 'OPERATOR' },
+    })
     expect(await get(`/v1/harvest-batches/${harvest.id}`, operario)).toMatchObject({ grossWeightKg: 18560, netWeightKg: 18410 })
     // No corregibles: lote de pertenencia, tipo, códigos…
     const notAllowed = failure(await correct(enologa, { target: { type: 'HARVEST_BATCH', id: harvest.id }, kind: 'AMEND', changes: { lotId: uid('otro'), harvestYear: 2025 }, reason: 'Mover el pesaje a otro lote' }))
@@ -587,7 +596,13 @@ describe('códigos de botella, correcciones, adjuntos, panel y reportes', () => 
     // VOID de un análisis de madurez: el pesaje vuelve a quedar sin análisis.
     const analysis = F.maturityAnalyses.find((m) => m.harvestBatchId === harvest.id)!
     expect((await correct(enologa, { target: { type: 'MATURITY_ANALYSIS', id: analysis.id }, kind: 'VOID', reason: 'Muestra mal etiquetada en el laboratorio' })).status).toBe(201)
-    expect(await get(`/v1/harvest-batches/${harvest.id}`, operario)).toMatchObject({ brixDegrees: null, maturityAnalyses: [] })
+    // El análisis anulado deja de contar (el pesaje vuelve a quedar sin Brix) y se devuelve marcado.
+    expect(await get(`/v1/harvest-batches/${harvest.id}`, operario)).toMatchObject({
+      brixDegrees: null,
+      correctedFields: ['grossWeightKg', 'netWeightKg'],
+      voided: false,
+      maturityAnalyses: [{ id: analysis.id, voided: true, correctedFields: [] }],
+    })
     const list = dataOf((await call<Paged<{ kind: string }>>(`/v1/lots/${lot.id}/corrections`, { token: operario })).json)
     expect(list.items.map((c) => c.kind)).toEqual(['VOID', 'AMEND'])
     const timeline = LotTimelineSchema.parse(await get(`/v1/lots/${lot.id}/timeline`, operario))
@@ -597,19 +612,33 @@ describe('códigos de botella, correcciones, adjuntos, panel y reportes', () => 
 
   it('adjuntos del lote: clave propia, etiqueta pública por defecto, informes del dictamen y del laboratorio, y cambio de visibilidad', async () => {
     const url = `/v1/lots/${SINGANI_CASE.lotId}/attachments`
-    const items = dataOf((await call<Paged<{ kind: string; visibility: string; url: string; sha256: string }>>(url, { token: operario })).json).items
+    const items = dataOf((await call<Paged<{ kind: string; visibility: string; url: string; sha256: string }>>(url, { token: enologa })).json).items
     expect(items.map((a) => [a.kind, a.visibility])).toEqual([['PHYTO_REPORT', 'PRIVATE'], ['LABEL', 'PUBLIC'], ['LAB_REPORT', 'PRIVATE'], ['DO_CERTIFICATE', 'PRIVATE']])
     expect(items[0]!.url).toMatch(/^\/mocks\/uploads\/org\/.+signature=mock$/)
+    // Agronomía y operación solo ven lo que adjuntaron ellos (§14): el agrónomo, su acta; el operario, nada.
+    const mine = async (token: string) => dataOf((await call<Paged<{ kind: string }>>(url, { token })).json).items.map((a) => a.kind)
+    expect(await mine(agronomo)).toEqual(['PHYTO_REPORT'])
+    expect(await mine(operario)).toEqual([])
     // Con el expediente cerrado no se adjunta nada más.
-    expect(failure(await post(url, operario, { key: file(CINTI, 'foto.jpg'), kind: 'PHOTO', title: 'Foto' })).code).toBe('TRC_DOSSIER_CLOSED')
+    const closed = failure(await post(url, operario, { key: file(CINTI, 'foto.jpg'), kind: 'PHOTO', title: 'Foto' }))
+    expect(closed).toMatchObject({ status: 409, code: 'TRC_DOSSIER_CLOSED' })
+    expect(closed.details[0]!.meta).toEqual({ closedAt: '2026-09-24T15:00:00Z', hash: F.lotDossiers[0]!.hash })
     const open = F.lots.find((l) => l.stage === 'DISTILLING')!
     const openUrl = `/v1/lots/${open.id}/attachments`
     expect(failure(await post(openUrl, operario, { key: file(ALTOS, 'ajena.jpg'), kind: 'PHOTO', title: 'De otra bodega' }))).toMatchObject({ status: 422, code: 'TRC_FILE_NOT_FOUND', details: [{ field: 'key' }] })
     const photo = dataOf((await post<{ id: string; visibility: string; mimeType: string }>(openUrl, operario, { key: file(CINTI, 'alambique.jpg'), kind: 'PHOTO', title: 'Alambique' })).json)
     expect(photo).toMatchObject({ visibility: 'PRIVATE', mimeType: 'image/jpeg', createdBy: { role: 'OPERATOR' } })
     expect(dataOf((await post(openUrl, enologa, { key: file(CINTI, 'etiqueta.png'), kind: 'LABEL', title: 'Etiqueta' })).json)).toMatchObject({ visibility: 'PUBLIC' })
+    // Publicar un archivo es cosa de dirección y enología.
+    expect((await post(openUrl, operario, { key: file(CINTI, 'otra.jpg'), kind: 'PHOTO', title: 'Otra', visibility: 'PUBLIC' })).status).toBe(403)
     expect((await post(`${openUrl}/${photo.id}/visibility`, operario, { visibility: 'PUBLIC' })).status).toBe(403)
+    const events = async () => LotTimelineSchema.parse(await get(`/v1/lots/${open.id}/timeline`, enologa)).events.filter((e) => e.type === 'FILE_ATTACHED')
+    const before = (await events()).length
     expect(dataOf((await post(`${openUrl}/${photo.id}/visibility`, enologa, { visibility: 'PUBLIC' })).json)).toMatchObject({ visibility: 'PUBLIC' })
+    // El cambio de visibilidad queda como un evento `FILE_ATTACHED`; repetir la vigente no registra nada.
+    expect((await events()).at(-1)).toMatchObject({ data: { action: 'VISIBILITY_CHANGED', attachmentId: photo.id, previous: 'PRIVATE', visibility: 'PUBLIC' }, visibility: 'INTERNAL' })
+    await post(`${openUrl}/${photo.id}/visibility`, enologa, { visibility: 'PUBLIC' })
+    expect(await events()).toHaveLength(before + 1)
     expect((await post(`${openUrl}/${uid('nope')}/visibility`, enologa, { visibility: 'PUBLIC' })).status).toBe(404)
   })
 

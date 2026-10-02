@@ -305,6 +305,38 @@
         "harvestBatchId": "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712",
         "kg": 9000
       }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2026-03-20T00:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2026-04-13T00:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2026-09-22T13:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      }
     ]
   },
   {
@@ -326,6 +358,18 @@
       {
         "harvestBatchId": "da1eec24-39ab-5e9e-b351-1e0c1df94015",
         "kg": 7400
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2026-09-17T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
       }
     ]
   },
@@ -349,6 +393,254 @@
         "harvestBatchId": "924ad785-abfe-5e0b-9857-83de40cae076",
         "kg": 6800
       }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2026-03-15T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2026-04-08T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2026-04-10T14:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      }
+    ]
+  },
+  {
+    "id": "84645346-8236-5be7-be28-11f041cb1d7a",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "harvestBatchId": "535ed750-3e23-5cd8-94c6-7c454d0ebd9b",
+    "tankCode": "TK-31",
+    "capacityLiters": 5000,
+    "material": "Acero inoxidable AISI 304",
+    "volumeFilledLiters": 3600,
+    "destinationType": "WINE_AGING",
+    "status": "TRANSFERRED",
+    "startDate": "2024-03-15T00:00:00Z",
+    "endDate": "2024-04-08T00:00:00Z",
+    "createdAt": "2024-03-15T16:00:00Z",
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "finalVolumeLiters": 3500,
+    "inputs": [
+      {
+        "harvestBatchId": "535ed750-3e23-5cd8-94c6-7c454d0ebd9b",
+        "kg": 5000
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2024-03-15T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2024-04-08T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2024-04-28T14:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      }
+    ]
+  },
+  {
+    "id": "6e774392-123e-5707-9b10-69c0d75538ad",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "harvestBatchId": "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55",
+    "tankCode": "TK-32",
+    "capacityLiters": 5000,
+    "material": "Acero inoxidable AISI 304",
+    "volumeFilledLiters": 4000,
+    "destinationType": "SINGANI_DIST",
+    "status": "TRANSFERRED",
+    "startDate": "2025-03-15T00:00:00Z",
+    "endDate": "2025-04-03T00:00:00Z",
+    "createdAt": "2025-03-27T14:00:00Z",
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "finalVolumeLiters": 3900,
+    "inputs": [
+      {
+        "harvestBatchId": "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55",
+        "kg": 6000
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2025-03-15T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2025-04-03T00:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2025-04-09T13:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fe50165d-6ba5-563c-9bb6-b6c1a1c7a806",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "harvestBatchId": "3c228caf-ba8d-5e96-9880-1f28560245f8",
+    "tankCode": "TK-33",
+    "capacityLiters": 6000,
+    "material": "Acero inoxidable AISI 316",
+    "volumeFilledLiters": 4700,
+    "destinationType": "SINGANI_DIST",
+    "status": "TRANSFERRED",
+    "startDate": "2024-03-10T00:00:00Z",
+    "endDate": "2024-03-29T00:00:00Z",
+    "createdAt": "2024-03-10T16:00:00Z",
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "finalVolumeLiters": 4600,
+    "inputs": [
+      {
+        "harvestBatchId": "3c228caf-ba8d-5e96-9880-1f28560245f8",
+        "kg": 7000
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2024-03-10T00:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2024-03-29T00:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2024-04-03T13:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      }
+    ]
+  },
+  {
+    "id": "7cd03350-4cc8-5206-95df-3fec384ec4e0",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "harvestBatchId": "36304582-8e8f-5e31-ae49-ff7584e9cb91",
+    "tankCode": "TK-01",
+    "capacityLiters": 5000,
+    "material": "Acero inoxidable AISI 304",
+    "volumeFilledLiters": 3700,
+    "destinationType": "SINGANI_DIST",
+    "status": "TRANSFERRED",
+    "startDate": "2025-03-15T00:00:00Z",
+    "endDate": "2025-04-02T00:00:00Z",
+    "createdAt": "2025-03-15T16:00:00Z",
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "finalVolumeLiters": 3600,
+    "inputs": [
+      {
+        "harvestBatchId": "36304582-8e8f-5e31-ae49-ff7584e9cb91",
+        "kg": 5500
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2025-03-15T00:00:00Z",
+        "by": {
+          "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+          "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+          "fullName": "Lic. Sofía Aramayo",
+          "role": "OWNER"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2025-04-02T00:00:00Z",
+        "by": {
+          "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+          "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+          "fullName": "Lic. Sofía Aramayo",
+          "role": "OWNER"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2025-04-07T13:00:00Z",
+        "by": {
+          "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+          "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+          "fullName": "Lic. Sofía Aramayo",
+          "role": "OWNER"
+        }
+      }
     ]
   },
   {
@@ -370,6 +662,38 @@
       {
         "harvestBatchId": "260262b8-47be-5be5-8b71-d5391032200d",
         "kg": 18400
+      }
+    ],
+    "transitions": [
+      {
+        "status": "FERMENTING",
+        "at": "2026-03-10T00:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "at": "2026-03-21T00:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      {
+        "status": "TRANSFERRED",
+        "at": "2026-03-22T13:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
       }
     ]
   }

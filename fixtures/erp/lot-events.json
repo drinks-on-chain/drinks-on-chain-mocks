@@ -77,8 +77,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-04T09:45:00Z",
-    "recordedAt": "2026-03-04T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
@@ -357,8 +357,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-10T09:45:00Z",
-    "recordedAt": "2025-03-10T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
@@ -669,8 +669,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-18T09:45:00Z",
-    "recordedAt": "2025-03-18T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
@@ -936,8 +936,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-02-26T09:45:00Z",
-    "recordedAt": "2025-02-26T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
@@ -1226,8 +1226,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-02T09:45:00Z",
-    "recordedAt": "2025-03-02T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
@@ -1439,8 +1439,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-09T09:45:00Z",
-    "recordedAt": "2026-03-09T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
@@ -1630,8 +1630,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-20T09:45:00Z",
-    "recordedAt": "2025-03-20T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
@@ -1798,8 +1798,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2025-03-06T09:45:00Z",
-    "recordedAt": "2025-03-06T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
@@ -2043,8 +2043,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-15T09:45:00Z",
-    "recordedAt": "2026-03-15T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
@@ -2162,8 +2162,8 @@
     "seq": 4,
     "type": "PHYTO_DECIDED",
     "occurredAt": "2026-03-22T09:45:00Z",
-    "recordedAt": "2026-03-22T09:45:00Z",
-    "lateEntry": false,
+    "recordedAt": "2026-09-25T12:00:00Z",
+    "lateEntry": true,
     "stage": "HARVEST",
     "actor": {
       "membershipId": "0872115a-241c-5321-b26a-882c88ed7134",
@@ -2253,7 +2253,7 @@
       "productType": "SINGANI",
       "harvestYear": 2026,
       "estimatedBottles": 1800,
-      "rulesTakenAt": "2026-09-25T12:00:00Z"
+      "rulesTakenAt": "2026-09-15T14:00:00Z"
     },
     "resource": {
       "type": "lot",
@@ -2283,7 +2283,7 @@
       "productType": "SINGANI",
       "harvestYear": 2026,
       "estimatedBottles": 1400,
-      "rulesTakenAt": "2026-09-25T12:00:00Z"
+      "rulesTakenAt": "2026-03-18T14:00:00Z"
     },
     "resource": {
       "type": "lot",
@@ -2510,7 +2510,7 @@
       "productType": null,
       "harvestYear": 2026,
       "estimatedBottles": 5200,
-      "rulesTakenAt": "2026-09-25T12:00:00Z"
+      "rulesTakenAt": "2026-09-16T13:30:00Z"
     },
     "resource": {
       "type": "lot",
@@ -2840,7 +2840,7 @@
       "productType": "WINE",
       "harvestYear": 2026,
       "estimatedBottles": 5600,
-      "rulesTakenAt": "2026-09-25T12:00:00Z"
+      "rulesTakenAt": "2026-03-14T13:15:00Z"
     },
     "resource": {
       "type": "lot",
@@ -3076,6 +3076,1485 @@
     "corrected": false
   },
   {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "919e3824-7761-55d8-8521-e103889a6b66",
+    "seq": 1,
+    "type": "LOT_CREATED",
+    "occurredAt": "2024-03-13T14:00:00Z",
+    "recordedAt": "2024-03-13T14:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Lote ALT-L2024-001 creado: Tannat La Angostura 2024",
+    "data": {
+      "reference": "ALT-L2024-001",
+      "productType": "WINE",
+      "harvestYear": 2024,
+      "estimatedBottles": 4500,
+      "rulesTakenAt": "2024-03-13T14:00:00Z"
+    },
+    "resource": {
+      "type": "lot",
+      "id": "6aa776d3-d333-5b1b-b56f-f94a58a39372"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "8b980755-a1e6-5a9c-9428-7f563fe60cde",
+    "seq": 2,
+    "type": "HARVEST_WEIGHED",
+    "occurredAt": "2024-03-14T13:10:00Z",
+    "recordedAt": "2024-03-14T13:10:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "8903bc37-3419-5b49-97f1-bd1811e267eb",
+      "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+      "fullName": "Mario Quispe",
+      "role": "OPERATOR"
+    },
+    "summary": "Pesaje de 5.000 kg desde Cuartel 1 · La Angostura",
+    "data": {
+      "netWeightKg": 5000,
+      "unit": "kg",
+      "harvestBatchCode": "HARV-2024-ANGOSTURA-001"
+    },
+    "resource": {
+      "type": "harvest_batch",
+      "id": "535ed750-3e23-5cd8-94c6-7c454d0ebd9b"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "63d30b80-ba24-57de-ad84-f7f781aaaa66",
+    "seq": 3,
+    "type": "MATURITY_ANALYZED",
+    "occurredAt": "2024-03-14T13:10:00Z",
+    "recordedAt": "2024-03-14T13:10:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "8903bc37-3419-5b49-97f1-bd1811e267eb",
+      "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+      "fullName": "Mario Quispe",
+      "role": "OPERATOR"
+    },
+    "summary": "Análisis de madurez: 24.6 °Bx, pH 3.62, acidez 5.4 g/L",
+    "data": {
+      "brixDegrees": 24.6,
+      "ph": 3.62,
+      "acidityGl": 5.4,
+      "harvestBatchCode": "HARV-2024-ANGOSTURA-001"
+    },
+    "resource": {
+      "type": "maturity_analysis",
+      "id": "2139be63-5e54-5af0-b1c3-c30ea70bf564"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "eaffec88-4bed-57cf-956c-0f09eaa35d17",
+    "seq": 4,
+    "type": "PHYTO_DECIDED",
+    "occurredAt": "2024-03-15T13:00:00Z",
+    "recordedAt": "2024-03-15T13:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "0872115a-241c-5321-b26a-882c88ed7134",
+      "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+      "fullName": "Ing. Diego Paredes",
+      "role": "AGRONOMIST"
+    },
+    "summary": "Dictamen fitosanitario de HARV-2024-ANGOSTURA-001: aprobado",
+    "data": {
+      "decision": "APPROVED",
+      "harvestBatchCode": "HARV-2024-ANGOSTURA-001",
+      "source": "ERP"
+    },
+    "resource": {
+      "type": "phyto_decision",
+      "id": "98e66f4a-39b0-544d-83ad-92cf15bea93f"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "e6569b57-96fb-539b-8141-e18c7f88f745",
+    "seq": 5,
+    "type": "TANK_FILLED",
+    "occurredAt": "2024-03-15T00:00:00Z",
+    "recordedAt": "2024-03-15T16:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Tanque TK-31 lleno con 3.600 L",
+    "data": {
+      "tankCode": "TK-31",
+      "volumeFilledLiters": 3600,
+      "unit": "L",
+      "kg": 5000
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "84645346-8236-5be7-be28-11f041cb1d7a"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "6e774607-91b9-59a3-97f9-401fcf16576d",
+    "seq": 6,
+    "type": "FERMENTATION_STARTED",
+    "occurredAt": "2024-03-15T00:00:00Z",
+    "recordedAt": "2024-03-15T16:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Fermentación iniciada en TK-31",
+    "data": {
+      "tankCode": "TK-31"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "84645346-8236-5be7-be28-11f041cb1d7a"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "33f4b3cb-da58-5d02-a705-3080c3242b6d",
+    "seq": 7,
+    "type": "FERMENTATION_COMPLETED",
+    "occurredAt": "2024-04-08T00:00:00Z",
+    "recordedAt": "2024-04-08T15:00:00Z",
+    "lateEntry": false,
+    "stage": "FERMENTING",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Fermentación completada en TK-31: 3.500 L con destino vino",
+    "data": {
+      "tankCode": "TK-31",
+      "finalVolumeLiters": 3500,
+      "unit": "L",
+      "destinationType": "WINE_AGING"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "84645346-8236-5be7-be28-11f041cb1d7a"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "94b7fd6a-cdc8-51dd-9bfa-0f17bad9d4cb",
+    "seq": 8,
+    "type": "AGING_STARTED",
+    "occurredAt": "2024-04-28T00:00:00Z",
+    "recordedAt": "2024-04-28T14:00:00Z",
+    "lateEntry": false,
+    "stage": "FERMENTING",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Crianza en Barrica por 12 meses: 3.400 L",
+    "data": {
+      "plannedMonths": 12,
+      "volumeLiters": 3400,
+      "unit": "L",
+      "unlockDate": "2025-04-28"
+    },
+    "resource": {
+      "type": "wine_aging_batch",
+      "id": "625ba51c-6c64-5326-93c0-e399db486c43"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "ec77ca59-f862-57b6-9758-a9576dea03db",
+    "seq": 9,
+    "type": "LOCK_RELEASED",
+    "occurredAt": "2025-04-28T04:05:00Z",
+    "recordedAt": "2025-04-29T04:05:00Z",
+    "lateEntry": false,
+    "stage": "AGING",
+    "actor": null,
+    "summary": "Crianza cumplida: 12 meses desde el 2024-04-28",
+    "data": {
+      "kind": "AGING",
+      "unlockDate": "2025-04-28",
+      "sourceId": "625ba51c-6c64-5326-93c0-e399db486c43"
+    },
+    "resource": {
+      "type": "wine_aging_batch",
+      "id": "625ba51c-6c64-5326-93c0-e399db486c43"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "a04e4615-5dc3-53ac-9b44-8b7f6fff14f4",
+    "seq": 10,
+    "type": "BOTTLED",
+    "occurredAt": "2025-08-01T00:00:00Z",
+    "recordedAt": "2025-08-01T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Embotellado de 4.400 botellas de 75 cL al 13,8 % (ALT-2025-WINE-001)",
+    "data": {
+      "lotCode": "ALT-2025-WINE-001",
+      "bottles": 4400,
+      "formatCl": 75,
+      "finalAlcoholAbv": 13.8,
+      "balance": {
+        "availableLiters": 3400,
+        "waterDilutionLiters": 0,
+        "bottledLiters": 3300,
+        "leftoverLiters": 0,
+        "lossLiters": 100,
+        "lossPercent": 2.94,
+        "maxLossPercent": 5,
+        "pureAlcohol": null,
+        "maxBottles": 4533
+      }
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "71f363c1-9ea2-51aa-9f57-08f55fc41da7",
+    "seq": 11,
+    "type": "BOTTLE_CODES_GENERATED",
+    "occurredAt": "2025-08-01T15:00:00Z",
+    "recordedAt": "2025-08-01T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "4.400 códigos de botella generados",
+    "data": {
+      "count": 4400
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "id": "d63a549c-8deb-5f87-a906-44f986bcc7eb",
+    "seq": 12,
+    "type": "LAB_REGISTERED",
+    "occurredAt": "2025-08-06T00:00:00Z",
+    "recordedAt": "2025-08-06T16:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Análisis de laboratorio de Laboratorio CENAVIT Tarija: no conforme",
+    "data": {
+      "conformity": "NON_CONFORMING",
+      "laboratory": "Laboratorio CENAVIT Tarija"
+    },
+    "resource": {
+      "type": "lab_analysis",
+      "id": "d9050da6-5d4b-5595-a62e-a661c04acb51"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "12d68a14-28c5-5564-a3d2-518905cf3bd2",
+    "seq": 1,
+    "type": "LOT_CREATED",
+    "occurredAt": "2025-03-12T14:00:00Z",
+    "recordedAt": "2025-03-12T14:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Lote ALT-L2025-004 creado: Singani El Portillo 2025",
+    "data": {
+      "reference": "ALT-L2025-004",
+      "productType": "SINGANI",
+      "harvestYear": 2025,
+      "estimatedBottles": 1050,
+      "rulesTakenAt": "2025-03-12T14:00:00Z"
+    },
+    "resource": {
+      "type": "lot",
+      "id": "a9a5d323-2e45-57b5-9803-8b633c538f22"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "d7ae08ec-4739-5ac6-8880-e9df25c881f3",
+    "seq": 2,
+    "type": "HARVEST_WEIGHED",
+    "occurredAt": "2025-03-14T13:20:00Z",
+    "recordedAt": "2025-03-26T14:00:00Z",
+    "lateEntry": true,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "8903bc37-3419-5b49-97f1-bd1811e267eb",
+      "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+      "fullName": "Mario Quispe",
+      "role": "OPERATOR"
+    },
+    "summary": "Pesaje de 6.000 kg desde Cuartel 3 · El Portillo",
+    "data": {
+      "netWeightKg": 6000,
+      "unit": "kg",
+      "harvestBatchCode": "HARV-2025-PORTILLO-010"
+    },
+    "resource": {
+      "type": "harvest_batch",
+      "id": "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "d8fe4595-ae48-5249-a788-770ff37222c9",
+    "seq": 3,
+    "type": "MATURITY_ANALYZED",
+    "occurredAt": "2025-03-14T15:00:00Z",
+    "recordedAt": "2025-03-26T15:00:00Z",
+    "lateEntry": true,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Análisis de madurez: 22.8 °Bx, pH 3.41, acidez 6.1 g/L",
+    "data": {
+      "brixDegrees": 22.8,
+      "ph": 3.41,
+      "acidityGl": 6.1,
+      "harvestBatchCode": "HARV-2025-PORTILLO-010"
+    },
+    "resource": {
+      "type": "maturity_analysis",
+      "id": "6904a299-21b3-5f4c-8e6d-dfd4e2d5be46"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "e608dc89-fd83-5388-a2f8-5118d17508aa",
+    "seq": 4,
+    "type": "PHYTO_DECIDED",
+    "occurredAt": "2025-03-15T13:00:00Z",
+    "recordedAt": "2025-03-26T16:00:00Z",
+    "lateEntry": true,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "0872115a-241c-5321-b26a-882c88ed7134",
+      "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+      "fullName": "Ing. Diego Paredes",
+      "role": "AGRONOMIST"
+    },
+    "summary": "Dictamen fitosanitario de HARV-2025-PORTILLO-010: aprobado",
+    "data": {
+      "decision": "APPROVED",
+      "harvestBatchCode": "HARV-2025-PORTILLO-010",
+      "source": "ERP"
+    },
+    "resource": {
+      "type": "phyto_decision",
+      "id": "81d598a3-f1da-519a-9841-710580c8c801"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "76505d6b-d43c-5c92-9004-221df6c3f2ff",
+    "seq": 5,
+    "type": "TANK_FILLED",
+    "occurredAt": "2025-03-15T00:00:00Z",
+    "recordedAt": "2025-03-27T14:00:00Z",
+    "lateEntry": true,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Tanque TK-32 lleno con 4.000 L",
+    "data": {
+      "tankCode": "TK-32",
+      "volumeFilledLiters": 4000,
+      "unit": "L",
+      "kg": 6000
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "6e774392-123e-5707-9b10-69c0d75538ad"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "f5f7dd78-9195-50f1-a243-5318c5cb1f84",
+    "seq": 6,
+    "type": "FERMENTATION_STARTED",
+    "occurredAt": "2025-03-15T00:00:00Z",
+    "recordedAt": "2025-03-27T14:00:00Z",
+    "lateEntry": true,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Fermentación iniciada en TK-32",
+    "data": {
+      "tankCode": "TK-32"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "6e774392-123e-5707-9b10-69c0d75538ad"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "353c9051-3b65-5a4a-a151-4a17bf18091c",
+    "seq": 7,
+    "type": "FERMENTATION_COMPLETED",
+    "occurredAt": "2025-04-03T00:00:00Z",
+    "recordedAt": "2025-04-03T15:00:00Z",
+    "lateEntry": false,
+    "stage": "FERMENTING",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Fermentación completada en TK-32: 3.900 L con destino singani",
+    "data": {
+      "tankCode": "TK-32",
+      "finalVolumeLiters": 3900,
+      "unit": "L",
+      "destinationType": "SINGANI_DIST"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "6e774392-123e-5707-9b10-69c0d75538ad"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "f2e00b90-d698-5a17-9323-4b84a10c3a04",
+    "seq": 8,
+    "type": "DISTILLATION_STARTED",
+    "occurredAt": "2025-04-09T00:00:00Z",
+    "recordedAt": "2025-04-09T13:00:00Z",
+    "lateEntry": false,
+    "stage": "DISTILLING",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Destilación en Alambique de cobre AL-A1 de 3.900 L",
+    "data": {
+      "inputVolumeLiters": 3900,
+      "unit": "L",
+      "equipmentIdentifier": "Alambique de cobre AL-A1"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "3d78d3c7-a0fb-5d25-8525-2486e6109b19",
+    "seq": 9,
+    "type": "DISTILLATION_CLOSED",
+    "occurredAt": "2025-04-13T00:00:00Z",
+    "recordedAt": "2025-04-13T19:00:00Z",
+    "lateEntry": false,
+    "stage": "RESTING",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Destilación cerrada: corazón de 480 L al 62 %; reposo hasta 2025-10-10",
+    "data": {
+      "headsLiters": 40,
+      "heartLiters": 480,
+      "tailsLiters": 70,
+      "heartAbvPercent": 62,
+      "vinasseLiters": null,
+      "restUntil": "2025-10-10",
+      "unit": "L"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "ec7be363-d9f7-596e-adf8-04e30fae6d69",
+    "seq": 10,
+    "type": "LOCK_RELEASED",
+    "occurredAt": "2025-10-10T04:05:00Z",
+    "recordedAt": "2025-10-10T04:05:00Z",
+    "lateEntry": false,
+    "stage": "RESTING",
+    "actor": null,
+    "summary": "Reposo cumplido: 180 días tras la destilación",
+    "data": {
+      "kind": "REST",
+      "unlockDate": "2025-10-10",
+      "sourceId": "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "b8510883-b74d-5fbc-a236-a047f7e10097",
+    "seq": 11,
+    "type": "BOTTLED",
+    "occurredAt": "2025-11-29T00:00:00Z",
+    "recordedAt": "2025-11-29T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Embotellado de 1.040 botellas de 70 cL al 40 % (ALT-2025-SINGANI-002)",
+    "data": {
+      "lotCode": "ALT-2025-SINGANI-002",
+      "bottles": 1040,
+      "formatCl": 70,
+      "finalAlcoholAbv": 40,
+      "balance": {
+        "availableLiters": 480,
+        "waterDilutionLiters": 260,
+        "bottledLiters": 728,
+        "leftoverLiters": 0,
+        "lossLiters": 12,
+        "lossPercent": 1.62,
+        "maxLossPercent": 5,
+        "pureAlcohol": {
+          "availableLiters": 297.6,
+          "bottledLiters": 291.2
+        },
+        "maxBottles": 1057
+      }
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "10b56de9-cfbd-5681-b953-bc05eeeea58c"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "edf27b22-5184-5d01-a1cd-42fcd55631a8",
+    "seq": 12,
+    "type": "BOTTLE_CODES_GENERATED",
+    "occurredAt": "2025-11-29T15:00:00Z",
+    "recordedAt": "2025-11-29T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "1.040 códigos de botella generados",
+    "data": {
+      "count": 1040
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "10b56de9-cfbd-5681-b953-bc05eeeea58c"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "id": "d4bedf09-6a4d-572c-84f4-07d35f8422ad",
+    "seq": 13,
+    "type": "LAB_REGISTERED",
+    "occurredAt": "2025-12-02T00:00:00Z",
+    "recordedAt": "2025-12-02T16:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Análisis de laboratorio de Laboratorio CENAVIT Tarija: conforme",
+    "data": {
+      "conformity": "CONFORMING",
+      "laboratory": "Laboratorio CENAVIT Tarija"
+    },
+    "resource": {
+      "type": "lab_analysis",
+      "id": "b5857659-0e30-5a0a-b0a5-22c400bd9f76"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "4bbd5139-7266-5938-8e37-1af0da9abac0",
+    "seq": 1,
+    "type": "LOT_CREATED",
+    "occurredAt": "2024-03-07T14:00:00Z",
+    "recordedAt": "2024-03-07T14:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Lote CVJ-L2024-001 creado: Singani Los Parrales 2024",
+    "data": {
+      "reference": "CVJ-L2024-001",
+      "productType": "SINGANI",
+      "harvestYear": 2024,
+      "estimatedBottles": 1150,
+      "rulesTakenAt": "2024-03-07T14:00:00Z"
+    },
+    "resource": {
+      "type": "lot",
+      "id": "63154759-c039-52b4-b81c-08ca11044c00"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "f9495e75-d3a1-594d-9dd2-375c23356637",
+    "seq": 2,
+    "type": "HARVEST_WEIGHED",
+    "occurredAt": "2024-03-09T13:30:00Z",
+    "recordedAt": "2024-03-09T13:30:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "75b76250-9520-50b8-9563-49384bb7d560",
+      "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "fullName": "Rubén Flores",
+      "role": "OPERATOR"
+    },
+    "summary": "Pesaje de 7.000 kg desde Parcela 1 · Los Parrales",
+    "data": {
+      "netWeightKg": 7000,
+      "unit": "kg",
+      "harvestBatchCode": "HARV-2024-PARRALES-001"
+    },
+    "resource": {
+      "type": "harvest_batch",
+      "id": "3c228caf-ba8d-5e96-9880-1f28560245f8"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "5fb5e495-5a91-5230-836f-9cc040bc0246",
+    "seq": 3,
+    "type": "MATURITY_ANALYZED",
+    "occurredAt": "2024-03-09T13:30:00Z",
+    "recordedAt": "2024-03-09T13:30:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "75b76250-9520-50b8-9563-49384bb7d560",
+      "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "fullName": "Rubén Flores",
+      "role": "OPERATOR"
+    },
+    "summary": "Análisis de madurez: 23.1 °Bx, pH 3.39, acidez 6 g/L",
+    "data": {
+      "brixDegrees": 23.1,
+      "ph": 3.39,
+      "acidityGl": 6,
+      "harvestBatchCode": "HARV-2024-PARRALES-001"
+    },
+    "resource": {
+      "type": "maturity_analysis",
+      "id": "67f8a73f-3afe-55aa-8e99-eda89b466d5e"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "91ed061e-73be-5de5-b431-6969a7f2cd46",
+    "seq": 4,
+    "type": "PHYTO_DECIDED",
+    "occurredAt": "2024-03-10T13:00:00Z",
+    "recordedAt": "2024-03-10T13:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "53f25b09-b550-511d-a01c-031141d137bc",
+      "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
+      "fullName": "Ing. Tomás Flores",
+      "role": "AGRONOMIST"
+    },
+    "summary": "Dictamen fitosanitario de HARV-2024-PARRALES-001: aprobado",
+    "data": {
+      "decision": "APPROVED",
+      "harvestBatchCode": "HARV-2024-PARRALES-001",
+      "source": "ERP"
+    },
+    "resource": {
+      "type": "phyto_decision",
+      "id": "860bfa0f-b758-5193-9e44-9c240b9bc283"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "2ad7933c-b6a9-5922-b02f-ae40b28f54d8",
+    "seq": 5,
+    "type": "TANK_FILLED",
+    "occurredAt": "2024-03-10T00:00:00Z",
+    "recordedAt": "2024-03-10T16:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Tanque TK-33 lleno con 4.700 L",
+    "data": {
+      "tankCode": "TK-33",
+      "volumeFilledLiters": 4700,
+      "unit": "L",
+      "kg": 7000
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "fe50165d-6ba5-563c-9bb6-b6c1a1c7a806"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "b104abe0-f02d-5e92-9ffc-c5d09892be74",
+    "seq": 6,
+    "type": "FERMENTATION_STARTED",
+    "occurredAt": "2024-03-10T00:00:00Z",
+    "recordedAt": "2024-03-10T16:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Fermentación iniciada en TK-33",
+    "data": {
+      "tankCode": "TK-33"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "fe50165d-6ba5-563c-9bb6-b6c1a1c7a806"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "d3c94e02-4330-56f8-a972-9396fb708544",
+    "seq": 7,
+    "type": "FERMENTATION_COMPLETED",
+    "occurredAt": "2024-03-29T00:00:00Z",
+    "recordedAt": "2024-03-29T15:00:00Z",
+    "lateEntry": false,
+    "stage": "FERMENTING",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Fermentación completada en TK-33: 4.600 L con destino singani",
+    "data": {
+      "tankCode": "TK-33",
+      "finalVolumeLiters": 4600,
+      "unit": "L",
+      "destinationType": "SINGANI_DIST"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "fe50165d-6ba5-563c-9bb6-b6c1a1c7a806"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "62c5731d-e9f8-5b1a-b612-0f94c1cc3ed6",
+    "seq": 8,
+    "type": "DISTILLATION_STARTED",
+    "occurredAt": "2024-04-03T00:00:00Z",
+    "recordedAt": "2024-04-03T13:00:00Z",
+    "lateEntry": false,
+    "stage": "DISTILLING",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Destilación en Alambique de cobre AL-02 de 4.600 L",
+    "data": {
+      "inputVolumeLiters": 4600,
+      "unit": "L",
+      "equipmentIdentifier": "Alambique de cobre AL-02"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "00bc292a-8178-5216-8578-6d97a524f182"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "8f2873ff-0047-5dbe-a0d0-c20c0a0f3147",
+    "seq": 9,
+    "type": "DISTILLATION_CLOSED",
+    "occurredAt": "2024-04-06T00:00:00Z",
+    "recordedAt": "2024-04-06T19:00:00Z",
+    "lateEntry": false,
+    "stage": "RESTING",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Destilación cerrada: corazón de 560 L al 61 %; reposo hasta 2024-10-03",
+    "data": {
+      "headsLiters": 50,
+      "heartLiters": 560,
+      "tailsLiters": 85,
+      "heartAbvPercent": 61,
+      "vinasseLiters": null,
+      "restUntil": "2024-10-03",
+      "unit": "L"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "00bc292a-8178-5216-8578-6d97a524f182"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "f75ade9f-f697-5967-87b3-4db3548b8f31",
+    "seq": 10,
+    "type": "LOCK_RELEASED",
+    "occurredAt": "2024-10-03T04:05:00Z",
+    "recordedAt": "2024-10-03T04:05:00Z",
+    "lateEntry": false,
+    "stage": "RESTING",
+    "actor": null,
+    "summary": "Reposo cumplido: 180 días tras la destilación",
+    "data": {
+      "kind": "REST",
+      "unlockDate": "2024-10-03",
+      "sourceId": "00bc292a-8178-5216-8578-6d97a524f182"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "00bc292a-8178-5216-8578-6d97a524f182"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "04422f36-5204-50d7-98a4-c010c176d316",
+    "seq": 11,
+    "type": "BOTTLED",
+    "occurredAt": "2025-05-13T00:00:00Z",
+    "recordedAt": "2025-05-13T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "Embotellado de 1.120 botellas de 75 cL al 40 % (CVJ-2025-SINGANI-001)",
+    "data": {
+      "lotCode": "CVJ-2025-SINGANI-001",
+      "bottles": 1120,
+      "formatCl": 75,
+      "finalAlcoholAbv": 40,
+      "balance": {
+        "availableLiters": 560,
+        "waterDilutionLiters": 290,
+        "bottledLiters": 840,
+        "leftoverLiters": 0,
+        "lossLiters": 10,
+        "lossPercent": 1.18,
+        "maxLossPercent": 5,
+        "pureAlcohol": {
+          "availableLiters": 341.6,
+          "bottledLiters": 336
+        },
+        "maxBottles": 1133
+      }
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "1281f02c-e882-5df1-aea7-eab5c8919350"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "eeea913c-8804-5589-a265-0dd2403eb0b8",
+    "seq": 12,
+    "type": "BOTTLE_CODES_GENERATED",
+    "occurredAt": "2025-05-13T15:00:00Z",
+    "recordedAt": "2025-05-13T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    },
+    "summary": "1.120 códigos de botella generados",
+    "data": {
+      "count": 1120
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "1281f02c-e882-5df1-aea7-eab5c8919350"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "id": "79df5bc4-a14c-5675-a0d2-2b7486eda2bf",
+    "seq": 13,
+    "type": "LOT_DISCARDED",
+    "occurredAt": "2026-08-26T15:00:00Z",
+    "recordedAt": "2026-08-26T15:00:00Z",
+    "lateEntry": false,
+    "stage": "DISCARDED",
+    "actor": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    },
+    "summary": "Lote descartado: Partida retirada por turbidez detectada en el control de almacén",
+    "data": {
+      "reason": "Partida retirada por turbidez detectada en el control de almacén",
+      "previousStage": "BOTTLED",
+      "voidedBottleCodes": 1120
+    },
+    "resource": {
+      "type": "lot",
+      "id": "63154759-c039-52b4-b81c-08ca11044c00"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "4de4f0d8-870d-55ec-aea1-3ca74374f7a4",
+    "seq": 1,
+    "type": "LOT_CREATED",
+    "occurredAt": "2025-03-12T14:00:00Z",
+    "recordedAt": "2025-03-12T14:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Lote CUR-L2025-001 creado: Singani Casa Uriondo 2025",
+    "data": {
+      "reference": "CUR-L2025-001",
+      "productType": "SINGANI",
+      "harvestYear": 2025,
+      "estimatedBottles": 900,
+      "rulesTakenAt": "2025-03-12T14:00:00Z"
+    },
+    "resource": {
+      "type": "lot",
+      "id": "e18ddfe2-3347-5d85-85c9-8518df8bab15"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "f6e86461-b15d-5694-ba26-c40d91a8b143",
+    "seq": 2,
+    "type": "HARVEST_WEIGHED",
+    "occurredAt": "2025-03-14T13:45:00Z",
+    "recordedAt": "2025-03-14T13:45:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Pesaje de 5.500 kg desde Finca La Cabaña · Parrales del Río",
+    "data": {
+      "netWeightKg": 5500,
+      "unit": "kg",
+      "harvestBatchCode": "HARV-2025-RIO-001"
+    },
+    "resource": {
+      "type": "harvest_batch",
+      "id": "36304582-8e8f-5e31-ae49-ff7584e9cb91"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "7162ac2f-f9de-57d0-85b1-4b3a2bb19304",
+    "seq": 3,
+    "type": "MATURITY_ANALYZED",
+    "occurredAt": "2025-03-14T13:45:00Z",
+    "recordedAt": "2025-03-14T13:45:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Análisis de madurez: 22.4 °Bx, pH 3.45, acidez 6.2 g/L",
+    "data": {
+      "brixDegrees": 22.4,
+      "ph": 3.45,
+      "acidityGl": 6.2,
+      "harvestBatchCode": "HARV-2025-RIO-001"
+    },
+    "resource": {
+      "type": "maturity_analysis",
+      "id": "81b0bb46-5f2f-52f3-9e65-a33b05a8ad50"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "5694dc69-9e6f-52c9-82b7-4e4c500b382f",
+    "seq": 4,
+    "type": "PHYTO_DECIDED",
+    "occurredAt": "2025-03-15T13:00:00Z",
+    "recordedAt": "2025-03-15T13:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Dictamen fitosanitario de HARV-2025-RIO-001: aprobado",
+    "data": {
+      "decision": "APPROVED",
+      "harvestBatchCode": "HARV-2025-RIO-001",
+      "source": "ERP"
+    },
+    "resource": {
+      "type": "phyto_decision",
+      "id": "28f0a175-d9b9-5316-a74a-bc1efbcd363f"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "4b5d5ae8-4c57-5d31-b018-6550aef6cde5",
+    "seq": 5,
+    "type": "TANK_FILLED",
+    "occurredAt": "2025-03-15T00:00:00Z",
+    "recordedAt": "2025-03-15T16:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Tanque TK-01 lleno con 3.700 L",
+    "data": {
+      "tankCode": "TK-01",
+      "volumeFilledLiters": 3700,
+      "unit": "L",
+      "kg": 5500
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "7cd03350-4cc8-5206-95df-3fec384ec4e0"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "3e7d6de1-5d37-5e8e-948d-54326de631a8",
+    "seq": 6,
+    "type": "FERMENTATION_STARTED",
+    "occurredAt": "2025-03-15T00:00:00Z",
+    "recordedAt": "2025-03-15T16:00:00Z",
+    "lateEntry": false,
+    "stage": "HARVEST",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Fermentación iniciada en TK-01",
+    "data": {
+      "tankCode": "TK-01"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "7cd03350-4cc8-5206-95df-3fec384ec4e0"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "c0f062dd-fbc1-531d-89ef-7efe288bcc1a",
+    "seq": 7,
+    "type": "FERMENTATION_COMPLETED",
+    "occurredAt": "2025-04-02T00:00:00Z",
+    "recordedAt": "2025-04-02T15:00:00Z",
+    "lateEntry": false,
+    "stage": "FERMENTING",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Fermentación completada en TK-01: 3.600 L con destino singani",
+    "data": {
+      "tankCode": "TK-01",
+      "finalVolumeLiters": 3600,
+      "unit": "L",
+      "destinationType": "SINGANI_DIST"
+    },
+    "resource": {
+      "type": "fermentation_tank",
+      "id": "7cd03350-4cc8-5206-95df-3fec384ec4e0"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "af2bc43c-bfbb-5eaa-81c9-e2d67523ccb1",
+    "seq": 8,
+    "type": "DISTILLATION_STARTED",
+    "occurredAt": "2025-04-07T00:00:00Z",
+    "recordedAt": "2025-04-07T13:00:00Z",
+    "lateEntry": false,
+    "stage": "DISTILLING",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Destilación en Alambique de cobre CU-01 de 3.600 L",
+    "data": {
+      "inputVolumeLiters": 3600,
+      "unit": "L",
+      "equipmentIdentifier": "Alambique de cobre CU-01"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "f9b48669-3b05-5bb4-9251-7905c2e343fc"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "605a6d95-61fe-5bb9-b13d-c4b4ec1936f5",
+    "seq": 9,
+    "type": "DISTILLATION_CLOSED",
+    "occurredAt": "2025-04-10T00:00:00Z",
+    "recordedAt": "2025-04-10T19:00:00Z",
+    "lateEntry": false,
+    "stage": "RESTING",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Destilación cerrada: corazón de 440 L al 61 %; reposo hasta 2025-10-07",
+    "data": {
+      "headsLiters": 38,
+      "heartLiters": 440,
+      "tailsLiters": 66,
+      "heartAbvPercent": 61,
+      "vinasseLiters": null,
+      "restUntil": "2025-10-07",
+      "unit": "L"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "f9b48669-3b05-5bb4-9251-7905c2e343fc"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "955a9ce5-8a5b-511e-8546-81ad3807539d",
+    "seq": 10,
+    "type": "LOCK_RELEASED",
+    "occurredAt": "2025-10-07T04:05:00Z",
+    "recordedAt": "2025-10-07T04:05:00Z",
+    "lateEntry": false,
+    "stage": "RESTING",
+    "actor": null,
+    "summary": "Reposo cumplido: 180 días tras la destilación",
+    "data": {
+      "kind": "REST",
+      "unlockDate": "2025-10-07",
+      "sourceId": "f9b48669-3b05-5bb4-9251-7905c2e343fc"
+    },
+    "resource": {
+      "type": "production_batch",
+      "id": "f9b48669-3b05-5bb4-9251-7905c2e343fc"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "207aff0a-28ad-5be0-a2d1-94fc816034ee",
+    "seq": 11,
+    "type": "BOTTLED",
+    "occurredAt": "2026-03-09T00:00:00Z",
+    "recordedAt": "2026-03-09T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Embotellado de 880 botellas de 75 cL al 40 % (CUR-2026-SINGANI-001)",
+    "data": {
+      "lotCode": "CUR-2026-SINGANI-001",
+      "bottles": 880,
+      "formatCl": 75,
+      "finalAlcoholAbv": 40,
+      "balance": {
+        "availableLiters": 440,
+        "waterDilutionLiters": 228,
+        "bottledLiters": 660,
+        "leftoverLiters": 0,
+        "lossLiters": 8,
+        "lossPercent": 1.2,
+        "maxLossPercent": 5,
+        "pureAlcohol": {
+          "availableLiters": 268.4,
+          "bottledLiters": 264
+        },
+        "maxBottles": 890
+      }
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "7a347a28-d916-5e64-8fea-25a28abcd9e6"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "a24f2d9c-4ddf-557f-ba82-d30b507f3780",
+    "seq": 12,
+    "type": "BOTTLE_CODES_GENERATED",
+    "occurredAt": "2026-03-09T15:00:00Z",
+    "recordedAt": "2026-03-09T15:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "880 códigos de botella generados",
+    "data": {
+      "count": 880
+    },
+    "resource": {
+      "type": "bottling_batch",
+      "id": "7a347a28-d916-5e64-8fea-25a28abcd9e6"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "id": "8189a1a7-2ef2-585a-9a77-25af4f61faa9",
+    "seq": 13,
+    "type": "LAB_REGISTERED",
+    "occurredAt": "2026-03-12T00:00:00Z",
+    "recordedAt": "2026-03-12T16:00:00Z",
+    "lateEntry": false,
+    "stage": "BOTTLED",
+    "actor": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "summary": "Análisis de laboratorio de Laboratorio CENAVIT Tarija: conforme",
+    "data": {
+      "conformity": "CONFORMING",
+      "laboratory": "Laboratorio CENAVIT Tarija"
+    },
+    "resource": {
+      "type": "lab_analysis",
+      "id": "633c1f3a-dbef-5766-a16a-52127d1bd145"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
     "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
     "id": "09ddd099-62f1-5eb8-a75f-7510b7558d25",
     "seq": 1,
@@ -3096,7 +4575,7 @@
       "productType": "SINGANI",
       "harvestYear": 2026,
       "estimatedBottles": 3000,
-      "rulesTakenAt": "2026-09-25T12:00:00Z"
+      "rulesTakenAt": "2026-03-07T14:00:00Z"
     },
     "resource": {
       "type": "lot",
@@ -3177,13 +4656,21 @@
       "fullName": "Rubén Flores",
       "role": "OPERATOR"
     },
-    "summary": "Corrección de temperatureAtIntakeC: Lectura del termómetro mal transcrita en la planilla de recepción",
+    "summary": "Corrección de el pesaje: Lectura del termómetro mal transcrita en la planilla de recepción",
     "data": {
+      "correctionId": "c1b6c7c3-c8d3-5221-a986-b46ab2874a22",
+      "target": {
+        "type": "HARVEST_BATCH",
+        "id": "260262b8-47be-5be5-8b71-d5391032200d"
+      },
       "targetType": "HARVEST_BATCH",
       "kind": "AMEND",
       "fields": [
         "temperatureAtIntakeC"
-      ]
+      ],
+      "reason": "Lectura del termómetro mal transcrita en la planilla de recepción",
+      "openedIssueIds": [],
+      "resolvedIssueIds": []
     },
     "resource": {
       "type": "correction",
@@ -3716,10 +5203,13 @@
       "fullName": "Lic. Lucía Rojas",
       "role": "ENOLOGIST"
     },
-    "summary": "Archivo adjunto: Etiqueta frontal aprobada",
+    "summary": "Archivo adjuntado: Etiqueta frontal aprobada (público)",
     "data": {
+      "action": "ATTACHED",
       "kind": "LABEL",
-      "visibility": "PUBLIC"
+      "title": "Etiqueta frontal aprobada",
+      "visibility": "PUBLIC",
+      "sha256": "e325c65f1d280fa3a5f11c593b05b7fc4442ce0297a447220d8bbbf385a499f0"
     },
     "resource": {
       "type": "lot_attachment",
@@ -3770,10 +5260,13 @@
       "fullName": "Rosa Camargo",
       "role": "OWNER"
     },
-    "summary": "Archivo adjunto: Certificado de la D.O. Singani 2026",
+    "summary": "Archivo adjuntado: Certificado de la D.O. Singani 2026 (privado)",
     "data": {
+      "action": "ATTACHED",
       "kind": "DO_CERTIFICATE",
-      "visibility": "PRIVATE"
+      "title": "Certificado de la D.O. Singani 2026",
+      "visibility": "PRIVATE",
+      "sha256": "1242827d53d66d52c2274e60ad059305257ba067e67b7befa1a9b82126327cbe"
     },
     "resource": {
       "type": "lot_attachment",
@@ -3797,11 +5290,12 @@
       "fullName": "Rosa Camargo",
       "role": "OWNER"
     },
-    "summary": "Expediente cerrado con la huella f4867f532d01…",
+    "summary": "Expediente cerrado con la huella 96204f58e5b4…",
     "data": {
-      "hash": "f4867f532d0179e211524c9f1aee5ec65e0d6c79a42f3ec923d4c2b29e291141",
+      "hash": "96204f58e5b47a3929ca42cf38d3d4ab2816107c581a62c1dfe7a6aa99549d5c",
       "algorithm": "sha256/jcs-rfc8785",
-      "bottleCodes": 2950
+      "bottleCodes": 2950,
+      "bottleMerkleRoot": "7a1caa0a457bbfaeea8f64c57adf82a85c5e7c1d454f6a21f53bd96f56914ff1"
     },
     "resource": {
       "type": "lot_dossier",

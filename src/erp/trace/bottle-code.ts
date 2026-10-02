@@ -1,4 +1,4 @@
-import { sha256Hex } from '../../shared/crypto'
+import { fromHex, sha256, sha256Hex, toHex } from '../../shared/crypto'
 
 // Códigos de botella (contrato O2 §7.1, A-26): 8 caracteres del alfabeto Crockford (sin I, L, O,
 // U): 7 de carga + 1 de control Luhn mod 32. Mismo cálculo que `domain/bottle-code.ts` del backend.
@@ -111,10 +111,19 @@ export interface MerkleLeafInput {
   salt: string
 }
 
+/** Hoja de una botella: `SHA-256("{serie}:{código}:{sal}")` sobre el texto UTF-8, en hexadecimal. */
 export const merkleLeaf = (leaf: MerkleLeafInput): string => sha256Hex(`${leaf.serial}:${leaf.code}:${leaf.salt}`)
 
-/** Nodo padre: SHA-256 de la concatenación en hexadecimal de sus dos hijos (izquierdo + derecho). */
-export const merkleParent = (left: string, right: string): string => sha256Hex(left + right)
+/**
+ * Nodo padre: `SHA-256(izquierdo ‖ derecho)` sobre los 32 **bytes** de cada resumen (no sobre su
+ * texto hexadecimal), como `domain/merkle.ts` del backend.
+ */
+export function merkleParent(left: string, right: string): string {
+  const bytes = new Uint8Array(64)
+  bytes.set(fromHex(left), 0)
+  bytes.set(fromHex(right), 32)
+  return toHex(sha256(bytes))
+}
 
 /** Niveles del árbol, de las hojas a la raíz. Un nodo sin pareja sube tal cual al nivel siguiente. */
 export function merkleLevels(leaves: readonly string[]): string[][] {
@@ -152,7 +161,18 @@ export function merkleProof(levels: readonly string[][], index: number): MerkleS
   return path
 }
 
-/** Recalcula la raíz desde una hoja y su prueba (lo que hace el visor para verificar una botella). */
+/**
+ * Recalcula la raíz desde una hoja y su prueba (lo que hace el visor para verificar una botella).
+ * `side` es el lado del hermano: `L` → `SHA-256(hermano ‖ actual)`; `R` → `SHA-256(actual ‖ hermano)`.
+ */
 export function merkleRootFromProof(leaf: string, path: readonly MerkleStep[]): string {
   return path.reduce((hash, step) => (step.side === 'L' ? merkleParent(step.hash, hash) : merkleParent(hash, step.hash)), leaf)
+}
+
+const HASH = /^[0-9a-f]{64}$/i
+
+/** ¿La prueba lleva de la hoja a la raíz? (`verifyMerkleProof` del backend). */
+export function verifyMerkleProof(leaf: string, path: readonly MerkleStep[], root: string): boolean {
+  if (!HASH.test(leaf) || path.some((step) => !HASH.test(step.hash))) return false
+  return merkleRootFromProof(leaf, path) === root.toLowerCase()
 }

@@ -32,6 +32,7 @@ import {
   restStatusOf,
   startTank,
 } from '../../trace/records'
+import { withIssueReevaluation } from '../../trace/dossier'
 import { canSee, scoped, trace, TRACE_READERS, type AuthContext } from '../auth-context'
 import { getErpDb, tick } from '../db'
 import { forbidden, notFound } from '../errors'
@@ -201,7 +202,11 @@ export const winemakingRoutes: RouteSpec[] = [
       const a = findAging(auth, params.id!)
       const body = await parseCreateBody(request, DiscardWineAgingSchema)
       tick()
-      return ok(agingView(discardAging(getErpDb(), traceCtx(auth), a, body), true))
+      const db = getErpDb()
+      const ctx = traceCtx(auth)
+      const lot = db.lots.find((l) => l.id === a.lotId) ?? null
+      // Las incidencias abiertas del lote se reevalúan (p. ej. una fuente abierta en un lote ya embotellado).
+      return ok(agingView(withIssueReevaluation(db, ctx, lot, () => discardAging(db, ctx, a, body)), true))
     },
   },
 
@@ -238,7 +243,10 @@ export const winemakingRoutes: RouteSpec[] = [
       const p = findProduction(auth, params.id!)
       const body = await parseBody(request, DiscardProductionBatchSchema)
       tick()
-      return ok(productionView(discardDistillation(getErpDb(), traceCtx(auth), p, body.reason), true))
+      const db = getErpDb()
+      const ctx = traceCtx(auth)
+      const lot = db.lots.find((l) => l.id === p.lotId) ?? null
+      return ok(productionView(withIssueReevaluation(db, ctx, lot, () => discardDistillation(db, ctx, p, body.reason)), true))
     },
   },
   {

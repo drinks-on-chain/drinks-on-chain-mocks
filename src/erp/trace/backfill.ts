@@ -331,10 +331,10 @@ export function backfillHarvest(state: TraceState, ctx: TraceCtx, harvestBatchId
       source: 'MIGRATION',
     }
     state.phytoDecisions.push(decision)
+    // Como el backend: el dictamen migrado se anota al migrar (su evento sale como registro tardío).
     appendLotEvent(state, system, lot, {
       type: 'PHYTO_DECIDED',
       occurredAt: harvest.createdAt,
-      recordedAt: harvest.createdAt,
       stage: 'HARVEST',
       actor: author,
       summary: `Dictamen fitosanitario: ${harvest.phytosanitaryStatus}`,

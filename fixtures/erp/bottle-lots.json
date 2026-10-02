@@ -36,6 +36,51 @@
     "exports": []
   },
   {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "bottlingBatchId": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f",
+    "total": 4400,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "bottlingBatchId": "10b56de9-cfbd-5681-b953-bc05eeeea58c",
+    "total": 1040,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "bottlingBatchId": "1281f02c-e882-5df1-aea7-eab5c8919350",
+    "total": 1120,
+    "generations": {},
+    "voided": [],
+    "allVoided": {
+      "at": "2026-08-26T15:00:00Z",
+      "by": {
+        "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+        "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+        "fullName": "Rosa Camargo",
+        "role": "OWNER"
+      },
+      "reason": "Lote descartado: Partida retirada por turbidez detectada en el control de almacén"
+    },
+    "exports": []
+  },
+  {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "bottlingBatchId": "7a347a28-d916-5e64-8fea-25a28abcd9e6",
+    "total": 880,
+    "generations": {},
+    "voided": [],
+    "allVoided": null,
+    "exports": []
+  },
+  {
     "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
     "bottlingBatchId": "8f82c09a-bb21-5565-889a-ff2e30be7b5d",
     "total": 2950,

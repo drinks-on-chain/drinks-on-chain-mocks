@@ -26,10 +26,10 @@ import { traceCtx } from './trace-context'
 // base de los handlers y el reloj de los mocks.
 
 /** `FermentationLogResponseDto` de una lectura guardada. */
-export const logView = (log: StoredLog, db: Pick<TraceState, 'wineries'> = getErpDb()): FermentationLog => views.logView(log, db)
+export const logView = (log: StoredLog, db: Pick<TraceState, 'wineries'> & Partial<Pick<TraceState, 'corrections'>> = getErpDb()): FermentationLog => views.logView(log, db)
 
 /** `EnologicalTreatmentResponseDto` de un tratamiento guardado. */
-export const treatmentView = (t: StoredTreatment, db: Pick<TraceState, 'wineries' | 'tanks'> = getErpDb()): EnologicalTreatment => views.treatmentView(t, db)
+export const treatmentView = (t: StoredTreatment, db: Pick<TraceState, 'wineries' | 'tanks'> & Partial<Pick<TraceState, 'corrections'>> = getErpDb()): EnologicalTreatment => views.treatmentView(t, db)
 
 export const terroirView = (t: TerroirResponse, detail = false): TerroirDetail => views.terroirView(getErpDb(), traceCtx(), t, detail)
 export const harvestView = (h: HarvestBatchResponse, detail = false): HarvestBatchDetail => views.harvestView(getErpDb(), traceCtx(), h, detail)

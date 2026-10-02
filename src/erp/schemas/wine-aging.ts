@@ -1,11 +1,12 @@
 import { z } from 'zod'
-import { DateInputSchema, IsoDateTimeSchema } from './common'
+import { CorrectionMarksShape, DateInputSchema, IsoDateTimeSchema } from './common'
 import { AgingStatusSchema } from './enums'
 import { CalendarDateSchema, LotLockInfoSchema } from './lots'
 
 // /v1/wine-aging · WineAgingResponseDto, CreateWineAgingBatchDto
 
 export const WineAgingResponseSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   wineryId: z.string(),
   fermentationTankId: z.string(),

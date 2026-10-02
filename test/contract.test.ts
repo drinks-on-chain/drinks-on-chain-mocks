@@ -367,7 +367,8 @@ const altosPendingHarvest = F.harvestBatches.find((h) => h.wineryId === ALTOS.id
 const altosTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'FERMENTING')!
 const altosTransferredTank = F.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'TRANSFERRED')!
 const altosAging = F.wineAging.find((a) => a.wineryId === ALTOS.id && a.agingStatus === 'AGING')!
-const cintiTank = F.fermentationTanks.find((t) => t.wineryId === CINTI.id)!
+/** Tanque completado con destino singani y vino por trasladar (TK-08 del lote en reposo). */
+const cintiTank = F.fermentationTanks.find((t) => t.wineryId === CINTI.id && t.status === 'COMPLETED' && t.destinationType === 'SINGANI_DIST')!
 const restingProduction = F.productionBatches.find((p) => p.restStatus === 'RESTING')!
 /** Destilación abierta de «Singani El Molino 2026» (5.800 L de entrada). */
 const openProduction = F.productionBatches.find((p) => p.wineryId === CINTI.id && !p.processEndDate)!

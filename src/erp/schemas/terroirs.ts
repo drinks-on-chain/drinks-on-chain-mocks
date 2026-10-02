@@ -1,10 +1,11 @@
 import { z } from 'zod'
-import { GeoJsonGeometrySchema, IsoDateTimeSchema } from './common'
+import { CorrectionMarksShape, GeoJsonGeometrySchema, IsoDateTimeSchema } from './common'
 import { DoEvaluationSchema } from './lots'
 
 // /v1/terroirs · TerroirResponseDto, CreateTerroirDto, UpdateTerroirDto
 
 export const TerroirResponseSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   wineryId: z.string(),
   parcelName: z.string(),

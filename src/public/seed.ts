@@ -1,7 +1,7 @@
 import type { PublicWineryProfile } from '../backoffice/schemas'
 import type { BackofficeFixtureSet } from '../backoffice/seed/generate'
 import { TRACE_SEED_NOW, type ErpFixtureFiles } from '../erp/seed/trace'
-import { emptyTraceCollections, bottleCodeOf, isSerialVoided, type TraceState } from '../erp/trace/state'
+import { emptyTraceCollections, bottleCodeOf, isSerialVoided, voidedRecordsOf, type TraceState } from '../erp/trace/state'
 import { buildCollections } from './collections'
 import { buildLotPassport, toPublicProfile, type PublicWineryInfo, type WineryResolver } from './passport'
 import type { PublicCollection, PublicLotPassport } from './schemas'
@@ -49,6 +49,7 @@ export function traceStateOf(erp: ErpFixtureFiles): TraceState {
     attachments: copy['lot-attachments.json'],
     dossiers: copy['lot-dossiers.json'],
     bottleLots: copy['bottle-lots.json'],
+    voidedRecords: voidedRecordsOf(copy['corrections.json']),
   }
 }
 

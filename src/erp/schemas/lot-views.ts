@@ -220,11 +220,11 @@ export const CorrectionTargetSchema = z.object({ type: CorrectionTargetTypeSchem
 export const CORRECTABLE_FIELDS: Record<CorrectionTargetType, readonly string[]> = {
   TERROIR: ['altitudeMasl', 'varietyName', 'rawMaterialType'],
   HARVEST_BATCH: ['grossWeightKg', 'tareWeightKg', 'intakeDate', 'temperatureAtIntakeC', 'notes'],
-  MATURITY_ANALYSIS: ['brixDegrees', 'ph', 'acidityGl', 'measuredAt'],
+  MATURITY_ANALYSIS: ['brixDegrees', 'ph', 'acidityGl', 'measuredAt', 'notes'],
   PHYTO_DECISION: [],
   FERMENTATION_TANK: ['volumeFilledLiters', 'finalVolumeLiters', 'startDate', 'endDate'],
-  FERMENTATION_LOG: ['temperatureCelsius', 'specificGravity', 'phValue', 'recordedAt'],
-  TREATMENT: ['dosageAppliedGPerHl', 'totalAppliedG', 'additiveName', 'appliedAt'],
+  FERMENTATION_LOG: ['temperatureCelsius', 'specificGravity', 'phValue', 'co2Observations', 'recordedAt', 'notes'],
+  TREATMENT: ['dosageAppliedGPerHl', 'totalAppliedG', 'additiveName', 'additiveSupplier', 'appliedAt', 'notes'],
   WINE_AGING: ['plannedMonths', 'volumeLiters', 'startDate'],
   PRODUCTION_BATCH: ['inputVolumeLiters', 'headsLiters', 'heartLiters', 'tailsLiters', 'vinasseLiters', 'heartAbvPercent', 'processStartDate', 'processEndDate'],
   BOTTLING: ['finalAlcoholAbv', 'bottleType', 'leftover'],
@@ -236,6 +236,9 @@ export const CORRECTABLE_FIELDS: Record<CorrectionTargetType, readonly string[]>
     'freeSulfurDioxideMgL',
     'totalSulfurDioxideMgL',
     'reducingSugarsGl',
+    'totalDryExtractGl',
+    'sugarFreeDryExtractGl',
+    'overpressureBar',
     'methanolContentMgL',
     'methanolMg100mlAa',
     'copperContentMgL',
@@ -296,7 +299,8 @@ export const LotAttachmentSchema = z.object({
   url: z.string(),
   urlExpiresAt: IsoDateTimeSchema,
   createdAt: IsoDateTimeSchema,
-  createdBy: TraceActorSchema,
+  /** `null` = no registrado (informes de registros anteriores a la Ola 2). */
+  createdBy: TraceActorSchema.nullable(),
 })
 export type LotAttachment = z.infer<typeof LotAttachmentSchema>
 

@@ -19,8 +19,8 @@ import {
   type LotStageCode,
   type WineryRole,
 } from '../../schemas'
-import { BOTTLE_UNIT_STATUSES, type BottleCodeExport } from '../../schemas/bottle-codes'
-import { assertNotBottled, bottleLot, evaluateBottling, exportBottleCodesCsv, listBottleUnits, lotBottlingRequest, registerLab, serialRange, voidBottleCode } from '../../trace/bottling'
+import { BOTTLE_UNIT_STATUSES, BOTTLE_ZIP_MAX_CODES, type BottleCodeExport } from '../../schemas/bottle-codes'
+import { assertNotBottled, bottleLot, evaluateBottling, exportBottleCodesCsv, listBottleUnits, lotBottlingRequest, registerBottleExport, registerLab, voidBottleCode } from '../../trace/bottling'
 import { daysBetween } from '../../trace/dates'
 import {
   addAttachment,
@@ -36,17 +36,7 @@ import {
 } from '../../trace/dossier'
 import { discardLot, updateLot } from '../../trace/lots'
 import { violation } from '../../trace/rules'
-import {
-  bottleLotOf,
-  createLot,
-  findLot,
-  lotBottling,
-  lotLabs,
-  stateError,
-  toLotSummary,
-  toLotView,
-  type StoredBottleExport,
-} from '../../trace/state'
+import { allLotLabs, createLot, findLot, lotDossier, toLotSummary, toLotView, type StoredBottleExport } from '../../trace/state'
 import {
   lotBalance,
   lotGraph,
@@ -62,6 +52,7 @@ import { ApiError, fieldError, forbidden, invalid, notFound } from '../errors'
 import { accepted, created, enumParam, intParam, listResult, ok, parseBody, parseCreateBody, strParam, type RouteContext, type RouteSpec } from '../http'
 import { traceCtx } from '../trace-context'
 import { bottlingView, labView } from '../views'
+import { sha256Hex } from '../../../shared/crypto'
 import { requireWinery } from './terroirs-harvest'
 
 // /v1/lots* (contrato de la Ola 2 §2 y §6–§11): el lote del servidor con su embotellado, códigos de
@@ -104,16 +95,34 @@ function audit(ctx: RouteContext, action: string, lot: Lot, resource: { type: st
   recordAudit(ctx, { action, resource, organizationId: lot.wineryId, after: { reference: lot.reference, ...after }, reason })
 }
 
-/** Estado de una exportación ZIP: el worker la deja lista poco después (aquí, a la segunda consulta). */
-function exportView(ctx: RouteContext, e: StoredBottleExport): BottleCodeExport {
-  const ready = e.status === 'READY'
+/** Personal de plataforma que puede listar los códigos de botella (contrato §14); ninguno los exporta ni los anula. */
+const PLATFORM_CODE_READERS: readonly string[] = ['SUPERADMIN', 'ADMIN', 'OPERATIONS']
+
+/** Los códigos de botella solo los exporta la bodega: la plataforma → 403. */
+function assertWineryExports(auth: AuthContext): void {
+  if (auth.organizationType === 'PLATFORM' || !auth.tenantId) throw forbidden('Solo la bodega exporta sus códigos de botella')
+}
+
+/** Clave del ZIP de una exportación: fuera del prefijo `org/…` de las subidas (`GET /v1/uploads/url` no la firma). */
+export const bottleExportStorageKey = (wineryId: string, exportId: string) => `exports/bottle-codes/${wineryId}/${exportId}.zip`
+
+/**
+ * Estado de una exportación. La ZIP la arma el worker poco después (aquí, a la segunda consulta) y
+ * caduca a los 7 días (`downloadUrl` pasa a `null`); una CSV se descarga al pedirla y no tiene URL.
+ */
+function exportView(ctx: RouteContext, lot: Lot, e: StoredBottleExport): BottleCodeExport {
+  const tctx = traceCtx(ctx.auth)
+  const downloadable = e.format === 'ZIP' && e.status === 'READY' && e.expiresAt > tctx.now
   return {
     exportId: e.exportId,
     status: e.status,
+    format: e.format,
+    fromSerial: e.fromSerial,
+    toSerial: e.toSerial,
     rows: e.rows,
     createdAt: e.createdAt,
     createdBy: e.createdBy,
-    downloadUrl: ready ? signedFileUrl(traceCtx(ctx.auth), `org/${ctx.auth.tenantId ?? 'platform'}/exports/${e.exportId}.zip`).url : null,
+    downloadUrl: downloadable ? signedFileUrl(tctx, bottleExportStorageKey(lot.wineryId, e.exportId)).url : null,
     expiresAt: e.expiresAt,
   }
 }
@@ -269,11 +278,18 @@ export const lotRoutes: RouteSpec[] = [
     access: trace(LOT_WRITERS),
     list: 'paged',
     handle({ query, auth, params }) {
+      // De la plataforma solo los listan administración y operaciones (soporte → 403).
+      if (auth.organizationType === 'PLATFORM' && !PLATFORM_CODE_READERS.includes(auth.platformRole ?? '')) {
+        throw forbidden('Los códigos de botella solo los lista el personal de administración y de operaciones')
+      }
       const lot = lotOf(auth, params.id!)
+      const q = strParam(query, 'q')
+      if (q !== undefined && q.length > 20) throw invalid([fieldError('q', 'q admite como máximo 20 caracteres')])
       const units = listBottleUnits(getErpDb(), traceCtx(auth), lot, {
         status: enumParam(query, 'status', BOTTLE_UNIT_STATUSES),
         fromSerial: intParam(query, 'fromSerial'),
         toSerial: intParam(query, 'toSerial'),
+        q,
       })
       return listResult(units, query)
     },
@@ -284,15 +300,17 @@ export const lotRoutes: RouteSpec[] = [
     access: trace(LOT_WRITERS),
     handle(ctx) {
       const { query, auth, params } = ctx
+      assertWineryExports(auth)
       enumParam(query, 'format', ['csv'] as const)
       const lot = lotOf(auth, params.id!)
+      // Queda registrada (con su entrada en la bitácora y el rango) antes de enviar nada.
       const csv = exportBottleCodesCsv(getErpDb(), traceCtx(auth), lot, intParam(query, 'fromSerial'), intParam(query, 'toSerial'))
-      audit(ctx, 'BOTTLE_CODES_EXPORTED', lot, { type: 'lot', id: lot.id }, { format: 'CSV', fromSerial: csv.from, toSerial: csv.to, rows: csv.rows })
+      audit(ctx, 'BOTTLE_CODES_EXPORTED', lot, { type: 'bottle_code_export', id: csv.exportId }, { lotId: lot.id, lotCode: lot.lotCode, format: 'CSV', fromSerial: csv.from, toSerial: csv.to, rows: csv.rows })
       return {
         status: 200,
         data: undefined,
         raw: { body: csv.body, contentType: 'text/csv; charset=utf-8' },
-        headers: { 'Content-Disposition': `attachment; filename="codigos-${lot.lotCode ?? lot.reference}.csv"`, 'Cache-Control': 'no-store', 'X-Export-Rows': String(csv.rows) },
+        headers: { 'Content-Disposition': `attachment; filename="${csv.filename}"`, 'Cache-Control': 'no-store', 'X-Export-Rows': String(csv.rows), 'X-Export-Id': csv.exportId },
       }
     },
   },
@@ -306,29 +324,18 @@ export const lotRoutes: RouteSpec[] = [
       const db = getErpDb()
       const lot = lotOf(auth, params.id!)
       const body = await parseBody(request, CreateBottleCodeExportSchema)
-      const bl = lotBottling(db, lot.id) ? bottleLotOf(db, lot.id) : null
-      if (!bl) throw stateError('TRC_LOT_NOT_BOTTLED', 'El lote aún no está embotellado: no tiene códigos de botella', [violation('TRC_LOT_NOT_BOTTLED', 'Lote sin embotellar', { meta: { stage: lot.stage } })])
-      const { from, to } = serialRange(bl, body.fromSerial, body.toSerial)
       tick()
-      const tctx = traceCtx(auth)
-      if (!tctx.actor) throw forbidden('Solo un miembro de la bodega puede exportar códigos')
-      const record: StoredBottleExport = {
+      // ZIP con `codigos.csv` y `qr/{serial}-{code}.svg|png`: como máximo 20.000 códigos activos por exportación.
+      const { record } = registerBottleExport(db, traceCtx(auth), lot, { format: 'ZIP', fromSerial: body.fromSerial, toSerial: body.toSerial, imageFormat: body.qr.imageFormat, maxRows: BOTTLE_ZIP_MAX_CODES })
+      audit(ctx, 'BOTTLE_CODES_EXPORTED', lot, { type: 'bottle_code_export', id: record.exportId }, {
         lotId: lot.id,
-        exportId: tctx.newId('bottle-export'),
-        status: 'PENDING',
-        rows: to - from + 1,
-        createdAt: tctx.now,
-        createdBy: tctx.actor,
-        downloadUrl: null,
-        expiresAt: new Date(Date.parse(tctx.now) + 7 * 86_400_000).toISOString().replace(/\.\d{3}Z$/, 'Z'),
-        fromSerial: from,
-        toSerial: to,
-        imageFormat: body.qr.imageFormat,
-        polls: 0,
-      }
-      db.bottleExports.push(record)
-      bl.exports.push({ fromSerial: from, toSerial: to, at: tctx.now })
-      audit(ctx, 'BOTTLE_CODES_EXPORTED', lot, { type: 'lot', id: lot.id }, { format: 'ZIP', fromSerial: from, toSerial: to, rows: record.rows, imageFormat: body.qr.imageFormat })
+        lotCode: lot.lotCode,
+        format: 'ZIP',
+        fromSerial: record.fromSerial,
+        toSerial: record.toSerial,
+        rows: record.rows,
+        qr: { imageFormat: body.qr.imageFormat, ...(body.qr.sizePx !== undefined && { sizePx: body.qr.sizePx }), ...(body.qr.margin !== undefined && { margin: body.qr.margin }) },
+      })
       return accepted({ exportId: record.exportId, status: 'PENDING' })
     },
   },
@@ -338,10 +345,11 @@ export const lotRoutes: RouteSpec[] = [
     access: trace(LOT_WRITERS),
     handle(ctx) {
       const { auth, params } = ctx
+      assertWineryExports(auth)
       const lot = lotOf(auth, params.id!)
       const record = getErpDb().bottleExports.find((e) => e.exportId === params.exportId && e.lotId === lot.id)
-      if (!record) throw notFound('Exportación no encontrada')
-      const view = exportView(ctx, record)
+      if (!record) throw notFound('Exportación no encontrada en este lote')
+      const view = exportView(ctx, lot, record)
       // La primera consulta la ve pendiente; a partir de la segunda, el ZIP ya está listo.
       record.polls++
       if (record.status === 'PENDING') record.status = 'READY'
@@ -388,8 +396,8 @@ export const lotRoutes: RouteSpec[] = [
     list: 'paged',
     handle({ query, auth, params }) {
       const lot = lotOf(auth, params.id!)
-      // Todos los análisis del lote, el más reciente primero, con `current: true` en el vigente.
-      return listResult([...lotLabs(getErpDb(), lot.id)].reverse().map((l) => labView(l)), query)
+      // Todos los análisis del lote (los anulados, marcados), el más reciente primero, con `current: true` en el vigente.
+      return listResult([...allLotLabs(getErpDb(), lot.id)].reverse().map((l) => labView(l)), query)
     },
   },
 
@@ -403,8 +411,9 @@ export const lotRoutes: RouteSpec[] = [
       const { request, auth, params } = ctx
       const lot = lotOf(auth, params.id!)
       const body = await parseBody(request, CreateLotCorrectionSchema)
+      if (body.target.type === 'TERROIR') throw invalid([fieldError('target.type', 'Una parcela se corrige con POST /v1/terroirs/{id}/corrections')])
       if (auth.memberRole && !CORRECTION_ROLES[body.target.type].includes(auth.memberRole)) {
-        throw forbidden(`Acceso denegado: el rol '${auth.memberRole}' no puede corregir este registro (lo corrige quien puede crearlo)`)
+        throw forbidden('Tu rol no puede corregir este registro: lo corrige quien puede crearlo')
       }
       tick()
       const correction = correctLot(getErpDb(), traceCtx(auth), lot, body)
@@ -461,8 +470,17 @@ export const lotRoutes: RouteSpec[] = [
     path: '/v1/lots/:id/dossier/canonical',
     access: trace(TRACE_READERS),
     handle({ auth, params }) {
+      const db = getErpDb()
       const lot = lotOf(auth, params.id!)
-      return { status: 200, data: undefined, raw: { body: dossierCanonical(getErpDb(), traceCtx(auth), lot), contentType: 'application/json; charset=utf-8' } }
+      const body = dossierCanonical(db, traceCtx(auth), lot)
+      const closed = lotDossier(db, lot.id)?.status === 'CLOSED'
+      return {
+        status: 200,
+        data: undefined,
+        raw: { body, contentType: 'application/json; charset=utf-8' },
+        // `X-Dossier-Status`: `OPEN` = vista previa; `X-Dossier-Hash`: el SHA-256 de estos bytes.
+        headers: { 'Cache-Control': 'no-store', 'X-Dossier-Status': closed ? 'CLOSED' : 'OPEN', 'X-Dossier-Hash': sha256Hex(body) },
+      }
     },
   },
 
@@ -476,6 +494,10 @@ export const lotRoutes: RouteSpec[] = [
       const { request, auth, params } = ctx
       const lot = lotOf(auth, params.id!)
       const body = await parseCreateBody(request, CreateLotAttachmentSchema)
+      // Publicar un archivo es cosa de dirección y enología (S-20).
+      if (body.visibility === 'PUBLIC' && auth.memberRole && !(LOT_WRITERS as readonly string[]).includes(auth.memberRole)) {
+        throw forbidden('Solo dirección y enología pueden publicar un archivo del lote')
+      }
       tick()
       const tctx = traceCtx(auth)
       const attachment = addAttachment(getErpDb(), tctx, lot, body)
@@ -491,7 +513,10 @@ export const lotRoutes: RouteSpec[] = [
     handle({ query, auth, params }) {
       const lot = lotOf(auth, params.id!)
       const tctx = traceCtx(auth)
-      return listResult(lotAttachments(getErpDb(), lot).map((a) => toAttachment(tctx, a)), query)
+      // Agronomía y operación solo ven los archivos que adjuntaron ellos (§14).
+      const ownOnly = auth.memberRole === 'AGRONOMIST' || auth.memberRole === 'OPERATOR'
+      const items = lotAttachments(getErpDb(), lot).filter((a) => !ownOnly || (a.createdBy !== null && a.createdBy.membershipId === auth.memberId))
+      return listResult(items.map((a) => toAttachment(tctx, a)), query)
     },
   },
   {
@@ -505,8 +530,9 @@ export const lotRoutes: RouteSpec[] = [
       const body = await parseBody(request, ChangeLotAttachmentVisibilitySchema)
       tick()
       const tctx = traceCtx(auth)
-      const attachment = changeAttachmentVisibility(getErpDb(), tctx, lot, params.attachmentId!, body)
-      audit(ctx, 'ATTACHMENT_VISIBILITY_CHANGED', lot, { type: 'lot_attachment', id: attachment.id }, { visibility: attachment.visibility })
+      const { attachment, changed } = changeAttachmentVisibility(getErpDb(), tctx, lot, params.attachmentId!, body)
+      // Repetir la visibilidad vigente no registra nada.
+      if (changed) audit(ctx, 'ATTACHMENT_VISIBILITY_CHANGED', lot, { type: 'lot_attachment', id: attachment.id }, { visibility: attachment.visibility, lotId: lot.id })
       return ok(toAttachment(tctx, attachment))
     },
   },

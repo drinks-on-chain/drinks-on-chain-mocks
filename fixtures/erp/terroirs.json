@@ -504,5 +504,25 @@
     "doCertificateUrl": "/mocks/uploads/certificates/do-vgq_01.pdf",
     "isActive": true,
     "createdAt": "2026-02-19T11:00:00Z"
+  },
+  {
+    "id": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "parcelName": "Finca La Cabaña · Parrales del Río",
+    "cadastreCode": "CAT-URI-0412",
+    "surfaceHectares": 2.8,
+    "altitudeMasl": 1740,
+    "latitude": -21.692,
+    "longitude": -64.668,
+    "geographicPolygonGeojson": null,
+    "rawMaterialType": "uva",
+    "varietyName": "Moscatel de Alejandría",
+    "soilType": "Franco-limoso",
+    "irrigationSystem": "Riego por goteo",
+    "isDoEligible": true,
+    "doType": "D.O. Singani",
+    "doCertificateUrl": null,
+    "isActive": true,
+    "createdAt": "2024-10-25T11:00:00Z"
   }
 ]

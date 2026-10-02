@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DateInputSchema, IsoDateTimeSchema, JsonObjectSchema } from './common'
+import { CorrectionMarksShape, DateInputSchema, IsoDateTimeSchema, JsonObjectSchema } from './common'
 import { FileReferenceSchema } from './harvest-batches'
 import { ErrorDetailSchema, LabLimitSchema, TraceActorSchema } from './lots'
 
@@ -69,6 +69,9 @@ export const LabUnitsSchema = z.object({
 export type LabUnits = z.infer<typeof LabUnitsSchema>
 
 export const BatchLabAnalysisResponseSchema = z.object({
+  ...CorrectionMarksShape,
+  /** Anulado por una corrección `VOID` (§9): deja de contar y nunca es el vigente. */
+  voidedAt: IsoDateTimeSchema.nullable().optional(),
   id: z.string(),
   bottlingBatchId: z.string(),
   certifiedLaboratoryName: z.string(),

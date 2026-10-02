@@ -248,6 +248,70 @@
     "source": "ERP"
   },
   {
+    "id": "98e66f4a-39b0-544d-83ad-92cf15bea93f",
+    "harvestBatchId": "535ed750-3e23-5cd8-94c6-7c454d0ebd9b",
+    "decision": "APPROVED",
+    "decidedAt": "2024-03-15T13:00:00Z",
+    "recordedAt": "2024-03-15T13:00:00Z",
+    "decidedBy": {
+      "membershipId": "0872115a-241c-5321-b26a-882c88ed7134",
+      "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+      "fullName": "Ing. Diego Paredes",
+      "role": "AGRONOMIST"
+    },
+    "inspectionReport": null,
+    "notes": "Uva sana.",
+    "source": "ERP"
+  },
+  {
+    "id": "81d598a3-f1da-519a-9841-710580c8c801",
+    "harvestBatchId": "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55",
+    "decision": "APPROVED",
+    "decidedAt": "2025-03-15T13:00:00Z",
+    "recordedAt": "2025-03-26T16:00:00Z",
+    "decidedBy": {
+      "membershipId": "0872115a-241c-5321-b26a-882c88ed7134",
+      "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
+      "fullName": "Ing. Diego Paredes",
+      "role": "AGRONOMIST"
+    },
+    "inspectionReport": null,
+    "notes": "Inspección en campo sin incidencias.",
+    "source": "ERP"
+  },
+  {
+    "id": "860bfa0f-b758-5193-9e44-9c240b9bc283",
+    "harvestBatchId": "3c228caf-ba8d-5e96-9880-1f28560245f8",
+    "decision": "APPROVED",
+    "decidedAt": "2024-03-10T13:00:00Z",
+    "recordedAt": "2024-03-10T13:00:00Z",
+    "decidedBy": {
+      "membershipId": "53f25b09-b550-511d-a01c-031141d137bc",
+      "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
+      "fullName": "Ing. Tomás Flores",
+      "role": "AGRONOMIST"
+    },
+    "inspectionReport": null,
+    "notes": "Sin incidencias.",
+    "source": "ERP"
+  },
+  {
+    "id": "28f0a175-d9b9-5316-a74a-bc1efbcd363f",
+    "harvestBatchId": "36304582-8e8f-5e31-ae49-ff7584e9cb91",
+    "decision": "APPROVED",
+    "decidedAt": "2025-03-15T13:00:00Z",
+    "recordedAt": "2025-03-15T13:00:00Z",
+    "decidedBy": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "inspectionReport": null,
+    "notes": "Uva sana.",
+    "source": "ERP"
+  },
+  {
     "id": "d04e559e-5d65-5238-8af7-073f3cf283f5",
     "harvestBatchId": "260262b8-47be-5be5-8b71-d5391032200d",
     "decision": "APPROVED",

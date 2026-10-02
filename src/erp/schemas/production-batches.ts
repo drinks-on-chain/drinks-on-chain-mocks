@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DateInputSchema, IsoDateTimeSchema, JsonObjectSchema } from './common'
+import { CorrectionMarksShape, DateInputSchema, IsoDateTimeSchema, JsonObjectSchema } from './common'
 import { ProcessTypeSchema, RestStatusSchema } from './enums'
 import { LotLockInfoSchema } from './lots'
 
@@ -14,6 +14,7 @@ export const DistillationCutsSchema = z.looseObject({
 export type DistillationCuts = z.infer<typeof DistillationCutsSchema>
 
 export const ProductionBatchResponseSchema = z.object({
+  ...CorrectionMarksShape,
   id: z.string(),
   wineryId: z.string(),
   fermentationTankId: z.string(),
@@ -56,6 +57,11 @@ export const CreateDistillationBatchSchema = z.object({
   processStartDate: DateInputSchema,
   processEndDate: DateInputSchema.optional(),
   inputVolumeLiters: z.number().min(0).optional(),
+  /**
+   * Última destilación del tanque: pasa a `TRANSFERRED` aunque le quede volumen (queda como merma
+   * de trasiego). Sin él, el tanque se transfiere solo al agotarse su volumen (§4.2).
+   */
+  closeTank: z.boolean().optional(),
   outputVolumeLiters: z.number().min(0).optional(),
   wasteVolumeLiters: z.number().min(0).optional(),
   initialAlcoholPercentage: z.number().min(0).max(100).optional(),

@@ -98,7 +98,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -133,7 +133,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -269,7 +269,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -304,7 +304,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -441,7 +441,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -476,7 +476,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -612,7 +612,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -647,7 +647,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -743,7 +743,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -778,7 +778,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -898,7 +898,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -935,7 +935,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1032,7 +1032,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1069,7 +1069,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1193,7 +1193,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1230,7 +1230,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1341,7 +1341,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1378,7 +1378,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1476,7 +1476,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1513,7 +1513,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1605,7 +1605,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1642,7 +1642,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1734,7 +1734,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1771,7 +1771,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -1855,7 +1855,7 @@
     ],
     "locks": [],
     "rules": {
-      "takenAt": "2026-09-25T12:00:00Z",
+      "takenAt": "2026-09-15T14:00:00Z",
       "origin": "LOT_CREATION",
       "singani": {
         "minAltitudeMasl": 1600,
@@ -1877,7 +1877,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -1912,7 +1912,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -2022,7 +2022,7 @@
     ],
     "locks": [],
     "rules": {
-      "takenAt": "2026-09-25T12:00:00Z",
+      "takenAt": "2026-03-18T14:00:00Z",
       "origin": "LOT_CREATION",
       "singani": {
         "minAltitudeMasl": 1600,
@@ -2044,7 +2044,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -2079,7 +2079,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -2193,7 +2193,7 @@
     ],
     "locks": [],
     "rules": {
-      "takenAt": "2026-09-25T12:00:00Z",
+      "takenAt": "2026-09-16T13:30:00Z",
       "origin": "LOT_CREATION",
       "singani": {
         "minAltitudeMasl": 1500,
@@ -2215,7 +2215,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -2252,7 +2252,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -2341,7 +2341,7 @@
     ],
     "locks": [],
     "rules": {
-      "takenAt": "2026-09-25T12:00:00Z",
+      "takenAt": "2026-03-14T13:15:00Z",
       "origin": "LOT_CREATION",
       "singani": {
         "minAltitudeMasl": 1500,
@@ -2363,7 +2363,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -2400,7 +2400,7 @@
         "trazabilidad.excepcionMinimoLegal": true,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {
@@ -2451,6 +2451,752 @@
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
       "fullName": "Lic. Carla Villarroel",
       "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2024-001",
+    "lotCode": "ALT-2025-WINE-001",
+    "name": "Tannat La Angostura 2024",
+    "productType": "WINE",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2025-08-01T15:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2024,
+    "estimatedBottles": 4500,
+    "projectedBottles": 4400,
+    "bottles": 4400,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NON_CONFORMING",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2024-03-13T14:00:00Z",
+    "updatedAt": "2025-08-06T16:00:00Z",
+    "plannedTerroirIds": [],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": null,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2025-04-28",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [
+      {
+        "value": 4500,
+        "at": "2024-03-13T14:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [
+      {
+        "kind": "AGING",
+        "sourceId": "625ba51c-6c64-5326-93c0-e399db486c43",
+        "unlockDate": "2025-04-28",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+          "minimum": 0,
+          "applied": 12,
+          "unit": "meses",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2024-03-13T14:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 200
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 200,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "535ed750-3e23-5cd8-94c6-7c454d0ebd9b"
+      ],
+      "tankIds": [
+        "84645346-8236-5be7-be28-11f041cb1d7a"
+      ],
+      "wineAgingBatchIds": [
+        "625ba51c-6c64-5326-93c0-e399db486c43"
+      ],
+      "productionBatchIds": [],
+      "bottlingBatchId": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f",
+      "labAnalysisIds": [
+        "d9050da6-5d4b-5595-a62e-a661c04acb51"
+      ]
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2025-004",
+    "lotCode": "ALT-2025-SINGANI-002",
+    "name": "Singani El Portillo 2025",
+    "productType": "SINGANI",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2025-11-29T15:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": 1050,
+    "projectedBottles": 1040,
+    "bottles": 1040,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "CONFORMING",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-12T14:00:00Z",
+    "updatedAt": "2025-12-02T16:00:00Z",
+    "plannedTerroirIds": [
+      "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+    ],
+    "plannedFormatCl": 70,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2025-10-10",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [
+      {
+        "value": 1050,
+        "at": "2025-03-12T14:00:00Z",
+        "by": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+        "unlockDate": "2025-10-10",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2025-03-12T14:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 200
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 200,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE_BY_EXCEPTION",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1500,
+          "legalMinimum": 1600,
+          "actual": 1540,
+          "pass": true,
+          "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55"
+      ],
+      "tankIds": [
+        "6e774392-123e-5707-9b10-69c0d75538ad"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+      ],
+      "bottlingBatchId": "10b56de9-cfbd-5681-b953-bc05eeeea58c",
+      "labAnalysisIds": [
+        "b5857659-0e30-5a0a-b0a5-22c400bd9f76"
+      ]
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "63154759-c039-52b4-b81c-08ca11044c00",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2024-001",
+    "lotCode": "CVJ-2025-SINGANI-001",
+    "name": "Singani Los Parrales 2024",
+    "productType": "SINGANI",
+    "stage": "DISCARDED",
+    "stageChangedAt": "2026-08-26T15:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2024,
+    "estimatedBottles": 1150,
+    "projectedBottles": 0,
+    "bottles": 0,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2024-03-07T14:00:00Z",
+    "updatedAt": "2026-08-26T15:00:00Z",
+    "plannedTerroirIds": [
+      "e26c2890-b4e4-5973-aec2-0f092355ad3b"
+    ],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2024-10-03",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [
+      {
+        "value": 1150,
+        "at": "2024-03-07T14:00:00Z",
+        "by": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "00bc292a-8178-5216-8578-6d97a524f182",
+        "unlockDate": "2024-10-03",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2024-03-07T14:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 200
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 200,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2350,
+          "pass": true,
+          "terroirId": "e26c2890-b4e4-5973-aec2-0f092355ad3b"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "e26c2890-b4e4-5973-aec2-0f092355ad3b"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "3c228caf-ba8d-5e96-9880-1f28560245f8"
+      ],
+      "tankIds": [
+        "fe50165d-6ba5-563c-9bb6-b6c1a1c7a806"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "00bc292a-8178-5216-8578-6d97a524f182"
+      ],
+      "bottlingBatchId": "1281f02c-e882-5df1-aea7-eab5c8919350",
+      "labAnalysisIds": []
+    },
+    "discarded": {
+      "at": "2026-08-26T15:00:00Z",
+      "by": {
+        "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+        "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+        "fullName": "Rosa Camargo",
+        "role": "OWNER"
+      },
+      "reason": "Partida retirada por turbidez detectada en el control de almacén"
+    },
+    "notes": null,
+    "createdBy": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "reference": "CUR-L2025-001",
+    "lotCode": "CUR-2026-SINGANI-001",
+    "name": "Singani Casa Uriondo 2025",
+    "productType": "SINGANI",
+    "stage": "BOTTLED",
+    "stageChangedAt": "2026-03-09T15:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2025,
+    "estimatedBottles": 900,
+    "projectedBottles": 880,
+    "bottles": 880,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 1,
+      "rejected": 0
+    },
+    "labStatus": "CONFORMING",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2025-03-12T14:00:00Z",
+    "updatedAt": "2026-03-12T16:00:00Z",
+    "plannedTerroirIds": [
+      "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+    ],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": "2025-10-07",
+    "estimatedReadyBasis": "LOCK",
+    "estimatedBottlesHistory": [
+      {
+        "value": 900,
+        "at": "2025-03-12T14:00:00Z",
+        "by": {
+          "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+          "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+          "fullName": "Lic. Sofía Aramayo",
+          "role": "OWNER"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [
+      {
+        "kind": "REST",
+        "sourceId": "f9b48669-3b05-5bb4-9251-7905c2e343fc",
+        "unlockDate": "2025-10-07",
+        "released": true,
+        "daysRemaining": 0,
+        "rule": {
+          "settingKey": "trazabilidad.singani.reposoMinimoDias",
+          "minimum": 180,
+          "applied": 180,
+          "unit": "días",
+          "legalException": false
+        }
+      }
+    ],
+    "rules": {
+      "takenAt": "2025-03-12T14:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 200
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 200,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 1740,
+          "pass": true,
+          "terroirId": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [
+        "36304582-8e8f-5e31-ae49-ff7584e9cb91"
+      ],
+      "tankIds": [
+        "7cd03350-4cc8-5206-95df-3fec384ec4e0"
+      ],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [
+        "f9b48669-3b05-5bb4-9251-7905c2e343fc"
+      ],
+      "bottlingBatchId": "7a347a28-d916-5e64-8fea-25a28abcd9e6",
+      "labAnalysisIds": [
+        "633c1f3a-dbef-5766-a16a-52127d1bd145"
+      ]
+    },
+    "discarded": null,
+    "notes": null,
+    "createdBy": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
     }
   },
   {
@@ -2528,7 +3274,7 @@
       }
     ],
     "rules": {
-      "takenAt": "2026-09-25T12:00:00Z",
+      "takenAt": "2026-03-07T14:00:00Z",
       "origin": "LOT_CREATION",
       "singani": {
         "minAltitudeMasl": 1600,
@@ -2550,7 +3296,7 @@
         "limits": {
           "metanol": {
             "unidad": "mg/100 ml a.a.",
-            "max": 300
+            "max": 200
           },
           "cobre": {
             "unidad": "mg/l",
@@ -2585,7 +3331,7 @@
         "trazabilidad.excepcionMinimoLegal": false,
         "trazabilidad.laboratorio.limites": {
           "metanol": {
-            "max": 300,
+            "max": 200,
             "unidad": "mg/100 ml a.a."
           },
           "cobre": {

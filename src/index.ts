@@ -22,7 +22,12 @@ export {
   luhnMod32CheckChar,
   merkleLeaf,
   merkleParent,
+  merkleRoot,
   merkleRootFromProof,
   normalizeBottleCode,
+  verifyMerkleProof,
+  type MerkleLeafInput,
   type MerkleStep,
 } from './erp/trace/bottle-code'
+// SHA-256 síncrono (texto UTF-8 → hexadecimal): la huella del expediente es `sha256Hex(bytes canónicos)`.
+export { canonicalJson, sha256Hex } from './shared/crypto'
