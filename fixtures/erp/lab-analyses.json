@@ -244,6 +244,244 @@
     }
   },
   {
+    "id": "d9050da6-5d4b-5595-a62e-a661c04acb51",
+    "bottlingBatchId": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f",
+    "certifiedLaboratoryName": "Laboratorio CENAVIT Tarija",
+    "accreditedLabCertificationCode": "LAB-SENASAG-2025-417",
+    "analysisRequestDate": "2025-08-03T00:00:00Z",
+    "testPerformedAt": "2025-08-06T00:00:00Z",
+    "actualAlcoholAbv": 13.9,
+    "totalAlcoholAbv": null,
+    "totalAcidityTartaricGl": 5.6,
+    "volatileAcidityAceticGl": 1.45,
+    "freeSulfurDioxideMgL": 22,
+    "totalSulfurDioxideMgL": 96,
+    "reducingSugarsGl": null,
+    "totalDryExtractGl": null,
+    "sugarFreeDryExtractGl": null,
+    "overpressureBar": null,
+    "methanolContentMgL": null,
+    "copperContentMgL": null,
+    "additionalParams": null,
+    "laboratoryReportPdfUrl": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/lab-reports/2026/informe-tannat-la-angostura-2024.pdf",
+    "conformsToSenasagStandards": false,
+    "conformsToEuStandards": false,
+    "conformsToUsaStandards": false,
+    "reviewedByMemberId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+    "createdAt": "2025-08-06T16:00:00Z",
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "methanolMg100mlAa": null,
+    "conformityStatus": "NON_CONFORMING",
+    "supersededAt": null,
+    "conformity": {
+      "status": "NON_CONFORMING",
+      "checks": [
+        {
+          "parameter": "acidezVolatil",
+          "value": 1.45,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "FAIL"
+        },
+        {
+          "parameter": "grado",
+          "value": 13.9,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        }
+      ],
+      "warnings": [],
+      "rulesTakenAt": "2024-03-13T14:00:00Z"
+    },
+    "recordedBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "report": {
+      "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/lab-reports/2026/informe-tannat-la-angostura-2024.pdf",
+      "sha256": "409cd7f880939985977cf971593610130002ca648b3cba96029f0303981a181e",
+      "url": null
+    }
+  },
+  {
+    "id": "b5857659-0e30-5a0a-b0a5-22c400bd9f76",
+    "bottlingBatchId": "10b56de9-cfbd-5681-b953-bc05eeeea58c",
+    "certifiedLaboratoryName": "Laboratorio CENAVIT Tarija",
+    "accreditedLabCertificationCode": "LAB-SENASAG-2025-417",
+    "analysisRequestDate": "2025-11-30T00:00:00Z",
+    "testPerformedAt": "2025-12-02T00:00:00Z",
+    "actualAlcoholAbv": 40,
+    "totalAlcoholAbv": null,
+    "totalAcidityTartaricGl": 4.5,
+    "volatileAcidityAceticGl": 0.19,
+    "freeSulfurDioxideMgL": null,
+    "totalSulfurDioxideMgL": null,
+    "reducingSugarsGl": null,
+    "totalDryExtractGl": null,
+    "sugarFreeDryExtractGl": null,
+    "overpressureBar": null,
+    "methanolContentMgL": null,
+    "copperContentMgL": 1.1,
+    "additionalParams": null,
+    "laboratoryReportPdfUrl": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/lab-reports/2026/informe-singani-el-portillo-2025.pdf",
+    "conformsToSenasagStandards": true,
+    "conformsToEuStandards": false,
+    "conformsToUsaStandards": false,
+    "reviewedByMemberId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+    "createdAt": "2025-12-02T16:00:00Z",
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "methanolMg100mlAa": 58,
+    "conformityStatus": "CONFORMING",
+    "supersededAt": null,
+    "conformity": {
+      "status": "CONFORMING",
+      "checks": [
+        {
+          "parameter": "metanol",
+          "value": 58,
+          "unit": "mg/100 mL de alcohol anhidro",
+          "limit": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "cobre",
+          "value": 1.1,
+          "unit": "mg/L",
+          "limit": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "grado",
+          "value": 40,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        },
+        {
+          "parameter": "acidezVolatil",
+          "value": 0.19,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "PASS"
+        }
+      ],
+      "warnings": [],
+      "rulesTakenAt": "2025-03-12T14:00:00Z"
+    },
+    "recordedBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "report": {
+      "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/lab-reports/2026/informe-singani-el-portillo-2025.pdf",
+      "sha256": "6f82126ef3da66afe11af86e60903cd3070e68ed76f81b3da7f52feeb9e23b3e",
+      "url": null
+    }
+  },
+  {
+    "id": "633c1f3a-dbef-5766-a16a-52127d1bd145",
+    "bottlingBatchId": "7a347a28-d916-5e64-8fea-25a28abcd9e6",
+    "certifiedLaboratoryName": "Laboratorio CENAVIT Tarija",
+    "accreditedLabCertificationCode": "LAB-SENASAG-2026-052",
+    "analysisRequestDate": "2026-03-10T00:00:00Z",
+    "testPerformedAt": "2026-03-12T00:00:00Z",
+    "actualAlcoholAbv": 40.2,
+    "totalAlcoholAbv": null,
+    "totalAcidityTartaricGl": 4.4,
+    "volatileAcidityAceticGl": 0.2,
+    "freeSulfurDioxideMgL": null,
+    "totalSulfurDioxideMgL": null,
+    "reducingSugarsGl": null,
+    "totalDryExtractGl": null,
+    "sugarFreeDryExtractGl": null,
+    "overpressureBar": null,
+    "methanolContentMgL": null,
+    "copperContentMgL": 0.9,
+    "additionalParams": null,
+    "laboratoryReportPdfUrl": "org/eac1f883-31c7-5032-8628-cac993ca5e48/lab-reports/2026/informe-singani-casa-uriondo-2025.pdf",
+    "conformsToSenasagStandards": true,
+    "conformsToEuStandards": false,
+    "conformsToUsaStandards": false,
+    "reviewedByMemberId": "15ceef52-08d1-59af-ac64-28566279de57",
+    "createdAt": "2026-03-12T16:00:00Z",
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "methanolMg100mlAa": 51,
+    "conformityStatus": "CONFORMING",
+    "supersededAt": null,
+    "conformity": {
+      "status": "CONFORMING",
+      "checks": [
+        {
+          "parameter": "metanol",
+          "value": 51,
+          "unit": "mg/100 mL de alcohol anhidro",
+          "limit": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 300
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "cobre",
+          "value": 0.9,
+          "unit": "mg/L",
+          "limit": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "result": "PASS"
+        },
+        {
+          "parameter": "grado",
+          "value": 40.2,
+          "unit": "% v/v a 20 °C",
+          "limit": null,
+          "result": "PASS"
+        },
+        {
+          "parameter": "acidezVolatil",
+          "value": 0.2,
+          "unit": "g/L",
+          "limit": {
+            "unidad": "g/l",
+            "max": 1.2
+          },
+          "result": "PASS"
+        }
+      ],
+      "warnings": [],
+      "rulesTakenAt": "2025-03-12T14:00:00Z"
+    },
+    "recordedBy": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "report": {
+      "key": "org/eac1f883-31c7-5032-8628-cac993ca5e48/lab-reports/2026/informe-singani-casa-uriondo-2025.pdf",
+      "sha256": "eeaa9eba6856f1e71c27e0df93b05c7ec86445eb5c813324a3b41f2ee7ccc1f4",
+      "url": null
+    }
+  },
+  {
     "id": "eb1118cd-a564-5ab4-83e3-dd15636d6184",
     "bottlingBatchId": "8f82c09a-bb21-5565-889a-ff2e30be7b5d",
     "certifiedLaboratoryName": "Laboratorio de Servicios Analíticos ISO 17025",
@@ -315,7 +553,7 @@
         }
       ],
       "warnings": [],
-      "rulesTakenAt": "2026-09-25T12:00:00Z"
+      "rulesTakenAt": "2026-03-07T14:00:00Z"
     },
     "recordedBy": {
       "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",

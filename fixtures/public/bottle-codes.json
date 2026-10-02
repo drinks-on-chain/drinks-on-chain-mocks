@@ -108,6 +108,114 @@
     ]
   },
   {
+    "lotCode": "ALT-2025-WINE-001",
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "total": 4400,
+    "codes": [
+      {
+        "serial": 1,
+        "code": "T1CRYRRM",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 2,
+        "code": "HA6175DS",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 3,
+        "code": "K3430MNC",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 4400,
+        "code": "ES703GZ8",
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "lotCode": "ALT-2025-SINGANI-002",
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "total": 1040,
+    "codes": [
+      {
+        "serial": 1,
+        "code": "6MM0ZB1B",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 2,
+        "code": "H1FP4W8M",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 3,
+        "code": "XT094MPS",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 1040,
+        "code": "JJK2YFFP",
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "lotCode": "CVJ-2025-SINGANI-001",
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "total": 1120,
+    "codes": [
+      {
+        "serial": 1,
+        "code": "HEFNKABN",
+        "status": "VOIDED"
+      },
+      {
+        "serial": 2,
+        "code": "AH5JZNPY",
+        "status": "VOIDED"
+      },
+      {
+        "serial": 3,
+        "code": "F3MXXZ8F",
+        "status": "VOIDED"
+      },
+      {
+        "serial": 1120,
+        "code": "Q4JSTMCE",
+        "status": "VOIDED"
+      }
+    ]
+  },
+  {
+    "lotCode": "CUR-2026-SINGANI-001",
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "total": 880,
+    "codes": [
+      {
+        "serial": 1,
+        "code": "KMZ3HYAE",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 2,
+        "code": "A4XEB3MX",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 3,
+        "code": "EX82HEQN",
+        "status": "ACTIVE"
+      },
+      {
+        "serial": 880,
+        "code": "HWQK85RS",
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  {
     "lotCode": "CVJ-2026-SINGANI-004",
     "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
     "total": 2950,

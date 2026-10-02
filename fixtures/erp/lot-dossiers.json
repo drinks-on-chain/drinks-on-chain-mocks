@@ -3,7 +3,7 @@
     "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
     "schema": "doc-dossier/1",
     "status": "CLOSED",
-    "hash": "f4867f532d0179e211524c9f1aee5ec65e0d6c79a42f3ec923d4c2b29e291141",
+    "hash": "7797f844452dfcf741e00115898f5f67894992cccf88a0aea5a00d446f1b79de",
     "algorithm": "sha256/jcs-rfc8785",
     "closedAt": "2026-09-24T15:00:00Z",
     "closedBy": {
@@ -14,7 +14,7 @@
     },
     "bottleCodes": {
       "count": 2950,
-      "merkleRoot": "83193856e24b73a5da9949cf19993c008fdb87c40be3f3c3c3468eee572bb243",
+      "merkleRoot": "7a1caa0a457bbfaeea8f64c57adf82a85c5e7c1d454f6a21f53bd96f56914ff1",
       "algorithm": "sha256-merkle/serial-code-salt"
     },
     "anchor": null

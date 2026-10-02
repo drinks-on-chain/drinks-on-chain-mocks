@@ -88,5 +88,23 @@
     "lotId": "657df64b-8ef6-5d59-912c-27496c32faed",
     "startDate": "2026-04-10",
     "containerCount": 19
+  },
+  {
+    "id": "625ba51c-6c64-5326-93c0-e399db486c43",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "fermentationTankId": "84645346-8236-5be7-be28-11f041cb1d7a",
+    "containerType": "Barrica",
+    "containerMaterial": "Roble americano, tostado medio",
+    "containerCode": "BAR-AM-2024-03",
+    "barrelUseCycle": 3,
+    "volumeLiters": 3400,
+    "plannedMonths": 12,
+    "lockUntilDate": "2025-04-28T00:00:00Z",
+    "agingStatus": "BOTTLED",
+    "notes": null,
+    "createdAt": "2024-04-28T14:00:00Z",
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "startDate": "2024-04-28",
+    "containerCount": 15
   }
 ]

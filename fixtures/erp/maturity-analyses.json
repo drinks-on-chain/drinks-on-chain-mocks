@@ -183,6 +183,74 @@
     "source": "ERP"
   },
   {
+    "id": "2139be63-5e54-5af0-b1c3-c30ea70bf564",
+    "harvestBatchId": "535ed750-3e23-5cd8-94c6-7c454d0ebd9b",
+    "brixDegrees": 24.6,
+    "ph": 3.62,
+    "acidityGl": 5.4,
+    "measuredAt": "2024-03-14T13:10:00Z",
+    "recordedAt": "2024-03-14T13:10:00Z",
+    "recordedBy": {
+      "membershipId": "8903bc37-3419-5b49-97f1-bd1811e267eb",
+      "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
+      "fullName": "Mario Quispe",
+      "role": "OPERATOR"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
+    "id": "6904a299-21b3-5f4c-8e6d-dfd4e2d5be46",
+    "harvestBatchId": "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55",
+    "brixDegrees": 22.8,
+    "ph": 3.41,
+    "acidityGl": 6.1,
+    "measuredAt": "2025-03-14T15:00:00Z",
+    "recordedAt": "2025-03-26T15:00:00Z",
+    "recordedBy": {
+      "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+      "fullName": "Lic. Carla Villarroel",
+      "role": "ENOLOGIST"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
+    "id": "67f8a73f-3afe-55aa-8e99-eda89b466d5e",
+    "harvestBatchId": "3c228caf-ba8d-5e96-9880-1f28560245f8",
+    "brixDegrees": 23.1,
+    "ph": 3.39,
+    "acidityGl": 6,
+    "measuredAt": "2024-03-09T13:30:00Z",
+    "recordedAt": "2024-03-09T13:30:00Z",
+    "recordedBy": {
+      "membershipId": "75b76250-9520-50b8-9563-49384bb7d560",
+      "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
+      "fullName": "Rubén Flores",
+      "role": "OPERATOR"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
+    "id": "81b0bb46-5f2f-52f3-9e65-a33b05a8ad50",
+    "harvestBatchId": "36304582-8e8f-5e31-ae49-ff7584e9cb91",
+    "brixDegrees": 22.4,
+    "ph": 3.45,
+    "acidityGl": 6.2,
+    "measuredAt": "2025-03-14T13:45:00Z",
+    "recordedAt": "2025-03-14T13:45:00Z",
+    "recordedBy": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "notes": null,
+    "source": "ERP"
+  },
+  {
     "id": "f338ade4-f9b5-57b5-8831-fb706b6ad862",
     "harvestBatchId": "260262b8-47be-5be5-8b71-d5391032200d",
     "brixDegrees": 23.4,
