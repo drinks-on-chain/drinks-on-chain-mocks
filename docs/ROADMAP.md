@@ -102,7 +102,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Escenarios de datos `lote-en-reposo`, `lote-listo`, `lote-con-incidencia`, `laboratorio-no-conforme` · 01-10-2026
 - [x] Prueba de contrato estricta de las rutas nuevas; `test/trace-rules.test.ts` (recorrido H2 y elusión del §18) y `test/public.test.ts` · 01-10-2026
 - [x] Versión 0.5.0, CHANGELOG con rupturas y guía de migración del ERP, README y `docs/CONTRATO.md` §10 · 01-10-2026
-- [ ] Etiqueta `v0.5.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.1.tgz`
+- [x] Etiqueta `v0.5.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.1.tgz`, instalado y probado en un proyecto limpio · 01-10-2026
 - [ ] `rc.2`: alinear con el backend cuando implemente las rutas que hoy responden 501 (huella del expediente y raíz Merkle del paso 2.8, `TRC_TANK_NOT_COMPLETED`)
 - [ ] Retirada de H2 al cerrar la ola: `LotView`/`deriveLotViews`/`lots-view.json`, rutas legadas y entradas obsoletas (CHANGELOG 0.5.0-rc.1)
 - [ ] Etiqueta estable `v0.5.0` en `main` al cerrar la Ola 2 (coordinación)
