@@ -285,7 +285,7 @@
           4000,
           750
         ],
-        "metadataHash": "0x472d59a2f1dd7fa6d4086ae6772f897ac3034c1ce8d9977d6eb01d7135c19d90",
+        "metadataHash": "0x7a76250bffe453c5fad19eed0ea5c3ad59d685a18ee48b32790287f945507a7f",
         "isCertified": true,
         "operator": {
           "name": "Supervisor de Envasado",
@@ -296,7 +296,7 @@
           "internationalLotCode": "CVJ-2026-SINGANI-002",
           "productType": "SINGANI",
           "finalAlcoholAbv": 40,
-          "waterDilutionLiters": 620,
+          "waterDilutionLiters": 630,
           "totalBottlesPackaged": 2140,
           "packagingFormatCl": 75,
           "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-002",

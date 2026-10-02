@@ -126,20 +126,6 @@
     "createdAt": "2026-01-05T14:35:00Z"
   },
   {
-    "id": "f28ea298-cf7f-5d30-a92e-aad6379b8158",
-    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "harvestBatchId": "be653b6b-868e-51f3-bc11-462afa764ca1",
-    "tankCode": "TK-07",
-    "capacityLiters": 8000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 4200,
-    "destinationType": "OTHER",
-    "status": "FILLING",
-    "startDate": "2026-09-24T14:30:00Z",
-    "endDate": null,
-    "createdAt": "2026-09-24T14:35:00Z"
-  },
-  {
     "id": "d78d6307-f96b-533b-8f6e-710f6533bb42",
     "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
     "harvestBatchId": "2a643ce2-9f17-5017-9d6a-b4eb661d4648",

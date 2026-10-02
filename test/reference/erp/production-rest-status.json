@@ -34,14 +34,5 @@
     "daysElapsed": 13,
     "daysRemaining": 167,
     "isRestCompleted": false
-  },
-  {
-    "id": "a6dd3060-8612-5595-b9b4-33a7d039159c",
-    "restStatus": "READY",
-    "processEndDate": "2026-03-22T00:00:00Z",
-    "mandatoryRestUntil": "2026-09-18T00:00:00Z",
-    "daysElapsed": 187,
-    "daysRemaining": 0,
-    "isRestCompleted": true
   }
 ]

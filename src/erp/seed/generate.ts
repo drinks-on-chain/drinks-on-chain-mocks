@@ -444,7 +444,8 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['t07', 'h08', 'TK-RED-02', 10000, 5300, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 21), day(2025, 4, 11)],
     ['t08', 'h09', 'TK-RED-03', 12000, 6700, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 7), day(2025, 3, 28)],
     ['t09', 'h07', 'TK-06', 10000, 0, 'WINE_AGING', 'CLEANED', day(2026, 1, 5), day(2026, 1, 6)],
-    ['t10', 'h11', 'TK-07', 8000, 4200, 'OTHER', 'FILLING', day(2026, 9, 24), null],
+    // t10 (TK-07, FILLING con el pesaje h11 en cuarentena) se retiró en la Ola 2: la uva sin dictamen
+    // aprobado no entra a un tanque (EA-04; mismas correcciones que `src/seed/corrections.ts` del backend).
     ['t11', 'h01', 'TK-08', 8000, 6300, 'SINGANI_DIST', 'COMPLETED', day(2026, 3, 7), day(2026, 4, 2)],
     ['t12', 'h02', 'TK-09', 15000, 0, 'SINGANI_DIST', 'CLEANED', day(2025, 3, 11), day(2025, 4, 13)],
     ['t13', 'h06', 'TK-RED-04', 10000, 0, 'WINE_AGING', 'CLEANED', day(2025, 3, 3), day(2025, 3, 25)],
@@ -534,7 +535,7 @@ export function generateErpFixtures(): ErpFixtureSet {
   const AGING: AgingRow[] = [
     ['a01', 't06', 'Roble francés grano fino (Allier), tostado medio', 'BAR-FR-2024-01', 1, 3375, 12, day(2025, 11, 3), 'AGING'],
     ['a02', 't07', 'Roble americano, tostado medio plus', 'BAR-US-2024-07', 2, 3150, 8, day(2026, 6, 30), 'AGING'],
-    ['a03', 't04', 'Roble francés, tostado ligero', 'BAR-FR-2023-11', 3, 2925, 10, day(2025, 4, 1), 'READY'],
+    ['a03', 't04', 'Roble francés, tostado ligero', 'BAR-FR-2023-11', 3, 2925, 10, day(2025, 4, 1), 'BOTTLED'],
     ['a04', 't08', 'Roble francés (Nevers), tostado medio', 'BAR-FR-2023-04', 1, 4050, 12, day(2025, 4, 10), 'BOTTLED'],
   ]
   const agings: WineAgingResponse[] = []
@@ -568,7 +569,8 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['p02', 't02', 'Alambique de cobre Charentais AL-01', day(2025, 5, 20), day(2025, 5, 25), 10000, 1750, 570, 70.2, 'BOTTLED'],
     ['p03', 't03', 'Alambique de cobre AL-02', day(2025, 5, 2), day(2025, 5, 4), 6100, 980, 290, 65.4, 'BOTTLED'],
     ['p04', 't11', 'Alambique de cobre AL-02', day(2026, 9, 10), day(2026, 9, 12), 6300, 900, 260, 62.1, 'RESTING'],
-    ['p05', 't03', 'Alambique de cobre AL-02', day(2026, 3, 20), day(2026, 3, 22), 3000, 450, 120, 64.0, 'READY'],
+    // p05 (segunda destilación de TK-02, marzo de 2026) se retiró en la Ola 2: el tanque ya se había
+    // destilado entero y su lote estaba embotellado (un embotellado por lote, S-10).
   ]
   const productions: ProductionBatchResponse[] = []
   for (const [key, tkey, equip, start, end, vin, vout, waste, abv, status] of DIST) {
@@ -608,7 +610,7 @@ export function generateErpFixtures(): ErpFixtureSet {
   type BottlingRow = [string, 'aging' | 'production', string, BottlingBatchResponse['productType'], number, number | null, number, number, string, Day, boolean, number, string]
   const BOTTLING: BottlingRow[] = [
     ['b01', 'production', 'p02', 'SINGANI', 40.0, 1321, 4080, 75, 'Vidrio extra-flint 750 ml', day(2026, 3, 1), true, 1, 'cvj_enologa'],
-    ['b02', 'production', 'p03', 'SINGANI', 40.0, 620, 2140, 75, 'Vidrio flint 750 ml', day(2026, 2, 10), true, 2, 'cvj_enologa'],
+    ['b02', 'production', 'p03', 'SINGANI', 40.0, 630, 2140, 75, 'Vidrio flint 750 ml', day(2026, 2, 10), true, 2, 'cvj_enologa'],
     ['b03', 'aging', 'a04', 'WINE', 14.2, null, 5320, 75, 'Bordelesa cónica verde antiguo 750 ml', day(2026, 5, 12), true, 1, 'altos_enologa'],
     ['b04', 'aging', 'a03', 'WINE', 13.8, null, 3860, 75, 'Borgoña 750 ml', day(2026, 9, 20), false, 3, 'cvj_enologa'],
   ]

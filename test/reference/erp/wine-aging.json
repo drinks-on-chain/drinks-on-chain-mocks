@@ -40,7 +40,7 @@
     "volumeLiters": 2925,
     "plannedMonths": 10,
     "lockUntilDate": "2026-02-01T00:00:00Z",
-    "agingStatus": "READY",
+    "agingStatus": "BOTTLED",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
     "createdAt": "2025-04-01T10:00:00Z"
   },
