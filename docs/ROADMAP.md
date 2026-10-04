@@ -111,7 +111,8 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] `rc.3`: retirada de H2 con el OpenAPI de la fase de cierre del backend (`feat/o2-be-contraer`, `9ca8111`: 158 operaciones, fijado desde la rama; `docs/CONTRATO.md` §12.1): fuera las cinco rutas legadas, los campos de entrada retirados (422 «property … should not exist»), `LotView`/`deriveLotViews`/`lots-view.json` y el grafo DAG; crianza y destilación solo desde un tanque `COMPLETED`; `sha256` en las subidas y `clean` con remanente · 02-10-2026
 - [x] `rc.3`: correcciones de la semilla del backend en los fixtures (tanques vacíos fuera, TK-08 `TRANSFERRED`, TK-01 `CLEANED`), crianza mínima real en Altos y los huecos que anotó el ERP (fecha del panel, nombre del CSV, escenario `empty`, `?mock=` al arrancar, incidencia al corregir una fuente ya embotellada); guía de migración `rc.2` → `rc.3` para ERP, Marketplace y Backoffice · 02-10-2026
 - [x] Etiqueta `v0.5.0-rc.3` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.5.0-rc.3.tgz`, instalado y probado en un proyecto limpio · 02-10-2026
-- [ ] Volver a `pnpm openapi:pull` contra el servidor cuando despliegue el cierre H2 (debe dar las mismas 158 operaciones; `docs/CONTRATO.md` §12.1)
+- [x] `pnpm openapi:pull` contra el servidor con el cierre H2 desplegado (`b82beed`): mismas 158 operaciones, documento idéntico · 04-10-2026
+- [x] Pasaportes de los fixtures comparados con los del servidor tras regenerar su semilla: mismos lotes y códigos (diferencias conocidas en el CHANGELOG 0.5.0) · 04-10-2026
 - [ ] Rendimiento del mosto de `CVJ-L2026-001` y `ALT-L2026-001` (~1,0 L/kg) en las filas base
 - [ ] Etiqueta estable `v0.5.0` en `main` al cerrar la Ola 2 (coordinación)
 
