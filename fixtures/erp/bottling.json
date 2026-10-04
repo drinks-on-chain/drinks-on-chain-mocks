@@ -18,8 +18,28 @@
     "blockchainDataHash": "ede8c963f0b67ff8e329edf2ca5665ab45932ce668c88ea432cf1c9c8c6092ac",
     "isAnchoredOnChain": true,
     "anchoredAt": "2026-03-02T12:00:00Z",
-    "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-001",
-    "createdAt": "2026-03-01T16:00:00Z"
+    "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-001",
+    "createdAt": "2026-03-01T16:00:00Z",
+    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "balance": {
+      "availableLiters": 1750,
+      "waterDilutionLiters": 1321,
+      "bottledLiters": 3060,
+      "leftoverLiters": 0,
+      "lossLiters": 11,
+      "lossPercent": 0.36,
+      "maxLossPercent": 5,
+      "pureAlcohol": {
+        "availableLiters": 1228.5,
+        "bottledLiters": 1224
+      },
+      "maxBottles": 4094
+    },
+    "leftover": null,
+    "labelDesign": {
+      "key": "/mocks/uploads/labels/cvj-2026-singani-001.png",
+      "url": "/mocks/uploads/labels/cvj-2026-singani-001.png"
+    }
   },
   {
     "id": "16887e29-6c0f-5820-85df-951b7372e1aa",
@@ -29,7 +49,7 @@
     "productType": "SINGANI",
     "internationalLotCode": "CVJ-2026-SINGANI-002",
     "finalAlcoholAbv": 40,
-    "waterDilutionLiters": 620,
+    "waterDilutionLiters": 630,
     "totalBottlesPackaged": 2140,
     "packagingFormatCl": 75,
     "bottleType": "Vidrio flint 750 ml",
@@ -40,8 +60,28 @@
     "blockchainDataHash": "a49b67f9f140e35bd3dff9efeac633cde19e7683d292914038ee40d6dd5a22e1",
     "isAnchoredOnChain": true,
     "anchoredAt": "2026-02-11T12:00:00Z",
-    "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-SINGANI-002",
-    "createdAt": "2026-02-10T16:00:00Z"
+    "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-002",
+    "createdAt": "2026-02-10T16:00:00Z",
+    "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
+    "balance": {
+      "availableLiters": 980,
+      "waterDilutionLiters": 630,
+      "bottledLiters": 1605,
+      "leftoverLiters": 0,
+      "lossLiters": 5,
+      "lossPercent": 0.31,
+      "maxLossPercent": 5,
+      "pureAlcohol": {
+        "availableLiters": 640.92,
+        "bottledLiters": 642
+      },
+      "maxBottles": 2146
+    },
+    "leftover": null,
+    "labelDesign": {
+      "key": "/mocks/uploads/labels/cvj-2026-singani-002.png",
+      "url": "/mocks/uploads/labels/cvj-2026-singani-002.png"
+    }
   },
   {
     "id": "bc10077a-bf11-575c-8bba-331fbc6887c2",
@@ -62,8 +102,25 @@
     "blockchainDataHash": "9c93db5cae4621b511ca9cb08bf1fb0ebd4d8e4922dc80be364c48b96f18f95f",
     "isAnchoredOnChain": true,
     "anchoredAt": "2026-05-13T12:00:00Z",
-    "qrBatchUrl": "https://app.drinksonchain.bo/b/ALT-2026-WINE-001",
-    "createdAt": "2026-05-12T16:00:00Z"
+    "qrBatchUrl": "http://localhost:3005/b/ALT-2026-WINE-001",
+    "createdAt": "2026-05-12T16:00:00Z",
+    "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
+    "balance": {
+      "availableLiters": 4050,
+      "waterDilutionLiters": 0,
+      "bottledLiters": 3990,
+      "leftoverLiters": 0,
+      "lossLiters": 60,
+      "lossPercent": 1.48,
+      "maxLossPercent": 5,
+      "pureAlcohol": null,
+      "maxBottles": 5400
+    },
+    "leftover": null,
+    "labelDesign": {
+      "key": "/mocks/uploads/labels/alt-2026-wine-001.png",
+      "url": "/mocks/uploads/labels/alt-2026-wine-001.png"
+    }
   },
   {
     "id": "c95f78e7-f72a-556c-8bae-e6670da39e8b",
@@ -84,7 +141,219 @@
     "blockchainDataHash": "7688045198824f28b204708e854f20fc3cc07bf1c3d3e9118ad7a25064c72e24",
     "isAnchoredOnChain": false,
     "anchoredAt": null,
-    "qrBatchUrl": "https://app.drinksonchain.bo/b/CVJ-2026-WINE-003",
-    "createdAt": "2026-09-20T16:00:00Z"
+    "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-WINE-003",
+    "createdAt": "2026-09-20T16:00:00Z",
+    "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
+    "balance": {
+      "availableLiters": 2925,
+      "waterDilutionLiters": 0,
+      "bottledLiters": 2895,
+      "leftoverLiters": 0,
+      "lossLiters": 30,
+      "lossPercent": 1.03,
+      "maxLossPercent": 5,
+      "pureAlcohol": null,
+      "maxBottles": 3900
+    },
+    "leftover": null,
+    "labelDesign": {
+      "key": "/mocks/uploads/labels/cvj-2026-wine-003.png",
+      "url": "/mocks/uploads/labels/cvj-2026-wine-003.png"
+    }
+  },
+  {
+    "id": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "wineAgingBatchId": "625ba51c-6c64-5326-93c0-e399db486c43",
+    "productionBatchId": null,
+    "productType": "WINE",
+    "internationalLotCode": "ALT-2025-WINE-001",
+    "finalAlcoholAbv": 13.8,
+    "waterDilutionLiters": null,
+    "totalBottlesPackaged": 4400,
+    "packagingFormatCl": 75,
+    "bottleType": "Bordelesa 750 ml",
+    "labelDesignUrl": null,
+    "bottlingDate": "2025-08-01T00:00:00Z",
+    "releasedByMemberId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+    "blockchainAnchorTxHash": null,
+    "blockchainDataHash": null,
+    "isAnchoredOnChain": false,
+    "anchoredAt": null,
+    "qrBatchUrl": "http://localhost:3005/b/ALT-2025-WINE-001",
+    "createdAt": "2025-08-01T15:00:00Z",
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "balance": {
+      "availableLiters": 3400,
+      "waterDilutionLiters": 0,
+      "bottledLiters": 3300,
+      "leftoverLiters": 0,
+      "lossLiters": 100,
+      "lossPercent": 2.94,
+      "maxLossPercent": 5,
+      "pureAlcohol": null,
+      "maxBottles": 4533
+    },
+    "leftover": null,
+    "labelDesign": null
+  },
+  {
+    "id": "10b56de9-cfbd-5681-b953-bc05eeeea58c",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "wineAgingBatchId": null,
+    "productionBatchId": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+    "productType": "SINGANI",
+    "internationalLotCode": "ALT-2025-SINGANI-002",
+    "finalAlcoholAbv": 40,
+    "waterDilutionLiters": 260,
+    "totalBottlesPackaged": 1040,
+    "packagingFormatCl": 70,
+    "bottleType": "Vidrio extra-flint 700 ml",
+    "labelDesignUrl": null,
+    "bottlingDate": "2025-11-29T00:00:00Z",
+    "releasedByMemberId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+    "blockchainAnchorTxHash": null,
+    "blockchainDataHash": null,
+    "isAnchoredOnChain": false,
+    "anchoredAt": null,
+    "qrBatchUrl": "http://localhost:3005/b/ALT-2025-SINGANI-002",
+    "createdAt": "2025-11-29T15:00:00Z",
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "balance": {
+      "availableLiters": 480,
+      "waterDilutionLiters": 260,
+      "bottledLiters": 728,
+      "leftoverLiters": 0,
+      "lossLiters": 12,
+      "lossPercent": 1.62,
+      "maxLossPercent": 5,
+      "pureAlcohol": {
+        "availableLiters": 297.6,
+        "bottledLiters": 291.2
+      },
+      "maxBottles": 1057
+    },
+    "leftover": null,
+    "labelDesign": null
+  },
+  {
+    "id": "1281f02c-e882-5df1-aea7-eab5c8919350",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "wineAgingBatchId": null,
+    "productionBatchId": "00bc292a-8178-5216-8578-6d97a524f182",
+    "productType": "SINGANI",
+    "internationalLotCode": "CVJ-2025-SINGANI-001",
+    "finalAlcoholAbv": 40,
+    "waterDilutionLiters": 290,
+    "totalBottlesPackaged": 1120,
+    "packagingFormatCl": 75,
+    "bottleType": "Vidrio extra-flint 750 ml",
+    "labelDesignUrl": null,
+    "bottlingDate": "2025-05-13T00:00:00Z",
+    "releasedByMemberId": "21af9548-86fa-5c19-86c1-16133a906b64",
+    "blockchainAnchorTxHash": null,
+    "blockchainDataHash": null,
+    "isAnchoredOnChain": false,
+    "anchoredAt": null,
+    "qrBatchUrl": "http://localhost:3005/b/CVJ-2025-SINGANI-001",
+    "createdAt": "2025-05-13T15:00:00Z",
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "balance": {
+      "availableLiters": 560,
+      "waterDilutionLiters": 290,
+      "bottledLiters": 840,
+      "leftoverLiters": 0,
+      "lossLiters": 10,
+      "lossPercent": 1.18,
+      "maxLossPercent": 5,
+      "pureAlcohol": {
+        "availableLiters": 341.6,
+        "bottledLiters": 336
+      },
+      "maxBottles": 1133
+    },
+    "leftover": null,
+    "labelDesign": null
+  },
+  {
+    "id": "7a347a28-d916-5e64-8fea-25a28abcd9e6",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "wineAgingBatchId": null,
+    "productionBatchId": "f9b48669-3b05-5bb4-9251-7905c2e343fc",
+    "productType": "SINGANI",
+    "internationalLotCode": "CUR-2026-SINGANI-001",
+    "finalAlcoholAbv": 40,
+    "waterDilutionLiters": 228,
+    "totalBottlesPackaged": 880,
+    "packagingFormatCl": 75,
+    "bottleType": "Vidrio extra-flint 750 ml",
+    "labelDesignUrl": null,
+    "bottlingDate": "2026-03-09T00:00:00Z",
+    "releasedByMemberId": "15ceef52-08d1-59af-ac64-28566279de57",
+    "blockchainAnchorTxHash": null,
+    "blockchainDataHash": null,
+    "isAnchoredOnChain": false,
+    "anchoredAt": null,
+    "qrBatchUrl": "http://localhost:3005/b/CUR-2026-SINGANI-001",
+    "createdAt": "2026-03-09T15:00:00Z",
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "balance": {
+      "availableLiters": 440,
+      "waterDilutionLiters": 228,
+      "bottledLiters": 660,
+      "leftoverLiters": 0,
+      "lossLiters": 8,
+      "lossPercent": 1.2,
+      "maxLossPercent": 5,
+      "pureAlcohol": {
+        "availableLiters": 268.4,
+        "bottledLiters": 264
+      },
+      "maxBottles": 890
+    },
+    "leftover": null,
+    "labelDesign": null
+  },
+  {
+    "id": "8f82c09a-bb21-5565-889a-ff2e30be7b5d",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "wineAgingBatchId": null,
+    "productionBatchId": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+    "productType": "SINGANI",
+    "internationalLotCode": "CVJ-2026-SINGANI-004",
+    "finalAlcoholAbv": 40,
+    "waterDilutionLiters": 750,
+    "totalBottlesPackaged": 2950,
+    "packagingFormatCl": 75,
+    "bottleType": "Vidrio extra-flint 750 ml",
+    "labelDesignUrl": null,
+    "bottlingDate": "2026-09-22T00:00:00Z",
+    "releasedByMemberId": "21af9548-86fa-5c19-86c1-16133a906b64",
+    "blockchainAnchorTxHash": null,
+    "blockchainDataHash": null,
+    "isAnchoredOnChain": false,
+    "anchoredAt": null,
+    "qrBatchUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-004",
+    "createdAt": "2026-09-22T15:00:00Z",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "balance": {
+      "availableLiters": 1500,
+      "waterDilutionLiters": 750,
+      "bottledLiters": 2212.5,
+      "leftoverLiters": 0,
+      "lossLiters": 37.5,
+      "lossPercent": 1.67,
+      "maxLossPercent": 5,
+      "pureAlcohol": {
+        "availableLiters": 900,
+        "bottledLiters": 885
+      },
+      "maxBottles": 3000
+    },
+    "leftover": null,
+    "labelDesign": {
+      "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/labels/2026/etiqueta-sgr-2026.png",
+      "url": null
+    }
   }
 ]

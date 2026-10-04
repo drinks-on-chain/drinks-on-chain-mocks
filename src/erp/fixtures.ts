@@ -5,34 +5,45 @@ import logsJson from '../../fixtures/erp/fermentation-logs.json'
 import tanksJson from '../../fixtures/erp/fermentation-tanks.json'
 import harvestJson from '../../fixtures/erp/harvest-batches.json'
 import labJson from '../../fixtures/erp/lab-analyses.json'
-import lotsJson from '../../fixtures/erp/lots-view.json'
+import bottleLotsJson from '../../fixtures/erp/bottle-lots.json'
+import correctionsJson from '../../fixtures/erp/corrections.json'
+import lotAttachmentsJson from '../../fixtures/erp/lot-attachments.json'
+import lotDossiersJson from '../../fixtures/erp/lot-dossiers.json'
+import lotEventsJson from '../../fixtures/erp/lot-events.json'
+import lotsV2Json from '../../fixtures/erp/lots.json'
+import maturityJson from '../../fixtures/erp/maturity-analyses.json'
+import phytoJson from '../../fixtures/erp/phyto-decisions.json'
 import productionJson from '../../fixtures/erp/production-batches.json'
 import restStatusJson from '../../fixtures/erp/production-rest-status.json'
 import terroirsJson from '../../fixtures/erp/terroirs.json'
-import publicJson from '../../fixtures/erp/traceability-public.json'
 import usersJson from '../../fixtures/erp/users.json'
 import walletsJson from '../../fixtures/erp/wallets.json'
 import agingJson from '../../fixtures/erp/wine-aging.json'
 import wineriesJson from '../../fixtures/erp/wineries.json'
 import staffMfaJson from '../../fixtures/backoffice/staff-mfa.json'
 import type { StaffMfa } from '../backoffice/model'
+import type { BottleLot, StoredAttachment } from './trace/state'
 import type {
   Audience,
   BatchLabAnalysisResponse,
   BottlingBatchResponse,
+  Correction,
   EnologicalTreatmentRecord,
   FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
-  LotView,
+  Lot,
+  LotDossier,
+  MaturityAnalysis,
   Membership,
   MembershipRole,
   MockUser,
+  PhytoDecision,
   PlatformRole,
   ProductionBatchResponse,
-  PublicPassport,
   RestStatusResponse,
   SessionResponse,
+  StoredLotEvent,
   TerroirResponse,
   WalletResponse,
   WineAgingResponse,
@@ -58,9 +69,22 @@ export interface ErpFixtures {
   productionRestStatus: RestStatusResponse[]
   bottling: BottlingBatchResponse[]
   labAnalyses: BatchLabAnalysisResponse[]
-  /** Pasaporte público por código de lote. */
-  traceabilityPublic: Record<string, PublicPassport>
-  lotsView: LotView[]
+  /**
+   * Lotes del servidor (Ola 2) tal como los devuelve `GET /v1/lots/{id}` el día de referencia: los
+   * migrados (uno por pesaje anterior, con el id de la semilla del backend) y los nativos de
+   * demostración, incluido «Singani Gran Reserva 2026» (contrato §18).
+   */
+  lots: Lot[]
+  /** Línea de tiempo de todos los lotes (cada evento con su `lotId`). */
+  lotEvents: StoredLotEvent[]
+  maturityAnalyses: MaturityAnalysis[]
+  phytoDecisions: PhytoDecision[]
+  /** Códigos de botella por lote: totales, series sustituidas, anulados y rangos exportados. */
+  bottleLots: BottleLot[]
+  corrections: Correction[]
+  lotAttachments: StoredAttachment[]
+  /** Expedientes cerrados. */
+  lotDossiers: LotDossier[]
 }
 
 export const erpFixtures: ErpFixtures = {
@@ -78,8 +102,14 @@ export const erpFixtures: ErpFixtures = {
   productionRestStatus: restStatusJson as unknown as RestStatusResponse[],
   bottling: bottlingJson as unknown as BottlingBatchResponse[],
   labAnalyses: labJson as unknown as BatchLabAnalysisResponse[],
-  traceabilityPublic: publicJson as unknown as Record<string, PublicPassport>,
-  lotsView: lotsJson as unknown as LotView[],
+  lots: lotsV2Json as unknown as Lot[],
+  lotEvents: lotEventsJson as unknown as StoredLotEvent[],
+  maturityAnalyses: maturityJson as unknown as MaturityAnalysis[],
+  phytoDecisions: phytoJson as unknown as PhytoDecision[],
+  bottleLots: bottleLotsJson as unknown as BottleLot[],
+  corrections: correctionsJson as unknown as Correction[],
+  lotAttachments: lotAttachmentsJson as unknown as StoredAttachment[],
+  lotDossiers: lotDossiersJson as unknown as LotDossier[],
 }
 
 /** Contraseña de todos los usuarios de demo. */

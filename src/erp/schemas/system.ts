@@ -46,6 +46,8 @@ export const UploadResponseSchema = z.object({
   originalName: z.string(),
   mimeType: UploadMimeTypeSchema,
   sizeBytes: z.number(),
+  /** Huella SHA-256 (hexadecimal) del contenido: la que guardan los registros de la trazabilidad junto a la `key`. */
+  sha256: z.string().regex(/^[0-9a-f]{64}$/),
 })
 export type UploadResponse = z.infer<typeof UploadResponseSchema>
 

@@ -5,16 +5,25 @@ import { z } from 'zod'
 import {
   AuthResponseSchema,
   BatchLabAnalysisResponseSchema,
+  BottleLotSchema,
   BottlingBatchResponseSchema,
+  CorrectionSchema,
   EnologicalTreatmentRecordSchema,
   FermentationLogRecordSchema,
   FermentationTankResponseSchema,
   HarvestBatchResponseSchema,
-  LotViewSchema,
+  LotDossierSchema,
+  LotSchema,
+  MaturityAnalysisSchema,
   MockUserSchema,
+  PhytoDecisionSchema,
+  PublicCollectionSchema,
+  PublicLotPassportSchema,
+  PublicWineryProfileSchema,
   ProductionBatchResponseSchema,
-  DagGraphMapSchema,
   RestStatusResponseSchema,
+  StoredLotAttachmentSchema,
+  StoredLotEventSchema,
   TerroirResponseSchema,
   WalletResponseSchema,
   WineAgingResponseSchema,
@@ -41,8 +50,30 @@ const SCHEMAS: Record<string, z.ZodType> = {
   'production-rest-status.json': z.array(RestStatusResponseSchema),
   'bottling.json': z.array(BottlingBatchResponseSchema),
   'lab-analyses.json': z.array(BatchLabAnalysisResponseSchema),
-  'traceability-public.json': DagGraphMapSchema,
-  'lots-view.json': z.array(LotViewSchema),
+  // Ola 2
+  'lots.json': z.array(LotSchema),
+  'lot-events.json': z.array(StoredLotEventSchema),
+  'maturity-analyses.json': z.array(MaturityAnalysisSchema),
+  'phyto-decisions.json': z.array(PhytoDecisionSchema),
+  'bottle-lots.json': z.array(BottleLotSchema),
+  'corrections.json': z.array(CorrectionSchema),
+  'lot-attachments.json': z.array(StoredLotAttachmentSchema),
+  'lot-dossiers.json': z.array(LotDossierSchema),
+}
+
+const publicDir = join(import.meta.dirname, '..', 'fixtures', 'public')
+const PUBLIC_SCHEMAS: Record<string, z.ZodType> = {
+  'passports.json': z.record(z.string(), PublicLotPassportSchema),
+  'bottle-codes.json': z.array(
+    z.object({
+      lotCode: z.string(),
+      lotId: z.string(),
+      total: z.number().int(),
+      codes: z.array(z.object({ serial: z.number().int(), code: z.string(), status: z.enum(['ACTIVE', 'VOIDED']) })),
+    }),
+  ),
+  'wineries.json': z.array(PublicWineryProfileSchema),
+  'collections.json': z.array(PublicCollectionSchema),
 }
 
 describe('fixtures del ERP', () => {
@@ -54,6 +85,14 @@ describe('fixtures del ERP', () => {
   it.each(Object.keys(SCHEMAS))('%s cumple su esquema zod sin campos extra', (name) => {
     const data: unknown = JSON.parse(readFileSync(join(dir, name), 'utf8'))
     const result = SCHEMAS[name]!.safeParse(data)
+    if (!result.success) throw new Error(z.prettifyError(result.error))
+    expect(result.data).toStrictEqual(data)
+  })
+
+  it.each(Object.keys(PUBLIC_SCHEMAS))('public/%s cumple su esquema zod sin campos extra', (name) => {
+    expect(readdirSync(publicDir).filter((f) => f.endsWith('.json')).sort()).toEqual(Object.keys(PUBLIC_SCHEMAS).sort())
+    const data: unknown = JSON.parse(readFileSync(join(publicDir, name), 'utf8'))
+    const result = PUBLIC_SCHEMAS[name]!.safeParse(data)
     if (!result.success) throw new Error(z.prettifyError(result.error))
     expect(result.data).toStrictEqual(data)
   })

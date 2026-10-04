@@ -443,6 +443,8 @@ for key, tkey, intake, gross, tare, brix, ph, acid, temp, status, cert in HARVES
         "certifiedByMemberId": uid(f"member:{cert}") if cert else None,
         "notes": rng.choice(["Cosecha manual matutina en cajas de 15 kg.", "Uva sana, sin botritis.", "Ingreso por camión, tara verificada en báscula.", None]),
         "createdAt": iso(intake, 9, 45),
+        "lotId": None,
+        "terroirSnapshot": None,
     })
 H = {key: next(h for h in harvests if h["id"] == uid(f"harvest:{key}")) for key, *_ in HARVESTS}
 
@@ -459,11 +461,11 @@ TANKS = [
     ("t06", "h06", "TK-RED-01", 10000, 5800, "WINE_AGING", "TRANSFERRED", date(2025, 3, 3), date(2025, 3, 24)),
     ("t07", "h08", "TK-RED-02", 10000, 5300, "WINE_AGING", "TRANSFERRED", date(2025, 3, 21), date(2025, 4, 11)),
     ("t08", "h09", "TK-RED-03", 12000, 6700, "WINE_AGING", "TRANSFERRED", date(2025, 3, 7), date(2025, 3, 28)),
-    ("t09", "h07", "TK-06", 10000, 0, "WINE_AGING", "CLEANED", date(2026, 1, 5), date(2026, 1, 6)),
-    ("t10", "h11", "TK-07", 8000, 4200, "OTHER", "FILLING", date(2026, 9, 24), None),
-    ("t11", "h01", "TK-08", 8000, 6300, "SINGANI_DIST", "COMPLETED", date(2026, 3, 7), date(2026, 4, 2)),   # listo para bifurcar/destilar
-    ("t12", "h02", "TK-09", 15000, 0, "SINGANI_DIST", "CLEANED", date(2025, 3, 11), date(2025, 4, 13)),
-    ("t13", "h06", "TK-RED-04", 10000, 0, "WINE_AGING", "CLEANED", date(2025, 3, 3), date(2025, 3, 25)),
+    # t09 (TK-06), t12 (TK-09) y t13 (TK-RED-04) se retiraron en el cierre H2: estaban CLEANED con 0 L de 0 kg
+    # (y TK-06, fechado dos meses antes del pesaje del que decía salir). Mismas correcciones que el backend.
+    # t10 (TK-07, FILLING con el pesaje h11 en cuarentena) se retiró en la Ola 2: la uva sin dictamen
+    # aprobado no entra a un tanque (EA-04; mismas correcciones que `src/seed/corrections.ts` del backend).
+    ("t11", "h01", "TK-08", 8000, 6300, "SINGANI_DIST", "TRANSFERRED", date(2026, 3, 7), date(2026, 4, 2)),   # su destilación (p04) se llevó los 6.300 L
     ("t14", "h07", "TK-10", 5000, 3900, "WINE_AGING", "FERMENTING", date(2026, 3, 11), None),
 ]
 tanks, logs, treatments = [], [], []
@@ -483,6 +485,8 @@ for key, hkey, code, cap, filled, dest, status, start, end in TANKS:
         "startDate": iso(start, 14, 30),
         "endDate": iso(end, 14, 30) if end else None,
         "createdAt": iso(start, 14, 35),
+        "lotId": None,
+        "finalVolumeLiters": None,
     })
     if status in ("FERMENTING", "COMPLETED", "TRANSFERRED"):
         last = end or TODAY
@@ -539,7 +543,7 @@ TN = {key: next(t for t in tanks if t["id"] == uid(f"tank:{key}")) for key, *_ i
 AGING = [
     ("a01", "t06", "Roble francés grano fino (Allier), tostado medio", "BAR-FR-2024-01", 1, 3375, 12, date(2025, 11, 3), "AGING"),     # 38 d restantes
     ("a02", "t07", "Roble americano, tostado medio plus", "BAR-US-2024-07", 2, 3150, 8, date(2026, 6, 30), "AGING"),                 # 156 d restantes
-    ("a03", "t04", "Roble francés, tostado ligero", "BAR-FR-2023-11", 3, 2925, 10, date(2025, 4, 1), "READY"),                        # liberado
+    ("a03", "t04", "Roble francés, tostado ligero", "BAR-FR-2023-11", 3, 2925, 10, date(2025, 4, 1), "BOTTLED"),                      # embotellado el 20-09-2026 (b04): estado terminal (EA-02)
     ("a04", "t08", "Roble francés (Nevers), tostado medio", "BAR-FR-2023-04", 1, 4050, 12, date(2025, 4, 10), "BOTTLED"),            # embotellado
 ]
 agings = []
@@ -560,6 +564,9 @@ for key, tkey, mat, code, cycle, liters, months, start, status in AGING:
         "agingStatus": status,
         "notes": "Cava subterránea a 14 °C y 75 % HR",
         "createdAt": iso(start, 10),
+        "lotId": None,
+        "startDate": None,
+        "containerCount": None,
     })
 AG = {key: next(a for a in agings if a["id"] == uid(f"aging:{key}")) for key, *_ in AGING}
 
@@ -572,7 +579,8 @@ DIST = [
     ("p02", "t02", "Alambique de cobre Charentais AL-01", date(2025, 5, 20), date(2025, 5, 25), 10000, 1750, 570, 70.2, "BOTTLED"),   # Singani aniversario
     ("p03", "t03", "Alambique de cobre AL-02", date(2025, 5, 2), date(2025, 5, 4), 6100, 980, 290, 65.4, "BOTTLED"),                  # Clásico 2025
     ("p04", "t11", "Alambique de cobre AL-02", date(2026, 9, 10), date(2026, 9, 12), 6300, 900, 260, 62.1, "RESTING"),                # recién destilado · 168 d
-    ("p05", "t03", "Alambique de cobre AL-02", date(2026, 3, 20), date(2026, 3, 22), 3000, 450, 120, 64.0, "READY"),                  # reposo cumplido
+    # p05 (segunda destilación de TK-02, marzo de 2026) se retiró en la Ola 2: el tanque ya se había
+    # destilado entero y su lote estaba embotellado (un embotellado por lote, S-10).
 ]
 productions = []
 for key, tkey, equip, start, end, vin, vout, waste, abv, status in DIST:
@@ -596,6 +604,12 @@ for key, tkey, equip, start, end, vin, vout, waste, abv, status in DIST:
         "additionalParams": {"headDiscardLiters": round(waste * 0.3), "heartYieldLiters": vout, "tailDiscardLiters": round(waste * 0.7)},
         "notes": "Destilación lenta a fuego directo con separación estricta de cabezas",
         "createdAt": iso(start, 10),
+        "lotId": None,
+        "headsLiters": None,
+        "heartLiters": None,
+        "tailsLiters": None,
+        "vinasseLiters": None,
+        "heartAbvPercent": None,
     })
 PR = {key: next(p for p in productions if p["id"] == uid(f"production:{key}")) for key, *_ in DIST}
 
@@ -617,7 +631,7 @@ rest_statuses = [rest_status(p) for p in productions]
 # key, source ('aging'|'production'), srcKey, productType, abv, water, bottles, cl, bottleType, date, anchored, seq, releasedBy
 BOTTLING = [
     ("b01", "production", "p02", "SINGANI", 40.0, 1321, 4080, 75, "Vidrio extra-flint 750 ml", date(2026, 3, 1), True, 1, "cvj_enologa"),
-    ("b02", "production", "p03", "SINGANI", 40.0, 620, 2140, 75, "Vidrio flint 750 ml", date(2026, 2, 10), True, 2, "cvj_enologa"),
+    ("b02", "production", "p03", "SINGANI", 40.0, 630, 2140, 75, "Vidrio flint 750 ml", date(2026, 2, 10), True, 2, "cvj_enologa"),
     ("b03", "aging", "a04", "WINE", 14.2, None, 5320, 75, "Bordelesa cónica verde antiguo 750 ml", date(2026, 5, 12), True, 1, "altos_enologa"),
     ("b04", "aging", "a03", "WINE", 13.8, None, 3860, 75, "Borgoña 750 ml", date(2026, 9, 20), False, 3, "cvj_enologa"),   # recién embotellado, sin anclar
 ]
@@ -647,6 +661,7 @@ for key, src, skey, ptype, abv, water, bottles, cl, btype, bdate, anchored, seq,
         "anchoredAt": iso(bdate + timedelta(days=1), 12) if anchored else None,
         "qrBatchUrl": f"https://app.drinksonchain.bo/b/{lot}",
         "createdAt": iso(bdate, 16),
+        "lotId": None,
     })
 BT = {key: next(b for b in bottlings if b["id"] == uid(f"bottling:{key}")) for key, *_ in BOTTLING}
 
@@ -688,151 +703,12 @@ for key, bkey, abv, tac, vac, fso2, tso2, rs, meth, cu, rev in LAB:
         "conformsToUsaStandards": b["productType"] == "SINGANI",
         "reviewedByMemberId": uid(f"member:{rev}"),
         "createdAt": iso(bdate + timedelta(days=3), 15),
+        "lotId": None,
+        "methanolMg100mlAa": None,
+        "conformityStatus": None,
+        "supersededAt": None,
     })
 LB = {l["bottlingBatchId"]: l for l in labs}
-
-# ---------------------------------------------------------------------------
-# 10. Grafo DAG del lote (GET /v1/traceability/dag/:id y /public/:lotCode)
-# ---------------------------------------------------------------------------
-# Forma y cálculo de DagBuilderService del backend (DagGraphResponseDto): un nodo por etapa con
-# el SHA-256 de "<ETAPA>-<id>", métricas ×100 (Math.round de JS) y el hash de los metadatos con
-# las claves ordenadas (JSON.stringify de JS: enteros sin ".0", sin espacios, sin escapar UTF-8).
-def js_num(x):
-    return int(x) if isinstance(x, float) and x.is_integer() else x
-
-
-def js_round(x: float) -> int:
-    return math.floor(x + 0.5)
-
-
-def dag_hash(text: str) -> str:
-    return "0x" + hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-def meta_hash(d: dict) -> str:
-    canonical = json.dumps({k: js_num(v) for k, v in d.items()}, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    return dag_hash(canonical)
-
-
-def num(x):
-    return x if x is not None else 0
-
-
-def dag_graph(b: dict) -> dict:
-    w = next(x for x in wineries if x["id"] == b["wineryId"])
-
-    def op(name: str, role: str) -> dict:
-        return {"name": name, "role": role, "wineryName": w["commercialName"]}
-
-    a = next((x for x in agings if x["id"] == b["wineAgingBatchId"]), None) if b["wineAgingBatchId"] else None
-    p = next((x for x in productions if x["id"] == b["productionBatchId"]), None) if not a and b["productionBatchId"] else None
-    mid = a or p
-    tank = next(x for x in tanks if x["id"] == mid["fermentationTankId"])
-    h = next(x for x in harvests if x["id"] == tank["harvestBatchId"])
-    t = next(x for x in terroirs if x["id"] == h["terroirId"])
-    lab = LB.get(b["id"])
-    nodes = []
-    plot = dag_hash(f"TERROIR-{t['id']}")
-    d = {"parcelName": t["parcelName"], "varietyName": t["varietyName"], "altitudeMasl": num(t["altitudeMasl"]),
-         "surfaceHectares": num(t["surfaceHectares"]), "isDoEligible": t["isDoEligible"]}
-    nodes.append({"batchId": plot, "stage": 0, "stageName": "Plot", "parents": [], "timestamp": t["createdAt"],
-                  "volumeOrUnits": num(t["surfaceHectares"]), "metrics": [js_round(num(t["altitudeMasl"]) * 100)],
-                  "metadataHash": meta_hash(d), "isCertified": t["isDoEligible"],
-                  "operator": op("Ingeniero Agrónomo", "Agronomist"), "details": d})
-    hh = dag_hash(f"HARVEST-{h['id']}")
-    d = {"harvestBatchCode": h["harvestBatchCode"], "grossWeightKg": num(h["grossWeightKg"]), "tareWeightKg": num(h["tareWeightKg"]),
-         "netWeightKg": num(h["netWeightKg"]), "brixDegrees": num(h["brixDegrees"]), "initialPh": num(h["initialPh"]),
-         "initialAcidityGl": num(h["initialAcidityGl"]), "phytosanitaryStatus": h["phytosanitaryStatus"]}
-    nodes.append({"batchId": hh, "stage": 1, "stageName": "Harvest", "parents": [plot], "timestamp": h["intakeDate"],
-                  "volumeOrUnits": num(h["netWeightKg"]),
-                  "metrics": [js_round(num(h["brixDegrees"]) * 100), js_round(num(h["initialPh"]) * 100),
-                              js_round(num(h["initialAcidityGl"]) * 100)],
-                  "metadataHash": meta_hash(d), "isCertified": h["phytosanitaryStatus"] == "APPROVED",
-                  "operator": op("Jefe de Báscula", "Weigher"), "details": d})
-    th = dag_hash(f"TANK-{tank['id']}")
-    d = {"tankCode": tank["tankCode"], "material": tank["material"], "volumeFilledLiters": num(tank["volumeFilledLiters"]),
-         "destinationType": tank["destinationType"]}
-    nodes.append({"batchId": th, "stage": 2, "stageName": "Vinification", "parents": [hh], "timestamp": tank["startDate"],
-                  "volumeOrUnits": num(tank["volumeFilledLiters"]), "metrics": [1280, 28], "metadataHash": meta_hash(d),
-                  "isCertified": True, "operator": op("Enólogo de Planta", "Oenologist"), "details": d})
-    if a:
-        mh = dag_hash(f"AGING-{a['id']}")
-        d = {"containerType": a["containerType"], "containerMaterial": a["containerMaterial"], "plannedMonths": a["plannedMonths"],
-             "lockUntilDate": a["lockUntilDate"][:10]}
-        nodes.append({"batchId": mh, "stage": 3, "stageName": "Aging", "parents": [th], "timestamp": a["createdAt"],
-                      "volumeOrUnits": num(a["volumeLiters"]), "metrics": [a["plannedMonths"] * 100], "metadataHash": meta_hash(d),
-                      "isCertified": True, "operator": op("Maestro de Cava", "Oenologist"), "details": d})
-    else:
-        mh = dag_hash(f"DISTILLATION-{p['id']}")
-        d = {"equipmentIdentifier": p["equipmentIdentifier"], "inputVolumeLiters": num(p["inputVolumeLiters"]),
-             "outputVolumeLiters": num(p["outputVolumeLiters"]), "wasteVolumeLiters": num(p["wasteVolumeLiters"]),
-             "initialAlcoholPercentage": num(p["initialAlcoholPercentage"]), "restStatus": p["restStatus"]}
-        alcohol = p["initialAlcoholPercentage"] if p["initialAlcoholPercentage"] is not None else 70.2
-        nodes.append({"batchId": mh, "stage": 4, "stageName": "Distillation", "parents": [th], "timestamp": p["processStartDate"],
-                      "volumeOrUnits": num(p["outputVolumeLiters"]), "metrics": [js_round(alcohol * 100)],
-                      "metadataHash": meta_hash(d), "isCertified": p["isDoEligible"],
-                      "operator": op("Maestro Destilador", "Distiller"), "details": d})
-    root = dag_hash(f"BOTTLING-{b['id']}")
-    d = {"internationalLotCode": b["internationalLotCode"], "productType": b["productType"], "finalAlcoholAbv": num(b["finalAlcoholAbv"]),
-         "waterDilutionLiters": num(b["waterDilutionLiters"]), "totalBottlesPackaged": b["totalBottlesPackaged"],
-         "packagingFormatCl": b["packagingFormatCl"], "qrBatchUrl": b["qrBatchUrl"]}
-    details = dict(d)
-    details["labAnalysis"] = ({
-        "certifiedLaboratoryName": lab["certifiedLaboratoryName"], "accreditedLabCertificationCode": lab["accreditedLabCertificationCode"],
-        "actualAlcoholAbv": num(lab["actualAlcoholAbv"]), "methanolContentMgL": num(lab["methanolContentMgL"]),
-        "conformsToSenasagStandards": lab["conformsToSenasagStandards"]} if lab else None)
-    nodes.append({"batchId": root, "stage": 5, "stageName": "Bottling", "parents": [mh], "timestamp": b["bottlingDate"],
-                  "volumeOrUnits": b["totalBottlesPackaged"],
-                  "metrics": [js_round(num(b["finalAlcoholAbv"]) * 100), b["packagingFormatCl"] * 10],
-                  "metadataHash": meta_hash(d), "isCertified": bool(lab and lab["conformsToSenasagStandards"]),
-                  "operator": op("Supervisor de Envasado", "Packer"), "details": details})
-    return {"rootBatchId": root, "internationalLotCode": b["internationalLotCode"], "productType": b["productType"], "nodes": nodes}
-
-
-public = {b["internationalLotCode"]: dag_graph(b) for b in bottlings}
-
-# ---------------------------------------------------------------------------
-# 11. Vista derivada "Lote" para las pantallas del ERP (no existe en el backend)
-# ---------------------------------------------------------------------------
-# Une la cadena vendimia → tanque → crianza | destilación → embotellado en una fila por
-# lote de vendimia, con el estado que muestra el ERP. Se calcula en el cliente.
-def lot_view(h: dict) -> dict:
-    t = next(x for x in terroirs if x["id"] == h["terroirId"])
-    tks = [x for x in tanks if x["harvestBatchId"] == h["id"] and x["status"] != "CLEANED"]
-    ag = [a for a in agings for x in tks if a["fermentationTankId"] == x["id"]]
-    pr = [p for p in productions for x in tks if p["fermentationTankId"] == x["id"]]
-    bt = [b for b in bottlings if (ag and b["wineAgingBatchId"] in {a["id"] for a in ag}) or (pr and b["productionBatchId"] in {p["id"] for p in pr})]
-    if bt:
-        stage, lock = "embotellado", None
-    elif ag:
-        a = ag[0]; stage = "crianza"
-        lock = {"kind": "crianza", "unlockAt": a["lockUntilDate"], "released": a["agingStatus"] == "READY"}
-    elif pr:
-        p = pr[0]; stage = "reposo"
-        rs = rest_status(p)
-        lock = {"kind": "reposo", "unlockAt": p["mandatoryRestUntil"], "released": rs["isRestCompleted"], "daysRemaining": rs["daysRemaining"]}
-    elif tks and any(x["status"] == "COMPLETED" for x in tks):
-        stage, lock = "bifurcacion", None
-    elif tks:
-        stage, lock = "fermentacion", None
-    elif h["phytosanitaryStatus"] == "APPROVED":
-        stage, lock = "vendimia", None
-    elif h["phytosanitaryStatus"] == "REJECTED":
-        stage, lock = "rechazado", None
-    else:
-        stage, lock = "pesaje", None
-    kind = "singani" if any(x["destinationType"] == "SINGANI_DIST" for x in tks) or pr else ("vino" if ag or bt else None)
-    return {
-        "harvestBatchId": h["id"], "harvestBatchCode": h["harvestBatchCode"], "wineryId": h["wineryId"],
-        "terroir": {"id": t["id"], "parcelName": t["parcelName"], "varietyName": t["varietyName"], "altitudeMasl": t["altitudeMasl"], "isDoEligible": t["isDoEligible"]},
-        "kind": kind, "stage": stage, "phytosanitaryStatus": h["phytosanitaryStatus"], "netWeightKg": h["netWeightKg"],
-        "tankIds": [x["id"] for x in tks], "wineAgingBatchId": ag[0]["id"] if ag else None,
-        "productionBatchId": pr[0]["id"] if pr else None, "bottlingBatchId": bt[0]["id"] if bt else None,
-        "internationalLotCode": bt[0]["internationalLotCode"] if bt else None, "lock": lock,
-    }
-
-
-lots = [lot_view(h) for h in harvests]
 
 # ---------------------------------------------------------------------------
 # Escritura
@@ -852,6 +728,4 @@ dump("production-batches.json", productions)
 dump("production-rest-status.json", rest_statuses)
 dump("bottling.json", bottlings)
 dump("lab-analyses.json", labs)
-dump("traceability-public.json", public)
-dump("lots-view.json", lots)
 print("Listo.")

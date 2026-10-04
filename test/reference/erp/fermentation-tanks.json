@@ -11,7 +11,9 @@
     "status": "TRANSFERRED",
     "startDate": "2026-03-06T14:30:00Z",
     "endDate": "2026-04-14T14:30:00Z",
-    "createdAt": "2026-03-06T14:35:00Z"
+    "createdAt": "2026-03-06T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "d4e37fed-41e1-5399-9b50-e8263a6ca797",
@@ -25,7 +27,9 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-11T14:30:00Z",
     "endDate": "2025-04-12T14:30:00Z",
-    "createdAt": "2025-03-11T14:35:00Z"
+    "createdAt": "2025-03-11T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "576b3ce2-a007-592e-8491-27202f13a995",
@@ -39,7 +43,9 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-19T14:30:00Z",
     "endDate": "2025-04-20T14:30:00Z",
-    "createdAt": "2025-03-19T14:35:00Z"
+    "createdAt": "2025-03-19T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "6e49c5f9-adc8-503b-a1db-2b576bef7078",
@@ -53,7 +59,9 @@
     "status": "TRANSFERRED",
     "startDate": "2025-02-27T14:30:00Z",
     "endDate": "2025-03-20T14:30:00Z",
-    "createdAt": "2025-02-27T14:35:00Z"
+    "createdAt": "2025-02-27T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "f87af6c0-197d-5fa3-b85e-29d7b27f00d9",
@@ -67,7 +75,9 @@
     "status": "FERMENTING",
     "startDate": "2026-03-10T14:30:00Z",
     "endDate": null,
-    "createdAt": "2026-03-10T14:35:00Z"
+    "createdAt": "2026-03-10T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "9da648ee-bdf1-5701-b362-83eced36156a",
@@ -81,7 +91,9 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-03T14:30:00Z",
     "endDate": "2025-03-24T14:30:00Z",
-    "createdAt": "2025-03-03T14:35:00Z"
+    "createdAt": "2025-03-03T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "e8a31a4f-1593-5ffc-9b81-15410f404d2a",
@@ -95,7 +107,9 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-21T14:30:00Z",
     "endDate": "2025-04-11T14:30:00Z",
-    "createdAt": "2025-03-21T14:35:00Z"
+    "createdAt": "2025-03-21T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "5ecf8ac9-c9d8-5edd-a359-33956b6294f5",
@@ -109,35 +123,9 @@
     "status": "TRANSFERRED",
     "startDate": "2025-03-07T14:30:00Z",
     "endDate": "2025-03-28T14:30:00Z",
-    "createdAt": "2025-03-07T14:35:00Z"
-  },
-  {
-    "id": "04e8d15f-24ff-5943-83db-6f915387071c",
-    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "harvestBatchId": "010ecdc8-6d52-5877-aecf-73bebb5c4d82",
-    "tankCode": "TK-06",
-    "capacityLiters": 10000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 0,
-    "destinationType": "WINE_AGING",
-    "status": "CLEANED",
-    "startDate": "2026-01-05T14:30:00Z",
-    "endDate": "2026-01-06T14:30:00Z",
-    "createdAt": "2026-01-05T14:35:00Z"
-  },
-  {
-    "id": "f28ea298-cf7f-5d30-a92e-aad6379b8158",
-    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "harvestBatchId": "be653b6b-868e-51f3-bc11-462afa764ca1",
-    "tankCode": "TK-07",
-    "capacityLiters": 8000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 4200,
-    "destinationType": "OTHER",
-    "status": "FILLING",
-    "startDate": "2026-09-24T14:30:00Z",
-    "endDate": null,
-    "createdAt": "2026-09-24T14:35:00Z"
+    "createdAt": "2025-03-07T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "d78d6307-f96b-533b-8f6e-710f6533bb42",
@@ -148,38 +136,12 @@
     "material": "Acero inoxidable AISI 316",
     "volumeFilledLiters": 6300,
     "destinationType": "SINGANI_DIST",
-    "status": "COMPLETED",
+    "status": "TRANSFERRED",
     "startDate": "2026-03-07T14:30:00Z",
     "endDate": "2026-04-02T14:30:00Z",
-    "createdAt": "2026-03-07T14:35:00Z"
-  },
-  {
-    "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2",
-    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-    "harvestBatchId": "19928e77-9724-5a4e-a7c4-3c494041add9",
-    "tankCode": "TK-09",
-    "capacityLiters": 15000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 0,
-    "destinationType": "SINGANI_DIST",
-    "status": "CLEANED",
-    "startDate": "2025-03-11T14:30:00Z",
-    "endDate": "2025-04-13T14:30:00Z",
-    "createdAt": "2025-03-11T14:35:00Z"
-  },
-  {
-    "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae",
-    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "harvestBatchId": "e4b491e3-1fc1-5d2d-8244-204b4fb99b3f",
-    "tankCode": "TK-RED-04",
-    "capacityLiters": 10000,
-    "material": "Acero inoxidable AISI 316",
-    "volumeFilledLiters": 0,
-    "destinationType": "WINE_AGING",
-    "status": "CLEANED",
-    "startDate": "2025-03-03T14:30:00Z",
-    "endDate": "2025-03-25T14:30:00Z",
-    "createdAt": "2025-03-03T14:35:00Z"
+    "createdAt": "2026-03-07T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   },
   {
     "id": "aac59603-e058-50f8-9000-dd0a41f26aef",
@@ -193,6 +155,8 @@
     "status": "FERMENTING",
     "startDate": "2026-03-11T14:30:00Z",
     "endDate": null,
-    "createdAt": "2026-03-11T14:35:00Z"
+    "createdAt": "2026-03-11T14:35:00Z",
+    "lotId": null,
+    "finalVolumeLiters": null
   }
 ]

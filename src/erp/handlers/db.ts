@@ -13,21 +13,9 @@ import type { AuditEvent, DashboardAlert, MockEmail, WaitlistEntry } from '../..
 import { REFERENCE_DAY, toDay, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
 import { erpFixtures } from '../fixtures'
-import type {
-  BatchLabAnalysisResponse,
-  BottlingBatchResponse,
-  EnologicalTreatmentRecord,
-  FermentationLogRecord,
-  FermentationTankResponse,
-  HarvestBatchResponse,
-  MockUser,
-  NotificationPrefs,
-  ProductionBatchResponse,
-  TerroirResponse,
-  WalletResponse,
-  WineAgingResponse,
-  WineryResponse,
-} from '../schemas'
+import type { MockUser, NotificationPrefs, WalletResponse, WineryResponse } from '../schemas'
+import { laPazDate } from '../trace/dates'
+import { voidedRecordsOf, type TraceState } from '../trace/state'
 import { resetSessions } from './sessions'
 
 // Base de datos en memoria de los handlers: una copia de los fixtures que las mutaciones
@@ -74,21 +62,21 @@ export interface BackofficeState {
   accountBlockedAt?: Record<string, string>
 }
 
-export interface ErpDb {
+/**
+ * La base contiene las colecciones de la trazabilidad (`TraceState`: la cadena del ERP más los
+ * lotes, eventos, dictámenes, códigos de botella, correcciones y expedientes de la Ola 2), sobre
+ * las que trabajan los servicios puros de `src/erp/trace/`.
+ */
+export interface ErpDb extends TraceState {
   wineries: WineryResponse[]
   users: MockUser[]
   wallets: WalletResponse[]
-  terroirs: TerroirResponse[]
-  harvestBatches: HarvestBatchResponse[]
-  tanks: FermentationTankResponse[]
-  /** Lecturas (filas de la semilla; las altas guardan además la persona que la registró). */
-  logs: Array<FermentationLogRecord & { recordedByUserId?: string }>
-  /** Tratamientos (filas de la semilla; las altas guardan además el miembro que lo autorizó). */
-  treatments: Array<EnologicalTreatmentRecord & { authorizedByMemberId?: string }>
-  wineAgings: WineAgingResponse[]
-  productionBatches: ProductionBatchResponse[]
-  bottlings: BottlingBatchResponse[]
-  labAnalyses: BatchLabAnalysisResponse[]
+  /** Escenario de datos aplicado a la trazabilidad (`normal` = los fixtures tal cual). */
+  dataScenario: string
+  /** Último día (La Paz) en que corrió la tarea diaria que libera los candados. */
+  locksReleasedOn: string
+  /** Códigos inexistentes consultados por IP en el pasaporte público (instantes del reloj de los mocks). */
+  publicMisses: Record<string, number[]>
   /** Estado de la Ola 1. */
   backoffice: BackofficeState
   /** Reloj fijo (ms). Avanza un minuto con cada alta. */
@@ -129,7 +117,7 @@ function createBackofficeState(): BackofficeState {
 
 const STATE_KEY = 'doc-mocks:state'
 /** Cambia con los fixtures: un estado guardado con otros fixtures se descarta. */
-const STATE_VERSION = `0.3:${backofficeFixtures.audit.at(-1)?.hash.slice(0, 16) ?? ''}:${erpFixtures.users.length}`
+const STATE_VERSION = `0.5:${backofficeFixtures.audit.at(-1)?.hash.slice(0, 16) ?? ''}:${erpFixtures.users.length}`
 
 interface PersistedState {
   version: string
@@ -160,12 +148,10 @@ function loadPersisted(): PersistedState | null {
   }
 }
 
-function createErpDb(fresh = false): ErpDb {
-  const f = structuredClone(erpFixtures)
-  const db: ErpDb = {
-    wineries: f.wineries,
-    users: f.users,
-    wallets: f.wallets,
+/** Colecciones de la trazabilidad tal como están en los fixtures (copia nueva en cada llamada). */
+export function traceFromFixtures(): Omit<TraceState, 'wineries'> {
+  const f = structuredClone({ ...erpFixtures, wineries: [], users: [], wallets: [], authLogin: {} })
+  return {
     terroirs: f.terroirs,
     harvestBatches: f.harvestBatches,
     tanks: f.fermentationTanks,
@@ -175,6 +161,54 @@ function createErpDb(fresh = false): ErpDb {
     productionBatches: f.productionBatches,
     bottlings: f.bottling,
     labAnalyses: f.labAnalyses,
+    lots: f.lots,
+    lotEvents: f.lotEvents,
+    maturityAnalyses: f.maturityAnalyses,
+    phytoDecisions: f.phytoDecisions,
+    corrections: f.corrections,
+    attachments: f.lotAttachments,
+    dossiers: f.lotDossiers,
+    bottleLots: f.bottleLots,
+    bottleExports: [],
+    voidedRecords: voidedRecordsOf(f.corrections),
+    uploads: {},
+  }
+}
+
+/** Claves de `ErpDb` que forman la trazabilidad (las que se copian antes de una escritura y se rehacen al cambiar de escenario). */
+export const TRACE_KEYS = [
+  'terroirs',
+  'harvestBatches',
+  'tanks',
+  'logs',
+  'treatments',
+  'wineAgings',
+  'productionBatches',
+  'bottlings',
+  'labAnalyses',
+  'lots',
+  'lotEvents',
+  'maturityAnalyses',
+  'phytoDecisions',
+  'corrections',
+  'attachments',
+  'dossiers',
+  'bottleLots',
+  'bottleExports',
+  'voidedRecords',
+  'uploads',
+] as const satisfies readonly (keyof TraceState)[]
+
+function createErpDb(fresh = false): ErpDb {
+  const f = structuredClone({ wineries: erpFixtures.wineries, users: erpFixtures.users, wallets: erpFixtures.wallets })
+  const db: ErpDb = {
+    wineries: f.wineries,
+    users: f.users,
+    wallets: f.wallets,
+    ...traceFromFixtures(),
+    dataScenario: 'normal',
+    locksReleasedOn: laPazDate(CLOCK_START),
+    publicMisses: {},
     backoffice: createBackofficeState(),
     clock: CLOCK_START,
     counters: {},

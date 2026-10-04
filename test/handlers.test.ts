@@ -1,16 +1,16 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import {
   BottlingBatchResponseSchema,
+  BottlingPreviewSchema,
   ErrorEnvelopeSchema,
   FermentationTankDetailSchema,
   HealthStatusSchema,
   HarvestBatchResponseSchema,
+  LotSchema,
   pagedSchema,
-  ProductionBatchResponseSchema,
-  DagGraphSchema,
-  RestStatusResponseSchema,
   successEnvelopeSchema,
   TerroirResponseSchema,
+  TraceDashboardSchema,
   unwrapList,
   UploadResponseSchema,
   MeResponseSchema,
@@ -21,9 +21,10 @@ import {
   type SessionResponse,
   type TerroirResponse,
 } from '../src'
-import { erpFixtures } from '../src/fixtures'
+import { erpFixtures, publicFixtures } from '../src/fixtures'
 import { resetScenario, setScenario } from '../src/handlers'
 import { getErpDb, resetErpDb, setupMockServer } from '../src/node'
+import { sha256, toHex } from '../src/shared/crypto'
 import { API, call, dataOf, login, loginSession } from './helpers'
 
 const server = setupMockServer({ baseUrl: API })
@@ -138,20 +139,22 @@ describe('multi-tenant, filtros y paginación', () => {
     expect(page.total).toBe(erpFixtures.terroirs.length)
   })
 
-  it('filtros varietyName e isDoEligible', async () => {
+  it('filtros varietyName e isDoEligible (aptitud D.O. calculada con los valores vigentes de la bodega)', async () => {
     const token = await login('agronomo@altos.test')
     const moscatel = unwrapList(dataOf((await call('/v1/terroirs?varietyName=moscatel', { token })).json) as Paged<TerroirResponse>)
     expect(moscatel.items.map((t) => t.parcelName)).toEqual(['Cuartel 2 · Los Sauces', 'Cuartel 3 · El Portillo'])
+    // Altos tiene la altitud mínima en 1.500 m por excepción legal (A-31): El Portillo (1.540 m) es apto por excepción.
+    expect(moscatel.items.map((t) => t.doEvaluation!.status)).toEqual(['ELIGIBLE', 'ELIGIBLE_BY_EXCEPTION'])
     const noDo = unwrapList(dataOf((await call('/v1/terroirs?isDoEligible=false', { token })).json) as Paged<TerroirResponse>)
-    expect(noDo.items).toHaveLength(1)
-    expect(noDo.items[0]!.altitudeMasl).toBe(1540)
+    // Las cepas que no son Moscatel de Alejandría no son aptas para la D.O. Singani.
+    expect(noDo.items.map((t) => t.varietyName).sort()).toEqual(['Cabernet Sauvignon', 'Syrah', 'Tannat'])
   })
 
   it('limit / offset y total', async () => {
     const token = await login('enologa@cintiviejo.test')
     const first = dataOf((await call('/v1/harvest-batches?limit=2&offset=0', { token })).json) as Paged<unknown>
     const second = dataOf((await call('/v1/harvest-batches?limit=2&offset=2', { token })).json) as Paged<unknown>
-    expect(first).toMatchObject({ total: 5, limit: 2, offset: 0 })
+    expect(first).toMatchObject({ total: erpFixtures.harvestBatches.filter((h) => h.wineryId === CINTI.id).length, limit: 2, offset: 0 })
     expect(first.items).toHaveLength(2)
     expect(second.items).toHaveLength(2)
     expect(second.items[0]).not.toEqual(first.items[0])
@@ -176,9 +179,9 @@ describe('multi-tenant, filtros y paginación', () => {
   it('filtros de tanques (status, destinationType) y de destilación (restStatus)', async () => {
     const token = await login('enologa@altos.test')
     const fermenting = dataOf((await call('/v1/fermentation-tanks?status=FERMENTING', { token })).json) as Paged<{ tankCode: string }>
-    expect(fermenting.items.map((t) => t.tankCode).sort()).toEqual(['TK-04', 'TK-10'])
+    expect(fermenting.items.map((t) => t.tankCode).sort()).toEqual(['TK-04', 'TK-10', 'TK-15'])
     const wine = dataOf((await call('/v1/fermentation-tanks?destinationType=WINE_AGING', { token })).json) as Paged<unknown>
-    expect(wine.total).toBe(7)
+    expect(wine.total).toBe(erpFixtures.fermentationTanks.filter((t) => t.wineryId === ALTOS.id && t.destinationType === 'WINE_AGING').length)
     expect((await call('/v1/fermentation-tanks?status=NOPE', { token })).status).toBe(422)
     const cvj = await login('enologa@cintiviejo.test')
     const resting = dataOf((await call('/v1/production-batches?restStatus=RESTING', { token: cvj })).json) as Paged<unknown>
@@ -208,7 +211,7 @@ describe('roles', () => {
     const harvest = erpFixtures.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
     const { status, json } = await call('/v1/fermentation-tanks', {
       token,
-      body: { harvestBatchId: harvest.id, tankCode: 'TK-99', startDate: '2026-09-25' },
+      body: { inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-99', volumeFilledLiters: 1000, startDate: '2026-09-25' },
     })
     expect(status).toBe(403)
     expect(ErrorEnvelopeSchema.parse(json).error.code).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
@@ -227,64 +230,83 @@ describe('roles', () => {
   it('un consumidor no ve datos del ERP pero sí el pasaporte público', async () => {
     const token = await login('maria@tribu.test')
     expect((await call('/v1/harvest-batches', { token })).status).toBe(403)
-    const passport = await call('/v1/traceability/public/CVJ-2026-SINGANI-001')
+    const passport = await call<{ generatedAt: string }>('/v1/public/lots/CVJ-2026-SINGANI-001', { token })
     expect(passport.status).toBe(200)
-    expect(dataOf(passport.json)).toStrictEqual(erpFixtures.traceabilityPublic['CVJ-2026-SINGANI-001'])
+    const data = dataOf(passport.json)
+    expect(data).toStrictEqual({ ...publicFixtures.passports['CVJ-2026-SINGANI-001'], generatedAt: data.generatedAt })
   })
 })
 
-describe('recorrido del ERP: vendimia → tanque → crianza → embotellado', () => {
-  it('flujo completo con reglas de negocio', async () => {
+describe('recorrido del ERP por las rutas definitivas (cierre H2 de la Ola 2)', () => {
+  it('vendimia → tanque → crianza → embotellado del lote: el dictamen va aparte, la uva sin aprobar no fermenta, solo un tanque completado se transfiere y el candado no se elude', async () => {
     const token = await login('enologa@altos.test')
     const terroir = erpFixtures.terroirs.find((t) => t.parcelName === 'Cuartel 1 · La Angostura')!
-
-    // Pesaje sin laboratorio → 422 con los campos
     const base = { terroirId: terroir.id, intakeDate: '2026-09-25', harvestYear: 2026, grossWeightKg: 5200, tareWeightKg: 100 }
-    const noLab = await call('/v1/harvest-batches', { token, body: base })
-    expect(noLab.status).toBe(422)
-    const err = ErrorEnvelopeSchema.parse(noLab.json)
-    expect(err.error.code).toBe('VALIDATION_ERROR')
-    expect(err.error.details!.map((d) => d.field)).toEqual(['brixDegrees', 'initialPh', 'initialAcidityGl'])
+
+    // EA-04: el alta del pesaje no tiene dictamen; enviarlo, con cualquier valor, es un 422 propio.
+    for (const value of ['APPROVED', 'PENDING_INSPECTION']) {
+      const selfApproved = await call('/v1/harvest-batches', { token, body: { ...base, phytosanitaryStatus: value } })
+      expect(selfApproved.status).toBe(422)
+      const selfApprovedErr = ErrorEnvelopeSchema.parse(selfApproved.json).error
+      expect(selfApprovedErr.code).toBe('TRC_PHYTO_IN_CREATE')
+      expect(selfApprovedErr.details![0]).toMatchObject({ field: 'phytosanitaryStatus', code: 'TRC_PHYTO_IN_CREATE', actual: value })
+    }
 
     // Bruto ≤ tara → 422 en grossWeightKg
-    const badWeight = await call('/v1/harvest-batches', {
-      token,
-      body: { ...base, grossWeightKg: 100, brixDegrees: 23, initialPh: 3.5, initialAcidityGl: 6 },
-    })
+    const badWeight = await call('/v1/harvest-batches', { token, body: { ...base, grossWeightKg: 100 } })
     expect(badWeight.status).toBe(422)
     expect(ErrorEnvelopeSchema.parse(badWeight.json).error.details![0]!.field).toBe('grossWeightKg')
 
-    // Pesaje correcto → 201 y aparece en la lista
-    const created = await call('/v1/harvest-batches', {
-      token,
-      body: { ...base, brixDegrees: 24.1, initialPh: 3.55, initialAcidityGl: 5.9 },
-    })
+    // Pesaje sin análisis → 201 (Brix, pH y acidez quedan nulos); uva recibida sin lote.
+    const plain = HarvestBatchResponseSchema.parse(dataOf((await call('/v1/harvest-batches', { token, body: base })).json))
+    expect(plain).toMatchObject({ brixDegrees: null, initialPh: null, initialAcidityGl: null, lotId: null, maturityAnalyses: [] })
+
+    // Con `maturity` → es el primer análisis de madurez (y rellena los tres campos de la respuesta).
+    const created = await call('/v1/harvest-batches', { token, body: { ...base, maturity: { brixDegrees: 24.1, ph: 3.55, acidityGl: 5.9 } } })
     expect(created.status).toBe(201)
     const harvest = HarvestBatchResponseSchema.parse(dataOf(created.json))
-    expect(harvest).toMatchObject({ netWeightKg: 5100, phytosanitaryStatus: 'PENDING_INSPECTION', wineryId: ALTOS.id })
-    expect(harvest.harvestBatchCode).toBe('HARV-2026-ANGOSTURA-13')
-    expect(harvest.createdAt).toBe('2026-09-25T12:01:00Z')
-    const list = dataOf((await call('/v1/harvest-batches?harvestYear=2026&limit=100', { token })).json) as Paged<{ id: string }>
-    expect(list.items.some((h) => h.id === harvest.id)).toBe(true)
+    expect(harvest).toMatchObject({ netWeightKg: 5100, phytosanitaryStatus: 'PENDING_INSPECTION', wineryId: ALTOS.id, brixDegrees: 24.1, initialPh: 3.55, initialAcidityGl: 5.9, availableKg: 5100 })
+    expect(harvest.maturityAnalyses).toHaveLength(1)
+    // Código con la secuencia de la bodega y el año (EA-07).
+    expect(harvest.harvestBatchCode).toBe('HARV-2026-ANGOSTURA-016')
+    expect(harvest.createdAt).toBe('2026-09-25T12:02:00Z')
+    const list = dataOf((await call('/v1/harvest-batches?lotId=none&limit=100', { token })).json) as Paged<{ id: string }>
+    expect(list.items.map((h) => h.id)).toEqual([plain.id, harvest.id])
 
-    // Dictamen fitosanitario
-    const phyto = await call(`/v1/harvest-batches/${harvest.id}/phyto-status`, {
-      token,
-      method: 'PATCH',
-      body: { phytosanitaryStatus: 'APPROVED' },
-    })
-    expect(dataOf(phyto.json)).toMatchObject({ phytosanitaryStatus: 'APPROVED' })
+    // La uva sin dictamen aprobado no entra a un tanque.
+    const tankBody = { inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-21', capacityLiters: 8000, volumeFilledLiters: 3900, destinationType: 'WINE_AGING', startDate: '2026-09-25' }
+    const unapproved = await call('/v1/fermentation-tanks', { token, body: tankBody })
+    expect(unapproved.status).toBe(422)
+    const unapprovedErr = ErrorEnvelopeSchema.parse(unapproved.json).error
+    expect(unapprovedErr.code).toBe('TRC_PHYTO_NOT_APPROVED')
+    expect(unapprovedErr.details![0]).toMatchObject({ rule: 'trazabilidad.fitosanitario.exigirAprobado', actual: 'PENDING_INSPECTION', meta: { harvestBatchId: harvest.id, status: 'PENDING_INSPECTION' } })
 
-    // Tanque con destino vino
-    const tankRes = await call('/v1/fermentation-tanks', {
-      token,
-      body: { harvestBatchId: harvest.id, tankCode: 'TK-11', capacityLiters: 8000, volumeFilledLiters: 3900, destinationType: 'WINE_AGING', startDate: '2026-09-25' },
-    })
+    // Dictamen: un registro propio, final (no se repite).
+    const phyto = await call(`/v1/harvest-batches/${harvest.id}/phyto-decisions`, { token, body: { decision: 'APPROVED' } })
+    expect(phyto.status).toBe(201)
+    expect(dataOf(phyto.json)).toMatchObject({ phytosanitaryStatus: 'APPROVED', phytoDecisions: [{ decision: 'APPROVED', source: 'ERP' }] })
+    const again = await call(`/v1/harvest-batches/${harvest.id}/phyto-decisions`, { token, body: { decision: 'REJECTED', notes: 'Cambio de opinión' } })
+    expect(again.status).toBe(409)
+    expect(ErrorEnvelopeSchema.parse(again.json).error.code).toBe('TRC_PHYTO_DECISION_FINAL')
+
+    // Estados finales en el alta del tanque → 422; el tanque nace FILLING y crea su lote.
+    expect((await call('/v1/fermentation-tanks', { token, body: { ...tankBody, status: 'COMPLETED' } })).status).toBe(422)
+    const tankRes = await call('/v1/fermentation-tanks', { token, body: tankBody })
     expect(tankRes.status).toBe(201)
-    const tank = dataOf(tankRes.json) as { id: string; status: string }
-    expect(tank.status).toBe('FILLING')
+    const tank = dataOf(tankRes.json) as { id: string; status: string; lotId: string; inputs: unknown[] }
+    expect(tank).toMatchObject({ status: 'FILLING', inputs: [{ harvestBatchId: harvest.id, kg: 5100 }] })
+    const lot = LotSchema.parse(dataOf((await call(`/v1/lots/${tank.lotId}`, { token })).json))
+    expect(lot).toMatchObject({ name: 'Tannat 2026', productType: 'WINE', stage: 'FERMENTING', reference: 'ALT-L2026-007' })
+    expect(lot.rules.origin).toBe('LOT_CREATION')
+    // La otra uva aún no tiene dictamen: la regla del dictamen va antes que la del código ocupado.
+    const sameCode = await call('/v1/fermentation-tanks', { token, body: { ...tankBody, inputs: [{ harvestBatchId: plain.id }] } })
+    expect(sameCode.status).toBe(422)
 
-    const log = await call(`/v1/fermentation-tanks/${tank.id}/logs`, { token, body: { temperatureCelsius: 22.4, recordedAt: '2026-09-26T08:00:00Z' } })
+    // Lecturas: no futuras.
+    const future = await call(`/v1/fermentation-tanks/${tank.id}/logs`, { token, body: { temperatureCelsius: 22.4, recordedAt: '2026-09-26T08:00:00Z' } })
+    expect(future.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(future.json).error.code).toBe('TRC_DATE_IN_FUTURE')
+    const log = await call(`/v1/fermentation-tanks/${tank.id}/logs`, { token, body: { temperatureCelsius: 22.4, recordedAt: '2026-09-25T11:30:00Z' } })
     expect(log.status).toBe(201)
     const treatment = await call(`/v1/fermentation-tanks/${tank.id}/treatments`, {
       token,
@@ -292,87 +314,136 @@ describe('recorrido del ERP: vendimia → tanque → crianza → embotellado', (
     })
     expect(treatment.status).toBe(201)
 
-    // Crianza de 12 meses desde hoy → candado hasta 2027-09-25
-    const agingRes = await call('/v1/wine-aging', {
-      token,
-      body: { fermentationTankId: tank.id, containerType: 'Barrica', plannedMonths: 12 },
-    })
+    // Crianza: solo desde un tanque `COMPLETED` (cierre H2); el volumen es obligatorio y no supera lo disponible.
+    const agingBody = { fermentationTankId: tank.id, containerType: 'Barrica', plannedMonths: 12 }
+    const notCompleted = await call('/v1/wine-aging', { token, body: { ...agingBody, volumeLiters: 3800 } })
+    expect(notCompleted.status).toBe(409)
+    const notCompletedErr = ErrorEnvelopeSchema.parse(notCompleted.json).error
+    expect(notCompletedErr.code).toBe('TRC_TANK_NOT_COMPLETED')
+    expect(notCompletedErr.details![0]).toMatchObject({ field: 'fermentationTankId', meta: { status: 'FILLING', tankId: tank.id } })
+    expect((await call(`/v1/fermentation-tanks/${tank.id}/start`, { token, body: {} })).status).toBe(200)
+    const completed = await call(`/v1/fermentation-tanks/${tank.id}/complete`, { token, body: { endDate: '2026-09-25', finalVolumeLiters: 3900, destination: 'WINE_AGING' } })
+    expect(dataOf(completed.json)).toMatchObject({ status: 'COMPLETED', destinationType: 'WINE_AGING', availableLiters: 3900 })
+    const noVolume = await call('/v1/wine-aging', { token, body: agingBody })
+    expect(noVolume.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(noVolume.json).error.details![0]!.field).toBe('volumeLiters')
+    const tooMuch = await call('/v1/wine-aging', { token, body: { ...agingBody, volumeLiters: 4000 } })
+    const tooMuchErr = ErrorEnvelopeSchema.parse(tooMuch.json).error
+    expect(tooMuchErr.code).toBe('TRC_VOLUME_EXCEEDS_AVAILABLE')
+    expect(tooMuchErr.details![0]).toMatchObject({ field: 'volumeLiters', expected: 3900, actual: 4000, meta: { available: 3900, requested: 4000, unit: 'L' } })
+    // Altos fija un mínimo de crianza de 6 meses: menos → 422 con la regla.
+    const short = await call('/v1/wine-aging', { token, body: { ...agingBody, plannedMonths: 3, volumeLiters: 3800 } })
+    const shortErr = ErrorEnvelopeSchema.parse(short.json).error
+    expect(shortErr.code).toBe('TRC_AGING_BELOW_MINIMUM')
+    expect(shortErr.details![0]).toMatchObject({ field: 'plannedMonths', rule: 'trazabilidad.vino.crianzaMinimaMeses', expected: 6, actual: 3 })
+    // 12 meses desde hoy → candado hasta 2027-09-25 (meses de calendario).
+    const agingRes = await call('/v1/wine-aging', { token, body: { ...agingBody, volumeLiters: 3800 } })
     expect(agingRes.status).toBe(201)
     const aging = WineAgingResponseSchema.parse(dataOf(agingRes.json))
-    expect(aging.lockUntilDate).toBe('2027-09-25T00:00:00Z')
+    expect(aging).toMatchObject({ lockUntilDate: '2027-09-25T00:00:00Z', unlockDate: '2027-09-25', startDate: '2026-09-25', lotId: tank.lotId })
+    expect(aging.lock).toMatchObject({ kind: 'AGING', released: false, daysRemaining: 365, rule: { settingKey: 'trazabilidad.vino.crianzaMinimaMeses', minimum: 6, applied: 12, unit: 'meses' } })
+    const twice = await call('/v1/wine-aging', { token, body: { ...agingBody, volumeLiters: 100 } })
+    expect(ErrorEnvelopeSchema.parse(twice.json).error.code).toBe('FERMENTATION_TANK_ALREADY_TRANSFERRED')
 
-    // Embotellar antes del candado → 422
-    const bottle = { wineAgingBatchId: aging.id, productType: 'WINE', finalAlcoholAbv: 14, totalBottlesPackaged: 5000, packagingFormatCl: 75, bottlingDate: '2026-09-25' }
-    const locked = await call('/v1/bottling', { token, body: bottle })
+    // Embotellar antes del candado → 422 con la regla, la fecha y los días que faltan (la vista previa lo anticipa).
+    const bottle = { finalAlcoholAbv: 14, totalBottlesPackaged: 5000, packagingFormatCl: 75, bottlingDate: '2026-09-25' }
+    const preview = BottlingPreviewSchema.parse(dataOf((await call(`/v1/lots/${tank.lotId}/bottling/preview`, { token, body: bottle })).json))
+    expect(preview.valid).toBe(false)
+    expect(preview.violations.map((v) => v.code)).toContain('TRC_LOCK_NOT_RELEASED')
+    const locked = await call(`/v1/lots/${tank.lotId}/bottling`, { token, body: bottle })
     expect(locked.status).toBe(422)
     const lockedErr = ErrorEnvelopeSchema.parse(locked.json).error
-    expect(lockedErr.message).toBe('El vino se encuentra bloqueado por período de crianza hasta el 2027-09-25')
-    expect(lockedErr.details![0]!.field).toBe('wineAgingBatchId')
+    expect(lockedErr.code).toBe('TRC_LOCK_NOT_RELEASED')
+    expect(lockedErr.message).toBe('Crianza de 12 meses: disponible el 2027-09-25 (faltan 365 días)')
+    expect(lockedErr.details![0]).toMatchObject({
+      field: 'bottlingDate',
+      rule: 'trazabilidad.vino.crianzaMinimaMeses',
+      expected: '2027-09-25',
+      meta: { sourceId: aging.id, kind: 'AGING', unlockDate: '2027-09-25', daysRemaining: 365 },
+    })
+    // Declarar una fecha futura tampoco lo elude: el candado se evalúa con el reloj del servidor.
+    const futureDate = await call(`/v1/lots/${tank.lotId}/bottling`, { token, body: { ...bottle, bottlingDate: '2027-10-01' } })
+    expect(ErrorEnvelopeSchema.parse(futureDate.json).error.details!.map((d) => d.code)).toEqual(expect.arrayContaining(['TRC_DATE_IN_FUTURE', 'TRC_LOCK_NOT_RELEASED']))
 
-    // Una crianza liberada (fixture READY de otra bodega no es visible → 404)
-    const cintiReady = erpFixtures.wineAging.find((a) => a.agingStatus === 'READY')!
-    expect((await call('/v1/bottling', { token, body: { ...bottle, wineAgingBatchId: cintiReady.id } })).status).toBe(404)
+    // Un lote de otra bodega no es visible → 404.
+    const cintiLot = erpFixtures.lots.find((l) => l.wineryId === CINTI.id)!
+    expect((await call(`/v1/lots/${cintiLot.id}/bottling`, { token, body: bottle })).status).toBe(404)
+    // Las lecturas del embotellado siguen en `/v1/bottling`.
+    const bottlings = pagedSchema(BottlingBatchResponseSchema).parse(dataOf((await call('/v1/bottling', { token })).json))
+    expect(bottlings.items.length).toBeGreaterThan(0)
+    expect(bottlings.items.every((b) => b.wineryId === ALTOS.id)).toBe(true)
   })
 
-  it('embotellado de singani: 422 durante el reposo y 201 con el reposo cumplido', async () => {
-    const token = await login('enologa@cintiviejo.test')
-    const resting = erpFixtures.productionBatches.find((p) => p.restStatus === 'RESTING')!
-    const ready = erpFixtures.productionBatches.find((p) => p.restStatus === 'READY')!
-    const body = { productType: 'SINGANI', finalAlcoholAbv: 40, waterDilutionLiters: 300, totalBottlesPackaged: 1000, packagingFormatCl: 75, bottlingDate: '2026-09-25' }
-
-    const rest = RestStatusResponseSchema.parse(dataOf((await call(`/v1/production-batches/${resting.id}/rest-status`, { token })).json))
-    expect(rest.isRestCompleted).toBe(false)
-    const blocked = await call('/v1/bottling', { token, body: { ...body, productionBatchId: resting.id } })
-    expect(blocked.status).toBe(422)
-
-    const ok = await call('/v1/bottling', { token, body: { ...body, productionBatchId: ready.id } })
-    expect(ok.status).toBe(201)
-    const b = BottlingBatchResponseSchema.parse(dataOf(ok.json))
-    expect(b.internationalLotCode).toBe('CVJ-2026-SINGANI-004')
-    expect(b.isAnchoredOnChain).toBe(false)
-    const after = ProductionBatchResponseSchema.parse(dataOf((await call(`/v1/production-batches/${ready.id}`, { token })).json))
-    expect(after.restStatus).toBe('BOTTLED')
-
-    // Pasaporte público y grafo del nuevo lote: el mismo DAG del backend (sin laboratorio aún).
-    const passport = DagGraphSchema.parse(dataOf((await call(`/v1/traceability/public/${b.internationalLotCode}`)).json))
-    const dag = DagGraphSchema.parse(dataOf((await call(`/v1/traceability/dag/${b.id}`, { token })).json))
-    expect(dag).toStrictEqual(passport)
-    expect(dag.nodes.map((n) => n.stageName)).toEqual(['Plot', 'Harvest', 'Vinification', 'Distillation', 'Bottling'])
-    expect(dag.nodes.map((n) => n.stage)).toEqual([0, 1, 2, 4, 5])
-    const bottlingNode = dag.nodes.at(-1)!
-    expect(dag.rootBatchId).toBe(bottlingNode.batchId)
-    expect(bottlingNode.parents).toEqual([dag.nodes[3]!.batchId])
-    expect(bottlingNode.details.labAnalysis).toBeNull()
-    expect(bottlingNode.isCertified).toBe(false)
-    expect(bottlingNode.batchId).toMatch(/^0x[0-9a-f]{64}$/)
-
-    // Certificado de laboratorio: alta y 409 al repetir
-    const lab = { bottlingBatchId: b.id, certifiedLaboratoryName: 'Lab', accreditedLabCertificationCode: 'LAB-1', testPerformedAt: '2026-09-26', actualAlcoholAbv: 40, totalAcidityTartaricGl: 4, volatileAcidityAceticGl: 0.2, laboratoryReportPdfUrl: '/mocks/uploads/lab-reports/x.pdf' }
-    expect((await call('/v1/lab-analyses', { token, body: lab })).status).toBe(201)
-    expect((await call('/v1/lab-analyses', { token, body: lab })).status).toBe(409)
-  })
-
-  it('destilación D.O.: 422 si la parcela está por debajo de 1.600 m', async () => {
+  it('rutas retiradas en el cierre H2 → 404 sin cabeceras Deprecation', async () => {
     const token = await login('enologa@altos.test')
-    const lowTerroir = erpFixtures.terroirs.find((t) => t.altitudeMasl < 1600)!
-    const harvest = dataOf(
-      (await call('/v1/harvest-batches', {
-        token,
-        body: { terroirId: lowTerroir.id, intakeDate: '2026-09-25', harvestYear: 2026, grossWeightKg: 3000, tareWeightKg: 50, brixDegrees: 22, initialPh: 3.5, initialAcidityGl: 6 },
-      })).json,
-    ) as { id: string }
-    const tank = dataOf((await call('/v1/fermentation-tanks', { token, body: { harvestBatchId: harvest.id, tankCode: 'TK-SG', destinationType: 'SINGANI_DIST', startDate: '2026-09-25' } })).json) as { id: string }
-    const res = await call('/v1/production-batches/distillation', {
-      token,
-      body: { fermentationTankId: tank.id, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25', isDoEligible: true },
-    })
-    expect(res.status).toBe(422)
-    const nonDo = await call('/v1/production-batches/distillation', {
-      token,
-      body: { fermentationTankId: tank.id, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25', processEndDate: '2026-09-26' },
-    })
-    expect(nonDo.status).toBe(201)
-    expect(ProductionBatchResponseSchema.parse(dataOf(nonDo.json)).mandatoryRestUntil).toBe('2027-03-25T00:00:00Z')
+    const bottling = erpFixtures.bottling.find((b) => b.wineryId === ALTOS.id)!
+    const harvest = erpFixtures.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
+    const retired: [method: string, path: string, body?: unknown][] = [
+      ['PATCH', `/v1/harvest-batches/${harvest.id}/phyto-status`, { phytosanitaryStatus: 'APPROVED' }],
+      ['POST', '/v1/bottling', { wineAgingBatchId: bottling.wineAgingBatchId }],
+      ['POST', '/v1/lab-analyses', { bottlingBatchId: bottling.id }],
+      ['GET', `/v1/traceability/dag/${bottling.id}`],
+      ['GET', `/v1/traceability/public/${bottling.internationalLotCode}`],
+    ]
+    for (const [method, path, body] of retired) {
+      const res = await call(path, { token, method, body })
+      expect(res.status, `${method} ${path}`).toBe(404)
+      expect(res.headers.get('deprecation')).toBeNull()
+    }
+    // Sus sustitutas: el grafo del lote, el pasaporte público y las lecturas del embotellado y su análisis.
+    expect((await call(`/v1/lots/${bottling.lotId}/graph`, { token })).status).toBe(200)
+    expect((await call(`/v1/public/lots/${bottling.internationalLotCode}`)).status).toBe(200)
+    expect((await call(`/v1/bottling/${bottling.id}`, { token })).status).toBe(200)
+  })
+
+  it('campos de entrada retirados en el cierre H2 → 422 VALIDATION_ERROR «property … should not exist» (como forbidNonWhitelisted)', async () => {
+    const enologa = await login('enologa@altos.test')
+    const agronomo = await login('agronomo@altos.test')
+    const terroir = erpFixtures.terroirs.find((t) => t.wineryId === ALTOS.id)!
+    const harvest = erpFixtures.harvestBatches.find((h) => h.wineryId === ALTOS.id)!
+    const fermenting = erpFixtures.fermentationTanks.find((t) => t.wineryId === ALTOS.id && t.status === 'FERMENTING')!
+    const lot = erpFixtures.lots.find((l) => l.wineryId === ALTOS.id && l.stage === 'AGING')!
+    const bottled = erpFixtures.lots.find((l) => l.wineryId === ALTOS.id && l.stage === 'BOTTLED')!
+    const weigh = { terroirId: terroir.id, intakeDate: '2026-09-25', harvestYear: 2026, grossWeightKg: 1200, tareWeightKg: 200 }
+    const tank = { inputs: [{ harvestBatchId: harvest.id }], tankCode: 'TK-77', volumeFilledLiters: 500, startDate: '2026-09-25' }
+    const distillation = { fermentationTankId: fermenting.id, equipmentIdentifier: 'AL-01', processStartDate: '2026-09-25', inputVolumeLiters: 100 }
+    const bottle = { finalAlcoholAbv: 13.5, totalBottlesPackaged: 100, packagingFormatCl: 75, bottlingDate: '2026-09-25' }
+    const lab = { certifiedLaboratoryName: 'Lab', accreditedLabCertificationCode: 'LAB-1', testPerformedAt: '2026-09-25', actualAlcoholAbv: 13.5, laboratoryReportKey: `org/${ALTOS.id}/lab-reports/2026/09/informe.pdf` }
+    const cases: [token: string, method: string, path: string, body: Record<string, unknown>, fields: Record<string, unknown>][] = [
+      [enologa, 'POST', '/v1/harvest-batches', weigh, { brixDegrees: 23, initialPh: 3.4, initialAcidityGl: 6 }],
+      [agronomo, 'POST', '/v1/terroirs', { parcelName: 'Nueva', surfaceHectares: 1, altitudeMasl: 1900, rawMaterialType: 'uva', varietyName: 'Tannat' }, { isDoEligible: true }],
+      [agronomo, 'PATCH', `/v1/terroirs/${terroir.id}`, { soilType: 'Franco' }, { isDoEligible: false }],
+      [enologa, 'POST', '/v1/fermentation-tanks', tank, { harvestBatchId: harvest.id }],
+      [enologa, 'POST', '/v1/production-batches/distillation', distillation, { processEndDate: '2026-09-25', outputVolumeLiters: 10, wasteVolumeLiters: 5, additionalParams: { heartYieldLiters: 10 }, isDoEligible: true }],
+      [enologa, 'POST', `/v1/lots/${lot.id}/bottling`, bottle, { labelDesignUrl: 'https://cdn.test/etiqueta.png' }],
+      [enologa, 'POST', `/v1/lots/${lot.id}/bottling/preview`, bottle, { labelDesignUrl: 'https://cdn.test/etiqueta.png' }],
+      [enologa, 'POST', `/v1/lots/${bottled.id}/lab-analyses`, lab, { laboratoryReportPdfUrl: 'https://laboratorio.test/informe.pdf' }],
+    ]
+    for (const [token, method, path, body, fields] of cases) {
+      for (const [field, value] of Object.entries(fields)) {
+        const res = await call(path, { token, method, body: { ...body, [field]: value } })
+        expect(res.status, `${method} ${path} · ${field}`).toBe(422)
+        const error = ErrorEnvelopeSchema.parse(res.json).error
+        expect(error.code).toBe('VALIDATION_ERROR')
+        expect(error.details).toEqual([expect.objectContaining({ field, message: `property ${field} should not exist` })])
+      }
+    }
+    // Los que pasaron a obligatorios.
+    const required: [path: string, body: Record<string, unknown>, field: string][] = [
+      ['/v1/fermentation-tanks', { ...tank, inputs: undefined }, 'inputs'],
+      ['/v1/fermentation-tanks', { ...tank, volumeFilledLiters: undefined }, 'volumeFilledLiters'],
+      ['/v1/production-batches/distillation', { ...distillation, inputVolumeLiters: undefined }, 'inputVolumeLiters'],
+      [`/v1/lots/${bottled.id}/lab-analyses`, { ...lab, laboratoryReportKey: undefined }, 'laboratoryReportKey'],
+    ]
+    for (const [path, body, field] of required) {
+      const res = await call(path, { token: enologa, body })
+      expect(res.status, `${path} · ${field}`).toBe(422)
+      expect(ErrorEnvelopeSchema.parse(res.json).error.details!.map((d) => d.field)).toContain(field)
+    }
+    // Destilar solo desde un tanque completado.
+    const early = await call('/v1/production-batches/distillation', { token: enologa, body: distillation })
+    expect(early.status).toBe(409)
+    expect(ErrorEnvelopeSchema.parse(early.json).error).toMatchObject({ code: 'TRC_TANK_NOT_COMPLETED', details: [{ meta: { status: 'FERMENTING', tankId: fermenting.id } }] })
   })
 
   it('resetErpDb() descarta los cambios de la sesión', async () => {
@@ -406,6 +477,9 @@ describe('bodega, miembros y archivos', () => {
     expect(upload.url.startsWith(`/mocks/uploads/${upload.key}?`)).toBe(true)
     expect(Date.parse(upload.expiresAt)).toBeGreaterThan(Date.parse('2026-09-25T12:00:00Z'))
     expect(upload).toMatchObject({ mimeType: 'application/pdf', originalName: 'acta.pdf', sizeBytes: 4 })
+    // Huella SHA-256 del contenido (los bytes `%PDF`): la que guardan después el dictamen o el laboratorio junto a la `key`.
+    expect(upload.sha256).toBe(toHex(sha256(new Uint8Array([37, 80, 68, 70]))))
+    expect(getErpDb().uploads[upload.key]).toBe(upload.sha256)
     // URL nueva para mostrarlo; la clave de otra organización → 404 FILE_NOT_FOUND
     const again = await call(`/v1/uploads/url?key=${encodeURIComponent(upload.key)}`, { token })
     expect(dataOf(again.json)).toMatchObject({ key: upload.key })
@@ -443,6 +517,20 @@ describe('escenarios', () => {
     setScenario('empty')
     expect(dataOf((await call('/v1/terroirs', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
     expect(dataOf((await call('/v1/harvest-batches', { token })).json)).toEqual({ items: [], total: 0, limit: 20, offset: 0 })
+    // El panel y el reporte no son listas: responden como una bodega sin registros.
+    const dashboard = TraceDashboardSchema.parse(dataOf((await call('/v1/traceability/dashboard', { token })).json))
+    expect(Object.values(dashboard.lotsByStage).every((n) => n === 0)).toBe(true)
+    expect(dashboard).toMatchObject({ locksDueSoon: [], fermentationAlerts: [], pendingPhyto: [], bottledWithoutLab: [], readyToClose: [], complianceIssuesOpen: 0, unassignedHarvestBatches: 0 })
+    const owner = await login('admin@altos.test')
+    const report = dataOf((await call<{ rows: unknown[]; totals: Record<string, { lots: number }> }>('/v1/traceability/reports/production', { token: owner })).json)
+    expect(report.rows).toEqual([])
+    expect(Object.values(report.totals).map((t) => t.lots)).toEqual([0, 0, 0])
+    const csv = await fetch(`${API}/v1/traceability/reports/production?format=csv`, { headers: { Authorization: `Bearer ${owner}` } })
+    expect(csv.headers.get('x-export-rows')).toBe('0')
+    expect((await csv.text()).trimEnd().split('\r\n')).toHaveLength(1)
+    // Fuera del escenario vuelven los datos.
+    setScenario('normal')
+    expect(TraceDashboardSchema.parse(dataOf((await call('/v1/traceability/dashboard', { token })).json)).lotsByStage.BOTTLED).toBeGreaterThan(0)
   })
 
   it('error: 500 con envoltorio (login sigue funcionando)', async () => {

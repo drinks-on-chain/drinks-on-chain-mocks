@@ -32,12 +32,10 @@ const harvestBody = {
   harvestYear: 2026,
   grossWeightKg: 1200,
   tareWeightKg: 200,
-  brixDegrees: 23,
-  initialPh: 3.4,
-  initialAcidityGl: 6,
+  maturity: { brixDegrees: 23, ph: 3.4, acidityGl: 6 },
 }
 const logBody = { temperatureCelsius: 22, recordedAt: '2026-09-25T08:00:00Z' }
-const tankBody = { harvestBatchId: altosHarvest.id, tankCode: 'TK-PERM', startDate: '2026-09-25' }
+const tankBody = { inputs: [{ harvestBatchId: altosHarvest.id }], tankCode: 'TK-PERM', volumeFilledLiters: 500, startDate: '2026-09-25' }
 
 /** Contadora activa en Altos (en los fixtures la única contadora está bloqueada): invitada y aceptada. */
 async function altosAccountant(): Promise<string> {
@@ -62,7 +60,7 @@ describe('matriz de roles de bodega (docs-back/05 §3)', () => {
     expect((await call(`/v1/fermentation-tanks/${altosTank.id}/logs`, { token: op, body: logBody })).status).toBe(201)
     expect((await call('/v1/harvest-batches', { token: op })).status).toBe(200)
     expect((await call(`/v1/fermentation-tanks/${altosTank.id}`, { token: op })).status).toBe(200)
-    const phyto = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-status`, { token: op, method: 'PATCH', body: { phytosanitaryStatus: 'APPROVED' } })
+    const phyto = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-decisions`, { token: op, body: { decision: 'APPROVED' } })
     expect(phyto.status).toBe(403)
     expect(code(phyto.json)).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
     expect((await call('/v1/fermentation-tanks', { token: op, body: tankBody })).status).toBe(403)
@@ -87,8 +85,13 @@ describe('matriz de roles de bodega (docs-back/05 §3)', () => {
 
   it('OWNER dictamina; AGRONOMIST registra lecturas pero no lee crianza ni embotellado', async () => {
     const owner = await login('admin@altos.test')
-    const phyto = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-status`, { token: owner, method: 'PATCH', body: { phytosanitaryStatus: 'APPROVED' } })
-    expect(phyto.status).toBe(200)
+    // Un pesaje aún sin dictamen (uno ya aprobado es final: 409 `TRC_PHYTO_DECISION_FINAL`).
+    const pending = F.harvestBatches.find((h) => h.wineryId === ALTOS.id && h.phytosanitaryStatus === 'PENDING_INSPECTION')!
+    const phyto = await call(`/v1/harvest-batches/${pending.id}/phyto-decisions`, { token: owner, body: { decision: 'APPROVED' } })
+    expect(phyto.status).toBe(201)
+    const final = await call(`/v1/harvest-batches/${altosHarvest.id}/phyto-decisions`, { token: owner, body: { decision: 'APPROVED' } })
+    expect(final.status).toBe(409)
+    expect(code(final.json)).toBe('TRC_PHYTO_DECISION_FINAL')
     const agro = await login('agronomo@altos.test')
     expect((await call(`/v1/fermentation-tanks/${altosTank.id}/logs`, { token: agro, body: logBody })).status).toBe(201)
     expect((await call('/v1/wine-aging', { token: agro })).status).toBe(403)
@@ -112,7 +115,7 @@ describe('matriz de roles de bodega (docs-back/05 §3)', () => {
 })
 
 describe('plataforma sobre una bodega (?wineryId=, OP-07)', () => {
-  it('lee todas las bodegas sin wineryId y una con él; escribe solo con wineryId', async () => {
+  it('lee todas las bodegas sin wineryId y una con él; la trazabilidad no la escribe (S-25, Ola 2)', async () => {
     const admin = (await loginSession('gestor@drinksonchain.test')).tokens.accessToken
     const all = dataOf((await call<Paged<TerroirResponse>>('/v1/terroirs?limit=100', { token: admin })).json)
     expect(new Set(all.items.map((t) => t.wineryId)).size).toBeGreaterThan(1)
@@ -122,17 +125,22 @@ describe('plataforma sobre una bodega (?wineryId=, OP-07)', () => {
     const cintiTerroir = F.terroirs.find((t) => t.wineryId === CINTI.id)!
     expect((await call(`/v1/terroirs/${cintiTerroir.id}?wineryId=${ALTOS.id}`, { token: admin })).status).toBe(404)
 
-    const missing = await call('/v1/harvest-batches', { token: admin, body: harvestBody })
-    expect(missing.status).toBe(422)
-    expect(ErrorEnvelopeSchema.parse(missing.json).error.details).toEqual([{ field: 'wineryId', message: expect.any(String) }])
-    const badUuid = await call('/v1/harvest-batches?wineryId=altos', { token: admin, body: harvestBody })
+    const badUuid = await call('/v1/harvest-batches?wineryId=altos', { token: admin })
+    expect(badUuid.status).toBe(422)
     expect(ErrorEnvelopeSchema.parse(badUuid.json).error.details![0]!.field).toBe('wineryId')
-    const unknown = await call('/v1/harvest-batches?wineryId=00000000-0000-4000-8000-00000000abcd', { token: admin, body: harvestBody })
+    const unknown = await call('/v1/harvest-batches?wineryId=00000000-0000-4000-8000-00000000abcd', { token: admin })
     expect(unknown.status).toBe(404)
     expect(code(unknown.json)).toBe('ORG_NOT_FOUND')
-    const created = await call<{ wineryId: string }>(`/v1/harvest-batches?wineryId=${ALTOS.id}`, { token: admin, body: harvestBody })
-    expect(created.status).toBe(201)
-    expect(dataOf(created.json).wineryId).toBe(ALTOS.id)
+    // La plataforma solo lee la trazabilidad (docs-back/05 §3): con o sin `wineryId`, 403.
+    for (const url of ['/v1/harvest-batches', `/v1/harvest-batches?wineryId=${ALTOS.id}`, `/v1/lots?wineryId=${ALTOS.id}`]) {
+      const write = await call(url, { token: admin, body: harvestBody })
+      expect(write.status, url).toBe(403)
+      expect(code(write.json), url).toBe('TRC_PLATFORM_READ_ONLY')
+    }
+    // Lo que no es trazabilidad sigue como en la Ola 1: escribe con `wineryId` (y sin él, 422).
+    const missing = await call('/v1/wineries/my', { token: admin, method: 'PATCH', body: { address: 'Nueva dirección' } })
+    expect(missing.status).toBe(422)
+    expect(ErrorEnvelopeSchema.parse(missing.json).error.details).toEqual([{ field: 'wineryId', message: expect.any(String) }])
     expect(dataOf((await call<{ commercialName: string }>(`/v1/wineries/my?wineryId=${CINTI.id}`, { token: admin })).json).commercialName).toBe(CINTI.commercialName)
   })
 
@@ -141,7 +149,8 @@ describe('plataforma sobre una bodega (?wineryId=, OP-07)', () => {
     expect((await call(`/v1/terroirs?wineryId=${ALTOS.id}`, { token: support })).status).toBe(200)
     const write = await call(`/v1/harvest-batches?wineryId=${ALTOS.id}`, { token: support, body: harvestBody })
     expect(write.status).toBe(403)
-    expect(code(write.json)).toBe('AUTH_INSUFFICIENT_PERMISSIONS')
+    expect(code(write.json)).toBe('TRC_PLATFORM_READ_ONLY')
+    expect((await call(`/v1/lots?wineryId=${ALTOS.id}`, { token: support })).status).toBe(200)
     expect((await call('/v1/wineries?status=INVITED', { token: support })).status).toBe(200)
   })
 })

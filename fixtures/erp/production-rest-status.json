@@ -36,11 +36,47 @@
     "isRestCompleted": false
   },
   {
-    "id": "a6dd3060-8612-5595-b9b4-33a7d039159c",
-    "restStatus": "READY",
-    "processEndDate": "2026-03-22T00:00:00Z",
-    "mandatoryRestUntil": "2026-09-18T00:00:00Z",
-    "daysElapsed": 187,
+    "id": "d5993d22-4689-5802-9ff8-4c844d8ab807",
+    "restStatus": "NOT_REQUIRED",
+    "processEndDate": null,
+    "mandatoryRestUntil": null,
+    "daysElapsed": 0,
+    "daysRemaining": 0,
+    "isRestCompleted": false
+  },
+  {
+    "id": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+    "restStatus": "BOTTLED",
+    "processEndDate": "2025-04-13T00:00:00Z",
+    "mandatoryRestUntil": "2025-10-10T00:00:00Z",
+    "daysElapsed": 530,
+    "daysRemaining": 0,
+    "isRestCompleted": true
+  },
+  {
+    "id": "00bc292a-8178-5216-8578-6d97a524f182",
+    "restStatus": "BOTTLED",
+    "processEndDate": "2024-04-06T00:00:00Z",
+    "mandatoryRestUntil": "2024-10-03T00:00:00Z",
+    "daysElapsed": 902,
+    "daysRemaining": 0,
+    "isRestCompleted": true
+  },
+  {
+    "id": "f9b48669-3b05-5bb4-9251-7905c2e343fc",
+    "restStatus": "BOTTLED",
+    "processEndDate": "2025-04-10T00:00:00Z",
+    "mandatoryRestUntil": "2025-10-07T00:00:00Z",
+    "daysElapsed": 533,
+    "daysRemaining": 0,
+    "isRestCompleted": true
+  },
+  {
+    "id": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+    "restStatus": "BOTTLED",
+    "processEndDate": "2026-03-24T00:00:00Z",
+    "mandatoryRestUntil": "2026-09-20T00:00:00Z",
+    "daysElapsed": 185,
     "daysRemaining": 0,
     "isRestCompleted": true
   }

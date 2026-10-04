@@ -12,7 +12,10 @@
     "lockUntilDate": "2026-11-03T00:00:00Z",
     "agingStatus": "AGING",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2025-11-03T10:00:00Z"
+    "createdAt": "2025-11-03T10:00:00Z",
+    "lotId": null,
+    "startDate": null,
+    "containerCount": null
   },
   {
     "id": "848d54be-3d51-5a62-93e6-d15eba6df89a",
@@ -27,7 +30,10 @@
     "lockUntilDate": "2027-02-28T00:00:00Z",
     "agingStatus": "AGING",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2026-06-30T10:00:00Z"
+    "createdAt": "2026-06-30T10:00:00Z",
+    "lotId": null,
+    "startDate": null,
+    "containerCount": null
   },
   {
     "id": "a48ddc67-0e24-51fe-a43d-877f55ac9de6",
@@ -40,9 +46,12 @@
     "volumeLiters": 2925,
     "plannedMonths": 10,
     "lockUntilDate": "2026-02-01T00:00:00Z",
-    "agingStatus": "READY",
+    "agingStatus": "BOTTLED",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2025-04-01T10:00:00Z"
+    "createdAt": "2025-04-01T10:00:00Z",
+    "lotId": null,
+    "startDate": null,
+    "containerCount": null
   },
   {
     "id": "a1370e1f-d1d9-5aad-b0a3-821677553361",
@@ -57,6 +66,9 @@
     "lockUntilDate": "2026-04-10T00:00:00Z",
     "agingStatus": "BOTTLED",
     "notes": "Cava subterránea a 14 °C y 75 % HR",
-    "createdAt": "2025-04-10T10:00:00Z"
+    "createdAt": "2025-04-10T10:00:00Z",
+    "lotId": null,
+    "startDate": null,
+    "containerCount": null
   }
 ]

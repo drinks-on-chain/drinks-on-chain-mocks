@@ -1,24 +1,14 @@
-import { dayFromIso, dayParts, isoDay, normalizeDateTime } from '../../../shared/dates'
-import { fakeHash64 } from '../../../shared/uuid'
-import { lotPrefixOf } from '../../../backoffice/handlers/support'
-import { WINERY_CODES_BY_ID } from '../../catalog'
-import { deriveRestStatus } from '../../lot-view'
-import {
-  CreateBatchLabAnalysisSchema,
-  CreateBottlingBatchSchema,
-  PRODUCT_TYPES,
-  type BatchLabAnalysisResponse,
-  type BottlingBatchResponse,
-} from '../../schemas'
-import { canSee, scoped, winery, type AuthContext } from '../auth-context'
-import { getErpDb, newId, tick, today } from '../db'
-import { conflict, fieldError, notFound, unprocessable } from '../errors'
-import { bottlingView } from '../views'
-import { boolParam, created, enumParam, listResult, ok, parseCreateBody, type RouteSpec } from '../http'
-import { requireWinery } from './terroirs-harvest'
-import { findAging, findProduction } from './winemaking'
+import { PRODUCT_TYPES, type BottlingBatchResponse } from '../../schemas'
+import { currentLab } from '../../trace/state'
+import { canSee, scoped, trace, type AuthContext } from '../auth-context'
+import { getErpDb } from '../db'
+import { notFound } from '../errors'
+import { boolParam, enumParam, listResult, ok, strParam, type RouteSpec } from '../http'
+import { bottlingView, labView } from '../views'
 
-// /v1/bottling* y /v1/lab-analyses*
+// /v1/bottling* y /v1/lab-analyses*: lecturas del embotellado y de su análisis vigente. Las altas
+// son del lote desde el cierre H2 de la Ola 2 (`POST /v1/lots/{id}/bottling` y
+// `POST /v1/lots/{id}/lab-analyses`); `POST /v1/bottling` y `POST /v1/lab-analyses` ya no existen.
 
 export function findBottling(auth: AuthContext | null, id: string): BottlingBatchResponse {
   const b = getErpDb().bottlings.find((x) => x.id === id)
@@ -26,127 +16,18 @@ export function findBottling(auth: AuthContext | null, id: string): BottlingBatc
   return b
 }
 
-/**
- * Código de bodega para el lote: catálogo fijo, el prefijo asignado al activarse (Ola 1, ORG-05) o
- * las tres primeras letras del nombre comercial.
- */
-function wineryCode(wineryId: string): string {
-  const known = WINERY_CODES_BY_ID[wineryId] ?? lotPrefixOf(wineryId)
-  if (known) return known
-  const w = getErpDb().wineries.find((x) => x.id === wineryId)
-  const letters = (w?.commercialName ?? 'DOC')
-    .normalize('NFD')
-    .replace(/[^A-Za-z]/g, '')
-    .toUpperCase()
-  return (letters.replace(/^(BODEGA|DESTILERIA|VINEDOS)/, '') || letters).slice(0, 3).padEnd(3, 'X')
-}
-
-/** `{BODEGA}-{AÑO}-{TIPO}-{SEQ}`; la secuencia es por bodega y año (como en los fixtures). */
-function nextLotCode(wineryId: string, year: number, productType: string): string {
-  const code = wineryCode(wineryId)
-  const prefix = `${code}-${year}-`
-  const seqs = getErpDb()
-    .bottlings.filter((b) => b.internationalLotCode.startsWith(prefix))
-    .map((b) => Number(b.internationalLotCode.split('-').at(-1)))
-    .filter((n) => Number.isFinite(n))
-  const seq = (seqs.length ? Math.max(...seqs) : 0) + 1
-  return `${prefix}${productType}-${String(seq).padStart(3, '0')}`
-}
-
 export const bottlingLabRoutes: RouteSpec[] = [
-  {
-    method: 'post',
-    path: '/v1/bottling',
-    access: winery(['OWNER', 'ENOLOGIST']),
-    async handle({ request, auth }) {
-      requireWinery(auth)
-      const body = await parseCreateBody(request, CreateBottlingBatchSchema)
-      const todayDay = today()
-      let wineryId: string
-      let markBottled: () => void
-      if (body.wineAgingBatchId) {
-        const aging = findAging(auth, body.wineAgingBatchId)
-        if (aging.agingStatus === 'BOTTLED' || aging.agingStatus === 'DISCARDED') {
-          throw unprocessable(`El lote de crianza ya está en estado ${aging.agingStatus}`, [
-            fieldError('wineAgingBatchId', `Estado ${aging.agingStatus}`),
-          ])
-        }
-        const lockDay = dayFromIso(aging.lockUntilDate)
-        if (todayDay < lockDay) {
-          throw unprocessable(`El vino se encuentra bloqueado por período de crianza hasta el ${isoDay(lockDay)}`, [
-            fieldError('wineAgingBatchId', `Candado de crianza hasta ${aging.lockUntilDate} (faltan ${lockDay - todayDay} días)`),
-          ])
-        }
-        wineryId = aging.wineryId
-        markBottled = () => {
-          aging.agingStatus = 'BOTTLED'
-        }
-      } else {
-        const production = findProduction(auth, body.productionBatchId!)
-        if (production.restStatus === 'BOTTLED' || production.restStatus === 'DISCARDED') {
-          throw unprocessable(`El lote de destilación ya está en estado ${production.restStatus}`, [
-            fieldError('productionBatchId', `Estado ${production.restStatus}`),
-          ])
-        }
-        if (production.restStatus !== 'NOT_REQUIRED') {
-          const rest = deriveRestStatus(production, { today: isoDay(todayDay) })
-          if (!rest.isRestCompleted) {
-            throw unprocessable(
-              `Reglas D.O. incumplidas: reposo inerte de ${rest.daysElapsed} días (mínimo 180, faltan ${rest.daysRemaining})`,
-              [
-                fieldError(
-                  'productionBatchId',
-                  `Reposo obligatorio hasta ${production.mandatoryRestUntil ?? ''} (faltan ${rest.daysRemaining} días)`,
-                ),
-              ],
-            )
-          }
-        }
-        wineryId = production.wineryId
-        markBottled = () => {
-          production.restStatus = 'BOTTLED'
-        }
-      }
-      const bottlingDate = normalizeDateTime(body.bottlingDate)
-      const lot = nextLotCode(wineryId, dayParts(dayFromIso(bottlingDate)).year, body.productType)
-      const id = newId('bottling')
-      const bottling: BottlingBatchResponse = {
-        id,
-        wineryId,
-        wineAgingBatchId: body.wineAgingBatchId ?? null,
-        productionBatchId: body.productionBatchId ?? null,
-        productType: body.productType,
-        internationalLotCode: lot,
-        finalAlcoholAbv: body.finalAlcoholAbv,
-        waterDilutionLiters: body.waterDilutionLiters ?? null,
-        totalBottlesPackaged: body.totalBottlesPackaged,
-        packagingFormatCl: body.packagingFormatCl,
-        bottleType: body.bottleType ?? null,
-        labelDesignUrl: body.labelDesignUrl ?? null,
-        bottlingDate,
-        releasedByMemberId: auth.memberId,
-        blockchainAnchorTxHash: null,
-        blockchainDataHash: fakeHash64(`data:${id}`),
-        isAnchoredOnChain: false,
-        anchoredAt: null,
-        qrBatchUrl: `https://app.drinksonchain.bo/b/${lot}`,
-        createdAt: tick(),
-      }
-      markBottled()
-      getErpDb().bottlings.push(bottling)
-      return created(bottling)
-    },
-  },
   {
     method: 'get',
     path: '/v1/bottling',
-    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
+    access: trace(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     list: 'paged',
     handle({ query, auth }) {
       const productType = enumParam(query, 'productType', PRODUCT_TYPES)
       const anchored = boolParam(query, 'isAnchoredOnChain')
+      const lotId = strParam(query, 'lotId')
       const items = scoped(auth, getErpDb().bottlings).filter(
-        (b) => (!productType || b.productType === productType) && (anchored === undefined || b.isAnchoredOnChain === anchored),
+        (b) => (!productType || b.productType === productType) && (anchored === undefined || b.isAnchoredOnChain === anchored) && (!lotId || b.lotId === lotId),
       )
       return listResult(items.map((b) => bottlingView(b)), query)
     },
@@ -154,62 +35,19 @@ export const bottlingLabRoutes: RouteSpec[] = [
   {
     method: 'get',
     path: '/v1/bottling/:id',
-    access: winery(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
+    access: trace(['OWNER', 'ENOLOGIST', 'ACCOUNTANT']),
     handle: ({ auth, params }) => ok(bottlingView(findBottling(auth, params.id!), true)),
-  },
-
-  // ----- Laboratorio -----
-  {
-    method: 'post',
-    path: '/v1/lab-analyses',
-    access: winery(['OWNER', 'ENOLOGIST']),
-    async handle({ request, auth }) {
-      const body = await parseCreateBody(request, CreateBatchLabAnalysisSchema)
-      const bottling = findBottling(auth, body.bottlingBatchId)
-      const db = getErpDb()
-      if (db.labAnalyses.some((l) => l.bottlingBatchId === bottling.id)) {
-        throw conflict('El lote ya tiene un informe oficial registrado')
-      }
-      const lab: BatchLabAnalysisResponse = {
-        id: newId('lab'),
-        bottlingBatchId: bottling.id,
-        certifiedLaboratoryName: body.certifiedLaboratoryName,
-        accreditedLabCertificationCode: body.accreditedLabCertificationCode,
-        analysisRequestDate: body.analysisRequestDate ? normalizeDateTime(body.analysisRequestDate) : null,
-        testPerformedAt: normalizeDateTime(body.testPerformedAt),
-        actualAlcoholAbv: body.actualAlcoholAbv,
-        totalAlcoholAbv: body.totalAlcoholAbv ?? null,
-        totalAcidityTartaricGl: body.totalAcidityTartaricGl,
-        volatileAcidityAceticGl: body.volatileAcidityAceticGl,
-        freeSulfurDioxideMgL: body.freeSulfurDioxideMgL ?? null,
-        totalSulfurDioxideMgL: body.totalSulfurDioxideMgL ?? null,
-        reducingSugarsGl: body.reducingSugarsGl ?? null,
-        totalDryExtractGl: body.totalDryExtractGl ?? null,
-        sugarFreeDryExtractGl: body.sugarFreeDryExtractGl ?? null,
-        overpressureBar: body.overpressureBar ?? null,
-        methanolContentMgL: body.methanolContentMgL ?? null,
-        copperContentMgL: body.copperContentMgL ?? null,
-        additionalParams: body.additionalParams ?? null,
-        laboratoryReportPdfUrl: body.laboratoryReportPdfUrl,
-        conformsToSenasagStandards: body.conformsToSenasagStandards ?? false,
-        conformsToEuStandards: body.conformsToEuStandards ?? false,
-        conformsToUsaStandards: body.conformsToUsaStandards ?? false,
-        reviewedByMemberId: auth.memberId,
-        createdAt: tick(),
-      }
-      db.labAnalyses.push(lab)
-      return created(lab)
-    },
   },
   {
     method: 'get',
     path: '/v1/lab-analyses/batch/:bottlingBatchId',
-    access: winery(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
+    access: trace(['OWNER', 'ENOLOGIST', 'AGRONOMIST', 'ACCOUNTANT']),
     handle({ auth, params }) {
       const bottling = findBottling(auth, params.bottlingBatchId!)
-      const lab = getErpDb().labAnalyses.find((l) => l.bottlingBatchId === bottling.id)
+      const db = getErpDb()
+      const lab = bottling.lotId ? currentLab(db, bottling.lotId) : db.labAnalyses.filter((l) => l.bottlingBatchId === bottling.id).at(-1)
       if (!lab) throw notFound(`Informe analítico del lote "${bottling.internationalLotCode}" no encontrado`)
-      return ok(lab)
+      return ok(labView(lab))
     },
   },
 ]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "923821ce-5b36-5088-9625-d778d410312d",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "kind": "LABEL",
+    "title": "Etiqueta frontal aprobada",
+    "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/labels/2026/etiqueta-sgr-2026.png",
+    "mimeType": "image/png",
+    "sizeBytes": 26342,
+    "sha256": "e325c65f1d280fa3a5f11c593b05b7fc4442ce0297a447220d8bbbf385a499f0",
+    "visibility": "PUBLIC",
+    "createdAt": "2026-09-22T18:30:00Z",
+    "createdBy": {
+      "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+      "fullName": "Lic. Lucía Rojas",
+      "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "a1b6d01a-6690-5b4d-87e2-9e429f046000",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "kind": "DO_CERTIFICATE",
+    "title": "Certificado de la D.O. Singani 2026",
+    "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/certificates/2026/certificado-do-singani-2026.pdf",
+    "mimeType": "application/pdf",
+    "sizeBytes": 256674,
+    "sha256": "1242827d53d66d52c2274e60ad059305257ba067e67b7befa1a9b82126327cbe",
+    "visibility": "PRIVATE",
+    "createdAt": "2026-09-23T17:00:00Z",
+    "createdBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    }
+  }
+]

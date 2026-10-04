@@ -192,38 +192,6 @@
   {
     "id": "e86e9b77-2053-580a-a81a-114fbb273ec2",
     "seq": 7,
-    "occurredAt": "2025-03-03T14:35:00Z",
-    "actor": {
-      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
-      "fullName": "Lic. Carla Villarroel",
-      "role": "ENOLOGIST",
-      "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "FERMENTATION_TANK_CREATED",
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "75d30fdf-eff5-596b-a2c3-d0d04db104ae"
-    },
-    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "before": null,
-    "after": {
-      "tankCode": "TK-RED-04",
-      "status": "CLEANED"
-    },
-    "reason": null,
-    "correlationId": "fx-0007",
-    "prevHash": "125d4ecbb549b4b108638a3f890a92a5b17488d59d3ae6287735a4ef186097e6",
-    "hash": "a6e992609b6c2f560ec1257d638d66639102c02344b309c390de389f8a05a93c"
-  },
-  {
-    "id": "6f24eeea-21cb-5f1b-a438-f12cc693ac21",
-    "seq": 8,
     "occurredAt": "2025-03-03T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -248,13 +216,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0008",
-    "prevHash": "a6e992609b6c2f560ec1257d638d66639102c02344b309c390de389f8a05a93c",
-    "hash": "2a6c116b764f77c99239af9a64f9dad5c67d106ecc880af7a9ef6aaff6b96c61"
+    "correlationId": "fx-0007",
+    "prevHash": "125d4ecbb549b4b108638a3f890a92a5b17488d59d3ae6287735a4ef186097e6",
+    "hash": "e794b9be16a8d24ec64ba2c1002ed55511d4736f57cfd8ecb9b20848c196f6f0"
   },
   {
-    "id": "e4843a37-71e2-5b07-9a5d-834acba8fa55",
-    "seq": 9,
+    "id": "6f24eeea-21cb-5f1b-a438-f12cc693ac21",
+    "seq": 8,
     "occurredAt": "2025-03-04T12:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -279,13 +247,13 @@
       "treatmentType": "NUTRIENT_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0009",
-    "prevHash": "2a6c116b764f77c99239af9a64f9dad5c67d106ecc880af7a9ef6aaff6b96c61",
-    "hash": "39eda390851b127f307ffbf0d45b3bada58017c733996279fb881d3eae76d165"
+    "correlationId": "fx-0008",
+    "prevHash": "e794b9be16a8d24ec64ba2c1002ed55511d4736f57cfd8ecb9b20848c196f6f0",
+    "hash": "5577f7416ec34bc100ec11ee64788f8b281f8d9046e29535970e93d430d743ed"
   },
   {
-    "id": "6bcb7727-e79c-5daf-b885-3e8798475e89",
-    "seq": 10,
+    "id": "e4843a37-71e2-5b07-9a5d-834acba8fa55",
+    "seq": 9,
     "occurredAt": "2025-03-06T09:45:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -311,13 +279,13 @@
       "netWeightKg": 9800
     },
     "reason": null,
-    "correlationId": "fx-0010",
-    "prevHash": "39eda390851b127f307ffbf0d45b3bada58017c733996279fb881d3eae76d165",
-    "hash": "e4d69a6add6684f5a094572bb5a6cde6876c4e1f1558cff76c5933ec4bee28a3"
+    "correlationId": "fx-0009",
+    "prevHash": "5577f7416ec34bc100ec11ee64788f8b281f8d9046e29535970e93d430d743ed",
+    "hash": "e7b0890539e6540e2a71d6929cefbf615a893652eb85272b7f665b2e8d7b6fe6"
   },
   {
-    "id": "c9cf3124-5374-5e94-bf01-7ec6a31c6df8",
-    "seq": 11,
+    "id": "6bcb7727-e79c-5daf-b885-3e8798475e89",
+    "seq": 10,
     "occurredAt": "2025-03-07T14:35:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -343,13 +311,13 @@
       "status": "TRANSFERRED"
     },
     "reason": null,
-    "correlationId": "fx-0011",
-    "prevHash": "e4d69a6add6684f5a094572bb5a6cde6876c4e1f1558cff76c5933ec4bee28a3",
-    "hash": "8efe8f1171377e8b9ee98a68b20ffb112574a5ae147a4225e2d447cbe87df281"
+    "correlationId": "fx-0010",
+    "prevHash": "e7b0890539e6540e2a71d6929cefbf615a893652eb85272b7f665b2e8d7b6fe6",
+    "hash": "29149616c48c8ec44202277df4b75e7674e54b3309c02027050a556887fbae44"
   },
   {
-    "id": "48aeca02-83b4-53bb-b639-8c7b40d5ebe2",
-    "seq": 12,
+    "id": "c9cf3124-5374-5e94-bf01-7ec6a31c6df8",
+    "seq": 11,
     "occurredAt": "2025-03-07T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -374,13 +342,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0012",
-    "prevHash": "8efe8f1171377e8b9ee98a68b20ffb112574a5ae147a4225e2d447cbe87df281",
-    "hash": "8e9badabdde421c6b69280651085a5c07f943aed93b8f1c7bc426af59b4fe5ab"
+    "correlationId": "fx-0011",
+    "prevHash": "29149616c48c8ec44202277df4b75e7674e54b3309c02027050a556887fbae44",
+    "hash": "5995e7323f71cffd9b4ebb2f143969d3a7caaf36742459491086c98fa9ebfbb8"
   },
   {
-    "id": "911a8955-32a0-5db8-a5ba-a5acf14ea20c",
-    "seq": 13,
+    "id": "48aeca02-83b4-53bb-b639-8c7b40d5ebe2",
+    "seq": 12,
     "occurredAt": "2025-03-08T12:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -405,13 +373,13 @@
       "treatmentType": "NUTRIENT_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0013",
-    "prevHash": "8e9badabdde421c6b69280651085a5c07f943aed93b8f1c7bc426af59b4fe5ab",
-    "hash": "10234a84cb8db6b4a618aa54f8a561e20a48df8ee7e6155cd2c104007345ec5e"
+    "correlationId": "fx-0012",
+    "prevHash": "5995e7323f71cffd9b4ebb2f143969d3a7caaf36742459491086c98fa9ebfbb8",
+    "hash": "605a16da02a8f311fae73d1b4a444155b80f8e142d9b3185e57efb521facb446"
   },
   {
-    "id": "05ee8cde-fd57-50cb-a79f-ee563e5380da",
-    "seq": 14,
+    "id": "911a8955-32a0-5db8-a5ba-a5acf14ea20c",
+    "seq": 13,
     "occurredAt": "2025-03-10T09:45:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -437,13 +405,13 @@
       "netWeightKg": 14850
     },
     "reason": null,
-    "correlationId": "fx-0014",
-    "prevHash": "10234a84cb8db6b4a618aa54f8a561e20a48df8ee7e6155cd2c104007345ec5e",
-    "hash": "a1b68ea38f2dc6240704640b5bb047e477a3966e9bd20b3db3b142cdf282a4c5"
+    "correlationId": "fx-0013",
+    "prevHash": "605a16da02a8f311fae73d1b4a444155b80f8e142d9b3185e57efb521facb446",
+    "hash": "f36d1f690dc7b627f28bb1fbf15eb6d64bf9b8202f10a2d3c6d7a842299eba51"
   },
   {
-    "id": "dc32bd28-b229-59a9-a151-ba4e59d5d43c",
-    "seq": 15,
+    "id": "05ee8cde-fd57-50cb-a79f-ee563e5380da",
+    "seq": 14,
     "occurredAt": "2025-03-11T14:35:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -469,45 +437,13 @@
       "status": "TRANSFERRED"
     },
     "reason": null,
-    "correlationId": "fx-0015",
-    "prevHash": "a1b68ea38f2dc6240704640b5bb047e477a3966e9bd20b3db3b142cdf282a4c5",
-    "hash": "f370d4e236ed33b3a157a5873444b02309f430da07ee40eb910f8e1112d8778d"
+    "correlationId": "fx-0014",
+    "prevHash": "f36d1f690dc7b627f28bb1fbf15eb6d64bf9b8202f10a2d3c6d7a842299eba51",
+    "hash": "2c3f2cbd680fec981a824d1ffe0515c14f00318b6523c7d3cfeaa4497addeb6a"
   },
   {
-    "id": "3351626c-7cd0-57e1-8105-3c6e274fe094",
-    "seq": 16,
-    "occurredAt": "2025-03-11T14:35:00Z",
-    "actor": {
-      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
-      "fullName": "Lic. Lucía Rojas",
-      "role": "ENOLOGIST",
-      "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "FERMENTATION_TANK_CREATED",
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "c66f62ff-e355-5e2c-8a47-1ac5282b77b2"
-    },
-    "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-    "before": null,
-    "after": {
-      "tankCode": "TK-09",
-      "status": "CLEANED"
-    },
-    "reason": null,
-    "correlationId": "fx-0016",
-    "prevHash": "f370d4e236ed33b3a157a5873444b02309f430da07ee40eb910f8e1112d8778d",
-    "hash": "b16e02d4a931e39ccab391b66e86767820fc34191c6f5fb2a1773b51eb1edf99"
-  },
-  {
-    "id": "3e828134-4492-528e-a7e5-82880550e73d",
-    "seq": 17,
+    "id": "dc32bd28-b229-59a9-a151-ba4e59d5d43c",
+    "seq": 15,
     "occurredAt": "2025-03-11T15:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -532,13 +468,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0017",
-    "prevHash": "b16e02d4a931e39ccab391b66e86767820fc34191c6f5fb2a1773b51eb1edf99",
-    "hash": "64f0103806227e4e722b292480fbf35f698074fad3db50621c8019b5b00a5bcf"
+    "correlationId": "fx-0015",
+    "prevHash": "2c3f2cbd680fec981a824d1ffe0515c14f00318b6523c7d3cfeaa4497addeb6a",
+    "hash": "80e82ef08d35689c33341bfa2077ff9f369080e9a251a54f69ee7629bfe96198"
   },
   {
-    "id": "a413878f-ffc4-5738-b8db-4a4926d5aa5c",
-    "seq": 18,
+    "id": "3351626c-7cd0-57e1-8105-3c6e274fe094",
+    "seq": 16,
     "occurredAt": "2025-03-18T09:45:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -564,13 +500,13 @@
       "netWeightKg": 9000
     },
     "reason": null,
-    "correlationId": "fx-0018",
-    "prevHash": "64f0103806227e4e722b292480fbf35f698074fad3db50621c8019b5b00a5bcf",
-    "hash": "08b20ea46f3fa5d5beb3509f86d3a5889643f72b8b3df92415e750d0213cdce6"
+    "correlationId": "fx-0016",
+    "prevHash": "80e82ef08d35689c33341bfa2077ff9f369080e9a251a54f69ee7629bfe96198",
+    "hash": "ad0db246e1d2e233fa5c1cd7f704a680f085b85e5bd0146f65c2ff1ba47362cd"
   },
   {
-    "id": "19b09ef0-636d-55fc-a800-0b95eb2bf3c0",
-    "seq": 19,
+    "id": "3e828134-4492-528e-a7e5-82880550e73d",
+    "seq": 17,
     "occurredAt": "2025-03-19T14:35:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -596,13 +532,13 @@
       "status": "TRANSFERRED"
     },
     "reason": null,
-    "correlationId": "fx-0019",
-    "prevHash": "08b20ea46f3fa5d5beb3509f86d3a5889643f72b8b3df92415e750d0213cdce6",
-    "hash": "54dee0730c11cbc755b458650eed6b1df405a6e826544fbfc48a1c843daeeb3b"
+    "correlationId": "fx-0017",
+    "prevHash": "ad0db246e1d2e233fa5c1cd7f704a680f085b85e5bd0146f65c2ff1ba47362cd",
+    "hash": "7038079981c645af95dad9cc236aed8a2ea142678d36d8038191629daae18aa3"
   },
   {
-    "id": "66643b94-fa50-5ed1-bf71-1f5657fd701b",
-    "seq": 20,
+    "id": "a413878f-ffc4-5738-b8db-4a4926d5aa5c",
+    "seq": 18,
     "occurredAt": "2025-03-19T15:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -627,13 +563,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0020",
-    "prevHash": "54dee0730c11cbc755b458650eed6b1df405a6e826544fbfc48a1c843daeeb3b",
-    "hash": "c85ab040beea52dab08cad4cc54173e28d861b6da4c8abc3bf0d57dc8df4d850"
+    "correlationId": "fx-0018",
+    "prevHash": "7038079981c645af95dad9cc236aed8a2ea142678d36d8038191629daae18aa3",
+    "hash": "32ef2bfd2f59641bc636cb9e18a985ba361e3e160ebf6bec10d76e826387e47a"
   },
   {
-    "id": "c92d4c57-eb19-57d2-8054-e19e409b7a1c",
-    "seq": 21,
+    "id": "19b09ef0-636d-55fc-a800-0b95eb2bf3c0",
+    "seq": 19,
     "occurredAt": "2025-03-20T09:45:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -659,13 +595,13 @@
       "netWeightKg": 7700
     },
     "reason": null,
-    "correlationId": "fx-0021",
-    "prevHash": "c85ab040beea52dab08cad4cc54173e28d861b6da4c8abc3bf0d57dc8df4d850",
-    "hash": "8f0d8810f572b01883051c70db42f8250794ae523c3e0e4eb2b6b9571da4ea57"
+    "correlationId": "fx-0019",
+    "prevHash": "32ef2bfd2f59641bc636cb9e18a985ba361e3e160ebf6bec10d76e826387e47a",
+    "hash": "a9adc7ebbeeeb6b41f04cbd8b0ab4139ea396deb5ce6814444e1a581780abc04"
   },
   {
-    "id": "ac9c8c06-f985-5aff-92a3-0dd2b339830a",
-    "seq": 22,
+    "id": "66643b94-fa50-5ed1-bf71-1f5657fd701b",
+    "seq": 20,
     "occurredAt": "2025-03-21T14:35:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -691,13 +627,13 @@
       "status": "TRANSFERRED"
     },
     "reason": null,
-    "correlationId": "fx-0022",
-    "prevHash": "8f0d8810f572b01883051c70db42f8250794ae523c3e0e4eb2b6b9571da4ea57",
-    "hash": "266602f241127011979c93c848afb986f250dd9efcf32290ea624213c0e1d819"
+    "correlationId": "fx-0020",
+    "prevHash": "a9adc7ebbeeeb6b41f04cbd8b0ab4139ea396deb5ce6814444e1a581780abc04",
+    "hash": "2cca6d0c84b419f2554f20938f638af46c793ba05706817a948c062ac7e293cc"
   },
   {
-    "id": "3dece8e5-7ced-5904-a7b5-be6c259e6a8c",
-    "seq": 23,
+    "id": "c92d4c57-eb19-57d2-8054-e19e409b7a1c",
+    "seq": 21,
     "occurredAt": "2025-03-21T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -722,13 +658,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0023",
-    "prevHash": "266602f241127011979c93c848afb986f250dd9efcf32290ea624213c0e1d819",
-    "hash": "d43ae7e9f84eca3f02d7987ca25e22bd4465ebf55b8c3c82eb54a43fd0c8bfbc"
+    "correlationId": "fx-0021",
+    "prevHash": "2cca6d0c84b419f2554f20938f638af46c793ba05706817a948c062ac7e293cc",
+    "hash": "c4b8649fa9a17c6fb411033bbdf02741fd89bc587bf8a3ff989b4944d01a6a48"
   },
   {
-    "id": "01240bf2-5970-5bce-8b85-eaec9ac8bee0",
-    "seq": 24,
+    "id": "ac9c8c06-f985-5aff-92a3-0dd2b339830a",
+    "seq": 22,
     "occurredAt": "2025-03-22T12:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -753,13 +689,13 @@
       "treatmentType": "NUTRIENT_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0024",
-    "prevHash": "d43ae7e9f84eca3f02d7987ca25e22bd4465ebf55b8c3c82eb54a43fd0c8bfbc",
-    "hash": "fe49d36a5d730f90dfa22b558871bbc74b0a0d9b62a4170b98acc71b9179575e"
+    "correlationId": "fx-0022",
+    "prevHash": "c4b8649fa9a17c6fb411033bbdf02741fd89bc587bf8a3ff989b4944d01a6a48",
+    "hash": "339f8be2c507c1aac090ebc75498d52b8f6bace3d2188f08a7a36824a046833c"
   },
   {
-    "id": "a209a931-fff9-5f95-887f-9df8fffd3187",
-    "seq": 25,
+    "id": "3dece8e5-7ced-5904-a7b5-be6c259e6a8c",
+    "seq": 23,
     "occurredAt": "2025-04-01T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -784,13 +720,13 @@
       "lockUntilDate": "2026-02-01T00:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0025",
-    "prevHash": "fe49d36a5d730f90dfa22b558871bbc74b0a0d9b62a4170b98acc71b9179575e",
-    "hash": "56e16aa49735e9978f3b52dd11a419b3210c5e94ee11ee0376c7aa7c0e166547"
+    "correlationId": "fx-0023",
+    "prevHash": "339f8be2c507c1aac090ebc75498d52b8f6bace3d2188f08a7a36824a046833c",
+    "hash": "847ac98d2bbc6919693024d1e6c4af3831d98dfc46836d5a89168f2deb2bfac0"
   },
   {
-    "id": "8c44dbb5-f31f-5b64-937f-33795358237d",
-    "seq": 26,
+    "id": "01240bf2-5970-5bce-8b85-eaec9ac8bee0",
+    "seq": 24,
     "occurredAt": "2025-04-10T10:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -815,13 +751,13 @@
       "lockUntilDate": "2026-04-10T00:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0026",
-    "prevHash": "56e16aa49735e9978f3b52dd11a419b3210c5e94ee11ee0376c7aa7c0e166547",
-    "hash": "4a0211c984145c438e85f8c8a93422cfa800706a15e31415ece298404461ee74"
+    "correlationId": "fx-0024",
+    "prevHash": "847ac98d2bbc6919693024d1e6c4af3831d98dfc46836d5a89168f2deb2bfac0",
+    "hash": "30eedd61df26f22e4509b528177ec3b80700867619bca9c0a3e7ad774c1bc52a"
   },
   {
-    "id": "15093130-31d5-56f0-89e0-288e48a7aa26",
-    "seq": 27,
+    "id": "a209a931-fff9-5f95-887f-9df8fffd3187",
+    "seq": 25,
     "occurredAt": "2025-05-02T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -847,13 +783,13 @@
       "isDoEligible": true
     },
     "reason": null,
-    "correlationId": "fx-0027",
-    "prevHash": "4a0211c984145c438e85f8c8a93422cfa800706a15e31415ece298404461ee74",
-    "hash": "e0649af7e98632048144fcde408217576eb03a79fef3c75dae9e7e2396c9b58a"
+    "correlationId": "fx-0025",
+    "prevHash": "30eedd61df26f22e4509b528177ec3b80700867619bca9c0a3e7ad774c1bc52a",
+    "hash": "ded10009302afba90407bbc9b659ba8ab5fb240667a1251d74e4028e630d681c"
   },
   {
-    "id": "a81ac061-c63c-5093-ac78-bd33c83e54ed",
-    "seq": 28,
+    "id": "8c44dbb5-f31f-5b64-937f-33795358237d",
+    "seq": 26,
     "occurredAt": "2025-05-20T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -879,13 +815,13 @@
       "isDoEligible": true
     },
     "reason": null,
-    "correlationId": "fx-0028",
-    "prevHash": "e0649af7e98632048144fcde408217576eb03a79fef3c75dae9e7e2396c9b58a",
-    "hash": "c4201a5c661e7774beeadc97f841145a88f5dd55c9e9107867ee4c613c283289"
+    "correlationId": "fx-0026",
+    "prevHash": "ded10009302afba90407bbc9b659ba8ab5fb240667a1251d74e4028e630d681c",
+    "hash": "fac011154d26fcd5dc17ba6503b4714a06c4166fd8e49ddd223026eb37a1dca0"
   },
   {
-    "id": "5c3d6d0e-255c-5d33-8507-fab67562d388",
-    "seq": 29,
+    "id": "15093130-31d5-56f0-89e0-288e48a7aa26",
+    "seq": 27,
     "occurredAt": "2025-10-20T09:00:00Z",
     "actor": {
       "userId": null,
@@ -910,13 +846,13 @@
       "status": "INVITED"
     },
     "reason": "Alta anterior a la Ola 1",
-    "correlationId": "fx-0029",
-    "prevHash": "c4201a5c661e7774beeadc97f841145a88f5dd55c9e9107867ee4c613c283289",
-    "hash": "11d5e0003808364fd7e617a23eebb698937f3fa9d5effc81f288a4f9224805e3"
+    "correlationId": "fx-0027",
+    "prevHash": "fac011154d26fcd5dc17ba6503b4714a06c4166fd8e49ddd223026eb37a1dca0",
+    "hash": "5458b8ff8a27aac36dfb7ef78f8a6d9d5383c5f301837564c3da08574f2df4a9"
   },
   {
-    "id": "7931dfd6-4238-551b-b34b-03d0970d126e",
-    "seq": 30,
+    "id": "a81ac061-c63c-5093-ac78-bd33c83e54ed",
+    "seq": 28,
     "occurredAt": "2025-10-22T10:00:00Z",
     "actor": {
       "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
@@ -941,13 +877,13 @@
       "role": "OWNER"
     },
     "reason": null,
-    "correlationId": "fx-0030",
-    "prevHash": "11d5e0003808364fd7e617a23eebb698937f3fa9d5effc81f288a4f9224805e3",
-    "hash": "ffa6bae2603e43e40ad042c2b865bac0ee47cae8841fb1d3e4df969b3f7eecbb"
+    "correlationId": "fx-0028",
+    "prevHash": "5458b8ff8a27aac36dfb7ef78f8a6d9d5383c5f301837564c3da08574f2df4a9",
+    "hash": "d7e98c47bd9d7108380fd7e9ee178dccb557879aeb44216ee2981cd4a12b2d0a"
   },
   {
-    "id": "0c1dde34-0a52-5528-b2d0-4d2d9279610e",
-    "seq": 31,
+    "id": "5c3d6d0e-255c-5d33-8507-fab67562d388",
+    "seq": 29,
     "occurredAt": "2025-11-03T10:00:00Z",
     "actor": {
       "userId": null,
@@ -975,13 +911,13 @@
       "lotPrefix": "CUR"
     },
     "reason": null,
-    "correlationId": "fx-0031",
-    "prevHash": "ffa6bae2603e43e40ad042c2b865bac0ee47cae8841fb1d3e4df969b3f7eecbb",
-    "hash": "4952b2a14c481ff8346e33fc27ab9e9ae4da00b4d9476dd0c34d3f1ac4c53148"
+    "correlationId": "fx-0029",
+    "prevHash": "d7e98c47bd9d7108380fd7e9ee178dccb557879aeb44216ee2981cd4a12b2d0a",
+    "hash": "d6068156906d5bc097285d36034bde90d84f04e617b4f91cc4a3b077dd2131d6"
   },
   {
-    "id": "1a60f34b-b3aa-5624-a696-e6aec02bef27",
-    "seq": 32,
+    "id": "7931dfd6-4238-551b-b34b-03d0970d126e",
+    "seq": 30,
     "occurredAt": "2025-11-03T10:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -1006,13 +942,13 @@
       "lockUntilDate": "2026-11-03T00:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0032",
-    "prevHash": "4952b2a14c481ff8346e33fc27ab9e9ae4da00b4d9476dd0c34d3f1ac4c53148",
-    "hash": "e8aa56abaa6ed7884f97a0bcc80ab97bf371f9da867fabc7c966d344c9aa46f5"
+    "correlationId": "fx-0030",
+    "prevHash": "d6068156906d5bc097285d36034bde90d84f04e617b4f91cc4a3b077dd2131d6",
+    "hash": "199ba5078c398b454382efd5e89668ac67e7589a7e2e37bd5c2f233c9f813b58"
   },
   {
-    "id": "adbf8362-78f7-5bad-9189-faf202365469",
-    "seq": 33,
+    "id": "0c1dde34-0a52-5528-b2d0-4d2d9279610e",
+    "seq": 31,
     "occurredAt": "2025-12-01T09:00:00Z",
     "actor": {
       "userId": null,
@@ -1037,13 +973,13 @@
       "status": "INVITED"
     },
     "reason": "Alta anterior a la Ola 1",
-    "correlationId": "fx-0033",
-    "prevHash": "e8aa56abaa6ed7884f97a0bcc80ab97bf371f9da867fabc7c966d344c9aa46f5",
-    "hash": "e0567eaabb4a0ee1a05ada4fee0e9dc1012d3441b90b373786261b051879258f"
+    "correlationId": "fx-0031",
+    "prevHash": "199ba5078c398b454382efd5e89668ac67e7589a7e2e37bd5c2f233c9f813b58",
+    "hash": "9f5daa023fb91adf4e3d3a0c90256dd8c1619e00dd769adc6a54d66fc092b7b7"
   },
   {
-    "id": "cb96d3b2-a57b-5f0b-8dff-a828f51c74a4",
-    "seq": 34,
+    "id": "1a60f34b-b3aa-5624-a696-e6aec02bef27",
+    "seq": 32,
     "occurredAt": "2026-01-05T10:00:00Z",
     "actor": {
       "userId": "8511139f-baa2-58e0-8297-6bc207d694a6",
@@ -1071,13 +1007,13 @@
       "lotPrefix": "VES"
     },
     "reason": null,
-    "correlationId": "fx-0034",
-    "prevHash": "e0567eaabb4a0ee1a05ada4fee0e9dc1012d3441b90b373786261b051879258f",
-    "hash": "dd29b89f0d051762e9ef1de52c04f31716a3a7d90def5a09ab84e27944800798"
+    "correlationId": "fx-0032",
+    "prevHash": "9f5daa023fb91adf4e3d3a0c90256dd8c1619e00dd769adc6a54d66fc092b7b7",
+    "hash": "3bf018634ab69aed3a6ecb2d8d1225ad4c632675cf11222af036f1428af20f10"
   },
   {
-    "id": "f50129fe-dc5e-5d1c-9008-ddca57ea5995",
-    "seq": 35,
+    "id": "adbf8362-78f7-5bad-9189-faf202365469",
+    "seq": 33,
     "occurredAt": "2026-01-05T10:00:00Z",
     "actor": {
       "userId": "8511139f-baa2-58e0-8297-6bc207d694a6",
@@ -1102,45 +1038,13 @@
       "role": "OWNER"
     },
     "reason": null,
-    "correlationId": "fx-0035",
-    "prevHash": "dd29b89f0d051762e9ef1de52c04f31716a3a7d90def5a09ab84e27944800798",
-    "hash": "44a3c2e0ae37b688547e03ee6177c40e0d315d210e1055a59d013a6a3ddd63d7"
+    "correlationId": "fx-0033",
+    "prevHash": "3bf018634ab69aed3a6ecb2d8d1225ad4c632675cf11222af036f1428af20f10",
+    "hash": "4427c94a27d8b4312361b3a84c4ba516dcc6336a2b14140e2f5036128054c8b1"
   },
   {
-    "id": "558b1968-2313-59a1-944d-88ceeb1031eb",
-    "seq": 36,
-    "occurredAt": "2026-01-05T14:35:00Z",
-    "actor": {
-      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
-      "fullName": "Lic. Carla Villarroel",
-      "role": "ENOLOGIST",
-      "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "FERMENTATION_TANK_CREATED",
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "04e8d15f-24ff-5943-83db-6f915387071c"
-    },
-    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "before": null,
-    "after": {
-      "tankCode": "TK-06",
-      "status": "CLEANED"
-    },
-    "reason": null,
-    "correlationId": "fx-0036",
-    "prevHash": "44a3c2e0ae37b688547e03ee6177c40e0d315d210e1055a59d013a6a3ddd63d7",
-    "hash": "5e11fae081b24231653705fe55688edafb674f311acaeb00131bb27446e539c7"
-  },
-  {
-    "id": "9ce728a2-5f20-5772-a20a-d729d26ffb39",
-    "seq": 37,
+    "id": "cb96d3b2-a57b-5f0b-8dff-a828f51c74a4",
+    "seq": 34,
     "occurredAt": "2026-01-08T09:00:00Z",
     "actor": {
       "userId": null,
@@ -1165,13 +1069,13 @@
       "status": "INVITED"
     },
     "reason": "Alta anterior a la Ola 1",
-    "correlationId": "fx-0037",
-    "prevHash": "5e11fae081b24231653705fe55688edafb674f311acaeb00131bb27446e539c7",
-    "hash": "2d62518564db6ad7e0f97625a61b6dbf838b9a1c5555db090b5bdf8f7eb49ca8"
+    "correlationId": "fx-0034",
+    "prevHash": "4427c94a27d8b4312361b3a84c4ba516dcc6336a2b14140e2f5036128054c8b1",
+    "hash": "f6311ac596254d3dcdf5ee33984d457e5851caac6b150abc72ec7beb297c177f"
   },
   {
-    "id": "2147238b-c0f0-5e11-a405-15dac71458a9",
-    "seq": 38,
+    "id": "f50129fe-dc5e-5d1c-9008-ddca57ea5995",
+    "seq": 35,
     "occurredAt": "2026-01-13T10:00:00Z",
     "actor": {
       "userId": "c918ae49-2b92-5268-b370-2f067e0e97fe",
@@ -1196,13 +1100,13 @@
       "role": "OWNER"
     },
     "reason": null,
-    "correlationId": "fx-0038",
-    "prevHash": "2d62518564db6ad7e0f97625a61b6dbf838b9a1c5555db090b5bdf8f7eb49ca8",
-    "hash": "ffbbcead8e4a0c87c060add72cb103ccb55fe73732304415932b9377930af7c9"
+    "correlationId": "fx-0035",
+    "prevHash": "f6311ac596254d3dcdf5ee33984d457e5851caac6b150abc72ec7beb297c177f",
+    "hash": "9bfa3b96257c494d89478f78b03e6c3c74957fd8a2b392109c1e6a38b776ed10"
   },
   {
-    "id": "34d4a6d6-e04f-567c-834c-81903f154cc9",
-    "seq": 39,
+    "id": "558b1968-2313-59a1-944d-88ceeb1031eb",
+    "seq": 36,
     "occurredAt": "2026-01-15T10:00:00Z",
     "actor": {
       "userId": null,
@@ -1230,13 +1134,13 @@
       "lotPrefix": "CVJ"
     },
     "reason": null,
-    "correlationId": "fx-0039",
-    "prevHash": "ffbbcead8e4a0c87c060add72cb103ccb55fe73732304415932b9377930af7c9",
-    "hash": "94dda1ad783d996fdcc770a167f8b3fa71d1c28103c7f808c27595ae8945655d"
+    "correlationId": "fx-0036",
+    "prevHash": "9bfa3b96257c494d89478f78b03e6c3c74957fd8a2b392109c1e6a38b776ed10",
+    "hash": "29064e9fa591e06f3754534afa324bf68fa412fd34305c51df24fdf7bbcd70d6"
   },
   {
-    "id": "714e7ffa-81e4-5635-94ad-6c99c9e19214",
-    "seq": 40,
+    "id": "9ce728a2-5f20-5772-a20a-d729d26ffb39",
+    "seq": 37,
     "occurredAt": "2026-01-20T11:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -1262,13 +1166,13 @@
       "altitudeMasl": 1860
     },
     "reason": null,
-    "correlationId": "fx-0040",
-    "prevHash": "94dda1ad783d996fdcc770a167f8b3fa71d1c28103c7f808c27595ae8945655d",
-    "hash": "bda0b3a819cec81c14f8944f5f96810cd6316bdc1895102b82a8d8630eac27fa"
+    "correlationId": "fx-0037",
+    "prevHash": "29064e9fa591e06f3754534afa324bf68fa412fd34305c51df24fdf7bbcd70d6",
+    "hash": "5c5d530f43984ca2626cb5b0b045ceae43d33663b260a8dd7fefb3b9fa8c1c57"
   },
   {
-    "id": "5e1ea323-a9ee-5dfd-ad39-06b2d2c4ad25",
-    "seq": 41,
+    "id": "2147238b-c0f0-5e11-a405-15dac71458a9",
+    "seq": 38,
     "occurredAt": "2026-01-23T11:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -1294,13 +1198,13 @@
       "altitudeMasl": 1875
     },
     "reason": null,
-    "correlationId": "fx-0041",
-    "prevHash": "bda0b3a819cec81c14f8944f5f96810cd6316bdc1895102b82a8d8630eac27fa",
-    "hash": "f702822b3bc3e9dad13b100b6093082a68e553ee05768ee4de04299a79aedf3d"
+    "correlationId": "fx-0038",
+    "prevHash": "5c5d530f43984ca2626cb5b0b045ceae43d33663b260a8dd7fefb3b9fa8c1c57",
+    "hash": "58cb3c409d440bc9f8840c1186374623e788d3eaf2fc10eab0d2a2e9082ea76b"
   },
   {
-    "id": "4d472606-de2a-5010-8c14-c7c281499071",
-    "seq": 42,
+    "id": "34d4a6d6-e04f-567c-834c-81903f154cc9",
+    "seq": 39,
     "occurredAt": "2026-01-26T11:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -1326,13 +1230,13 @@
       "altitudeMasl": 1540
     },
     "reason": null,
-    "correlationId": "fx-0042",
-    "prevHash": "f702822b3bc3e9dad13b100b6093082a68e553ee05768ee4de04299a79aedf3d",
-    "hash": "3b01cbb07608b966c0f5410f7d8dabf111cabeed12522c8dc3677f320c836daf"
+    "correlationId": "fx-0039",
+    "prevHash": "58cb3c409d440bc9f8840c1186374623e788d3eaf2fc10eab0d2a2e9082ea76b",
+    "hash": "0619deacd46932065f45dc2ad9d803974537d321713e4f03f1daa73e8b779a11"
   },
   {
-    "id": "f187f011-f37f-5d0b-8c50-b794c68875fa",
-    "seq": 43,
+    "id": "714e7ffa-81e4-5635-94ad-6c99c9e19214",
+    "seq": 40,
     "occurredAt": "2026-01-29T11:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -1358,13 +1262,13 @@
       "altitudeMasl": 1910
     },
     "reason": null,
-    "correlationId": "fx-0043",
-    "prevHash": "3b01cbb07608b966c0f5410f7d8dabf111cabeed12522c8dc3677f320c836daf",
-    "hash": "3e9cf48acc29e3c03274a660036a306bbefa4dfbf31a3d654d7093f77ea551aa"
+    "correlationId": "fx-0040",
+    "prevHash": "0619deacd46932065f45dc2ad9d803974537d321713e4f03f1daa73e8b779a11",
+    "hash": "85d157f780ed325c10a2d0996aa46dd05a09d6f43e4b257e5f94f169e98d9ce1"
   },
   {
-    "id": "88e95128-58d1-5b6a-9860-95d08cbde0e0",
-    "seq": 44,
+    "id": "5e1ea323-a9ee-5dfd-ad39-06b2d2c4ad25",
+    "seq": 41,
     "occurredAt": "2026-02-01T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1389,13 +1293,13 @@
       "role": "ENOLOGIST"
     },
     "reason": null,
-    "correlationId": "fx-0044",
-    "prevHash": "3e9cf48acc29e3c03274a660036a306bbefa4dfbf31a3d654d7093f77ea551aa",
-    "hash": "f72927e2b9c48770215bdb443c9a01831c53750bd677cc5da9026c6946c73689"
+    "correlationId": "fx-0041",
+    "prevHash": "85d157f780ed325c10a2d0996aa46dd05a09d6f43e4b257e5f94f169e98d9ce1",
+    "hash": "c8ba15f4609649e8fada6dddef15dd98fb908d37001b9a1ad2d34b8b6e97d910"
   },
   {
-    "id": "3d8e6053-ff83-54b2-9046-461f1dce6f5d",
-    "seq": 45,
+    "id": "4d472606-de2a-5010-8c14-c7c281499071",
+    "seq": 42,
     "occurredAt": "2026-02-01T11:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -1421,13 +1325,13 @@
       "altitudeMasl": 1890
     },
     "reason": null,
-    "correlationId": "fx-0045",
-    "prevHash": "f72927e2b9c48770215bdb443c9a01831c53750bd677cc5da9026c6946c73689",
-    "hash": "f41a4c3b8b0e10d4496ad7828670f4ee369a1972ac1f0798b3958af94677389a"
+    "correlationId": "fx-0042",
+    "prevHash": "c8ba15f4609649e8fada6dddef15dd98fb908d37001b9a1ad2d34b8b6e97d910",
+    "hash": "e9e62986036d24cd9a6f2994a041d5b4578b2be6bda7475443a83618ee59380e"
   },
   {
-    "id": "4399a60f-9c1c-56a3-be21-8a901adcbe59",
-    "seq": 46,
+    "id": "f187f011-f37f-5d0b-8c50-b794c68875fa",
+    "seq": 43,
     "occurredAt": "2026-02-03T10:00:00Z",
     "actor": {
       "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
@@ -1452,13 +1356,13 @@
       "role": "AGRONOMIST"
     },
     "reason": null,
-    "correlationId": "fx-0046",
-    "prevHash": "f41a4c3b8b0e10d4496ad7828670f4ee369a1972ac1f0798b3958af94677389a",
-    "hash": "4aa42534fbf8b3eed567fcc48d6411bbff236bdd7f4f19cfd2c6498b3e1235e4"
+    "correlationId": "fx-0043",
+    "prevHash": "e9e62986036d24cd9a6f2994a041d5b4578b2be6bda7475443a83618ee59380e",
+    "hash": "dcb685111b3866ff6b7bb455bb7849a58cf2eae00168185f2eeb1e64b2a0a4a1"
   },
   {
-    "id": "b477daf0-4f16-5620-a38b-c4cdd6409826",
-    "seq": 47,
+    "id": "88e95128-58d1-5b6a-9860-95d08cbde0e0",
+    "seq": 44,
     "occurredAt": "2026-02-04T11:00:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -1484,13 +1388,13 @@
       "altitudeMasl": 2350
     },
     "reason": null,
-    "correlationId": "fx-0047",
-    "prevHash": "4aa42534fbf8b3eed567fcc48d6411bbff236bdd7f4f19cfd2c6498b3e1235e4",
-    "hash": "9c76e2b140617bdfa3b564a521cdf89283322cb6b9884268dc1b43cca67841d7"
+    "correlationId": "fx-0044",
+    "prevHash": "dcb685111b3866ff6b7bb455bb7849a58cf2eae00168185f2eeb1e64b2a0a4a1",
+    "hash": "29dd56723fb1403846c656cf535d374513f223c83e89625df65b449236bf0ff4"
   },
   {
-    "id": "e0961d93-6b13-5fae-b68c-da904dac2133",
-    "seq": 48,
+    "id": "3d8e6053-ff83-54b2-9046-461f1dce6f5d",
+    "seq": 45,
     "occurredAt": "2026-02-07T11:00:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -1516,13 +1420,13 @@
       "altitudeMasl": 2410
     },
     "reason": null,
-    "correlationId": "fx-0048",
-    "prevHash": "9c76e2b140617bdfa3b564a521cdf89283322cb6b9884268dc1b43cca67841d7",
-    "hash": "126fb0ae0daf8dee7c7919c7783300340255d8e6a1bbe7adf716c9fac635965c"
+    "correlationId": "fx-0045",
+    "prevHash": "29dd56723fb1403846c656cf535d374513f223c83e89625df65b449236bf0ff4",
+    "hash": "6d7e936f960aa4ceaeb65d5350df6d616096486c49809181cfe1f703c46472e7"
   },
   {
-    "id": "7c802cb0-a77b-5602-b247-4dd8e12a0e07",
-    "seq": 49,
+    "id": "4399a60f-9c1c-56a3-be21-8a901adcbe59",
+    "seq": 46,
     "occurredAt": "2026-02-10T10:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -1547,13 +1451,13 @@
       "role": "OWNER"
     },
     "reason": null,
-    "correlationId": "fx-0049",
-    "prevHash": "126fb0ae0daf8dee7c7919c7783300340255d8e6a1bbe7adf716c9fac635965c",
-    "hash": "e6b972b411f1911ae701b732d34450f6f065826a4d46d19081f691b15f39e32a"
+    "correlationId": "fx-0046",
+    "prevHash": "6d7e936f960aa4ceaeb65d5350df6d616096486c49809181cfe1f703c46472e7",
+    "hash": "6eb2d9798ebe182c18196484e0f922184cb872d54be0032ea388a2eb35add382"
   },
   {
-    "id": "46818d60-ba17-5ce1-a589-c04a732e24f2",
-    "seq": 50,
+    "id": "b477daf0-4f16-5620-a38b-c4cdd6409826",
+    "seq": 47,
     "occurredAt": "2026-02-10T11:00:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -1579,13 +1483,13 @@
       "altitudeMasl": 2280
     },
     "reason": null,
-    "correlationId": "fx-0050",
-    "prevHash": "e6b972b411f1911ae701b732d34450f6f065826a4d46d19081f691b15f39e32a",
-    "hash": "48affb9ce17e8230a607f2f03d39cb9636dd8a77b73d98d16f5ac50f314a937a"
+    "correlationId": "fx-0047",
+    "prevHash": "6eb2d9798ebe182c18196484e0f922184cb872d54be0032ea388a2eb35add382",
+    "hash": "054b6ee338e89f298383cafa190b2ff74d804eb4dbf8ba8240b4dd999eac06ea"
   },
   {
-    "id": "359d708e-e7fb-5e60-b70b-ac784bd91daf",
-    "seq": 51,
+    "id": "e0961d93-6b13-5fae-b68c-da904dac2133",
+    "seq": 48,
     "occurredAt": "2026-02-10T16:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1611,13 +1515,13 @@
       "bottles": 2140
     },
     "reason": null,
-    "correlationId": "fx-0051",
-    "prevHash": "48affb9ce17e8230a607f2f03d39cb9636dd8a77b73d98d16f5ac50f314a937a",
-    "hash": "af7d36e75186fe1a3e81457e9c9c45da65bdf204332abc1ba1b3f4330abc2ba7"
+    "correlationId": "fx-0048",
+    "prevHash": "054b6ee338e89f298383cafa190b2ff74d804eb4dbf8ba8240b4dd999eac06ea",
+    "hash": "28ffada31c1e376952b4755ee299006164466c069f4034aec498e098c7dd9543"
   },
   {
-    "id": "c04d37fe-d06d-5bc3-854c-71c1f006d2b6",
-    "seq": 52,
+    "id": "7c802cb0-a77b-5602-b247-4dd8e12a0e07",
+    "seq": 49,
     "occurredAt": "2026-02-13T11:00:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -1643,13 +1547,13 @@
       "altitudeMasl": 2320
     },
     "reason": null,
-    "correlationId": "fx-0052",
-    "prevHash": "af7d36e75186fe1a3e81457e9c9c45da65bdf204332abc1ba1b3f4330abc2ba7",
-    "hash": "73a1576e47575393a04faffe2cbc08639eab0c37ca7f27e4c614c65405cc6679"
+    "correlationId": "fx-0049",
+    "prevHash": "28ffada31c1e376952b4755ee299006164466c069f4034aec498e098c7dd9543",
+    "hash": "8ce9cc720899e7013c0284d74e9ef2f3fdc515aa70a805c9c8c9e8f5bfc5af17"
   },
   {
-    "id": "59135fd3-2ecc-5e76-b555-22a13cbc94c9",
-    "seq": 53,
+    "id": "46818d60-ba17-5ce1-a589-c04a732e24f2",
+    "seq": 50,
     "occurredAt": "2026-02-13T15:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1674,13 +1578,13 @@
       "conformsToSenasagStandards": true
     },
     "reason": null,
-    "correlationId": "fx-0053",
-    "prevHash": "73a1576e47575393a04faffe2cbc08639eab0c37ca7f27e4c614c65405cc6679",
-    "hash": "927f6ee8de2781a69d851b9128ea5128c903c154d9df84ff6a5a5c8eab87107c"
+    "correlationId": "fx-0050",
+    "prevHash": "8ce9cc720899e7013c0284d74e9ef2f3fdc515aa70a805c9c8c9e8f5bfc5af17",
+    "hash": "4e27b5ee5b867ef6f7c03b4282aeee7fe9edd6034cb3247f8caaf2e4e84ce736"
   },
   {
-    "id": "416e41d4-4135-5f86-946f-57d69aedb2fe",
-    "seq": 54,
+    "id": "359d708e-e7fb-5e60-b70b-ac784bd91daf",
+    "seq": 51,
     "occurredAt": "2026-02-16T11:00:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -1706,13 +1610,13 @@
       "altitudeMasl": 2390
     },
     "reason": null,
-    "correlationId": "fx-0054",
-    "prevHash": "927f6ee8de2781a69d851b9128ea5128c903c154d9df84ff6a5a5c8eab87107c",
-    "hash": "64beeec30c3513dd539d32491201937d4557baad0e17a24ef7d1c0eb4f82fba2"
+    "correlationId": "fx-0051",
+    "prevHash": "4e27b5ee5b867ef6f7c03b4282aeee7fe9edd6034cb3247f8caaf2e4e84ce736",
+    "hash": "5022dcd352dda3686770a69085c850e9a0e40df32f2bdc80abe8c2997b9e53d6"
   },
   {
-    "id": "d3c263a4-5715-502d-87e7-e7d69f664359",
-    "seq": 55,
+    "id": "c04d37fe-d06d-5bc3-854c-71c1f006d2b6",
+    "seq": 52,
     "occurredAt": "2026-02-19T11:00:00Z",
     "actor": {
       "userId": "c918ae49-2b92-5268-b370-2f067e0e97fe",
@@ -1738,13 +1642,13 @@
       "altitudeMasl": 1790
     },
     "reason": null,
-    "correlationId": "fx-0055",
-    "prevHash": "64beeec30c3513dd539d32491201937d4557baad0e17a24ef7d1c0eb4f82fba2",
-    "hash": "176c92b43c26e72e345fcbf0095a4557a56c01121ecbb995a63b86963f435a70"
+    "correlationId": "fx-0052",
+    "prevHash": "5022dcd352dda3686770a69085c850e9a0e40df32f2bdc80abe8c2997b9e53d6",
+    "hash": "5026c2e52ddaefff8d0377ffe900b519a735dfc59a837e13a7e2a156dca42015"
   },
   {
-    "id": "b88e5ae6-a7dc-5f7d-aac2-3e29ff64b5b8",
-    "seq": 56,
+    "id": "59135fd3-2ecc-5e76-b555-22a13cbc94c9",
+    "seq": 53,
     "occurredAt": "2026-02-20T09:00:00Z",
     "actor": {
       "userId": null,
@@ -1769,13 +1673,13 @@
       "status": "INVITED"
     },
     "reason": "Alta anterior a la Ola 1",
-    "correlationId": "fx-0056",
-    "prevHash": "176c92b43c26e72e345fcbf0095a4557a56c01121ecbb995a63b86963f435a70",
-    "hash": "e0778c31005a746f3bb227e782f19cabdaae3f729cb597cfb18dfaa1584a9f23"
+    "correlationId": "fx-0053",
+    "prevHash": "5026c2e52ddaefff8d0377ffe900b519a735dfc59a837e13a7e2a156dca42015",
+    "hash": "049dbea5cdb9002efcf63288c29f92d415970346250735355c5e4622122c49a7"
   },
   {
-    "id": "4bf367f2-30e4-5d2c-97e3-ec7629f46024",
-    "seq": 57,
+    "id": "416e41d4-4135-5f86-946f-57d69aedb2fe",
+    "seq": 54,
     "occurredAt": "2026-03-01T16:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1801,13 +1705,13 @@
       "bottles": 4080
     },
     "reason": null,
-    "correlationId": "fx-0057",
-    "prevHash": "e0778c31005a746f3bb227e782f19cabdaae3f729cb597cfb18dfaa1584a9f23",
-    "hash": "d53345fb8f131d2b1d7f0d517efc96c47fe988ca4cc779af5355f97e831aaf9d"
+    "correlationId": "fx-0054",
+    "prevHash": "049dbea5cdb9002efcf63288c29f92d415970346250735355c5e4622122c49a7",
+    "hash": "f8cb7902cbb449573ac741c5a4effb637a59b9d9fc30393d9824d31e1a44888d"
   },
   {
-    "id": "797c82c3-17a1-59d4-bc92-ff306cd917a7",
-    "seq": 58,
+    "id": "d3c263a4-5715-502d-87e7-e7d69f664359",
+    "seq": 55,
     "occurredAt": "2026-03-02T10:00:00Z",
     "actor": {
       "userId": null,
@@ -1835,13 +1739,13 @@
       "lotPrefix": "ALT"
     },
     "reason": null,
-    "correlationId": "fx-0058",
-    "prevHash": "d53345fb8f131d2b1d7f0d517efc96c47fe988ca4cc779af5355f97e831aaf9d",
-    "hash": "0f50994ece738cd52b82719c37890c88ab1433c70878db1fd24e3f6c143bd7e6"
+    "correlationId": "fx-0055",
+    "prevHash": "f8cb7902cbb449573ac741c5a4effb637a59b9d9fc30393d9824d31e1a44888d",
+    "hash": "f2c0191a55b5f7baf1851625e96695740b153f28008c266e36d402f7f77ac77d"
   },
   {
-    "id": "7c7b76fd-21a3-5f18-ae87-9787f2c40891",
-    "seq": 59,
+    "id": "b88e5ae6-a7dc-5f7d-aac2-3e29ff64b5b8",
+    "seq": 56,
     "occurredAt": "2026-03-04T09:45:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1867,13 +1771,13 @@
       "netWeightKg": 18400
     },
     "reason": null,
-    "correlationId": "fx-0059",
-    "prevHash": "0f50994ece738cd52b82719c37890c88ab1433c70878db1fd24e3f6c143bd7e6",
-    "hash": "dcfc6b7bef27b497dbe7774689d4aa393aea71d706ea78bfc383f928760ca924"
+    "correlationId": "fx-0056",
+    "prevHash": "f2c0191a55b5f7baf1851625e96695740b153f28008c266e36d402f7f77ac77d",
+    "hash": "90600b814ebd56abc686d8c8047b9ff1be86bc2955b8f749515086487ecf98b4"
   },
   {
-    "id": "516e2d22-d63c-58e8-a427-bcca194c1a2c",
-    "seq": 60,
+    "id": "4bf367f2-30e4-5d2c-97e3-ec7629f46024",
+    "seq": 57,
     "occurredAt": "2026-03-04T15:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1898,13 +1802,13 @@
       "conformsToSenasagStandards": true
     },
     "reason": null,
-    "correlationId": "fx-0060",
-    "prevHash": "dcfc6b7bef27b497dbe7774689d4aa393aea71d706ea78bfc383f928760ca924",
-    "hash": "1371254073db6b26d663250d96ddaed67427beb984913569ed29906747647912"
+    "correlationId": "fx-0057",
+    "prevHash": "90600b814ebd56abc686d8c8047b9ff1be86bc2955b8f749515086487ecf98b4",
+    "hash": "92dfe58160c890b2c81f119b59c568c03f8082b0e44052b325e050d63e7f63bc"
   },
   {
-    "id": "4040bb23-49a4-5cf0-ab4c-ecfe1cb90651",
-    "seq": 61,
+    "id": "797c82c3-17a1-59d4-bc92-ff306cd917a7",
+    "seq": 58,
     "occurredAt": "2026-03-06T14:35:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1930,13 +1834,13 @@
       "status": "TRANSFERRED"
     },
     "reason": null,
-    "correlationId": "fx-0061",
-    "prevHash": "1371254073db6b26d663250d96ddaed67427beb984913569ed29906747647912",
-    "hash": "c12c7039c898955e52f9476309cfa69c033607aadf8b38cee39140947a437c05"
+    "correlationId": "fx-0058",
+    "prevHash": "92dfe58160c890b2c81f119b59c568c03f8082b0e44052b325e050d63e7f63bc",
+    "hash": "3875d4b04e1c15038c4b53b5e90ff0ca351299d854da59f7aadfcf027cb2f37e"
   },
   {
-    "id": "0c4d72e2-1f2e-5f01-9d9b-8ba091a61f62",
-    "seq": 62,
+    "id": "7c7b76fd-21a3-5f18-ae87-9787f2c40891",
+    "seq": 59,
     "occurredAt": "2026-03-06T15:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1961,13 +1865,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0062",
-    "prevHash": "c12c7039c898955e52f9476309cfa69c033607aadf8b38cee39140947a437c05",
-    "hash": "1d08be80d7caa49801318291cc75d7fca1ef7e9312a3485b38dbf857269bac0c"
+    "correlationId": "fx-0059",
+    "prevHash": "3875d4b04e1c15038c4b53b5e90ff0ca351299d854da59f7aadfcf027cb2f37e",
+    "hash": "b51cfac9fa211a4e16dab9ffbf50a458e64711a768fa6cef7575b723e44b40b5"
   },
   {
-    "id": "47c77b7c-3673-552f-b0b4-d4dff2234472",
-    "seq": 63,
+    "id": "516e2d22-d63c-58e8-a427-bcca194c1a2c",
+    "seq": 60,
     "occurredAt": "2026-03-07T14:35:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -1990,16 +1894,16 @@
     "before": null,
     "after": {
       "tankCode": "TK-08",
-      "status": "COMPLETED"
+      "status": "TRANSFERRED"
     },
     "reason": null,
-    "correlationId": "fx-0063",
-    "prevHash": "1d08be80d7caa49801318291cc75d7fca1ef7e9312a3485b38dbf857269bac0c",
-    "hash": "8881f5bd69820adb276e4fdac6afbebcc99f6a5d4226e0cdfe44c78f2b69fae2"
+    "correlationId": "fx-0060",
+    "prevHash": "b51cfac9fa211a4e16dab9ffbf50a458e64711a768fa6cef7575b723e44b40b5",
+    "hash": "bd8ea6ef5d5ca1f857c00b5697365f529be4faa185cab444256e44de3cd485ac"
   },
   {
-    "id": "eb213536-f88e-5456-8915-ff3193cd4d81",
-    "seq": 64,
+    "id": "4040bb23-49a4-5cf0-ab4c-ecfe1cb90651",
+    "seq": 61,
     "occurredAt": "2026-03-07T15:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -2024,13 +1928,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0064",
-    "prevHash": "8881f5bd69820adb276e4fdac6afbebcc99f6a5d4226e0cdfe44c78f2b69fae2",
-    "hash": "6b8c34b50c2dc266614d5f5aabbf438d963dafa67591fe0c87a67fd842130a64"
+    "correlationId": "fx-0061",
+    "prevHash": "bd8ea6ef5d5ca1f857c00b5697365f529be4faa185cab444256e44de3cd485ac",
+    "hash": "5a469d90d11c1af852da7e034d4785702630034849b59d0ba6be275a391ce707"
   },
   {
-    "id": "5d96102e-5f83-5e04-b909-ea7daa975ce7",
-    "seq": 65,
+    "id": "0c4d72e2-1f2e-5f01-9d9b-8ba091a61f62",
+    "seq": 62,
     "occurredAt": "2026-03-09T09:45:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2056,13 +1960,13 @@
       "netWeightKg": 12050
     },
     "reason": null,
-    "correlationId": "fx-0065",
-    "prevHash": "6b8c34b50c2dc266614d5f5aabbf438d963dafa67591fe0c87a67fd842130a64",
-    "hash": "3a54187638a1c734a2c1ac5ab7b127741261500247589fc4b53f9066cdb87dee"
+    "correlationId": "fx-0062",
+    "prevHash": "5a469d90d11c1af852da7e034d4785702630034849b59d0ba6be275a391ce707",
+    "hash": "fc7c0cd226964ef39a1c49c70acff8c8701575fdf302bf4e2fc7dc204016f69a"
   },
   {
-    "id": "c60a5afa-11e2-5be1-8820-10c9d28271fc",
-    "seq": 66,
+    "id": "47c77b7c-3673-552f-b0b4-d4dff2234472",
+    "seq": 63,
     "occurredAt": "2026-03-10T10:00:00Z",
     "actor": {
       "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
@@ -2087,13 +1991,13 @@
       "role": "ENOLOGIST"
     },
     "reason": null,
-    "correlationId": "fx-0066",
-    "prevHash": "3a54187638a1c734a2c1ac5ab7b127741261500247589fc4b53f9066cdb87dee",
-    "hash": "f0c47f3d76a63b13fe0dd5fc1109394d32b87209ad2c7e2b06720a385d1074fc"
+    "correlationId": "fx-0063",
+    "prevHash": "fc7c0cd226964ef39a1c49c70acff8c8701575fdf302bf4e2fc7dc204016f69a",
+    "hash": "80ec4452184ad2f54e57b52be542358611420d5656d88e6b71f8b72f14aa84a5"
   },
   {
-    "id": "13ada7b5-2683-5ba7-b2c0-dc5d6fcce85b",
-    "seq": 67,
+    "id": "eb213536-f88e-5456-8915-ff3193cd4d81",
+    "seq": 64,
     "occurredAt": "2026-03-10T14:35:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2119,13 +2023,13 @@
       "status": "FERMENTING"
     },
     "reason": null,
-    "correlationId": "fx-0067",
-    "prevHash": "f0c47f3d76a63b13fe0dd5fc1109394d32b87209ad2c7e2b06720a385d1074fc",
-    "hash": "3a1acd5eed9e1e6fccafdf0c0618d9633f61a1564ec68b00213e9414296ad229"
+    "correlationId": "fx-0064",
+    "prevHash": "80ec4452184ad2f54e57b52be542358611420d5656d88e6b71f8b72f14aa84a5",
+    "hash": "3a103fdd03e39a8c02f133e7f3b7dbd31ee1e7011457b2d806b16e935b9970ca"
   },
   {
-    "id": "08f515c7-796f-5f08-9b70-326c35ea2326",
-    "seq": 68,
+    "id": "5d96102e-5f83-5e04-b909-ea7daa975ce7",
+    "seq": 65,
     "occurredAt": "2026-03-10T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2150,13 +2054,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0068",
-    "prevHash": "3a1acd5eed9e1e6fccafdf0c0618d9633f61a1564ec68b00213e9414296ad229",
-    "hash": "f52cead9fe39f28610030b573a13c7bbd7c9491ff81dec8b200442619bac491a"
+    "correlationId": "fx-0065",
+    "prevHash": "3a103fdd03e39a8c02f133e7f3b7dbd31ee1e7011457b2d806b16e935b9970ca",
+    "hash": "800925bef9230c211d3501b51df11c37173c41205a3505dad08a1eccf96fd71d"
   },
   {
-    "id": "dbb54d18-77d1-5367-8ebd-eb9c423d763b",
-    "seq": 69,
+    "id": "c60a5afa-11e2-5be1-8820-10c9d28271fc",
+    "seq": 66,
     "occurredAt": "2026-03-11T12:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2181,13 +2085,13 @@
       "treatmentType": "NUTRIENT_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0069",
-    "prevHash": "f52cead9fe39f28610030b573a13c7bbd7c9491ff81dec8b200442619bac491a",
-    "hash": "f3b87eead41fd3a48ddea1ce06a384960293899f9eb3a37bab2ede0b420bcbd3"
+    "correlationId": "fx-0066",
+    "prevHash": "800925bef9230c211d3501b51df11c37173c41205a3505dad08a1eccf96fd71d",
+    "hash": "bf380ea3e786d6d75aff5ec117f948ee7d8de2319b87429a0690febea05e7875"
   },
   {
-    "id": "b6817ee7-07f2-5052-bf39-3506de13abc6",
-    "seq": 70,
+    "id": "13ada7b5-2683-5ba7-b2c0-dc5d6fcce85b",
+    "seq": 67,
     "occurredAt": "2026-03-11T14:35:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2213,13 +2117,13 @@
       "status": "FERMENTING"
     },
     "reason": null,
-    "correlationId": "fx-0070",
-    "prevHash": "f3b87eead41fd3a48ddea1ce06a384960293899f9eb3a37bab2ede0b420bcbd3",
-    "hash": "7acf75b1814431ec5bafaf8d0298677710c3c092ee982df0515bf962460fac22"
+    "correlationId": "fx-0067",
+    "prevHash": "bf380ea3e786d6d75aff5ec117f948ee7d8de2319b87429a0690febea05e7875",
+    "hash": "6f281c95ac65e22e14b3ec0625b3aa8823aa88aa89e47d128db9cd4ec6fec144"
   },
   {
-    "id": "4e0f99e0-f423-5f0e-8a2d-0ebf02000312",
-    "seq": 71,
+    "id": "08f515c7-796f-5f08-9b70-326c35ea2326",
+    "seq": 68,
     "occurredAt": "2026-03-11T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2244,13 +2148,13 @@
       "treatmentType": "SO2_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0071",
-    "prevHash": "7acf75b1814431ec5bafaf8d0298677710c3c092ee982df0515bf962460fac22",
-    "hash": "6b9b28a90ff58f8d8117655881d302fda6a3d48ccb27683319de821800b0562e"
+    "correlationId": "fx-0068",
+    "prevHash": "6f281c95ac65e22e14b3ec0625b3aa8823aa88aa89e47d128db9cd4ec6fec144",
+    "hash": "3cd8fee738c0292c39158cbd75984fca0846a34e5b8e520578cf888f013c633a"
   },
   {
-    "id": "cbc4c0b3-b032-5d15-a2e7-d9d0ab824eef",
-    "seq": 72,
+    "id": "dbb54d18-77d1-5367-8ebd-eb9c423d763b",
+    "seq": 69,
     "occurredAt": "2026-03-12T09:45:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -2276,13 +2180,13 @@
       "netWeightKg": 6300
     },
     "reason": null,
-    "correlationId": "fx-0072",
-    "prevHash": "6b9b28a90ff58f8d8117655881d302fda6a3d48ccb27683319de821800b0562e",
-    "hash": "55017cc2adab6ca40e8912dc60ef3222044cadf693c768dfa8165c41b98ed459"
+    "correlationId": "fx-0069",
+    "prevHash": "3cd8fee738c0292c39158cbd75984fca0846a34e5b8e520578cf888f013c633a",
+    "hash": "396c16da50792357b5af3757ef390d45883905695dfa6a0aa1f0fa3a4d0ca7b0"
   },
   {
-    "id": "5acd48eb-eaf8-5232-b50e-a2d34848d5e4",
-    "seq": 73,
+    "id": "b6817ee7-07f2-5052-bf39-3506de13abc6",
+    "seq": 70,
     "occurredAt": "2026-03-12T10:00:00Z",
     "actor": {
       "userId": "b4af6bc9-c113-548b-8d8f-78d11ce5730f",
@@ -2307,13 +2211,13 @@
       "role": "OPERATOR"
     },
     "reason": null,
-    "correlationId": "fx-0073",
-    "prevHash": "55017cc2adab6ca40e8912dc60ef3222044cadf693c768dfa8165c41b98ed459",
-    "hash": "39fbc155087a999d1f914fda556144de64479667cfb785b86e81164c3990c04f"
+    "correlationId": "fx-0070",
+    "prevHash": "396c16da50792357b5af3757ef390d45883905695dfa6a0aa1f0fa3a4d0ca7b0",
+    "hash": "acba69fe989020c789d29e7fcb04f5e75d4ae274b1d614365a9dc3dd77784360"
   },
   {
-    "id": "c8b43352-ec51-542e-9dc3-aa9725878dc6",
-    "seq": 74,
+    "id": "4e0f99e0-f423-5f0e-8a2d-0ebf02000312",
+    "seq": 71,
     "occurredAt": "2026-03-12T12:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2338,13 +2242,13 @@
       "treatmentType": "NUTRIENT_ADDITION"
     },
     "reason": null,
-    "correlationId": "fx-0074",
-    "prevHash": "39fbc155087a999d1f914fda556144de64479667cfb785b86e81164c3990c04f",
-    "hash": "104046b76699be3170bf64072da8372d40baa2fb061293b4fb9c2b1a0c48cde9"
+    "correlationId": "fx-0071",
+    "prevHash": "acba69fe989020c789d29e7fcb04f5e75d4ae274b1d614365a9dc3dd77784360",
+    "hash": "0f2a9e40bf61484a57e19f219b1e0699e4fb3d9c60a83dccacab99c40045c362"
   },
   {
-    "id": "e639d76a-ac2f-5bab-bc78-0dfa663848b8",
-    "seq": 75,
+    "id": "cbc4c0b3-b032-5d15-a2e7-d9d0ab824eef",
+    "seq": 72,
     "occurredAt": "2026-03-15T09:45:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2370,13 +2274,13 @@
       "netWeightKg": 4050
     },
     "reason": null,
-    "correlationId": "fx-0075",
-    "prevHash": "104046b76699be3170bf64072da8372d40baa2fb061293b4fb9c2b1a0c48cde9",
-    "hash": "79925483282b100fcbc3760162c418d9869618bbbc76e0650c0a2b3fe8ff546f"
+    "correlationId": "fx-0072",
+    "prevHash": "0f2a9e40bf61484a57e19f219b1e0699e4fb3d9c60a83dccacab99c40045c362",
+    "hash": "9b6bcdd71180090bc7421e5bc63a1d270f7cfd7c46f2c3d6dc82e6710392ab4f"
   },
   {
-    "id": "eeb8ab67-c03f-5b2e-9e36-750e629fcff3",
-    "seq": 76,
+    "id": "5acd48eb-eaf8-5232-b50e-a2d34848d5e4",
+    "seq": 73,
     "occurredAt": "2026-03-19T10:00:00Z",
     "actor": {
       "userId": "39ebc706-bc21-53d2-b492-3b1c9e37d684",
@@ -2401,45 +2305,13 @@
       "role": "AGRONOMIST"
     },
     "reason": null,
-    "correlationId": "fx-0076",
-    "prevHash": "79925483282b100fcbc3760162c418d9869618bbbc76e0650c0a2b3fe8ff546f",
-    "hash": "f219b40acb03c1344f7689dfcf1441170a9f97f100aec9b132780ff2e4f10a80"
+    "correlationId": "fx-0073",
+    "prevHash": "9b6bcdd71180090bc7421e5bc63a1d270f7cfd7c46f2c3d6dc82e6710392ab4f",
+    "hash": "caa187cd14ca9477d6ba30a44f510bb8ad3780691fd6721b1d84afe6eb09c856"
   },
   {
-    "id": "dcbef2c9-d7a7-542a-a410-d50be7732191",
-    "seq": 77,
-    "occurredAt": "2026-03-20T10:00:00Z",
-    "actor": {
-      "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
-      "fullName": "Lic. Lucía Rojas",
-      "role": "ENOLOGIST",
-      "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "PRODUCTION_BATCH_CREATED",
-    "resource": {
-      "type": "production_batch",
-      "id": "a6dd3060-8612-5595-b9b4-33a7d039159c"
-    },
-    "organizationId": "04de1441-989d-5c3e-b06f-033f3961d19d",
-    "before": null,
-    "after": {
-      "processType": "SINGANI_DISTILLATION",
-      "isDoEligible": true
-    },
-    "reason": null,
-    "correlationId": "fx-0077",
-    "prevHash": "f219b40acb03c1344f7689dfcf1441170a9f97f100aec9b132780ff2e4f10a80",
-    "hash": "5089a4723760d6b5b9001c02ab10befa53916ff84e5150d465a6c48e5162513d"
-  },
-  {
-    "id": "ac8c61b6-d75e-5252-bc8a-fe6b09ec72e5",
-    "seq": 78,
+    "id": "c8b43352-ec51-542e-9dc3-aa9725878dc6",
+    "seq": 74,
     "occurredAt": "2026-03-22T09:45:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -2465,13 +2337,13 @@
       "netWeightKg": 6100
     },
     "reason": null,
-    "correlationId": "fx-0078",
-    "prevHash": "5089a4723760d6b5b9001c02ab10befa53916ff84e5150d465a6c48e5162513d",
-    "hash": "8a1103a89630e24dee5b7135f743ab493660928df22e172f82c6346b4a6f56dc"
+    "correlationId": "fx-0074",
+    "prevHash": "caa187cd14ca9477d6ba30a44f510bb8ad3780691fd6721b1d84afe6eb09c856",
+    "hash": "c7f91588caa331b62ff229d5531dbf4aa1dcd6d73a23e683a3fac9dd99681add"
   },
   {
-    "id": "bb66cd44-3a31-5f0e-80ce-8f12f34f3ebd",
-    "seq": 79,
+    "id": "e639d76a-ac2f-5bab-bc78-0dfa663848b8",
+    "seq": 75,
     "occurredAt": "2026-03-27T10:00:00Z",
     "actor": {
       "userId": "7095c941-cece-53bc-ad08-b58f24e484f1",
@@ -2496,13 +2368,13 @@
       "role": "OPERATOR"
     },
     "reason": null,
-    "correlationId": "fx-0079",
-    "prevHash": "8a1103a89630e24dee5b7135f743ab493660928df22e172f82c6346b4a6f56dc",
-    "hash": "326e1a8af106c35710e6984edda2df40ed0acd99c03b923d400287ec3db12456"
+    "correlationId": "fx-0075",
+    "prevHash": "c7f91588caa331b62ff229d5531dbf4aa1dcd6d73a23e683a3fac9dd99681add",
+    "hash": "4ddfd9eb7a85407fca83c83415467b73ee20c0ff6c1f9e50258d17d1405ca0fd"
   },
   {
-    "id": "954ddf58-5e10-5101-ac0d-5722f81b95a3",
-    "seq": 80,
+    "id": "eeb8ab67-c03f-5b2e-9e36-750e629fcff3",
+    "seq": 76,
     "occurredAt": "2026-04-01T10:00:00Z",
     "actor": {
       "userId": "3c0b5b96-8cf0-5417-94a2-36be8575d743",
@@ -2527,13 +2399,13 @@
       "role": "OPERATOR"
     },
     "reason": null,
-    "correlationId": "fx-0080",
-    "prevHash": "326e1a8af106c35710e6984edda2df40ed0acd99c03b923d400287ec3db12456",
-    "hash": "9f3d9d4b44e6b8665f0c4cc8e24bc1d123d3216ede36de30f71b7bb5601a2d1a"
+    "correlationId": "fx-0076",
+    "prevHash": "4ddfd9eb7a85407fca83c83415467b73ee20c0ff6c1f9e50258d17d1405ca0fd",
+    "hash": "53c278d38fc51f52cb1724e1d20e7470e9ac34b7f6e2ac1a35fe54f6f6666cb0"
   },
   {
-    "id": "1ddc34d6-b458-546c-bd0f-709d93e6f85f",
-    "seq": 81,
+    "id": "dcbef2c9-d7a7-542a-a410-d50be7732191",
+    "seq": 77,
     "occurredAt": "2026-04-04T09:00:00Z",
     "actor": {
       "userId": null,
@@ -2559,13 +2431,13 @@
       "role": "SUPERADMIN"
     },
     "reason": null,
-    "correlationId": "fx-0081",
-    "prevHash": "9f3d9d4b44e6b8665f0c4cc8e24bc1d123d3216ede36de30f71b7bb5601a2d1a",
-    "hash": "dba9d2673f9cfeef21e36df57315937c8ed8622118360f05ca550d5ad11dc999"
+    "correlationId": "fx-0077",
+    "prevHash": "53c278d38fc51f52cb1724e1d20e7470e9ac34b7f6e2ac1a35fe54f6f6666cb0",
+    "hash": "25e324263548bc1f1a74f0411e2c891c594049853f45bd0ce8296a2fd00098ba"
   },
   {
-    "id": "00a909c0-fcd3-5eda-8610-8d1120d468a0",
-    "seq": 82,
+    "id": "ac8c61b6-d75e-5252-bc8a-fe6b09ec72e5",
+    "seq": 78,
     "occurredAt": "2026-04-04T09:15:00Z",
     "actor": {
       "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
@@ -2588,13 +2460,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0082",
-    "prevHash": "dba9d2673f9cfeef21e36df57315937c8ed8622118360f05ca550d5ad11dc999",
-    "hash": "e316150895c16ec09651e3e81183e2d3392239d26a9d07c011752a786b800a25"
+    "correlationId": "fx-0078",
+    "prevHash": "25e324263548bc1f1a74f0411e2c891c594049853f45bd0ce8296a2fd00098ba",
+    "hash": "f7d3641555016025cc262facae3e7636fae12281ddeb5ef140b8970dba0aa7ca"
   },
   {
-    "id": "8c4fc791-d735-51f0-9663-955f9a4c1645",
-    "seq": 83,
+    "id": "bb66cd44-3a31-5f0e-80ce-8f12f34f3ebd",
+    "seq": 79,
     "occurredAt": "2026-04-10T09:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -2619,13 +2491,13 @@
       "role": "ADMIN"
     },
     "reason": null,
-    "correlationId": "fx-0083",
-    "prevHash": "e316150895c16ec09651e3e81183e2d3392239d26a9d07c011752a786b800a25",
-    "hash": "1f5374fb7a0a9145fc793833bf4c9fadbf8a69d10d8b7b161e22539db1669d89"
+    "correlationId": "fx-0079",
+    "prevHash": "f7d3641555016025cc262facae3e7636fae12281ddeb5ef140b8970dba0aa7ca",
+    "hash": "d9591e09836c33a5c4ae34bd6c069950c412747cb36124bfdaec9f33b14b518f"
   },
   {
-    "id": "22281f14-2492-5634-9d65-c3c806d75df7",
-    "seq": 84,
+    "id": "954ddf58-5e10-5101-ac0d-5722f81b95a3",
+    "seq": 80,
     "occurredAt": "2026-04-10T09:15:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -2648,13 +2520,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0084",
-    "prevHash": "1f5374fb7a0a9145fc793833bf4c9fadbf8a69d10d8b7b161e22539db1669d89",
-    "hash": "898a99386e0c60af4321c98978edd69c8f8904cab56bf2daf6a1fc130c0ec2ec"
+    "correlationId": "fx-0080",
+    "prevHash": "d9591e09836c33a5c4ae34bd6c069950c412747cb36124bfdaec9f33b14b518f",
+    "hash": "815fb846b999e523c862e397e0ae0a6ec667e0a915a755a5b714b1b034231ed5"
   },
   {
-    "id": "853dd9b0-f879-525b-92e0-48559a8b7a64",
-    "seq": 85,
+    "id": "1ddc34d6-b458-546c-bd0f-709d93e6f85f",
+    "seq": 81,
     "occurredAt": "2026-04-15T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -2680,13 +2552,13 @@
       "isDoEligible": true
     },
     "reason": null,
-    "correlationId": "fx-0085",
-    "prevHash": "898a99386e0c60af4321c98978edd69c8f8904cab56bf2daf6a1fc130c0ec2ec",
-    "hash": "3c33d70546e7687482a303ce7a3c68db9693d2146f1b59a77fe8979c9ad89d46"
+    "correlationId": "fx-0081",
+    "prevHash": "815fb846b999e523c862e397e0ae0a6ec667e0a915a755a5b714b1b034231ed5",
+    "hash": "c7ddf3dbf43c7ca572510acd62a50901a5102592e45a24c9c337180cc4b90295"
   },
   {
-    "id": "4ca87ffb-7ed8-53d5-83eb-002a38b56c0a",
-    "seq": 86,
+    "id": "00a909c0-fcd3-5eda-8610-8d1120d468a0",
+    "seq": 82,
     "occurredAt": "2026-05-02T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -2711,13 +2583,13 @@
       "role": "OPERATIONS"
     },
     "reason": null,
-    "correlationId": "fx-0086",
-    "prevHash": "3c33d70546e7687482a303ce7a3c68db9693d2146f1b59a77fe8979c9ad89d46",
-    "hash": "a6417467f9b684d731971f5de52f4f79423cf89aff8912b10d71b45e7d6cb8a6"
+    "correlationId": "fx-0082",
+    "prevHash": "c7ddf3dbf43c7ca572510acd62a50901a5102592e45a24c9c337180cc4b90295",
+    "hash": "18ac82776a58c74201492b65448355c4e3d9f095894c8fcc5b7c9033ad4367bb"
   },
   {
-    "id": "18656cb2-0c00-58ae-84e6-d3a36ce2e9f3",
-    "seq": 87,
+    "id": "8c4fc791-d735-51f0-9663-955f9a4c1645",
+    "seq": 83,
     "occurredAt": "2026-05-02T09:15:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -2740,13 +2612,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0087",
-    "prevHash": "a6417467f9b684d731971f5de52f4f79423cf89aff8912b10d71b45e7d6cb8a6",
-    "hash": "9b5b5ee328b2320fc44f5ba71bb95138ffd16ca4f541bb26e0988d175d7d4bea"
+    "correlationId": "fx-0083",
+    "prevHash": "18ac82776a58c74201492b65448355c4e3d9f095894c8fcc5b7c9033ad4367bb",
+    "hash": "3ab3cdc862963942d06129435cf382833845a3c4fc5cdd90b441d6cd23a8f2ad"
   },
   {
-    "id": "68083b75-2e8d-579f-8d5d-2e6118bc1f6d",
-    "seq": 88,
+    "id": "22281f14-2492-5634-9d65-c3c806d75df7",
+    "seq": 84,
     "occurredAt": "2026-05-12T16:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2772,13 +2644,13 @@
       "bottles": 5320
     },
     "reason": null,
-    "correlationId": "fx-0088",
-    "prevHash": "9b5b5ee328b2320fc44f5ba71bb95138ffd16ca4f541bb26e0988d175d7d4bea",
-    "hash": "361eba81fdc87f20a33c1455da4fa01efe519ffe23489cc00f098ab609e7fbeb"
+    "correlationId": "fx-0084",
+    "prevHash": "3ab3cdc862963942d06129435cf382833845a3c4fc5cdd90b441d6cd23a8f2ad",
+    "hash": "1eba54e16c5742e719ff6c81b3ebd74a5b4a298fda50a77c183a1eb5916e86f1"
   },
   {
-    "id": "5d465355-bc80-5d18-bad4-7a29c5a5268e",
-    "seq": 89,
+    "id": "853dd9b0-f879-525b-92e0-48559a8b7a64",
+    "seq": 85,
     "occurredAt": "2026-05-15T10:00:00Z",
     "actor": {
       "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
@@ -2803,13 +2675,13 @@
       "role": "OWNER"
     },
     "reason": null,
-    "correlationId": "fx-0089",
-    "prevHash": "361eba81fdc87f20a33c1455da4fa01efe519ffe23489cc00f098ab609e7fbeb",
-    "hash": "47382d1e5b0c5485b8dc9ae9222ae86ef47c9f8b1810969c2894fb5f15a1ca7c"
+    "correlationId": "fx-0085",
+    "prevHash": "1eba54e16c5742e719ff6c81b3ebd74a5b4a298fda50a77c183a1eb5916e86f1",
+    "hash": "be20d12b0aa09eb06b030a2452256c22f9cd23748cd30978a1a7836adf5bc900"
   },
   {
-    "id": "84ccd165-eb12-5182-bd43-cc5b550de8e4",
-    "seq": 90,
+    "id": "4ca87ffb-7ed8-53d5-83eb-002a38b56c0a",
+    "seq": 86,
     "occurredAt": "2026-05-15T15:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2834,13 +2706,13 @@
       "conformsToSenasagStandards": true
     },
     "reason": null,
-    "correlationId": "fx-0090",
-    "prevHash": "47382d1e5b0c5485b8dc9ae9222ae86ef47c9f8b1810969c2894fb5f15a1ca7c",
-    "hash": "89e68403b5440c30166ec60058ab2feecb7b092c2e16aa812cfa78a7e734fbe9"
+    "correlationId": "fx-0086",
+    "prevHash": "be20d12b0aa09eb06b030a2452256c22f9cd23748cd30978a1a7836adf5bc900",
+    "hash": "35c52326fc90ad7b029178026845a864c05574c6672554c4430689c035428f8a"
   },
   {
-    "id": "fdcfca9d-00a9-55f2-be26-f35c146b6889",
-    "seq": 91,
+    "id": "18656cb2-0c00-58ae-84e6-d3a36ce2e9f3",
+    "seq": 87,
     "occurredAt": "2026-05-18T10:00:00Z",
     "actor": {
       "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
@@ -2867,13 +2739,13 @@
       "expiresAt": "2026-05-21T10:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0091",
-    "prevHash": "89e68403b5440c30166ec60058ab2feecb7b092c2e16aa812cfa78a7e734fbe9",
-    "hash": "623ca04557e574657c3b615b338bdb21fc73432ac1702f6109e9274515fd9d97"
+    "correlationId": "fx-0087",
+    "prevHash": "35c52326fc90ad7b029178026845a864c05574c6672554c4430689c035428f8a",
+    "hash": "1409cd96e1793056601711c296202b7480f605bdc408a1885a115b1ca75b16d3"
   },
   {
-    "id": "79ae26ee-fd2e-5bca-a2ce-df9789175086",
-    "seq": 92,
+    "id": "68083b75-2e8d-579f-8d5d-2e6118bc1f6d",
+    "seq": 88,
     "occurredAt": "2026-05-20T10:00:00Z",
     "actor": {
       "userId": "888314c6-9ce6-5b66-b68f-4804276de103",
@@ -2896,13 +2768,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0092",
-    "prevHash": "623ca04557e574657c3b615b338bdb21fc73432ac1702f6109e9274515fd9d97",
-    "hash": "b487fe47fd39813b46b73f9ec8b25d11a4994f1d150f072824e10ba6b495b452"
+    "correlationId": "fx-0088",
+    "prevHash": "1409cd96e1793056601711c296202b7480f605bdc408a1885a115b1ca75b16d3",
+    "hash": "4439d14277f54ec9e97dbdb55b5031351b857455725a4b086ce2a460d4daae43"
   },
   {
-    "id": "c8f43eb0-7f71-59a9-a5e1-e807eb6afb47",
-    "seq": 93,
+    "id": "5d465355-bc80-5d18-bad4-7a29c5a5268e",
+    "seq": 89,
     "occurredAt": "2026-05-20T10:00:00Z",
     "actor": {
       "userId": "888314c6-9ce6-5b66-b68f-4804276de103",
@@ -2927,13 +2799,13 @@
       "role": "ACCOUNTANT"
     },
     "reason": null,
-    "correlationId": "fx-0093",
-    "prevHash": "b487fe47fd39813b46b73f9ec8b25d11a4994f1d150f072824e10ba6b495b452",
-    "hash": "c796e25cc24a56e74c00cbe4aa1b3e679fedc4b3c8ca5ec7c8ef4a7986081232"
+    "correlationId": "fx-0089",
+    "prevHash": "4439d14277f54ec9e97dbdb55b5031351b857455725a4b086ce2a460d4daae43",
+    "hash": "7567e47f544472bb8e91324ec38613eab0e96d83c40a1579fdbec0dcde8de574"
   },
   {
-    "id": "aa87e7fb-b451-5c5a-a800-261aa2581137",
-    "seq": 94,
+    "id": "84ccd165-eb12-5182-bd43-cc5b550de8e4",
+    "seq": 90,
     "occurredAt": "2026-06-01T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -2961,13 +2833,13 @@
       "legalException": false
     },
     "reason": "Clientes de temporada alta: ventana ampliada acordada con la bodega.",
-    "correlationId": "fx-0094",
-    "prevHash": "c796e25cc24a56e74c00cbe4aa1b3e679fedc4b3c8ca5ec7c8ef4a7986081232",
-    "hash": "6ecc3507a9b7f8265e7b2af95d895cbca165bdb7ff17bacfa883ca807c8a7187"
+    "correlationId": "fx-0090",
+    "prevHash": "7567e47f544472bb8e91324ec38613eab0e96d83c40a1579fdbec0dcde8de574",
+    "hash": "221ac00b899c73b20dae607c586f880e6f0709800f296c37c7556c0c503a6b30"
   },
   {
-    "id": "306a4367-3756-5987-850d-2c0a51d7d978",
-    "seq": 95,
+    "id": "fdcfca9d-00a9-55f2-be26-f35c146b6889",
+    "seq": 91,
     "occurredAt": "2026-06-04T10:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -2992,13 +2864,13 @@
       "role": "ENOLOGIST"
     },
     "reason": null,
-    "correlationId": "fx-0095",
-    "prevHash": "6ecc3507a9b7f8265e7b2af95d895cbca165bdb7ff17bacfa883ca807c8a7187",
-    "hash": "09891ffd8fbca83396da1e31d2fd2550bf513e1ee1df19b7c32b33766c6c10ac"
+    "correlationId": "fx-0091",
+    "prevHash": "221ac00b899c73b20dae607c586f880e6f0709800f296c37c7556c0c503a6b30",
+    "hash": "62a4b1ba4adc6c9811d0a504bfa2996a6f19410749f25807ae1560acb03ad621"
   },
   {
-    "id": "45d2fddb-7c92-53f4-99df-86c3c069d0e5",
-    "seq": 96,
+    "id": "79ae26ee-fd2e-5bca-a2ce-df9789175086",
+    "seq": 92,
     "occurredAt": "2026-06-29T10:00:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -3023,13 +2895,13 @@
       "role": "AGRONOMIST"
     },
     "reason": null,
-    "correlationId": "fx-0096",
-    "prevHash": "09891ffd8fbca83396da1e31d2fd2550bf513e1ee1df19b7c32b33766c6c10ac",
-    "hash": "f1e1b8cd9ee40b9ac243c81fc51e74bf20c3aa247fd5ae2b07230913c60c7040"
+    "correlationId": "fx-0092",
+    "prevHash": "62a4b1ba4adc6c9811d0a504bfa2996a6f19410749f25807ae1560acb03ad621",
+    "hash": "56c30539ffce910c2d26a15893e12d5823fcc0de2f00e62aadb17b497d7a2844"
   },
   {
-    "id": "e5b32d63-86e6-520b-a06b-3608e3c7afcb",
-    "seq": 97,
+    "id": "c8f43eb0-7f71-59a9-a5e1-e807eb6afb47",
+    "seq": 93,
     "occurredAt": "2026-06-30T10:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -3057,13 +2929,13 @@
       "blockedBy": "OWNER"
     },
     "reason": "Terminó su contrato de temporada.",
-    "correlationId": "fx-0097",
-    "prevHash": "f1e1b8cd9ee40b9ac243c81fc51e74bf20c3aa247fd5ae2b07230913c60c7040",
-    "hash": "c3402dc436d1ef5a9e95207ee1b1e4409a2b9b183e887a5ee544422ce0fdfe02"
+    "correlationId": "fx-0093",
+    "prevHash": "56c30539ffce910c2d26a15893e12d5823fcc0de2f00e62aadb17b497d7a2844",
+    "hash": "a5b18051686e744b8e30e2b9bdf62b2e0616ea2885d8b23c30fdd52579b9467f"
   },
   {
-    "id": "c62ef59d-cd18-54a3-bec4-7e32a0f9431c",
-    "seq": 98,
+    "id": "aa87e7fb-b451-5c5a-a800-261aa2581137",
+    "seq": 94,
     "occurredAt": "2026-06-30T10:00:00Z",
     "actor": {
       "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
@@ -3088,13 +2960,13 @@
       "lockUntilDate": "2027-02-28T00:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0098",
-    "prevHash": "c3402dc436d1ef5a9e95207ee1b1e4409a2b9b183e887a5ee544422ce0fdfe02",
-    "hash": "24058cd4dfde2ad46df18d0d8fa88ba3fc4e3a9ec84b8ab8cb91410850cd583a"
+    "correlationId": "fx-0094",
+    "prevHash": "a5b18051686e744b8e30e2b9bdf62b2e0616ea2885d8b23c30fdd52579b9467f",
+    "hash": "4b6492cc20003dfbd42a78a6de92cdb36d539d92d4547d1b7dd19b2ad77c8657"
   },
   {
-    "id": "5c8978b0-03c7-5080-8863-e5dcde7768bf",
-    "seq": 99,
+    "id": "306a4367-3756-5987-850d-2c0a51d7d978",
+    "seq": 95,
     "occurredAt": "2026-07-01T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3122,13 +2994,13 @@
       "legalException": false
     },
     "reason": "Plan piloto de equipo reducido.",
-    "correlationId": "fx-0099",
-    "prevHash": "24058cd4dfde2ad46df18d0d8fa88ba3fc4e3a9ec84b8ab8cb91410850cd583a",
-    "hash": "b9dc863a4f74d37346f0b0fb3f8da93c951574210768c86b22048b98562412a3"
+    "correlationId": "fx-0095",
+    "prevHash": "4b6492cc20003dfbd42a78a6de92cdb36d539d92d4547d1b7dd19b2ad77c8657",
+    "hash": "96c6692abcd1b6626db6e4868dad2e6ae4a0654f33b0d7d18c4ceed55b4a945a"
   },
   {
-    "id": "4d934622-0c8c-5a80-9799-80c15431c088",
-    "seq": 100,
+    "id": "45d2fddb-7c92-53f4-99df-86c3c069d0e5",
+    "seq": 96,
     "occurredAt": "2026-07-25T09:00:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -3153,13 +3025,13 @@
       "role": "SUPPORT"
     },
     "reason": null,
-    "correlationId": "fx-0100",
-    "prevHash": "b9dc863a4f74d37346f0b0fb3f8da93c951574210768c86b22048b98562412a3",
-    "hash": "217e44d6a4e6abe24d5a3460a0fb30eb9b825509f6d3555e414f9631b1d0553e"
+    "correlationId": "fx-0096",
+    "prevHash": "96c6692abcd1b6626db6e4868dad2e6ae4a0654f33b0d7d18c4ceed55b4a945a",
+    "hash": "bc77895579e30eeb9385ad25bda82cb77eeb0c0721289273f420070907adef0b"
   },
   {
-    "id": "24f2dd89-d14b-59cc-b486-e3b7353179ec",
-    "seq": 101,
+    "id": "e5b32d63-86e6-520b-a06b-3608e3c7afcb",
+    "seq": 97,
     "occurredAt": "2026-07-25T09:15:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -3182,13 +3054,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0101",
-    "prevHash": "217e44d6a4e6abe24d5a3460a0fb30eb9b825509f6d3555e414f9631b1d0553e",
-    "hash": "22247f82cb8e0df0d7b1482271878ea7ca2dbeeb8b920a979a94704025d8d1d0"
+    "correlationId": "fx-0097",
+    "prevHash": "bc77895579e30eeb9385ad25bda82cb77eeb0c0721289273f420070907adef0b",
+    "hash": "3641a89bed31f99cc7b59e8c1d25d3f49dd33e16b123b7b1e79e301b4505ec16"
   },
   {
-    "id": "54f7673f-2403-537a-a1b6-eafa86300105",
-    "seq": 102,
+    "id": "c62ef59d-cd18-54a3-bec4-7e32a0f9431c",
+    "seq": 98,
     "occurredAt": "2026-08-05T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3216,13 +3088,13 @@
       "legalException": false
     },
     "reason": "La destilería gestiona sus propios puntos de canje.",
-    "correlationId": "fx-0102",
-    "prevHash": "22247f82cb8e0df0d7b1482271878ea7ca2dbeeb8b920a979a94704025d8d1d0",
-    "hash": "e878f81380aeb5f931abe8d982fd1bdbea42099f263285f8639fda71bbc862b9"
+    "correlationId": "fx-0098",
+    "prevHash": "3641a89bed31f99cc7b59e8c1d25d3f49dd33e16b123b7b1e79e301b4505ec16",
+    "hash": "80d2e4a2c9093e6dcac378d2d170539e55a9e36ebf3dde011c78d319ec845f94"
   },
   {
-    "id": "e41a10eb-5c2a-5bfb-bb5f-5b3e8e799f28",
-    "seq": 103,
+    "id": "5c8978b0-03c7-5080-8863-e5dcde7768bf",
+    "seq": 99,
     "occurredAt": "2026-08-14T10:00:00Z",
     "actor": {
       "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
@@ -3249,13 +3121,13 @@
       "status": "REVOKED"
     },
     "reason": "Cierre de la bodega solicitado por su titular.",
-    "correlationId": "fx-0103",
-    "prevHash": "e878f81380aeb5f931abe8d982fd1bdbea42099f263285f8639fda71bbc862b9",
-    "hash": "e94d0cbc82b827a9e56d6a689a2c1b6ff5c5f3b33e5ec1a9bc69c43f8b393a3f"
+    "correlationId": "fx-0099",
+    "prevHash": "80d2e4a2c9093e6dcac378d2d170539e55a9e36ebf3dde011c78d319ec845f94",
+    "hash": "c3fc2139ccd2c6f1ed0c2f75b61ec89a7d30bfec5df3337e8635b4be057bcac4"
   },
   {
-    "id": "8b595363-605c-593b-a656-544e36d971b0",
-    "seq": 104,
+    "id": "4d934622-0c8c-5a80-9799-80c15431c088",
+    "seq": 100,
     "occurredAt": "2026-08-20T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3282,13 +3154,13 @@
       "status": "SUSPENDED"
     },
     "reason": "Registro SENASAG vencido; se reactiva al presentar la renovación.",
-    "correlationId": "fx-0104",
-    "prevHash": "e94d0cbc82b827a9e56d6a689a2c1b6ff5c5f3b33e5ec1a9bc69c43f8b393a3f",
-    "hash": "9d746ff87886e434037171cffc96b645521a6058c366072fd07aa26fef75ddea"
+    "correlationId": "fx-0100",
+    "prevHash": "c3fc2139ccd2c6f1ed0c2f75b61ec89a7d30bfec5df3337e8635b4be057bcac4",
+    "hash": "bfc0a092c9e06fae7de2ec4da89980c783ee8ee3de9419da70acb2d54a2db1c4"
   },
   {
-    "id": "8ed72018-0ee4-594b-9b86-3b680decfb75",
-    "seq": 105,
+    "id": "24f2dd89-d14b-59cc-b486-e3b7353179ec",
+    "seq": 101,
     "occurredAt": "2026-09-01T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3316,13 +3188,13 @@
       "legalException": false
     },
     "reason": "Singani Gran Reserva de producción limitada.",
-    "correlationId": "fx-0105",
-    "prevHash": "9d746ff87886e434037171cffc96b645521a6058c366072fd07aa26fef75ddea",
-    "hash": "dda0acbed346d0cc0f7b0f3101d8061b2b4616896519e49b70e182954922e16b"
+    "correlationId": "fx-0101",
+    "prevHash": "bfc0a092c9e06fae7de2ec4da89980c783ee8ee3de9419da70acb2d54a2db1c4",
+    "hash": "dafb2fcdff2938387648ca87a1fc8d63f07ce75d00668a479e5e4ff953b25570"
   },
   {
-    "id": "df79d095-3781-570d-b9ee-e9de7c68e5d5",
-    "seq": 106,
+    "id": "54f7673f-2403-537a-a1b6-eafa86300105",
+    "seq": 102,
     "occurredAt": "2026-09-05T14:00:00Z",
     "actor": {
       "userId": null,
@@ -3349,13 +3221,13 @@
       "contactEmail": "ivan@licoresdelchaco.test"
     },
     "reason": null,
-    "correlationId": "fx-0106",
-    "prevHash": "dda0acbed346d0cc0f7b0f3101d8061b2b4616896519e49b70e182954922e16b",
-    "hash": "38de39da56d0c0e9334ef69a23a373cf2a20286df7a39640a3eed498fd778832"
+    "correlationId": "fx-0102",
+    "prevHash": "dafb2fcdff2938387648ca87a1fc8d63f07ce75d00668a479e5e4ff953b25570",
+    "hash": "74e7a45ca2191450a6e48af8d777cb8320bce5d16c0e82a3ce4cc093471cbb1d"
   },
   {
-    "id": "8c7d87fe-2404-530c-a9a9-ccf35f35e880",
-    "seq": 107,
+    "id": "e41a10eb-5c2a-5bfb-bb5f-5b3e8e799f28",
+    "seq": 103,
     "occurredAt": "2026-09-05T14:03:00Z",
     "actor": {
       "userId": null,
@@ -3382,13 +3254,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0107",
-    "prevHash": "38de39da56d0c0e9334ef69a23a373cf2a20286df7a39640a3eed498fd778832",
-    "hash": "edb675813c89e80ef0453e6d076ea5faa38fddff147b2473be8dbc7bb227469d"
+    "correlationId": "fx-0103",
+    "prevHash": "74e7a45ca2191450a6e48af8d777cb8320bce5d16c0e82a3ce4cc093471cbb1d",
+    "hash": "231846539583ca37762e97f7f16f081168eb51123fa84df0c3fc3d3e063f034b"
   },
   {
-    "id": "639cc70a-cfa6-592a-abfc-b125dc52eb24",
-    "seq": 108,
+    "id": "8b595363-605c-593b-a656-544e36d971b0",
+    "seq": 104,
     "occurredAt": "2026-09-06T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3417,13 +3289,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0108",
-    "prevHash": "edb675813c89e80ef0453e6d076ea5faa38fddff147b2473be8dbc7bb227469d",
-    "hash": "c9ccdc6b087bf968964fa9b98059e191792221259c892310fa3befe8beb1b597"
+    "correlationId": "fx-0104",
+    "prevHash": "231846539583ca37762e97f7f16f081168eb51123fa84df0c3fc3d3e063f034b",
+    "hash": "64f72e3a4183077625e52540208404a98a1072794b33ae24ecc9e66ffa0d4ca1"
   },
   {
-    "id": "e2f3dc88-c1d2-55bb-bae6-c982e2e2ca54",
-    "seq": 109,
+    "id": "8ed72018-0ee4-594b-9b86-3b680decfb75",
+    "seq": 105,
     "occurredAt": "2026-09-08T10:00:00Z",
     "actor": {
       "userId": null,
@@ -3450,13 +3322,13 @@
       "contactEmail": "gerencia@guadalquivir.test"
     },
     "reason": null,
-    "correlationId": "fx-0109",
-    "prevHash": "c9ccdc6b087bf968964fa9b98059e191792221259c892310fa3befe8beb1b597",
-    "hash": "d86e0c4c06d517f40f0c669b86c3b0672b672587270c04a87cd5d4363aac1ddc"
+    "correlationId": "fx-0105",
+    "prevHash": "64f72e3a4183077625e52540208404a98a1072794b33ae24ecc9e66ffa0d4ca1",
+    "hash": "d1f561363fee2f19a33a318a4f29a2cc28d7b55e38b18c3d89c7432f2a2cc9ac"
   },
   {
-    "id": "3b05a3cd-b1ff-5fe9-93a2-f5d0fdd84a41",
-    "seq": 110,
+    "id": "df79d095-3781-570d-b9ee-e9de7c68e5d5",
+    "seq": 106,
     "occurredAt": "2026-09-08T10:10:00Z",
     "actor": {
       "userId": null,
@@ -3483,13 +3355,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0110",
-    "prevHash": "d86e0c4c06d517f40f0c669b86c3b0672b672587270c04a87cd5d4363aac1ddc",
-    "hash": "2b8441002f6c1510b116e1f91858db4518cba13f0cd945e9dc297ca729fac26e"
+    "correlationId": "fx-0106",
+    "prevHash": "d1f561363fee2f19a33a318a4f29a2cc28d7b55e38b18c3d89c7432f2a2cc9ac",
+    "hash": "cb2eb2bc2b08bd684432042405fb6499c73c46f5be4ebfc8f77d849c7e806180"
   },
   {
-    "id": "8846832d-4901-5c43-a3b2-d400db51b72e",
-    "seq": 111,
+    "id": "8c7d87fe-2404-530c-a9a9-ccf35f35e880",
+    "seq": 107,
     "occurredAt": "2026-09-08T11:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3517,13 +3389,13 @@
       "wineryId": null
     },
     "reason": "No elabora a partir de materia prima propia: distribuye licores de terceros.",
-    "correlationId": "fx-0111",
-    "prevHash": "2b8441002f6c1510b116e1f91858db4518cba13f0cd945e9dc297ca729fac26e",
-    "hash": "396e91db2a946f52bf762781c57537ed2f714492e36860ee8411beffe77a4726"
+    "correlationId": "fx-0107",
+    "prevHash": "cb2eb2bc2b08bd684432042405fb6499c73c46f5be4ebfc8f77d849c7e806180",
+    "hash": "19bf07f5458de860bc938232a909392d56b7b75ce0bea0ec7cffa1442c39626c"
   },
   {
-    "id": "08f32e18-4168-5060-a562-da2b475f30cb",
-    "seq": 112,
+    "id": "639cc70a-cfa6-592a-abfc-b125dc52eb24",
+    "seq": 108,
     "occurredAt": "2026-09-09T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3552,13 +3424,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0112",
-    "prevHash": "396e91db2a946f52bf762781c57537ed2f714492e36860ee8411beffe77a4726",
-    "hash": "a7a9768e617ed06c76847468a67b9559f4f783a28c8821d90c96772828a6962e"
+    "correlationId": "fx-0108",
+    "prevHash": "19bf07f5458de860bc938232a909392d56b7b75ce0bea0ec7cffa1442c39626c",
+    "hash": "c5c02a4f61ef60709496b462d1b4b56122a858273cae953c8be7f69f42cfeecb"
   },
   {
-    "id": "0f698a5a-a7a8-55c7-b0c4-38770b98e575",
-    "seq": 113,
+    "id": "e2f3dc88-c1d2-55bb-bae6-c982e2e2ca54",
+    "seq": 109,
     "occurredAt": "2026-09-09T09:30:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3587,13 +3459,13 @@
       "channel": "IN_PERSON"
     },
     "reason": null,
-    "correlationId": "fx-0113",
-    "prevHash": "a7a9768e617ed06c76847468a67b9559f4f783a28c8821d90c96772828a6962e",
-    "hash": "08b37b1a8e503a5bbd1839230e47bd76239e6ba2aa5a4a08d09f481f5dc3da01"
+    "correlationId": "fx-0109",
+    "prevHash": "c5c02a4f61ef60709496b462d1b4b56122a858273cae953c8be7f69f42cfeecb",
+    "hash": "b77733ee1eab70745ac51fc44d1a077bfbc16694ba24418d186a1b6cdb91e152"
   },
   {
-    "id": "93b810da-5c55-593e-b0f9-4a76f01e663f",
-    "seq": 114,
+    "id": "3b05a3cd-b1ff-5fe9-93a2-f5d0fdd84a41",
+    "seq": 110,
     "occurredAt": "2026-09-10T09:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3620,13 +3492,13 @@
       "value": 45
     },
     "reason": "Prueba de ventana de canje ampliada.",
-    "correlationId": "fx-0114",
-    "prevHash": "08b37b1a8e503a5bbd1839230e47bd76239e6ba2aa5a4a08d09f481f5dc3da01",
-    "hash": "5c4a3fe36cf4e3c47bba6dd435d32beefa4c25dda4258782652767b74d130375"
+    "correlationId": "fx-0110",
+    "prevHash": "b77733ee1eab70745ac51fc44d1a077bfbc16694ba24418d186a1b6cdb91e152",
+    "hash": "9692b93b730a0cca5b0b9b7cd2430acd20d1c8200a1554b57ea985d2ba209406"
   },
   {
-    "id": "30d002a3-8edd-5354-b17e-8d753b1b6e2c",
-    "seq": 115,
+    "id": "8846832d-4901-5c43-a3b2-d400db51b72e",
+    "seq": 111,
     "occurredAt": "2026-09-10T10:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -3653,13 +3525,13 @@
       "expiresAt": "2026-09-13T10:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0115",
-    "prevHash": "5c4a3fe36cf4e3c47bba6dd435d32beefa4c25dda4258782652767b74d130375",
-    "hash": "a0449f131e15971a594fc8def28596ed30e5e2c661eb4a6e21ed60951189ceff"
+    "correlationId": "fx-0111",
+    "prevHash": "9692b93b730a0cca5b0b9b7cd2430acd20d1c8200a1554b57ea985d2ba209406",
+    "hash": "3f9d328a3a1b64296d6620c2a5c828a3da6318172600611f3f1785855cdcdd83"
   },
   {
-    "id": "61044661-f639-59df-abe5-1f79cd2c4be0",
-    "seq": 116,
+    "id": "08f32e18-4168-5060-a562-da2b475f30cb",
+    "seq": 112,
     "occurredAt": "2026-09-10T10:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -3685,13 +3557,13 @@
       "isDoEligible": true
     },
     "reason": null,
-    "correlationId": "fx-0116",
-    "prevHash": "a0449f131e15971a594fc8def28596ed30e5e2c661eb4a6e21ed60951189ceff",
-    "hash": "22cc05fbc0cc79a5b506f491ec7917a953d93e14430305f11a1b42c8a7b965fd"
+    "correlationId": "fx-0112",
+    "prevHash": "3f9d328a3a1b64296d6620c2a5c828a3da6318172600611f3f1785855cdcdd83",
+    "hash": "a18e5e3a6dba1d22045c6c12b4158afb0105a7100916cd6e97ce097009c43523"
   },
   {
-    "id": "4f2869b2-38fc-59c3-bc67-6bc5597030ef",
-    "seq": 117,
+    "id": "0f698a5a-a7a8-55c7-b0c4-38770b98e575",
+    "seq": 113,
     "occurredAt": "2026-09-10T11:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3719,13 +3591,13 @@
       "legalException": false
     },
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
-    "correlationId": "fx-0117",
-    "prevHash": "22cc05fbc0cc79a5b506f491ec7917a953d93e14430305f11a1b42c8a7b965fd",
-    "hash": "8820dcfb366bcb899feda8f9b248255ff9ae65646577eb1064aca72eca068def"
+    "correlationId": "fx-0113",
+    "prevHash": "a18e5e3a6dba1d22045c6c12b4158afb0105a7100916cd6e97ce097009c43523",
+    "hash": "31aecdf71cec0cac707215b8e8e83c6a610ee80968b8d33b6b084778b80467b1"
   },
   {
-    "id": "29c876ad-2931-57e7-9254-8cdca4dadd2e",
-    "seq": 118,
+    "id": "93b810da-5c55-593e-b0f9-4a76f01e663f",
+    "seq": 114,
     "occurredAt": "2026-09-10T11:05:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3753,13 +3625,13 @@
       "legalException": true
     },
     "reason": "Excepción autorizada para el Cuartel 3 · El Portillo (1.540 msnm) mientras dure el ensayo con el ente regulador.",
-    "correlationId": "fx-0118",
-    "prevHash": "8820dcfb366bcb899feda8f9b248255ff9ae65646577eb1064aca72eca068def",
-    "hash": "9d6e92f82cab65ab3e44be364693161086b71faaf9604ba7e7525ca4a01767b7"
+    "correlationId": "fx-0114",
+    "prevHash": "31aecdf71cec0cac707215b8e8e83c6a610ee80968b8d33b6b084778b80467b1",
+    "hash": "b248e36919d839129cc16c0a6e31b0037630f71a074798e23ac7c6048bcfc471"
   },
   {
-    "id": "48163bea-86b4-591b-a2a9-db149b3744e2",
-    "seq": 119,
+    "id": "30d002a3-8edd-5354-b17e-8d753b1b6e2c",
+    "seq": 115,
     "occurredAt": "2026-09-10T17:00:00Z",
     "actor": {
       "userId": null,
@@ -3786,13 +3658,13 @@
       "contactEmail": "marcelo@laangostura.test"
     },
     "reason": null,
-    "correlationId": "fx-0119",
-    "prevHash": "9d6e92f82cab65ab3e44be364693161086b71faaf9604ba7e7525ca4a01767b7",
-    "hash": "37972ada29e64c9285805c6403b54fee926b60cd46000221b630a471587a5df6"
+    "correlationId": "fx-0115",
+    "prevHash": "b248e36919d839129cc16c0a6e31b0037630f71a074798e23ac7c6048bcfc471",
+    "hash": "cb2d61781f05127fa5f9f4db880c4700ff0a4bc12ba535e998ca73ab33fac776"
   },
   {
-    "id": "1c0fdc36-7c33-5c02-b22b-f94d7eaa8bc5",
-    "seq": 120,
+    "id": "61044661-f639-59df-abe5-1f79cd2c4be0",
+    "seq": 116,
     "occurredAt": "2026-09-10T17:05:00Z",
     "actor": {
       "userId": null,
@@ -3819,13 +3691,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0120",
-    "prevHash": "37972ada29e64c9285805c6403b54fee926b60cd46000221b630a471587a5df6",
-    "hash": "6ad3da16ab0ab35446a109424bd43fd4749ef519f26ddf4b86ff3722c55fc292"
+    "correlationId": "fx-0116",
+    "prevHash": "cb2d61781f05127fa5f9f4db880c4700ff0a4bc12ba535e998ca73ab33fac776",
+    "hash": "0738a5572e46bd27d87279f032671933a7fc44452a27479e0889338902ef8849"
   },
   {
-    "id": "6f3f8ab9-8d52-5a9b-850f-2e37446d1652",
-    "seq": 121,
+    "id": "4f2869b2-38fc-59c3-bc67-6bc5597030ef",
+    "seq": 117,
     "occurredAt": "2026-09-11T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3854,13 +3726,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0121",
-    "prevHash": "6ad3da16ab0ab35446a109424bd43fd4749ef519f26ddf4b86ff3722c55fc292",
-    "hash": "f3a3a4f824038d4b04b1cfa1963d3b3564f722c5d705f85b420da1acbd32943a"
+    "correlationId": "fx-0117",
+    "prevHash": "0738a5572e46bd27d87279f032671933a7fc44452a27479e0889338902ef8849",
+    "hash": "beaf998d954f128ae61a85035398364acf3c19a008783ebb3ab059f7854cfd95"
   },
   {
-    "id": "cbf3bf74-4a65-56f8-ab11-809b03a93a29",
-    "seq": 122,
+    "id": "29c876ad-2931-57e7-9254-8cdca4dadd2e",
+    "seq": 118,
     "occurredAt": "2026-09-11T09:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -3887,13 +3759,13 @@
       "status": "REVOKED"
     },
     "reason": null,
-    "correlationId": "fx-0122",
-    "prevHash": "f3a3a4f824038d4b04b1cfa1963d3b3564f722c5d705f85b420da1acbd32943a",
-    "hash": "76ee430cb297fbce792d6cd1083ed62b87d88d8375e8417560ed0187f1e8a055"
+    "correlationId": "fx-0118",
+    "prevHash": "beaf998d954f128ae61a85035398364acf3c19a008783ebb3ab059f7854cfd95",
+    "hash": "9b3ccf72843128edee1e54dcecbe7158fe02c382aa113b0d8d5d420a2adbdb8d"
   },
   {
-    "id": "776a5ded-9f7c-5427-9770-345c986d0d3e",
-    "seq": 123,
+    "id": "48163bea-86b4-591b-a2a9-db149b3744e2",
+    "seq": 119,
     "occurredAt": "2026-09-11T09:20:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -3918,13 +3790,13 @@
       "noteId": "1e3d0a2f-b471-5d1a-8569-58d6cee2a0a7"
     },
     "reason": null,
-    "correlationId": "fx-0123",
-    "prevHash": "76ee430cb297fbce792d6cd1083ed62b87d88d8375e8417560ed0187f1e8a055",
-    "hash": "d63dd293e16d8867a6ead0a5cee3a111a8e5ba94143b9deeb0db867ddfce552e"
+    "correlationId": "fx-0119",
+    "prevHash": "9b3ccf72843128edee1e54dcecbe7158fe02c382aa113b0d8d5d420a2adbdb8d",
+    "hash": "6edee28225a5d886908c1225d8da3b83703ea69ed02ac37d3e74ba4e4b8f807c"
   },
   {
-    "id": "45dc5ade-bd57-5c4e-983d-725916b9567f",
-    "seq": 124,
+    "id": "1c0fdc36-7c33-5c02-b22b-f94d7eaa8bc5",
+    "seq": 120,
     "occurredAt": "2026-09-12T09:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -3951,13 +3823,13 @@
       "value": 30
     },
     "reason": "Se vuelve al estándar tras la prueba.",
-    "correlationId": "fx-0124",
-    "prevHash": "d63dd293e16d8867a6ead0a5cee3a111a8e5ba94143b9deeb0db867ddfce552e",
-    "hash": "eacfec36496e0034a46da65391c827da006188ceed3a4041c2a206ad613bfea4"
+    "correlationId": "fx-0120",
+    "prevHash": "6edee28225a5d886908c1225d8da3b83703ea69ed02ac37d3e74ba4e4b8f807c",
+    "hash": "42256df9abba7f3571f21e2340abc348e2d8a22cf303bc15bb63ad4694c27428"
   },
   {
-    "id": "1461ab86-b6dd-5428-8143-4c473a513f28",
-    "seq": 125,
+    "id": "6f3f8ab9-8d52-5a9b-850f-2e37446d1652",
+    "seq": 121,
     "occurredAt": "2026-09-12T15:00:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -3985,13 +3857,13 @@
       "blockedBy": "PLATFORM"
     },
     "reason": "Acceso compartido detectado; pendiente de confirmar con la dueña.",
-    "correlationId": "fx-0125",
-    "prevHash": "eacfec36496e0034a46da65391c827da006188ceed3a4041c2a206ad613bfea4",
-    "hash": "8bc6a309ae43cd46504f2ffd87bac5f3e0978c76086578a5bc4652f3f9523c62"
+    "correlationId": "fx-0121",
+    "prevHash": "42256df9abba7f3571f21e2340abc348e2d8a22cf303bc15bb63ad4694c27428",
+    "hash": "2e3ad5b66069a19038c8b1d4d9a8edbf4163c38cbdd0dcfdb73071950f4b7167"
   },
   {
-    "id": "7db0f126-2be7-5c6b-a3d7-68609e0991c2",
-    "seq": 126,
+    "id": "cbf3bf74-4a65-56f8-ab11-809b03a93a29",
+    "seq": 122,
     "occurredAt": "2026-09-12T18:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4018,13 +3890,47 @@
       "status": "IN_REVIEW"
     },
     "reason": null,
-    "correlationId": "fx-0126",
-    "prevHash": "8bc6a309ae43cd46504f2ffd87bac5f3e0978c76086578a5bc4652f3f9523c62",
-    "hash": "29a5c98a5a81c1e38985e2e6259422ee40fbf58c46e8bda58d51f8cbf17d3e92"
+    "correlationId": "fx-0122",
+    "prevHash": "2e3ad5b66069a19038c8b1d4d9a8edbf4163c38cbdd0dcfdb73071950f4b7167",
+    "hash": "5e256fa4cc19ffc2fb6471f1c5ab688336d429a164eb1c90bf0b734ca9e8ce02"
   },
   {
-    "id": "2434ffa0-7090-5a9d-a776-275c646eff0a",
-    "seq": 127,
+    "id": "776a5ded-9f7c-5427-9770-345c986d0d3e",
+    "seq": 123,
+    "occurredAt": "2026-09-15T10:00:00Z",
+    "actor": {
+      "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
+      "fullName": "Jorge Salinas",
+      "role": "ADMIN",
+      "organizationId": "d5146597-15ea-5287-af8e-075e0d47a5ce",
+      "viaPlatform": true
+    },
+    "source": {
+      "app": "BACKOFFICE",
+      "ip": "203.0.113.10",
+      "deviceId": null
+    },
+    "action": "SETTING_OVERRIDE_SET",
+    "resource": {
+      "type": "setting",
+      "id": "trazabilidad.vino.crianzaMinimaMeses"
+    },
+    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "before": {
+      "value": null
+    },
+    "after": {
+      "value": 6,
+      "legalException": false
+    },
+    "reason": "La bodega no saca al mercado tintos con menos de seis meses de crianza.",
+    "correlationId": "fx-0123",
+    "prevHash": "5e256fa4cc19ffc2fb6471f1c5ab688336d429a164eb1c90bf0b734ca9e8ce02",
+    "hash": "e3873d75a8c6d06bc930ce00257bf3a968436ee4bd022864267cefc215d6afd1"
+  },
+  {
+    "id": "45dc5ade-bd57-5c4e-983d-725916b9567f",
+    "seq": 124,
     "occurredAt": "2026-09-15T11:00:00Z",
     "actor": {
       "userId": null,
@@ -4051,13 +3957,13 @@
       "contactEmail": "patricia@tierradecintis.test"
     },
     "reason": null,
-    "correlationId": "fx-0127",
-    "prevHash": "29a5c98a5a81c1e38985e2e6259422ee40fbf58c46e8bda58d51f8cbf17d3e92",
-    "hash": "dcdc0d35deb762abe4477ce83fb0840aec2bc7786cf60f4b11568df79545478d"
+    "correlationId": "fx-0124",
+    "prevHash": "e3873d75a8c6d06bc930ce00257bf3a968436ee4bd022864267cefc215d6afd1",
+    "hash": "ef24706d8e143f2cfc8573624c81cd23e2d71bfbf616285e70a1dce86ea364fd"
   },
   {
-    "id": "eccdfe26-d2cb-55f7-be7b-d6095ad4479a",
-    "seq": 128,
+    "id": "1461ab86-b6dd-5428-8143-4c473a513f28",
+    "seq": 125,
     "occurredAt": "2026-09-15T11:10:00Z",
     "actor": {
       "userId": null,
@@ -4084,13 +3990,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0128",
-    "prevHash": "dcdc0d35deb762abe4477ce83fb0840aec2bc7786cf60f4b11568df79545478d",
-    "hash": "ca3eb2fa5dab4242821d56b8499463e93230ee5b72a06e0029468e055c7edc29"
+    "correlationId": "fx-0125",
+    "prevHash": "ef24706d8e143f2cfc8573624c81cd23e2d71bfbf616285e70a1dce86ea364fd",
+    "hash": "37016f93a6867c91c98630d80e7c28b3243519a6606c7ee96fafdbfe38b62043"
   },
   {
-    "id": "1e937b35-160c-5248-8260-a742c1b25eef",
-    "seq": 129,
+    "id": "7db0f126-2be7-5c6b-a3d7-68609e0991c2",
+    "seq": 126,
     "occurredAt": "2026-09-16T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4119,13 +4025,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0129",
-    "prevHash": "ca3eb2fa5dab4242821d56b8499463e93230ee5b72a06e0029468e055c7edc29",
-    "hash": "6b219468595cf5a34771b469c62b51750f8ea455b2a3662d55cf04c659d82b4f"
+    "correlationId": "fx-0126",
+    "prevHash": "37016f93a6867c91c98630d80e7c28b3243519a6606c7ee96fafdbfe38b62043",
+    "hash": "9be8a9287f381cd831a97098371a2e7ee48e4f14b84d4d31c9aa200eb2fa000b"
   },
   {
-    "id": "ab330ffe-534c-58af-a990-d0feb1546ba1",
-    "seq": 130,
+    "id": "2434ffa0-7090-5a9d-a776-275c646eff0a",
+    "seq": 127,
     "occurredAt": "2026-09-16T09:30:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4150,13 +4056,13 @@
       "noteId": "b24c5d13-5ae0-5cef-a32f-79c45ad86e56"
     },
     "reason": null,
-    "correlationId": "fx-0130",
-    "prevHash": "6b219468595cf5a34771b469c62b51750f8ea455b2a3662d55cf04c659d82b4f",
-    "hash": "2b522bc0ef28b2a6e9f19aff62f470675a3a9e641f193cec3883857b6311295d"
+    "correlationId": "fx-0127",
+    "prevHash": "9be8a9287f381cd831a97098371a2e7ee48e4f14b84d4d31c9aa200eb2fa000b",
+    "hash": "c44528f3c57cd9313c5db489547fd7b8ee209f6d3d1c6944eb942da487226edf"
   },
   {
-    "id": "de36929c-7589-5bd4-b27e-7f6553403d8d",
-    "seq": 131,
+    "id": "eccdfe26-d2cb-55f7-be7b-d6095ad4479a",
+    "seq": 128,
     "occurredAt": "2026-09-18T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4184,13 +4090,13 @@
       "wineryId": "140bd695-7a59-5480-811c-38ce57cdd80f"
     },
     "reason": null,
-    "correlationId": "fx-0131",
-    "prevHash": "2b522bc0ef28b2a6e9f19aff62f470675a3a9e641f193cec3883857b6311295d",
-    "hash": "f089e3b29ecfc3a08ef0a653e39be22ede2e6efbbeecc540a9f8877379a3325d"
+    "correlationId": "fx-0128",
+    "prevHash": "c44528f3c57cd9313c5db489547fd7b8ee209f6d3d1c6944eb942da487226edf",
+    "hash": "cdfd2dc1c6b63e2b786ddb03abf0a7d0fd2f429a4b482c581218cb4dab869159"
   },
   {
-    "id": "f10bf959-bb4e-570f-9d11-d53e77d2255b",
-    "seq": 132,
+    "id": "1e937b35-160c-5248-8260-a742c1b25eef",
+    "seq": 129,
     "occurredAt": "2026-09-18T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4215,13 +4121,13 @@
       "status": "INVITED"
     },
     "reason": "Solicitud aprobada",
-    "correlationId": "fx-0132",
-    "prevHash": "f089e3b29ecfc3a08ef0a653e39be22ede2e6efbbeecc540a9f8877379a3325d",
-    "hash": "d703a523767eb940f8ec45ad68fc5191b9ee6ec1616239ba49d4e7845a209499"
+    "correlationId": "fx-0129",
+    "prevHash": "cdfd2dc1c6b63e2b786ddb03abf0a7d0fd2f429a4b482c581218cb4dab869159",
+    "hash": "7a516186ca16975265a532485a19158e70b0ec50d7fdc19381ba56d3994e7015"
   },
   {
-    "id": "37d308cf-114a-5c0b-a4b2-0e2deb74895c",
-    "seq": 133,
+    "id": "ab330ffe-534c-58af-a990-d0feb1546ba1",
+    "seq": 130,
     "occurredAt": "2026-09-18T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4248,13 +4154,13 @@
       "expiresAt": "2026-09-21T09:00:00Z"
     },
     "reason": "Solicitud aprobada",
-    "correlationId": "fx-0133",
-    "prevHash": "d703a523767eb940f8ec45ad68fc5191b9ee6ec1616239ba49d4e7845a209499",
-    "hash": "76742d8fd7367883918b3dd72c4ffe8880aaf5e2029e07400c3f45d2e180c6dd"
+    "correlationId": "fx-0130",
+    "prevHash": "7a516186ca16975265a532485a19158e70b0ec50d7fdc19381ba56d3994e7015",
+    "hash": "f1ec67e0677d7c828fed1fb42d6a182e19a6ec4bbe11c14974d477fed699bec1"
   },
   {
-    "id": "2c0f3657-b9f5-5d52-85fb-b3eea2a3ebd7",
-    "seq": 134,
+    "id": "de36929c-7589-5bd4-b27e-7f6553403d8d",
+    "seq": 131,
     "occurredAt": "2026-09-19T10:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4283,13 +4189,13 @@
       "channel": "VIDEO"
     },
     "reason": null,
-    "correlationId": "fx-0134",
-    "prevHash": "76742d8fd7367883918b3dd72c4ffe8880aaf5e2029e07400c3f45d2e180c6dd",
-    "hash": "ee7a89259ce7f52b2b5ff1a9590cfad52cb1864384fafd7e1a1f79f82b3dd612"
+    "correlationId": "fx-0131",
+    "prevHash": "f1ec67e0677d7c828fed1fb42d6a182e19a6ec4bbe11c14974d477fed699bec1",
+    "hash": "ddde47076e94732a43ef22f8e3f8d8372cbcfed432d325f9a7daeaa61e92c889"
   },
   {
-    "id": "cd12dcd8-7f90-52b9-a424-8fe3bdfaa6bd",
-    "seq": 135,
+    "id": "f10bf959-bb4e-570f-9d11-d53e77d2255b",
+    "seq": 132,
     "occurredAt": "2026-09-20T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -4316,13 +4222,13 @@
       "expiresAt": "2026-09-23T10:00:00Z"
     },
     "reason": "Refuerzo de operaciones para la temporada de altas",
-    "correlationId": "fx-0135",
-    "prevHash": "ee7a89259ce7f52b2b5ff1a9590cfad52cb1864384fafd7e1a1f79f82b3dd612",
-    "hash": "1fdd28eeb9213a93b77bee0792da90a691f6b6d9237134da6f3409ec4204bee0"
+    "correlationId": "fx-0132",
+    "prevHash": "ddde47076e94732a43ef22f8e3f8d8372cbcfed432d325f9a7daeaa61e92c889",
+    "hash": "e2f01b8f8f5023326f8298a70123852ffdd74cf212237a603bc7d5c6d941ec7b"
   },
   {
-    "id": "f71cf218-7d3c-56b9-9051-559c1c9a9133",
-    "seq": 136,
+    "id": "37d308cf-114a-5c0b-a4b2-0e2deb74895c",
+    "seq": 133,
     "occurredAt": "2026-09-20T12:00:00Z",
     "actor": {
       "userId": null,
@@ -4349,13 +4255,13 @@
       "contactEmail": "duena@soldepadcaya.test"
     },
     "reason": null,
-    "correlationId": "fx-0136",
-    "prevHash": "1fdd28eeb9213a93b77bee0792da90a691f6b6d9237134da6f3409ec4204bee0",
-    "hash": "0fed7b880ba23037d9f4e291d60c641220cfa8bfce572f2dd1b88b25c402a173"
+    "correlationId": "fx-0133",
+    "prevHash": "e2f01b8f8f5023326f8298a70123852ffdd74cf212237a603bc7d5c6d941ec7b",
+    "hash": "d837b6d5f2a156ac6c37b72e5c892f74f13d5c402648d159a84ca8c1596f9743"
   },
   {
-    "id": "1f5c5cd8-0a27-5a93-9f86-a0d647bcac2c",
-    "seq": 137,
+    "id": "2c0f3657-b9f5-5d52-85fb-b3eea2a3ebd7",
+    "seq": 134,
     "occurredAt": "2026-09-20T12:05:00Z",
     "actor": {
       "userId": null,
@@ -4382,13 +4288,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0137",
-    "prevHash": "0fed7b880ba23037d9f4e291d60c641220cfa8bfce572f2dd1b88b25c402a173",
-    "hash": "ba0b3091d8bb676e2d98cfb8bf13ab9a50c6bbb697529b6e9922aeadd06e3494"
+    "correlationId": "fx-0134",
+    "prevHash": "d837b6d5f2a156ac6c37b72e5c892f74f13d5c402648d159a84ca8c1596f9743",
+    "hash": "09b0ed7bbbc34af03fbc9f57a050feaccf8906958c80334b47abfe6699482d8b"
   },
   {
-    "id": "666779f0-181a-59bf-8364-009a31d28017",
-    "seq": 138,
+    "id": "cd12dcd8-7f90-52b9-a424-8fe3bdfaa6bd",
+    "seq": 135,
     "occurredAt": "2026-09-20T16:00:00Z",
     "actor": {
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
@@ -4414,13 +4320,13 @@
       "bottles": 3860
     },
     "reason": null,
-    "correlationId": "fx-0138",
-    "prevHash": "ba0b3091d8bb676e2d98cfb8bf13ab9a50c6bbb697529b6e9922aeadd06e3494",
-    "hash": "fb7a280ea6f87ea0b8f1e53779c97d6323e024359ad853eda568d3aa593ccf1f"
+    "correlationId": "fx-0135",
+    "prevHash": "09b0ed7bbbc34af03fbc9f57a050feaccf8906958c80334b47abfe6699482d8b",
+    "hash": "a943d6c720d8ec22c7b5fe20b66744a2e0200aa53ba148d5daba534abc298d75"
   },
   {
-    "id": "be05cfa5-a945-542d-88cd-fabf53bee8db",
-    "seq": 139,
+    "id": "f71cf218-7d3c-56b9-9051-559c1c9a9133",
+    "seq": 136,
     "occurredAt": "2026-09-21T08:30:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -4445,13 +4351,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0139",
-    "prevHash": "fb7a280ea6f87ea0b8f1e53779c97d6323e024359ad853eda568d3aa593ccf1f",
-    "hash": "0ace761e7f8e71307e464392696b2652bd4edaa53a7a64a2cfcdac7d8ed3f89d"
+    "correlationId": "fx-0136",
+    "prevHash": "a943d6c720d8ec22c7b5fe20b66744a2e0200aa53ba148d5daba534abc298d75",
+    "hash": "069d243bee0cb05e76f4769c1377aa33e4446670731f76e410404723b27527a8"
   },
   {
-    "id": "a88a9f2a-0b63-5dcb-aea1-77ac16e25c7e",
-    "seq": 140,
+    "id": "1f5c5cd8-0a27-5a93-9f86-a0d647bcac2c",
+    "seq": 137,
     "occurredAt": "2026-09-21T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4480,13 +4386,13 @@
       "assigneeId": "99f29bfe-2296-57c7-908c-b09ec778c439"
     },
     "reason": null,
-    "correlationId": "fx-0140",
-    "prevHash": "0ace761e7f8e71307e464392696b2652bd4edaa53a7a64a2cfcdac7d8ed3f89d",
-    "hash": "0924baa915f84fdce4631e7e7c0cf0f3a7f15175978943b39a3d4a954fc94b28"
+    "correlationId": "fx-0137",
+    "prevHash": "069d243bee0cb05e76f4769c1377aa33e4446670731f76e410404723b27527a8",
+    "hash": "6a7387976e147ed1d42c1c71c7ae7dc8ab1c781714fd594aa820b51134677b96"
   },
   {
-    "id": "a12117aa-e46e-57de-b8ac-df276ed4ac0c",
-    "seq": 141,
+    "id": "666779f0-181a-59bf-8364-009a31d28017",
+    "seq": 138,
     "occurredAt": "2026-09-21T09:00:00Z",
     "actor": {
       "userId": null,
@@ -4509,13 +4415,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0141",
-    "prevHash": "0924baa915f84fdce4631e7e7c0cf0f3a7f15175978943b39a3d4a954fc94b28",
-    "hash": "c9541ff3647c8e821e2af4a8e51fccb2db305385694717215d3d5a1bf6a21c3c"
+    "correlationId": "fx-0138",
+    "prevHash": "6a7387976e147ed1d42c1c71c7ae7dc8ab1c781714fd594aa820b51134677b96",
+    "hash": "2e0936c562d5fed5ce5fc8e4df2e522bc8c3349c9d9ff616825c28f37a6417c0"
   },
   {
-    "id": "5951e15e-b669-55af-a3b4-feae14b1b891",
-    "seq": 142,
+    "id": "be05cfa5-a945-542d-88cd-fabf53bee8db",
+    "seq": 139,
     "occurredAt": "2026-09-22T09:00:00Z",
     "actor": {
       "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
@@ -4538,13 +4444,13 @@
     "before": null,
     "after": null,
     "reason": null,
-    "correlationId": "fx-0142",
-    "prevHash": "c9541ff3647c8e821e2af4a8e51fccb2db305385694717215d3d5a1bf6a21c3c",
-    "hash": "d0926d15f57a350c7178f04c62d4f6ff4c7de1252f496257925c0f89b7b970a1"
+    "correlationId": "fx-0139",
+    "prevHash": "2e0936c562d5fed5ce5fc8e4df2e522bc8c3349c9d9ff616825c28f37a6417c0",
+    "hash": "94b28f84a57e2b7b22d2403f3765c1819fcdba1631841940724d1eb989678555"
   },
   {
-    "id": "0b3d7abd-cb3b-5184-9512-22e8e879913e",
-    "seq": 143,
+    "id": "a88a9f2a-0b63-5dcb-aea1-77ac16e25c7e",
+    "seq": 140,
     "occurredAt": "2026-09-22T09:00:00Z",
     "actor": {
       "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
@@ -4569,13 +4475,13 @@
       "role": "OPERATIONS"
     },
     "reason": null,
-    "correlationId": "fx-0143",
-    "prevHash": "d0926d15f57a350c7178f04c62d4f6ff4c7de1252f496257925c0f89b7b970a1",
-    "hash": "1e7297fe57e6b7b296b940b9951924484d2b48f091c844f33cf43fe64c6df011"
+    "correlationId": "fx-0140",
+    "prevHash": "94b28f84a57e2b7b22d2403f3765c1819fcdba1631841940724d1eb989678555",
+    "hash": "f5b37f8559e053a4dc3d9884ab9f3e26f821eb518ead567a5a289f00c114b833"
   },
   {
-    "id": "6fc2c026-9128-5b53-873f-009334fd6538",
-    "seq": 144,
+    "id": "a12117aa-e46e-57de-b8ac-df276ed4ac0c",
+    "seq": 141,
     "occurredAt": "2026-09-22T16:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4600,13 +4506,13 @@
       "noteId": "23c01d42-ec36-52dc-a21d-66b544cbe0f7"
     },
     "reason": null,
-    "correlationId": "fx-0144",
-    "prevHash": "1e7297fe57e6b7b296b940b9951924484d2b48f091c844f33cf43fe64c6df011",
-    "hash": "2a458a6771994fedf3d4b7bf292c7e7acbd16595ecfbbbc2cb757286f0a3525e"
+    "correlationId": "fx-0141",
+    "prevHash": "f5b37f8559e053a4dc3d9884ab9f3e26f821eb518ead567a5a289f00c114b833",
+    "hash": "46ea528beb72b87efc0e0318ef9abe62cd0be366d4983be71340e774e204510a"
   },
   {
-    "id": "b33df423-56da-59f8-847c-924f29941e0f",
-    "seq": 145,
+    "id": "5951e15e-b669-55af-a3b4-feae14b1b891",
+    "seq": 142,
     "occurredAt": "2026-09-23T11:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4631,13 +4537,13 @@
       "noteId": "22667ca8-50ba-5ce9-a998-0b396709c905"
     },
     "reason": null,
-    "correlationId": "fx-0145",
-    "prevHash": "2a458a6771994fedf3d4b7bf292c7e7acbd16595ecfbbbc2cb757286f0a3525e",
-    "hash": "da84a9f656c8f0c3474b043acb0721503b74a25fcf84b9d2bedcad4407951ed4"
+    "correlationId": "fx-0142",
+    "prevHash": "46ea528beb72b87efc0e0318ef9abe62cd0be366d4983be71340e774e204510a",
+    "hash": "cb69f61a7fa88dda33362e15aa8c12e9bb67f82a4fbfac1ce1bdcde3e52a4574"
   },
   {
-    "id": "659bde6d-e481-56a2-85d2-80f75f32ce0f",
-    "seq": 146,
+    "id": "0b3d7abd-cb3b-5184-9512-22e8e879913e",
+    "seq": 143,
     "occurredAt": "2026-09-23T11:00:00Z",
     "actor": {
       "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
@@ -4664,13 +4570,13 @@
       "expiresAt": "2026-09-26T11:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0146",
-    "prevHash": "da84a9f656c8f0c3474b043acb0721503b74a25fcf84b9d2bedcad4407951ed4",
-    "hash": "41c9b74b586c7e0743464f2bdef3230a501b5b243b632e0280a9b4481436e987"
+    "correlationId": "fx-0143",
+    "prevHash": "cb69f61a7fa88dda33362e15aa8c12e9bb67f82a4fbfac1ce1bdcde3e52a4574",
+    "hash": "48e461276a77dc20a6b1c3030fca7fbe8c7ec0b9398d75711f469ae36d8cd34e"
   },
   {
-    "id": "76a71064-bbc4-589a-8867-a64a761c3b20",
-    "seq": 147,
+    "id": "6fc2c026-9128-5b53-873f-009334fd6538",
+    "seq": 144,
     "occurredAt": "2026-09-23T15:10:00Z",
     "actor": {
       "userId": null,
@@ -4697,13 +4603,13 @@
       "contactEmail": "lucia@andinadealtura.test"
     },
     "reason": null,
-    "correlationId": "fx-0147",
-    "prevHash": "41c9b74b586c7e0743464f2bdef3230a501b5b243b632e0280a9b4481436e987",
-    "hash": "0dce6015a52b77e52f1077c120236b55f9585b6b6ebb92305d7d57909f4a5377"
+    "correlationId": "fx-0144",
+    "prevHash": "48e461276a77dc20a6b1c3030fca7fbe8c7ec0b9398d75711f469ae36d8cd34e",
+    "hash": "28cb4c35dff4caf283a252e72eed6cc77445cef3969c13452823aa4f9810c5c5"
   },
   {
-    "id": "d7230eed-31b5-5e6e-b5c6-ec4e89654787",
-    "seq": 148,
+    "id": "b33df423-56da-59f8-847c-924f29941e0f",
+    "seq": 145,
     "occurredAt": "2026-09-23T15:25:00Z",
     "actor": {
       "userId": null,
@@ -4730,13 +4636,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0148",
-    "prevHash": "0dce6015a52b77e52f1077c120236b55f9585b6b6ebb92305d7d57909f4a5377",
-    "hash": "6ae84db1f38bf0e1090cab03a44ac89ee0108e9d85da1305b8b3711c29a3d534"
+    "correlationId": "fx-0145",
+    "prevHash": "28cb4c35dff4caf283a252e72eed6cc77445cef3969c13452823aa4f9810c5c5",
+    "hash": "e0e227fc1bbcb1d60579fdb0b248ca420958542b2b0273a2d686e3a7d82b53f6"
   },
   {
-    "id": "2ee6cc83-aa4f-52a0-a141-87a92b510d40",
-    "seq": 149,
+    "id": "659bde6d-e481-56a2-85d2-80f75f32ce0f",
+    "seq": 146,
     "occurredAt": "2026-09-24T08:30:00Z",
     "actor": {
       "userId": "54ad3be4-79ad-57fb-86ff-1fa2517fe25a",
@@ -4761,13 +4667,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0149",
-    "prevHash": "6ae84db1f38bf0e1090cab03a44ac89ee0108e9d85da1305b8b3711c29a3d534",
-    "hash": "12e2cd8c98cd219366656ff007e7dbc520a018d14eadc5e925735048e178c5d4"
+    "correlationId": "fx-0146",
+    "prevHash": "e0e227fc1bbcb1d60579fdb0b248ca420958542b2b0273a2d686e3a7d82b53f6",
+    "hash": "b32ce890c4d077c62dcad0971946e6427285b522f876ac45c93ed73ba0bd8492"
   },
   {
-    "id": "40a954c1-e27d-5667-adfa-b2e7744aea21",
-    "seq": 150,
+    "id": "76a71064-bbc4-589a-8867-a64a761c3b20",
+    "seq": 147,
     "occurredAt": "2026-09-24T08:30:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -4792,13 +4698,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0150",
-    "prevHash": "12e2cd8c98cd219366656ff007e7dbc520a018d14eadc5e925735048e178c5d4",
-    "hash": "6451a707ec13323ea587d6d57fba9f644c1b78d6a945510438016b9c4ccf8587"
+    "correlationId": "fx-0147",
+    "prevHash": "b32ce890c4d077c62dcad0971946e6427285b522f876ac45c93ed73ba0bd8492",
+    "hash": "1545a5f179e9d6cfea5eeedc2ce3ea3547c6e13460d8863324b19d9d9b805c59"
   },
   {
-    "id": "79233513-8335-52a6-b331-70d8dc5354b7",
-    "seq": 151,
+    "id": "d7230eed-31b5-5e6e-b5c6-ec4e89654787",
+    "seq": 148,
     "occurredAt": "2026-09-24T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4826,13 +4732,13 @@
       "wineryId": "50ec6662-4f14-525d-8678-42dfd1afe5e1"
     },
     "reason": "Documentación completa",
-    "correlationId": "fx-0151",
-    "prevHash": "6451a707ec13323ea587d6d57fba9f644c1b78d6a945510438016b9c4ccf8587",
-    "hash": "4f42f67d676e6073d73a110e91f0e220f263c86c085ec4465393d9ab538d5bc1"
+    "correlationId": "fx-0148",
+    "prevHash": "1545a5f179e9d6cfea5eeedc2ce3ea3547c6e13460d8863324b19d9d9b805c59",
+    "hash": "a44ef4eb2a9fe3ad07bedf7e9c031eedda3d8571f0d288e624feede0c3d24efc"
   },
   {
-    "id": "96d3b1b5-4dfa-584e-bf3c-71fbab40315e",
-    "seq": 152,
+    "id": "2ee6cc83-aa4f-52a0-a141-87a92b510d40",
+    "seq": 149,
     "occurredAt": "2026-09-24T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4857,13 +4763,13 @@
       "status": "INVITED"
     },
     "reason": "Documentación completa",
-    "correlationId": "fx-0152",
-    "prevHash": "4f42f67d676e6073d73a110e91f0e220f263c86c085ec4465393d9ab538d5bc1",
-    "hash": "a085220ac26f02a461d9fa5cda6e510b0da0add8e85d25c89293b7a68e2ec8a8"
+    "correlationId": "fx-0149",
+    "prevHash": "a44ef4eb2a9fe3ad07bedf7e9c031eedda3d8571f0d288e624feede0c3d24efc",
+    "hash": "76813a20793f0247cef2aacfcd23e7c740e40f87c84461a1fd654476ca52b9a0"
   },
   {
-    "id": "1340a1e7-a13b-5683-b4e9-23bac40e9e1f",
-    "seq": 153,
+    "id": "40a954c1-e27d-5667-adfa-b2e7744aea21",
+    "seq": 150,
     "occurredAt": "2026-09-24T09:00:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -4890,13 +4796,13 @@
       "expiresAt": "2026-09-27T09:00:00Z"
     },
     "reason": "Documentación completa",
-    "correlationId": "fx-0153",
-    "prevHash": "a085220ac26f02a461d9fa5cda6e510b0da0add8e85d25c89293b7a68e2ec8a8",
-    "hash": "79270ef4a718aa182e408b0ecc37cf03e0ccc5a76bf6d956f3f728ace9bb957d"
+    "correlationId": "fx-0150",
+    "prevHash": "76813a20793f0247cef2aacfcd23e7c740e40f87c84461a1fd654476ca52b9a0",
+    "hash": "827efff29abac157cb9014bf314f91a378f46f967eb916559e1eb6788f1d67a8"
   },
   {
-    "id": "1e51f64b-2f81-5880-9249-0825e9dade9b",
-    "seq": 154,
+    "id": "79233513-8335-52a6-b331-70d8dc5354b7",
+    "seq": 151,
     "occurredAt": "2026-09-24T09:45:00Z",
     "actor": {
       "userId": "3a41fe19-9b6f-5b6c-9d56-1c55c6b4d0f7",
@@ -4922,13 +4828,13 @@
       "netWeightKg": 6100
     },
     "reason": null,
-    "correlationId": "fx-0154",
-    "prevHash": "79270ef4a718aa182e408b0ecc37cf03e0ccc5a76bf6d956f3f728ace9bb957d",
-    "hash": "cd62e52f7895fd1c310705813dc83786921b52f7a2bbf97d123d22c6b8bb0551"
+    "correlationId": "fx-0151",
+    "prevHash": "827efff29abac157cb9014bf314f91a378f46f967eb916559e1eb6788f1d67a8",
+    "hash": "f34638c87fc302800f55f17717a2926e3939afb5de505cdd64a6a30f8bddd83e"
   },
   {
-    "id": "03617be5-1473-5211-a48b-fe61c7e8bd2a",
-    "seq": 155,
+    "id": "96d3b1b5-4dfa-584e-bf3c-71fbab40315e",
+    "seq": 152,
     "occurredAt": "2026-09-24T10:00:00Z",
     "actor": {
       "userId": "4e89872f-1de3-5f01-968b-2203e12dbfd0",
@@ -4955,13 +4861,13 @@
       "expiresAt": "2026-09-27T10:00:00Z"
     },
     "reason": null,
-    "correlationId": "fx-0155",
-    "prevHash": "cd62e52f7895fd1c310705813dc83786921b52f7a2bbf97d123d22c6b8bb0551",
-    "hash": "cee6fcaab211acc72cf24473bcfd24503a33d00ffedc341fd945089d8d6ecc13"
+    "correlationId": "fx-0152",
+    "prevHash": "f34638c87fc302800f55f17717a2926e3939afb5de505cdd64a6a30f8bddd83e",
+    "hash": "af5e936a113c14c64d4ccce6735c4d3a78453bbaf3db757f36a649e7a332e838"
   },
   {
-    "id": "cab4647d-aa32-51f6-80dc-df25d3df384d",
-    "seq": 156,
+    "id": "1340a1e7-a13b-5683-b4e9-23bac40e9e1f",
+    "seq": 153,
     "occurredAt": "2026-09-24T10:05:00Z",
     "actor": {
       "userId": null,
@@ -4988,13 +4894,13 @@
       "contactEmail": "ernesto@riopilaya.test"
     },
     "reason": null,
-    "correlationId": "fx-0156",
-    "prevHash": "cee6fcaab211acc72cf24473bcfd24503a33d00ffedc341fd945089d8d6ecc13",
-    "hash": "2a965eb457a7aeb0dad129011b455e1ad64f9e540e9540b387266a21a7277593"
+    "correlationId": "fx-0153",
+    "prevHash": "af5e936a113c14c64d4ccce6735c4d3a78453bbaf3db757f36a649e7a332e838",
+    "hash": "ebf04c23114967e3bdf54d6d313e2d7d266b9535a8e15ddf6c961b0925386155"
   },
   {
-    "id": "14d2c46e-b3d0-5f28-831b-0c8ca1556f6f",
-    "seq": 157,
+    "id": "1e51f64b-2f81-5880-9249-0825e9dade9b",
+    "seq": 154,
     "occurredAt": "2026-09-24T10:20:00Z",
     "actor": {
       "userId": null,
@@ -5021,45 +4927,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0157",
-    "prevHash": "2a965eb457a7aeb0dad129011b455e1ad64f9e540e9540b387266a21a7277593",
-    "hash": "9dbae0f2a68c05a32d196b839237637e2c9dc31f84d0d09708986dbf6ee87923"
+    "correlationId": "fx-0154",
+    "prevHash": "ebf04c23114967e3bdf54d6d313e2d7d266b9535a8e15ddf6c961b0925386155",
+    "hash": "d66b2a771c20c7f4a893db74c2b223de4167b26fd6cfad07f0b83cfcc3103e82"
   },
   {
-    "id": "2a0f8ecc-a8b4-508d-852c-e64e29074a24",
-    "seq": 158,
-    "occurredAt": "2026-09-24T14:35:00Z",
-    "actor": {
-      "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
-      "fullName": "Lic. Carla Villarroel",
-      "role": "ENOLOGIST",
-      "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-      "viaPlatform": false
-    },
-    "source": {
-      "app": "ERP",
-      "ip": "198.51.100.24",
-      "deviceId": null
-    },
-    "action": "FERMENTATION_TANK_CREATED",
-    "resource": {
-      "type": "fermentation_tank",
-      "id": "f28ea298-cf7f-5d30-a92e-aad6379b8158"
-    },
-    "organizationId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
-    "before": null,
-    "after": {
-      "tankCode": "TK-07",
-      "status": "FILLING"
-    },
-    "reason": null,
-    "correlationId": "fx-0158",
-    "prevHash": "9dbae0f2a68c05a32d196b839237637e2c9dc31f84d0d09708986dbf6ee87923",
-    "hash": "1dd11e72396e79a3a38a82c75d41d1070f17cce55de5e7c0b41249e5346c87cc"
-  },
-  {
-    "id": "6f6d94cb-57c4-5ed9-9f35-bf5ec67cb0b4",
-    "seq": 159,
+    "id": "03617be5-1473-5211-a48b-fe61c7e8bd2a",
+    "seq": 155,
     "occurredAt": "2026-09-25T07:15:00Z",
     "actor": {
       "userId": null,
@@ -5086,13 +4960,13 @@
       "contactEmail": "anamaria@chocloca.test"
     },
     "reason": null,
-    "correlationId": "fx-0159",
-    "prevHash": "1dd11e72396e79a3a38a82c75d41d1070f17cce55de5e7c0b41249e5346c87cc",
-    "hash": "7b24d8156c720ff8146e93879c235a7b35dafe875019262edb484b1b66d3f738"
+    "correlationId": "fx-0155",
+    "prevHash": "d66b2a771c20c7f4a893db74c2b223de4167b26fd6cfad07f0b83cfcc3103e82",
+    "hash": "4a8fbff828cb80f83639a46a1e5a4ea6b81b1335961c5a302b0e2a9d5886f9a9"
   },
   {
-    "id": "5acad74f-b380-5821-9d57-af65e2f5fabc",
-    "seq": 160,
+    "id": "cab4647d-aa32-51f6-80dc-df25d3df384d",
+    "seq": 156,
     "occurredAt": "2026-09-25T07:20:00Z",
     "actor": {
       "userId": null,
@@ -5119,13 +4993,13 @@
       "status": "RECEIVED"
     },
     "reason": null,
-    "correlationId": "fx-0160",
-    "prevHash": "7b24d8156c720ff8146e93879c235a7b35dafe875019262edb484b1b66d3f738",
-    "hash": "7d7089f9255e36543879b90d4d59da885b34562f773a62bede9e12d6c2163e13"
+    "correlationId": "fx-0156",
+    "prevHash": "4a8fbff828cb80f83639a46a1e5a4ea6b81b1335961c5a302b0e2a9d5886f9a9",
+    "hash": "c17a4d3ee4e988b52c5bf10a4577f42d79b80dec3c8c545d3afa65cc0d6204c4"
   },
   {
-    "id": "4ca0356e-11ff-5ea9-aa77-3a9fd88a2cec",
-    "seq": 161,
+    "id": "14d2c46e-b3d0-5f28-831b-0c8ca1556f6f",
+    "seq": 157,
     "occurredAt": "2026-09-25T08:30:00Z",
     "actor": {
       "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
@@ -5150,13 +5024,13 @@
       "mfa": true
     },
     "reason": null,
-    "correlationId": "fx-0161",
-    "prevHash": "7d7089f9255e36543879b90d4d59da885b34562f773a62bede9e12d6c2163e13",
-    "hash": "6d720eace079e4e70359211215c84a8956d259b582eb3a83e27807ccc3c5487a"
+    "correlationId": "fx-0157",
+    "prevHash": "c17a4d3ee4e988b52c5bf10a4577f42d79b80dec3c8c545d3afa65cc0d6204c4",
+    "hash": "552fd912f70fa4b8e0bbcfabff650594e1e6638f8fa33d9fb51f3195d5c81922"
   },
   {
-    "id": "e69da769-70f0-55eb-bce2-62c855f578aa",
-    "seq": 162,
+    "id": "2a0f8ecc-a8b4-508d-852c-e64e29074a24",
+    "seq": 158,
     "occurredAt": "2026-09-25T08:40:00Z",
     "actor": {
       "userId": null,
@@ -5183,13 +5057,13 @@
       "contactEmail": "rodrigo@altocamargo.test"
     },
     "reason": null,
-    "correlationId": "fx-0162",
-    "prevHash": "6d720eace079e4e70359211215c84a8956d259b582eb3a83e27807ccc3c5487a",
-    "hash": "f48ae2b133e9e796588671012600685c9a72955e148841efc7fcd859c4935618"
+    "correlationId": "fx-0158",
+    "prevHash": "552fd912f70fa4b8e0bbcfabff650594e1e6638f8fa33d9fb51f3195d5c81922",
+    "hash": "2a845d7806ac2fa6f1dae3c6483937cf23792dbacf15b3082e16345a5862b9f1"
   },
   {
-    "id": "f60946d5-d789-5a4b-9f12-dab33791ce10",
-    "seq": 163,
+    "id": "6f6d94cb-57c4-5ed9-9f35-bf5ec67cb0b4",
+    "seq": 159,
     "occurredAt": "2026-09-25T09:00:00Z",
     "actor": {
       "userId": "23d99814-3526-54f6-8b5f-5807a08506a2",
@@ -5216,8 +5090,8 @@
       "expiresAt": "2026-09-28T09:00:00Z"
     },
     "reason": "Pedido de la dueña por el canal de soporte",
-    "correlationId": "fx-0163",
-    "prevHash": "f48ae2b133e9e796588671012600685c9a72955e148841efc7fcd859c4935618",
-    "hash": "2dc6553acb99840c2006925eb49685ab4e2c1dc48e66d5ed4c1353b046a93691"
+    "correlationId": "fx-0159",
+    "prevHash": "2a845d7806ac2fa6f1dae3c6483937cf23792dbacf15b3082e16345a5862b9f1",
+    "hash": "5a86e13e2e2f82972d799b2eff254ff8d13cbb258025aa4ad1d0896e3a49d51c"
   }
 ]

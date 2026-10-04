@@ -563,22 +563,25 @@ describe('escenarios en los dominios de la Ola 1', () => {
 describe('ERP: lo que cambió con la Ola 1 y el backend O0-BE-2', () => {
   it('una cuba pasa una sola vez a crianza → 409 FERMENTATION_TANK_ALREADY_TRANSFERRED', async () => {
     const aging = F.wineAging.find((a) => a.wineryId === ALTOS.id)!
-    const res = await call('/v1/wine-aging', { token: staticToken('altos_enologa'), body: { fermentationTankId: aging.fermentationTankId, containerType: 'Barrica', plannedMonths: 6 } })
+    const res = await call('/v1/wine-aging', { token: staticToken('altos_enologa'), body: { fermentationTankId: aging.fermentationTankId, containerType: 'Barrica', plannedMonths: 6, volumeLiters: 100 } })
     expect(errorOf(res.json).code).toBe('FERMENTATION_TANK_ALREADY_TRANSFERRED')
   })
 
-  it('balance de masa y embotellado sin origen → 422 VALIDATION_ERROR con los campos del backend', async () => {
-    const tank = F.fermentationTanks.find((t) => t.wineryId === CINTI.id)!
-    const mass = await call('/v1/production-batches/distillation', {
+  it('balance de masa (422 TRC_MASS_BALANCE_EXCEEDED desde la Ola 2) y fuente del embotellado sin crianza ni destilación → 422 VALIDATION_ERROR', async () => {
+    // Destilación abierta de «Singani El Molino 2026» (5.800 L de entrada): cortes mayores que la entrada.
+    const open = F.productionBatches.find((p) => p.wineryId === CINTI.id && !p.processEndDate)!
+    const mass = await call(`/v1/production-batches/${open.id}/close`, {
       token: staticToken('cvj_enologa'),
-      body: { fermentationTankId: tank.id, equipmentIdentifier: 'AL-1', processStartDate: '2026-09-25', inputVolumeLiters: 1000, outputVolumeLiters: 900, wasteVolumeLiters: 200 },
+      body: { processEndDate: '2026-09-25', cuts: { headsLiters: 400, heartLiters: 5000, tailsLiters: 600 }, heartAbvPercent: 60 },
     })
-    expect(errorOf(mass.json)).toMatchObject({ code: 'VALIDATION_ERROR', details: [{ field: 'outputVolumeLiters' }] })
-    const noSource = await call('/v1/bottling', {
+    expect(mass.status).toBe(422)
+    expect(errorOf(mass.json)).toMatchObject({ code: 'TRC_MASS_BALANCE_EXCEEDED', details: [{ field: 'cuts', expected: 5800, actual: 6000, meta: { inputLiters: 5800, outputLiters: 6000 } }] })
+    const noSource = await call(`/v1/lots/${open.lotId}/bottling`, {
       token: staticToken('cvj_enologa'),
-      body: { productType: 'SINGANI', finalAlcoholAbv: 40, totalBottlesPackaged: 10, packagingFormatCl: 75, bottlingDate: '2026-09-25' },
+      body: { sources: [{ liters: 10 }], finalAlcoholAbv: 40, totalBottlesPackaged: 10, packagingFormatCl: 75, bottlingDate: '2026-09-25' },
     })
-    expect(errorOf(noSource.json).details!.map((d) => d.field)).toEqual(['wineAgingBatchId', 'productionBatchId'])
+    expect(noSource.status).toBe(422)
+    expect(errorOf(noSource.json)).toMatchObject({ code: 'VALIDATION_ERROR', details: [{ field: 'sources.0.wineAgingBatchId' }] })
   })
 
   it('Idempotency-Key en los POST de alta: repetición, otro cuerpo y clave inválida', async () => {

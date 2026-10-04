@@ -38,6 +38,9 @@ export function startMockWorker(options: StartMockWorkerOptions = {}): Promise<S
   if (typeof window === 'undefined') {
     return Promise.reject(new Error('startMockWorker solo puede ejecutarse en el navegador'))
   }
+  // `?mock=<escenario>` se lee ya, antes de cualquier navegación: así queda guardado aunque la
+  // primera petición llegue desde otra página sin el parámetro.
+  getScenario()
   starting ??= (async () => {
     const { setupWorker } = await import('msw/browser')
     const { serviceWorkerUrl, quiet, onUnhandledRequest, exposeGlobal, ...handlerOptions } = options

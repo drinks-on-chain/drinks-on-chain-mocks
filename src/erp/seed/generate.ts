@@ -1,7 +1,6 @@
 import { addMonthsClamped, day, dayFromIso, dayParts, isoAt, REFERENCE_DAY, type Day } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
-import { buildDagGraph, buildSessionResponse } from '../derive'
-import { deriveLotViews, deriveRestStatus } from '../lot-view'
+import { buildSessionResponse } from '../derive'
 import { PLATFORM_ROLE_BY_KEY, WINERY_CODES } from '../catalog'
 import type {
   BatchLabAnalysisResponse,
@@ -10,11 +9,9 @@ import type {
   FermentationLogRecord,
   FermentationTankResponse,
   HarvestBatchResponse,
-  LotView,
   MemberRole,
   MockUser,
   ProductionBatchResponse,
-  DagGraph,
   RestStatusResponse,
   SessionResponse,
   TerroirResponse,
@@ -64,10 +61,23 @@ export interface ErpFixtureSet {
   'production-rest-status.json': RestStatusResponse[]
   'bottling.json': BottlingBatchResponse[]
   'lab-analyses.json': BatchLabAnalysisResponse[]
-  'traceability-public.json': Record<string, DagGraph>
-  'lots-view.json': LotView[]
 }
 export type ErpFixtureName = keyof ErpFixtureSet
+
+/** Reposo de una destilación en las filas base (`rest_status` de `generate.py`: 180 días desde el fin). */
+function baseRestStatus(p: ProductionBatchResponse, today: Day): RestStatusResponse {
+  const elapsed = today - dayFromIso(p.processEndDate ?? p.processStartDate)
+  const remaining = Math.max(0, 180 - elapsed)
+  return {
+    id: p.id,
+    restStatus: p.restStatus,
+    processEndDate: p.processEndDate ?? null,
+    mandatoryRestUntil: p.mandatoryRestUntil ?? null,
+    daysElapsed: Math.max(0, elapsed),
+    daysRemaining: remaining,
+    isRestCompleted: remaining === 0,
+  }
+}
 
 export function generateErpFixtures(): ErpFixtureSet {
   const rng = new PyRandom(20260925)
@@ -425,6 +435,8 @@ export function generateErpFixtures(): ErpFixtureSet {
         null,
       ]),
       createdAt: isoAt(intake, 9, 45),
+      lotId: null,
+      terroirSnapshot: null,
     })
   }
   const H: Record<string, HarvestBatchResponse> = {}
@@ -443,11 +455,10 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['t06', 'h06', 'TK-RED-01', 10000, 5800, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 3), day(2025, 3, 24)],
     ['t07', 'h08', 'TK-RED-02', 10000, 5300, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 21), day(2025, 4, 11)],
     ['t08', 'h09', 'TK-RED-03', 12000, 6700, 'WINE_AGING', 'TRANSFERRED', day(2025, 3, 7), day(2025, 3, 28)],
-    ['t09', 'h07', 'TK-06', 10000, 0, 'WINE_AGING', 'CLEANED', day(2026, 1, 5), day(2026, 1, 6)],
-    ['t10', 'h11', 'TK-07', 8000, 4200, 'OTHER', 'FILLING', day(2026, 9, 24), null],
-    ['t11', 'h01', 'TK-08', 8000, 6300, 'SINGANI_DIST', 'COMPLETED', day(2026, 3, 7), day(2026, 4, 2)],
-    ['t12', 'h02', 'TK-09', 15000, 0, 'SINGANI_DIST', 'CLEANED', day(2025, 3, 11), day(2025, 4, 13)],
-    ['t13', 'h06', 'TK-RED-04', 10000, 0, 'WINE_AGING', 'CLEANED', day(2025, 3, 3), day(2025, 3, 25)],
+    // t09 (TK-06), t12 (TK-09) y t13 (TK-RED-04) se retiraron en el cierre H2: CLEANED con 0 L de 0 kg (como el backend).
+    // t10 (TK-07, FILLING con el pesaje h11 en cuarentena) se retiró en la Ola 2: la uva sin dictamen
+    // aprobado no entra a un tanque (EA-04; mismas correcciones que `src/seed/corrections.ts` del backend).
+    ['t11', 'h01', 'TK-08', 8000, 6300, 'SINGANI_DIST', 'TRANSFERRED', day(2026, 3, 7), day(2026, 4, 2)],
     ['t14', 'h07', 'TK-10', 5000, 3900, 'WINE_AGING', 'FERMENTING', day(2026, 3, 11), null],
   ]
   const tanks: FermentationTankResponse[] = []
@@ -469,6 +480,8 @@ export function generateErpFixtures(): ErpFixtureSet {
       startDate: isoAt(start, 14, 30),
       endDate: end !== null ? isoAt(end, 14, 30) : null,
       createdAt: isoAt(start, 14, 35),
+      lotId: null,
+      finalVolumeLiters: null,
     })
     if (status === 'FERMENTING' || status === 'COMPLETED' || status === 'TRANSFERRED') {
       const last = end ?? TODAY
@@ -534,7 +547,7 @@ export function generateErpFixtures(): ErpFixtureSet {
   const AGING: AgingRow[] = [
     ['a01', 't06', 'Roble francés grano fino (Allier), tostado medio', 'BAR-FR-2024-01', 1, 3375, 12, day(2025, 11, 3), 'AGING'],
     ['a02', 't07', 'Roble americano, tostado medio plus', 'BAR-US-2024-07', 2, 3150, 8, day(2026, 6, 30), 'AGING'],
-    ['a03', 't04', 'Roble francés, tostado ligero', 'BAR-FR-2023-11', 3, 2925, 10, day(2025, 4, 1), 'READY'],
+    ['a03', 't04', 'Roble francés, tostado ligero', 'BAR-FR-2023-11', 3, 2925, 10, day(2025, 4, 1), 'BOTTLED'],
     ['a04', 't08', 'Roble francés (Nevers), tostado medio', 'BAR-FR-2023-04', 1, 4050, 12, day(2025, 4, 10), 'BOTTLED'],
   ]
   const agings: WineAgingResponse[] = []
@@ -554,6 +567,9 @@ export function generateErpFixtures(): ErpFixtureSet {
       agingStatus: status,
       notes: 'Cava subterránea a 14 °C y 75 % HR',
       createdAt: isoAt(start, 10),
+      lotId: null,
+      startDate: null,
+      containerCount: null,
     })
   }
   const AG: Record<string, WineAgingResponse> = {}
@@ -568,7 +584,8 @@ export function generateErpFixtures(): ErpFixtureSet {
     ['p02', 't02', 'Alambique de cobre Charentais AL-01', day(2025, 5, 20), day(2025, 5, 25), 10000, 1750, 570, 70.2, 'BOTTLED'],
     ['p03', 't03', 'Alambique de cobre AL-02', day(2025, 5, 2), day(2025, 5, 4), 6100, 980, 290, 65.4, 'BOTTLED'],
     ['p04', 't11', 'Alambique de cobre AL-02', day(2026, 9, 10), day(2026, 9, 12), 6300, 900, 260, 62.1, 'RESTING'],
-    ['p05', 't03', 'Alambique de cobre AL-02', day(2026, 3, 20), day(2026, 3, 22), 3000, 450, 120, 64.0, 'READY'],
+    // p05 (segunda destilación de TK-02, marzo de 2026) se retiró en la Ola 2: el tanque ya se había
+    // destilado entero y su lote estaba embotellado (un embotellado por lote, S-10).
   ]
   const productions: ProductionBatchResponse[] = []
   for (const [key, tkey, equip, start, end, vin, vout, waste, abv, status] of DIST) {
@@ -595,12 +612,18 @@ export function generateErpFixtures(): ErpFixtureSet {
       },
       notes: 'Destilación lenta a fuego directo con separación estricta de cabezas',
       createdAt: isoAt(start, 10),
+      lotId: null,
+      headsLiters: null,
+      heartLiters: null,
+      tailsLiters: null,
+      vinasseLiters: null,
+      heartAbvPercent: null,
     })
   }
   const PR: Record<string, ProductionBatchResponse> = {}
   for (const [key] of DIST) PR[key] = productions.find((p) => p.id === uid(`production:${key}`))!
 
-  const restStatuses = productions.map((p) => deriveRestStatus(p, { today: REFERENCE_DAY }))
+  const restStatuses = productions.map((p) => baseRestStatus(p, TODAY))
 
   // -------------------------------------------------------------------------
   // 8. Embotellado (BottlingBatchResponseDto)
@@ -608,7 +631,7 @@ export function generateErpFixtures(): ErpFixtureSet {
   type BottlingRow = [string, 'aging' | 'production', string, BottlingBatchResponse['productType'], number, number | null, number, number, string, Day, boolean, number, string]
   const BOTTLING: BottlingRow[] = [
     ['b01', 'production', 'p02', 'SINGANI', 40.0, 1321, 4080, 75, 'Vidrio extra-flint 750 ml', day(2026, 3, 1), true, 1, 'cvj_enologa'],
-    ['b02', 'production', 'p03', 'SINGANI', 40.0, 620, 2140, 75, 'Vidrio flint 750 ml', day(2026, 2, 10), true, 2, 'cvj_enologa'],
+    ['b02', 'production', 'p03', 'SINGANI', 40.0, 630, 2140, 75, 'Vidrio flint 750 ml', day(2026, 2, 10), true, 2, 'cvj_enologa'],
     ['b03', 'aging', 'a04', 'WINE', 14.2, null, 5320, 75, 'Bordelesa cónica verde antiguo 750 ml', day(2026, 5, 12), true, 1, 'altos_enologa'],
     ['b04', 'aging', 'a03', 'WINE', 13.8, null, 3860, 75, 'Borgoña 750 ml', day(2026, 9, 20), false, 3, 'cvj_enologa'],
   ]
@@ -637,6 +660,7 @@ export function generateErpFixtures(): ErpFixtureSet {
       anchoredAt: anchored ? isoAt(addDays(bdate, 1), 12) : null,
       qrBatchUrl: `https://app.drinksonchain.bo/b/${lot}`,
       createdAt: isoAt(bdate, 16),
+      lotId: null,
     })
   }
   const BT: Record<string, BottlingBatchResponse> = {}
@@ -682,17 +706,12 @@ export function generateErpFixtures(): ErpFixtureSet {
       conformsToUsaStandards: b.productType === 'SINGANI',
       reviewedByMemberId: uid(`member:${rev}`),
       createdAt: isoAt(addDays(bdate, 3), 15),
+      lotId: null,
+      methanolMg100mlAa: null,
+      conformityStatus: null,
+      supersededAt: null,
     })
   }
-
-  // -------------------------------------------------------------------------
-  // 10. Trazabilidad pública y 11. vista derivada LotView
-  // -------------------------------------------------------------------------
-  const chain = { wineries, terroirs, harvestBatches: harvests, tanks, wineAgings: agings, productionBatches: productions, bottlings, labAnalyses: labs }
-  const publicPassports: Record<string, DagGraph> = {}
-  for (const b of bottlings) publicPassports[b.internationalLotCode] = buildDagGraph(b, chain)
-
-  const lots = deriveLotViews(chain, { today: REFERENCE_DAY })
 
   return {
     'wineries.json': wineries,
@@ -709,7 +728,5 @@ export function generateErpFixtures(): ErpFixtureSet {
     'production-rest-status.json': restStatuses,
     'bottling.json': bottlings,
     'lab-analyses.json': labs,
-    'traceability-public.json': publicPassports,
-    'lots-view.json': lots,
   }
 }

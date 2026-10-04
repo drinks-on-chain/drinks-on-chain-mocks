@@ -190,5 +190,18 @@
     "regulatoryAuthCode": "SENASAG-REG-ADD-2024-112",
     "appliedAt": "2026-03-12T12:00:00Z",
     "notes": "Adición al primer tercio de fermentación"
+  },
+  {
+    "id": "0e1969f4-d259-5a59-a736-ee6eadc50cee",
+    "fermentationTankId": "50fb50c9-1ce4-538f-a153-975c6bfb21f4",
+    "treatmentType": "SO2_ADDITION",
+    "additiveName": "Metabisulfito de potasio grado alimentario",
+    "additiveSupplier": "Laffort Oenologie",
+    "dosageAppliedGPerHl": 3,
+    "totalAppliedG": 363,
+    "regulatoryAuthCode": "SENASAG-REG-ADD-2024-88",
+    "appliedAt": "2026-03-10T17:00:00Z",
+    "notes": "Sulfitado inicial",
+    "authorizedByMemberId": "21af9548-86fa-5c19-86c1-16133a906b64"
   }
 ]

@@ -78,5 +78,15 @@
     "after": 30,
     "reason": "Se vuelve al estándar tras la prueba.",
     "legalException": false
+  },
+  {
+    "key": "trazabilidad.vino.crianzaMinimaMeses",
+    "at": "2026-09-15T10:00:00Z",
+    "by": "Jorge Salinas",
+    "scope": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "before": 0,
+    "after": 6,
+    "reason": "La bodega no saca al mercado tintos con menos de seis meses de crianza.",
+    "legalException": false
   }
 ]

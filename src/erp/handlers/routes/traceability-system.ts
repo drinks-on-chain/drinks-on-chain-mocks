@@ -1,8 +1,7 @@
-import { buildDagGraph, type PassportChain } from '../../derive'
+import { sha256, toHex } from '../../../shared/crypto'
 import {
   UPLOAD_MAX_BYTES,
   UPLOAD_MAX_IMAGE_BYTES,
-  type BottlingBatchResponse,
   type HealthStatus,
   type Liveness,
   type SignedUrlResponse,
@@ -11,26 +10,10 @@ import {
 } from '../../schemas'
 import { anyUser, type AuthContext } from '../auth-context'
 import { CLOCK_START, getErpDb, newId, tick } from '../db'
-import { ApiError, badRequest, fieldError, invalid, notFound } from '../errors'
+import { ApiError, badRequest, fieldError, invalid } from '../errors'
 import { created, ok, strParam, type RouteSpec } from '../http'
-import { findBottling } from './bottling-lab'
 
-// /v1/traceability/*, /v1/uploads*, /v1/health*
-
-function chainOf(): PassportChain {
-  const db = getErpDb()
-  return {
-    wineries: db.wineries,
-    terroirs: db.terroirs,
-    harvestBatches: db.harvestBatches,
-    tanks: db.tanks,
-    wineAgings: db.wineAgings,
-    productionBatches: db.productionBatches,
-    labAnalyses: db.labAnalyses,
-  }
-}
-
-const dagOf = (b: BottlingBatchResponse) => buildDagGraph(b, chainOf())
+// /v1/uploads*, /v1/health*
 
 // ----- Archivos (almacenamiento privado con URL firmada, como `UploadsService` del backend) -----
 
@@ -69,24 +52,6 @@ function signedUrl(key: string): SignedUrlResponse {
 
 export const traceabilitySystemRoutes: RouteSpec[] = [
   {
-    method: 'get',
-    path: '/v1/traceability/dag/:bottlingBatchId',
-    access: anyUser,
-    // El backend no filtra por bodega (cualquier sesión); los mocks sí: una bodega activa solo ve sus lotes.
-    handle: ({ auth, params }) => ok(dagOf(findBottling(auth.organizationType === 'WINERY' ? auth : null, params.bottlingBatchId!))),
-  },
-  {
-    method: 'get',
-    path: '/v1/traceability/public/:lotCode',
-    access: 'public',
-    handle({ params }) {
-      const code = decodeURIComponent(params.lotCode!)
-      const b = getErpDb().bottlings.find((x) => x.internationalLotCode.toUpperCase() === code.toUpperCase() || x.id === code)
-      if (!b) throw notFound(`Lote de embotellado con identificador "${code}" no encontrado`)
-      return ok(dagOf(b))
-    },
-  },
-  {
     method: 'post',
     path: '/v1/uploads',
     access: anyUser,
@@ -117,11 +82,15 @@ export const traceabilitySystemRoutes: RouteSpec[] = [
       const now = new Date(Date.parse(tick()))
       const month = String(now.getUTCMonth() + 1).padStart(2, '0')
       const key = `${prefix}/${folder}/${now.getUTCFullYear()}/${month}/${newId('upload')}${detected.extension}`
+      // Huella del contenido: la que guardan los registros de la trazabilidad junto a la `key`.
+      const hash = toHex(sha256(bytes))
+      getErpDb().uploads[key] = hash
       const upload: UploadResponse = {
         ...signedUrl(key),
         originalName: (file.name || 'archivo').replace(/[\r\n"]/g, '').slice(0, 255),
         mimeType: detected.mimeType,
         sizeBytes: bytes.length,
+        sha256: hash,
       }
       return created(upload)
     },
