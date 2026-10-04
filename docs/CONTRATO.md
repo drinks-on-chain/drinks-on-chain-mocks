@@ -370,6 +370,8 @@ pnpm test
 
 El resumen del script debe decir «Mismas operaciones que antes» (158). Si añade o quita alguna, es un cambio del backend posterior a `9ca8111`: ajusta los esquemas y anótalo aquí.
 
+**Hecho en 0.5.0 (04-10-2026)**: el servidor ya sirve el cierre (`b82beed`, `v0.2.0`) y `pnpm openapi:pull` contra él dio «Mismas operaciones que antes» (158) y un documento idéntico; la prueba de contrato pasa contra él. `openapi/erp.json` vuelve a salir del servidor.
+
 ### 12.2 Lo retirado y cómo responden los mocks
 
 | Retirado | Respuesta de los mocks | En su lugar |

@@ -2,6 +2,48 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.5.0] · 2026-10-04
+
+**Ola 2 · ERP confiable y dominio público** (`plan/contratos/o2-erp-confiable.md`). Versión estable que reúne `rc.1`–`rc.3`. El contrato es el OpenAPI que sirve el backend desplegado (`b82beed`, su `v0.2.0`: 137 rutas, 158 operaciones, 266 esquemas, sin rutas legadas ni operaciones con 501), traído otra vez con `pnpm openapi:pull` desde el servidor: es idéntico al que `rc.3` fijó desde la rama de cierre. Los pasaportes públicos de los nueve lotes embotellados de los fixtures coinciden con los del servidor tras regenerar su semilla, salvo lo que se indica en «Fixtures». Detalle de cada candidata en sus entradas de abajo y en [docs/CONTRATO.md](docs/CONTRATO.md) §10–§12.
+
+### Respecto a `rc.3`
+
+- `openapi/erp.json` vuelve a salir del servidor (`pnpm openapi:pull -- https://136.243.223.39.sslip.io/docs-json`); sin cambios de operaciones ni de esquemas.
+- Ningún cambio de código ni de fixtures.
+
+### Qué trae la Ola 2 (resumen)
+
+- **Lote como entidad del servidor** (`/v1/lots*`): instantánea de reglas, etapa derivada, candados de crianza y reposo, D.O. calculada, proyección de botellas, incidencias; línea de tiempo, grafo, balance de masas, panel de la bodega y reporte de producción (JSON y CSV).
+- **Reglas en el servidor** con códigos `TRC_…` y `details` ampliados (`code`, `rule`, `expected`, `actual`, `meta`): dictamen fitosanitario aparte y bloqueante, tanques por acciones (`start`, `complete`, `clean`; crianza y destilación solo desde un tanque `COMPLETED`), balances del embotellado, un embotellado por lote, fechas coherentes, correcciones compensatorias con marcas en los recursos y la plataforma en solo lectura.
+- **Códigos de botella** (uno por botella, CSV y ZIP, anulación con o sin sustituto), **laboratorio** con conformidad calculada y reanálisis, **adjuntos** y **expediente** (`doc-dossier/1`, huella SHA-256 y raíz Merkle de los códigos).
+- **Dominio público** sin sesión: pasaporte de lote y de botella, bytes canónicos del expediente, adjuntos públicos y directorio de bodegas, con `ETag`, 404/422/429 del backend; **borrador del catálogo** (`/v1/public/collections`, fuera del OpenAPI, `X-Mock-Draft`).
+- **Fixtures**: 21 lotes en todas las etapas, con los mismos UUID v5, referencias y códigos de lote que la semilla del backend; «Singani Gran Reserva 2026» (`SINGANI_CASE`, `CVJ-2026-SINGANI-004`) con el expediente cerrado; `PASSPORT_CASES` para cada caso del visor; escenarios de datos de `/__mocks` y `pasaporte-saturado`; los handlers sirven los archivos de `/mocks/uploads`.
+- **Retirado en el cierre H2**: las cinco rutas legadas, los campos de entrada de `RETIRED_INPUT_FIELDS` (422 «property … should not exist»), `TRC_PRODUCT_TYPE_MISMATCH`, `LotView`/`deriveLotViews`/`deriveRestStatus`, el grafo DAG y `lots-view.json`/`traceability-public.json`.
+
+### Guía de migración desde `0.4.1`
+
+**ERP** (de la Ola 1):
+
+1. El lote es del servidor: `GET /v1/lots` y `LotSchema` en lugar de `LotView`/`deriveLotViews`; el reposo, en `production.lock` o `GET …/rest-status`.
+2. Dictamen con `POST /v1/harvest-batches/{id}/phyto-decisions` (final; `notes` obligatorio al rechazar o poner en cuarentena); el pesaje no lleva `phytosanitaryStatus` ni los campos planos de madurez (usa `maturity` o `POST …/maturity-analyses`).
+3. Tanque con `inputs` y `volumeFilledLiters`; transiciones por acciones (`…/start`, `…/complete` con `destination`, `…/clean`). Crianza (`volumeLiters` obligatorio, mínimo de meses de la instantánea) y destilación (`inputVolumeLiters`; cierre con `POST …/{id}/close` y sus cortes) solo desde un tanque `COMPLETED`.
+4. Embotellado con `POST /v1/lots/{id}/bottling` (vista previa en `…/preview`, tipo derivado, `labelDesignKey`); laboratorio con `POST /v1/lots/{id}/lab-analyses` (`laboratoryReportKey` de `POST /v1/uploads`, conformidad calculada, un reanálisis sustituye al anterior); grafo con `GET /v1/lots/{id}/graph`.
+5. Errores: muestra los `TRC_…` con `details[].expected`/`actual`/`meta` (no con el texto del mensaje); la plataforma recibe 403 `TRC_PLATFORM_READ_ONLY` en cualquier escritura.
+6. Tipos de respuesta con campos nuevos obligatorios (`lotId`, `terroirSnapshot`, marcas de corrección, `availableLiters`, `transitions`, `conformityStatus`, `UploadResponse.sha256`…): quien los construya a mano en pruebas o historias debe añadirlos. Los registros anulados se devuelven marcados (`voided: true`).
+7. Detalle punto por punto: «Cambiado» de `rc.1` y las guías de `rc.2` y `rc.3`.
+
+**Marketplace**: construido sobre `rc.1`–`rc.3`; desde `rc.3` no cambia nada del pasaporte ni del catálogo. Si queda algo del grafo legado (`GET /v1/traceability/public/{lotCode}`, `PublicPassportSchema`), pasa a `GET /v1/public/passports/{code}` y `PublicLotPassportSchema`.
+
+**Backoffice**: sin cambios de esquemas, tipos ni rutas de la plataforma ni de la lista de espera. Cambian el límite de metanol por defecto (200 mg/100 ml a.a., era 300), los fixtures de configuración (un ajuste por bodega más) y la bitácora (159 eventos, con otros hashes), las acciones del ERP que aparecen en la bitácora, `ScenarioName` (usa `SCENARIOS` y `SCENARIO_DESCRIPTIONS`) y la plataforma, que solo lee la trazabilidad. Lista completa en la guía de `rc.3`.
+
+### Fixtures frente al servidor
+
+Diferencias conocidas con los datos del servidor de desarrollo (las mismas en los pasaportes públicos):
+
+- Los mocks fijan 6 meses de crianza mínima en Altos de Calamuchita (para probar `TRC_AGING_BELOW_MINIMUM`); la semilla del backend no siembra ajustes por bodega, así que allí es 0.
+- La huella del expediente de `CVJ-2026-SINGANI-004` difiere (el backend genera los códigos de botella al sembrar) y el servidor no tiene archivos adjuntos (`publicAttachments` vacío).
+- El servidor devuelve los instantes con milisegundos (`.000Z`).
+
 ## [0.5.0-rc.3] · 2026-10-02
 
 **Cierre H2 de la Ola 2: sin rutas legadas ni `LotView`.** Candidata a la estable `0.5.0`. El contrato es el OpenAPI de la **fase de cierre** del backend (`drinks-on-chain-back`, rama `feat/o2-be-contraer`, `9ca8111`: 137 rutas, 158 operaciones, 266 esquemas, ninguna obsoleta), **todavía sin desplegar**: el servidor de desarrollo sigue sirviendo las 163 de `rc.2` hasta que se actualice. Con los mocks activos (MSW) las apps ven ya el contrato final; contra el servidor, las rutas y los campos retirados siguen respondiendo hasta el despliegue. Detalle y cómo volver a `pnpm openapi:pull` en [docs/CONTRATO.md](docs/CONTRATO.md) §12.

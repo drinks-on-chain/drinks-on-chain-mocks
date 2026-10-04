@@ -14,17 +14,17 @@ No hace falta registro de paquetes: cada versión se publica como GitHub Release
 # Estable (Ola 1 + lista de espera)
 pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.1/drinks-on-chain-mocks-0.4.1.tgz
 # Pre-release de la Ola 2 (ERP v2 y dominio público)
-pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.5.0-rc.3/drinks-on-chain-mocks-0.5.0-rc.3.tgz
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.5.0/drinks-on-chain-mocks-0.5.0.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
 ```json
 "dependencies": {
-  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.5.0-rc.3/drinks-on-chain-mocks-0.5.0-rc.3.tgz"
+  "@drinks-on-chain/mocks": "https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.5.0/drinks-on-chain-mocks-0.5.0.tgz"
 }
 ```
 
-Pasar del ERP de la Ola 1 (0.4.1) a `0.5.0`: guía de migración en el [CHANGELOG](CHANGELOG.md) (0.5.0-rc.1, «Cambiado»). De `rc.1` a `rc.2`: la lista de lo que obliga a tocar código está en la entrada 0.5.0-rc.2. De `rc.2` a `rc.3` (cierre H2: sin rutas legadas ni `LotView`), y lo que le cambia al Backoffice al saltar de 0.4.1 a 0.5.0: «Guía de migración» de la entrada 0.5.0-rc.3.
+Pasar de 0.4.1 a `0.5.0` (ERP, Marketplace y Backoffice): «Guía de migración desde 0.4.1» de la entrada 0.5.0 del [CHANGELOG](CHANGELOG.md); el detalle, en «Cambiado» de 0.5.0-rc.1. De `rc.1` a `rc.2`: la lista de lo que obliga a tocar código está en la entrada 0.5.0-rc.2. De `rc.2` a `rc.3` (cierre H2: sin rutas legadas ni `LotView`), y lo que le cambia al Backoffice al saltar de 0.4.1 a 0.5.0: «Guía de migración» de la entrada 0.5.0-rc.3.
 
 ## Puntos de entrada
 
@@ -43,7 +43,7 @@ import { LotSchema, pagedSchema, type Lot } from '@drinks-on-chain/mocks'
 const lots: Lot[] = pagedSchema(LotSchema).parse(data).items // GET /v1/lots
 ```
 
-El lote es una entidad del servidor desde la Ola 2 (`GET /v1/lots`, `LotSchema`). La vista derivada de 0.1–0.4 (`LotView`, `deriveLotViews`, `deriveRestStatus`, `lots-view.json`) se retiró en 0.5.0-rc.3 con el cierre H2: el reposo de una destilación está en `production.lock` y en `GET /v1/production-batches/{id}/rest-status`.
+El lote es una entidad del servidor desde la Ola 2 (`GET /v1/lots`, `LotSchema`). La vista derivada de 0.1–0.4 (`LotView`, `deriveLotViews`, `deriveRestStatus`, `lots-view.json`) se retiró con el cierre H2 (0.5.0-rc.3): el reposo de una destilación está en `production.lock` y en `GET /v1/production-batches/{id}/rest-status`.
 
 ## Conectar MSW en una app Next.js 16 (App Router)
 
@@ -147,7 +147,7 @@ afterAll(() => server.close())
 - Las acciones del back office sobre terceros exigen `reason` (422 con `details[{ field: 'reason' }]`); toda escritura deja un evento encadenado por hash con la app de `X-Client-App`.
 - El estado vive en memoria y, en el navegador, en `localStorage` (`doc-mocks:state`), así el recorrido solicitud → aprobación → invitación → activación sobrevive a una recarga. Cada app tiene su propio estado; los enlaces de invitación que emiten los mocks funcionan también en otra app (se importan). `advanceMockClock(ms)` adelanta el reloj (caducidades). Decisiones y datos de demo: [docs/CONTRATO.md §6](docs/CONTRATO.md).
 
-### Ola 2 · ERP v2 y dominio público (`plan/contratos/o2-erp-confiable.md`, desde 0.5.0-rc.1; alineado con el backend en rc.2; cierre H2 en rc.3)
+### Ola 2 · ERP v2 y dominio público (`plan/contratos/o2-erp-confiable.md`, estable en 0.5.0)
 
 - **Lote** (`/v1/lots`): se crea solo (`POST /v1/lots`) o con el primer pesaje (`newLot`); lleva la **instantánea de reglas** de la bodega (un cambio posterior en el back office no le afecta), su etapa derivada (`ORIGIN`, `HARVEST`, `FERMENTING`, `AGING`, `DISTILLING`, `RESTING`, `BOTTLED`, `CERTIFIED`, `REJECTED`, `DISCARDED`), candados, D.O. calculada, proyección de botellas e incidencias. Vistas: `…/timeline`, `…/graph`, `…/balance`, `GET /v1/traceability/dashboard` y `…/reports/production` (JSON o `?format=csv`).
 - **Reglas en el servidor**, con el motivo en `details[0]` (`code`, `rule`, `expected`, `actual`, `meta`): dictamen fitosanitario aparte del pesaje y bloqueante (`TRC_PHYTO_IN_CREATE`, `TRC_PHYTO_NOT_APPROVED`, `TRC_PHYTO_DECISION_FINAL`), D.O. calculada (`TRC_DO_TERROIR_NOT_ELIGIBLE`, `TRC_DO_NOT_ELIGIBLE`), tanques por acciones (`…/start`, `…/complete`, `…/clean`), crianza y destilación solo desde un tanque completado (`TRC_TANK_NOT_COMPLETED`), crianza mínima (`TRC_AGING_BELOW_MINIMUM`; Altos fija 6 meses), candados (`TRC_LOCK_NOT_RELEASED` con `meta.unlockDate` y `meta.daysRemaining`), balance del embotellado (`TRC_BOTTLING_EXCEEDS_VOLUME`, `TRC_ALCOHOL_BALANCE_EXCEEDED`, `TRC_BOTTLING_LOSS_ABOVE_TOLERANCE`), un embotellado por lote (`TRC_LOT_ALREADY_BOTTLED`) y fechas coherentes (`TRC_DATE_IN_FUTURE`, `TRC_DATE_BEFORE_PREVIOUS_STAGE`). `POST /v1/lots/{id}/bottling/preview` devuelve el balance y las infracciones sin escribir.
@@ -276,7 +276,7 @@ pnpm openapi:pull -- <url|ruta>   # copia un OpenAPI 3 a openapi/erp.json y resu
 Estructura:
 
 ```
-openapi/erp.json          OpenAPI del backend (fuente de verdad; pnpm openapi:pull; en rc.3, fijado desde la rama de cierre: docs/CONTRATO.md §12.1)
+openapi/erp.json          OpenAPI del backend (fuente de verdad; pnpm openapi:pull)
 openapi/pendientes.json   lo que adelanta un contrato de ola y el OpenAPI aún no tiene
 scripts/openapi-pull.mjs  pnpm openapi:pull
 src/index.ts              entrada raíz (sin msw)
