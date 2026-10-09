@@ -1,0 +1,3735 @@
+[
+  {
+    "id": "ec44b0ee-dd59-5307-bd9d-4efad98a3be5",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo"
+    },
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "lot": {
+      "reference": "CVJ-L2026-005",
+      "lotCode": "CVJ-2026-SINGANI-004",
+      "name": "Singani Gran Reserva 2026",
+      "productType": "SINGANI",
+      "stage": "ANCHORED",
+      "harvestYear": 2026,
+      "estimatedBottles": 2950,
+      "bottles": 2950
+    },
+    "kind": "INITIAL",
+    "status": "APPROVED",
+    "quantity": 60,
+    "resultingQuota": 60,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "submittedAt": "2026-09-04T15:00:00Z",
+    "submittedBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-05T16:00:00Z",
+    "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+    "commercialDraft": {
+      "name": "Singani Gran Reserva 2026",
+      "description": "Edición limitada de la Parcela 2 de Destilería Cinti Viejo: 2.950 botellas de singani con Denominación de Origen, 180 días de reposo y expediente de trazabilidad completo.",
+      "tastingNotes": "Flor de azahar, durazno blanco y un fondo mineral; entrada suave y final persistente.",
+      "pairing": "Quesos de cabra, frutos secos y postres de cítricos.",
+      "imageKeys": [
+        {
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-gran-reserva-2026.jpg",
+          "alt": "Botella de Singani Gran Reserva 2026",
+          "isCover": true
+        },
+        {
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-gran-reserva-2026-parrales.jpg",
+          "alt": "Parrales de Moscatel de Alejandría en el cañón de Cinti",
+          "isCover": false
+        }
+      ],
+      "estimatedRedeemDate": "2026-09-20"
+    },
+    "price": {
+      "amountMinor": 28000,
+      "currency": "BOB",
+      "source": "MANUAL",
+      "setAt": "2026-09-05T16:00:00Z",
+      "setBy": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez"
+      }
+    },
+    "wineryNotes": null,
+    "changeRequests": [],
+    "decision": {
+      "outcome": "APPROVED",
+      "at": "2026-09-05T16:00:00Z",
+      "reason": null,
+      "by": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez",
+        "system": false
+      }
+    },
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 2950,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 2950
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-04T15:00:00Z",
+        "by": "Rosa Camargo",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-05T13:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      },
+      {
+        "status": "APPROVED",
+        "at": "2026-09-05T16:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "05b7584c-13e0-5770-9336-9071197e3259",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "reference": "CVJ-L2026-005",
+        "lotCode": "CVJ-2026-SINGANI-004",
+        "name": "Singani Gran Reserva 2026",
+        "productType": "SINGANI",
+        "stage": "ANCHORED",
+        "stageChangedAt": "2026-09-24T15:02:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2026,
+        "estimatedBottles": 2950,
+        "projectedBottles": 2950,
+        "bottles": 2950,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "CONFORMING",
+        "dossierStatus": "CLOSED",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2026-03-07T14:00:00Z",
+        "updatedAt": "2026-09-24T15:02:00Z",
+        "tokenization": {
+          "state": "PUBLISHED",
+          "quota": 60,
+          "minted": 60,
+          "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0"
+        },
+        "plannedTerroirIds": [
+          "536b1e93-996e-5835-9794-02c12f1319c4"
+        ],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": "2026-09-20",
+        "estimatedReadyBasis": "LOCK",
+        "estimatedBottlesHistory": [
+          {
+            "value": 3000,
+            "at": "2026-03-07T14:00:00Z",
+            "by": {
+              "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+              "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+              "fullName": "Lic. Lucía Rojas",
+              "role": "ENOLOGIST"
+            },
+            "reason": null
+          },
+          {
+            "value": 2950,
+            "at": "2026-03-25T14:00:00Z",
+            "by": {
+              "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+              "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+              "fullName": "Lic. Lucía Rojas",
+              "role": "ENOLOGIST"
+            },
+            "reason": "Rendimiento real del corazón tras la destilación"
+          }
+        ],
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+            "unlockDate": "2026-09-20",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "rules": {
+          "takenAt": "2026-03-07T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1600,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 0
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1600,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 0,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": false,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2410,
+              "pass": true,
+              "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "260262b8-47be-5be5-8b71-d5391032200d"
+          ],
+          "tankIds": [
+            "50fb50c9-1ce4-538f-a153-975c6bfb21f4"
+          ],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [
+            "b7920625-c7f9-5615-b3d3-23ab147e7a36"
+          ],
+          "bottlingBatchId": "8f82c09a-bb21-5565-889a-ff2e30be7b5d",
+          "labAnalysisIds": [
+            "eb1118cd-a564-5ab4-83e3-dd15636d6184"
+          ]
+        },
+        "discarded": null,
+        "notes": "Edición de la vendimia 2026 con la uva de Cañón Viejo.",
+        "createdBy": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 15,
+        "lastEvent": {
+          "id": "c9e1fa62-bfc8-51e8-a8b0-8657dc34d918",
+          "seq": 30,
+          "type": "TOKENS_REDEEMABLE",
+          "occurredAt": "2026-09-24T15:02:00Z",
+          "recordedAt": "2026-09-24T15:02:00Z",
+          "lateEntry": false,
+          "stage": "ANCHORED",
+          "actor": null,
+          "summary": "Las botellas de la colección ya se pueden canjear",
+          "data": {
+            "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+            "redeemableTokens": 0,
+            "windowDays": 30
+          },
+          "resource": {
+            "type": "collection",
+            "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0"
+          },
+          "visibility": "PUBLIC",
+          "corrected": false
+        },
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "b7920625-c7f9-5615-b3d3-23ab147e7a36",
+            "unlockDate": "2026-09-20",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "estimatedReadyDate": "2026-09-20",
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2410,
+              "pass": true,
+              "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "536b1e93-996e-5835-9794-02c12f1319c4"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "CLOSED"
+      },
+      "limits": {
+        "basis": "BOTTLES",
+        "estimatedBottles": 2950,
+        "bottles": 2950,
+        "authorizedQuota": 60,
+        "pendingQuantity": 0,
+        "maxQuantity": 2890
+      },
+      "chainIdentity": {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "10ebc4aa-ac60-5a00-9c9e-6f9df074ba90",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "ledger": 1480001,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:00:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          }
+        },
+        "contract": {
+          "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Destilería Cinti Viejo",
+          "symbol": "CVJ",
+          "baseUri": "http://localhost:4000/v1/public/nft/destileria-cinti-viejo/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "ledger": 1480002,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:01:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          },
+          "deployedAt": "2026-08-16T09:01:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": [
+        {
+          "id": "20c275fc-7330-5935-911c-2c5800a0911a",
+          "slug": "singani-preventa-2026",
+          "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+          "winery": {
+            "slug": "destileria-cinti-viejo",
+            "tradeName": "Destilería Cinti Viejo"
+          },
+          "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+          "lot": {
+            "reference": "CVJ-L2026-006",
+            "lotCode": null,
+            "name": "Singani Preventa 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ORIGIN",
+            "estimatedReadyDate": null
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "PRESALE",
+          "quota": 100,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 100,
+            "available": 100,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": null,
+          "name": "Singani Preventa 2026",
+          "coverImageUrl": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+          "estimatedRedeemDate": null,
+          "contract": {
+            "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": "2026-09-23T15:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-23T13:00:00Z",
+          "updatedAt": "2026-09-23T15:00:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "c697864a-236e-5688-b355-25dc31345443",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita"
+    },
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "lot": {
+      "reference": "ALT-L2025-004",
+      "lotCode": "ALT-2025-SINGANI-002",
+      "name": "Singani El Portillo 2025",
+      "productType": "SINGANI",
+      "stage": "BOTTLED",
+      "harvestYear": 2025,
+      "estimatedBottles": 1050,
+      "bottles": 1040
+    },
+    "kind": "INITIAL",
+    "status": "APPROVED",
+    "quantity": 240,
+    "resultingQuota": 240,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "submittedAt": "2026-09-16T15:00:00Z",
+    "submittedBy": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-17T16:00:00Z",
+    "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+    "commercialDraft": {
+      "name": "Singani El Portillo 2025",
+      "description": "Singani de altura de la parcela El Portillo de Bodega Altos de Calamuchita, embotellado en 2025 tras su reposo en acero.",
+      "tastingNotes": null,
+      "pairing": null,
+      "imageKeys": [
+        {
+          "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/collections/2026/singani-el-portillo-2025.jpg",
+          "alt": "Botella de Singani El Portillo 2025",
+          "isCover": true
+        }
+      ],
+      "estimatedRedeemDate": "2025-10-10"
+    },
+    "price": null,
+    "wineryNotes": null,
+    "changeRequests": [],
+    "decision": {
+      "outcome": "APPROVED",
+      "at": "2026-09-17T16:00:00Z",
+      "reason": null,
+      "by": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez",
+        "system": false
+      }
+    },
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 1050,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 1040
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-16T15:00:00Z",
+        "by": "Martín Calamuchita",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-17T13:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      },
+      {
+        "status": "APPROVED",
+        "at": "2026-09-17T16:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "reference": "ALT-L2025-004",
+        "lotCode": "ALT-2025-SINGANI-002",
+        "name": "Singani El Portillo 2025",
+        "productType": "SINGANI",
+        "stage": "BOTTLED",
+        "stageChangedAt": "2025-11-29T15:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2025,
+        "estimatedBottles": 1050,
+        "projectedBottles": 1040,
+        "bottles": 1040,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "CONFORMING",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2025-03-12T14:00:00Z",
+        "updatedAt": "2025-12-02T16:00:00Z",
+        "tokenization": {
+          "state": "READY",
+          "quota": 240,
+          "minted": 240,
+          "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45"
+        },
+        "plannedTerroirIds": [
+          "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+        ],
+        "plannedFormatCl": 70,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": "2025-10-10",
+        "estimatedReadyBasis": "LOCK",
+        "estimatedBottlesHistory": [
+          {
+            "value": 1050,
+            "at": "2025-03-12T14:00:00Z",
+            "by": {
+              "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+              "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+              "fullName": "Lic. Carla Villarroel",
+              "role": "ENOLOGIST"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+            "unlockDate": "2025-10-10",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "rules": {
+          "takenAt": "2025-03-12T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1500,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 6
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [
+            "trazabilidad.singani.altitudMinimaMsnm"
+          ],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "WINERY",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1500,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 6,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": true,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE_BY_EXCEPTION",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1500,
+              "legalMinimum": 1600,
+              "actual": 1540,
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55"
+          ],
+          "tankIds": [
+            "6e774392-123e-5707-9b10-69c0d75538ad"
+          ],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [
+            "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+          ],
+          "bottlingBatchId": "10b56de9-cfbd-5681-b953-bc05eeeea58c",
+          "labAnalysisIds": [
+            "b5857659-0e30-5a0a-b0a5-22c400bd9f76"
+          ]
+        },
+        "discarded": null,
+        "notes": null,
+        "createdBy": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 11,
+        "lastEvent": {
+          "id": "f1ed75de-95a5-5698-ac73-967d3c011ca0",
+          "seq": 16,
+          "type": "TOKENIZATION_AUTHORIZED",
+          "occurredAt": "2026-09-24T16:00:00Z",
+          "recordedAt": "2026-09-24T16:00:00Z",
+          "lateEntry": false,
+          "stage": "BOTTLED",
+          "actor": {
+            "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+            "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+            "fullName": "Martín Calamuchita",
+            "role": "OWNER"
+          },
+          "summary": "Ampliación de la cuota autorizada: 500 botellas más",
+          "data": {
+            "requestId": "561f004f-b877-5e1a-a484-a9b16e6ebb5a",
+            "kind": "QUOTA_INCREASE",
+            "quantity": 500,
+            "resultingQuota": 740
+          },
+          "resource": {
+            "type": "tokenization_request",
+            "id": "561f004f-b877-5e1a-a484-a9b16e6ebb5a"
+          },
+          "visibility": "INTERNAL",
+          "corrected": false
+        },
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+            "unlockDate": "2025-10-10",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "estimatedReadyDate": "2025-10-10",
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE_BY_EXCEPTION",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1500,
+              "legalMinimum": 1600,
+              "actual": 1540,
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "BOTTLES",
+        "estimatedBottles": 1050,
+        "bottles": 1040,
+        "authorizedQuota": 240,
+        "pendingQuantity": 500,
+        "maxQuantity": 300
+      },
+      "chainIdentity": {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "11bd1f26-b922-5fac-bb88-9832528cd474",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "ledger": 1480003,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:10:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          }
+        },
+        "contract": {
+          "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Bodega Altos de Calamuchita",
+          "symbol": "ALT",
+          "baseUri": "http://localhost:4000/v1/public/nft/altos-de-calamuchita/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "38e43389-e58c-533c-8074-c050c5086f92",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "ledger": 1480004,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:11:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          },
+          "deployedAt": "2026-08-16T09:11:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": []
+    }
+  },
+  {
+    "id": "561f004f-b877-5e1a-a484-a9b16e6ebb5a",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita"
+    },
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "lot": {
+      "reference": "ALT-L2025-004",
+      "lotCode": "ALT-2025-SINGANI-002",
+      "name": "Singani El Portillo 2025",
+      "productType": "SINGANI",
+      "stage": "BOTTLED",
+      "harvestYear": 2025,
+      "estimatedBottles": 1050,
+      "bottles": 1040
+    },
+    "kind": "QUOTA_INCREASE",
+    "status": "SUBMITTED",
+    "quantity": 500,
+    "resultingQuota": 740,
+    "requiresApproval": true,
+    "assignee": null,
+    "submittedAt": "2026-09-24T16:00:00Z",
+    "submittedBy": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-24T16:00:00Z",
+    "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+    "commercialDraft": {
+      "name": null,
+      "description": null,
+      "tastingNotes": null,
+      "pairing": null,
+      "imageKeys": [],
+      "estimatedRedeemDate": "2025-10-10"
+    },
+    "price": null,
+    "wineryNotes": "Queremos ofrecer más botellas antes de la feria de noviembre.",
+    "changeRequests": [],
+    "decision": null,
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 1050,
+      "bottles": 1040,
+      "authorizedQuota": 240,
+      "pendingQuantity": 0,
+      "maxQuantity": 800
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-24T16:00:00Z",
+        "by": "Martín Calamuchita",
+        "note": null
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "reference": "ALT-L2025-004",
+        "lotCode": "ALT-2025-SINGANI-002",
+        "name": "Singani El Portillo 2025",
+        "productType": "SINGANI",
+        "stage": "BOTTLED",
+        "stageChangedAt": "2025-11-29T15:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2025,
+        "estimatedBottles": 1050,
+        "projectedBottles": 1040,
+        "bottles": 1040,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "CONFORMING",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2025-03-12T14:00:00Z",
+        "updatedAt": "2025-12-02T16:00:00Z",
+        "tokenization": {
+          "state": "READY",
+          "quota": 240,
+          "minted": 240,
+          "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45"
+        },
+        "plannedTerroirIds": [
+          "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+        ],
+        "plannedFormatCl": 70,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": "2025-10-10",
+        "estimatedReadyBasis": "LOCK",
+        "estimatedBottlesHistory": [
+          {
+            "value": 1050,
+            "at": "2025-03-12T14:00:00Z",
+            "by": {
+              "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+              "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+              "fullName": "Lic. Carla Villarroel",
+              "role": "ENOLOGIST"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+            "unlockDate": "2025-10-10",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "rules": {
+          "takenAt": "2025-03-12T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1500,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 6
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [
+            "trazabilidad.singani.altitudMinimaMsnm"
+          ],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "WINERY",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1500,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 6,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": true,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE_BY_EXCEPTION",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1500,
+              "legalMinimum": 1600,
+              "actual": 1540,
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "1d58dac2-5b09-557e-a7c4-1e9fc44f5e55"
+          ],
+          "tankIds": [
+            "6e774392-123e-5707-9b10-69c0d75538ad"
+          ],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [
+            "17e3fef4-f096-56a6-a093-0e0f21c3698a"
+          ],
+          "bottlingBatchId": "10b56de9-cfbd-5681-b953-bc05eeeea58c",
+          "labAnalysisIds": [
+            "b5857659-0e30-5a0a-b0a5-22c400bd9f76"
+          ]
+        },
+        "discarded": null,
+        "notes": null,
+        "createdBy": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 11,
+        "lastEvent": {
+          "id": "f1ed75de-95a5-5698-ac73-967d3c011ca0",
+          "seq": 16,
+          "type": "TOKENIZATION_AUTHORIZED",
+          "occurredAt": "2026-09-24T16:00:00Z",
+          "recordedAt": "2026-09-24T16:00:00Z",
+          "lateEntry": false,
+          "stage": "BOTTLED",
+          "actor": {
+            "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+            "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+            "fullName": "Martín Calamuchita",
+            "role": "OWNER"
+          },
+          "summary": "Ampliación de la cuota autorizada: 500 botellas más",
+          "data": {
+            "requestId": "561f004f-b877-5e1a-a484-a9b16e6ebb5a",
+            "kind": "QUOTA_INCREASE",
+            "quantity": 500,
+            "resultingQuota": 740
+          },
+          "resource": {
+            "type": "tokenization_request",
+            "id": "561f004f-b877-5e1a-a484-a9b16e6ebb5a"
+          },
+          "visibility": "INTERNAL",
+          "corrected": false
+        },
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "17e3fef4-f096-56a6-a093-0e0f21c3698a",
+            "unlockDate": "2025-10-10",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "estimatedReadyDate": "2025-10-10",
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE_BY_EXCEPTION",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1500,
+              "legalMinimum": 1600,
+              "actual": 1540,
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "ceaf7563-9785-5331-93c3-f9f8193ff45f"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "BOTTLES",
+        "estimatedBottles": 1050,
+        "bottles": 1040,
+        "authorizedQuota": 240,
+        "pendingQuantity": 0,
+        "maxQuantity": 800
+      },
+      "chainIdentity": {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "11bd1f26-b922-5fac-bb88-9832528cd474",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "ledger": 1480003,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:10:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          }
+        },
+        "contract": {
+          "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Bodega Altos de Calamuchita",
+          "symbol": "ALT",
+          "baseUri": "http://localhost:4000/v1/public/nft/altos-de-calamuchita/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "38e43389-e58c-533c-8074-c050c5086f92",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "ledger": 1480004,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:11:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          },
+          "deployedAt": "2026-08-16T09:11:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": []
+    }
+  },
+  {
+    "id": "a8494b4d-8407-5160-86be-9f6226731095",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo"
+    },
+    "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+    "lot": {
+      "reference": "CVJ-L2026-006",
+      "lotCode": null,
+      "name": "Singani Preventa 2026",
+      "productType": "SINGANI",
+      "stage": "ORIGIN",
+      "harvestYear": 2026,
+      "estimatedBottles": 3000,
+      "bottles": null
+    },
+    "kind": "INITIAL",
+    "status": "APPROVED",
+    "quantity": 100,
+    "resultingQuota": 100,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "submittedAt": "2026-09-20T15:00:00Z",
+    "submittedBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-23T13:00:00Z",
+    "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a",
+    "commercialDraft": {
+      "name": "Singani Preventa 2026",
+      "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
+      "tastingNotes": "Nariz floral de moscatel, con azahar y cáscara de lima; boca limpia y sedosa, de final largo.",
+      "pairing": "Solo, en copa pequeña, o en un chuflay con ginger ale y limón.",
+      "imageKeys": [
+        {
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-preventa-2026.jpg",
+          "alt": "Botella de Singani Preventa 2026 sobre una mesa de madera",
+          "isCover": true
+        }
+      ],
+      "estimatedRedeemDate": null
+    },
+    "price": null,
+    "wineryNotes": "Primera preventa de la destilería.",
+    "changeRequests": [
+      {
+        "id": "00126571-5e22-57c0-b28f-e8ffd40c19a4",
+        "at": "2026-09-21T13:20:00Z",
+        "by": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        },
+        "message": "Falta la nota de cata para la ficha de la colección.",
+        "fields": [
+          "commercial.tastingNotes"
+        ],
+        "resolvedAt": "2026-09-22T14:05:00Z"
+      }
+    ],
+    "decision": {
+      "outcome": "APPROVED",
+      "at": "2026-09-23T13:00:00Z",
+      "reason": "Datos completos; precio por anunciar",
+      "by": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez",
+        "system": false
+      }
+    },
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 3000,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 3000
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-20T15:00:00Z",
+        "by": "Rosa Camargo",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-21T13:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      },
+      {
+        "status": "CHANGES_REQUESTED",
+        "at": "2026-09-21T13:20:00Z",
+        "by": "Valeria Méndez",
+        "note": "Falta la nota de cata para la ficha de la colección."
+      },
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-22T14:05:00Z",
+        "by": "Rosa Camargo",
+        "note": "Añadida la nota de cata."
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-22T16:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      },
+      {
+        "status": "APPROVED",
+        "at": "2026-09-23T13:00:00Z",
+        "by": "Valeria Méndez",
+        "note": "Datos completos; precio por anunciar"
+      }
+    ],
+    "internalNotes": [
+      {
+        "id": "0bffb567-0d46-5261-b268-8d38130e0be3",
+        "text": "Datos completos. Precio pendiente de la política (A-32): se aprueba sin precio.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-22T16:10:00Z"
+      }
+    ],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "reference": "CVJ-L2026-006",
+        "lotCode": null,
+        "name": "Singani Preventa 2026",
+        "productType": "SINGANI",
+        "stage": "ORIGIN",
+        "stageChangedAt": "2026-09-19T14:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2026,
+        "estimatedBottles": 3000,
+        "projectedBottles": 3000,
+        "bottles": null,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 0,
+          "rejected": 0
+        },
+        "labStatus": "NOT_RECORDED",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2026-09-19T14:00:00Z",
+        "updatedAt": "2026-09-19T14:00:00Z",
+        "tokenization": {
+          "state": "PUBLISHED",
+          "quota": 100,
+          "minted": 100,
+          "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a"
+        },
+        "plannedTerroirIds": [
+          "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        ],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": null,
+        "estimatedReadyBasis": null,
+        "estimatedBottlesHistory": [
+          {
+            "value": 3000,
+            "at": "2026-09-19T14:00:00Z",
+            "by": {
+              "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+              "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+              "fullName": "Rosa Camargo",
+              "role": "OWNER"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [],
+        "rules": {
+          "takenAt": "2026-09-19T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1600,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 0
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1600,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 0,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": false,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2320,
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [],
+          "tankIds": [],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [],
+          "bottlingBatchId": null,
+          "labAnalysisIds": []
+        },
+        "discarded": null,
+        "notes": "Lote de la preventa de 2026.",
+        "createdBy": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 2,
+        "lastEvent": {
+          "id": "7a599e86-da55-5cab-a289-db9c19957781",
+          "seq": 4,
+          "type": "COLLECTION_PUBLISHED",
+          "occurredAt": "2026-09-23T15:00:00Z",
+          "recordedAt": "2026-09-23T15:00:00Z",
+          "lateEntry": false,
+          "stage": "ORIGIN",
+          "actor": null,
+          "summary": "Colección «Singani Preventa 2026» publicada",
+          "data": {
+            "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a"
+          },
+          "resource": {
+            "type": "collection",
+            "id": "20c275fc-7330-5935-911c-2c5800a0911a"
+          },
+          "visibility": "PUBLIC",
+          "corrected": false
+        },
+        "locks": [],
+        "estimatedReadyDate": null,
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2320,
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "ESTIMATE",
+        "estimatedBottles": 3000,
+        "bottles": null,
+        "authorizedQuota": 100,
+        "pendingQuantity": 0,
+        "maxQuantity": 2900
+      },
+      "chainIdentity": {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "10ebc4aa-ac60-5a00-9c9e-6f9df074ba90",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "ledger": 1480001,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:00:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          }
+        },
+        "contract": {
+          "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Destilería Cinti Viejo",
+          "symbol": "CVJ",
+          "baseUri": "http://localhost:4000/v1/public/nft/destileria-cinti-viejo/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "ledger": 1480002,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:01:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          },
+          "deployedAt": "2026-08-16T09:01:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": [
+        {
+          "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+          "slug": "singani-gran-reserva-2026",
+          "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+          "winery": {
+            "slug": "destileria-cinti-viejo",
+            "tradeName": "Destilería Cinti Viejo"
+          },
+          "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+          "lot": {
+            "reference": "CVJ-L2026-005",
+            "lotCode": "CVJ-2026-SINGANI-004",
+            "name": "Singani Gran Reserva 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ANCHORED",
+            "estimatedReadyDate": "2026-09-20"
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "ON_SALE",
+          "quota": 60,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 60,
+            "available": 60,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": {
+            "amountMinor": 28000,
+            "currency": "BOB",
+            "source": "MANUAL",
+            "setAt": "2026-09-05T16:00:00Z",
+            "setBy": {
+              "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+              "fullName": "Valeria Méndez"
+            }
+          },
+          "name": "Singani Gran Reserva 2026",
+          "coverImageUrl": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+          "estimatedRedeemDate": "2026-09-20",
+          "contract": {
+            "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+          },
+          "redeemable": true,
+          "redeemableSince": "2026-09-24T15:02:00Z",
+          "publishedAt": "2026-09-06T14:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-05T16:00:00Z",
+          "updatedAt": "2026-09-24T15:02:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "2727c758-0460-5c4d-8fd0-f19bdd84d8b9",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo"
+    },
+    "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+    "lot": {
+      "reference": "CVJ-L2026-004",
+      "lotCode": null,
+      "name": "Singani El Molino 2026",
+      "productType": "SINGANI",
+      "stage": "DISTILLING",
+      "harvestYear": 2026,
+      "estimatedBottles": 1400,
+      "bottles": null
+    },
+    "kind": "INITIAL",
+    "status": "WITHDRAWN",
+    "quantity": 1400,
+    "resultingQuota": 1400,
+    "requiresApproval": true,
+    "assignee": null,
+    "submittedAt": "2026-09-10T15:00:00Z",
+    "submittedBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-11T10:00:00Z",
+    "collectionId": null,
+    "commercialDraft": {
+      "name": null,
+      "description": null,
+      "tastingNotes": null,
+      "pairing": null,
+      "imageKeys": [],
+      "estimatedRedeemDate": null
+    },
+    "price": null,
+    "wineryNotes": null,
+    "changeRequests": [],
+    "decision": null,
+    "withdrawn": {
+      "at": "2026-09-11T10:00:00Z",
+      "by": {
+        "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+        "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+        "fullName": "Rosa Camargo",
+        "role": "OWNER"
+      },
+      "reason": "Me equivoqué de cantidad: queremos empezar con menos botellas."
+    },
+    "limitsAtSubmission": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 1400,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 1400
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-10T15:00:00Z",
+        "by": "Rosa Camargo",
+        "note": null
+      },
+      {
+        "status": "WITHDRAWN",
+        "at": "2026-09-11T10:00:00Z",
+        "by": "Rosa Camargo",
+        "note": "Me equivoqué de cantidad: queremos empezar con menos botellas."
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "reference": "CVJ-L2026-004",
+        "lotCode": null,
+        "name": "Singani El Molino 2026",
+        "productType": "SINGANI",
+        "stage": "DISTILLING",
+        "stageChangedAt": "2026-09-22T13:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2026,
+        "estimatedBottles": 1400,
+        "projectedBottles": 1400,
+        "bottles": null,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "NOT_RECORDED",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2026-03-18T14:00:00Z",
+        "updatedAt": "2026-09-22T13:00:00Z",
+        "tokenization": {
+          "state": "REQUESTED",
+          "quota": 0,
+          "minted": 0,
+          "collectionId": null
+        },
+        "plannedTerroirIds": [
+          "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        ],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": null,
+        "estimatedReadyBasis": null,
+        "estimatedBottlesHistory": [
+          {
+            "value": 1400,
+            "at": "2026-03-18T14:00:00Z",
+            "by": {
+              "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+              "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+              "fullName": "Lic. Lucía Rojas",
+              "role": "ENOLOGIST"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [],
+        "rules": {
+          "takenAt": "2026-03-18T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1600,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 0
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1600,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 0,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": false,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2320,
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712"
+          ],
+          "tankIds": [
+            "ad5d5c1e-9b76-53c7-8047-d2ef82c4b3c6"
+          ],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [
+            "d5993d22-4689-5802-9ff8-4c844d8ab807"
+          ],
+          "bottlingBatchId": null,
+          "labAnalysisIds": []
+        },
+        "discarded": null,
+        "notes": null,
+        "createdBy": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 6,
+        "lastEvent": {
+          "id": "5d8b4789-8007-5449-8412-0a6cd0b12a68",
+          "seq": 10,
+          "type": "TOKENIZATION_AUTHORIZED",
+          "occurredAt": "2026-09-23T17:00:00Z",
+          "recordedAt": "2026-09-23T17:00:00Z",
+          "lateEntry": false,
+          "stage": "DISTILLING",
+          "actor": {
+            "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+            "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+            "fullName": "Rosa Camargo",
+            "role": "OWNER"
+          },
+          "summary": "Tokenización autorizada: 400 botellas",
+          "data": {
+            "requestId": "6cdd52d3-6fa7-52a0-a209-fca325e999b6",
+            "kind": "INITIAL",
+            "quantity": 400,
+            "resultingQuota": 400
+          },
+          "resource": {
+            "type": "tokenization_request",
+            "id": "6cdd52d3-6fa7-52a0-a209-fca325e999b6"
+          },
+          "visibility": "INTERNAL",
+          "corrected": false
+        },
+        "locks": [],
+        "estimatedReadyDate": null,
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2320,
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "ESTIMATE",
+        "estimatedBottles": 1400,
+        "bottles": null,
+        "authorizedQuota": 0,
+        "pendingQuantity": 400,
+        "maxQuantity": 1000
+      },
+      "chainIdentity": {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "10ebc4aa-ac60-5a00-9c9e-6f9df074ba90",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "ledger": 1480001,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:00:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          }
+        },
+        "contract": {
+          "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Destilería Cinti Viejo",
+          "symbol": "CVJ",
+          "baseUri": "http://localhost:4000/v1/public/nft/destileria-cinti-viejo/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "ledger": 1480002,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:01:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          },
+          "deployedAt": "2026-08-16T09:01:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": [
+        {
+          "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+          "slug": "singani-gran-reserva-2026",
+          "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+          "winery": {
+            "slug": "destileria-cinti-viejo",
+            "tradeName": "Destilería Cinti Viejo"
+          },
+          "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+          "lot": {
+            "reference": "CVJ-L2026-005",
+            "lotCode": "CVJ-2026-SINGANI-004",
+            "name": "Singani Gran Reserva 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ANCHORED",
+            "estimatedReadyDate": "2026-09-20"
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "ON_SALE",
+          "quota": 60,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 60,
+            "available": 60,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": {
+            "amountMinor": 28000,
+            "currency": "BOB",
+            "source": "MANUAL",
+            "setAt": "2026-09-05T16:00:00Z",
+            "setBy": {
+              "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+              "fullName": "Valeria Méndez"
+            }
+          },
+          "name": "Singani Gran Reserva 2026",
+          "coverImageUrl": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+          "estimatedRedeemDate": "2026-09-20",
+          "contract": {
+            "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+          },
+          "redeemable": true,
+          "redeemableSince": "2026-09-24T15:02:00Z",
+          "publishedAt": "2026-09-06T14:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-05T16:00:00Z",
+          "updatedAt": "2026-09-24T15:02:00Z"
+        },
+        {
+          "id": "20c275fc-7330-5935-911c-2c5800a0911a",
+          "slug": "singani-preventa-2026",
+          "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+          "winery": {
+            "slug": "destileria-cinti-viejo",
+            "tradeName": "Destilería Cinti Viejo"
+          },
+          "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+          "lot": {
+            "reference": "CVJ-L2026-006",
+            "lotCode": null,
+            "name": "Singani Preventa 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ORIGIN",
+            "estimatedReadyDate": null
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "PRESALE",
+          "quota": 100,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 100,
+            "available": 100,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": null,
+          "name": "Singani Preventa 2026",
+          "coverImageUrl": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+          "estimatedRedeemDate": null,
+          "contract": {
+            "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": "2026-09-23T15:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-23T13:00:00Z",
+          "updatedAt": "2026-09-23T15:00:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "6cdd52d3-6fa7-52a0-a209-fca325e999b6",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo"
+    },
+    "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+    "lot": {
+      "reference": "CVJ-L2026-004",
+      "lotCode": null,
+      "name": "Singani El Molino 2026",
+      "productType": "SINGANI",
+      "stage": "DISTILLING",
+      "harvestYear": 2026,
+      "estimatedBottles": 1400,
+      "bottles": null
+    },
+    "kind": "INITIAL",
+    "status": "IN_REVIEW",
+    "quantity": 400,
+    "resultingQuota": 400,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "submittedAt": "2026-09-23T17:00:00Z",
+    "submittedBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-24T14:30:00Z",
+    "collectionId": null,
+    "commercialDraft": {
+      "name": "Singani El Molino 2026",
+      "description": "Singani joven de la parcela El Molino, destilado en septiembre de 2026 y en reposo hasta marzo de 2027.",
+      "tastingNotes": "Aromas de flor blanca y pera; fresco y directo.",
+      "pairing": null,
+      "imageKeys": [
+        {
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-el-molino-2026.jpg",
+          "alt": "Alambique de cobre de la destilería",
+          "isCover": true
+        }
+      ],
+      "estimatedRedeemDate": null
+    },
+    "price": null,
+    "wineryNotes": "Preventa para el club de la destilería.",
+    "changeRequests": [],
+    "decision": null,
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 1400,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 1400
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-23T17:00:00Z",
+        "by": "Rosa Camargo",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-24T14:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      }
+    ],
+    "internalNotes": [
+      {
+        "id": "d28919bf-36a7-564c-b4a8-96d4895295fe",
+        "text": "La destilación sigue abierta: revisar la fecha estimada de canje antes de aprobar.",
+        "by": "Valeria Méndez",
+        "at": "2026-09-24T14:30:00Z"
+      }
+    ],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "reference": "CVJ-L2026-004",
+        "lotCode": null,
+        "name": "Singani El Molino 2026",
+        "productType": "SINGANI",
+        "stage": "DISTILLING",
+        "stageChangedAt": "2026-09-22T13:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2026,
+        "estimatedBottles": 1400,
+        "projectedBottles": 1400,
+        "bottles": null,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "NOT_RECORDED",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2026-03-18T14:00:00Z",
+        "updatedAt": "2026-09-22T13:00:00Z",
+        "tokenization": {
+          "state": "REQUESTED",
+          "quota": 0,
+          "minted": 0,
+          "collectionId": null
+        },
+        "plannedTerroirIds": [
+          "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        ],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": null,
+        "estimatedReadyBasis": null,
+        "estimatedBottlesHistory": [
+          {
+            "value": 1400,
+            "at": "2026-03-18T14:00:00Z",
+            "by": {
+              "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+              "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+              "fullName": "Lic. Lucía Rojas",
+              "role": "ENOLOGIST"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [],
+        "rules": {
+          "takenAt": "2026-03-18T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1600,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 0
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1600,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 0,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": false,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2320,
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "8a2a8525-bfdf-5ade-b3e3-e9ffc6d14712"
+          ],
+          "tankIds": [
+            "ad5d5c1e-9b76-53c7-8047-d2ef82c4b3c6"
+          ],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [
+            "d5993d22-4689-5802-9ff8-4c844d8ab807"
+          ],
+          "bottlingBatchId": null,
+          "labAnalysisIds": []
+        },
+        "discarded": null,
+        "notes": null,
+        "createdBy": {
+          "membershipId": "21af9548-86fa-5c19-86c1-16133a906b64",
+          "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
+          "fullName": "Lic. Lucía Rojas",
+          "role": "ENOLOGIST"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 6,
+        "lastEvent": {
+          "id": "5d8b4789-8007-5449-8412-0a6cd0b12a68",
+          "seq": 10,
+          "type": "TOKENIZATION_AUTHORIZED",
+          "occurredAt": "2026-09-23T17:00:00Z",
+          "recordedAt": "2026-09-23T17:00:00Z",
+          "lateEntry": false,
+          "stage": "DISTILLING",
+          "actor": {
+            "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+            "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+            "fullName": "Rosa Camargo",
+            "role": "OWNER"
+          },
+          "summary": "Tokenización autorizada: 400 botellas",
+          "data": {
+            "requestId": "6cdd52d3-6fa7-52a0-a209-fca325e999b6",
+            "kind": "INITIAL",
+            "quantity": 400,
+            "resultingQuota": 400
+          },
+          "resource": {
+            "type": "tokenization_request",
+            "id": "6cdd52d3-6fa7-52a0-a209-fca325e999b6"
+          },
+          "visibility": "INTERNAL",
+          "corrected": false
+        },
+        "locks": [],
+        "estimatedReadyDate": null,
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 2320,
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "ESTIMATE",
+        "estimatedBottles": 1400,
+        "bottles": null,
+        "authorizedQuota": 0,
+        "pendingQuantity": 0,
+        "maxQuantity": 1400
+      },
+      "chainIdentity": {
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "10ebc4aa-ac60-5a00-9c9e-6f9df074ba90",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+            "ledger": 1480001,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:00:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          }
+        },
+        "contract": {
+          "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Destilería Cinti Viejo",
+          "symbol": "CVJ",
+          "baseUri": "http://localhost:4000/v1/public/nft/destileria-cinti-viejo/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+            "ledger": 1480002,
+            "confirmedAt": "2026-08-16T09:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:01:00Z",
+            "updatedAt": "2026-08-16T09:01:00Z"
+          },
+          "deployedAt": "2026-08-16T09:01:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": [
+        {
+          "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+          "slug": "singani-gran-reserva-2026",
+          "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+          "winery": {
+            "slug": "destileria-cinti-viejo",
+            "tradeName": "Destilería Cinti Viejo"
+          },
+          "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+          "lot": {
+            "reference": "CVJ-L2026-005",
+            "lotCode": "CVJ-2026-SINGANI-004",
+            "name": "Singani Gran Reserva 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ANCHORED",
+            "estimatedReadyDate": "2026-09-20"
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "ON_SALE",
+          "quota": 60,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 60,
+            "available": 60,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": {
+            "amountMinor": 28000,
+            "currency": "BOB",
+            "source": "MANUAL",
+            "setAt": "2026-09-05T16:00:00Z",
+            "setBy": {
+              "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+              "fullName": "Valeria Méndez"
+            }
+          },
+          "name": "Singani Gran Reserva 2026",
+          "coverImageUrl": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+          "estimatedRedeemDate": "2026-09-20",
+          "contract": {
+            "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+          },
+          "redeemable": true,
+          "redeemableSince": "2026-09-24T15:02:00Z",
+          "publishedAt": "2026-09-06T14:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-05T16:00:00Z",
+          "updatedAt": "2026-09-24T15:02:00Z"
+        },
+        {
+          "id": "20c275fc-7330-5935-911c-2c5800a0911a",
+          "slug": "singani-preventa-2026",
+          "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+          "winery": {
+            "slug": "destileria-cinti-viejo",
+            "tradeName": "Destilería Cinti Viejo"
+          },
+          "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+          "lot": {
+            "reference": "CVJ-L2026-006",
+            "lotCode": null,
+            "name": "Singani Preventa 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ORIGIN",
+            "estimatedReadyDate": null
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "PRESALE",
+          "quota": 100,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 100,
+            "available": 100,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": null,
+          "name": "Singani Preventa 2026",
+          "coverImageUrl": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+          "estimatedRedeemDate": null,
+          "contract": {
+            "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": "2026-09-23T15:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-23T13:00:00Z",
+          "updatedAt": "2026-09-23T15:00:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "28d728a1-d7a0-561c-b835-6d7fc795a19a",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita"
+    },
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "lot": {
+      "reference": "ALT-L2024-001",
+      "lotCode": "ALT-2025-WINE-001",
+      "name": "Tannat La Angostura 2024",
+      "productType": "WINE",
+      "stage": "BOTTLED",
+      "harvestYear": 2024,
+      "estimatedBottles": 4500,
+      "bottles": 4400
+    },
+    "kind": "INITIAL",
+    "status": "CHANGES_REQUESTED",
+    "quantity": 1200,
+    "resultingQuota": 1200,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+      "fullName": "Camila Torrez"
+    },
+    "submittedAt": "2026-09-19T11:00:00Z",
+    "submittedBy": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-20T10:40:00Z",
+    "collectionId": null,
+    "commercialDraft": {
+      "name": "Tannat La Angostura 2024",
+      "description": "Tannat de la parcela La Angostura, con doce meses de crianza en roble.",
+      "tastingNotes": null,
+      "pairing": null,
+      "imageKeys": [],
+      "estimatedRedeemDate": "2025-04-28"
+    },
+    "price": null,
+    "wineryNotes": null,
+    "changeRequests": [
+      {
+        "id": "a041d6b0-2cc7-522e-839e-508ba6d676ee",
+        "at": "2026-09-20T10:40:00Z",
+        "by": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        },
+        "message": "Falta la foto de portada de la colección.",
+        "fields": [
+          "commercial.imageKeys"
+        ],
+        "resolvedAt": null
+      }
+    ],
+    "decision": null,
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 4500,
+      "bottles": 4400,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 4400
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-19T11:00:00Z",
+        "by": "Martín Calamuchita",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-20T10:00:00Z",
+        "by": "Camila Torrez",
+        "note": null
+      },
+      {
+        "status": "CHANGES_REQUESTED",
+        "at": "2026-09-20T10:40:00Z",
+        "by": "Camila Torrez",
+        "note": "Falta la foto de portada de la colección."
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "reference": "ALT-L2024-001",
+        "lotCode": "ALT-2025-WINE-001",
+        "name": "Tannat La Angostura 2024",
+        "productType": "WINE",
+        "stage": "BOTTLED",
+        "stageChangedAt": "2025-08-01T15:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2024,
+        "estimatedBottles": 4500,
+        "projectedBottles": 4400,
+        "bottles": 4400,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "NON_CONFORMING",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2024-03-13T14:00:00Z",
+        "updatedAt": "2025-08-06T16:00:00Z",
+        "tokenization": {
+          "state": "CHANGES_REQUESTED",
+          "quota": 0,
+          "minted": 0,
+          "collectionId": null
+        },
+        "plannedTerroirIds": [],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": null,
+        "targetReadyDate": null,
+        "estimatedReadyDate": "2025-04-28",
+        "estimatedReadyBasis": "LOCK",
+        "estimatedBottlesHistory": [
+          {
+            "value": 4500,
+            "at": "2024-03-13T14:00:00Z",
+            "by": {
+              "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+              "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+              "fullName": "Lic. Carla Villarroel",
+              "role": "ENOLOGIST"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [
+          {
+            "kind": "AGING",
+            "sourceId": "625ba51c-6c64-5326-93c0-e399db486c43",
+            "unlockDate": "2025-04-28",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+              "minimum": 6,
+              "applied": 12,
+              "unit": "meses",
+              "legalException": false
+            }
+          }
+        ],
+        "rules": {
+          "takenAt": "2024-03-13T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1500,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 6
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [
+            "trazabilidad.singani.altitudMinimaMsnm"
+          ],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "WINERY",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1500,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 6,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": true,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "NOT_APPLICABLE",
+          "checks": [],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "535ed750-3e23-5cd8-94c6-7c454d0ebd9b"
+          ],
+          "tankIds": [
+            "84645346-8236-5be7-be28-11f041cb1d7a"
+          ],
+          "wineAgingBatchIds": [
+            "625ba51c-6c64-5326-93c0-e399db486c43"
+          ],
+          "productionBatchIds": [],
+          "bottlingBatchId": "8e079a8c-08ac-55e8-8e05-a2ff33aa4e0f",
+          "labAnalysisIds": [
+            "d9050da6-5d4b-5595-a62e-a661c04acb51"
+          ]
+        },
+        "discarded": null,
+        "notes": null,
+        "createdBy": {
+          "membershipId": "1d61f347-a3cb-540d-9550-17d40cf4875c",
+          "userId": "00765b24-82d9-559f-851a-9b8a3fcf8afe",
+          "fullName": "Lic. Carla Villarroel",
+          "role": "ENOLOGIST"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 9,
+        "lastEvent": {
+          "id": "42c83500-a208-5c36-8d83-895e7bcbab47",
+          "seq": 13,
+          "type": "TOKENIZATION_AUTHORIZED",
+          "occurredAt": "2026-09-19T11:00:00Z",
+          "recordedAt": "2026-09-19T11:00:00Z",
+          "lateEntry": false,
+          "stage": "BOTTLED",
+          "actor": {
+            "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+            "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+            "fullName": "Martín Calamuchita",
+            "role": "OWNER"
+          },
+          "summary": "Tokenización autorizada: 1200 botellas",
+          "data": {
+            "requestId": "28d728a1-d7a0-561c-b835-6d7fc795a19a",
+            "kind": "INITIAL",
+            "quantity": 1200,
+            "resultingQuota": 1200
+          },
+          "resource": {
+            "type": "tokenization_request",
+            "id": "28d728a1-d7a0-561c-b835-6d7fc795a19a"
+          },
+          "visibility": "INTERNAL",
+          "corrected": false
+        },
+        "locks": [
+          {
+            "kind": "AGING",
+            "sourceId": "625ba51c-6c64-5326-93c0-e399db486c43",
+            "unlockDate": "2025-04-28",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.vino.crianzaMinimaMeses",
+              "minimum": 6,
+              "applied": 12,
+              "unit": "meses",
+              "legalException": false
+            }
+          }
+        ],
+        "estimatedReadyDate": "2025-04-28",
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "NOT_APPLICABLE",
+          "checks": [],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "BOTTLES",
+        "estimatedBottles": 4500,
+        "bottles": 4400,
+        "authorizedQuota": 0,
+        "pendingQuantity": 0,
+        "maxQuantity": 4400
+      },
+      "chainIdentity": {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "11bd1f26-b922-5fac-bb88-9832528cd474",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "ledger": 1480003,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:10:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          }
+        },
+        "contract": {
+          "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Bodega Altos de Calamuchita",
+          "symbol": "ALT",
+          "baseUri": "http://localhost:4000/v1/public/nft/altos-de-calamuchita/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "38e43389-e58c-533c-8074-c050c5086f92",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "ledger": 1480004,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:11:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          },
+          "deployedAt": "2026-08-16T09:11:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": [
+        {
+          "id": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+          "slug": "singani-el-portillo-2025",
+          "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+          "winery": {
+            "slug": "altos-de-calamuchita",
+            "tradeName": "Bodega Altos de Calamuchita"
+          },
+          "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+          "lot": {
+            "reference": "ALT-L2025-004",
+            "lotCode": "ALT-2025-SINGANI-002",
+            "name": "Singani El Portillo 2025",
+            "productType": "SINGANI",
+            "harvestYear": 2025,
+            "stage": "BOTTLED",
+            "estimatedReadyDate": "2025-10-10"
+          },
+          "status": "READY",
+          "mintStatus": "CONFIRMED",
+          "saleState": null,
+          "quota": 240,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 240,
+            "available": 240,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": null,
+          "name": "Singani El Portillo 2025",
+          "coverImageUrl": "/v1/public/collections/images/c40ff3e3-d6ab-50d4-b864-855e1e90927f",
+          "estimatedRedeemDate": "2025-10-10",
+          "contract": {
+            "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": null,
+          "closedAt": null,
+          "createdAt": "2026-09-17T16:00:00Z",
+          "updatedAt": "2026-09-17T16:01:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "f564cf6e-e089-5eef-8238-214352a7aa04",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "winery": {
+      "slug": "casa-uriondo",
+      "tradeName": "Casa Uriondo"
+    },
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "lot": {
+      "reference": "CUR-L2025-001",
+      "lotCode": "CUR-2026-SINGANI-001",
+      "name": "Singani Casa Uriondo 2025",
+      "productType": "SINGANI",
+      "stage": "BOTTLED",
+      "harvestYear": 2025,
+      "estimatedBottles": 900,
+      "bottles": 880
+    },
+    "kind": "INITIAL",
+    "status": "REJECTED",
+    "quantity": 300,
+    "resultingQuota": 300,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+      "fullName": "Valeria Méndez"
+    },
+    "submittedAt": "2026-08-26T12:00:00Z",
+    "submittedBy": {
+      "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+      "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+      "fullName": "Lic. Sofía Aramayo",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-08-28T16:00:00Z",
+    "collectionId": null,
+    "commercialDraft": {
+      "name": "Singani Casa Uriondo 2025",
+      "description": "Singani de Casa Uriondo de la vendimia 2025.",
+      "tastingNotes": null,
+      "pairing": null,
+      "imageKeys": [],
+      "estimatedRedeemDate": "2025-10-07"
+    },
+    "price": null,
+    "wineryNotes": null,
+    "changeRequests": [],
+    "decision": {
+      "outcome": "REJECTED",
+      "at": "2026-08-28T16:00:00Z",
+      "reason": "La bodega tiene documentación pendiente; podrá volver a pedirlo cuando se regularice.",
+      "by": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez",
+        "system": false
+      }
+    },
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 900,
+      "bottles": 880,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 880
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-08-26T12:00:00Z",
+        "by": "Lic. Sofía Aramayo",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-08-27T10:00:00Z",
+        "by": "Valeria Méndez",
+        "note": null
+      },
+      {
+        "status": "REJECTED",
+        "at": "2026-08-28T16:00:00Z",
+        "by": "Valeria Méndez",
+        "note": "La bodega tiene documentación pendiente; podrá volver a pedirlo cuando se regularice."
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+        "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+        "reference": "CUR-L2025-001",
+        "lotCode": "CUR-2026-SINGANI-001",
+        "name": "Singani Casa Uriondo 2025",
+        "productType": "SINGANI",
+        "stage": "BOTTLED",
+        "stageChangedAt": "2026-03-09T15:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2025,
+        "estimatedBottles": 900,
+        "projectedBottles": 880,
+        "bottles": 880,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 1,
+          "rejected": 0
+        },
+        "labStatus": "CONFORMING",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2025-03-12T14:00:00Z",
+        "updatedAt": "2026-03-12T16:00:00Z",
+        "tokenization": {
+          "state": "NONE",
+          "quota": 0,
+          "minted": 0,
+          "collectionId": null
+        },
+        "plannedTerroirIds": [
+          "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+        ],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": "2025-10-07",
+        "estimatedReadyBasis": "LOCK",
+        "estimatedBottlesHistory": [
+          {
+            "value": 900,
+            "at": "2025-03-12T14:00:00Z",
+            "by": {
+              "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+              "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+              "fullName": "Lic. Sofía Aramayo",
+              "role": "OWNER"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "f9b48669-3b05-5bb4-9251-7905c2e343fc",
+            "unlockDate": "2025-10-07",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "rules": {
+          "takenAt": "2025-03-12T14:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1600,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 0
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1600,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 0,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": false,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 1740,
+              "pass": true,
+              "terroirId": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [
+            "36304582-8e8f-5e31-ae49-ff7584e9cb91"
+          ],
+          "tankIds": [
+            "7cd03350-4cc8-5206-95df-3fec384ec4e0"
+          ],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [
+            "f9b48669-3b05-5bb4-9251-7905c2e343fc"
+          ],
+          "bottlingBatchId": "7a347a28-d916-5e64-8fea-25a28abcd9e6",
+          "labAnalysisIds": [
+            "633c1f3a-dbef-5766-a16a-52127d1bd145"
+          ]
+        },
+        "discarded": null,
+        "notes": null,
+        "createdBy": {
+          "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+          "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+          "fullName": "Lic. Sofía Aramayo",
+          "role": "OWNER"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 10,
+        "lastEvent": {
+          "id": "e3d11295-5004-55b7-b1d9-ed623dc51d42",
+          "seq": 14,
+          "type": "TOKENIZATION_AUTHORIZED",
+          "occurredAt": "2026-08-26T12:00:00Z",
+          "recordedAt": "2026-08-26T12:00:00Z",
+          "lateEntry": false,
+          "stage": "BOTTLED",
+          "actor": {
+            "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+            "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+            "fullName": "Lic. Sofía Aramayo",
+            "role": "OWNER"
+          },
+          "summary": "Tokenización autorizada: 300 botellas",
+          "data": {
+            "requestId": "f564cf6e-e089-5eef-8238-214352a7aa04",
+            "kind": "INITIAL",
+            "quantity": 300,
+            "resultingQuota": 300
+          },
+          "resource": {
+            "type": "tokenization_request",
+            "id": "f564cf6e-e089-5eef-8238-214352a7aa04"
+          },
+          "visibility": "INTERNAL",
+          "corrected": false
+        },
+        "locks": [
+          {
+            "kind": "REST",
+            "sourceId": "f9b48669-3b05-5bb4-9251-7905c2e343fc",
+            "unlockDate": "2025-10-07",
+            "released": true,
+            "daysRemaining": 0,
+            "rule": {
+              "settingKey": "trazabilidad.singani.reposoMinimoDias",
+              "minimum": 180,
+              "applied": 180,
+              "unit": "días",
+              "legalException": false
+            }
+          }
+        ],
+        "estimatedReadyDate": "2025-10-07",
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "ELIGIBLE",
+          "checks": [
+            {
+              "rule": "ALTITUDE",
+              "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+              "required": 1600,
+              "legalMinimum": 1600,
+              "actual": 1740,
+              "pass": true,
+              "terroirId": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+            },
+            {
+              "rule": "VARIETY",
+              "settingKey": "trazabilidad.singani.variedadesExigidas",
+              "required": [
+                "Moscatel de Alejandría"
+              ],
+              "legalMinimum": [
+                "Moscatel de Alejandría"
+              ],
+              "actual": "Moscatel de Alejandría",
+              "pass": true,
+              "terroirId": "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
+            }
+          ],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "BOTTLES",
+        "estimatedBottles": 900,
+        "bottles": 880,
+        "authorizedQuota": 0,
+        "pendingQuantity": 0,
+        "maxQuantity": 880
+      },
+      "chainIdentity": {
+        "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "37b79cb5-7cdf-5882-ab39-b6556cc4cc21",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "878955af2124847d6b93e205f0e668cb619dc5e66eb92be74ccff08a60d9efa8",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/878955af2124847d6b93e205f0e668cb619dc5e66eb92be74ccff08a60d9efa8",
+            "ledger": 1480005,
+            "confirmedAt": "2026-08-16T09:21:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:20:00Z",
+            "updatedAt": "2026-08-16T09:21:00Z"
+          }
+        },
+        "contract": {
+          "address": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Casa Uriondo",
+          "symbol": "CUR",
+          "baseUri": "http://localhost:4000/v1/public/nft/casa-uriondo/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "c92ddc88-3856-50c8-ab22-af9a61d906c5",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+            "ledger": 1480006,
+            "confirmedAt": "2026-08-16T09:21:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:21:00Z",
+            "updatedAt": "2026-08-16T09:21:00Z"
+          },
+          "deployedAt": "2026-08-16T09:21:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": []
+    }
+  }
+]

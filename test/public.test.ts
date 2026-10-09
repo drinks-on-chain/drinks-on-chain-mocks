@@ -55,7 +55,8 @@ describe('pasaportes públicos', () => {
     expect(passport).toMatchObject({
       kind: 'LOT',
       name: 'Singani Gran Reserva 2026',
-      stage: 'CERTIFIED',
+      // Ola 3: el expediente cerrado en H2 queda anclado por el relleno.
+      stage: 'ANCHORED',
       winery: { slug: 'destileria-cinti-viejo', active: true },
       denomination: { applies: true, status: 'ELIGIBLE', legalException: false, rules: { minAltitudeMasl: 1600, requiredVarieties: ['Moscatel de Alejandría'] } },
       harvest: { phytosanitary: 'APPROVED', maturity: { brixDegrees: 23.4 } },
@@ -65,12 +66,12 @@ describe('pasaportes públicos', () => {
       lab: { status: 'CONFORMING' },
       rules: { origin: 'LOT_CREATION' },
       corrections: { count: 1 },
-      dossier: { status: 'CLOSED', canonicalUrl: `/v1/public/lots/${CASE_CODE}/dossier`, anchor: null },
+      dossier: { status: 'CLOSED', canonicalUrl: `/v1/public/lots/${CASE_CODE}/dossier`, anchor: { status: 'ANCHORED', network: 'TESTNET' } },
     })
     // S-21/S-22: roles en lugar de nombres, y ni pesos ni volúmenes intermedios.
     const text = JSON.stringify(passport)
     for (const hidden of ['Rosa Camargo', 'Lucía Rojas', '18400', '18.400', '12100', '12.100', 'membershipId', 'userId']) expect(text).not.toContain(hidden)
-    expect(passport.timeline.map((e) => e.type)).toEqual(['HARVEST_WEIGHED', 'PHYTO_DECIDED', 'TANK_FILLED', 'FERMENTATION_STARTED', 'FERMENTATION_COMPLETED', 'DISTILLATION_STARTED', 'DISTILLATION_CLOSED', 'LOCK_RELEASED', 'BOTTLED', 'LAB_REGISTERED', 'DOSSIER_CLOSED'])
+    expect(passport.timeline.map((e) => e.type)).toEqual(['HARVEST_WEIGHED', 'PHYTO_DECIDED', 'TANK_FILLED', 'FERMENTATION_STARTED', 'FERMENTATION_COMPLETED', 'DISTILLATION_STARTED', 'DISTILLATION_CLOSED', 'NFT_MINTED', 'COLLECTION_PUBLISHED', 'LOCK_RELEASED', 'BOTTLED', 'LAB_REGISTERED', 'DOSSIER_CLOSED', 'DOSSIER_ANCHORED', 'TOKENS_REDEEMABLE'])
     expect(passport.timeline[0]).toMatchObject({ summary: 'Uva recibida y pesada en la bodega', actorRole: 'OPERATOR', corrected: true })
     expect(passport.fermentation.treatments[0]).toEqual({ type: 'SO2_ADDITION', additive: 'Metabisulfito de potasio grado alimentario', regulatoryAuthCode: 'SENASAG-REG-ADD-2024-88', appliedAt: '2026-03-10T17:00:00Z' })
     // Sin distinguir mayúsculas.
@@ -106,7 +107,7 @@ describe('pasaportes públicos', () => {
     // El código original de la serie 17 se anuló y sustituyó antes del cierre: el visor avisa.
     const voided = PublicBottlePassportSchema.parse(dataOf((await call(`/v1/public/passports/${codeOf(17, 'VOIDED')}`)).json))
     expect(voided.bottle).toMatchObject({ serial: 17, status: 'VOIDED', merkleProof: null })
-    expect(voided.lot.stage).toBe('CERTIFIED')
+    expect(voided.lot.stage).toBe('ANCHORED')
     // Lote sin expediente cerrado: sin prueba todavía.
     const open = publicFixtures.bottleCodes.find((b) => b.lotCode === 'CVJ-2026-SINGANI-001')!
     expect(PublicBottlePassportSchema.parse(dataOf((await call(`/v1/public/bottles/${open.codes[0]!.code}`)).json)).bottle).toMatchObject({ serial: 1, lotTotal: 4080, merkleProof: null })
@@ -270,20 +271,21 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     // La fila no lleva la ficha.
     expect(page.items[0]).not.toHaveProperty('description')
     const slugs = async (query: string) => dataOf((await call<Paged<{ slug: string }>>(`/v1/public/collections?${query}`)).json).items.map((c) => c.slug)
-    expect(await slugs('status=PRESALE')).toEqual(['singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
+    expect(await slugs('status=PRESALE')).toEqual(['singani-preventa-2026', 'singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
     expect(await slugs('productType=WINE')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025'])
     expect(await slugs('winery=altos-de-calamuchita')).toEqual(['vino-la-compania-2025', 'singani-el-portillo-2025'])
     expect(await slugs('q=gran reserva')).toEqual(['singani-gran-reserva-2026'])
     // Orden: por defecto las destacadas primero y, dentro, las más recientes.
-    expect(items.map((c) => c.featured)).toEqual([true, true, false, false, false, false, false, false])
-    expect(await slugs('featured=true')).toEqual(['singani-gran-reserva-2026', 'vino-la-compania-2025'])
+    expect(items.map((c) => c.featured)).toEqual([true, true, true, false, false, false, false, false, false])
+    // Ola 3: las colecciones reales publicadas (la preventa y la del lote anclado) van destacadas.
+    expect(await slugs('featured=true')).toEqual(['singani-preventa-2026', 'singani-gran-reserva-2026', 'vino-la-compania-2025'])
     expect((await slugs('sort=featured')).join()).toBe(items.map((c) => c.slug).join())
     const byName = await slugs('sort=name')
     expect([byName.at(0), byName.at(-1)]).toEqual(['singani-canon-viejo-2025', 'vino-las-carreras-2025'])
-    expect((await slugs('sort=newest')).slice(0, 3)).toEqual(['singani-edicion-aniversario-2026', 'singani-el-molino-2026', 'singani-gran-reserva-2026'])
+    expect((await slugs('sort=newest')).slice(0, 3)).toEqual(['singani-preventa-2026', 'singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
     // Por precio, las que aún no tienen precio van al final.
-    expect(await slugs('sort=price-asc')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025', 'singani-gran-reserva-2026', 'singani-el-portillo-2025', 'singani-canon-viejo-2025', 'singani-el-molino-2026', 'singani-el-molino-2025', 'singani-edicion-aniversario-2026'])
-    expect((await slugs('sort=price-desc')).at(0)).toBe('singani-el-molino-2025')
+    expect(await slugs('sort=price-asc')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025', 'singani-el-portillo-2025', 'singani-canon-viejo-2025', 'singani-el-molino-2026', 'singani-el-molino-2025', 'singani-gran-reserva-2026', 'singani-preventa-2026', 'singani-edicion-aniversario-2026'])
+    expect((await slugs('sort=price-desc')).at(0)).toBe('singani-gran-reserva-2026')
     expect((await slugs('sort=price-desc')).at(-1)).toBe('singani-edicion-aniversario-2026')
     expect((await call('/v1/public/collections?sort=caro')).status).toBe(422)
     // No se ofrece un lote con el análisis no conforme ni los de una bodega que no está activa.
@@ -294,7 +296,8 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     expect(detail.headers.get('x-mock-draft')).toBe(COLLECTIONS_DRAFT_CONTRACT)
     const collection = PublicCollectionSchema.parse(dataOf(detail.json))
     expect(collection).toStrictEqual(publicFixtures.collections.find((c) => c.slug === collection.slug))
-    expect(collection).toMatchObject({ lotStage: 'CERTIFIED', status: 'ON_SALE', availability: { total: 2950 }, price: { currency: 'BOB' }, lot: { lotCode: CASE_CODE } })
+    // Ola 3: la ficha sale de la colección real del lote (60 botellas tokenizadas, anclado → en venta).
+    expect(collection).toMatchObject({ lotStage: 'ANCHORED', status: 'ON_SALE', saleState: 'ON_SALE', availability: { total: 60, available: 60 }, counts: { available: 60 }, price: { amountMinor: 28000, currency: 'BOB' }, lot: { lotCode: CASE_CODE } })
     // Preventa: lote en proceso, con su fecha estimada y sin código de lote todavía.
     const presale = PublicCollectionSchema.parse(dataOf((await call('/v1/public/collections/singani-el-molino-2026')).json))
     expect(presale).toMatchObject({ status: 'PRESALE', lotStage: 'DISTILLING', lot: { lotCode: null } })
@@ -328,7 +331,7 @@ describe('coherencia de los fixtures de la Ola 2', () => {
     }
     for (const lab of F.labAnalyses) expect(lab.lotId).toBe(F.bottling.find((b) => b.id === lab.bottlingBatchId)!.lotId)
     expect(F.harvestBatches.filter((h) => h.lotId === null)).toHaveLength(1)
-    expect(new Set(F.lots.map((l) => l.stage))).toEqual(new Set(['ORIGIN', 'HARVEST', 'FERMENTING', 'AGING', 'DISTILLING', 'RESTING', 'BOTTLED', 'CERTIFIED', 'REJECTED', 'DISCARDED']))
+    expect(new Set(F.lots.map((l) => l.stage))).toEqual(new Set(['ORIGIN', 'HARVEST', 'FERMENTING', 'AGING', 'DISTILLING', 'RESTING', 'BOTTLED', 'ANCHORED', 'REJECTED', 'DISCARDED']))
     // Un embotellado por lote, y el código de lote solo existe tras embotellar.
     expect(new Set(F.bottling.map((b) => b.lotId)).size).toBe(F.bottling.length)
     for (const lot of F.lots) expect(lot.lotCode !== null, lot.reference).toBe(F.bottling.some((b) => b.lotId === lot.id))
@@ -380,7 +383,7 @@ describe('coherencia de los fixtures de la Ola 2', () => {
     const distillation = F.productionBatches.find((p) => p.lotId === lot.id)!
     const bottling = F.bottling.find((b) => b.lotId === lot.id)!
     const lab = F.labAnalyses.find((a) => a.lotId === lot.id)!
-    expect(lot).toMatchObject({ wineryId: SINGANI_CASE.wineryId, stage: 'CERTIFIED', lotCode: CASE_CODE, bottles: 2950, labStatus: 'CONFORMING', dossierStatus: 'CLOSED' })
+    expect(lot).toMatchObject({ wineryId: SINGANI_CASE.wineryId, stage: 'ANCHORED', lotCode: CASE_CODE, bottles: 2950, labStatus: 'CONFORMING', dossierStatus: 'CLOSED' })
     expect(lot.rules).toMatchObject({ singani: { minAltitudeMasl: 1600, minRestDays: 180 }, bottling: { maxLossPercent: 5 } })
     expect(harvest).toMatchObject({ id: SINGANI_CASE.harvestBatchId, netWeightKg: 18400, phytosanitaryStatus: 'APPROVED' })
     expect(tank).toMatchObject({ volumeFilledLiters: 12100, finalVolumeLiters: 12100, destinationType: 'SINGANI_DIST' })

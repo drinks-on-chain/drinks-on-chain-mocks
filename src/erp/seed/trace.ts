@@ -1,3 +1,6 @@
+import type { ChainCtx } from '../../chain/engine'
+import { identityOf, txById } from '../../chain/state'
+import { runChainSeed, seedChainEnv } from '../../tokenization/seed'
 import type { BackofficeFixtureSet } from '../../backoffice/seed/generate'
 import { REFERENCE_DAY } from '../../shared/dates'
 import { uid } from '../../shared/uuid'
@@ -109,12 +112,34 @@ export function buildTraceState(base: ErpFixtureSet, ctx: TraceCtx): TraceState 
   return state
 }
 
-/** Archivos de `fixtures/erp/`: las filas del ERP ya migradas y las colecciones de la Ola 2. */
-export function buildErpFixtureFiles(base: ErpFixtureSet, backoffice: BackofficeFixtureSet): ErpFixtureFiles {
+/** URL públicas de la API en los fixtures (el backend local). */
+export const SEED_PUBLIC_API_BASE_URL = 'http://localhost:4000'
+
+/** Contexto de la semilla de la Ola 3 (cadena y tokenización) sobre el de la trazabilidad. */
+export function seedChainCtx(backoffice: BackofficeFixtureSet, state: Pick<TraceState, 'wineries'>, ctx: TraceCtx = seedTraceCtx(backoffice)): ChainCtx {
+  const urls = { publicApiBaseUrl: SEED_PUBLIC_API_BASE_URL, homeDomain: SEED_PUBLIC_API_BASE_URL.replace(/^https?:\/\//, '') }
+  return { ...ctx, env: seedChainEnv(state, backoffice['winery-profiles.json'], backoffice['settings.json'], backoffice['setting-overrides.json'], urls) }
+}
+
+/**
+ * Archivos de `fixtures/erp/`: las filas del ERP ya migradas y las colecciones de la Ola 2, tras la
+ * semilla de la Ola 3 (identidades, preventas, anclajes). `capture` devuelve el estado completo
+ * para escribir `fixtures/chain/` y `fixtures/tokenization/`.
+ */
+export function buildErpFixtureFiles(base: ErpFixtureSet, backoffice: BackofficeFixtureSet, capture?: { state?: TraceState; ctx?: ChainCtx }): ErpFixtureFiles {
   const ctx = seedTraceCtx(backoffice)
   const state = buildTraceState(base, ctx)
+  const chainCtx = seedChainCtx(backoffice, state, ctx)
+  runChainSeed(state, chainCtx)
+  if (capture) Object.assign(capture, { state, ctx: chainCtx })
+  // SE-02: los campos legados de la bodega ya no llevan direcciones simuladas (contrato O3 §3.3).
+  const wineries = state.wineries.map((w) => {
+    const identity = identityOf(state.chain, w.id)
+    return { ...w, stellarPublicKey: identity?.accountAddress ?? null, onchainProducerId: null, onchainRegisterTxHash: txById(state.chain, identity?.accountTxId ?? null)?.txHash ?? null }
+  })
   return {
     ...base,
+    'wineries.json': wineries,
     'terroirs.json': state.terroirs,
     'harvest-batches.json': state.harvestBatches,
     'fermentation-tanks.json': state.tanks,

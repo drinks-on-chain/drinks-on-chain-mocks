@@ -1,3 +1,4 @@
+import { consumerAddressOf } from '../../../marketplace/handlers'
 import {
   needsMfa,
   recordLogin,
@@ -37,7 +38,6 @@ import {
   fieldError,
   invalid,
   invalidCredentials,
-  notFound,
   refreshInvalid,
   refreshReused,
   sessionExpired,
@@ -426,9 +426,11 @@ export const authUserRoutes: RouteSpec[] = [
     path: '/v1/users/me/wallet',
     access: anyUser,
     handle({ auth }) {
+      // Ola 3 §3.3 (SE-02): ya no hay billeteras simuladas. El personal → 404; el consumidor recibe su
+      // dirección custodial derivada con la forma legada (se sustituye en la Ola 4).
       const wallet = getErpDb().wallets.find((w) => w.userId === auth.user.id && w.isPrimary)
-      if (!wallet) throw notFound('Billetera no encontrada')
-      return ok(wallet)
+      if (auth.audience !== 'CONSUMER' || !wallet) throw new ApiError(404, 'CHN_WALLET_NOT_AVAILABLE', 'Esta cuenta no tiene una dirección en la red')
+      return ok({ ...wallet, stellarPublicAddress: consumerAddressOf(auth.user.id) })
     },
   },
 ]

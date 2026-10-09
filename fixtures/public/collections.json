@@ -1,5 +1,61 @@
 [
   {
+    "id": "20c275fc-7330-5935-911c-2c5800a0911a",
+    "slug": "singani-preventa-2026",
+    "name": "Singani Preventa 2026",
+    "productType": "SINGANI",
+    "vintage": 2026,
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "region": "Valle de Cinti · Camargo"
+    },
+    "lotStage": "ORIGIN",
+    "estimatedReadyDate": null,
+    "price": null,
+    "availability": {
+      "total": 100,
+      "available": 100
+    },
+    "status": "PRESALE",
+    "saleState": "PRESALE",
+    "counts": {
+      "available": 100
+    },
+    "featured": true,
+    "imageUrl": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+    "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
+    "tastingNotes": "Nariz floral de moscatel, con azahar y cáscara de lima; boca limpia y sedosa, de final largo.",
+    "pairing": "Solo, en copa pequeña, o en un chuflay con ginger ale y limón.",
+    "gallery": [
+      "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9"
+    ],
+    "lot": {
+      "lotCode": null,
+      "timeline": [
+        {
+          "type": "NFT_MINTED",
+          "occurredAt": "2026-09-23T13:01:00Z",
+          "recordedAt": "2026-09-23T13:01:00Z",
+          "lateEntry": false,
+          "summary": "100 botellas en preventa",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "COLLECTION_PUBLISHED",
+          "occurredAt": "2026-09-23T15:00:00Z",
+          "recordedAt": "2026-09-23T15:00:00Z",
+          "lateEntry": false,
+          "summary": "Colección publicada en el Marketplace",
+          "actorRole": null,
+          "corrected": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
     "slug": "singani-gran-reserva-2026",
     "name": "Singani Gran Reserva 2026",
     "productType": "SINGANI",
@@ -9,25 +65,29 @@
       "tradeName": "Destilería Cinti Viejo",
       "region": "Valle de Cinti · Camargo"
     },
-    "lotStage": "CERTIFIED",
-    "estimatedReadyDate": null,
+    "lotStage": "ANCHORED",
+    "estimatedReadyDate": "2026-09-20",
     "price": {
-      "amountMinor": 18500,
+      "amountMinor": 28000,
       "currency": "BOB"
     },
     "availability": {
-      "total": 2950,
-      "available": 1269
+      "total": 60,
+      "available": 60
     },
     "status": "ON_SALE",
+    "saleState": "ON_SALE",
+    "counts": {
+      "available": 60
+    },
     "featured": true,
-    "imageUrl": "/mocks/uploads/collections/singani-gran-reserva-2026.jpg",
-    "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
-    "tastingNotes": "Nariz floral de azahar y jazmín, con cítricos y un fondo de uva fresca; boca seca, limpia y persistente.",
-    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
+    "imageUrl": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+    "description": "Edición limitada de la Parcela 2 de Destilería Cinti Viejo: 2.950 botellas de singani con Denominación de Origen, 180 días de reposo y expediente de trazabilidad completo.",
+    "tastingNotes": "Flor de azahar, durazno blanco y un fondo mineral; entrada suave y final persistente.",
+    "pairing": "Quesos de cabra, frutos secos y postres de cítricos.",
     "gallery": [
-      "/mocks/uploads/collections/singani-gran-reserva-2026.jpg",
-      "/mocks/uploads/collections/singani-gran-reserva-2026-2.jpg"
+      "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+      "/v1/public/collections/images/f2add4f1-763a-59d3-94d5-96a26302e1b3"
     ],
     "lot": {
       "lotCode": "CVJ-2026-SINGANI-004",
@@ -96,6 +156,24 @@
           "corrected": false
         },
         {
+          "type": "NFT_MINTED",
+          "occurredAt": "2026-09-05T16:01:00Z",
+          "recordedAt": "2026-09-05T16:01:00Z",
+          "lateEntry": false,
+          "summary": "60 botellas en preventa",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "COLLECTION_PUBLISHED",
+          "occurredAt": "2026-09-06T14:00:00Z",
+          "recordedAt": "2026-09-06T14:00:00Z",
+          "lateEntry": false,
+          "summary": "Colección publicada en el Marketplace",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
           "type": "LOCK_RELEASED",
           "occurredAt": "2026-09-20T04:05:00Z",
           "recordedAt": "2026-09-20T04:05:00Z",
@@ -130,11 +208,30 @@
           "summary": "Expediente del lote cerrado",
           "actorRole": "OWNER",
           "corrected": false
+        },
+        {
+          "type": "DOSSIER_ANCHORED",
+          "occurredAt": "2026-09-24T15:02:00Z",
+          "recordedAt": "2026-09-24T15:02:00Z",
+          "lateEntry": false,
+          "summary": "Expediente anclado en la red Stellar",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "TOKENS_REDEEMABLE",
+          "occurredAt": "2026-09-24T15:02:00Z",
+          "recordedAt": "2026-09-24T15:02:00Z",
+          "lateEntry": false,
+          "summary": "Botellas listas para canjear",
+          "actorRole": null,
+          "corrected": false
         }
       ]
     }
   },
   {
+    "id": "0f5abfa2-9b35-5959-8349-61a243c3c5c1",
     "slug": "vino-la-compania-2025",
     "name": "Vino La Compañía 2025",
     "productType": "WINE",
@@ -155,6 +252,10 @@
       "available": 1384
     },
     "status": "ON_SALE",
+    "saleState": "ON_SALE",
+    "counts": {
+      "available": 1384
+    },
     "featured": true,
     "imageUrl": "/mocks/uploads/collections/vino-la-compania-2025.jpg",
     "description": "Vino de altura de los valles del sur de Bolivia, criado en barrica y embotellado en la propia bodega.",
@@ -234,6 +335,7 @@
     }
   },
   {
+    "id": "9ab9d83f-099f-5af6-9138-a9d82e5ba9f3",
     "slug": "singani-edicion-aniversario-2026",
     "name": "Singani Edición Aniversario 2026",
     "productType": "SINGANI",
@@ -251,6 +353,10 @@
       "available": 864
     },
     "status": "PRESALE",
+    "saleState": "PRESALE",
+    "counts": {
+      "available": 864
+    },
     "featured": false,
     "imageUrl": "/mocks/uploads/collections/singani-edicion-aniversario-2026.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
@@ -266,6 +372,7 @@
     }
   },
   {
+    "id": "a5a7a016-7539-5a03-900e-a257c57181c1",
     "slug": "singani-el-molino-2026",
     "name": "Singani El Molino 2026",
     "productType": "SINGANI",
@@ -286,6 +393,10 @@
       "available": 1246
     },
     "status": "PRESALE",
+    "saleState": "PRESALE",
+    "counts": {
+      "available": 1246
+    },
     "featured": false,
     "imageUrl": "/mocks/uploads/collections/singani-el-molino-2026.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
@@ -356,6 +467,7 @@
     }
   },
   {
+    "id": "12b05b0e-4d7e-542e-8df4-890e3d984828",
     "slug": "singani-el-molino-2025",
     "name": "Singani El Molino 2025",
     "productType": "SINGANI",
@@ -376,6 +488,10 @@
       "available": 1563
     },
     "status": "ON_SALE",
+    "saleState": "ON_SALE",
+    "counts": {
+      "available": 1563
+    },
     "featured": false,
     "imageUrl": "/mocks/uploads/collections/singani-el-molino-2025.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
@@ -464,6 +580,7 @@
     }
   },
   {
+    "id": "bedb4498-411c-5e10-a286-42cc9d108d8f",
     "slug": "singani-el-portillo-2025",
     "name": "Singani El Portillo 2025",
     "productType": "SINGANI",
@@ -484,6 +601,10 @@
       "available": 229
     },
     "status": "ON_SALE",
+    "saleState": "ON_SALE",
+    "counts": {
+      "available": 229
+    },
     "featured": false,
     "imageUrl": "/mocks/uploads/collections/singani-el-portillo-2025.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
@@ -585,11 +706,21 @@
           "summary": "Análisis de laboratorio registrado",
           "actorRole": "ENOLOGIST",
           "corrected": false
+        },
+        {
+          "type": "NFT_MINTED",
+          "occurredAt": "2026-09-17T16:01:00Z",
+          "recordedAt": "2026-09-17T16:01:00Z",
+          "lateEntry": false,
+          "summary": "240 botellas en preventa",
+          "actorRole": null,
+          "corrected": false
         }
       ]
     }
   },
   {
+    "id": "03130b3b-2f17-576e-9989-06a59c9c0595",
     "slug": "singani-canon-viejo-2025",
     "name": "Singani Cañón Viejo 2025",
     "productType": "SINGANI",
@@ -610,6 +741,10 @@
       "available": 1143
     },
     "status": "ON_SALE",
+    "saleState": "ON_SALE",
+    "counts": {
+      "available": 1143
+    },
     "featured": false,
     "imageUrl": "/mocks/uploads/collections/singani-canon-viejo-2025.jpg",
     "description": "Singani de Moscatel de Alejandría de altura, destilado en alambique de cobre y reposado antes de embotellar.",
@@ -698,6 +833,7 @@
     }
   },
   {
+    "id": "ac0b0961-eff1-577f-8586-830801bf184d",
     "slug": "vino-las-carreras-2025",
     "name": "Vino Las Carreras 2025",
     "productType": "WINE",
@@ -718,6 +854,10 @@
       "available": 0
     },
     "status": "SOLD_OUT",
+    "saleState": "SOLD_OUT",
+    "counts": {
+      "available": 0
+    },
     "featured": false,
     "imageUrl": "/mocks/uploads/collections/vino-las-carreras-2025.jpg",
     "description": "Vino de altura de los valles del sur de Bolivia, criado en barrica y embotellado en la propia bodega.",

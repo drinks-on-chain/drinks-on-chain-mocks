@@ -26,6 +26,71 @@
           "$zod": "PublicCollectionSchema"
         }
       }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/consumer",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Borrador adelantado de la Etapa 4 para las pantallas 2B y 2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "ConsumerProfileSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/orders",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Borrador adelantado de la Etapa 4 para las pantallas 2B y 2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 201,
+        "schema": {
+          "$zod": "OrderSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orders",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Borrador adelantado de la Etapa 4 para las pantallas 2B y 2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$page": "zod:OrderSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orders/{id}",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Borrador adelantado de la Etapa 4 para las pantallas 2B y 2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "OrderSchema"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payments/test/{paymentId}/simulate",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Borrador adelantado de la Etapa 4 para las pantallas 2B y 2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "OrderSchema"
+        }
+      }
     }
   ],
   "cambios": [],

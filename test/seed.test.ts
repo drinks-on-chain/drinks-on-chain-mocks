@@ -5,6 +5,9 @@ import { generateBackofficeFixtures } from '../src/backoffice/seed/generate'
 import { generateErpFixtures } from '../src/erp/seed/generate'
 import { buildErpFixtureFiles } from '../src/erp/seed/trace'
 import { generatePublicFixtures } from '../src/public/seed'
+import type { ChainCtx } from '../src/chain/engine'
+import type { TraceState } from '../src/erp/trace/state'
+import { buildChainFixtureFiles } from '../src/tokenization/fixture-files'
 import { PyRandom, pyRound } from '../src/erp/seed/py-random'
 import { uid } from '../src/shared/uuid'
 
@@ -53,9 +56,12 @@ describe('PyRandom (compatible con random.Random de CPython)', () => {
 describe('generador del ERP', () => {
   const set = generateErpFixtures()
   const names = Object.keys(set).sort()
-  const files = buildErpFixtureFiles(set, generateBackofficeFixtures(set))
+  const capture: { state?: TraceState; ctx?: ChainCtx } = {}
+  const files = buildErpFixtureFiles(set, generateBackofficeFixtures(set), capture)
   const fileNames = Object.keys(files).sort()
-  const publicFiles = generatePublicFixtures(files, generateBackofficeFixtures(set))
+  const publicFiles = generatePublicFixtures(files, generateBackofficeFixtures(set), capture.state!.chain)
+  // Ola 3: `fixtures/chain/` y `fixtures/tokenization/` salen del mismo estado.
+  const ola3 = buildChainFixtureFiles(capture.state!, capture.ctx!)
 
   it('produce los mismos archivos que la referencia de Python', () => {
     const reference = readdirSync(referenceDir).filter((f) => f.endsWith('.json')).sort()
@@ -84,6 +90,14 @@ describe('generador del ERP', () => {
   it.each(fileNames)('fixtures/erp/%s está al día con el generador', (name) => {
     const generated = roundTrip(files[name as keyof typeof files])
     expect(readJson(join(fixturesDir, name))).toStrictEqual(generated)
+  })
+
+  it.each(Object.keys(ola3.chain))('fixtures/chain/%s está al día con el generador', (name) => {
+    expect(readJson(join(root, 'fixtures', 'chain', name))).toStrictEqual(roundTrip(ola3.chain[name as keyof typeof ola3.chain]))
+  })
+
+  it.each(Object.keys(ola3.tokenization))('fixtures/tokenization/%s está al día con el generador', (name) => {
+    expect(readJson(join(root, 'fixtures', 'tokenization', name))).toStrictEqual(roundTrip(ola3.tokenization[name as keyof typeof ola3.tokenization]))
   })
 
   it.each(Object.keys(publicFiles))('fixtures/public/%s está al día con el generador', (name) => {

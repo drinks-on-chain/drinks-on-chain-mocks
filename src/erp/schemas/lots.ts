@@ -143,6 +143,35 @@ export const LotLabStatusSchema = z.enum(LAB_STATUSES)
 export type LotLabStatus = z.infer<typeof LotLabStatusSchema>
 
 /** Fila de la lista de lotes (`LotSummaryDto`). */
+/**
+ * Marca de tokenización del lote (contrato de la Ola 3 §5.3; `LotTokenizationMarkDto`). No es una
+ * etapa. Sin solicitud ni colección: `{ state: 'NONE', quota: 0, minted: 0, collectionId: null }`.
+ */
+export const LOT_TOKENIZATION_STATES = ['NONE', 'REQUESTED', 'CHANGES_REQUESTED', 'MINTING', 'MINT_FAILED', 'READY', 'PUBLISHED', 'PAUSED', 'CLOSED'] as const
+export const LotTokenizationStateSchema = z.enum(LOT_TOKENIZATION_STATES)
+export type LotTokenizationState = z.infer<typeof LotTokenizationStateSchema>
+
+export const LotTokenizationMarkSchema = z.object({
+  state: LotTokenizationStateSchema,
+  /** Cuota aprobada vigente (0 sin colección). */
+  quota: z.number().int().min(0),
+  /** NFT emitidos y confirmados en la red. */
+  minted: z.number().int().min(0),
+  collectionId: z.string().nullable(),
+})
+export type LotTokenizationMark = z.infer<typeof LotTokenizationMarkSchema>
+
+/** Sin solicitud ni colección. */
+export const NO_TOKENIZATION: LotTokenizationMark = { state: 'NONE', quota: 0, minted: 0, collectionId: null }
+
+/** Bloque `tokenization` del panel de la bodega (contrato de la Ola 3 §11; `TraceDashboardTokenizationDto`). */
+export const TraceDashboardTokenizationSchema = z.object({
+  openRequests: z.number().int().min(0),
+  changesRequested: z.number().int().min(0),
+  collectionsPublished: z.number().int().min(0),
+})
+export type TraceDashboardTokenization = z.infer<typeof TraceDashboardTokenizationSchema>
+
 export const LotSummarySchema = z.object({
   id: z.string(),
   wineryId: z.string(),
@@ -175,6 +204,8 @@ export const LotSummarySchema = z.object({
   complianceIssuesOpen: z.number().int().min(0),
   createdAt: Instant,
   updatedAt: Instant,
+  /** Marca de tokenización (Ola 3, aditiva). */
+  tokenization: LotTokenizationMarkSchema,
 })
 export type LotSummary = z.infer<typeof LotSummarySchema>
 
@@ -270,6 +301,13 @@ export const LOT_EVENT_TYPES = [
   'DOSSIER_CLOSED',
   'LOT_REJECTED',
   'LOT_DISCARDED',
+  // Ola 3 (contrato §11): tokenización y anclaje
+  'TOKENIZATION_AUTHORIZED',
+  'NFT_MINTED',
+  'COLLECTION_PUBLISHED',
+  'DOSSIER_ANCHORED',
+  'TOKENS_REDEEMABLE',
+  'SHORTFALL_DETECTED',
 ] as const
 export const LotEventTypeSchema = z.enum(LOT_EVENT_TYPES)
 export type LotEventType = z.infer<typeof LotEventTypeSchema>
@@ -290,6 +328,10 @@ export const PUBLIC_LOT_EVENT_TYPES: readonly LotEventType[] = [
   'LAB_REGISTERED',
   'DOSSIER_CLOSED',
   'LOT_DISCARDED',
+  'NFT_MINTED',
+  'COLLECTION_PUBLISHED',
+  'DOSSIER_ANCHORED',
+  'TOKENS_REDEEMABLE',
 ]
 
 /** Evento de la línea de tiempo del lote (`LotEventDto`). */

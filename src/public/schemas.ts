@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { PublicDossierAnchorSchema } from '../chain/schemas'
 import { WineryRoleSchema } from '../erp/schemas/organizations'
 import { LabConformityCheckSchema } from '../erp/schemas/lab-analyses'
 import { CalendarDateSchema, DoStatusSchema, LotEventTypeSchema, LotProductTypeSchema, LotStageCodeSchema } from '../erp/schemas/lots'
@@ -124,8 +125,8 @@ export const PublicLotPassportSchema = z.object({
      * absoluta o una ruta relativa de la API (`/v1/public/…`) que la app resuelve contra su proxy.
      */
     canonicalUrl: z.string().nullable(),
-    /** Siempre `null` en esta ola (anclaje: Ola 3). */
-    anchor: z.null(),
+    /** Anclaje en la red (Ola 3 §7.3): `null` hasta que exista la transacción; `FAILED` se publica como `PENDING`. */
+    anchor: PublicDossierAnchorSchema.nullable(),
   }),
   /** `url`: `/v1/public/lots/{lotCode}/attachments/{id}` (redirige a una URL firmada); absoluta o relativa, como `canonicalUrl`. */
   publicAttachments: z.array(z.object({ id: z.string(), kind: z.string(), title: z.string(), url: z.string() })),
@@ -176,6 +177,8 @@ export type PublicCollectionStatus = z.infer<typeof PublicCollectionStatusSchema
 
 /** @experimental Borrador (§17.1): fila del catálogo sin cuenta. */
 export const PublicCollectionSummarySchema = z.object({
+  /** Id de la colección (el que recibe `POST /v1/orders` del borrador de la Etapa 4; mocks 0.6). */
+  id: z.string(),
   slug: z.string(),
   name: z.string(),
   productType: LotProductTypeSchema,
@@ -187,6 +190,10 @@ export const PublicCollectionSummarySchema = z.object({
   price: z.object({ amountMinor: z.number().int(), currency: z.literal('BOB') }).nullable(),
   availability: z.object({ total: z.number().int().min(0), available: z.number().int().min(0) }),
   status: PublicCollectionStatusSchema,
+  /** Igual que `status` (nombre del contrato de la Ola 3 §13.1; `status` se retirará con el OpenAPI de la Etapa 4). */
+  saleState: PublicCollectionStatusSchema,
+  /** Botellas que aún se pueden comprar (contrato de la Ola 3 §13.1). */
+  counts: z.object({ available: z.number().int().min(0) }),
   /** Destacada en la portada del catálogo (el orden por defecto las pone primero). */
   featured: z.boolean(),
   /** Puede faltar. En los mocks, `/mocks/uploads/collections/{slug}.jpg`, que sirven los handlers. */

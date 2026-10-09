@@ -1,0 +1,581 @@
+[
+  {
+    "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+    "slug": "singani-gran-reserva-2026",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo"
+    },
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "lot": {
+      "reference": "CVJ-L2026-005",
+      "lotCode": "CVJ-2026-SINGANI-004",
+      "name": "Singani Gran Reserva 2026",
+      "productType": "SINGANI",
+      "harvestYear": 2026,
+      "stage": "ANCHORED",
+      "estimatedReadyDate": "2026-09-20"
+    },
+    "status": "PUBLISHED",
+    "mintStatus": "CONFIRMED",
+    "saleState": "ON_SALE",
+    "quota": 60,
+    "pendingMintQuantity": 0,
+    "counts": {
+      "minted": 60,
+      "available": 60,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "price": {
+      "amountMinor": 28000,
+      "currency": "BOB",
+      "source": "MANUAL",
+      "setAt": "2026-09-05T16:00:00Z",
+      "setBy": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez"
+      }
+    },
+    "name": "Singani Gran Reserva 2026",
+    "coverImageUrl": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+    "estimatedRedeemDate": "2026-09-20",
+    "contract": {
+      "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+    },
+    "redeemable": true,
+    "redeemableSince": "2026-09-24T15:02:00Z",
+    "publishedAt": "2026-09-06T14:00:00Z",
+    "closedAt": null,
+    "createdAt": "2026-09-05T16:00:00Z",
+    "updatedAt": "2026-09-24T15:02:00Z",
+    "commercial": {
+      "name": "Singani Gran Reserva 2026",
+      "description": "Edición limitada de la Parcela 2 de Destilería Cinti Viejo: 2.950 botellas de singani con Denominación de Origen, 180 días de reposo y expediente de trazabilidad completo.",
+      "tastingNotes": "Flor de azahar, durazno blanco y un fondo mineral; entrada suave y final persistente.",
+      "pairing": "Quesos de cabra, frutos secos y postres de cítricos.",
+      "estimatedRedeemDate": "2026-09-20",
+      "images": [
+        {
+          "id": "7deadeaf-1344-5286-81fe-45b898291b56",
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-gran-reserva-2026.jpg",
+          "sha256": "e6fcee116dae2c9bcda79c05026ea02cd56a0d2bc441a1f211b786c45241bbe1",
+          "url": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+          "alt": "Botella de Singani Gran Reserva 2026",
+          "isCover": true
+        },
+        {
+          "id": "f2add4f1-763a-59d3-94d5-96a26302e1b3",
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-gran-reserva-2026-parrales.jpg",
+          "sha256": "7bcf485cfd934eb2738e8c09335c59a91b63b7424fe624b578c1aab6ebcf10bd",
+          "url": "/v1/public/collections/images/f2add4f1-763a-59d3-94d5-96a26302e1b3",
+          "alt": "Parrales de Moscatel de Alejandría en el cañón de Cinti",
+          "isCover": false
+        }
+      ]
+    },
+    "pricePolicySnapshot": null,
+    "priceHistory": [
+      {
+        "amountMinor": 28000,
+        "currency": "BOB",
+        "source": "MANUAL",
+        "setAt": "2026-09-05T16:00:00Z",
+        "setBy": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        }
+      }
+    ],
+    "mints": [
+      {
+        "id": "e54b86ea-1663-5b35-bfb8-fcc6ad53eef3",
+        "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+        "requestId": "ec44b0ee-dd59-5307-bd9d-4efad98a3be5",
+        "sequence": 1,
+        "quantity": 60,
+        "status": "CONFIRMED",
+        "lotArg": "CVJ-L2026-005",
+        "ranges": [
+          {
+            "firstTokenId": 0,
+            "lastTokenId": 59,
+            "firstBottleNumber": 1,
+            "lastBottleNumber": 60
+          }
+        ],
+        "createdAt": "2026-09-05T16:00:00Z",
+        "confirmedAt": "2026-09-05T16:01:00Z",
+        "transactions": [
+          {
+            "id": "b12fb83f-46a1-554a-8579-03d6dc55e9ac",
+            "kind": "MINT_BATCH",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
+            "ledger": 1560653,
+            "confirmedAt": "2026-09-05T16:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-09-05T16:00:00Z",
+            "updatedAt": "2026-09-05T16:01:00Z"
+          }
+        ]
+      }
+    ],
+    "quotaHistory": [
+      {
+        "requestId": "ec44b0ee-dd59-5307-bd9d-4efad98a3be5",
+        "kind": "INITIAL",
+        "quantity": 60,
+        "resultingQuota": 60,
+        "approvedAt": "2026-09-05T16:00:00Z",
+        "approvedBy": "Valeria Méndez"
+      }
+    ],
+    "statusHistory": [
+      {
+        "status": "MINTING",
+        "at": "2026-09-05T16:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": null
+      },
+      {
+        "status": "READY",
+        "at": "2026-09-05T16:01:00Z",
+        "by": "Sistema",
+        "reason": "Emisión confirmada"
+      },
+      {
+        "status": "PUBLISHED",
+        "at": "2026-09-06T14:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": null
+      }
+    ],
+    "anchor": {
+      "status": "ANCHORED",
+      "network": "TESTNET",
+      "account": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+      "memoHashHex": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
+      "memoHashBase64": "zAUUTPqeYPY+OPrbpbXDDsjNMOUpF/9UtipFZ8U+m00=",
+      "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+      "ledger": 1888265,
+      "anchoredAt": "2026-09-24T15:02:00Z",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+      "verifiedAt": "2026-09-24T15:02:00Z",
+      "transaction": {
+        "id": "dbc954ee-e00e-5c3a-9698-7d09f3100d26",
+        "kind": "ANCHOR_DOSSIER",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "ledger": 1888265,
+        "confirmedAt": "2026-09-24T15:02:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-24T15:01:00Z",
+        "updatedAt": "2026-09-24T15:02:00Z"
+      }
+    },
+    "closure": {
+      "id": "48a60114-159f-5621-ab91-4e57a5f4144b",
+      "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+      "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+      "status": "NO_SHORTFALL",
+      "computedAt": "2026-09-25T06:00:00Z",
+      "bottles": 2950,
+      "minted": 60,
+      "sold": 0,
+      "reserved": 0,
+      "unsold": 60,
+      "shortfall": 0,
+      "unsoldToBurn": 0,
+      "soldWithoutBottle": 0,
+      "unsoldPolicy": null,
+      "decision": null,
+      "items": []
+    },
+    "metrics": {
+      "counts": {
+        "minted": 60,
+        "available": 60,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "quota": 60,
+      "authorizedVsEstimatePercent": 2,
+      "firstMintedAt": "2026-09-05T16:01:00Z",
+      "publishedAt": "2026-09-06T14:00:00Z",
+      "firstSaleAt": null,
+      "chainCosts": {
+        "feesChargedXlm": "0.1389000",
+        "transactions": 1
+      },
+      "byMint": [
+        {
+          "sequence": 1,
+          "quantity": 60,
+          "confirmedAt": "2026-09-05T16:01:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+    "slug": "singani-el-portillo-2025",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita"
+    },
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "lot": {
+      "reference": "ALT-L2025-004",
+      "lotCode": "ALT-2025-SINGANI-002",
+      "name": "Singani El Portillo 2025",
+      "productType": "SINGANI",
+      "harvestYear": 2025,
+      "stage": "BOTTLED",
+      "estimatedReadyDate": "2025-10-10"
+    },
+    "status": "READY",
+    "mintStatus": "CONFIRMED",
+    "saleState": null,
+    "quota": 240,
+    "pendingMintQuantity": 0,
+    "counts": {
+      "minted": 240,
+      "available": 240,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "price": null,
+    "name": "Singani El Portillo 2025",
+    "coverImageUrl": "/v1/public/collections/images/c40ff3e3-d6ab-50d4-b864-855e1e90927f",
+    "estimatedRedeemDate": "2025-10-10",
+    "contract": {
+      "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+    },
+    "redeemable": false,
+    "redeemableSince": null,
+    "publishedAt": null,
+    "closedAt": null,
+    "createdAt": "2026-09-17T16:00:00Z",
+    "updatedAt": "2026-09-17T16:01:00Z",
+    "commercial": {
+      "name": "Singani El Portillo 2025",
+      "description": "Singani de altura de la parcela El Portillo de Bodega Altos de Calamuchita, embotellado en 2025 tras su reposo en acero.",
+      "tastingNotes": null,
+      "pairing": null,
+      "estimatedRedeemDate": "2025-10-10",
+      "images": [
+        {
+          "id": "c40ff3e3-d6ab-50d4-b864-855e1e90927f",
+          "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/collections/2026/singani-el-portillo-2025.jpg",
+          "sha256": "381518fe05c094deb597764c36f9ad1c2b34167359917012eaf48ec869ab7a27",
+          "url": "/v1/public/collections/images/c40ff3e3-d6ab-50d4-b864-855e1e90927f",
+          "alt": "Botella de Singani El Portillo 2025",
+          "isCover": true
+        }
+      ]
+    },
+    "pricePolicySnapshot": null,
+    "priceHistory": [],
+    "mints": [
+      {
+        "id": "36002565-e834-5dbb-ad8f-ca93e2865563",
+        "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+        "requestId": "c697864a-236e-5688-b355-25dc31345443",
+        "sequence": 1,
+        "quantity": 240,
+        "status": "CONFIRMED",
+        "lotArg": "ALT-L2025-004",
+        "ranges": [
+          {
+            "firstTokenId": 0,
+            "lastTokenId": 239,
+            "firstBottleNumber": 1,
+            "lastBottleNumber": 240
+          }
+        ],
+        "createdAt": "2026-09-17T16:00:00Z",
+        "confirmedAt": "2026-09-17T16:01:00Z",
+        "transactions": [
+          {
+            "id": "296ac8c5-e1ae-5c21-994c-642b6ec0632d",
+            "kind": "MINT_BATCH",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
+            "ledger": 1768013,
+            "confirmedAt": "2026-09-17T16:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-09-17T16:00:00Z",
+            "updatedAt": "2026-09-17T16:01:00Z"
+          }
+        ]
+      }
+    ],
+    "quotaHistory": [
+      {
+        "requestId": "c697864a-236e-5688-b355-25dc31345443",
+        "kind": "INITIAL",
+        "quantity": 240,
+        "resultingQuota": 240,
+        "approvedAt": "2026-09-17T16:00:00Z",
+        "approvedBy": "Valeria Méndez"
+      }
+    ],
+    "statusHistory": [
+      {
+        "status": "MINTING",
+        "at": "2026-09-17T16:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": null
+      },
+      {
+        "status": "READY",
+        "at": "2026-09-17T16:01:00Z",
+        "by": "Sistema",
+        "reason": "Emisión confirmada"
+      }
+    ],
+    "anchor": null,
+    "closure": {
+      "id": "32d63503-aa4a-5768-9b2c-12d66d090202",
+      "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+      "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+      "status": "NO_SHORTFALL",
+      "computedAt": "2026-09-25T06:00:00Z",
+      "bottles": 1040,
+      "minted": 240,
+      "sold": 0,
+      "reserved": 0,
+      "unsold": 240,
+      "shortfall": 0,
+      "unsoldToBurn": 0,
+      "soldWithoutBottle": 0,
+      "unsoldPolicy": null,
+      "decision": null,
+      "items": []
+    },
+    "metrics": {
+      "counts": {
+        "minted": 240,
+        "available": 240,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "quota": 240,
+      "authorizedVsEstimatePercent": 22.9,
+      "firstMintedAt": "2026-09-17T16:01:00Z",
+      "publishedAt": null,
+      "firstSaleAt": null,
+      "chainCosts": {
+        "feesChargedXlm": "0.1389000",
+        "transactions": 1
+      },
+      "byMint": [
+        {
+          "sequence": 1,
+          "quantity": 240,
+          "confirmedAt": "2026-09-17T16:01:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "id": "20c275fc-7330-5935-911c-2c5800a0911a",
+    "slug": "singani-preventa-2026",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "winery": {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo"
+    },
+    "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+    "lot": {
+      "reference": "CVJ-L2026-006",
+      "lotCode": null,
+      "name": "Singani Preventa 2026",
+      "productType": "SINGANI",
+      "harvestYear": 2026,
+      "stage": "ORIGIN",
+      "estimatedReadyDate": null
+    },
+    "status": "PUBLISHED",
+    "mintStatus": "CONFIRMED",
+    "saleState": "PRESALE",
+    "quota": 100,
+    "pendingMintQuantity": 0,
+    "counts": {
+      "minted": 100,
+      "available": 100,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "price": null,
+    "name": "Singani Preventa 2026",
+    "coverImageUrl": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+    "estimatedRedeemDate": null,
+    "contract": {
+      "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+    },
+    "redeemable": false,
+    "redeemableSince": null,
+    "publishedAt": "2026-09-23T15:00:00Z",
+    "closedAt": null,
+    "createdAt": "2026-09-23T13:00:00Z",
+    "updatedAt": "2026-09-23T15:00:00Z",
+    "commercial": {
+      "name": "Singani Preventa 2026",
+      "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
+      "tastingNotes": "Nariz floral de moscatel, con azahar y cáscara de lima; boca limpia y sedosa, de final largo.",
+      "pairing": "Solo, en copa pequeña, o en un chuflay con ginger ale y limón.",
+      "estimatedRedeemDate": null,
+      "images": [
+        {
+          "id": "c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+          "key": "org/04de1441-989d-5c3e-b06f-033f3961d19d/collections/2026/singani-preventa-2026.jpg",
+          "sha256": "41f88f02ddbd97bc1ee60ab9d4b135dbe81148a77ae4a9465ea6d577c9f07598",
+          "url": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+          "alt": "Botella de Singani Preventa 2026 sobre una mesa de madera",
+          "isCover": true
+        }
+      ]
+    },
+    "pricePolicySnapshot": null,
+    "priceHistory": [],
+    "mints": [
+      {
+        "id": "4740cafd-7ae2-5aa1-a14a-12c8f11551e0",
+        "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a",
+        "requestId": "a8494b4d-8407-5160-86be-9f6226731095",
+        "sequence": 1,
+        "quantity": 100,
+        "status": "CONFIRMED",
+        "lotArg": "CVJ-L2026-006",
+        "ranges": [
+          {
+            "firstTokenId": 60,
+            "lastTokenId": 159,
+            "firstBottleNumber": 1,
+            "lastBottleNumber": 100
+          }
+        ],
+        "createdAt": "2026-09-23T13:00:00Z",
+        "confirmedAt": "2026-09-23T13:01:00Z",
+        "transactions": [
+          {
+            "id": "a739721c-9ab9-5bb3-b8ca-dedf16ad4506",
+            "kind": "MINT_BATCH",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
+            "ledger": 1869533,
+            "confirmedAt": "2026-09-23T13:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-09-23T13:00:00Z",
+            "updatedAt": "2026-09-23T13:01:00Z"
+          }
+        ]
+      }
+    ],
+    "quotaHistory": [
+      {
+        "requestId": "a8494b4d-8407-5160-86be-9f6226731095",
+        "kind": "INITIAL",
+        "quantity": 100,
+        "resultingQuota": 100,
+        "approvedAt": "2026-09-23T13:00:00Z",
+        "approvedBy": "Valeria Méndez"
+      }
+    ],
+    "statusHistory": [
+      {
+        "status": "MINTING",
+        "at": "2026-09-23T13:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": null
+      },
+      {
+        "status": "READY",
+        "at": "2026-09-23T13:01:00Z",
+        "by": "Sistema",
+        "reason": "Emisión confirmada"
+      },
+      {
+        "status": "PUBLISHED",
+        "at": "2026-09-23T15:00:00Z",
+        "by": "Valeria Méndez",
+        "reason": "Apertura de la preventa"
+      }
+    ],
+    "anchor": null,
+    "closure": null,
+    "metrics": {
+      "counts": {
+        "minted": 100,
+        "available": 100,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "quota": 100,
+      "authorizedVsEstimatePercent": 3.3,
+      "firstMintedAt": "2026-09-23T13:01:00Z",
+      "publishedAt": "2026-09-23T15:00:00Z",
+      "firstSaleAt": null,
+      "chainCosts": {
+        "feesChargedXlm": "0.0070000",
+        "transactions": 1
+      },
+      "byMint": [
+        {
+          "sequence": 1,
+          "quantity": 100,
+          "confirmedAt": "2026-09-23T13:01:00Z"
+        }
+      ]
+    }
+  }
+]

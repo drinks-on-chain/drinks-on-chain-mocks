@@ -1,3 +1,4 @@
+import { emptyChainState, isLotAnchored, lotTokenizationMark, type ChainState } from '../../chain/state'
 import { sha256Hex } from '../../shared/crypto'
 import type { ApiErrorDetail } from '../../shared/envelope'
 import { ApiError } from '../handlers/errors'
@@ -33,7 +34,7 @@ import type {
   WineAgingResponse,
   WineryResponse,
 } from '../schemas'
-import { PUBLIC_LOT_EVENT_TYPES, TERMINAL_LOT_STAGES } from '../schemas/lots'
+import { NO_TOKENIZATION, PUBLIC_LOT_EVENT_TYPES, TERMINAL_LOT_STAGES } from '../schemas/lots'
 import { mockBottleCode } from './bottle-code'
 import { dateOnly, dayOf, daysBetween, laPazDate } from './dates'
 import { agingLock, deriveLotStage, doRulesFromLot, doViolations, evaluateDo, nextLock, readyDateFromLocks, restLock, type DoRules } from './domain'
@@ -83,6 +84,8 @@ export interface TraceState {
   voidedRecords: string[]
   /** Huella SHA-256 de los archivos subidos en la sesión con `POST /v1/uploads`, por su `key`. */
   uploads: Record<string, string>
+  /** Ola 3: cadena y tokenización (identidades, transacciones, solicitudes, colecciones, NFT, anclajes…). */
+  chain: ChainState
 }
 
 /**
@@ -94,9 +97,9 @@ export const fileSha256 = (key: string, state?: Pick<TraceState, 'uploads'>): st
 /** Colecciones nuevas de la Ola 2, vacías. */
 export function emptyTraceCollections(): Pick<
   TraceState,
-  'lots' | 'lotEvents' | 'maturityAnalyses' | 'phytoDecisions' | 'corrections' | 'attachments' | 'dossiers' | 'bottleLots' | 'bottleExports' | 'voidedRecords' | 'uploads'
+  'lots' | 'lotEvents' | 'maturityAnalyses' | 'phytoDecisions' | 'corrections' | 'attachments' | 'dossiers' | 'bottleLots' | 'bottleExports' | 'voidedRecords' | 'uploads' | 'chain'
 > {
-  return { lots: [], lotEvents: [], maturityAnalyses: [], phytoDecisions: [], corrections: [], attachments: [], dossiers: [], bottleLots: [], bottleExports: [], voidedRecords: [], uploads: {} }
+  return { lots: [], lotEvents: [], maturityAnalyses: [], phytoDecisions: [], corrections: [], attachments: [], dossiers: [], bottleLots: [], bottleExports: [], voidedRecords: [], uploads: {}, chain: emptyChainState() }
 }
 
 /** Contexto de una operación: reloj del servidor, autor e identificadores. */
@@ -434,7 +437,7 @@ export function appendLotEvent(state: TraceState, ctx: TraceCtx, lot: Lot, input
 
 /** Etapa del lote según sus registros (§2.2). */
 export function computeStage(state: TraceState, lot: Lot): LotStageCode {
-  return deriveLotStage({
+  const stage = deriveLotStage({
     discarded: lot.discarded !== null,
     dossierClosed: lotDossier(state, lot.id)?.status === 'CLOSED',
     productType: lot.productType,
@@ -444,6 +447,8 @@ export function computeStage(state: TraceState, lot: Lot): LotStageCode {
     distillations: lotProductions(state, lot.id).map((p) => ({ closed: Boolean(p.processEndDate), discarded: p.restStatus === 'DISCARDED' })),
     bottled: lotBottling(state, lot.id) !== null,
   })
+  // Ola 3 §7.2: con el anclaje confirmado y verificado, el lote certificado pasa a `ANCHORED`.
+  return stage === 'CERTIFIED' && isLotAnchored(state.chain, lot.id) ? 'ANCHORED' : stage
 }
 
 /**
@@ -544,6 +549,7 @@ export function toLotSummary(state: TraceState, lot: Lot, ctx: Pick<TraceCtx, 't
     complianceIssuesOpen: lot.complianceIssues.filter((i) => !i.resolvedAt).length,
     createdAt: lot.createdAt,
     updatedAt: lot.updatedAt,
+    tokenization: lotTokenizationMark(state.chain, lot.id),
   }
 }
 
@@ -675,6 +681,7 @@ export function createLot(state: TraceState, ctx: TraceCtx, wineryId: string, bo
     links: { harvestBatchIds: [], tankIds: [], wineAgingBatchIds: [], productionBatchIds: [], bottlingBatchId: null, labAnalysisIds: [] },
     discarded: null,
     notes: body.notes ?? null,
+    tokenization: { ...NO_TOKENIZATION },
     createdBy: options.origin === 'MIGRATION' ? null : ctx.actor,
   }
   state.lots.push(base)

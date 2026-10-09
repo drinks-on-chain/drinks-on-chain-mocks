@@ -427,7 +427,7 @@ describe('permisos de la lista de espera (capacidad waitlist)', () => {
     const capability = matrix.capabilities.find((c) => c.key === 'waitlist')!
     expect(capability.label).toBe('Lista de espera')
     expect(capability.roles).toMatchObject({ SUPERADMIN: 'FULL', ADMIN: 'FULL', OPERATIONS: 'FULL', SUPPORT: 'READ', OWNER: 'NONE', ENOLOGIST: 'NONE' })
-    expect(matrix.capabilities.map((c) => c.key)).toEqual(['platform.users', 'settings', 'applications', 'waitlist', 'wineries.suspend', 'wineries.revoke', 'team', 'audit'])
+    expect(matrix.capabilities.map((c) => c.key)).toEqual(['platform.users', 'settings', 'applications', 'waitlist', 'wineries.suspend', 'wineries.revoke', 'team', 'audit', 'tokenization', 'chain', 'chain.admin'])
     expect(platformRolesWith('waitlist', 'FULL', 'READ')).toEqual(['SUPERADMIN', 'ADMIN', 'OPERATIONS', 'SUPPORT'])
     expect(platformRolesWith('waitlist', 'FULL')).toEqual(['SUPERADMIN', 'ADMIN', 'OPERATIONS'])
   })

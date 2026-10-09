@@ -1,3 +1,4 @@
+import { traceDashboardTokenization as traceDashboardTokenizationOf } from '../../tokenization/views'
 import type {
   BatchLabAnalysisResponse,
   BottlingBatchDetail,
@@ -582,6 +583,7 @@ export function traceDashboard(state: TraceState, ctx: TraceCtx, wineryId: strin
     bottledWithoutLab: bottled.filter((l) => !currentLab(state, l.id)).map((l) => toLotSummary(state, l, ctx)),
     readyToClose: bottled.filter((l) => dossierPreview(state, ctx, l).ready).map((l) => toLotSummary(state, l, ctx)),
     complianceIssuesOpen: sum(lots.map((l) => l.complianceIssues.filter((i) => !i.resolvedAt).length)),
+    tokenization: traceDashboardTokenizationOf(state.chain, wineryId),
     unassignedHarvestBatches: harvests.filter((h) => !h.lotId).length,
   }
 }

@@ -59,7 +59,7 @@ const codeMalformed = () =>
  * cuenta para su IP; al superar 20 en 10 minutos, todas sus consultas del pasaporte responden 429
  * hasta que acaba la ventana).
  */
-function lookup<T>(ctx: RouteContext, find: () => T): T {
+export function lookup<T>(ctx: RouteContext, find: () => T): T {
   if (getScenario() === 'pasaporte-saturado') {
     throw new ApiError(429, 'TOO_MANY_REQUESTS', 'Demasiadas peticiones. Vuelve a intentarlo en un momento', null, { 'Retry-After': String(PUBLIC_RATE_LIMIT.retryAfterSeconds), 'Cache-Control': 'no-store' })
   }
@@ -121,7 +121,7 @@ function bottlePassport(ctx: RouteContext, raw: string): RouteResult {
 }
 
 /** Lote embotellado de un código de lote de la URL (422 si la forma es imposible, 404 si no existe). */
-function publicLot(lotCode: string): Lot {
+export function publicLot(lotCode: string): Lot {
   const code = decodeURIComponent(lotCode).trim().toUpperCase()
   if (!LOT_CODE_PATTERN.test(code)) throw codeMalformed()
   const lot = findLotByCode(getErpDb(), code)
@@ -223,7 +223,7 @@ export const publicRoutes: RouteSpec[] = [
       const q = strParam(query, 'q')?.toLowerCase()
       const featured = boolParam(query, 'featured')
       const sort = enumParam(query, 'sort', COLLECTION_SORTS)
-      const filtered = rankedCollections(getErpDb(), publicWineryOf, nowStamp()).filter(
+      const filtered = rankedCollections(getErpDb(), publicWineryOf, nowStamp(), getErpDb().marketplace.sold).filter(
         (c) =>
           (!productType || c.productType === productType) &&
           (!status || c.status === status) &&
@@ -243,7 +243,7 @@ export const publicRoutes: RouteSpec[] = [
     access: 'public',
     draft: COLLECTIONS_DRAFT_CONTRACT,
     handle({ params }) {
-      const collection = buildCollections(getErpDb(), publicWineryOf, nowStamp()).find((c) => c.slug === params.slug)
+      const collection = buildCollections(getErpDb(), publicWineryOf, nowStamp(), getErpDb().marketplace.sold).find((c) => c.slug === params.slug)
       if (!collection) throw notFound(`Colección "${params.slug}" no encontrada`)
       return ok(collection)
     },

@@ -1,5 +1,5 @@
 import type { SetupWorker, StartOptions } from 'msw/browser'
-import { advanceMockClock, createErpHandlers, mockMailbox, resetErpDb, type MockHandlerOptions } from './erp/handlers'
+import { advanceMockClock, createErpHandlers, mockChain, mockMailbox, resetErpDb, type MockChain, type MockHandlerOptions } from './erp/handlers'
 import { getScenario, setScenario } from './shared/scenarios'
 
 // Entrada `@drinks-on-chain/mocks/browser`: arranca el Service Worker de MSW en la app.
@@ -26,6 +26,8 @@ export interface DocMocksGlobal {
   advanceClock: typeof advanceMockClock
   getScenario: typeof getScenario
   setScenario: typeof setScenario
+  /** Red simulada de la Ola 3: `advance()`, `settle()`, `failNext()`, `setMode()`, `pending()`. */
+  chain: MockChain
 }
 
 let starting: Promise<SetupWorker> | null = null
@@ -51,7 +53,7 @@ export function startMockWorker(options: StartMockWorkerOptions = {}): Promise<S
       quiet: quiet ?? false,
     })
     if (exposeGlobal !== false) {
-      const api: DocMocksGlobal = { mailbox: mockMailbox, reset: resetErpDb, advanceClock: advanceMockClock, getScenario, setScenario }
+      const api: DocMocksGlobal = { mailbox: mockMailbox, reset: resetErpDb, advanceClock: advanceMockClock, getScenario, setScenario, chain: mockChain }
       ;(window as unknown as { __docMocks?: DocMocksGlobal }).__docMocks = api
     }
     return worker
@@ -65,6 +67,7 @@ export {
   expireAccessTokens,
   expireRefreshGrace,
   getMockAppUrls,
+  mockChain,
   mockMailbox,
   resetErpDb,
   resetSessions,

@@ -1,0 +1,45 @@
+{
+  "network": "TESTNET",
+  "networkPassphrase": "Test SDF Network ; September 2015",
+  "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+  "platform": {
+    "operationsAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+    "anchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7"
+  },
+  "wineries": [
+    {
+      "slug": "destileria-cinti-viejo",
+      "tradeName": "Destilería Cinti Viejo",
+      "symbol": "CVJ",
+      "account": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+      "contract": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "accountExplorerUrl": "https://stellar.expert/explorer/testnet/account/GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+      "contractExplorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "paused": false,
+      "since": "2026-08-16T09:01:00Z"
+    },
+    {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita",
+      "symbol": "ALT",
+      "account": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+      "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "accountExplorerUrl": "https://stellar.expert/explorer/testnet/account/GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+      "contractExplorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "paused": false,
+      "since": "2026-08-16T09:11:00Z"
+    },
+    {
+      "slug": "casa-uriondo",
+      "tradeName": "Casa Uriondo",
+      "symbol": "CUR",
+      "account": "GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE",
+      "contract": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+      "accountExplorerUrl": "https://stellar.expert/explorer/testnet/account/GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE",
+      "contractExplorerUrl": "https://stellar.expert/explorer/testnet/contract/CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+      "paused": false,
+      "since": "2026-08-16T09:21:00Z"
+    }
+  ],
+  "generatedAt": "2026-09-25T12:00:00Z"
+}

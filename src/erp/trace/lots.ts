@@ -1,3 +1,4 @@
+import { mintedOfLot } from '../../chain/state'
 import { ApiError } from '../handlers/errors'
 import type { Lot, UpdateLotDto } from '../schemas'
 import { formatQuantity } from './rules'
@@ -14,6 +15,14 @@ export function updateLot(state: TraceState, ctx: TraceCtx, lot: Lot, body: Upda
     throw new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', [
       { field: 'reason', message: 'Indica el motivo del cambio de la estimación de botellas (queda en su historial)' },
     ])
+  }
+  if (estimateChanges) {
+    // Ola 3 §5.2: la estimación no baja de lo ya emitido (bajarla de la cuota solo limita futuras ampliaciones).
+    const minted = mintedOfLot(state.chain, lot.id)
+    if ((body.estimatedBottles as number) < minted) {
+      const message = `La estimación no puede ser menor que los ${minted} NFT ya emitidos del lote`
+      throw new ApiError(422, 'TOK_ESTIMATE_BELOW_MINTED', message, [{ field: 'estimatedBottles', message, code: 'TOK_ESTIMATE_BELOW_MINTED', expected: minted, actual: body.estimatedBottles }])
+    }
   }
   if (body.name !== undefined) lot.name = body.name.trim()
   if (body.plannedFormatCl !== undefined) lot.plannedFormatCl = body.plannedFormatCl

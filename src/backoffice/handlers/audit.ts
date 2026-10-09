@@ -1,3 +1,4 @@
+import { dashboardChain, dashboardTokenization } from '../../tokenization/views'
 import { anyStaff, orgMember, platform } from '../../erp/handlers/auth-context'
 import { getErpDb } from '../../erp/handlers/db'
 import { domainError, fieldError, invalid } from '../../erp/handlers/errors'
@@ -136,7 +137,15 @@ function dashboard(): Dashboard {
       wineries: count(state.waitlist, (e) => e.type === 'WINERY'),
       last24h: count(state.waitlist, (e) => Date.parse(e.createdAt) >= nowMs() - 24 * 3_600_000),
     },
-    alerts: [...state.alerts].sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
+    tokenization: dashboardTokenization(getErpDb().chain, nowIso),
+    chain: dashboardChain(getErpDb().chain, nowIso),
+    // Las alertas abiertas de la cadena (conciliación, transacciones fallidas) se suman a las del tablero.
+    alerts: [
+      ...state.alerts,
+      ...getErpDb()
+        .chain.alerts.filter((a) => a.resolvedAt === null)
+        .map((a) => ({ id: a.id, level: a.level, message: a.message, createdAt: a.detectedAt, link: '/cadena/alertas' })),
+    ].sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
     recentAudit: [...state.audit].sort(byNewest).slice(0, 5),
   }
 }

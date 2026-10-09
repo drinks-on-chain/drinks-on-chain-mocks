@@ -1,0 +1,448 @@
+{
+  "04de1441-989d-5c3e-b06f-033f3961d19d": {
+    "identity": {
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "network": "TESTNET",
+      "status": "ACTIVE",
+      "account": {
+        "address": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/account/GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+        "homeDomain": "localhost:4000",
+        "createdTx": {
+          "id": "10ebc4aa-ac60-5a00-9c9e-6f9df074ba90",
+          "kind": "CREATE_WINERY_ACCOUNT",
+          "status": "CONFIRMED",
+          "network": "TESTNET",
+          "txHash": "94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+          "ledger": 1480001,
+          "confirmedAt": "2026-08-16T09:01:00Z",
+          "attempts": 1,
+          "lastError": null,
+          "createdAt": "2026-08-16T09:00:00Z",
+          "updatedAt": "2026-08-16T09:01:00Z"
+        }
+      },
+      "contract": {
+        "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+        "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+        "name": "Destilería Cinti Viejo",
+        "symbol": "CVJ",
+        "baseUri": "http://localhost:4000/v1/public/nft/destileria-cinti-viejo/",
+        "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "paused": false,
+        "deployedTx": {
+          "id": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+          "kind": "DEPLOY_WINERY_CONTRACT",
+          "status": "CONFIRMED",
+          "network": "TESTNET",
+          "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+          "ledger": 1480002,
+          "confirmedAt": "2026-08-16T09:01:00Z",
+          "attempts": 1,
+          "lastError": null,
+          "createdAt": "2026-08-16T09:01:00Z",
+          "updatedAt": "2026-08-16T09:01:00Z"
+        },
+        "deployedAt": "2026-08-16T09:01:00Z"
+      },
+      "pendingTransactions": [],
+      "lastError": null
+    },
+    "totals": {
+      "minted": 160,
+      "available": 160,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "byLot": [
+      {
+        "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+        "reference": "CVJ-L2026-005",
+        "lotCode": "CVJ-2026-SINGANI-004",
+        "name": "Singani Gran Reserva 2026",
+        "stage": "ANCHORED",
+        "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+        "collectionStatus": "PUBLISHED",
+        "quota": 60,
+        "counts": {
+          "minted": 60,
+          "available": 60,
+          "reserved": 0,
+          "sold": 0,
+          "redeemable": 0,
+          "passActive": 0,
+          "redeemed": 0,
+          "burned": 0,
+          "expired": 0
+        },
+        "anchor": {
+          "status": "ANCHORED",
+          "network": "TESTNET",
+          "account": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+          "memoHashHex": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
+          "memoHashBase64": "zAUUTPqeYPY+OPrbpbXDDsjNMOUpF/9UtipFZ8U+m00=",
+          "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+          "ledger": 1888265,
+          "anchoredAt": "2026-09-24T15:02:00Z",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+          "verifiedAt": "2026-09-24T15:02:00Z",
+          "transaction": {
+            "id": "dbc954ee-e00e-5c3a-9698-7d09f3100d26",
+            "kind": "ANCHOR_DOSSIER",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+            "ledger": 1888265,
+            "confirmedAt": "2026-09-24T15:02:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-09-24T15:01:00Z",
+            "updatedAt": "2026-09-24T15:02:00Z"
+          }
+        }
+      },
+      {
+        "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+        "reference": "CVJ-L2026-006",
+        "lotCode": null,
+        "name": "Singani Preventa 2026",
+        "stage": "ORIGIN",
+        "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a",
+        "collectionStatus": "PUBLISHED",
+        "quota": 100,
+        "counts": {
+          "minted": 100,
+          "available": 100,
+          "reserved": 0,
+          "sold": 0,
+          "redeemable": 0,
+          "passActive": 0,
+          "redeemed": 0,
+          "burned": 0,
+          "expired": 0
+        },
+        "anchor": null
+      }
+    ],
+    "recentTransactions": [
+      {
+        "id": "dbc954ee-e00e-5c3a-9698-7d09f3100d26",
+        "kind": "ANCHOR_DOSSIER",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "ledger": 1888265,
+        "confirmedAt": "2026-09-24T15:02:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-24T15:01:00Z",
+        "updatedAt": "2026-09-24T15:02:00Z"
+      },
+      {
+        "id": "a739721c-9ab9-5bb3-b8ca-dedf16ad4506",
+        "kind": "MINT_BATCH",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
+        "ledger": 1869533,
+        "confirmedAt": "2026-09-23T13:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-23T13:00:00Z",
+        "updatedAt": "2026-09-23T13:01:00Z"
+      },
+      {
+        "id": "b12fb83f-46a1-554a-8579-03d6dc55e9ac",
+        "kind": "MINT_BATCH",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
+        "ledger": 1560653,
+        "confirmedAt": "2026-09-05T16:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-05T16:00:00Z",
+        "updatedAt": "2026-09-05T16:01:00Z"
+      },
+      {
+        "id": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+        "kind": "DEPLOY_WINERY_CONTRACT",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+        "ledger": 1480002,
+        "confirmedAt": "2026-08-16T09:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-08-16T09:01:00Z",
+        "updatedAt": "2026-08-16T09:01:00Z"
+      },
+      {
+        "id": "10ebc4aa-ac60-5a00-9c9e-6f9df074ba90",
+        "kind": "CREATE_WINERY_ACCOUNT",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/94b850811396a5cf38e3798a261c86882a0b3a66323151823efe35b1f76f43b3",
+        "ledger": 1480001,
+        "confirmedAt": "2026-08-16T09:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-08-16T09:00:00Z",
+        "updatedAt": "2026-08-16T09:01:00Z"
+      }
+    ],
+    "chainCosts": {
+      "feesChargedXlm": "0.3609300",
+      "since": "2026-08-16T09:00:00Z"
+    }
+  },
+  "bd7bf10b-1768-51fa-aa4e-6299f374a153": {
+    "identity": {
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "network": "TESTNET",
+      "status": "ACTIVE",
+      "account": {
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/account/GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "homeDomain": "localhost:4000",
+        "createdTx": {
+          "id": "11bd1f26-b922-5fac-bb88-9832528cd474",
+          "kind": "CREATE_WINERY_ACCOUNT",
+          "status": "CONFIRMED",
+          "network": "TESTNET",
+          "txHash": "071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+          "ledger": 1480003,
+          "confirmedAt": "2026-08-16T09:11:00Z",
+          "attempts": 1,
+          "lastError": null,
+          "createdAt": "2026-08-16T09:10:00Z",
+          "updatedAt": "2026-08-16T09:11:00Z"
+        }
+      },
+      "contract": {
+        "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+        "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+        "name": "Bodega Altos de Calamuchita",
+        "symbol": "ALT",
+        "baseUri": "http://localhost:4000/v1/public/nft/altos-de-calamuchita/",
+        "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "paused": false,
+        "deployedTx": {
+          "id": "38e43389-e58c-533c-8074-c050c5086f92",
+          "kind": "DEPLOY_WINERY_CONTRACT",
+          "status": "CONFIRMED",
+          "network": "TESTNET",
+          "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+          "ledger": 1480004,
+          "confirmedAt": "2026-08-16T09:11:00Z",
+          "attempts": 1,
+          "lastError": null,
+          "createdAt": "2026-08-16T09:11:00Z",
+          "updatedAt": "2026-08-16T09:11:00Z"
+        },
+        "deployedAt": "2026-08-16T09:11:00Z"
+      },
+      "pendingTransactions": [],
+      "lastError": null
+    },
+    "totals": {
+      "minted": 240,
+      "available": 240,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "byLot": [
+      {
+        "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+        "reference": "ALT-L2025-004",
+        "lotCode": "ALT-2025-SINGANI-002",
+        "name": "Singani El Portillo 2025",
+        "stage": "BOTTLED",
+        "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+        "collectionStatus": "READY",
+        "quota": 240,
+        "counts": {
+          "minted": 240,
+          "available": 240,
+          "reserved": 0,
+          "sold": 0,
+          "redeemable": 0,
+          "passActive": 0,
+          "redeemed": 0,
+          "burned": 0,
+          "expired": 0
+        },
+        "anchor": null
+      }
+    ],
+    "recentTransactions": [
+      {
+        "id": "296ac8c5-e1ae-5c21-994c-642b6ec0632d",
+        "kind": "MINT_BATCH",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
+        "ledger": 1768013,
+        "confirmedAt": "2026-09-17T16:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-17T16:00:00Z",
+        "updatedAt": "2026-09-17T16:01:00Z"
+      },
+      {
+        "id": "38e43389-e58c-533c-8074-c050c5086f92",
+        "kind": "DEPLOY_WINERY_CONTRACT",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+        "ledger": 1480004,
+        "confirmedAt": "2026-08-16T09:11:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-08-16T09:11:00Z",
+        "updatedAt": "2026-08-16T09:11:00Z"
+      },
+      {
+        "id": "11bd1f26-b922-5fac-bb88-9832528cd474",
+        "kind": "CREATE_WINERY_ACCOUNT",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+        "ledger": 1480003,
+        "confirmedAt": "2026-08-16T09:11:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-08-16T09:10:00Z",
+        "updatedAt": "2026-08-16T09:11:00Z"
+      }
+    ],
+    "chainCosts": {
+      "feesChargedXlm": "0.3539200",
+      "since": "2026-08-16T09:10:00Z"
+    }
+  },
+  "eac1f883-31c7-5032-8628-cac993ca5e48": {
+    "identity": {
+      "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+      "network": "TESTNET",
+      "status": "ACTIVE",
+      "account": {
+        "address": "GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/account/GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE",
+        "homeDomain": "localhost:4000",
+        "createdTx": {
+          "id": "37b79cb5-7cdf-5882-ab39-b6556cc4cc21",
+          "kind": "CREATE_WINERY_ACCOUNT",
+          "status": "CONFIRMED",
+          "network": "TESTNET",
+          "txHash": "878955af2124847d6b93e205f0e668cb619dc5e66eb92be74ccff08a60d9efa8",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/878955af2124847d6b93e205f0e668cb619dc5e66eb92be74ccff08a60d9efa8",
+          "ledger": 1480005,
+          "confirmedAt": "2026-08-16T09:21:00Z",
+          "attempts": 1,
+          "lastError": null,
+          "createdAt": "2026-08-16T09:20:00Z",
+          "updatedAt": "2026-08-16T09:21:00Z"
+        }
+      },
+      "contract": {
+        "address": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+        "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+        "name": "Casa Uriondo",
+        "symbol": "CUR",
+        "baseUri": "http://localhost:4000/v1/public/nft/casa-uriondo/",
+        "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "paused": false,
+        "deployedTx": {
+          "id": "c92ddc88-3856-50c8-ab22-af9a61d906c5",
+          "kind": "DEPLOY_WINERY_CONTRACT",
+          "status": "CONFIRMED",
+          "network": "TESTNET",
+          "txHash": "ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/tx/ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+          "ledger": 1480006,
+          "confirmedAt": "2026-08-16T09:21:00Z",
+          "attempts": 1,
+          "lastError": null,
+          "createdAt": "2026-08-16T09:21:00Z",
+          "updatedAt": "2026-08-16T09:21:00Z"
+        },
+        "deployedAt": "2026-08-16T09:21:00Z"
+      },
+      "pendingTransactions": [],
+      "lastError": null
+    },
+    "totals": {
+      "minted": 0,
+      "available": 0,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "byLot": [],
+    "recentTransactions": [
+      {
+        "id": "c92ddc88-3856-50c8-ab22-af9a61d906c5",
+        "kind": "DEPLOY_WINERY_CONTRACT",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+        "ledger": 1480006,
+        "confirmedAt": "2026-08-16T09:21:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-08-16T09:21:00Z",
+        "updatedAt": "2026-08-16T09:21:00Z"
+      },
+      {
+        "id": "37b79cb5-7cdf-5882-ab39-b6556cc4cc21",
+        "kind": "CREATE_WINERY_ACCOUNT",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "878955af2124847d6b93e205f0e668cb619dc5e66eb92be74ccff08a60d9efa8",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/878955af2124847d6b93e205f0e668cb619dc5e66eb92be74ccff08a60d9efa8",
+        "ledger": 1480005,
+        "confirmedAt": "2026-08-16T09:21:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-08-16T09:20:00Z",
+        "updatedAt": "2026-08-16T09:21:00Z"
+      }
+    ],
+    "chainCosts": {
+      "feesChargedXlm": "0.2150200",
+      "since": "2026-08-16T09:20:00Z"
+    }
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "destileria-cinti-viejo/0": {
+    "name": "Singani Gran Reserva 2026 · Botella 1 de 60",
+    "description": "Edición limitada de la Parcela 2 de Destilería Cinti Viejo: 2.950 botellas de singani con Denominación de Origen, 180 días de reposo y expediente de trazabilidad completo.",
+    "image": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+    "external_url": "http://localhost:3005/b/CVJ-2026-SINGANI-004",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Destilería Cinti Viejo"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "CVJ-L2026-005"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2026
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 1
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani Gran Reserva 2026"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotReference": "CVJ-L2026-005",
+      "lotCode": "CVJ-2026-SINGANI-004",
+      "bottleNumber": 1,
+      "collectionSize": 60,
+      "tokenId": 0,
+      "contract": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "status": "MINTED",
+      "passportUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-004"
+    }
+  },
+  "destileria-cinti-viejo/59": {
+    "name": "Singani Gran Reserva 2026 · Botella 60 de 60",
+    "description": "Edición limitada de la Parcela 2 de Destilería Cinti Viejo: 2.950 botellas de singani con Denominación de Origen, 180 días de reposo y expediente de trazabilidad completo.",
+    "image": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+    "external_url": "http://localhost:3005/b/CVJ-2026-SINGANI-004",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Destilería Cinti Viejo"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "CVJ-L2026-005"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2026
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 60
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani Gran Reserva 2026"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotReference": "CVJ-L2026-005",
+      "lotCode": "CVJ-2026-SINGANI-004",
+      "bottleNumber": 60,
+      "collectionSize": 60,
+      "tokenId": 59,
+      "contract": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "status": "MINTED",
+      "passportUrl": "http://localhost:3005/b/CVJ-2026-SINGANI-004"
+    }
+  },
+  "altos-de-calamuchita/0": {
+    "name": "Singani El Portillo 2025 · Botella 1 de 240",
+    "description": "Botella 1 del lote ALT-L2025-004 de Bodega Altos de Calamuchita.",
+    "image": null,
+    "external_url": "http://localhost:3005/b/ALT-2025-SINGANI-002",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Bodega Altos de Calamuchita"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "ALT-L2025-004"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2025
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 1
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani El Portillo 2025"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotReference": "ALT-L2025-004",
+      "lotCode": "ALT-2025-SINGANI-002",
+      "bottleNumber": 1,
+      "collectionSize": 240,
+      "tokenId": 0,
+      "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "status": "MINTED",
+      "passportUrl": "http://localhost:3005/b/ALT-2025-SINGANI-002"
+    }
+  },
+  "altos-de-calamuchita/239": {
+    "name": "Singani El Portillo 2025 · Botella 240 de 240",
+    "description": "Botella 240 del lote ALT-L2025-004 de Bodega Altos de Calamuchita.",
+    "image": null,
+    "external_url": "http://localhost:3005/b/ALT-2025-SINGANI-002",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Bodega Altos de Calamuchita"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "ALT-L2025-004"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2025
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 240
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani El Portillo 2025"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotReference": "ALT-L2025-004",
+      "lotCode": "ALT-2025-SINGANI-002",
+      "bottleNumber": 240,
+      "collectionSize": 240,
+      "tokenId": 239,
+      "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "status": "MINTED",
+      "passportUrl": "http://localhost:3005/b/ALT-2025-SINGANI-002"
+    }
+  },
+  "destileria-cinti-viejo/60": {
+    "name": "Singani Preventa 2026 · Botella 1 de 100",
+    "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
+    "image": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+    "external_url": "http://localhost:3005/colecciones/singani-preventa-2026",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Destilería Cinti Viejo"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "CVJ-L2026-006"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2026
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 1
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani Preventa 2026"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotReference": "CVJ-L2026-006",
+      "lotCode": null,
+      "bottleNumber": 1,
+      "collectionSize": 100,
+      "tokenId": 60,
+      "contract": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "status": "MINTED",
+      "passportUrl": null
+    }
+  },
+  "destileria-cinti-viejo/159": {
+    "name": "Singani Preventa 2026 · Botella 100 de 100",
+    "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
+    "image": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+    "external_url": "http://localhost:3005/colecciones/singani-preventa-2026",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Destilería Cinti Viejo"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "CVJ-L2026-006"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2026
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 100
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani Preventa 2026"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotReference": "CVJ-L2026-006",
+      "lotCode": null,
+      "bottleNumber": 100,
+      "collectionSize": 100,
+      "tokenId": 159,
+      "contract": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "status": "MINTED",
+      "passportUrl": null
+    }
+  }
+}

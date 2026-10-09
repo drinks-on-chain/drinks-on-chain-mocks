@@ -1,3 +1,4 @@
+import { syncChainNetwork } from '../../chain/runtime'
 import { delay, http, HttpResponse, type HttpHandler } from 'msw'
 import type { z } from 'zod'
 import { canonicalJson, sha256Hex } from '../../shared/crypto'
@@ -73,7 +74,7 @@ export interface RouteResult {
   /** Cabeceras extra (p. ej. `Set-Cookie`). */
   headers?: Record<string, string>
   /** Respuesta sin envoltorio (p. ej. `text/csv` de la exportación de la bitácora). */
-  raw?: { body: string; contentType: string }
+  raw?: { body: string | Uint8Array; contentType: string }
 }
 
 export interface RouteSpec {
@@ -88,8 +89,11 @@ export interface RouteSpec {
    * el resto → 403 `ORG_NOT_ACTIVE`). Solo aplica a las reglas de bodega.
    */
   allowInactiveOrg?: readonly CertificationStatus[]
-  /** Acepta `Idempotency-Key` (los 9 POST de alta del ERP, contrato de la Ola 0 §3). */
-  idempotent?: boolean
+  /**
+   * Acepta `Idempotency-Key` (los 9 POST de alta del ERP, contrato de la Ola 0 §3). `'required'`
+   * (Ola 3): sin la cabecera → 422 `IDEMPOTENCY_KEY_REQUIRED` con `details[0].field = 'Idempotency-Key'`.
+   */
+  idempotent?: boolean | 'required'
   handle: (ctx: RouteContext) => RouteResult | Promise<RouteResult>
   /** Se ejecuta tras una respuesta 2xx (p. ej. la bitácora de las escrituras del ERP). */
   afterSuccess?: (ctx: RouteContext, result: RouteResult) => void
@@ -137,7 +141,7 @@ function successResponse(request: Request, url: URL, result: RouteResult, correl
   // 204 sin cuerpo y redirecciones (302 a la URL firmada de un adjunto público).
   if (result.status === 204 || (result.status >= 300 && result.status < 400)) return new HttpResponse(null, { status: result.status, headers })
   if (result.raw) {
-    return new HttpResponse(result.raw.body, { status: result.status, headers: { ...headers, 'Content-Type': result.raw.contentType } })
+    return new HttpResponse(result.raw.body as BodyInit, { status: result.status, headers: { ...headers, 'Content-Type': result.raw.contentType } })
   }
   const body: SuccessEnvelope<unknown> = {
     success: true,
@@ -243,6 +247,7 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
     // para deshacer una escritura que falle a medias (como la transacción del backend).
     syncDataScenario()
     runDailyTasks()
+    syncChainNetwork()
     const backup = writes ? backupTrace() : null
     // Una escritura de la trazabilidad que falla tampoco avanza el reloj ni consume ids (el reloj
     // de los mocks avanza un minuto por alta, no por intento).
@@ -269,6 +274,11 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
         return successResponse(request, url, ok(empty), correlationId)
       }
       const idem = spec.idempotent ? await idempotencyKeyOf(request, url, session) : null
+      if (spec.idempotent === 'required' && !idem) {
+        throw new ApiError(422, 'IDEMPOTENCY_KEY_REQUIRED', `La cabecera ${IDEMPOTENCY_KEY_HEADER} es obligatoria en esta operación`, [
+          fieldError(IDEMPOTENCY_KEY_HEADER, `${IDEMPOTENCY_KEY_HEADER} es obligatoria (un UUID por operación)`),
+        ])
+      }
       if (idem) {
         const saved = idempotencyStore.get(idem.key)
         if (saved && saved.fingerprint !== idem.fingerprint) {

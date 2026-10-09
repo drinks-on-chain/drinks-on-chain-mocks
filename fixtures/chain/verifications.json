@@ -1,0 +1,336 @@
+{
+  "CVJ-2026-SINGANI-001": {
+    "lotCode": "CVJ-2026-SINGANI-001",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2026-SINGANI-002": {
+    "lotCode": "CVJ-2026-SINGANI-002",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2026-WINE-003": {
+    "lotCode": "CVJ-2026-WINE-003",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "ALT-2026-WINE-001": {
+    "lotCode": "ALT-2026-WINE-001",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "ALT-2025-WINE-001": {
+    "lotCode": "ALT-2025-WINE-001",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "ALT-2025-SINGANI-002": {
+    "lotCode": "ALT-2025-SINGANI-002",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2025-SINGANI-001": {
+    "lotCode": "CVJ-2025-SINGANI-001",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "CUR-2026-SINGANI-001": {
+    "lotCode": "CUR-2026-SINGANI-001",
+    "dossier": {
+      "status": "OPEN",
+      "hash": null,
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": null,
+      "canonicalUrl": null
+    },
+    "anchor": null,
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": false,
+        "message": "El expediente del lote aún no está cerrado"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": null,
+        "message": "Aún no aplica: el expediente no está cerrado"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": null,
+        "message": "Aún no aplica: no hay anclaje confirmado"
+      }
+    ],
+    "verifiedOnChainAt": null,
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "CVJ-2026-SINGANI-004": {
+    "lotCode": "CVJ-2026-SINGANI-004",
+    "dossier": {
+      "status": "CLOSED",
+      "hash": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
+      "algorithm": "sha256/jcs-rfc8785",
+      "closedAt": "2026-09-24T15:00:00Z",
+      "canonicalUrl": "/v1/public/lots/CVJ-2026-SINGANI-004/dossier"
+    },
+    "anchor": {
+      "status": "ANCHORED",
+      "network": "TESTNET",
+      "account": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+      "memoHashHex": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
+      "memoHashBase64": "zAUUTPqeYPY+OPrbpbXDDsjNMOUpF/9UtipFZ8U+m00=",
+      "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+      "ledger": 1888265,
+      "anchoredAt": "2026-09-24T15:02:00Z",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d"
+    },
+    "officialAnchorAccount": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "checks": [
+      {
+        "key": "DOSSIER_CLOSED",
+        "pass": true,
+        "message": "El expediente del lote está cerrado y tiene su huella"
+      },
+      {
+        "key": "ANCHOR_CONFIRMED",
+        "pass": true,
+        "message": "La transacción de anclaje está confirmada en la red"
+      },
+      {
+        "key": "MEMO_MATCHES_HASH",
+        "pass": true,
+        "message": "El memo de la transacción coincide con la huella del expediente"
+      },
+      {
+        "key": "ANCHOR_ACCOUNT_OFFICIAL",
+        "pass": true,
+        "message": "La transacción la firmó la cuenta de anclaje oficial de Drinks on Chain"
+      }
+    ],
+    "verifiedOnChainAt": "2026-09-24T15:02:00Z",
+    "checkedAt": "2026-09-25T12:00:00Z"
+  }
+}
