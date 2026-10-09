@@ -155,6 +155,8 @@ export function tokenCounts(tokens: readonly Pick<StoredToken, 'status'>[]): Tok
 export function tokenView(chain: ChainState, t: StoredToken): Token {
   const contract = identityOf(chain, t.wineryId)?.contract
   const { mintTxId, burnTxId, ...rest } = t
+  // El pedido que lo compró es interno (borrador de la Etapa 4): `TokenDto` no lo lleva.
+  delete rest.orderId
   return {
     ...rest,
     contractAddress: contract?.address ?? '',
@@ -383,7 +385,7 @@ export function dashboardChain(chain: ChainState, now: string): DashboardChain {
     stuckTransactions: chain.transactions.filter((t) => isTxInFlight(t) && t.status !== 'PENDING' && Date.parse(now) - Date.parse(t.updatedAt) > TX_STUCK_MINUTES * 60_000).length,
     openAlerts: { critical: open.filter((a) => a.level === 'CRITICAL').length, warning: open.filter((a) => a.level === 'WARNING').length },
     lastReconciliation: last ? { at: last.finishedAt!, status: last.status } : null,
-    indexerLagSeconds: 12,
+    indexerLagSeconds: chain.indexer.lagSeconds,
   }
 }
 
@@ -417,7 +419,8 @@ export function publicNftMetadata(state: TraceState, ctx: ChainCtx & { passportB
     name: `${collection.commercial.name} · Botella ${token.bottleNumber} de ${collection.quota}`,
     description: published ? collection.commercial.description : `Botella ${token.bottleNumber} del lote ${lot.reference} de ${winery.tradeName}.`,
     image: published ? (collection.commercial.images.find((i) => i.isCover)?.url ?? null) : null,
-    external_url: passportUrl ?? `${ctx.passportBaseUrl}/colecciones/${collection.slug}`,
+    // Sin pasaporte, la ficha de la colección en el Marketplace, que se resuelve por bodega (el `slug` es único por bodega).
+    external_url: passportUrl ?? `${ctx.passportBaseUrl}/colecciones/${encodeURIComponent(winery.slug)}/${encodeURIComponent(collection.slug)}`,
     attributes: [
       { trait_type: 'Bodega', value: winery.tradeName },
       { trait_type: 'Lote', value: lot.reference },
@@ -434,6 +437,10 @@ export function publicNftMetadata(state: TraceState, ctx: ChainCtx & { passportB
 /** `GET /v1/public/chain/registry` (§3.2): cuentas y contratos oficiales. */
 export function publicChainRegistry(state: TraceState, ctx: ChainCtx): PublicChainRegistry {
   const chain = state.chain
+  // Con la cadena sin configurar (`CHN_DISABLED`), las cuentas son `null` y la lista, vacía.
+  if (!chain.enabled) {
+    return { network: chain.network, networkPassphrase: chain.platform.networkPassphrase, wasmHash: null, platform: { operationsAccount: null, anchorAccount: null }, wineries: [], generatedAt: ctx.now }
+  }
   return {
     network: chain.network,
     networkPassphrase: chain.platform.networkPassphrase,

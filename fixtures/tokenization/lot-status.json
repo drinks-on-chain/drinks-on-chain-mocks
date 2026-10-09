@@ -1152,5 +1152,120 @@
         "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a"
       }
     ]
+  },
+  "e702d4c7-129a-54de-bc38-76747ab65bd8": {
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "tokenizable": true,
+    "blockers": [],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 800,
+      "bottles": null,
+      "authorizedQuota": 80,
+      "pendingQuantity": 0,
+      "maxQuantity": 720
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": {
+      "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "slug": "singani-preventa-2026",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "lot": {
+        "reference": "ALT-L2026-007",
+        "lotCode": null,
+        "name": "Singani Preventa 2026",
+        "productType": "SINGANI",
+        "harvestYear": 2026,
+        "stage": "ORIGIN",
+        "estimatedReadyDate": null
+      },
+      "status": "PUBLISHED",
+      "mintStatus": "CONFIRMED",
+      "saleState": "PRESALE",
+      "quota": 80,
+      "pendingMintQuantity": 0,
+      "counts": {
+        "minted": 80,
+        "available": 80,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "price": {
+        "amountMinor": 15000,
+        "currency": "BOB",
+        "source": "MANUAL",
+        "setAt": "2026-09-22T11:00:00Z",
+        "setBy": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        }
+      },
+      "name": "Singani Preventa 2026",
+      "coverImageUrl": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+      "estimatedRedeemDate": null,
+      "contract": {
+        "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+      },
+      "redeemable": false,
+      "redeemableSince": null,
+      "publishedAt": "2026-09-22T12:00:00Z",
+      "closedAt": null,
+      "createdAt": "2026-09-22T11:00:00Z",
+      "updatedAt": "2026-09-22T12:00:00Z"
+    },
+    "requests": [
+      {
+        "id": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "winery": {
+          "slug": "altos-de-calamuchita",
+          "tradeName": "Bodega Altos de Calamuchita"
+        },
+        "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+        "lot": {
+          "reference": "ALT-L2026-007",
+          "lotCode": null,
+          "name": "Singani Preventa 2026",
+          "productType": "SINGANI",
+          "stage": "ORIGIN",
+          "harvestYear": 2026,
+          "estimatedBottles": 800,
+          "bottles": null
+        },
+        "kind": "INITIAL",
+        "status": "APPROVED",
+        "quantity": 80,
+        "resultingQuota": 80,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        },
+        "submittedAt": "2026-09-21T11:00:00Z",
+        "submittedBy": {
+          "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+          "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+          "fullName": "Martín Calamuchita",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-22T11:00:00Z",
+        "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+      }
+    ]
   }
 }

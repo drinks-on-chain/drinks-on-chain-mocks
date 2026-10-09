@@ -62,7 +62,12 @@ export interface StoredCollection {
 
 export type StoredMint = Omit<Mint, 'transactions'> & { txIds: string[] }
 
-export type StoredToken = Omit<Token, 'contractAddress' | 'mintTx' | 'burnTx' | 'metadataUrl'> & { mintTxId: string; burnTxId: string | null }
+export type StoredToken = Omit<Token, 'contractAddress' | 'mintTx' | 'burnTx' | 'metadataUrl'> & {
+  mintTxId: string
+  burnTxId: string | null
+  /** Pedido que lo compró (borrador de la Etapa 4): sale en los ítems del cierre con faltante, no en `TokenDto`. */
+  orderId?: string | null
+}
 
 export type StoredClosureItem = Omit<LotClosureItem, 'burnTx'> & { burnTxId: string | null }
 export type StoredClosure = Omit<LotClosure, 'items'> & { wineryId: string; items: StoredClosureItem[] }
@@ -77,6 +82,8 @@ export interface StoredAnchor {
   createdAt: string
   /** El servidor leyó la transacción y comprobó memo y cuenta. */
   verifiedAt: string | null
+  /** La transacción se confirmó pero su memo o su cuenta no son los esperados (`ANCHOR_MISMATCH`): no se da por bueno. */
+  mismatch?: boolean
 }
 
 /** Fallo forzado de la red simulada (`failNextChainTransaction`). */
@@ -88,6 +95,40 @@ export interface ForcedChainFailure {
   message?: string
 }
 
+/**
+ * Aviso de dominio pendiente de enviarse por correo (lo que el backend publica en su outbox, §11).
+ * Los servicios puros lo dejan aquí; los handlers lo convierten en correos del buzón simulado.
+ */
+export interface ChainNotice {
+  type:
+    | 'REQUEST_SUBMITTED'
+    | 'REQUEST_RESUBMITTED'
+    | 'CHANGES_REQUESTED'
+    | 'REQUEST_APPROVED'
+    | 'REQUEST_REJECTED'
+    | 'NFT_MINTED'
+    | 'COLLECTION_PUBLISHED'
+    | 'COLLECTION_PAUSED'
+    | 'COLLECTION_RESUMED'
+    | 'SHORTFALL_DETECTED'
+    | 'ALERT_CRITICAL'
+  wineryId: string | null
+  requestId?: string
+  collectionId?: string
+  alertId?: string
+  /** Texto libre del hecho: mensaje de los cambios pedidos, motivo del rechazo… */
+  message?: string | null
+  data?: Record<string, unknown>
+}
+
+/** Lo que la conciliación «lee de la red» y no coincide con la base (solo en los mocks). */
+export interface ChainDrift {
+  /** Contratos pausados en la red sin que la base lo sepa (o al revés): dirección → pausado en la red. */
+  paused: Record<string, boolean>
+  /** Rol concedido en la red que el sistema no pidió: dirección del contrato → cuenta. */
+  roles: Record<string, string>
+}
+
 export interface ChainPlatformState {
   operationsAddress: string
   anchorAddress: string
@@ -96,6 +137,10 @@ export interface ChainPlatformState {
   operationsMinBalanceXlm: string
   anchorMinBalanceXlm: string
   wasmHash: string
+  /**
+   * Días de vida del código tal como se guardaron en la semilla de 0.6.0-rc.1. Desde rc.2 manda
+   * `ChainState.ttl.code` (fecha hasta la que vive): `codeTtlDaysOf()` lo calcula con el reloj.
+   */
   codeTtlDays: number
   checkedAt: string
   networkPassphrase: string
@@ -124,7 +169,28 @@ export interface ChainState {
   alerts: ChainAlert[]
   events: ChainEvent[]
   runs: ReconciliationRun[]
+  /** `false` = cadena sin configurar en el entorno (`CHAIN_ENABLED`): provision, pause y unpause → 409 `CHN_DISABLED`. */
+  enabled: boolean
+  /**
+   * Vida del almacenamiento (§8.3): hasta cuándo viven el código (`code`; `null` = aún sin leer,
+   * `codeTtlDays: null`) y las entradas de cada contrato (por dirección).
+   */
+  ttl: { code: string | null; contracts: Record<string, string> }
+  /** Indexador de eventos (§8.1): último ledger procesado y retraso respecto de la red. */
+  indexer: { lastLedger: number; lagSeconds: number }
+  /** Comprobaciones de la red que la siguiente confirmación de ese tipo no supera (`mockChain.mismatchNext`). */
+  forcedMismatches: ChainTxKind[]
+  drift: ChainDrift
+  /** Avisos pendientes de convertirse en correos (ver `ChainNotice`). */
+  notices: ChainNotice[]
 }
+
+/** Retraso normal del indexador (s): consulta cada 60 s (§11). */
+export const INDEXER_BASE_LAG_SECONDS = 12
+/** Umbral de la alerta `TTL_EXPIRING` (días). */
+export const TTL_MIN_DAYS = 14
+/** Días que añade una extensión de vida (`EXTEND_TTL`). */
+export const TTL_EXTENSION_DAYS = 30
 
 export const TESTNET_PASSPHRASE = 'Test SDF Network ; September 2015'
 
@@ -159,7 +225,37 @@ export function emptyChainState(): ChainState {
     alerts: [],
     events: [],
     runs: [],
+    enabled: true,
+    ttl: { code: null, contracts: {} },
+    indexer: { lastLedger: 0, lagSeconds: INDEXER_BASE_LAG_SECONDS },
+    forcedMismatches: [],
+    drift: { paused: {}, roles: {} },
+    notices: [],
   }
+}
+
+/** Completa un estado guardado por una versión anterior (campos añadidos en 0.6.0-rc.2). */
+export function upgradeChainState(chain: ChainState): ChainState {
+  const base = emptyChainState()
+  chain.enabled ??= true
+  chain.ttl ??= base.ttl
+  chain.indexer ??= { lastLedger: chain.ledger, lagSeconds: INDEXER_BASE_LAG_SECONDS }
+  chain.forcedMismatches ??= []
+  chain.drift ??= base.drift
+  chain.notices ??= []
+  return chain
+}
+
+const DAY_MS = 86_400_000
+/** Días enteros que faltan hasta `until` (0 si ya pasó; `null` si no se conoce). */
+export const daysUntil = (until: string | null | undefined, now: string): number | null => (until ? Math.max(0, Math.floor((Date.parse(until) - Date.parse(now)) / DAY_MS)) : null)
+
+/** `codeTtlDays` de las cuentas de la plataforma: días de vida que le quedan al código (`null` = sin leer aún). */
+export const codeTtlDaysOf = (chain: ChainState, now: string): number | null => daysUntil(chain.ttl.code, now)
+
+/** Deja un aviso pendiente de correo. */
+export function pushNotice(chain: ChainState, notice: ChainNotice): void {
+  chain.notices.push(notice)
 }
 
 export const OPEN_REQUEST_STATUSES = ['SUBMITTED', 'IN_REVIEW', 'CHANGES_REQUESTED'] as const

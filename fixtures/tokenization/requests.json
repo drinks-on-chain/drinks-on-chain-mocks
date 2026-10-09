@@ -945,7 +945,66 @@
         "available": false,
         "reason": "POLICY_UNDEFINED"
       },
-      "otherCollectionsOfWinery": []
+      "otherCollectionsOfWinery": [
+        {
+          "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+          "slug": "singani-preventa-2026",
+          "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+          "winery": {
+            "slug": "altos-de-calamuchita",
+            "tradeName": "Bodega Altos de Calamuchita"
+          },
+          "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+          "lot": {
+            "reference": "ALT-L2026-007",
+            "lotCode": null,
+            "name": "Singani Preventa 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ORIGIN",
+            "estimatedReadyDate": null
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "PRESALE",
+          "quota": 80,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 80,
+            "available": 80,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": {
+            "amountMinor": 15000,
+            "currency": "BOB",
+            "source": "MANUAL",
+            "setAt": "2026-09-22T11:00:00Z",
+            "setBy": {
+              "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+              "fullName": "Camila Torrez"
+            }
+          },
+          "name": "Singani Preventa 2026",
+          "coverImageUrl": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+          "estimatedRedeemDate": null,
+          "contract": {
+            "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": "2026-09-22T12:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-22T11:00:00Z",
+          "updatedAt": "2026-09-22T12:00:00Z"
+        }
+      ]
     }
   },
   {
@@ -1356,7 +1415,66 @@
         "available": false,
         "reason": "POLICY_UNDEFINED"
       },
-      "otherCollectionsOfWinery": []
+      "otherCollectionsOfWinery": [
+        {
+          "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+          "slug": "singani-preventa-2026",
+          "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+          "winery": {
+            "slug": "altos-de-calamuchita",
+            "tradeName": "Bodega Altos de Calamuchita"
+          },
+          "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+          "lot": {
+            "reference": "ALT-L2026-007",
+            "lotCode": null,
+            "name": "Singani Preventa 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ORIGIN",
+            "estimatedReadyDate": null
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "PRESALE",
+          "quota": 80,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 80,
+            "available": 80,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": {
+            "amountMinor": 15000,
+            "currency": "BOB",
+            "source": "MANUAL",
+            "setAt": "2026-09-22T11:00:00Z",
+            "setBy": {
+              "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+              "fullName": "Camila Torrez"
+            }
+          },
+          "name": "Singani Preventa 2026",
+          "coverImageUrl": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+          "estimatedRedeemDate": null,
+          "contract": {
+            "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": "2026-09-22T12:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-22T11:00:00Z",
+          "updatedAt": "2026-09-22T12:00:00Z"
+        }
+      ]
     }
   },
   {
@@ -3295,6 +3413,64 @@
           "closedAt": null,
           "createdAt": "2026-09-17T16:00:00Z",
           "updatedAt": "2026-09-17T16:01:00Z"
+        },
+        {
+          "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+          "slug": "singani-preventa-2026",
+          "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+          "winery": {
+            "slug": "altos-de-calamuchita",
+            "tradeName": "Bodega Altos de Calamuchita"
+          },
+          "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+          "lot": {
+            "reference": "ALT-L2026-007",
+            "lotCode": null,
+            "name": "Singani Preventa 2026",
+            "productType": "SINGANI",
+            "harvestYear": 2026,
+            "stage": "ORIGIN",
+            "estimatedReadyDate": null
+          },
+          "status": "PUBLISHED",
+          "mintStatus": "CONFIRMED",
+          "saleState": "PRESALE",
+          "quota": 80,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 80,
+            "available": 80,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": {
+            "amountMinor": 15000,
+            "currency": "BOB",
+            "source": "MANUAL",
+            "setAt": "2026-09-22T11:00:00Z",
+            "setBy": {
+              "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+              "fullName": "Camila Torrez"
+            }
+          },
+          "name": "Singani Preventa 2026",
+          "coverImageUrl": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+          "estimatedRedeemDate": null,
+          "contract": {
+            "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": "2026-09-22T12:00:00Z",
+          "closedAt": null,
+          "createdAt": "2026-09-22T11:00:00Z",
+          "updatedAt": "2026-09-22T12:00:00Z"
         }
       ]
     }
@@ -3730,6 +3906,412 @@
         "reason": "POLICY_UNDEFINED"
       },
       "otherCollectionsOfWinery": []
+    }
+  },
+  {
+    "id": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita"
+    },
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "lot": {
+      "reference": "ALT-L2026-007",
+      "lotCode": null,
+      "name": "Singani Preventa 2026",
+      "productType": "SINGANI",
+      "stage": "ORIGIN",
+      "harvestYear": 2026,
+      "estimatedBottles": 800,
+      "bottles": null
+    },
+    "kind": "INITIAL",
+    "status": "APPROVED",
+    "quantity": 80,
+    "resultingQuota": 80,
+    "requiresApproval": true,
+    "assignee": {
+      "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+      "fullName": "Camila Torrez"
+    },
+    "submittedAt": "2026-09-21T11:00:00Z",
+    "submittedBy": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    },
+    "updatedAt": "2026-09-22T11:00:00Z",
+    "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+    "commercialDraft": {
+      "name": "Singani Preventa 2026",
+      "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+      "tastingNotes": "Flores blancas y fruta de carozo; boca fresca, de final limpio.",
+      "pairing": null,
+      "imageKeys": [
+        {
+          "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/collections/2026/singani-preventa-2026.jpg",
+          "alt": "Botella de Singani Preventa 2026 de Altos de Calamuchita",
+          "isCover": true
+        }
+      ],
+      "estimatedRedeemDate": null
+    },
+    "price": {
+      "amountMinor": 15000,
+      "currency": "BOB",
+      "source": "MANUAL",
+      "setAt": "2026-09-22T11:00:00Z",
+      "setBy": {
+        "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+        "fullName": "Camila Torrez"
+      }
+    },
+    "wineryNotes": null,
+    "changeRequests": [],
+    "decision": {
+      "outcome": "APPROVED",
+      "at": "2026-09-22T11:00:00Z",
+      "reason": "Datos completos",
+      "by": {
+        "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+        "fullName": "Camila Torrez",
+        "system": false
+      }
+    },
+    "withdrawn": null,
+    "limitsAtSubmission": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 800,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 800
+    },
+    "history": [
+      {
+        "status": "SUBMITTED",
+        "at": "2026-09-21T11:00:00Z",
+        "by": "Martín Calamuchita",
+        "note": null
+      },
+      {
+        "status": "IN_REVIEW",
+        "at": "2026-09-22T10:00:00Z",
+        "by": "Camila Torrez",
+        "note": null
+      },
+      {
+        "status": "APPROVED",
+        "at": "2026-09-22T11:00:00Z",
+        "by": "Camila Torrez",
+        "note": "Datos completos"
+      }
+    ],
+    "internalNotes": [],
+    "priceSuggestion": {
+      "available": false,
+      "reason": "POLICY_UNDEFINED"
+    },
+    "review": {
+      "lot": {
+        "id": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "reference": "ALT-L2026-007",
+        "lotCode": null,
+        "name": "Singani Preventa 2026",
+        "productType": "SINGANI",
+        "stage": "ORIGIN",
+        "stageChangedAt": "2026-09-21T10:00:00Z",
+        "awaitingBifurcation": false,
+        "harvestYear": 2026,
+        "estimatedBottles": 800,
+        "projectedBottles": 800,
+        "bottles": null,
+        "nextLock": null,
+        "phyto": {
+          "pending": 0,
+          "quarantine": 0,
+          "approved": 0,
+          "rejected": 0
+        },
+        "labStatus": "NOT_RECORDED",
+        "dossierStatus": "OPEN",
+        "complianceIssuesOpen": 0,
+        "createdAt": "2026-09-21T10:00:00Z",
+        "updatedAt": "2026-09-21T10:00:00Z",
+        "tokenization": {
+          "state": "PUBLISHED",
+          "quota": 80,
+          "minted": 80,
+          "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+        },
+        "plannedTerroirIds": [],
+        "plannedFormatCl": 75,
+        "targetAbvPercent": 40,
+        "targetReadyDate": null,
+        "estimatedReadyDate": null,
+        "estimatedReadyBasis": null,
+        "estimatedBottlesHistory": [
+          {
+            "value": 800,
+            "at": "2026-09-21T10:00:00Z",
+            "by": {
+              "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+              "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+              "fullName": "Martín Calamuchita",
+              "role": "OWNER"
+            },
+            "reason": null
+          }
+        ],
+        "locks": [],
+        "rules": {
+          "takenAt": "2026-09-21T10:00:00Z",
+          "origin": "LOT_CREATION",
+          "singani": {
+            "minAltitudeMasl": 1500,
+            "requiredVarieties": [
+              "Moscatel de Alejandría"
+            ],
+            "minRestDays": 180
+          },
+          "wine": {
+            "minAgingMonths": 6
+          },
+          "phytosanitary": {
+            "requireApproved": true
+          },
+          "bottling": {
+            "maxLossPercent": 5
+          },
+          "lab": {
+            "limits": {
+              "metanol": {
+                "unidad": "mg/100 ml a.a.",
+                "max": 200
+              },
+              "cobre": {
+                "unidad": "mg/l",
+                "max": 6
+              },
+              "acidezVolatil": {
+                "unidad": "g/l",
+                "max": 1.2
+              }
+            }
+          },
+          "legalExceptions": [
+            "trazabilidad.singani.altitudMinimaMsnm"
+          ],
+          "sources": {
+            "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+            "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+            "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+            "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
+            "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+            "trazabilidad.excepcionMinimoLegal": "WINERY",
+            "trazabilidad.laboratorio.limites": "GLOBAL"
+          },
+          "values": {
+            "trazabilidad.singani.altitudMinimaMsnm": 1500,
+            "trazabilidad.singani.variedadesExigidas": [
+              "Moscatel de Alejandría"
+            ],
+            "trazabilidad.singani.reposoMinimoDias": 180,
+            "trazabilidad.vino.crianzaMinimaMeses": 6,
+            "trazabilidad.fitosanitario.exigirAprobado": true,
+            "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+            "trazabilidad.excepcionMinimoLegal": true,
+            "trazabilidad.laboratorio.limites": {
+              "metanol": {
+                "max": 200,
+                "unidad": "mg/100 ml a.a."
+              },
+              "cobre": {
+                "max": 6,
+                "unidad": "mg/l"
+              },
+              "acidezVolatil": {
+                "max": 1.2,
+                "unidad": "g/l"
+              }
+            }
+          }
+        },
+        "denomination": {
+          "status": "NOT_APPLICABLE",
+          "checks": [],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "complianceIssues": [],
+        "links": {
+          "harvestBatchIds": [],
+          "tankIds": [],
+          "wineAgingBatchIds": [],
+          "productionBatchIds": [],
+          "bottlingBatchId": null,
+          "labAnalysisIds": []
+        },
+        "discarded": null,
+        "notes": "Primera preventa de singani de la bodega.",
+        "createdBy": {
+          "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+          "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+          "fullName": "Martín Calamuchita",
+          "role": "OWNER"
+        }
+      },
+      "traceability": {
+        "publicEventsCount": 2,
+        "lastEvent": {
+          "id": "4e5b284d-3319-5c69-ad64-df17293de106",
+          "seq": 4,
+          "type": "COLLECTION_PUBLISHED",
+          "occurredAt": "2026-09-22T12:00:00Z",
+          "recordedAt": "2026-09-22T12:00:00Z",
+          "lateEntry": false,
+          "stage": "ORIGIN",
+          "actor": null,
+          "summary": "Colección «Singani Preventa 2026» publicada",
+          "data": {
+            "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+          },
+          "resource": {
+            "type": "collection",
+            "id": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+          },
+          "visibility": "PUBLIC",
+          "corrected": false
+        },
+        "locks": [],
+        "estimatedReadyDate": null,
+        "complianceIssuesOpen": 0,
+        "denomination": {
+          "status": "NOT_APPLICABLE",
+          "checks": [],
+          "rulesSource": "LOT_SNAPSHOT",
+          "evaluatedAt": "2026-09-25T12:00:00Z"
+        },
+        "dossierStatus": "OPEN"
+      },
+      "limits": {
+        "basis": "ESTIMATE",
+        "estimatedBottles": 800,
+        "bottles": null,
+        "authorizedQuota": 80,
+        "pendingQuantity": 0,
+        "maxQuantity": 720
+      },
+      "chainIdentity": {
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "network": "TESTNET",
+        "status": "ACTIVE",
+        "account": {
+          "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/account/GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "homeDomain": "localhost:4000",
+          "createdTx": {
+            "id": "11bd1f26-b922-5fac-bb88-9832528cd474",
+            "kind": "CREATE_WINERY_ACCOUNT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/071e2e46fa734a848765cd8c43f0c10428134da54ac19dd5c9629206597430d4",
+            "ledger": 1480003,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:10:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          }
+        },
+        "contract": {
+          "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+          "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+          "name": "Bodega Altos de Calamuchita",
+          "symbol": "ALT",
+          "baseUri": "http://localhost:4000/v1/public/nft/altos-de-calamuchita/",
+          "operatorAddress": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "paused": false,
+          "deployedTx": {
+            "id": "38e43389-e58c-533c-8074-c050c5086f92",
+            "kind": "DEPLOY_WINERY_CONTRACT",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+            "ledger": 1480004,
+            "confirmedAt": "2026-08-16T09:11:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-08-16T09:11:00Z",
+            "updatedAt": "2026-08-16T09:11:00Z"
+          },
+          "deployedAt": "2026-08-16T09:11:00Z"
+        },
+        "pendingTransactions": [],
+        "lastError": null
+      },
+      "priceSuggestion": {
+        "available": false,
+        "reason": "POLICY_UNDEFINED"
+      },
+      "otherCollectionsOfWinery": [
+        {
+          "id": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+          "slug": "singani-el-portillo-2025",
+          "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+          "winery": {
+            "slug": "altos-de-calamuchita",
+            "tradeName": "Bodega Altos de Calamuchita"
+          },
+          "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+          "lot": {
+            "reference": "ALT-L2025-004",
+            "lotCode": "ALT-2025-SINGANI-002",
+            "name": "Singani El Portillo 2025",
+            "productType": "SINGANI",
+            "harvestYear": 2025,
+            "stage": "BOTTLED",
+            "estimatedReadyDate": "2025-10-10"
+          },
+          "status": "READY",
+          "mintStatus": "CONFIRMED",
+          "saleState": null,
+          "quota": 240,
+          "pendingMintQuantity": 0,
+          "counts": {
+            "minted": 240,
+            "available": 240,
+            "reserved": 0,
+            "sold": 0,
+            "redeemable": 0,
+            "passActive": 0,
+            "redeemed": 0,
+            "burned": 0,
+            "expired": 0
+          },
+          "price": null,
+          "name": "Singani El Portillo 2025",
+          "coverImageUrl": "/v1/public/collections/images/c40ff3e3-d6ab-50d4-b864-855e1e90927f",
+          "estimatedRedeemDate": "2025-10-10",
+          "contract": {
+            "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+          },
+          "redeemable": false,
+          "redeemableSince": null,
+          "publishedAt": null,
+          "closedAt": null,
+          "createdAt": "2026-09-17T16:00:00Z",
+          "updatedAt": "2026-09-17T16:01:00Z"
+        }
+      ]
     }
   }
 ]

@@ -82,7 +82,8 @@ export function dossierAnchorView(chain: ChainState | undefined, lotId: string):
   if (!anchor || !tx) return null
   const anchored = tx.status === 'CONFIRMED' && anchor.verifiedAt !== null
   return {
-    status: anchored ? 'ANCHORED' : tx.status === 'FAILED' ? 'FAILED' : tx.status === 'SUBMITTED' || tx.status === 'CONFIRMED' ? 'SUBMITTED' : 'PENDING',
+    // Un anclaje confirmado que no supera la comprobación (`ANCHOR_MISMATCH`) queda `FAILED`.
+    status: anchored ? 'ANCHORED' : tx.status === 'FAILED' || anchor.mismatch ? 'FAILED' : tx.status === 'SUBMITTED' || tx.status === 'CONFIRMED' ? 'SUBMITTED' : 'PENDING',
     network: chain.network,
     account: chain.platform.anchorAddress,
     memoHashHex: anchor.memoHashHex,

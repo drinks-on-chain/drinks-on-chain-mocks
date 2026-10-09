@@ -17,7 +17,43 @@ export const CHAIN_ALERT_LEVELS = ['INFO', 'WARNING', 'CRITICAL'] as const
 export const ChainAlertLevelSchema = z.enum(CHAIN_ALERT_LEVELS)
 export type ChainAlertLevel = z.infer<typeof ChainAlertLevelSchema>
 
+/**
+ * Códigos de alerta conocidos (`ChainAlert.code` es texto: el backend puede añadir más). Los del
+ * OpenAPI más `MINT_RANGE_MISMATCH` (una emisión confirmada cuyo rango no cuadra con lo pedido).
+ */
+export const CHAIN_ALERT_CODES = [
+  'TOTAL_MINTED_MISMATCH',
+  'BALANCE_MISMATCH',
+  'OWNER_MISMATCH',
+  'BURN_MISMATCH',
+  'PAUSE_MISMATCH',
+  'ROLE_MISMATCH',
+  'QUOTA_EXCEEDED',
+  'BOTTLES_SHORTFALL',
+  'ANCHOR_MISMATCH',
+  'MINT_RANGE_MISMATCH',
+  'TX_STUCK',
+  'LOW_BALANCE',
+  'TTL_EXPIRING',
+  'UNEXPECTED_EVENT',
+  'INDEXER_GAP',
+  'NETWORK_RESET',
+  'CHN_INTENT_REJECTED',
+  'TX_FAILED',
+] as const
+export type ChainAlertCode = (typeof CHAIN_ALERT_CODES)[number]
+
+/**
+ * Tipos de sujeto que llevan hoy las alertas. El OpenAPI declara `ChainAlertSubjectDto.type` como
+ * **texto libre** (ejemplo `COLLECTION`), no como `ChainSubjectType`: esta lista es orientativa
+ * (para etiquetas y enlaces) y el esquema acepta cualquier texto. `id` es el id del recurso salvo
+ * en `PLATFORM_ACCOUNT` (`OPERATIONS` | `ANCHOR`), `PLATFORM` (`WASM`, `INDEXER`) y `CONTRACT` (su dirección `C…`).
+ */
+export const CHAIN_ALERT_SUBJECT_TYPES = ['TRANSACTION', 'COLLECTION', 'MINT', 'LOT', 'CONTRACT', 'PLATFORM_ACCOUNT', 'PLATFORM', 'CHAIN_EVENT'] as const
+export type ChainAlertSubjectType = (typeof CHAIN_ALERT_SUBJECT_TYPES)[number]
+
 export const ChainAlertSubjectSchema = z.object({
+  /** Texto libre en el OpenAPI; valores conocidos en `CHAIN_ALERT_SUBJECT_TYPES`. */
   type: z.string(),
   id: z.string(),
 })
@@ -85,7 +121,7 @@ export const ChainTxStatusSchema = z.enum(CHAIN_TX_STATUSES)
 export type ChainTxStatus = z.infer<typeof ChainTxStatusSchema>
 
 export const ChainTxErrorSchema = z.object({
-  /** Código interno (§2.3): `CHN_RPC_UNAVAILABLE`, `CHN_TX_TIMEOUT`, `CHN_BAD_SEQUENCE`, `CHN_INSUFFICIENT_FEE`, `CHN_TRY_AGAIN_LATER`, `CHN_ARCHIVED_ENTRY`, `CHN_CONTRACT_ERROR`, `CHN_AUTH_FAILED`, `CHN_INSUFFICIENT_BALANCE`, `CHN_INTENT_REJECTED`, `CHN_MINT_DISABLED`, `CHN_NETWORK_RESET` */
+  /** Código interno (§2.3; desde 0.6.0-rc.2 también `CHN_WINERY_NOT_ACTIVE`: la emisión espera en `PENDING`, como con `CHN_MINT_DISABLED`, mientras la bodega no esté activa): `CHN_RPC_UNAVAILABLE`, `CHN_TX_TIMEOUT`, `CHN_BAD_SEQUENCE`, `CHN_INSUFFICIENT_FEE`, `CHN_TRY_AGAIN_LATER`, `CHN_ARCHIVED_ENTRY`, `CHN_CONTRACT_ERROR`, `CHN_AUTH_FAILED`, `CHN_INSUFFICIENT_BALANCE`, `CHN_INTENT_REJECTED`, `CHN_MINT_DISABLED`, `CHN_NETWORK_RESET` */
   code: z.string(),
   message: z.string(),
   /** El worker la reintenta solo */

@@ -169,6 +169,8 @@ export const API_ERROR_CODES = [
   'CHN_CONTRACT_ALREADY_PAUSED',
   'CHN_CONTRACT_NOT_PAUSED',
   'CHN_IDENTITY_ALREADY_ACTIVE',
+  // 0.6.0-rc.2: cadena sin configurar en el entorno (provision, pause y unpause).
+  'CHN_DISABLED',
   'CHN_RECONCILIATION_RUNNING',
   'CHN_ALERT_ALREADY_RESOLVED',
   'CHN_WALLET_NOT_AVAILABLE',

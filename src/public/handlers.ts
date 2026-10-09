@@ -129,6 +129,16 @@ export function publicLot(lotCode: string): Lot {
   return lot
 }
 
+/**
+ * Expediente canónico con un dato cambiado (escenario `huella-alterada`): sigue siendo un JSON
+ * válido con la misma forma, pero su SHA-256 ya no es el anclado. Cambia el primer número de
+ * botellas que encuentre; si no hay ninguno, añade un espacio al final.
+ */
+export function tamperDossier(canonical: string): string {
+  const altered = canonical.replace(/"(totalBottlesPackaged|bottles|totalBottles|estimatedBottles)":(\d+)/, (_m, key: string, n: string) => `"${key}":${Number(n) + 1}`)
+  return altered === canonical ? `${canonical} ` : altered
+}
+
 export const publicRoutes: RouteSpec[] = [
   {
     // Resuelve el código del visor: de botella (8 caracteres con control) o de lote.
@@ -168,11 +178,17 @@ export const publicRoutes: RouteSpec[] = [
         // Los bytes tal como se guardaron al cerrar, con la huella como `ETag`.
         const etag = `"${dossier.hash}"`
         const cacheControl = 'public, max-age=3600, stale-while-revalidate=600'
+        const canonical = dossierCanonical(getErpDb(), traceCtx(null), lot)
+        // Escenario `huella-alterada`: los bytes que se descargan ya no son los que se anclaron (su
+        // SHA-256 no coincide con el memo); el visor, que recalcula la huella, debe avisar.
+        if (getScenario() === 'huella-alterada') {
+          return { status: 200, data: undefined, raw: { body: tamperDossier(canonical), contentType: 'application/json; charset=utf-8' }, headers: { 'Cache-Control': 'no-store' } }
+        }
         return (
           notModified(ctx, etag, cacheControl) ?? {
             status: 200,
             data: undefined,
-            raw: { body: dossierCanonical(getErpDb(), traceCtx(null), lot), contentType: 'application/json; charset=utf-8' },
+            raw: { body: canonical, contentType: 'application/json; charset=utf-8' },
             headers: { 'Cache-Control': cacheControl, ETag: etag },
           }
         )
@@ -238,10 +254,14 @@ export const publicRoutes: RouteSpec[] = [
     },
   },
   {
+    // Obsoleta desde 0.6.0-rc.2: el `slug` es único por bodega, así que la ficha se resuelve con
+    // `GET /v1/public/collections/{winerySlug}/{slug}`. Si dos bodegas comparten el `slug`,
+    // devuelve la primera del catálogo. Se retira en 0.6.0.
     method: 'get',
     path: '/v1/public/collections/:slug',
     access: 'public',
     draft: COLLECTIONS_DRAFT_CONTRACT,
+    deprecated: '/v1/public/collections/{winerySlug}/{slug}',
     handle({ params }) {
       const collection = buildCollections(getErpDb(), publicWineryOf, nowStamp(), getErpDb().marketplace.sold).find((c) => c.slug === params.slug)
       if (!collection) throw notFound(`Colección "${params.slug}" no encontrada`)

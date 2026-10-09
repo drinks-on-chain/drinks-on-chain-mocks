@@ -28,11 +28,23 @@ export const SCENARIOS = [
   'faltante-botellas',
   'alerta-evento-inesperado',
   'cambios-pedidos',
+  // 0.6.0-rc.2
+  'faltante-vendidos',
+  'identidad-sin-aprovisionar',
+  'cadena-sin-configurar',
+  'huella-alterada',
+  'verificacion-no-encontrada',
 ] as const
 export type ScenarioName = (typeof SCENARIOS)[number]
 
 /** Escenarios que cambian **cómo responde** el backend simulado (los de 0.1; no tocan los datos). */
 export const RESPONSE_SCENARIOS = ['normal', 'empty', 'error', 'slow', 'offline'] as const satisfies readonly ScenarioName[]
+
+/**
+ * Escenarios que solo cambian cómo responden las **rutas públicas** del visor (sin tocar los datos):
+ * el límite del pasaporte y, desde 0.6.0-rc.2, los dos de la verificación del anclaje.
+ */
+export const PUBLIC_RESPONSE_SCENARIOS = ['pasaporte-saturado', 'huella-alterada', 'verificacion-no-encontrada'] as const satisfies readonly ScenarioName[]
 export type ResponseScenarioName = (typeof RESPONSE_SCENARIOS)[number]
 
 export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
@@ -53,6 +65,11 @@ export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
   'faltante-botellas': '«Singani El Portillo 2025» con 20 NFT más que botellas: cierre con faltante sin decidir',
   'alerta-evento-inesperado': 'Alerta CRITICAL UNEXPECTED_EVENT: un role_granted en el contrato de Cinti Viejo que no originó el sistema',
   'cambios-pedidos': '«Singani Preventa 2026» con cambios pedidos por operaciones («falta la nota de cata»): editar y reenviar',
+  'faltante-vendidos': '«Singani El Portillo 2025» vendida casi entera y con 20 NFT más que botellas: 10 sin vender se queman y 10 vendidos se quedan sin botella (resolver ítem a ítem)',
+  'identidad-sin-aprovisionar': 'Bodega Altos de Calamuchita activa pero sin identidad en la red (NOT_PROVISIONED): operaciones la aprovisiona',
+  'cadena-sin-configurar': 'Cadena sin configurar en el entorno: provision, pause y unpause → 409 CHN_DISABLED; el registro público, sin cuentas ni bodegas',
+  'huella-alterada': 'Verificación pública: el expediente canónico que se descarga no coincide con la huella anclada (el visor debe avisar)',
+  'verificacion-no-encontrada': 'Verificación pública: GET /v1/public/lots/{lotCode}/verification responde 404 PUB_CODE_NOT_FOUND (el pasaporte sí carga)',
 }
 
 /**
@@ -72,6 +89,9 @@ export const DATA_SCENARIOS = [
   'faltante-botellas',
   'alerta-evento-inesperado',
   'cambios-pedidos',
+  'faltante-vendidos',
+  'identidad-sin-aprovisionar',
+  'cadena-sin-configurar',
 ] as const satisfies readonly ScenarioName[]
 export type DataScenarioName = (typeof DATA_SCENARIOS)[number]
 

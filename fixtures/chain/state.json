@@ -1,7 +1,7 @@
 {
   "network": "TESTNET",
-  "ledger": 1888265,
-  "elapsedMs": 90000,
+  "ledger": 1888268,
+  "elapsedMs": 108000,
   "due": {},
   "forcedFailures": [],
   "mintEnabled": true,
@@ -146,7 +146,8 @@
       "result": {
         "returnValue": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
         "contractEvents": [
-          "role_granted"
+          "role_granted",
+          "base_uri_updated"
         ]
       },
       "history": [
@@ -324,7 +325,8 @@
       "result": {
         "returnValue": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
         "contractEvents": [
-          "role_granted"
+          "role_granted",
+          "base_uri_updated"
         ]
       },
       "history": [
@@ -502,7 +504,8 @@
       "result": {
         "returnValue": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
         "contractEvents": [
-          "role_granted"
+          "role_granted",
+          "base_uri_updated"
         ]
       },
       "history": [
@@ -913,6 +916,274 @@
           "at": "2026-09-24T15:02:00Z",
           "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
           "sequence": "933554430874",
+          "errorCode": null,
+          "detail": null
+        }
+      ],
+      "nextAttemptAt": null,
+      "requestedBy": {
+        "userId": null,
+        "fullName": null,
+        "source": "WORKER"
+      },
+      "abandoned": null,
+      "correlationId": null
+    },
+    {
+      "id": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "kind": "MINT_BATCH",
+      "status": "CONFIRMED",
+      "network": "TESTNET",
+      "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/tx/c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+      "ledger": 1850813,
+      "confirmedAt": "2026-09-22T11:01:00Z",
+      "attempts": 1,
+      "lastError": null,
+      "createdAt": "2026-09-22T11:00:00Z",
+      "updatedAt": "2026-09-22T11:01:00Z",
+      "intentKey": "mint:c6e87fa2-d274-5b00-a5c3-f76c65fe7218:0",
+      "subject": {
+        "type": "MINT",
+        "id": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218"
+      },
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "intent": {
+        "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+        "chunk": 0,
+        "amount": 80,
+        "lot": "ALT-L2026-007",
+        "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+        "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "sourceAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+      "signers": [
+        {
+          "role": "OPERATIONS",
+          "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "wineryId": null
+        },
+        {
+          "role": "WINERY",
+          "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+          "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153"
+        }
+      ],
+      "feeChargedStroops": "70000",
+      "rentFeeStroops": "42000",
+      "maxFeeStroops": "10000000",
+      "result": {
+        "returnValue": 319,
+        "contractEvents": [
+          "consecutive_mint",
+          "lot_minted"
+        ]
+      },
+      "history": [
+        {
+          "attempt": 1,
+          "status": "PENDING",
+          "at": "2026-09-22T11:00:00Z",
+          "txHash": null,
+          "sequence": null,
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "BUILDING",
+          "at": "2026-09-22T11:01:00Z",
+          "txHash": null,
+          "sequence": null,
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "SUBMITTED",
+          "at": "2026-09-22T11:01:00Z",
+          "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+          "sequence": "863313722198",
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "CONFIRMED",
+          "at": "2026-09-22T11:01:00Z",
+          "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+          "sequence": "863313722198",
+          "errorCode": null,
+          "detail": null
+        }
+      ],
+      "nextAttemptAt": null,
+      "requestedBy": {
+        "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+        "fullName": "Camila Torrez",
+        "source": "API"
+      },
+      "abandoned": null,
+      "correlationId": null
+    },
+    {
+      "id": "b9c58147-aad2-5840-8c75-30dbdd7c9d41",
+      "kind": "EXTEND_TTL",
+      "status": "CONFIRMED",
+      "network": "TESTNET",
+      "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/tx/19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+      "ledger": 1813373,
+      "confirmedAt": "2026-09-20T07:01:00Z",
+      "attempts": 1,
+      "lastError": null,
+      "createdAt": "2026-09-20T07:00:00Z",
+      "updatedAt": "2026-09-20T07:01:00Z",
+      "intentKey": "ttl:CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS:2026-09-20T07:00:00Z",
+      "subject": {
+        "type": "CONTRACT",
+        "id": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+      },
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "intent": {
+        "target": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+        "days": 30
+      },
+      "sourceAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+      "signers": [
+        {
+          "role": "OPERATIONS",
+          "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "wineryId": null
+        }
+      ],
+      "feeChargedStroops": "420000",
+      "rentFeeStroops": "252000",
+      "maxFeeStroops": "10000000",
+      "result": {
+        "returnValue": null,
+        "contractEvents": []
+      },
+      "history": [
+        {
+          "attempt": 1,
+          "status": "PENDING",
+          "at": "2026-09-20T07:00:00Z",
+          "txHash": null,
+          "sequence": null,
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "BUILDING",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": null,
+          "sequence": null,
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "SUBMITTED",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+          "sequence": "111349607857",
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "CONFIRMED",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+          "sequence": "111349607857",
+          "errorCode": null,
+          "detail": null
+        }
+      ],
+      "nextAttemptAt": null,
+      "requestedBy": {
+        "userId": null,
+        "fullName": null,
+        "source": "WORKER"
+      },
+      "abandoned": null,
+      "correlationId": null
+    },
+    {
+      "id": "c110b4a8-45fb-54b6-9389-2c017a0b461b",
+      "kind": "EXTEND_TTL",
+      "status": "CONFIRMED",
+      "network": "TESTNET",
+      "txHash": "0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/tx/0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+      "ledger": 1813374,
+      "confirmedAt": "2026-09-20T07:01:00Z",
+      "attempts": 1,
+      "lastError": null,
+      "createdAt": "2026-09-20T07:01:00Z",
+      "updatedAt": "2026-09-20T07:01:00Z",
+      "intentKey": "ttl:code:2026-09-20T07:01:00Z",
+      "subject": {
+        "type": "PLATFORM",
+        "id": "WASM"
+      },
+      "wineryId": null,
+      "intent": {
+        "target": "CODE",
+        "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+        "days": 30
+      },
+      "sourceAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+      "signers": [
+        {
+          "role": "OPERATIONS",
+          "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+          "wineryId": null
+        }
+      ],
+      "feeChargedStroops": "65000000",
+      "rentFeeStroops": "39000000",
+      "maxFeeStroops": "100000000",
+      "result": {
+        "returnValue": null,
+        "contractEvents": []
+      },
+      "history": [
+        {
+          "attempt": 1,
+          "status": "PENDING",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": null,
+          "sequence": null,
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "BUILDING",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": null,
+          "sequence": null,
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "SUBMITTED",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": "0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+          "sequence": "58804006397",
+          "errorCode": null,
+          "detail": null
+        },
+        {
+          "attempt": 1,
+          "status": "CONFIRMED",
+          "at": "2026-09-20T07:01:00Z",
+          "txHash": "0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+          "sequence": "58804006397",
           "errorCode": null,
           "detail": null
         }
@@ -1619,6 +1890,96 @@
         }
       ],
       "internalNotes": []
+    },
+    {
+      "id": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "kind": "INITIAL",
+      "status": "APPROVED",
+      "quantity": 80,
+      "resultingQuota": 80,
+      "requiresApproval": true,
+      "assignee": {
+        "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+        "fullName": "Camila Torrez"
+      },
+      "submittedAt": "2026-09-21T11:00:00Z",
+      "submittedBy": {
+        "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+        "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+        "fullName": "Martín Calamuchita",
+        "role": "OWNER"
+      },
+      "updatedAt": "2026-09-22T11:00:00Z",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "commercialDraft": {
+        "name": "Singani Preventa 2026",
+        "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+        "tastingNotes": "Flores blancas y fruta de carozo; boca fresca, de final limpio.",
+        "pairing": null,
+        "imageKeys": [
+          {
+            "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/collections/2026/singani-preventa-2026.jpg",
+            "alt": "Botella de Singani Preventa 2026 de Altos de Calamuchita",
+            "isCover": true
+          }
+        ],
+        "estimatedRedeemDate": null
+      },
+      "price": {
+        "amountMinor": 15000,
+        "currency": "BOB",
+        "source": "MANUAL",
+        "setAt": "2026-09-22T11:00:00Z",
+        "setBy": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        }
+      },
+      "wineryNotes": null,
+      "changeRequests": [],
+      "decision": {
+        "outcome": "APPROVED",
+        "at": "2026-09-22T11:00:00Z",
+        "reason": "Datos completos",
+        "by": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez",
+          "system": false
+        }
+      },
+      "withdrawn": null,
+      "limitsAtSubmission": {
+        "basis": "ESTIMATE",
+        "estimatedBottles": 800,
+        "bottles": null,
+        "authorizedQuota": 0,
+        "pendingQuantity": 0,
+        "maxQuantity": 800
+      },
+      "history": [
+        {
+          "status": "SUBMITTED",
+          "at": "2026-09-21T11:00:00Z",
+          "by": "Martín Calamuchita",
+          "note": null
+        },
+        {
+          "status": "IN_REVIEW",
+          "at": "2026-09-22T10:00:00Z",
+          "by": "Camila Torrez",
+          "note": null
+        },
+        {
+          "status": "APPROVED",
+          "at": "2026-09-22T11:00:00Z",
+          "by": "Camila Torrez",
+          "note": "Datos completos"
+        }
+      ],
+      "internalNotes": [],
+      "publishOnMint": false
     }
   ],
   "collections": [
@@ -1835,6 +2196,90 @@
       "createdAt": "2026-09-23T13:00:00Z",
       "updatedAt": "2026-09-23T15:00:00Z",
       "publishOnMint": false
+    },
+    {
+      "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "slug": "singani-preventa-2026",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "status": "PUBLISHED",
+      "quota": 80,
+      "price": {
+        "amountMinor": 15000,
+        "currency": "BOB",
+        "source": "MANUAL",
+        "setAt": "2026-09-22T11:00:00Z",
+        "setBy": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        }
+      },
+      "commercial": {
+        "name": "Singani Preventa 2026",
+        "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+        "tastingNotes": "Flores blancas y fruta de carozo; boca fresca, de final limpio.",
+        "pairing": null,
+        "estimatedRedeemDate": null,
+        "images": [
+          {
+            "id": "28060672-bdb1-595b-a097-29341637aaa0",
+            "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/collections/2026/singani-preventa-2026.jpg",
+            "sha256": "ee41e234960ea8cfa1cd1484dd8472e0a305c64e9283e1bc8899e7046c11a79c",
+            "url": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+            "alt": "Botella de Singani Preventa 2026 de Altos de Calamuchita",
+            "isCover": true
+          }
+        ]
+      },
+      "pricePolicySnapshot": null,
+      "priceHistory": [
+        {
+          "amountMinor": 15000,
+          "currency": "BOB",
+          "source": "MANUAL",
+          "setAt": "2026-09-22T11:00:00Z",
+          "setBy": {
+            "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+            "fullName": "Camila Torrez"
+          }
+        }
+      ],
+      "quotaHistory": [
+        {
+          "requestId": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+          "kind": "INITIAL",
+          "quantity": 80,
+          "resultingQuota": 80,
+          "approvedAt": "2026-09-22T11:00:00Z",
+          "approvedBy": "Camila Torrez"
+        }
+      ],
+      "statusHistory": [
+        {
+          "status": "MINTING",
+          "at": "2026-09-22T11:00:00Z",
+          "by": "Camila Torrez",
+          "reason": null
+        },
+        {
+          "status": "READY",
+          "at": "2026-09-22T11:01:00Z",
+          "by": "Sistema",
+          "reason": "Emisión confirmada"
+        },
+        {
+          "status": "PUBLISHED",
+          "at": "2026-09-22T12:00:00Z",
+          "by": "Camila Torrez",
+          "reason": "Apertura de la preventa"
+        }
+      ],
+      "redeemableSince": null,
+      "publishedAt": "2026-09-22T12:00:00Z",
+      "closedAt": null,
+      "createdAt": "2026-09-22T11:00:00Z",
+      "updatedAt": "2026-09-22T12:00:00Z",
+      "publishOnMint": false
     }
   ],
   "mints": [
@@ -1903,6 +2348,28 @@
       ],
       "createdAt": "2026-09-23T13:00:00Z",
       "confirmedAt": "2026-09-23T13:01:00Z"
+    },
+    {
+      "id": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "requestId": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+      "sequence": 1,
+      "quantity": 80,
+      "status": "CONFIRMED",
+      "lotArg": "ALT-L2026-007",
+      "ranges": [
+        {
+          "firstTokenId": 240,
+          "lastTokenId": 319,
+          "firstBottleNumber": 1,
+          "lastBottleNumber": 80
+        }
+      ],
+      "txIds": [
+        "8f93c8a4-51f2-56eb-816b-625b53e88d14"
+      ],
+      "createdAt": "2026-09-22T11:00:00Z",
+      "confirmedAt": "2026-09-22T11:01:00Z"
     }
   ],
   "tokens": [
@@ -12305,6 +12772,2086 @@
         "burned": false,
         "checkedAt": "2026-09-23T13:01:00Z"
       }
+    },
+    {
+      "id": "6051f615-0a7e-506e-be12-205838acdbf9",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 240,
+      "bottleNumber": 1,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "dedb6c41-cc2b-5563-8fb2-fd600c2146d3",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 241,
+      "bottleNumber": 2,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "1a32efaa-0e81-58b3-99b6-3ca5e15aa530",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 242,
+      "bottleNumber": 3,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "aeb448f5-2fde-56c5-8ff7-8f48484d7761",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 243,
+      "bottleNumber": 4,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "8cc77def-f5f6-53b1-bf80-c6a1b290a6eb",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 244,
+      "bottleNumber": 5,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "72e0939c-875a-5645-9171-3c141f023293",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 245,
+      "bottleNumber": 6,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "d29e2b7a-2e3c-5685-9420-2bdf88ee1183",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 246,
+      "bottleNumber": 7,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "384833bf-fa5e-5e01-9b60-f7c3689b9e7a",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 247,
+      "bottleNumber": 8,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "08742bcb-b256-513a-aec3-a32c39e9117f",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 248,
+      "bottleNumber": 9,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "d26286cf-db57-51a5-9d64-495819e3330e",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 249,
+      "bottleNumber": 10,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "d672d3cc-547f-5438-a3c0-d03be597cc7a",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 250,
+      "bottleNumber": 11,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "9bfd9ace-40f6-5b4f-a379-aa9865560ab6",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 251,
+      "bottleNumber": 12,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "2b39ca7d-f5e9-5302-ab5c-ce73ca984294",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 252,
+      "bottleNumber": 13,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "4de1ddeb-48de-5678-b4ac-2e263c18087b",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 253,
+      "bottleNumber": 14,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "bda8ed97-4f5f-5745-8996-4f44ac10470b",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 254,
+      "bottleNumber": 15,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "b7d4e201-6004-5c01-b682-71989562d54e",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 255,
+      "bottleNumber": 16,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "edb69ee2-4f92-566a-8251-14c91309a198",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 256,
+      "bottleNumber": 17,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "863d1f1f-71d7-534c-8c02-faf47e46dc9a",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 257,
+      "bottleNumber": 18,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "84b58c26-e39a-5a9a-a273-11c708c2ffc6",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 258,
+      "bottleNumber": 19,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "10447fd0-dc57-5a12-9aef-e5256ed2bdca",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 259,
+      "bottleNumber": 20,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "5724285f-f50a-5577-a4b2-0a3828eb940f",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 260,
+      "bottleNumber": 21,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "24ceb5ae-0589-569e-8767-806af43d58de",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 261,
+      "bottleNumber": 22,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "3db6d9c7-5cbe-5e91-bf20-d8749924cefa",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 262,
+      "bottleNumber": 23,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "43fa8bd8-5051-58fa-8283-1b1e502a63b8",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 263,
+      "bottleNumber": 24,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "49a4a69b-1be2-5e55-91cc-ccc52b508929",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 264,
+      "bottleNumber": 25,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "bf500cfc-a050-5c5c-9dd1-dc4986a75710",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 265,
+      "bottleNumber": 26,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "cd611ce1-1435-5421-96ae-71aa11661840",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 266,
+      "bottleNumber": 27,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "3f7393ce-1be0-500b-bc22-bd253880ffd9",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 267,
+      "bottleNumber": 28,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "b9588c0b-995f-5d36-96f2-6b894df8ed33",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 268,
+      "bottleNumber": 29,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "fb55260b-fefc-5072-8504-ab8614a93db6",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 269,
+      "bottleNumber": 30,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "e631f34d-6cc0-5cbd-a4fe-9b62c8eb7e9c",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 270,
+      "bottleNumber": 31,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "f247d8e1-021d-5cfa-aab0-5f685b961181",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 271,
+      "bottleNumber": 32,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "f45a3677-95eb-5fea-b1a7-107b20e3f3ab",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 272,
+      "bottleNumber": 33,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "5b584566-a5d1-5bed-a190-e4108856812c",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 273,
+      "bottleNumber": 34,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "aa1b410a-88a8-501b-9eca-7149258baaa3",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 274,
+      "bottleNumber": 35,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "6a131a69-ca90-5654-aaa4-45ce06082dd9",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 275,
+      "bottleNumber": 36,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "6cb4e458-5fb1-51c6-b24c-73fe793e494a",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 276,
+      "bottleNumber": 37,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "9ff09a08-3b47-5c78-86c6-97a206078bab",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 277,
+      "bottleNumber": 38,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "261baf25-b830-5e09-8d08-11f2d18d2506",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 278,
+      "bottleNumber": 39,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "a072fafd-7e96-5b6a-b657-3ae7554dc762",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 279,
+      "bottleNumber": 40,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "3d0bab6b-56c8-522c-8d1a-fcd1a99d6952",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 280,
+      "bottleNumber": 41,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "fb6b24f0-63b1-5f06-af0b-6f1072c714f8",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 281,
+      "bottleNumber": 42,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "b6a9445c-f5f2-5cdc-8f0b-a7e59a8cc1e9",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 282,
+      "bottleNumber": 43,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "3f3e1d95-48f4-5664-bc5d-77c809719396",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 283,
+      "bottleNumber": 44,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "080a0e7d-ba3d-5b46-a03f-a504f687f967",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 284,
+      "bottleNumber": 45,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "9c0ee2a4-0665-5a5d-bece-f844f812c8f5",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 285,
+      "bottleNumber": 46,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "a458e933-6407-56ab-b07f-1ae3d04728c3",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 286,
+      "bottleNumber": 47,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "b6cf961e-073e-52fd-b510-a3011c84bbc2",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 287,
+      "bottleNumber": 48,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "a1f0d1c6-9550-5846-a543-53db0f11aef5",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 288,
+      "bottleNumber": 49,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "cc1b4570-1dbe-5540-967f-f6be685c189f",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 289,
+      "bottleNumber": 50,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "29abac33-f0cf-513f-80c0-bd7796d51956",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 290,
+      "bottleNumber": 51,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "ff91f5ad-da98-563e-b977-138f08c0cdbf",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 291,
+      "bottleNumber": 52,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "ac74f638-48a7-5b65-ba17-6b53fdebcfef",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 292,
+      "bottleNumber": 53,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "7ff1f04f-2ad7-50c0-ae2a-da5fa1065a70",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 293,
+      "bottleNumber": 54,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "0eeeff90-2433-56aa-9852-49c8c70c1ca7",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 294,
+      "bottleNumber": 55,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "6dbf8ee0-5f03-54cd-a6d3-5ccd5de9ef00",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 295,
+      "bottleNumber": 56,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "7430d47b-e8f4-58fc-8de2-c2047986c407",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 296,
+      "bottleNumber": 57,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "164e7e4c-e457-562e-b531-8387c3c4cfdc",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 297,
+      "bottleNumber": 58,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "b5827650-ad1c-5962-ab18-8e82fecb93b7",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 298,
+      "bottleNumber": 59,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "04ae129b-1445-5faa-8bfe-c614979b6d17",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 299,
+      "bottleNumber": 60,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "85e5662a-6ef3-5e16-837b-04c6c1404efe",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 300,
+      "bottleNumber": 61,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "09c60822-a152-5dd6-8cfe-482c47bb117c",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 301,
+      "bottleNumber": 62,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "1740cca2-7c29-5a41-9948-720793e8e62c",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 302,
+      "bottleNumber": 63,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "1ee7313a-e600-54fb-90b8-acf9cd86861d",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 303,
+      "bottleNumber": 64,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "9064dc3d-1b09-52cc-9185-47a52b347ec5",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 304,
+      "bottleNumber": 65,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "71f319a3-c34e-5002-8886-a9a2fdbb667a",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 305,
+      "bottleNumber": 66,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "b2059152-f7b2-5801-b6fa-691a55947e73",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 306,
+      "bottleNumber": 67,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "a558bff3-dbb5-559f-b8f7-c73b2d9e70c3",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 307,
+      "bottleNumber": 68,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "1be89cf1-1765-5b57-9076-20d86a01e52c",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 308,
+      "bottleNumber": 69,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "7c94aede-bcf3-5e4a-a444-f8a65fa30c9f",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 309,
+      "bottleNumber": 70,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "e9cecabe-5c2e-5491-91b3-7209affd3156",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 310,
+      "bottleNumber": 71,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "85e71151-5499-54c4-a16a-a2b3dfa8d3d1",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 311,
+      "bottleNumber": 72,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "e0adba2b-cad6-5869-adae-87e070b63ab9",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 312,
+      "bottleNumber": 73,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "245231df-7f55-5390-a80f-e2fef6f50cdb",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 313,
+      "bottleNumber": 74,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "823deef1-ebba-5421-8ff2-0fd6f7fe7225",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 314,
+      "bottleNumber": 75,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "1e6504f3-97bc-539d-a1ab-ee5dc85f097d",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 315,
+      "bottleNumber": 76,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "431d13fb-f0ee-5015-b3ed-b788d72b8669",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 316,
+      "bottleNumber": 77,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "c33fb9cb-4fd5-5141-8315-f924b3a90953",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 317,
+      "bottleNumber": 78,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "cb325b01-5c72-5735-9379-88be504f3cc7",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 318,
+      "bottleNumber": 79,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
+    },
+    {
+      "id": "0f179db0-58f3-5e6c-9552-df4b77f2c02e",
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+      "tokenId": 319,
+      "bottleNumber": 80,
+      "status": "MINTED",
+      "owner": {
+        "kind": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      },
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "mintTxId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "soldAt": null,
+      "redeemableAt": null,
+      "redeemWindowEndsAt": null,
+      "burnedAt": null,
+      "burnTxId": null,
+      "burnReason": null,
+      "onchain": {
+        "owner": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "burned": false,
+        "checkedAt": "2026-09-22T11:01:00Z"
+      }
     }
   ],
   "closures": [
@@ -12367,9 +14914,14 @@
         "id": "ANCHOR"
       },
       "wineryId": null,
-      "expected": "10.0000000",
-      "actual": "4.2000000",
-      "message": "Saldo bajo en la cuenta de anclaje",
+      "expected": {
+        "minBalanceXlm": "10.0000000"
+      },
+      "actual": {
+        "balanceXlm": "4.2000000",
+        "status": "LOW"
+      },
+      "message": "El saldo de la cuenta de anclaje está por debajo del mínimo",
       "runId": "c7c9634f-a7d7-53ba-81e4-18a8bc07da4a",
       "detectedAt": "2026-09-15T06:30:00Z",
       "resolvedAt": "2026-09-15T13:00:00Z",
@@ -12381,6 +14933,31 @@
     },
     {
       "id": "20484b8c-a16d-5fd4-a490-f95760e7d0b4",
+      "code": "TTL_EXPIRING",
+      "level": "WARNING",
+      "subject": {
+        "type": "CONTRACT",
+        "id": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+      },
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "expected": {
+        "minDays": 14
+      },
+      "actual": {
+        "days": 12
+      },
+      "message": "Entradas del contrato de Destilería Cinti Viejo con menos de 14 días de vida y sin extensión en curso",
+      "runId": "90986b9c-79e7-591f-bd6c-0e5b3dca2dd1",
+      "detectedAt": "2026-09-19T06:30:00Z",
+      "resolvedAt": "2026-09-20T10:30:00Z",
+      "resolution": {
+        "by": "Sistema",
+        "note": "La diferencia ya no se reproduce: la base y la red coinciden",
+        "auto": true
+      }
+    },
+    {
+      "id": "b498b51a-7044-5587-a36a-d5e3e19764b8",
       "code": "TTL_EXPIRING",
       "level": "WARNING",
       "subject": {
@@ -12413,11 +14990,14 @@
       "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
       "type": "role_granted",
       "topics": [
-        "role_granted"
+        "role_granted",
+        "operator",
+        "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
       ],
       "data": {
         "role": "operator",
-        "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
+        "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "caller": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM"
       },
       "matchedTransactionId": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
       "originatedBySystem": true,
@@ -12425,6 +15005,26 @@
     },
     {
       "id": "d83163f0-edf7-55a9-a142-4a1bab1cae9f",
+      "rpcEventId": "0001480002-0000000001",
+      "network": "TESTNET",
+      "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "ledger": 1480002,
+      "ledgerClosedAt": "2026-08-16T09:01:00Z",
+      "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+      "type": "base_uri_updated",
+      "topics": [
+        "base_uri_updated"
+      ],
+      "data": {
+        "base_uri": "http://localhost:4000/v1/public/nft/destileria-cinti-viejo/"
+      },
+      "matchedTransactionId": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+      "originatedBySystem": true,
+      "processedAt": "2026-08-16T09:01:00Z"
+    },
+    {
+      "id": "6bbbb41d-8c90-5e74-9b2c-24d45961be52",
       "rpcEventId": "0001480004-0000000000",
       "network": "TESTNET",
       "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
@@ -12434,18 +15034,41 @@
       "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
       "type": "role_granted",
       "topics": [
-        "role_granted"
+        "role_granted",
+        "operator",
+        "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
       ],
       "data": {
         "role": "operator",
-        "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
+        "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "caller": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
       },
       "matchedTransactionId": "38e43389-e58c-533c-8074-c050c5086f92",
       "originatedBySystem": true,
       "processedAt": "2026-08-16T09:11:00Z"
     },
     {
-      "id": "6bbbb41d-8c90-5e74-9b2c-24d45961be52",
+      "id": "69a1fe95-6241-5215-9539-86365faf8c7e",
+      "rpcEventId": "0001480004-0000000001",
+      "network": "TESTNET",
+      "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "ledger": 1480004,
+      "ledgerClosedAt": "2026-08-16T09:11:00Z",
+      "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+      "type": "base_uri_updated",
+      "topics": [
+        "base_uri_updated"
+      ],
+      "data": {
+        "base_uri": "http://localhost:4000/v1/public/nft/altos-de-calamuchita/"
+      },
+      "matchedTransactionId": "38e43389-e58c-533c-8074-c050c5086f92",
+      "originatedBySystem": true,
+      "processedAt": "2026-08-16T09:11:00Z"
+    },
+    {
+      "id": "11ce40a0-edeb-5110-89d8-3c222efef788",
       "rpcEventId": "0001480006-0000000000",
       "network": "TESTNET",
       "contractAddress": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
@@ -12455,18 +15078,41 @@
       "txHash": "ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
       "type": "role_granted",
       "topics": [
-        "role_granted"
+        "role_granted",
+        "operator",
+        "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
       ],
       "data": {
         "role": "operator",
-        "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
+        "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "caller": "GCOUNBECDQYTDTIGCHPBMZBRQ36IUZUZEBIIJKORL6ZZJ3U6YJNJNHQE"
       },
       "matchedTransactionId": "c92ddc88-3856-50c8-ab22-af9a61d906c5",
       "originatedBySystem": true,
       "processedAt": "2026-08-16T09:21:00Z"
     },
     {
-      "id": "69a1fe95-6241-5215-9539-86365faf8c7e",
+      "id": "7c001bef-0e95-5d50-ab07-6f58952ba8ed",
+      "rpcEventId": "0001480006-0000000001",
+      "network": "TESTNET",
+      "contractAddress": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+      "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+      "ledger": 1480006,
+      "ledgerClosedAt": "2026-08-16T09:21:00Z",
+      "txHash": "ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+      "type": "base_uri_updated",
+      "topics": [
+        "base_uri_updated"
+      ],
+      "data": {
+        "base_uri": "http://localhost:4000/v1/public/nft/casa-uriondo/"
+      },
+      "matchedTransactionId": "c92ddc88-3856-50c8-ab22-af9a61d906c5",
+      "originatedBySystem": true,
+      "processedAt": "2026-08-16T09:21:00Z"
+    },
+    {
+      "id": "f0d63647-abb7-5ae5-9024-433b4433a14d",
       "rpcEventId": "0001560653-0000000000",
       "network": "TESTNET",
       "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
@@ -12476,7 +15122,8 @@
       "txHash": "5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
       "type": "consecutive_mint",
       "topics": [
-        "consecutive_mint"
+        "consecutive_mint",
+        "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM"
       ],
       "data": {
         "to": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
@@ -12488,7 +15135,7 @@
       "processedAt": "2026-09-05T16:01:00Z"
     },
     {
-      "id": "11ce40a0-edeb-5110-89d8-3c222efef788",
+      "id": "d4c1658d-5ce8-530f-87e6-8ebe8161228f",
       "rpcEventId": "0001560653-0000000001",
       "network": "TESTNET",
       "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
@@ -12498,10 +15145,13 @@
       "txHash": "5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
       "type": "lot_minted",
       "topics": [
-        "lot_minted"
+        "lot_minted",
+        "CVJ-L2026-005",
+        "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM"
       ],
       "data": {
         "lot": "CVJ-L2026-005",
+        "to": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
         "firstTokenId": 0,
         "lastTokenId": 59,
         "amount": 60
@@ -12511,7 +15161,7 @@
       "processedAt": "2026-09-05T16:01:00Z"
     },
     {
-      "id": "7c001bef-0e95-5d50-ab07-6f58952ba8ed",
+      "id": "64f91025-00b7-58ec-88a5-9eefa2e4c66c",
       "rpcEventId": "0001768013-0000000000",
       "network": "TESTNET",
       "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
@@ -12521,7 +15171,8 @@
       "txHash": "a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
       "type": "consecutive_mint",
       "topics": [
-        "consecutive_mint"
+        "consecutive_mint",
+        "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
       ],
       "data": {
         "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
@@ -12533,7 +15184,7 @@
       "processedAt": "2026-09-17T16:01:00Z"
     },
     {
-      "id": "f0d63647-abb7-5ae5-9024-433b4433a14d",
+      "id": "dbb34fff-e9d7-512b-879b-995d17161574",
       "rpcEventId": "0001768013-0000000001",
       "network": "TESTNET",
       "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
@@ -12543,10 +15194,13 @@
       "txHash": "a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
       "type": "lot_minted",
       "topics": [
-        "lot_minted"
+        "lot_minted",
+        "ALT-L2025-004",
+        "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
       ],
       "data": {
         "lot": "ALT-L2025-004",
+        "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
         "firstTokenId": 0,
         "lastTokenId": 239,
         "amount": 240
@@ -12556,7 +15210,56 @@
       "processedAt": "2026-09-17T16:01:00Z"
     },
     {
-      "id": "d4c1658d-5ce8-530f-87e6-8ebe8161228f",
+      "id": "3aa68c02-961d-522b-89b5-7e274c5d5306",
+      "rpcEventId": "0001850813-0000000000",
+      "network": "TESTNET",
+      "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "ledger": 1850813,
+      "ledgerClosedAt": "2026-09-22T11:01:00Z",
+      "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+      "type": "consecutive_mint",
+      "topics": [
+        "consecutive_mint",
+        "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      ],
+      "data": {
+        "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "fromTokenId": 240,
+        "toTokenId": 319
+      },
+      "matchedTransactionId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "originatedBySystem": true,
+      "processedAt": "2026-09-22T11:01:00Z"
+    },
+    {
+      "id": "050a5bc9-365c-52fc-a2eb-b6308b59a421",
+      "rpcEventId": "0001850813-0000000001",
+      "network": "TESTNET",
+      "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "ledger": 1850813,
+      "ledgerClosedAt": "2026-09-22T11:01:00Z",
+      "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+      "type": "lot_minted",
+      "topics": [
+        "lot_minted",
+        "ALT-L2026-007",
+        "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+      ],
+      "data": {
+        "lot": "ALT-L2026-007",
+        "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "firstTokenId": 240,
+        "lastTokenId": 319,
+        "amount": 80
+      },
+      "matchedTransactionId": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+      "originatedBySystem": true,
+      "processedAt": "2026-09-22T11:01:00Z"
+    },
+    {
+      "id": "e3d28eec-4dbe-507b-8e4f-1354e6e7d153",
       "rpcEventId": "0001869533-0000000000",
       "network": "TESTNET",
       "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
@@ -12566,7 +15269,8 @@
       "txHash": "5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
       "type": "consecutive_mint",
       "topics": [
-        "consecutive_mint"
+        "consecutive_mint",
+        "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM"
       ],
       "data": {
         "to": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
@@ -12578,7 +15282,7 @@
       "processedAt": "2026-09-23T13:01:00Z"
     },
     {
-      "id": "64f91025-00b7-58ec-88a5-9eefa2e4c66c",
+      "id": "ceb92e7f-30d6-564f-b537-890dde7ce002",
       "rpcEventId": "0001869533-0000000001",
       "network": "TESTNET",
       "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
@@ -12588,10 +15292,13 @@
       "txHash": "5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
       "type": "lot_minted",
       "topics": [
-        "lot_minted"
+        "lot_minted",
+        "CVJ-L2026-006",
+        "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM"
       ],
       "data": {
         "lot": "CVJ-L2026-006",
+        "to": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
         "firstTokenId": 60,
         "lastTokenId": 159,
         "amount": 100
@@ -12611,7 +15318,7 @@
       "status": "DIFFERENCES",
       "startedAt": "2026-09-15T06:30:00Z",
       "finishedAt": "2026-09-15T06:30:00Z",
-      "checks": 21,
+      "checks": 33,
       "issuesOpened": 1,
       "issuesAutoResolved": 0
     },
@@ -12621,15 +15328,41 @@
       "subjectId": null,
       "trigger": "SCHEDULED",
       "depth": "FULL",
-      "status": "OK",
-      "startedAt": "2026-09-25T06:30:00Z",
-      "finishedAt": "2026-09-25T06:30:00Z",
-      "checks": 21,
-      "issuesOpened": 0,
+      "status": "DIFFERENCES",
+      "startedAt": "2026-09-19T06:30:00Z",
+      "finishedAt": "2026-09-19T06:30:00Z",
+      "checks": 33,
+      "issuesOpened": 1,
       "issuesAutoResolved": 0
     },
     {
       "id": "6af91988-45fc-5615-9f0b-ff4ca994046a",
+      "scope": "ALL",
+      "subjectId": null,
+      "trigger": "SCHEDULED",
+      "depth": "FULL",
+      "status": "OK",
+      "startedAt": "2026-09-20T10:30:00Z",
+      "finishedAt": "2026-09-20T10:30:00Z",
+      "checks": 33,
+      "issuesOpened": 0,
+      "issuesAutoResolved": 1
+    },
+    {
+      "id": "19fca1e5-4963-5539-a87a-48dfc0d76b6a",
+      "scope": "ALL",
+      "subjectId": null,
+      "trigger": "SCHEDULED",
+      "depth": "FULL",
+      "status": "OK",
+      "startedAt": "2026-09-25T06:30:00Z",
+      "finishedAt": "2026-09-25T06:30:00Z",
+      "checks": 33,
+      "issuesOpened": 0,
+      "issuesAutoResolved": 0
+    },
+    {
+      "id": "1e965fa4-609d-52a8-ba52-e98ec8346b7e",
       "scope": "ALL",
       "subjectId": null,
       "trigger": "SCHEDULED",
@@ -12641,5 +15374,24 @@
       "issuesOpened": 0,
       "issuesAutoResolved": 0
     }
-  ]
+  ],
+  "enabled": true,
+  "ttl": {
+    "code": "2026-12-31T00:00:00Z",
+    "contracts": {
+      "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS": "2026-11-01T00:00:00Z",
+      "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR": "2026-10-05T00:00:00Z",
+      "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH": "2026-10-21T00:00:00Z"
+    }
+  },
+  "indexer": {
+    "lastLedger": 1888268,
+    "lagSeconds": 12
+  },
+  "forcedMismatches": [],
+  "drift": {
+    "paused": {},
+    "roles": {}
+  },
+  "notices": []
 }

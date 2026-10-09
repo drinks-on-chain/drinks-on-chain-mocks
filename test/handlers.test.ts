@@ -296,7 +296,7 @@ describe('recorrido del ERP por las rutas definitivas (cierre H2 de la Ola 2)', 
     const tank = dataOf(tankRes.json) as { id: string; status: string; lotId: string; inputs: unknown[] }
     expect(tank).toMatchObject({ status: 'FILLING', inputs: [{ harvestBatchId: harvest.id, kg: 5100 }] })
     const lot = LotSchema.parse(dataOf((await call(`/v1/lots/${tank.lotId}`, { token })).json))
-    expect(lot).toMatchObject({ name: 'Tannat 2026', productType: 'WINE', stage: 'FERMENTING', reference: 'ALT-L2026-007' })
+    expect(lot).toMatchObject({ name: 'Tannat 2026', productType: 'WINE', stage: 'FERMENTING', reference: 'ALT-L2026-008' })
     expect(lot.rules.origin).toBe('LOT_CREATION')
     // La otra uva aún no tiene dictamen: la regla del dictamen va antes que la del código ocupado.
     const sameCode = await call('/v1/fermentation-tanks', { token, body: { ...tankBody, inputs: [{ harvestBatchId: plain.id }] } })

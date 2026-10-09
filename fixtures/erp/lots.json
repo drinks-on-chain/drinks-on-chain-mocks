@@ -3695,5 +3695,155 @@
       "fullName": "Rosa Camargo",
       "role": "OWNER"
     }
+  },
+  {
+    "id": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "reference": "ALT-L2026-007",
+    "lotCode": null,
+    "name": "Singani Preventa 2026",
+    "productType": "SINGANI",
+    "stage": "ORIGIN",
+    "stageChangedAt": "2026-09-21T10:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 800,
+    "projectedBottles": 800,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 0,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-09-21T10:00:00Z",
+    "updatedAt": "2026-09-21T10:00:00Z",
+    "tokenization": {
+      "state": "PUBLISHED",
+      "quota": 80,
+      "minted": 80,
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+    },
+    "plannedTerroirIds": [],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [
+      {
+        "value": 800,
+        "at": "2026-09-21T10:00:00Z",
+        "by": {
+          "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+          "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+          "fullName": "Martín Calamuchita",
+          "role": "OWNER"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-21T10:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1500,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 6
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 200
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [
+        "trazabilidad.singani.altitudMinimaMsnm"
+      ],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "WINERY",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "WINERY",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "WINERY",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1500,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 6,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": true,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 200,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "NOT_APPLICABLE",
+      "checks": [],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": "Primera preventa de singani de la bodega.",
+    "createdBy": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    }
   }
 ]

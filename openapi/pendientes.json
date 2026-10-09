@@ -18,12 +18,38 @@
       "method": "GET",
       "path": "/v1/public/collections/{slug}",
       "contrato": "plan/contratos/o2-erp-confiable.md §17.1",
-      "motivo": "Borrador adelantado de la ficha de una colección (pantalla 2A del Marketplace). No lo implementa el backend en la Ola 2: lo fija el OpenAPI borrador de la Etapa 4 (O3-PK-1) y puede cambiar.",
+      "motivo": "Borrador de la ficha de una colección por su slug (Ola 2). OBSOLETA desde mocks 0.6.0-rc.2: el slug es único por bodega (backend, Etapa 3) y la ficha se resuelve con GET /v1/public/collections/{winerySlug}/{slug}; se retira en 0.6.0.",
       "borrador": true,
       "respuesta": {
         "status": 200,
         "schema": {
           "$zod": "PublicCollectionSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/public/collections/{winerySlug}/{slug}",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Ficha de una colección resuelta por bodega: el slug de una colección es único por bodega, no global (backend, Etapa 3). Borrador adelantado de la Etapa 4 para las pantallas 2A–2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PublicCollectionSchema"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/public/purchase-settings",
+      "contrato": "plan/contratos/o3-tokenizacion.md §13.1",
+      "motivo": "Máximo de botellas por compra (compra.maxBotellasPorCompra) y minutos de reserva, sin sesión. Borrador adelantado de la Etapa 4 para las pantallas 2A–2C del Marketplace. No lo implementa el backend en la Ola 3: lo fijará el contrato de la Ola 4 (plan/contratos/o4-marketplace.md) y puede cambiar.",
+      "borrador": true,
+      "respuesta": {
+        "status": 200,
+        "schema": {
+          "$zod": "PurchaseSettingsSchema"
         }
       }
     },

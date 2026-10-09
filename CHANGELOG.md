@@ -2,6 +2,54 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.6.0-rc.2] · 2026-10-09
+
+**Ola 3 · precisiones del backend y pedidos de las apps.** Pre-release sobre `dev`. El contrato es ahora el OpenAPI de la rama más avanzada del backend (`feat/o3-be-emision`, `66f33fd`: pasos 3.1–3.5 implementados; mismas 212 operaciones y 403 esquemas que la apertura, sin `501` en lo ya implementado), que sigue sin desplegar: ver `docs/CONTRATO.md` §14. Instalación: `pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.2/drinks-on-chain-mocks-0.6.0-rc.2.tgz`.
+
+### Cambios que rompen (respecto a `rc.1`)
+
+Del backend:
+
+- **El `slug` de una colección es único por bodega, no global.** `TOK_SLUG_TAKEN` solo salta dentro de la misma bodega. `PublicNftMetadata.external_url` sin pasaporte pasa de `{MKT}/colecciones/{slug}` a **`{MKT}/colecciones/{slugBodega}/{slug}`**. En los fixtures hay dos bodegas con una colección `singani-preventa-2026` (`SAME_SLUG_CASE`): no busques una colección solo por su `slug`.
+- **Catálogo (borrador)**: la ficha se resuelve por bodega, `GET /v1/public/collections/{winerySlug}/{slug}` (borrador `marketplace`, `X-Mock-Draft: plan/contratos/o3-tokenizacion.md §13.1`). `GET /v1/public/collections/{slug}` queda **obsoleta** (cabeceras `Deprecation` y `Link`; con un `slug` repetido devuelve la primera del catálogo) y se retira en `0.6.0`. Dos colecciones de demostración de bodegas distintas ya pueden compartir `slug`; su `id` sigue siendo único.
+- **`stellar.toml`** ya no lleva `[[CURRENCIES]]` (S-7): los contratos se publican solo en `GET /v1/public/chain/registry`.
+- **Alertas**: `TX_FAILED` cambia el mensaje (`MINT_BATCH falló (CHN_AUTH_FAILED): …`) y `actual` (`{ status, code, detail }`); una transacción que falla por `CHN_INTENT_REJECTED` o `CHN_INSUFFICIENT_BALANCE` abre la alerta con ese código o con `LOW_BALANCE`. `LOW_BALANCE` de la conciliación lleva `expected: { minBalanceXlm }`, `actual: { balanceXlm, status }` y es `CRITICAL` en la cuenta de operaciones.
+
+De los datos (pedidos de las apps):
+
+- **Lote y colección nuevos en Altos de Calamuchita**: «Singani Preventa 2026» (`ALT-L2026-007`, en origen, estimación 800) con su colección `PUBLISHED` de 80 NFT a Bs 150. El siguiente lote de Altos es `ALT-L2026-008`; hay 4 colecciones, 480 NFT, 9 solicitudes (4 aprobadas) y el catálogo tiene 10 fichas.
+- **Cadena**: 13 transacciones (dos `EXTEND_TTL`), 14 eventos (cada contrato nace con `role_granted` **y** `base_uri_updated`; `topics` lleva los argumentos indexados), 3 alertas y 5 conciliaciones. Los ledgers de los fixtures siguen el orden de las fechas.
+- **`PlatformChainAccounts.codeTtlDays`** se calcula con el reloj de los mocks (96 el día de referencia; baja al adelantarlo) y **`Dashboard.chain.indexerLagSeconds`** deja de ser fijo.
+- **Buzón**: las operaciones de tokenización envían correos (9 plantillas nuevas en `MAIL_TEMPLATES`). Una prueba que cuente todos los correos del buzón verá más.
+- **`GET /v1/orders`** de María (`MARKETPLACE_DEMO_ACCOUNT`) trae 4 pedidos sembrados.
+- **Escenario `empty`**: `GET /v1/organizations/current/chain-account` (y la de plataforma) sale sin NFT, lotes, transacciones ni costes.
+- **`POST /v1/auth/signup` con `captchaToken`** (o `website`, `acceptTerms`, `ageDeclaration`) responde **202** `{ status: 'VERIFICATION_SENT' }` sin abrir sesión (borrador §13.1). Sin esos campos, el alta del OpenAPI vigente (201 con sesión) no cambia.
+- `SCENARIOS` tiene cinco nombres más; `mockChain.setMintEnabled` y los tipos `ChainState`/`StoredToken` ganan campos.
+
+#### Qué toca cada app
+
+- **ERP**: si alguna prueba cuenta los lotes o las colecciones de Altos, o espera `ALT-L2026-007` como siguiente referencia, actualízala. La ficha de la cuenta de la bodega tiene ya su estado vacío (`empty`) y el de identidad sin aprovisionar (`identidad-sin-aprovisionar`). El embotellado **no** lleva `explorerUrl` (el OpenAPI no lo trae): el enlace del anclaje es `LotDossier.anchor.explorerUrl`. Una emisión puede esperar con `lastError.code = 'CHN_WINERY_NOT_ACTIVE'`.
+- **Backoffice**: trata `ChainAlert.subject.type` como texto (lista orientativa `CHAIN_ALERT_SUBJECT_TYPES`; el back usa `TRANSACTION`, `COLLECTION`, `MINT`, `LOT`, `CONTRACT`, `PLATFORM_ACCOUNT` y `PLATFORM`) y añade `MINT_RANGE_MISMATCH` a los códigos conocidos (`CHAIN_ALERT_CODES`). `chain/provision`, `pause` y `unpause` pueden responder 409 `CHN_DISABLED`. Las listas de colecciones y solicitudes tienen una fila más; `collectionsPublished` del tablero es 3. Revisa lo que dependa del texto o de `expected`/`actual` de `TX_FAILED` y `LOW_BALANCE`.
+- **Marketplace**: enlaza la ficha con `/colecciones/{slugBodega}/{slug}` y pídela a `GET /v1/public/collections/{winerySlug}/{slug}`; las claves de lista deben ser el `id` (o bodega + `slug`), no el `slug`. El alta con captcha recibe 202 y no hay sesión hasta `verify-email` + login. `GET /v1/orders` de María ya no está vacío. `stellar.toml` no trae contratos.
+
+### Añadido
+
+- **Backend**: `CHN_DISABLED` (409 en `chain/provision`, `chain/pause` y `chain/unpause`; registro público con cuentas `null` y lista vacía) con `mockChain.setEnabled(false)`; `CHN_WINERY_NOT_ACTIVE` (la emisión de una bodega suspendida o revocada espera en `PENDING`, como `CHN_MINT_DISABLED`, y continúa sola al reactivarla; `MINT_HOLD_CODES`); alertas `MINT_RANGE_MISMATCH` y `ANCHOR_MISMATCH` (`mockChain.mismatchNext('MINT_BATCH' | 'ANCHOR_DOSSIER')`: emisión `FAILED` sin NFT; anclaje `FAILED` en privado y `PENDING` sin transacción en público); `CHAIN_ALERT_CODES` y `CHAIN_ALERT_SUBJECT_TYPES`. La respuesta de aprobar trae `mint.transactions` con sus `MINT_BATCH`. `GET /v1/public/lots/{lotCode}/verification` responde 429 con `Retry-After` (`pasaporte-saturado`).
+- **Escenarios**: `faltante-vendidos` (cierre con 10 NFT sin vender que se queman y 10 **vendidos sin botella** para resolver ítem a ítem; los ítems llevan `orderId` y `paidAt`), `identidad-sin-aprovisionar` (bodega `ACTIVE` con identidad `NOT_PROVISIONED`), `cadena-sin-configurar`, `huella-alterada` (los bytes del expediente canónico no dan la huella anclada) y `verificacion-no-encontrada` (la verificación responde 404). `PUBLIC_RESPONSE_SCENARIOS`.
+- **`mockTokenization`** (también en `window.__docMocks.tokenization`): `resubmitAsWinery(requestId, { message?, commercial?, quantity? })` simula a la bodega atendiendo los cambios pedidos y reenviando (sin datos, completa lo que pidió operaciones); `submitAsWinery(lotId, body)` y `withdrawAsWinery(requestId)`.
+- **Correos de la tokenización** en el buzón simulado (`TOKENIZATION_MAIL_TEMPLATES`): al dueño, `TOKENIZATION_REQUEST_RECEIVED`, `TOKENIZATION_CHANGES_REQUESTED` (con el mensaje), `TOKENIZATION_APPROVED`, `TOKENIZATION_REJECTED` (con el motivo), `NFT_MINTED` (enlace al contrato en el explorador), `COLLECTION_STATUS_CHANGED` y `LOT_SHORTFALL_DETECTED`; a operaciones y administración, `TOKENIZATION_REQUEST_FOR_OPERATIONS` (nueva o reenviada) y `CHAIN_ALERT_CRITICAL`.
+- **Conciliación**: cada ejecución abre las diferencias nuevas y **cierra solas** las que ya no se reproducen (`RECONCILED_ALERT_CODES`; en los fixtures, una ejecución abre `TTL_EXPIRING` y la siguiente la cierra tras un `EXTEND_TTL`). Profundidad `FULL`: `OWNER_MISMATCH`, `BURN_MISMATCH`, `PAUSE_MISMATCH`, `ROLE_MISMATCH` y `TTL_EXPIRING` de cada contrato y del código. Controles: `mockChain.drift()`, `clearDrift()`, `reconcile()`, `indexerGap()`, `extendTtl()`, `setCodeTtlDays()` y `setContractTtlDays()`.
+- **Borrador del Marketplace**: alta con captcha, campo trampa y correo de verificación (`ConsumerSignupSchema`, `ConsumerSignupAcceptedSchema`); `ConsumerProfile.emailVerified` variable; pedidos sembrados (`MARKETPLACE_DEMO_ACCOUNT`); `GET /v1/public/purchase-settings` (`PurchaseSettingsSchema`: máximo por compra y minutos de reserva); un NFT vendido recuerda su pedido.
+
+### Sin cambio
+
+- `explorerUrl` del anclaje en el embotellado: `BottlingBatchResponseDto` no lo declara, así que no se añade.
+- Emisión `CONFIRMED` con una `MINT_BATCH` en `PENDING` en la lista de la misma colección: es coherente (la lista une las transacciones de **todas** las emisiones; pasa con una ampliación en curso). Documentado en `docs/CONTRATO.md` §14.6 y cubierto por una prueba que recorre todos los escenarios.
+
+### Pendiente para `0.6.0`
+
+`pnpm openapi:pull` contra el servidor cuando el backend despliegue la Ola 3; rutas del paso 3.6 (conciliación, alertas, eventos y cierre siguen con `501` en el OpenAPI); retirar `GET /v1/public/collections/{slug}`; dominio `marketplace` desde el OpenAPI borrador de la Etapa 4.
+
 ## [0.6.0-rc.1] · 2026-10-09
 
 **Ola 3 · tokenización y cadena** (`plan/contratos/o3-tokenizacion.md`). Pre-release sobre `dev`. El contrato es el OpenAPI de la apertura del backend (rama `feat/o3-be-apertura`, `157dee4`: 212 operaciones, 54 nuevas), que aún no está desplegado: ver `docs/CONTRATO.md` §13.1. Instalación: `pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.1/drinks-on-chain-mocks-0.6.0-rc.1.tgz`.
@@ -32,7 +80,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); v
 
 ### Pendiente (`rc.2`)
 
-Correos de la tokenización, más comprobaciones de la conciliación y del indexador, y el cierre con NFT vendidos sin botella como escenario (`docs/CONTRATO.md` §13.8).
+Correos de la tokenización, más comprobaciones de la conciliación y del indexador, y el cierre con NFT vendidos sin botella como escenario (`docs/CONTRATO.md` §13.8). Hecho en `0.6.0-rc.2`.
 
 ## [0.5.0] · 2026-10-04
 

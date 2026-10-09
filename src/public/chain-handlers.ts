@@ -2,6 +2,7 @@ import { profileOf } from '../backoffice/handlers/support'
 import { chainCtx } from '../chain/runtime'
 import { getErpDb } from '../erp/handlers/db'
 import { ApiError } from '../erp/handlers/errors'
+import { getScenario } from '../shared/scenarios'
 import { ok, type RouteSpec } from '../erp/handlers/http'
 import { demoBottlePng } from '../shared/png'
 import { publicChainRegistry, publicDossierVerification, publicNftMetadata } from '../tokenization/views'
@@ -29,7 +30,7 @@ function stellarToml(): string {
     'ORG_URL="https://www.drinksonchain.com"',
     'ORG_DESCRIPTION="Trazabilidad y preventa de vinos y singanis de Bolivia"',
     '',
-    ...registry.wineries.flatMap((w) => ['[[CURRENCIES]]', `code="${w.symbol}"`, `contract="${w.contract}"`, `name="${w.tradeName}"`, `desc="NFT por botella de ${w.tradeName}"`, '']),
+    // Los contratos no van en `[[CURRENCIES]]` (S-7): su fuente canónica es `GET /v1/public/chain/registry`.
   ].join('\n')
 }
 
@@ -51,12 +52,16 @@ export const publicChainRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/public/lots/:lotCode/verification',
     access: 'public',
-    handle: (ctx) =>
-      lookup(ctx, () => {
+    handle(ctx) {
+      // Escenario `verificacion-no-encontrada`: la verificación responde 404 aunque el pasaporte cargue
+      // (un lote que dejó de publicarse). Fuera de `lookup`: no cuenta para el freno a la enumeración.
+      if (getScenario() === 'verificacion-no-encontrada') throw new ApiError(404, 'PUB_CODE_NOT_FOUND', 'Código no encontrado', null, { 'Cache-Control': 'public, max-age=30' })
+      return lookup(ctx, () => {
         const lot = publicLot(ctx.params.lotCode!)
         const view = publicDossierVerification(getErpDb(), chainCtx(), lot, `/v1/public/lots/${encodeURIComponent(lot.lotCode!)}/dossier`)
         return { ...ok(view), headers: { 'Cache-Control': `public, max-age=${view.anchor?.status === 'ANCHORED' ? 3600 : 60}` } }
-      }),
+      })
+    },
   },
   {
     method: 'get',

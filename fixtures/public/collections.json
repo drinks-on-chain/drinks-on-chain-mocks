@@ -1,5 +1,63 @@
 [
   {
+    "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+    "slug": "singani-preventa-2026",
+    "name": "Singani Preventa 2026",
+    "productType": "SINGANI",
+    "vintage": 2026,
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita",
+      "region": "Valle Central de Tarija · Santa Ana"
+    },
+    "lotStage": "ORIGIN",
+    "estimatedReadyDate": null,
+    "price": {
+      "amountMinor": 15000,
+      "currency": "BOB"
+    },
+    "availability": {
+      "total": 80,
+      "available": 80
+    },
+    "status": "PRESALE",
+    "saleState": "PRESALE",
+    "counts": {
+      "available": 80
+    },
+    "featured": true,
+    "imageUrl": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+    "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+    "tastingNotes": "Flores blancas y fruta de carozo; boca fresca, de final limpio.",
+    "pairing": "Solo y frío, en chuflay o con frutas de carozo y postres de cítricos.",
+    "gallery": [
+      "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0"
+    ],
+    "lot": {
+      "lotCode": null,
+      "timeline": [
+        {
+          "type": "NFT_MINTED",
+          "occurredAt": "2026-09-22T11:01:00Z",
+          "recordedAt": "2026-09-22T11:01:00Z",
+          "lateEntry": false,
+          "summary": "80 botellas en preventa",
+          "actorRole": null,
+          "corrected": false
+        },
+        {
+          "type": "COLLECTION_PUBLISHED",
+          "occurredAt": "2026-09-22T12:00:00Z",
+          "recordedAt": "2026-09-22T12:00:00Z",
+          "lateEntry": false,
+          "summary": "Colección publicada en el Marketplace",
+          "actorRole": null,
+          "corrected": false
+        }
+      ]
+    }
+  },
+  {
     "id": "20c275fc-7330-5935-911c-2c5800a0911a",
     "slug": "singani-preventa-2026",
     "name": "Singani Preventa 2026",

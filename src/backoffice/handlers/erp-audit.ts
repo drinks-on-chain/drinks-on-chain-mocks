@@ -50,6 +50,8 @@ function erpAfterSuccess(spec: RouteSpec): RouteSpec['afterSuccess'] {
   if (!entry || !entry[0]) return undefined
   const [action, resourceType] = entry
   return (ctx: RouteContext, result: RouteResult) => {
+    // 202: alta del borrador de la Etapa 4 (registra su propia entrada, o ninguna si no creó nada).
+    if (result.status === 202) return
     const data = (result.data ?? {}) as Record<string, unknown>
     const user = data.user as { id?: unknown } | undefined
     const id = typeof data.id === 'string' ? data.id : typeof data.key === 'string' ? data.key.slice(0, 100) : typeof user?.id === 'string' ? user.id : null

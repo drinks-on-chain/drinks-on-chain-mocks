@@ -2,10 +2,11 @@ import { effectiveSetting, profileOf } from '../backoffice/handlers/support'
 import type { AuthContext } from '../erp/handlers/auth-context'
 import { getErpDb } from '../erp/handlers/db'
 import { traceCtx } from '../erp/handlers/trace-context'
-import { advanceChain, CHAIN_STEP_MS, enqueueTx, hasChainWork, processChain, setMintEnabled, settleChain, type ChainCtx, type ChainEnv } from './engine'
-import type { ChainTxRef, UserRef } from './schemas'
-import { provisionIdentity } from './service'
-import { identityOf, type ForcedChainFailure } from './state'
+import { advanceChain, CHAIN_STEP_MS, enqueueTx, hasChainWork, processChain, resumeHeldMints, setMintEnabled, settleChain, type ChainCtx, type ChainEnv } from './engine'
+import { flushChainNotices } from './notices'
+import type { ChainAlert, ChainTxKind, ChainTxRef, ReconciliationRun, StartReconciliation, UserRef } from './schemas'
+import { clearChainDrift, driftChain, extendTtl, provisionIdentity, runReconciliation, simulateIndexerGap, type ChainDriftInput } from './service'
+import { identityOf, pushNotice, type ForcedChainFailure } from './state'
 import { isTxInFlight, toTxRef } from './views'
 
 // Puente entre los handlers y los servicios de la Ola 3: contexto de cada operación (reloj de los
@@ -61,6 +62,8 @@ let lastSync: number | null = null
 /** Lo llama cada petición antes de atenderse: pone la red al día. */
 export function syncChainNetwork(): void {
   const db = getErpDb()
+  // Una emisión en espera (bodega suspendida, emisión desactivada) continúa cuando su causa desaparece.
+  if (db.chain.transactions.some((t) => t.status === 'PENDING' && t.kind === 'MINT_BATCH')) resumeHeldMints(db, chainCtx())
   if (!hasChainWork(db.chain)) {
     lastSync = null
     return
@@ -82,11 +85,15 @@ export const mockChain = {
   stepMs: CHAIN_STEP_MS,
   /** Adelanta el reloj de la red (por defecto, un paso) y devuelve cuántos pasos se dieron. */
   advance(ms: number = CHAIN_STEP_MS): number {
-    return advanceChain(getErpDb(), chainCtx(), ms)
+    const steps = advanceChain(getErpDb(), chainCtx(), ms)
+    flushChainNotices()
+    return steps
   },
   /** Adelanta la red hasta que no quede ninguna transacción en vuelo. */
   settle(): number {
-    return settleChain(getErpDb(), chainCtx())
+    const steps = settleChain(getErpDb(), chainCtx())
+    flushChainNotices()
+    return steps
   },
   /**
    * La siguiente transacción que se envíe (o la siguiente de `kind`) falla con `code`
@@ -107,7 +114,63 @@ export const mockChain = {
   },
   /** `CHAIN_MINT_ENABLED` (ADR-011): con `false`, las emisiones aprobadas esperan en `PENDING` con `CHN_MINT_DISABLED`. */
   setMintEnabled(enabled: boolean): void {
-    setMintEnabled(getErpDb(), enabled)
+    setMintEnabled(getErpDb(), chainCtx(), enabled)
+  },
+  /**
+   * Cadena configurada o no en el entorno. Con `false`: `chain/provision`, `chain/pause` y
+   * `chain/unpause` → 409 `CHN_DISABLED`, el registro público sale sin cuentas ni bodegas y una
+   * bodega que se active no recibe identidad.
+   */
+  setEnabled(enabled: boolean): void {
+    getErpDb().chain.enabled = enabled
+  },
+  isEnabled: (): boolean => getErpDb().chain.enabled,
+  /**
+   * La siguiente confirmación de ese tipo no supera la comprobación del servidor: una emisión queda
+   * `FAILED` con la alerta `CRITICAL` `MINT_RANGE_MISMATCH` (no se registran sus NFT) y un anclaje
+   * queda `FAILED` con `ANCHOR_MISMATCH` (el lote sigue `CERTIFIED`; en público, `PENDING`).
+   */
+  mismatchNext(kind: Extract<ChainTxKind, 'MINT_BATCH' | 'ANCHOR_DOSSIER'>): void {
+    getErpDb().chain.forcedMismatches.push(kind)
+  },
+  /** Tarea de TTL: registra `EXTEND_TTL` para el código (`'CODE'`, por defecto) o para el contrato de una bodega. */
+  extendTtl(target: 'CODE' | { wineryId: string } = 'CODE', days?: number): ChainTxRef {
+    return toTxRef(extendTtl(getErpDb(), chainCtx(), target, days))
+  },
+  /**
+   * Días de vida que le quedan al código (`PlatformChainAccounts.codeTtlDays`): baja sola con el
+   * reloj de los mocks. `null` = el backend aún no lo ha leído. Menos de 14 → la conciliación
+   * completa abre `TTL_EXPIRING`.
+   */
+  setCodeTtlDays(days: number | null): void {
+    const db = getErpDb()
+    db.chain.ttl.code = days === null ? null : new Date(db.clock + days * 86_400_000 + 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z')
+  },
+  /** Igual, para las entradas del contrato de una bodega. */
+  setContractTtlDays(wineryId: string, days: number): void {
+    const db = getErpDb()
+    const contract = identityOf(db.chain, wineryId)?.contract
+    if (contract) db.chain.ttl.contracts[contract.address] = new Date(db.clock + days * 86_400_000 + 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z')
+  },
+  /** El indexador se queda atrás: alerta `INDEXER_GAP` y `indexerLagSeconds` alto hasta la siguiente conciliación. */
+  indexerGap(ledgers?: number): ChainAlert {
+    const alert = simulateIndexerGap(getErpDb(), chainCtx(), ledgers)
+    flushChainNotices()
+    return alert
+  },
+  /** La red «dice» otra cosa que la base (dueño de un NFT, pausa o rol de un contrato): la conciliación `FULL` lo detecta. */
+  drift(input: ChainDriftInput): void {
+    driftChain(getErpDb(), chainCtx(), input)
+  },
+  /** La red vuelve a coincidir con la base: la siguiente conciliación cierra sola esas alertas. */
+  clearDrift(): void {
+    clearChainDrift(getErpDb(), chainCtx())
+  },
+  /** Ejecuta una conciliación como la tarea programada (por defecto, completa y de todo). */
+  reconcile(body: StartReconciliation = { scope: 'ALL', depth: 'FULL' }): ReconciliationRun {
+    const run = runReconciliation(getErpDb(), chainCtx(), body, 'SCHEDULED')
+    flushChainNotices()
+    return run
   },
 }
 export type MockChain = typeof mockChain
@@ -119,6 +182,8 @@ export type MockChain = typeof mockChain
 /** `winery.activated`: la bodega recibe su cuenta y su contrato. */
 export function onWineryActivated(wineryId: string): void {
   const db = getErpDb()
+  // Con la cadena sin configurar no se aprovisiona nada (queda `NOT_PROVISIONED`).
+  if (!db.chain.enabled) return
   const status = identityOf(db.chain, wineryId)?.status
   if (status && status !== 'FAILED') return
   provisionIdentity(db, chainCtx(), wineryId, null)
@@ -135,6 +200,7 @@ export function onWineryStatusChanged(wineryId: string, status: string): void {
     c.status = 'PAUSED'
     c.updatedAt = ctx.now
     c.statusHistory.push({ status: 'PAUSED', at: ctx.now, by: 'Sistema', reason })
+    pushNotice(db.chain, { type: 'COLLECTION_PAUSED', wineryId, collectionId: c.id, message: reason })
   }
   if (status !== 'REVOKED') return
   // Revocar pausa además el contrato en la red (lo firma el operador; solo la bodega lo reanuda).

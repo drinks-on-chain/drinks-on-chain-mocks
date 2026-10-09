@@ -163,6 +163,20 @@
         "updatedAt": "2026-09-23T13:01:00Z"
       },
       {
+        "id": "b9c58147-aad2-5840-8c75-30dbdd7c9d41",
+        "kind": "EXTEND_TTL",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+        "ledger": 1813373,
+        "confirmedAt": "2026-09-20T07:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-20T07:00:00Z",
+        "updatedAt": "2026-09-20T07:01:00Z"
+      },
+      {
         "id": "b12fb83f-46a1-554a-8579-03d6dc55e9ac",
         "kind": "MINT_BATCH",
         "status": "CONFIRMED",
@@ -206,7 +220,7 @@
       }
     ],
     "chainCosts": {
-      "feesChargedXlm": "0.3609300",
+      "feesChargedXlm": "0.4029300",
       "since": "2026-08-16T09:00:00Z"
     }
   },
@@ -263,8 +277,8 @@
       "lastError": null
     },
     "totals": {
-      "minted": 240,
-      "available": 240,
+      "minted": 320,
+      "available": 320,
       "reserved": 0,
       "sold": 0,
       "redeemable": 0,
@@ -295,9 +309,45 @@
           "expired": 0
         },
         "anchor": null
+      },
+      {
+        "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+        "reference": "ALT-L2026-007",
+        "lotCode": null,
+        "name": "Singani Preventa 2026",
+        "stage": "ORIGIN",
+        "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+        "collectionStatus": "PUBLISHED",
+        "quota": 80,
+        "counts": {
+          "minted": 80,
+          "available": 80,
+          "reserved": 0,
+          "sold": 0,
+          "redeemable": 0,
+          "passActive": 0,
+          "redeemed": 0,
+          "burned": 0,
+          "expired": 0
+        },
+        "anchor": null
       }
     ],
     "recentTransactions": [
+      {
+        "id": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+        "kind": "MINT_BATCH",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+        "ledger": 1850813,
+        "confirmedAt": "2026-09-22T11:01:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-22T11:00:00Z",
+        "updatedAt": "2026-09-22T11:01:00Z"
+      },
       {
         "id": "296ac8c5-e1ae-5c21-994c-642b6ec0632d",
         "kind": "MINT_BATCH",
@@ -342,7 +392,7 @@
       }
     ],
     "chainCosts": {
-      "feesChargedXlm": "0.3539200",
+      "feesChargedXlm": "0.3609200",
       "since": "2026-08-16T09:10:00Z"
     }
   },

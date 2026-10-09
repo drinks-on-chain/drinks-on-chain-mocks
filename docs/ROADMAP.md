@@ -127,8 +127,13 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Borrador `marketplace` (§13.1): perfil del consumidor, pedidos y pasarela de prueba, fuera de la prueba de contrato · 09-10-2026
 - [x] Prueba de contrato estricta de lo nuevo, `test/tokenization.test.ts` y `test/chain-fixtures.test.ts`; `docs/CONTRATO.md` §13, CHANGELOG y README · 09-10-2026
 - [x] Etiqueta `v0.6.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.6.0-rc.1.tgz`, instalado por URL y probado en un proyecto limpio · 09-10-2026
-- [ ] `rc.2`: correos de la tokenización, más comprobaciones de la conciliación y del indexador, cierre con NFT vendidos sin botella como escenario (`docs/CONTRATO.md` §13.8)
-- [ ] `pnpm openapi:pull` contra el servidor cuando el backend despliegue la apertura (debe dar las mismas 212 operaciones)
+- [x] `rc.2`: `openapi/erp.json` = rama `feat/o3-be-emision` del backend (`66f33fd`, pasos 3.1–3.5; `docs/CONTRATO.md` §14.1) y sus precisiones: `slug` por bodega (`external_url`, dos bodegas con el mismo `slug`, ficha del catálogo por bodega en el borrador), `CHN_DISABLED`, `CHN_WINERY_NOT_ACTIVE`, alertas `MINT_RANGE_MISMATCH` y `ANCHOR_MISMATCH`, verificación con 429 · 09-10-2026
+- [x] `rc.2`: pedidos del Backoffice (escenario `faltante-vendidos`, `mockTokenization.resubmitAsWinery`, coherencia emisión ⇄ transacciones documentada y probada), del ERP (`empty` vacía `chain-account`, `identidad-sin-aprovisionar`) y del Marketplace (alta 202 con captcha y verificación, `emailVerified`, pedidos sembrados, `huella-alterada`, `verificacion-no-encontrada`, `purchase-settings`) · 09-10-2026
+- [x] `rc.2`: correos de la tokenización en el buzón, conciliación que abre y cierra sola sus alertas, eventos del indexador con sus temas, `INDEXER_GAP` y `codeTtlDays` con el reloj · 09-10-2026
+- [x] Etiqueta `v0.6.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.6.0-rc.2.tgz`, instalado por URL y probado en un proyecto limpio · 09-10-2026
+- [ ] Precisiones del paso 3.6 del backend (conciliación, alertas, eventos, TTL y cierre: hoy `501` en su OpenAPI) y retirada de `GET /v1/public/collections/{slug}`
+- [ ] Correos de la tokenización también en `fixtures/backoffice/mailbox.json`
+- [ ] `pnpm openapi:pull` contra el servidor cuando el backend despliegue la Ola 3 (debe dar las mismas 212 operaciones)
 - [ ] Etiqueta estable `v0.6.0` en `main` al cerrar la Ola 3 (coordinación), con el dominio `marketplace` regenerado desde el OpenAPI borrador de la Etapa 4
 
 ## Más adelante

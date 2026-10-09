@@ -577,5 +577,191 @@
         }
       ]
     }
+  },
+  {
+    "id": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+    "slug": "singani-preventa-2026",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "winery": {
+      "slug": "altos-de-calamuchita",
+      "tradeName": "Bodega Altos de Calamuchita"
+    },
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "lot": {
+      "reference": "ALT-L2026-007",
+      "lotCode": null,
+      "name": "Singani Preventa 2026",
+      "productType": "SINGANI",
+      "harvestYear": 2026,
+      "stage": "ORIGIN",
+      "estimatedReadyDate": null
+    },
+    "status": "PUBLISHED",
+    "mintStatus": "CONFIRMED",
+    "saleState": "PRESALE",
+    "quota": 80,
+    "pendingMintQuantity": 0,
+    "counts": {
+      "minted": 80,
+      "available": 80,
+      "reserved": 0,
+      "sold": 0,
+      "redeemable": 0,
+      "passActive": 0,
+      "redeemed": 0,
+      "burned": 0,
+      "expired": 0
+    },
+    "price": {
+      "amountMinor": 15000,
+      "currency": "BOB",
+      "source": "MANUAL",
+      "setAt": "2026-09-22T11:00:00Z",
+      "setBy": {
+        "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+        "fullName": "Camila Torrez"
+      }
+    },
+    "name": "Singani Preventa 2026",
+    "coverImageUrl": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+    "estimatedRedeemDate": null,
+    "contract": {
+      "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+    },
+    "redeemable": false,
+    "redeemableSince": null,
+    "publishedAt": "2026-09-22T12:00:00Z",
+    "closedAt": null,
+    "createdAt": "2026-09-22T11:00:00Z",
+    "updatedAt": "2026-09-22T12:00:00Z",
+    "commercial": {
+      "name": "Singani Preventa 2026",
+      "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+      "tastingNotes": "Flores blancas y fruta de carozo; boca fresca, de final limpio.",
+      "pairing": null,
+      "estimatedRedeemDate": null,
+      "images": [
+        {
+          "id": "28060672-bdb1-595b-a097-29341637aaa0",
+          "key": "org/bd7bf10b-1768-51fa-aa4e-6299f374a153/collections/2026/singani-preventa-2026.jpg",
+          "sha256": "ee41e234960ea8cfa1cd1484dd8472e0a305c64e9283e1bc8899e7046c11a79c",
+          "url": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+          "alt": "Botella de Singani Preventa 2026 de Altos de Calamuchita",
+          "isCover": true
+        }
+      ]
+    },
+    "pricePolicySnapshot": null,
+    "priceHistory": [
+      {
+        "amountMinor": 15000,
+        "currency": "BOB",
+        "source": "MANUAL",
+        "setAt": "2026-09-22T11:00:00Z",
+        "setBy": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        }
+      }
+    ],
+    "mints": [
+      {
+        "id": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+        "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+        "requestId": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+        "sequence": 1,
+        "quantity": 80,
+        "status": "CONFIRMED",
+        "lotArg": "ALT-L2026-007",
+        "ranges": [
+          {
+            "firstTokenId": 240,
+            "lastTokenId": 319,
+            "firstBottleNumber": 1,
+            "lastBottleNumber": 80
+          }
+        ],
+        "createdAt": "2026-09-22T11:00:00Z",
+        "confirmedAt": "2026-09-22T11:01:00Z",
+        "transactions": [
+          {
+            "id": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+            "kind": "MINT_BATCH",
+            "status": "CONFIRMED",
+            "network": "TESTNET",
+            "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+            "explorerUrl": "https://stellar.expert/explorer/testnet/tx/c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+            "ledger": 1850813,
+            "confirmedAt": "2026-09-22T11:01:00Z",
+            "attempts": 1,
+            "lastError": null,
+            "createdAt": "2026-09-22T11:00:00Z",
+            "updatedAt": "2026-09-22T11:01:00Z"
+          }
+        ]
+      }
+    ],
+    "quotaHistory": [
+      {
+        "requestId": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+        "kind": "INITIAL",
+        "quantity": 80,
+        "resultingQuota": 80,
+        "approvedAt": "2026-09-22T11:00:00Z",
+        "approvedBy": "Camila Torrez"
+      }
+    ],
+    "statusHistory": [
+      {
+        "status": "MINTING",
+        "at": "2026-09-22T11:00:00Z",
+        "by": "Camila Torrez",
+        "reason": null
+      },
+      {
+        "status": "READY",
+        "at": "2026-09-22T11:01:00Z",
+        "by": "Sistema",
+        "reason": "Emisión confirmada"
+      },
+      {
+        "status": "PUBLISHED",
+        "at": "2026-09-22T12:00:00Z",
+        "by": "Camila Torrez",
+        "reason": "Apertura de la preventa"
+      }
+    ],
+    "anchor": null,
+    "closure": null,
+    "metrics": {
+      "counts": {
+        "minted": 80,
+        "available": 80,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "quota": 80,
+      "authorizedVsEstimatePercent": 10,
+      "firstMintedAt": "2026-09-22T11:01:00Z",
+      "publishedAt": "2026-09-22T12:00:00Z",
+      "firstSaleAt": null,
+      "chainCosts": {
+        "feesChargedXlm": "0.0070000",
+        "transactions": 1
+      },
+      "byMint": [
+        {
+          "sequence": 1,
+          "quantity": 80,
+          "confirmedAt": "2026-09-22T11:01:00Z"
+        }
+      ]
+    }
   }
 ]

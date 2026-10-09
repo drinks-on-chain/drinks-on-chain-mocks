@@ -8,9 +8,14 @@
       "id": "ANCHOR"
     },
     "wineryId": null,
-    "expected": "10.0000000",
-    "actual": "4.2000000",
-    "message": "Saldo bajo en la cuenta de anclaje",
+    "expected": {
+      "minBalanceXlm": "10.0000000"
+    },
+    "actual": {
+      "balanceXlm": "4.2000000",
+      "status": "LOW"
+    },
+    "message": "El saldo de la cuenta de anclaje está por debajo del mínimo",
     "runId": "c7c9634f-a7d7-53ba-81e4-18a8bc07da4a",
     "detectedAt": "2026-09-15T06:30:00Z",
     "resolvedAt": "2026-09-15T13:00:00Z",
@@ -22,6 +27,31 @@
   },
   {
     "id": "20484b8c-a16d-5fd4-a490-f95760e7d0b4",
+    "code": "TTL_EXPIRING",
+    "level": "WARNING",
+    "subject": {
+      "type": "CONTRACT",
+      "id": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+    },
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "expected": {
+      "minDays": 14
+    },
+    "actual": {
+      "days": 12
+    },
+    "message": "Entradas del contrato de Destilería Cinti Viejo con menos de 14 días de vida y sin extensión en curso",
+    "runId": "90986b9c-79e7-591f-bd6c-0e5b3dca2dd1",
+    "detectedAt": "2026-09-19T06:30:00Z",
+    "resolvedAt": "2026-09-20T10:30:00Z",
+    "resolution": {
+      "by": "Sistema",
+      "note": "La diferencia ya no se reproduce: la base y la red coinciden",
+      "auto": true
+    }
+  },
+  {
+    "id": "b498b51a-7044-5587-a36a-d5e3e19764b8",
     "code": "TTL_EXPIRING",
     "level": "WARNING",
     "subject": {

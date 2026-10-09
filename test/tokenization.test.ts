@@ -298,7 +298,7 @@ describe('red simulada: fallos forzados, reintento y espera de la emisión (§2.
     expect(alerts.items).toMatchObject([{ code: 'TX_FAILED', subject: { id: failed[0]!.id } }])
     const board = await get<Dashboard>('/v1/platform/dashboard', ADMIN)
     expect(board.chain).toMatchObject({ network: 'TESTNET', failedTransactions: 1, openAlerts: { critical: 1, warning: 1 }, lastReconciliation: { status: 'OK' } })
-    expect(board.tokenization).toMatchObject({ mintFailures: 1, collectionsMinting: 1, collectionsPublished: 1, submitted: 1, inReview: 1, changesRequested: 1 })
+    expect(board.tokenization).toMatchObject({ mintFailures: 1, collectionsMinting: 1, collectionsPublished: 2, submitted: 1, inReview: 1, changesRequested: 1 })
     expect(board.alerts.some((a) => a.level === 'CRITICAL' && a.message.includes('MINT_BATCH'))).toBe(true)
 
     // Una emisión no se abandona; reintentar exige rol, motivo e Idempotency-Key.
@@ -468,7 +468,7 @@ describe('anclaje del expediente (§7) e identidad de la bodega (§3)', () => {
 describe('cierre con faltante (§8.4), conciliación y alertas (§8.2)', () => {
   it('escenario faltante-botellas: 20 NFT sin botella; decide administración, se queman y el cierre queda resuelto', async () => {
     setScenario('faltante-botellas')
-    const collection = (await get<Paged<Collection>>(`/v1/platform/collections?wineryId=${ALTOS}`, SUPPORT)).items[0]!
+    const collection = (await get<Paged<Collection>>(`/v1/platform/collections?wineryId=${ALTOS}`, SUPPORT)).items.find((c) => c.name === 'Singani El Portillo 2025')!
     const url = `/v1/platform/collections/${collection.id}`
     const closure = LotClosureSchema.parse(await get(`${url}/closure`, SUPPORT))
     expect(closure).toMatchObject({ status: 'SHORTFALL_OPEN', bottles: 1040, minted: 1060, unsold: 1060, sold: 0, shortfall: SHORTFALL_SCENARIO_BOTTLES, unsoldToBurn: 20, soldWithoutBottle: 0, unsoldPolicy: null, decision: null })
@@ -525,7 +525,8 @@ describe('cierre con faltante (§8.4), conciliación y alertas (§8.2)', () => {
     expect(failure(await post(url, OPS, { note: 'Otra vez' }))).toMatchObject({ status: 409, code: 'CHN_ALERT_ALREADY_RESOLVED' })
 
     // Una diferencia provocada en la base: la conciliación la detecta y abre la alerta, sin tocar los datos.
-    getErpDb().chain.tokens.pop()
+    const tokens = getErpDb().chain.tokens
+    tokens.splice(tokens.findLastIndex((t) => t.collectionId === preventa.id), 1)
     const started = await post<{ id: string; status: string; issuesOpened: number }>('/v1/platform/chain/reconciliation/runs', OPS, { scope: 'ALL', depth: 'FULL' })
     expect(started.status).toBe(202)
     expect(dataOf(started.json)).toMatchObject({ status: 'DIFFERENCES', issuesOpened: 1, trigger: 'MANUAL', depth: 'FULL' })
@@ -534,7 +535,7 @@ describe('cierre con faltante (§8.4), conciliación y alertas (§8.2)', () => {
     expect(getErpDb().chain.tokens.filter((t) => t.collectionId === preventa.id)).toHaveLength(99)
     expect(failure(await post('/v1/platform/chain/reconciliation/runs', OPS, { scope: 'COLLECTION' }))).toMatchObject({ status: 422, details: [{ field: 'subjectId' }] })
     expect(failure(await post('/v1/platform/chain/reconciliation/runs', SUPPORT, { scope: 'ALL' }))).toMatchObject({ status: 403 })
-    expect((await get<Paged<unknown>>('/v1/platform/chain/reconciliation/runs', SUPPORT)).total).toBe(4)
+    expect((await get<Paged<unknown>>('/v1/platform/chain/reconciliation/runs', SUPPORT)).total).toBe(chainFixtures.reconciliationRuns.length + 1)
     // Las rutas de cadena son de la plataforma.
     expect((await call('/v1/platform/chain/transactions', { token: OWNER })).status).toBe(403)
     expect((await get<{ operations: { status: string; explorerUrl: string } }>('/v1/platform/chain/accounts', SUPPORT)).operations).toMatchObject({ status: 'OK' })
@@ -640,7 +641,8 @@ describe('BORRADOR del Marketplace (§13.1): cuenta del consumidor y compra con 
     expect(await get(`/v1/orders/${third.id}`, CONSUMER)).toMatchObject({ status: 'EXPIRED', reservedUntil: null })
     expect((await get<Collection>(`/v1/collections/${granReserva.id}`, OWNER)).counts).toMatchObject({ available: 58, reserved: 0, redeemable: 2 })
     const mine = await get<Paged<{ status: string }>>('/v1/orders', CONSUMER)
-    expect(mine.items.map((o) => o.status)).toEqual(['EXPIRED', 'PAYMENT_FAILED', 'PAID'])
+    // Delante de los pedidos sembrados de la cuenta de demostración (rc.2).
+    expect(mine.items.map((o) => o.status)).toEqual(['EXPIRED', 'PAYMENT_FAILED', 'PAID', 'EXPIRED', 'PAYMENT_FAILED', 'PAID', 'PAID'])
     expect((await get<Paged<unknown>>('/v1/orders', as('carlos'))).total).toBe(0)
     expect(failure(await call(`/v1/orders/${created.id}`, { token: as('carlos') }))).toMatchObject({ status: 404, code: 'MKT_ORDER_NOT_FOUND' })
     // Con ventas, el precio de la colección queda bloqueado.
