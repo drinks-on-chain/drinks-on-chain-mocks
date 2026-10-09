@@ -1,3 +1,4 @@
+import type { ChainState } from '../chain/state'
 import type { PublicWineryProfile } from '../backoffice/schemas'
 import type { BackofficeFixtureSet } from '../backoffice/seed/generate'
 import { TRACE_SEED_NOW, type ErpFixtureFiles } from '../erp/seed/trace'
@@ -27,10 +28,11 @@ export interface PublicFixtureSet {
 }
 
 /** Estado de la trazabilidad a partir de los archivos de `fixtures/erp/`. */
-export function traceStateOf(erp: ErpFixtureFiles): TraceState {
+export function traceStateOf(erp: ErpFixtureFiles, chain?: ChainState): TraceState {
   const copy = structuredClone(erp)
   return {
     ...emptyTraceCollections(),
+    ...(chain ? { chain: structuredClone(chain) } : {}),
     wineries: copy['wineries.json'],
     terroirs: copy['terroirs.json'],
     harvestBatches: copy['harvest-batches.json'],
@@ -71,8 +73,8 @@ export function wineryResolver(erp: Pick<ErpFixtureFiles, 'wineries.json'>, back
   }
 }
 
-export function generatePublicFixtures(erp: ErpFixtureFiles, backoffice: BackofficeFixtureSet): PublicFixtureSet {
-  const state = traceStateOf(erp)
+export function generatePublicFixtures(erp: ErpFixtureFiles, backoffice: BackofficeFixtureSet, chain?: ChainState): PublicFixtureSet {
+  const state = traceStateOf(erp, chain)
   const wineryOf = wineryResolver(erp, backoffice)
   const passports: Record<string, PublicLotPassport> = {}
   const samples: BottleCodeSample[] = []

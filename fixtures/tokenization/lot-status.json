@@ -1,0 +1,1156 @@
+{
+  "4af50d09-875b-5d1d-b026-62d60ae13b35": {
+    "lotId": "4af50d09-875b-5d1d-b026-62d60ae13b35",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "b5c058de-38fb-5c28-aacd-54b60c517687": {
+    "lotId": "b5c058de-38fb-5c28-aacd-54b60c517687",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": null,
+      "bottles": 4080,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 4080
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "4b7f0bb0-0acb-5f23-8637-f927c652b441": {
+    "lotId": "4b7f0bb0-0acb-5f23-8637-f927c652b441",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": null,
+      "bottles": 2140,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 2140
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "a8d26a88-40cd-5152-850b-e22d01885c7e": {
+    "lotId": "a8d26a88-40cd-5152-850b-e22d01885c7e",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": null,
+      "bottles": 3860,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 3860
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "700fca35-50c3-51a0-a23c-b7ed1958e4f4": {
+    "lotId": "700fca35-50c3-51a0-a23c-b7ed1958e4f4",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote aún no tiene decidido su tipo de producto (vino o singani)",
+        "code": "TOK_LOT_PRODUCT_UNDEFINED"
+      },
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "cb178cbb-78dd-50e2-ac94-1db981d3c549": {
+    "lotId": "cb178cbb-78dd-50e2-ac94-1db981d3c549",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c": {
+    "lotId": "00c6d01b-188a-5aa8-82fc-bb562cd4cd1c",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "f4536967-3999-53d5-851a-03c1bc26c7aa": {
+    "lotId": "f4536967-3999-53d5-851a-03c1bc26c7aa",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "d378310a-8bc9-5119-ab8b-4517701a1a4e": {
+    "lotId": "d378310a-8bc9-5119-ab8b-4517701a1a4e",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": null,
+      "bottles": 5320,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 5320
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b": {
+    "lotId": "86fe0c8b-b8c4-55f2-94b7-0664e04aaf9b",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote aún no tiene decidido su tipo de producto (vino o singani)",
+        "code": "TOK_LOT_PRODUCT_UNDEFINED"
+      },
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      },
+      {
+        "field": null,
+        "message": "El lote ya no se puede tokenizar: está certificado, anclado, rechazado o descartado",
+        "code": "TOK_LOT_NOT_TOKENIZABLE",
+        "meta": {
+          "stage": "REJECTED"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "f62144c5-2e11-5974-a269-500721ea5ec9": {
+    "lotId": "f62144c5-2e11-5974-a269-500721ea5ec9",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote aún no tiene decidido su tipo de producto (vino o singani)",
+        "code": "TOK_LOT_PRODUCT_UNDEFINED"
+      },
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "41ec0cf8-6c30-5dd9-88d0-be0d8e9e667a": {
+    "lotId": "41ec0cf8-6c30-5dd9-88d0-be0d8e9e667a",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote aún no tiene decidido su tipo de producto (vino o singani)",
+        "code": "TOK_LOT_PRODUCT_UNDEFINED"
+      },
+      {
+        "field": "estimatedBottles",
+        "message": "Declara la estimación de botellas del lote antes de tokenizarlo",
+        "code": "TOK_LOT_ESTIMATE_MISSING"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": null,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "b45c5f2a-c906-5d3b-97db-c0bd88d84651": {
+    "lotId": "b45c5f2a-c906-5d3b-97db-c0bd88d84651",
+    "tokenizable": true,
+    "blockers": [],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 1800,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 1800
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "35b04e1b-42c7-58a1-b653-d2167d216eb2": {
+    "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote ya tiene una solicitud de tokenización abierta",
+        "code": "TOK_REQUEST_ALREADY_OPEN",
+        "meta": {
+          "requestId": "6cdd52d3-6fa7-52a0-a209-fca325e999b6"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 1400,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 400,
+      "maxQuantity": 1000
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": {
+      "id": "6cdd52d3-6fa7-52a0-a209-fca325e999b6",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+      "lot": {
+        "reference": "CVJ-L2026-004",
+        "lotCode": null,
+        "name": "Singani El Molino 2026",
+        "productType": "SINGANI",
+        "stage": "DISTILLING",
+        "harvestYear": 2026,
+        "estimatedBottles": 1400,
+        "bottles": null
+      },
+      "kind": "INITIAL",
+      "status": "IN_REVIEW",
+      "quantity": 400,
+      "resultingQuota": 400,
+      "requiresApproval": true,
+      "assignee": {
+        "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+        "fullName": "Valeria Méndez"
+      },
+      "submittedAt": "2026-09-23T17:00:00Z",
+      "submittedBy": {
+        "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+        "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+        "fullName": "Rosa Camargo",
+        "role": "OWNER"
+      },
+      "updatedAt": "2026-09-24T14:30:00Z",
+      "collectionId": null
+    },
+    "collection": null,
+    "requests": [
+      {
+        "id": "6cdd52d3-6fa7-52a0-a209-fca325e999b6",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "winery": {
+          "slug": "destileria-cinti-viejo",
+          "tradeName": "Destilería Cinti Viejo"
+        },
+        "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+        "lot": {
+          "reference": "CVJ-L2026-004",
+          "lotCode": null,
+          "name": "Singani El Molino 2026",
+          "productType": "SINGANI",
+          "stage": "DISTILLING",
+          "harvestYear": 2026,
+          "estimatedBottles": 1400,
+          "bottles": null
+        },
+        "kind": "INITIAL",
+        "status": "IN_REVIEW",
+        "quantity": 400,
+        "resultingQuota": 400,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        },
+        "submittedAt": "2026-09-23T17:00:00Z",
+        "submittedBy": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-24T14:30:00Z",
+        "collectionId": null
+      },
+      {
+        "id": "2727c758-0460-5c4d-8fd0-f19bdd84d8b9",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "winery": {
+          "slug": "destileria-cinti-viejo",
+          "tradeName": "Destilería Cinti Viejo"
+        },
+        "lotId": "35b04e1b-42c7-58a1-b653-d2167d216eb2",
+        "lot": {
+          "reference": "CVJ-L2026-004",
+          "lotCode": null,
+          "name": "Singani El Molino 2026",
+          "productType": "SINGANI",
+          "stage": "DISTILLING",
+          "harvestYear": 2026,
+          "estimatedBottles": 1400,
+          "bottles": null
+        },
+        "kind": "INITIAL",
+        "status": "WITHDRAWN",
+        "quantity": 1400,
+        "resultingQuota": 1400,
+        "requiresApproval": true,
+        "assignee": null,
+        "submittedAt": "2026-09-10T15:00:00Z",
+        "submittedBy": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-11T10:00:00Z",
+        "collectionId": null
+      }
+    ]
+  },
+  "769be91a-ff12-59f9-9202-2f3953f9fa4c": {
+    "lotId": "769be91a-ff12-59f9-9202-2f3953f9fa4c",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote aún no tiene decidido su tipo de producto (vino o singani)",
+        "code": "TOK_LOT_PRODUCT_UNDEFINED"
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 5200,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 5200
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "657df64b-8ef6-5d59-912c-27496c32faed": {
+    "lotId": "657df64b-8ef6-5d59-912c-27496c32faed",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote ya no se puede tokenizar: está certificado, anclado, rechazado o descartado",
+        "code": "TOK_LOT_NOT_TOKENIZABLE",
+        "meta": {
+          "stage": "DISCARDED"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 5600,
+      "bottles": null,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 5600
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "6aa776d3-d333-5b1b-b56f-f94a58a39372": {
+    "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote ya tiene una solicitud de tokenización abierta",
+        "code": "TOK_REQUEST_ALREADY_OPEN",
+        "meta": {
+          "requestId": "28d728a1-d7a0-561c-b835-6d7fc795a19a"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 4500,
+      "bottles": 4400,
+      "authorizedQuota": 0,
+      "pendingQuantity": 1200,
+      "maxQuantity": 3200
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": {
+      "id": "28d728a1-d7a0-561c-b835-6d7fc795a19a",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+      "lot": {
+        "reference": "ALT-L2024-001",
+        "lotCode": "ALT-2025-WINE-001",
+        "name": "Tannat La Angostura 2024",
+        "productType": "WINE",
+        "stage": "BOTTLED",
+        "harvestYear": 2024,
+        "estimatedBottles": 4500,
+        "bottles": 4400
+      },
+      "kind": "INITIAL",
+      "status": "CHANGES_REQUESTED",
+      "quantity": 1200,
+      "resultingQuota": 1200,
+      "requiresApproval": true,
+      "assignee": {
+        "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+        "fullName": "Camila Torrez"
+      },
+      "submittedAt": "2026-09-19T11:00:00Z",
+      "submittedBy": {
+        "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+        "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+        "fullName": "Martín Calamuchita",
+        "role": "OWNER"
+      },
+      "updatedAt": "2026-09-20T10:40:00Z",
+      "collectionId": null
+    },
+    "collection": null,
+    "requests": [
+      {
+        "id": "28d728a1-d7a0-561c-b835-6d7fc795a19a",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "winery": {
+          "slug": "altos-de-calamuchita",
+          "tradeName": "Bodega Altos de Calamuchita"
+        },
+        "lotId": "6aa776d3-d333-5b1b-b56f-f94a58a39372",
+        "lot": {
+          "reference": "ALT-L2024-001",
+          "lotCode": "ALT-2025-WINE-001",
+          "name": "Tannat La Angostura 2024",
+          "productType": "WINE",
+          "stage": "BOTTLED",
+          "harvestYear": 2024,
+          "estimatedBottles": 4500,
+          "bottles": 4400
+        },
+        "kind": "INITIAL",
+        "status": "CHANGES_REQUESTED",
+        "quantity": 1200,
+        "resultingQuota": 1200,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+          "fullName": "Camila Torrez"
+        },
+        "submittedAt": "2026-09-19T11:00:00Z",
+        "submittedBy": {
+          "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+          "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+          "fullName": "Martín Calamuchita",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-20T10:40:00Z",
+        "collectionId": null
+      }
+    ]
+  },
+  "a9a5d323-2e45-57b5-9803-8b633c538f22": {
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote ya tiene una solicitud de tokenización abierta",
+        "code": "TOK_REQUEST_ALREADY_OPEN",
+        "meta": {
+          "requestId": "561f004f-b877-5e1a-a484-a9b16e6ebb5a"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 1050,
+      "bottles": 1040,
+      "authorizedQuota": 240,
+      "pendingQuantity": 500,
+      "maxQuantity": 300
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": {
+      "id": "561f004f-b877-5e1a-a484-a9b16e6ebb5a",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+      "lot": {
+        "reference": "ALT-L2025-004",
+        "lotCode": "ALT-2025-SINGANI-002",
+        "name": "Singani El Portillo 2025",
+        "productType": "SINGANI",
+        "stage": "BOTTLED",
+        "harvestYear": 2025,
+        "estimatedBottles": 1050,
+        "bottles": 1040
+      },
+      "kind": "QUOTA_INCREASE",
+      "status": "SUBMITTED",
+      "quantity": 500,
+      "resultingQuota": 740,
+      "requiresApproval": true,
+      "assignee": null,
+      "submittedAt": "2026-09-24T16:00:00Z",
+      "submittedBy": {
+        "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+        "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+        "fullName": "Martín Calamuchita",
+        "role": "OWNER"
+      },
+      "updatedAt": "2026-09-24T16:00:00Z",
+      "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45"
+    },
+    "collection": {
+      "id": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+      "slug": "singani-el-portillo-2025",
+      "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+      "lot": {
+        "reference": "ALT-L2025-004",
+        "lotCode": "ALT-2025-SINGANI-002",
+        "name": "Singani El Portillo 2025",
+        "productType": "SINGANI",
+        "harvestYear": 2025,
+        "stage": "BOTTLED",
+        "estimatedReadyDate": "2025-10-10"
+      },
+      "status": "READY",
+      "mintStatus": "CONFIRMED",
+      "saleState": null,
+      "quota": 240,
+      "pendingMintQuantity": 0,
+      "counts": {
+        "minted": 240,
+        "available": 240,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "price": null,
+      "name": "Singani El Portillo 2025",
+      "coverImageUrl": "/v1/public/collections/images/c40ff3e3-d6ab-50d4-b864-855e1e90927f",
+      "estimatedRedeemDate": "2025-10-10",
+      "contract": {
+        "address": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+      },
+      "redeemable": false,
+      "redeemableSince": null,
+      "publishedAt": null,
+      "closedAt": null,
+      "createdAt": "2026-09-17T16:00:00Z",
+      "updatedAt": "2026-09-17T16:01:00Z"
+    },
+    "requests": [
+      {
+        "id": "561f004f-b877-5e1a-a484-a9b16e6ebb5a",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "winery": {
+          "slug": "altos-de-calamuchita",
+          "tradeName": "Bodega Altos de Calamuchita"
+        },
+        "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+        "lot": {
+          "reference": "ALT-L2025-004",
+          "lotCode": "ALT-2025-SINGANI-002",
+          "name": "Singani El Portillo 2025",
+          "productType": "SINGANI",
+          "stage": "BOTTLED",
+          "harvestYear": 2025,
+          "estimatedBottles": 1050,
+          "bottles": 1040
+        },
+        "kind": "QUOTA_INCREASE",
+        "status": "SUBMITTED",
+        "quantity": 500,
+        "resultingQuota": 740,
+        "requiresApproval": true,
+        "assignee": null,
+        "submittedAt": "2026-09-24T16:00:00Z",
+        "submittedBy": {
+          "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+          "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+          "fullName": "Martín Calamuchita",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-24T16:00:00Z",
+        "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45"
+      },
+      {
+        "id": "c697864a-236e-5688-b355-25dc31345443",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+        "winery": {
+          "slug": "altos-de-calamuchita",
+          "tradeName": "Bodega Altos de Calamuchita"
+        },
+        "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+        "lot": {
+          "reference": "ALT-L2025-004",
+          "lotCode": "ALT-2025-SINGANI-002",
+          "name": "Singani El Portillo 2025",
+          "productType": "SINGANI",
+          "stage": "BOTTLED",
+          "harvestYear": 2025,
+          "estimatedBottles": 1050,
+          "bottles": 1040
+        },
+        "kind": "INITIAL",
+        "status": "APPROVED",
+        "quantity": 240,
+        "resultingQuota": 240,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        },
+        "submittedAt": "2026-09-16T15:00:00Z",
+        "submittedBy": {
+          "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+          "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+          "fullName": "Martín Calamuchita",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-17T16:00:00Z",
+        "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45"
+      }
+    ]
+  },
+  "63154759-c039-52b4-b81c-08ca11044c00": {
+    "lotId": "63154759-c039-52b4-b81c-08ca11044c00",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote ya no se puede tokenizar: está certificado, anclado, rechazado o descartado",
+        "code": "TOK_LOT_NOT_TOKENIZABLE",
+        "meta": {
+          "stage": "DISCARDED"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 1150,
+      "bottles": 0,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 0
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": []
+  },
+  "e18ddfe2-3347-5d85-85c9-8518df8bab15": {
+    "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+    "tokenizable": true,
+    "blockers": [],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 900,
+      "bottles": 880,
+      "authorizedQuota": 0,
+      "pendingQuantity": 0,
+      "maxQuantity": 880
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": null,
+    "requests": [
+      {
+        "id": "f564cf6e-e089-5eef-8238-214352a7aa04",
+        "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+        "winery": {
+          "slug": "casa-uriondo",
+          "tradeName": "Casa Uriondo"
+        },
+        "lotId": "e18ddfe2-3347-5d85-85c9-8518df8bab15",
+        "lot": {
+          "reference": "CUR-L2025-001",
+          "lotCode": "CUR-2026-SINGANI-001",
+          "name": "Singani Casa Uriondo 2025",
+          "productType": "SINGANI",
+          "stage": "BOTTLED",
+          "harvestYear": 2025,
+          "estimatedBottles": 900,
+          "bottles": 880
+        },
+        "kind": "INITIAL",
+        "status": "REJECTED",
+        "quantity": 300,
+        "resultingQuota": 300,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        },
+        "submittedAt": "2026-08-26T12:00:00Z",
+        "submittedBy": {
+          "membershipId": "15ceef52-08d1-59af-ac64-28566279de57",
+          "userId": "653aa2f8-4a14-5cfb-b269-76480bc65c79",
+          "fullName": "Lic. Sofía Aramayo",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-08-28T16:00:00Z",
+        "collectionId": null
+      }
+    ]
+  },
+  "05b7584c-13e0-5770-9336-9071197e3259": {
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "tokenizable": false,
+    "blockers": [
+      {
+        "field": null,
+        "message": "El lote ya no se puede tokenizar: está certificado, anclado, rechazado o descartado",
+        "code": "TOK_LOT_NOT_TOKENIZABLE",
+        "meta": {
+          "stage": "ANCHORED"
+        }
+      }
+    ],
+    "limits": {
+      "basis": "BOTTLES",
+      "estimatedBottles": 2950,
+      "bottles": 2950,
+      "authorizedQuota": 60,
+      "pendingQuantity": 0,
+      "maxQuantity": 2890
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": {
+      "id": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+      "slug": "singani-gran-reserva-2026",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+      "lot": {
+        "reference": "CVJ-L2026-005",
+        "lotCode": "CVJ-2026-SINGANI-004",
+        "name": "Singani Gran Reserva 2026",
+        "productType": "SINGANI",
+        "harvestYear": 2026,
+        "stage": "ANCHORED",
+        "estimatedReadyDate": "2026-09-20"
+      },
+      "status": "PUBLISHED",
+      "mintStatus": "CONFIRMED",
+      "saleState": "ON_SALE",
+      "quota": 60,
+      "pendingMintQuantity": 0,
+      "counts": {
+        "minted": 60,
+        "available": 60,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "price": {
+        "amountMinor": 28000,
+        "currency": "BOB",
+        "source": "MANUAL",
+        "setAt": "2026-09-05T16:00:00Z",
+        "setBy": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        }
+      },
+      "name": "Singani Gran Reserva 2026",
+      "coverImageUrl": "/v1/public/collections/images/7deadeaf-1344-5286-81fe-45b898291b56",
+      "estimatedRedeemDate": "2026-09-20",
+      "contract": {
+        "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+      },
+      "redeemable": true,
+      "redeemableSince": "2026-09-24T15:02:00Z",
+      "publishedAt": "2026-09-06T14:00:00Z",
+      "closedAt": null,
+      "createdAt": "2026-09-05T16:00:00Z",
+      "updatedAt": "2026-09-24T15:02:00Z"
+    },
+    "requests": [
+      {
+        "id": "ec44b0ee-dd59-5307-bd9d-4efad98a3be5",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "winery": {
+          "slug": "destileria-cinti-viejo",
+          "tradeName": "Destilería Cinti Viejo"
+        },
+        "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+        "lot": {
+          "reference": "CVJ-L2026-005",
+          "lotCode": "CVJ-2026-SINGANI-004",
+          "name": "Singani Gran Reserva 2026",
+          "productType": "SINGANI",
+          "stage": "ANCHORED",
+          "harvestYear": 2026,
+          "estimatedBottles": 2950,
+          "bottles": 2950
+        },
+        "kind": "INITIAL",
+        "status": "APPROVED",
+        "quantity": 60,
+        "resultingQuota": 60,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        },
+        "submittedAt": "2026-09-04T15:00:00Z",
+        "submittedBy": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-05T16:00:00Z",
+        "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0"
+      }
+    ]
+  },
+  "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986": {
+    "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+    "tokenizable": true,
+    "blockers": [],
+    "limits": {
+      "basis": "ESTIMATE",
+      "estimatedBottles": 3000,
+      "bottles": null,
+      "authorizedQuota": 100,
+      "pendingQuantity": 0,
+      "maxQuantity": 2900
+    },
+    "approvalRequired": true,
+    "chainIdentity": {
+      "status": "ACTIVE"
+    },
+    "openRequest": null,
+    "collection": {
+      "id": "20c275fc-7330-5935-911c-2c5800a0911a",
+      "slug": "singani-preventa-2026",
+      "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+      "winery": {
+        "slug": "destileria-cinti-viejo",
+        "tradeName": "Destilería Cinti Viejo"
+      },
+      "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+      "lot": {
+        "reference": "CVJ-L2026-006",
+        "lotCode": null,
+        "name": "Singani Preventa 2026",
+        "productType": "SINGANI",
+        "harvestYear": 2026,
+        "stage": "ORIGIN",
+        "estimatedReadyDate": null
+      },
+      "status": "PUBLISHED",
+      "mintStatus": "CONFIRMED",
+      "saleState": "PRESALE",
+      "quota": 100,
+      "pendingMintQuantity": 0,
+      "counts": {
+        "minted": 100,
+        "available": 100,
+        "reserved": 0,
+        "sold": 0,
+        "redeemable": 0,
+        "passActive": 0,
+        "redeemed": 0,
+        "burned": 0,
+        "expired": 0
+      },
+      "price": null,
+      "name": "Singani Preventa 2026",
+      "coverImageUrl": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
+      "estimatedRedeemDate": null,
+      "contract": {
+        "address": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/contract/CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+      },
+      "redeemable": false,
+      "redeemableSince": null,
+      "publishedAt": "2026-09-23T15:00:00Z",
+      "closedAt": null,
+      "createdAt": "2026-09-23T13:00:00Z",
+      "updatedAt": "2026-09-23T15:00:00Z"
+    },
+    "requests": [
+      {
+        "id": "a8494b4d-8407-5160-86be-9f6226731095",
+        "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+        "winery": {
+          "slug": "destileria-cinti-viejo",
+          "tradeName": "Destilería Cinti Viejo"
+        },
+        "lotId": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+        "lot": {
+          "reference": "CVJ-L2026-006",
+          "lotCode": null,
+          "name": "Singani Preventa 2026",
+          "productType": "SINGANI",
+          "stage": "ORIGIN",
+          "harvestYear": 2026,
+          "estimatedBottles": 3000,
+          "bottles": null
+        },
+        "kind": "INITIAL",
+        "status": "APPROVED",
+        "quantity": 100,
+        "resultingQuota": 100,
+        "requiresApproval": true,
+        "assignee": {
+          "userId": "99f29bfe-2296-57c7-908c-b09ec778c439",
+          "fullName": "Valeria Méndez"
+        },
+        "submittedAt": "2026-09-20T15:00:00Z",
+        "submittedBy": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        },
+        "updatedAt": "2026-09-23T13:00:00Z",
+        "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a"
+      }
+    ]
+  }
+}

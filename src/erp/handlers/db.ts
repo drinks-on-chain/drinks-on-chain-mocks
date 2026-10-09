@@ -1,3 +1,5 @@
+import type { MarketplaceState } from '../../marketplace/handlers'
+import { chainFixtures } from '../../chain/fixtures'
 import { backofficeFixtures } from '../../backoffice/fixtures'
 import type {
   MemberBlock,
@@ -79,6 +81,8 @@ export interface ErpDb extends TraceState {
   publicMisses: Record<string, number[]>
   /** Estado de la Ola 1. */
   backoffice: BackofficeState
+  /** BORRADOR de la Etapa 4: pedidos del Marketplace (solo en memoria). */
+  marketplace: MarketplaceState
   /** Reloj fijo (ms). Avanza un minuto con cada alta. */
   clock: number
   /** Contadores por recurso para ids deterministas. */
@@ -117,7 +121,7 @@ function createBackofficeState(): BackofficeState {
 
 const STATE_KEY = 'doc-mocks:state'
 /** Cambia con los fixtures: un estado guardado con otros fixtures se descarta. */
-const STATE_VERSION = `0.5:${backofficeFixtures.audit.at(-1)?.hash.slice(0, 16) ?? ''}:${erpFixtures.users.length}`
+const STATE_VERSION = `0.6:${backofficeFixtures.audit.at(-1)?.hash.slice(0, 16) ?? ''}:${erpFixtures.users.length}`
 
 interface PersistedState {
   version: string
@@ -172,6 +176,7 @@ export function traceFromFixtures(): Omit<TraceState, 'wineries'> {
     bottleExports: [],
     voidedRecords: voidedRecordsOf(f.corrections),
     uploads: {},
+    chain: structuredClone(chainFixtures.state),
   }
 }
 
@@ -197,6 +202,7 @@ export const TRACE_KEYS = [
   'bottleExports',
   'voidedRecords',
   'uploads',
+  'chain',
 ] as const satisfies readonly (keyof TraceState)[]
 
 function createErpDb(fresh = false): ErpDb {
@@ -210,6 +216,7 @@ function createErpDb(fresh = false): ErpDb {
     locksReleasedOn: laPazDate(CLOCK_START),
     publicMisses: {},
     backoffice: createBackofficeState(),
+    marketplace: { orders: [], sold: {} },
     clock: CLOCK_START,
     counters: {},
   }
@@ -287,6 +294,8 @@ export function tick(): string {
  */
 export function advanceMockClock(ms: number): void {
   db.clock += Math.max(0, ms)
+  // El reloj de la red simulada (Ola 3) avanza con él: las transacciones en vuelo progresan.
+  db.chain.elapsedMs += Math.max(0, ms)
   persistErpDb()
 }
 

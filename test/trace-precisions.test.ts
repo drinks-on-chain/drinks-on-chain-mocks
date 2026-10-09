@@ -498,7 +498,7 @@ describe('expediente canónico doc-dossier/1 y raíz Merkle (§10, §20)', () =>
       call(`/v1/lots/${lotId}`, { token: enologa, method: 'PATCH', body: { name: 'Otro nombre' } }),
       post(`/v1/lots/${lotId}/discard`, enologa, { reason: 'No procede' }),
     ]
-    for (const write of terminalWrites) expect(failure(await write)).toMatchObject({ status: 409, code: 'TRC_LOT_TERMINAL', details: [{ meta: { stage: 'CERTIFIED' } }] })
+    for (const write of terminalWrites) expect(failure(await write)).toMatchObject({ status: 409, code: 'TRC_LOT_TERMINAL', details: [{ meta: { stage: 'ANCHORED' } }] })
     // Lo único que el lote sigue admitiendo: anular un código sin sustituto (S-14).
     const code = publicFixtures.bottleCodes.find((b) => b.lotId === lotId)!.codes[1]!.code
     const replace = failure(await post(`/v1/bottle-codes/${code}/void`, enologa, { reason: 'Etiqueta dañada', replace: true }))
@@ -519,7 +519,7 @@ describe('pasaporte público: precisiones (§12)', () => {
       expect({ ...publicFixtures.passports[PASSPORT_CASES[key]], generatedAt: data.generatedAt }).toStrictEqual(data)
       return data
     }
-    expect(await passport('certified')).toMatchObject({ stage: 'CERTIFIED', lab: { status: 'CONFORMING' }, dossier: { status: 'CLOSED' }, winery: { active: true } })
+    expect(await passport('certified')).toMatchObject({ stage: 'ANCHORED', lab: { status: 'CONFORMING' }, dossier: { status: 'CLOSED' }, winery: { active: true } })
     expect(await passport('bottled')).toMatchObject({ stage: 'BOTTLED', dossier: { status: 'OPEN', hash: null, closedAt: null, canonicalUrl: null }, rules: { origin: 'MIGRATION' } })
     expect(await passport('labNotRecorded')).toMatchObject({ lab: { status: 'NOT_RECORDED', laboratoryName: null, checks: [] } })
     const nonConforming = await passport('labNonConforming')
@@ -566,10 +566,14 @@ describe('pasaporte público: precisiones (§12)', () => {
       'Fermentación completada',
       'Destilación iniciada',
       'Destilación cerrada: empieza el reposo',
+      '60 botellas en preventa',
+      'Colección publicada en el Marketplace',
       'Tiempo mínimo de crianza o reposo cumplido',
       'Lote embotellado',
       'Análisis de laboratorio registrado',
       'Expediente del lote cerrado',
+      'Expediente anclado en la red Stellar',
+      'Botellas listas para canjear',
     ])
     // El resumen interno (con kilos, litros y motivos) no es el que se publica.
     const internal = (await get<{ events: { summary: string }[] }>(`/v1/lots/${SINGANI_CASE.lotId}/timeline`, enologa)).events.map((e) => e.summary)
@@ -609,7 +613,7 @@ describe('pasaporte público: precisiones (§12)', () => {
     expect((await call('/v1/public/wineries')).status).toBe(200)
     expect((await call('/v1/public/collections')).status).toBe(200)
     // La trazabilidad no cambia: no es un escenario de datos.
-    expect((await lotOf(SINGANI_CASE.lotId)).stage).toBe('CERTIFIED')
+    expect((await lotOf(SINGANI_CASE.lotId)).stage).toBe('ANCHORED')
     resetScenario()
     expect((await call(`/v1/public/passports/${CASE_CODE}`)).status).toBe(200)
   })

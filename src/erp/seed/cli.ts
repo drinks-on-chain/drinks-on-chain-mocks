@@ -1,3 +1,6 @@
+import type { ChainCtx } from '../../chain/engine'
+import { buildChainFixtureFiles } from '../../tokenization/fixture-files'
+import type { TraceState } from '../trace/state'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -26,8 +29,12 @@ function write(domain: string, set: object) {
 
 const base = generateErpFixtures()
 const backoffice = generateBackofficeFixtures(base)
-const erp = buildErpFixtureFiles(base, backoffice)
+const capture: { state?: TraceState; ctx?: ChainCtx } = {}
+const erp = buildErpFixtureFiles(base, backoffice, capture)
+const ola3 = buildChainFixtureFiles(capture.state!, capture.ctx!)
 write('erp', erp)
 write('backoffice', backoffice)
-write('public', generatePublicFixtures(erp, backoffice))
+write('chain', ola3.chain)
+write('tokenization', ola3.tokenization)
+write('public', generatePublicFixtures(erp, backoffice, capture.state!.chain))
 console.log('Listo.')

@@ -80,7 +80,7 @@ describe('recorrido H2 (contrato §18): «Singani Gran Reserva» de la parcela a
     const created = await post('/v1/lots', enologa, { name: 'Singani de la casa 2026', harvestYear: 2026, productType: 'SINGANI', estimatedBottles: 3000, plannedFormatCl: 75, targetAbvPercent: 40, plannedTerroirIds: [T('cvj_02')] })
     expect(created.status).toBe(201)
     const lot = LotSchema.parse(dataOf(created.json))
-    expect(lot).toMatchObject({ stage: 'ORIGIN', reference: 'CVJ-L2026-006', lotCode: null, productType: 'SINGANI', projectedBottles: 3000, denomination: { status: 'ELIGIBLE' } })
+    expect(lot).toMatchObject({ stage: 'ORIGIN', reference: 'CVJ-L2026-007', lotCode: null, productType: 'SINGANI', projectedBottles: 3000, denomination: { status: 'ELIGIBLE' } })
     expect(lot.rules).toMatchObject({ origin: 'LOT_CREATION', singani: { minAltitudeMasl: 1600, requiredVarieties: ['Moscatel de Alejandría'], minRestDays: 180 }, bottling: { maxLossPercent: 5 }, legalExceptions: [] })
     expect(lot.createdBy).toMatchObject({ fullName: 'Lic. Lucía Rojas', role: 'ENOLOGIST' })
 
@@ -191,7 +191,7 @@ describe('recorrido H2 (contrato §18): «Singani Gran Reserva» de la parcela a
     })
     expect(dataOf(lab.json)).toMatchObject({ conformityStatus: 'CONFORMING', conformsToSenasagStandards: true, current: true, units: { methanolMg100mlAa: 'mg/100 mL de alcohol anhidro' } })
     const dossier = LotDossierSchema.parse(dataOf((await post(`/v1/lots/${lot.id}/dossier/close`, duena, { confirm: true })).json))
-    expect(dossier).toMatchObject({ status: 'CLOSED', schema: 'doc-dossier/1', algorithm: 'sha256/jcs-rfc8785', closedBy: { role: 'OWNER' }, bottleCodes: { count: 2950, algorithm: 'sha256-merkle/serial-code-salt' }, anchor: null })
+    expect(dossier).toMatchObject({ status: 'CLOSED', schema: 'doc-dossier/1', algorithm: 'sha256/jcs-rfc8785', closedBy: { role: 'OWNER' }, bottleCodes: { count: 2950, algorithm: 'sha256-merkle/serial-code-salt' }, anchor: { status: 'PENDING', txHash: null, memoHashHex: expect.stringMatching(/^[0-9a-f]{64}$/) } })
     const canonical = await (await fetch(`${API}/v1/lots/${lot.id}/dossier/canonical`, { headers: { Authorization: `Bearer ${operario}` } })).text()
     expect(sha256Hex(canonical)).toBe(dossier.hash)
     // Los códigos no van en claro en el expediente: solo su raíz Merkle.
@@ -404,7 +404,7 @@ describe('reglas del lote, la vendimia y los tanques', () => {
     expect(summaries).toHaveLength(F.lots.filter((l) => l.wineryId === CINTI).length)
     // Orden por última actualización, la más reciente primero.
     expect(summaries.map((s) => s.updatedAt)).toEqual([...summaries.map((s) => s.updatedAt)].sort().reverse())
-    expect(summaries[0]).toMatchObject({ name: 'Singani Gran Reserva 2026', stage: 'CERTIFIED' })
+    expect(summaries[0]).toMatchObject({ name: 'Singani Gran Reserva 2026', stage: 'ANCHORED' })
     const filtered = async (query: string) => dataOf((await call<Paged<{ name: string }>>(`/v1/lots?${query}`, { token: operario })).json).items.map((l) => l.name)
     expect(await filtered('stage=RESTING,DISTILLING')).toEqual(['Singani El Molino 2026', 'Moscatel de Alejandría 2026'])
     expect(await filtered('q=gran reserva')).toEqual(['Singani Gran Reserva 2026'])
@@ -645,7 +645,7 @@ describe('códigos de botella, correcciones, adjuntos, panel y reportes', () => 
 
   it('panel de la bodega y reporte de producción (JSON y CSV)', async () => {
     const cinti = TraceDashboardSchema.parse(await get('/v1/traceability/dashboard', enologa))
-    expect(cinti.lotsByStage).toMatchObject({ ORIGIN: 1, HARVEST: 1, DISTILLING: 1, RESTING: 1, BOTTLED: 3, CERTIFIED: 1, FERMENTING: 0 })
+    expect(cinti.lotsByStage).toMatchObject({ ORIGIN: 2, HARVEST: 1, DISTILLING: 1, RESTING: 1, BOTTLED: 3, CERTIFIED: 0, ANCHORED: 1, FERMENTING: 0 })
     expect(cinti.bottledWithoutLab.map((l) => l.lotCode)).toEqual(['CVJ-2026-WINE-003'])
     expect(cinti.readyToClose.map((l) => l.lotCode).sort()).toEqual(['CVJ-2026-SINGANI-001', 'CVJ-2026-SINGANI-002'])
     expect(cinti.pendingPhyto.map((p) => [p.status, p.lotId === null])).toEqual([['PENDING_INSPECTION', false], ['PENDING_INSPECTION', true]])
@@ -666,17 +666,17 @@ describe('códigos de botella, correcciones, adjuntos, panel y reportes', () => 
 
     const report = await get<{ rows: Record<string, unknown>[]; totals: Record<string, Record<string, number>> }>('/v1/traceability/reports/production?productType=SINGANI', duena)
     const row = report.rows.find((r) => r.name === 'Singani Gran Reserva 2026')!
-    expect(row).toMatchObject({ lotCode: 'CVJ-2026-SINGANI-004', stage: 'CERTIFIED', netKg: 18400, mustLiters: 12100, baseWineLiters: 12100, heartLiters: 1500, bottledLiters: 2212.5, bottles: 2950, formatCl: 75, labStatus: 'CONFORMING', lossPercentByStage: { fermentation: 0, transfer: null, distillation: 87.6, bottling: 1.67 }, bottlesPerTonne: 160.3 })
+    expect(row).toMatchObject({ lotCode: 'CVJ-2026-SINGANI-004', stage: 'ANCHORED', netKg: 18400, mustLiters: 12100, baseWineLiters: 12100, heartLiters: 1500, bottledLiters: 2212.5, bottles: 2950, formatCl: 75, labStatus: 'CONFORMING', lossPercentByStage: { fermentation: 0, transfer: null, distillation: 87.6, bottling: 1.67 }, bottlesPerTonne: 160.3 })
     expect(report.totals.SINGANI).toMatchObject({ lots: report.rows.length, bottles: 4080 + 2140 + 2950 })
     expect(report.totals.WINE!.lots).toBe(0)
-    const csv = await fetch(`${API}/v1/traceability/reports/production?format=csv&stage=CERTIFIED`, { headers: { Authorization: `Bearer ${duena}` } })
+    const csv = await fetch(`${API}/v1/traceability/reports/production?format=csv&stage=ANCHORED`, { headers: { Authorization: `Bearer ${duena}` } })
     expect(csv.headers.get('content-type')).toBe('text/csv; charset=utf-8')
     // El nombre lleva el día (America/La_Paz) en que se pide.
     expect(csv.headers.get('content-disposition')).toBe('attachment; filename="reporte-produccion-2026-09-25.csv"')
     const lines = (await csv.text()).trimEnd().split('\r\n')
     expect(lines[0]).toBe('lotId,reference,lotCode,name,productType,harvestYear,stage,netKg,mustLiters,baseWineLiters,heartLiters,bottledLiters,bottles,formatCl,lossPercentFermentation,lossPercentTransfer,lossPercentDistillation,lossPercentBottling,litersPerKg,bottlesPerTonne,bottlingDate,labStatus')
     expect(lines).toHaveLength(2)
-    expect(lines[1]).toContain(',CVJ-2026-SINGANI-004,Singani Gran Reserva 2026,SINGANI,2026,CERTIFIED,18400,')
+    expect(lines[1]).toContain(',CVJ-2026-SINGANI-004,Singani Gran Reserva 2026,SINGANI,2026,ANCHORED,18400,')
     expect(failure(await call('/v1/traceability/reports/production?from=ayer', { token: duena })).details[0]!.field).toBe('from')
     expect((await call('/v1/traceability/reports/production', { token: operario })).status).toBe(403)
   })
@@ -688,7 +688,7 @@ describe('escenarios de datos de /__mocks', () => {
       const lot = await lotOf(SINGANI_CASE.lotId)
       return { stage: lot.stage, lab: lot.labStatus, bottles: lot.bottles, lock: lot.nextLock?.daysRemaining ?? null, reference: lot.reference }
     }
-    expect(await state()).toEqual({ stage: 'CERTIFIED', lab: 'CONFORMING', bottles: 2950, lock: null, reference: 'CVJ-L2026-005' })
+    expect(await state()).toEqual({ stage: 'ANCHORED', lab: 'CONFORMING', bottles: 2950, lock: null, reference: 'CVJ-L2026-005' })
     setScenario('lote-listo')
     expect(await state()).toEqual({ stage: 'RESTING', lab: 'NOT_RECORDED', bottles: null, lock: null, reference: 'CVJ-L2026-005' })
     expect((await get<{ restStatus: string }>(`/v1/production-batches/${(await lotOf(SINGANI_CASE.lotId)).links.productionBatchIds[0]}`, enologa)).restStatus).toBe('READY')
@@ -699,7 +699,7 @@ describe('escenarios de datos de /__mocks', () => {
     expect((await lotOf(SINGANI_CASE.lotId)).lotCode).toBe('CVJ-2026-SINGANI-004')
 
     setScenario('lote-con-incidencia')
-    expect(await state()).toMatchObject({ stage: 'CERTIFIED' })
+    expect(await state()).toMatchObject({ stage: 'ANCHORED' })
     const withIssue = dataOf((await call<Paged<Lot>>('/v1/lots?hasComplianceIssues=true', { token: operario })).json)
     expect(withIssue.items.map((l) => l.lotCode)).toEqual(['CVJ-2026-SINGANI-002'])
     const lot = await lotOf(withIssue.items[0]!.id)
@@ -712,7 +712,7 @@ describe('escenarios de datos de /__mocks', () => {
     // Lo creado en la sesión se descarta al cambiar de escenario de datos; la identidad no.
     await post('/v1/lots', enologa, { name: 'Lote efímero 2026', harvestYear: 2026 })
     resetScenario()
-    expect(await state()).toEqual({ stage: 'CERTIFIED', lab: 'CONFORMING', bottles: 2950, lock: null, reference: 'CVJ-L2026-005' })
+    expect(await state()).toEqual({ stage: 'ANCHORED', lab: 'CONFORMING', bottles: 2950, lock: null, reference: 'CVJ-L2026-005' })
     expect(getErpDb().lots).toHaveLength(F.lots.length)
   })
 })

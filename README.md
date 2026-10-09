@@ -13,8 +13,10 @@ No hace falta registro de paquetes: cada versión se publica como GitHub Release
 ```bash
 # Estable (Ola 1 + lista de espera)
 pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.4.1/drinks-on-chain-mocks-0.4.1.tgz
-# Pre-release de la Ola 2 (ERP v2 y dominio público)
+# Estable de la Ola 2 (ERP v2 y dominio público)
 pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.5.0/drinks-on-chain-mocks-0.5.0.tgz
+# Pre-release de la Ola 3 (tokenización y cadena)
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.1/drinks-on-chain-mocks-0.6.0-rc.1.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
@@ -32,7 +34,7 @@ Pasar de 0.4.1 a `0.5.0` (ERP, Marketplace y Backoffice): «Guía de migración 
 |---|---|---|
 | `@drinks-on-chain/mocks` | Esquemas zod (respuesta y alta/edición) y tipos de cada recurso, enumeraciones, sesión (`SessionResponseSchema`, `MeResponseSchema`, `MembershipSchema`, `OrganizationType`, roles de plataforma, bodega y punto de canje, `AccessTokenClaims`), envoltorio (`successEnvelopeSchema`, `ErrorEnvelopeSchema`, `ApiErrorDetail`), listas (`ListPage<T>`, `listPageSchema`, `DEFAULT_LIMIT`, `MAX_LIMIT`, `unwrapList`) y los esquemas de la Ola 1 (`InvitationSchema`, `WineryApplicationSchema`, `WineryDetailSchema`, `MemberSchema`, `PlatformUserSchema`, `SettingDefinitionSchema`, `AuditEventSchema`, `DashboardSchema`, `PermissionMatrixSchema`, `LoginResponseSchema`, `MfaChallengeSchema`, `isMfaChallenge`…) y los de la lista de espera (`WaitlistEntrySchema`, `WaitlistJoinRequestSchema`, `WaitlistStatsSchema`, `UpdateWaitlistEntrySchema`…). Desde 0.5, los del ERP v2 (`LotSchema`, `LotSummarySchema`, `LotRulesSchema`, `LotTimelineSchema`, `LotBalanceSchema`, `LotGraphSchema`, `BottlingPreviewSchema`, `BottleUnitSchema`, `PhytoDecisionSchema`, `MaturityAnalysisSchema`, `CorrectionSchema`, `LotDossierSchema`, `LabConformitySchema`, `TraceDashboardSchema`, `ProductionReportSchema`, `CanonicalDossierSchema`, `CorrectionMarksSchema`, `TankTransitionSchema`…), los errores `TRACE_ERROR_CODES`, los del dominio público (`PublicLotPassportSchema`, `PublicBottlePassportSchema`, `PublicCodePassportSchema`, `PublicCollectionSchema`) y las utilidades de los códigos de botella y del expediente (`normalizeBottleCode`, `isValidBottleCode`, `formatBottleCode`, `merkleLeaf`, `merkleRoot`, `merkleRootFromProof`, `verifyMerkleProof`, `sha256Hex`, `canonicalJson`) | No. Apto para producción |
 | `@drinks-on-chain/mocks/fixtures` | `erpFixtures` (desde 0.5 con `lots`, `lotEvents`, `maturityAnalyses`, `phytoDecisions`, `bottleLots`, `corrections`, `lotAttachments`, `lotDossiers`), `publicFixtures` (`passports`, `bottleCodes`, `wineries`, `collections`), `SINGANI_CASE`, `PASSPORT_CASES`, `mockBottleCode()`, `backofficeFixtures` (JSON tipados; `backofficeFixtures.waitlist` desde 0.4.1), `demoUsers` (con membresías, rol de plataforma y TOTP), `demoStaff`, `DEMO_PASSWORD`, `DEMO_NEW_PASSWORD`, `DEMO_TOTP_SECRET`, `MOCK_TOTP_BYPASS_CODE`, `generateTotp()` | No |
-| `@drinks-on-chain/mocks/fixtures/{erp,backoffice,public}/<archivo>.json` | JSON crudos | No |
+| `@drinks-on-chain/mocks/fixtures/{erp,backoffice,public,chain,tokenization}/<archivo>.json` | JSON crudos (`chain` y `tokenization`, desde 0.6: también `chainFixtures` y `tokenizationFixtures` en `…/fixtures`) | No |
 | `@drinks-on-chain/mocks/handlers` | `createErpHandlers()` (= `createMockHandlers()`, todos los dominios), `resetErpDb()`, `getErpDb()`, `advanceMockClock()`, `mockMailbox`, `setMockAppUrls()`, `resetSessions()`, `expireAccessTokens()`, `ERP_ROUTES`, `MOCK_ROUTE_SPECS`, `PUBLIC_ROUTE_SPECS`, escenarios (`setScenario`, `SCENARIOS`, `SCENARIO_DESCRIPTIONS`, `RESPONSE_SCENARIOS`, `DATA_SCENARIOS`), `SINGANI_CASE`, `PASSPORT_CASES`, `PUBLIC_LOOKUP_LIMIT`, `PUBLIC_RATE_LIMIT`, `COLLECTIONS_DRAFT_CONTRACT`, `demoUsers`, `mockAccessToken()` | Sí |
 | `@drinks-on-chain/mocks/browser` | `startMockWorker(options)` (Service Worker; publica `window.__docMocks`), `mockMailbox` | Sí (import dinámico) |
 | `@drinks-on-chain/mocks/node` | `setupMockServer(options)` para Vitest, Playwright y scripts, `mockMailbox`, `generateTotp()` | Sí |
@@ -167,6 +169,31 @@ setScenario('lote-en-reposo')        // el lote de demostración, a 10 días de 
 advanceMockClock(10 * 86_400_000)    // pasan los 10 días: ya se puede embotellar SINGANI_CASE.lotId
 ```
 
+### Ola 3 · tokenización y cadena (`plan/contratos/o3-tokenizacion.md`, pre-release 0.6.0-rc.1)
+
+Las 54 rutas de la apertura de la Ola 3, con sus reglas y una red simulada (detalle, diferencias con el contrato escrito y suposiciones en [`docs/CONTRATO.md`](docs/CONTRATO.md) §13):
+
+- **ERP**: `GET /v1/lots/{id}/tokenization` (límite y bloqueos), solicitudes (`POST /v1/lots/{id}/tokenization-requests`, editar, reenviar, retirar; solo el dueño y con `Idempotency-Key`), colecciones, NFT y cierre de la bodega, y `GET /v1/organizations/current/chain-account`. `LotSummary.tokenization` lleva la marca del lote.
+- **Back office**: bandeja (`/v1/platform/tokenization-requests`: tomar, notas, datos y precio, pedir cambios, aprobar, rechazar), colecciones (publicar, pausar, reanudar, cerrar, NFT, transacciones, métricas), cierre con faltante, y cadena (`/v1/platform/chain/*`: transacciones con reintento y abandono, cuentas, eventos, conciliaciones, alertas; identidad de cada bodega con `provision`, `pause` y `unpause`).
+- **Público**: registro, `stellar.toml`, verificación del anclaje, metadatos del NFT e imágenes.
+
+```ts
+import { mockChain } from '@drinks-on-chain/mocks/node' // o /handlers; en el navegador, window.__docMocks.chain
+
+// Una transacción recorre PENDING → BUILDING → SUBMITTED → CONFIRMED: tres pasos de mockChain.stepMs.
+mockChain.advance()                       // un paso
+mockChain.settle()                        // hasta que no quede nada en vuelo
+mockChain.failNext({ kind: 'MINT_BATCH' }) // la siguiente emisión falla (CHN_AUTH_FAILED): se reintenta desde el back office
+mockChain.failNext({ code: 'CHN_RPC_UNAVAILABLE' }) // transitorio: RETRYING y se confirma sola
+mockChain.setMode('manual')               // en el navegador avanza sola ('auto'); en Node, solo con estos controles
+```
+
+En el navegador la red avanza con el tiempo real (un paso, como mucho, entre dos peticiones): con el `refetchInterval` de 5 s de las pantallas, una emisión se confirma en unas tres consultas. `advanceMockClock(ms)` también la adelanta.
+
+Las direcciones (`G…`, `C…`) y los hashes de los fixtures tienen **forma válida** (StrKey con su CRC; `isValidStrKey`) y **no existen en testnet**. Los `explorerUrl` los construyen los mocks, como el backend: la app nunca escribe el host del explorador.
+
+**Borrador del Marketplace** (contrato §13.1, fuera del OpenAPI, cabecera `X-Mock-Draft`): `GET /v1/me/consumer`, `POST /v1/orders`, `GET /v1/orders`, `GET /v1/orders/{id}` y `POST /v1/payments/test/{paymentId}/simulate` (`APPROVE`, `REJECT`, `DELAY`). Puede cambiar con el contrato de la Ola 4.
+
 ### Lista de espera (`plan/contratos/o1b-lista-de-espera.md`, desde 0.4.1)
 
 - **Pública**: `POST /v1/public/waitlist` (`type: CONSUMER` con `isAdult: true`, o `WINERY` con `wineryName`) → 201 `{ type, position }` (número de orden dentro de su tipo). Un correo ya inscrito en ese tipo recibe la misma posición (no se duplica; solo completa teléfono, ciudad y región vacíos); el campo trampa `website` relleno → 201 sin guardar nada; más de 3 inscripciones por hora del mismo correo → 429 `TOO_MANY_REQUESTS` con `Retry-After`; 422 `VALIDATION_ERROR` con un detalle por campo y los mensajes del backend. `GET /v1/public/waitlist/stats` → `{ consumers, wineries }`.
@@ -206,8 +233,15 @@ Todas las colecciones responden `data: { items, total, limit, offset }` (contrat
 | `laboratorio-no-conforme` | Datos: el lote embotellado con un análisis no conforme (el expediente no se puede cerrar) |
 | `lote-con-incidencia` | Datos: `CVJ-2026-SINGANI-002` con una incidencia de migración abierta |
 | `pasaporte-saturado` | Las rutas del pasaporte público responden 429 `TOO_MANY_REQUESTS` con `Retry-After` (límite de 60 consultas por minuto) |
+| `identidad-preparandose` | Datos (Ola 3): Bodega Altos de Calamuchita con su cuenta y su contrato aún creándose (aprobar → `TOK_WINERY_CHAIN_NOT_READY`) |
+| `emision-en-curso` | Datos: «Singani Preventa 2026» recién aprobada, con la emisión de sus 100 NFT avanzando en la red |
+| `emision-fallida` | Datos: la misma con la emisión `FAILED` y su alerta; reintentarla desde el back office la confirma |
+| `anclaje-pendiente` | Datos: «Singani Gran Reserva 2026» `CERTIFIED` con el anclaje en la red (en `normal` ya está `ANCHORED`) |
+| `faltante-botellas` | Datos: «Singani El Portillo 2025» con 20 NFT más que botellas: cierre con faltante sin decidir |
+| `alerta-evento-inesperado` | Datos: alerta `CRITICAL` `UNEXPECTED_EVENT` en el contrato de Cinti Viejo |
+| `cambios-pedidos` | Datos: «Singani Preventa 2026» con cambios pedidos por operaciones (editar y reenviar) |
 
-La lista crece con las olas: para un panel usa `SCENARIOS` y `SCENARIO_DESCRIPTIONS` (o `Partial<Record<ScenarioName, …>>`), no un `Record<ScenarioName, …>` escrito a mano. `lote-en-reposo`, `lote-listo`, `laboratorio-no-conforme` y `lote-con-incidencia` son **escenarios de datos** (`DATA_SCENARIOS`): no cambian cómo responde el backend simulado sino en qué etapa está el lote de demostración. Al elegir uno, la trazabilidad se rehace desde los fixtures (lo creado en la sesión se descarta; la identidad y el back office, no); `normal` deja el lote certificado.
+La lista crece con las olas: para un panel usa `SCENARIOS` y `SCENARIO_DESCRIPTIONS` (o `Partial<Record<ScenarioName, …>>`), no un `Record<ScenarioName, …>` escrito a mano. `lote-en-reposo`, `lote-listo`, `laboratorio-no-conforme`, `lote-con-incidencia` y los siete de la Ola 3 (`CHAIN_SCENARIOS`) son **escenarios de datos** (`DATA_SCENARIOS`): no cambian cómo responde el backend simulado sino en qué etapa está el lote de demostración. Al elegir uno, la trazabilidad se rehace desde los fixtures (lo creado en la sesión se descarta; la identidad y el back office, no); `normal` deja el lote certificado.
 
 Se eligen con `setScenario('empty')` (se guarda en `localStorage`), con `?mock=empty` en la URL o volviendo al valor por defecto con `resetScenario()`. La latencia normal es de 200–400 ms en el navegador y 0 en Node (`latency` en las opciones la cambia).
 

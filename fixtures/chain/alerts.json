@@ -1,0 +1,44 @@
+[
+  {
+    "id": "02023a42-07b8-52bc-9f64-07fd78f8b910",
+    "code": "LOW_BALANCE",
+    "level": "WARNING",
+    "subject": {
+      "type": "PLATFORM_ACCOUNT",
+      "id": "ANCHOR"
+    },
+    "wineryId": null,
+    "expected": "10.0000000",
+    "actual": "4.2000000",
+    "message": "Saldo bajo en la cuenta de anclaje",
+    "runId": "c7c9634f-a7d7-53ba-81e4-18a8bc07da4a",
+    "detectedAt": "2026-09-15T06:30:00Z",
+    "resolvedAt": "2026-09-15T13:00:00Z",
+    "resolution": {
+      "by": "Jorge Salinas",
+      "note": "Cuenta de anclaje recargada con Friendbot.",
+      "auto": false
+    }
+  },
+  {
+    "id": "20484b8c-a16d-5fd4-a490-f95760e7d0b4",
+    "code": "TTL_EXPIRING",
+    "level": "WARNING",
+    "subject": {
+      "type": "CONTRACT",
+      "id": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR"
+    },
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "expected": {
+      "minDays": 14
+    },
+    "actual": {
+      "days": 11
+    },
+    "message": "Entradas del contrato de Bodega Altos de Calamuchita con menos de 14 días de vida y sin extensión en curso",
+    "runId": null,
+    "detectedAt": "2026-09-23T07:00:00Z",
+    "resolvedAt": null,
+    "resolution": null
+  }
+]

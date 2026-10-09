@@ -23,6 +23,10 @@ const ROWS: Row[] = [
   ],
   ['team', 'Equipo de una bodega', { SUPERADMIN: 'FULL', ADMIN: 'FULL', OPERATIONS: 'FULL', SUPPORT: 'FULL', OWNER: 'OWN', ...others('READ') }],
   ['audit', 'Bitácora', { SUPERADMIN: 'FULL', ADMIN: 'FULL', OPERATIONS: 'FULL', SUPPORT: 'FULL', OWNER: 'OWN' }],
+  // Ola 3 (contrato O3 §10; `permissions.ts` del backend en la apertura)
+  ['tokenization', 'Tokenización: bandeja, colecciones y cierre con faltante', { SUPERADMIN: 'FULL', ADMIN: 'FULL', OPERATIONS: 'FULL', SUPPORT: 'READ', OWNER: 'OWN', ENOLOGIST: 'READ', ACCOUNTANT: 'READ' }],
+  ['chain', 'Cadena: transacciones, identidad de las bodegas, conciliación y alertas', { SUPERADMIN: 'FULL', ADMIN: 'FULL', OPERATIONS: 'FULL', SUPPORT: 'READ', OWNER: 'READ', ...others('READ') }],
+  ['chain.admin', 'Abandonar transacciones, pausar o reanudar un contrato en la red y quemar NFT sin vender', { SUPERADMIN: 'FULL', ADMIN: 'FULL' }],
 ]
 
 const ALL_ROLES: readonly MembershipRole[] = [

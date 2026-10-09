@@ -1484,6 +1484,15 @@
         "summary": "Análisis de laboratorio registrado",
         "actorRole": "ENOLOGIST",
         "corrected": false
+      },
+      {
+        "type": "NFT_MINTED",
+        "occurredAt": "2026-09-17T16:01:00Z",
+        "recordedAt": "2026-09-17T16:01:00Z",
+        "lateEntry": false,
+        "summary": "240 botellas en preventa",
+        "actorRole": null,
+        "corrected": false
       }
     ],
     "corrections": {
@@ -2038,7 +2047,7 @@
     "name": "Singani Gran Reserva 2026",
     "productType": "SINGANI",
     "vintage": 2026,
-    "stage": "CERTIFIED",
+    "stage": "ANCHORED",
     "winery": {
       "slug": "destileria-cinti-viejo",
       "tradeName": "Destilería Cinti Viejo",
@@ -2283,6 +2292,24 @@
         "corrected": false
       },
       {
+        "type": "NFT_MINTED",
+        "occurredAt": "2026-09-05T16:01:00Z",
+        "recordedAt": "2026-09-05T16:01:00Z",
+        "lateEntry": false,
+        "summary": "60 botellas en preventa",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "COLLECTION_PUBLISHED",
+        "occurredAt": "2026-09-06T14:00:00Z",
+        "recordedAt": "2026-09-06T14:00:00Z",
+        "lateEntry": false,
+        "summary": "Colección publicada en el Marketplace",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
         "type": "LOCK_RELEASED",
         "occurredAt": "2026-09-20T04:05:00Z",
         "recordedAt": "2026-09-20T04:05:00Z",
@@ -2317,6 +2344,24 @@
         "summary": "Expediente del lote cerrado",
         "actorRole": "OWNER",
         "corrected": false
+      },
+      {
+        "type": "DOSSIER_ANCHORED",
+        "occurredAt": "2026-09-24T15:02:00Z",
+        "recordedAt": "2026-09-24T15:02:00Z",
+        "lateEntry": false,
+        "summary": "Expediente anclado en la red Stellar",
+        "actorRole": null,
+        "corrected": false
+      },
+      {
+        "type": "TOKENS_REDEEMABLE",
+        "occurredAt": "2026-09-24T15:02:00Z",
+        "recordedAt": "2026-09-24T15:02:00Z",
+        "lateEntry": false,
+        "summary": "Botellas listas para canjear",
+        "actorRole": null,
+        "corrected": false
       }
     ],
     "corrections": {
@@ -2328,7 +2373,17 @@
       "hash": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
       "closedAt": "2026-09-24T15:00:00Z",
       "canonicalUrl": "/v1/public/lots/CVJ-2026-SINGANI-004/dossier",
-      "anchor": null
+      "anchor": {
+        "status": "ANCHORED",
+        "network": "TESTNET",
+        "account": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+        "memoHashHex": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
+        "memoHashBase64": "zAUUTPqeYPY+OPrbpbXDDsjNMOUpF/9UtipFZ8U+m00=",
+        "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "ledger": 1888265,
+        "anchoredAt": "2026-09-24T15:02:00Z",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d"
+      }
     },
     "publicAttachments": [
       {

@@ -10,6 +10,11 @@ export * from './shared/list'
 export * from './erp/schemas'
 export * from './backoffice/schemas'
 export * from './public/schemas'
+// Ola 3: cadena y tokenización (contrato `o3-tokenizacion.md`) y el BORRADOR del Marketplace (§13.1).
+export * from './chain/schemas'
+export * from './tokenization/schemas'
+export * from './marketplace/schemas'
+export { isValidStrKey } from './shared/strkey'
 export {
   BOTTLE_CODE_LENGTH,
   BOTTLE_MERKLE_ALGORITHM,

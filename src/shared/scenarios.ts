@@ -20,6 +20,14 @@ export const SCENARIOS = [
   'lote-con-incidencia',
   'laboratorio-no-conforme',
   'pasaporte-saturado',
+  // Ola 3: tokenización y cadena
+  'identidad-preparandose',
+  'emision-en-curso',
+  'emision-fallida',
+  'anclaje-pendiente',
+  'faltante-botellas',
+  'alerta-evento-inesperado',
+  'cambios-pedidos',
 ] as const
 export type ScenarioName = (typeof SCENARIOS)[number]
 
@@ -38,6 +46,13 @@ export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
   'lote-con-incidencia': 'CVJ-2026-SINGANI-002 con una incidencia de migración abierta (TRC_BOTTLING_EXCEEDS_VOLUME)',
   'laboratorio-no-conforme': '«Singani Gran Reserva 2026» embotellado con un análisis no conforme (el expediente no se puede cerrar)',
   'pasaporte-saturado': 'Pasaporte público: límite de 60 consultas por minuto superado (429 TOO_MANY_REQUESTS con Retry-After)',
+  'identidad-preparandose': 'Bodega Altos de Calamuchita recién activada: su cuenta y su contrato en la red aún se están creando (aprobar → TOK_WINERY_CHAIN_NOT_READY)',
+  'emision-en-curso': '«Singani Preventa 2026» recién aprobada: la emisión de sus 100 NFT avanza en la red (PENDING → CONFIRMED)',
+  'emision-fallida': '«Singani Preventa 2026» con la emisión fallida (CHN_AUTH_FAILED): se reintenta desde el back office y se confirma',
+  'anclaje-pendiente': '«Singani Gran Reserva 2026» certificado con el anclaje de su expediente aún en la red (al confirmarse pasa a ANCHORED)',
+  'faltante-botellas': '«Singani El Portillo 2025» con 20 NFT más que botellas: cierre con faltante sin decidir',
+  'alerta-evento-inesperado': 'Alerta CRITICAL UNEXPECTED_EVENT: un role_granted en el contrato de Cinti Viejo que no originó el sistema',
+  'cambios-pedidos': '«Singani Preventa 2026» con cambios pedidos por operaciones («falta la nota de cata»): editar y reenviar',
 }
 
 /**
@@ -45,7 +60,19 @@ export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
  * está el lote de demostración. Al elegir uno, la trazabilidad de la base en memoria se rehace
  * desde los fixtures (lo creado en la sesión se descarta; la identidad y el back office, no).
  */
-export const DATA_SCENARIOS = ['lote-en-reposo', 'lote-listo', 'lote-con-incidencia', 'laboratorio-no-conforme'] as const satisfies readonly ScenarioName[]
+export const DATA_SCENARIOS = [
+  'lote-en-reposo',
+  'lote-listo',
+  'lote-con-incidencia',
+  'laboratorio-no-conforme',
+  'identidad-preparandose',
+  'emision-en-curso',
+  'emision-fallida',
+  'anclaje-pendiente',
+  'faltante-botellas',
+  'alerta-evento-inesperado',
+  'cambios-pedidos',
+] as const satisfies readonly ScenarioName[]
 export type DataScenarioName = (typeof DATA_SCENARIOS)[number]
 
 export function isDataScenario(name: ScenarioName): name is DataScenarioName {

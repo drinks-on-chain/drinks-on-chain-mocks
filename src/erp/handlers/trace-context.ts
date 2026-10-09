@@ -1,9 +1,11 @@
+import { chainCtx } from '../../chain/runtime'
+import { applyChainScenario, purgeLotAnchor, purgeLotTokenization } from '../../tokenization/seed'
 import { getMockAppUrls, lotPrefixOf } from '../../backoffice/handlers/support'
 import { getScenario, isDataScenario, type DataScenarioName } from '../../shared/scenarios'
 import { WINERY_CODES_BY_ID } from '../catalog'
 import type { TraceActor } from '../schemas'
 import { laPazDate } from '../trace/dates'
-import { injectMigrationIssue, resetSinganiCase } from '../trace/demo'
+import { injectMigrationIssue, resetSinganiCase, SINGANI_CASE, type SinganiCaseOptions } from '../trace/demo'
 import { takeSettingsSnapshot } from '../trace/rules'
 import { releaseLocks, type TraceCtx } from '../trace/state'
 import type { AuthContext } from './auth-context'
@@ -75,6 +77,22 @@ export function runDailyTasks(): void {
   releaseLocks(db, traceCtx(null))
 }
 
+/**
+ * Rehace el caso del §18 hasta una etapa anterior. Como el lote deja de estar certificado, se
+ * retiran también su anclaje y su colección de la Ola 3 (no existirían aún).
+ */
+function resetCase(db: ErpDb, ctx: TraceCtx, options: SinganiCaseOptions): void {
+  purgeLotAnchor(db, ctx, SINGANI_CASE.lotId)
+  purgeLotTokenization(db, SINGANI_CASE.lotId)
+  // El caso se rehace con su referencia de siempre: los lotes numerados después de él (la preventa
+  // de la Ola 3) no cuentan al numerarlo.
+  const reference = db.lots.find((l) => l.id === SINGANI_CASE.lotId)?.reference ?? ''
+  const later = db.lots.filter((l) => l.wineryId === SINGANI_CASE.wineryId && l.reference.slice(0, -3) === reference.slice(0, -3) && l.reference > reference)
+  db.lots = db.lots.filter((l) => !later.includes(l))
+  resetSinganiCase(db, ctx, options)
+  db.lots.push(...later)
+}
+
 /** Rehace la trazabilidad desde los fixtures y deja el lote de demostración en la etapa del escenario. */
 function applyDataScenario(db: ErpDb, name: DataScenarioName | 'normal'): void {
   Object.assign(db, traceFromFixtures())
@@ -82,13 +100,22 @@ function applyDataScenario(db: ErpDb, name: DataScenarioName | 'normal'): void {
   const ctx = traceCtx(null)
   switch (name) {
     case 'lote-en-reposo':
-      resetSinganiCase(db, ctx, { upTo: 'RESTING', closedDaysAgo: 170 })
+      resetCase(db, ctx, { upTo: 'RESTING', closedDaysAgo: 170 })
       break
     case 'lote-listo':
-      resetSinganiCase(db, ctx, { upTo: 'READY' })
+      resetCase(db, ctx, { upTo: 'READY' })
       break
     case 'laboratorio-no-conforme':
-      resetSinganiCase(db, ctx, { upTo: 'LAB', lab: 'NON_CONFORMING' })
+      resetCase(db, ctx, { upTo: 'LAB', lab: 'NON_CONFORMING' })
+      break
+    case 'identidad-preparandose':
+    case 'emision-en-curso':
+    case 'emision-fallida':
+    case 'anclaje-pendiente':
+    case 'faltante-botellas':
+    case 'alerta-evento-inesperado':
+    case 'cambios-pedidos':
+      applyChainScenario(db, chainCtx(null), name)
       break
     case 'lote-con-incidencia':
       injectMigrationIssue(db, ctx)

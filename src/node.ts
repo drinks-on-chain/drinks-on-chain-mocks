@@ -30,6 +30,7 @@ export {
   expireRefreshGrace,
   getErpDb,
   mockAccessToken,
+  mockChain,
   mockMailbox,
   resetErpDb,
   resetSessions,

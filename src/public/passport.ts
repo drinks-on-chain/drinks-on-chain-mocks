@@ -1,3 +1,4 @@
+import { publicAnchorView } from '../chain/views'
 import type { PublicWineryProfile } from '../backoffice/schemas'
 import type { Lot, MemberRole, StoredLotEvent } from '../erp/schemas'
 import { MEMBER_ROLES } from '../erp/schemas/enums'
@@ -91,6 +92,15 @@ export function publicEventSummary(type: string, data: Record<string, unknown>):
       return 'Expediente del lote cerrado'
     case 'LOT_DISCARDED':
       return 'Lote retirado por la bodega'
+    // Ola 3 (contrato §11)
+    case 'NFT_MINTED':
+      return typeof data.quantity === 'number' ? `${data.quantity} botellas en preventa` : 'Botellas en preventa'
+    case 'COLLECTION_PUBLISHED':
+      return 'Colección publicada en el Marketplace'
+    case 'DOSSIER_ANCHORED':
+      return 'Expediente anclado en la red Stellar'
+    case 'TOKENS_REDEEMABLE':
+      return 'Botellas listas para canjear'
     default:
       return 'Registro del lote'
   }
@@ -280,7 +290,7 @@ export function buildLotPassport(state: TraceState, lot: Lot, winery: PublicWine
       hash: dossier?.status === 'CLOSED' ? (dossier.hash ?? null) : null,
       closedAt: dossier?.status === 'CLOSED' ? (dossier.closedAt ?? null) : null,
       canonicalUrl: dossier?.status === 'CLOSED' ? `/v1/public/lots/${encodeURIComponent(lotCode)}/dossier` : null,
-      anchor: null,
+      anchor: publicAnchorView(state.chain, lot.id),
     },
     publicAttachments: lotAttachments(state, lot)
       .filter((a) => a.visibility === 'PUBLIC')

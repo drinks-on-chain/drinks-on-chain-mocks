@@ -116,6 +116,20 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [ ] Rendimiento del mosto de `CVJ-L2026-001` y `ALT-L2026-001` (~1,0 L/kg) en las filas base
 - [ ] Etiqueta estable `v0.5.0` en `main` al cerrar la Ola 2 (coordinación)
 
+## Ola 3 · `mocks` 0.6 (tokenización y cadena; O3-PK-1, contrato `plan/contratos/o3-tokenizacion.md`)
+
+- [x] `openapi/erp.json` = OpenAPI de la apertura del backend (rama `feat/o3-be-apertura`, `157dee4`: 212 operaciones, 403 esquemas; fijado desde la rama, `docs/CONTRATO.md` §13.1) · 09-10-2026
+- [x] Dominios `tokenization` y `chain`: esquemas zod generados de los DTO, estado y servicios puros (`src/chain/`, `src/tokenization/`) · 09-10-2026
+- [x] Handlers de las 54 rutas con las reglas del §5.2, las transiciones y los permisos del §10; `Idempotency-Key` obligatoria (`IDEMPOTENCY_KEY_REQUIRED`) · 09-10-2026
+- [x] Red simulada con reloj controlable (`mockChain`), emisión que crea los NFT, anclaje al certificar (`ANCHORED`), fallos forzados y reintento · 09-10-2026
+- [x] Ampliaciones de `erp` (`LotSummary.tokenization`, eventos, `TOK_ESTIMATE_BELOW_MINTED`, panel), `backoffice` (tablero, permisos) y `public` (anclaje, verificación, metadatos, registro, imágenes, `stellar.toml`) · 09-10-2026
+- [x] Fixtures `fixtures/chain/` y `fixtures/tokenization/` con «Singani Preventa 2026» y direcciones con forma válida; siete escenarios de `/__mocks` · 09-10-2026
+- [x] Borrador `marketplace` (§13.1): perfil del consumidor, pedidos y pasarela de prueba, fuera de la prueba de contrato · 09-10-2026
+- [x] Prueba de contrato estricta de lo nuevo, `test/tokenization.test.ts` y `test/chain-fixtures.test.ts`; `docs/CONTRATO.md` §13, CHANGELOG y README · 09-10-2026
+- [ ] `rc.2`: correos de la tokenización, más comprobaciones de la conciliación y del indexador, cierre con NFT vendidos sin botella como escenario (`docs/CONTRATO.md` §13.8)
+- [ ] `pnpm openapi:pull` contra el servidor cuando el backend despliegue la apertura (debe dar las mismas 212 operaciones)
+- [ ] Etiqueta estable `v0.6.0` en `main` al cerrar la Ola 3 (coordinación), con el dominio `marketplace` regenerado desde el OpenAPI borrador de la Etapa 4
+
 ## Más adelante
 
 - [ ] Página `/__mocks` de ejemplo (selector de escenario y de usuario) en la plantilla de aplicación

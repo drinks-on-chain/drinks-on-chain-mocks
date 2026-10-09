@@ -1,0 +1,21 @@
+{
+  "network": "TESTNET",
+  "operations": {
+    "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+    "explorerUrl": "https://stellar.expert/explorer/testnet/account/GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+    "balanceXlm": "9482.5310000",
+    "minBalanceXlm": "100.0000000",
+    "status": "OK",
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "anchor": {
+    "address": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "explorerUrl": "https://stellar.expert/explorer/testnet/account/GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+    "balanceXlm": "99.9998800",
+    "minBalanceXlm": "10.0000000",
+    "status": "OK",
+    "checkedAt": "2026-09-25T12:00:00Z"
+  },
+  "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+  "codeTtlDays": 96
+}

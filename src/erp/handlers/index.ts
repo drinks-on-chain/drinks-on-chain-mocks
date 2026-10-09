@@ -1,3 +1,8 @@
+import { chainRoutes } from '../../chain/handlers'
+import { setMockPublicApiBaseUrl } from '../../chain/runtime'
+import { marketplaceDraftRoutes } from '../../marketplace/handlers'
+import { publicChainRoutes } from '../../public/chain-handlers'
+import { tokenizationRoutes } from '../../tokenization/handlers'
 import type { HttpHandler } from 'msw'
 import { BACKOFFICE_ROUTE_SPECS, setMockAppUrls, withErpExtras } from '../../backoffice/handlers'
 import type { AppUrls } from '../../backoffice/mail'
@@ -29,11 +34,28 @@ export const ERP_ROUTE_SPECS: readonly RouteSpec[] = [
   ...traceabilitySystemRoutes,
 ].map(withErpExtras)
 
-/** Rutas públicas de la Ola 2 (pasaportes, directorio de bodegas) y el borrador del catálogo (§17.1). */
-export const PUBLIC_ROUTE_SPECS: readonly RouteSpec[] = publicRoutes
+/**
+ * Rutas públicas: las de la Ola 2 (pasaportes, directorio de bodegas), el borrador del catálogo
+ * (§17.1) y las de la Ola 3 (registro, `stellar.toml`, verificación, metadatos del NFT, imágenes).
+ */
+export const PUBLIC_ROUTE_SPECS: readonly RouteSpec[] = [...publicRoutes, ...publicChainRoutes]
+
+/** Rutas de la Ola 3: tokenización (ERP y back office) y cadena. */
+export const TOKENIZATION_ROUTE_SPECS: readonly RouteSpec[] = tokenizationRoutes.map(withErpExtras)
+export const CHAIN_ROUTE_SPECS: readonly RouteSpec[] = chainRoutes
+
+/** BORRADOR de la Etapa 4 (contrato de la Ola 3 §13.1): cuenta del consumidor y compra. Fuera del OpenAPI. */
+export const MARKETPLACE_DRAFT_ROUTE_SPECS: readonly RouteSpec[] = marketplaceDraftRoutes
 
 /** Todas las rutas simuladas (ERP + Ola 1 + públicas). La usa la prueba de contrato. */
-export const MOCK_ROUTE_SPECS: readonly RouteSpec[] = [...ERP_ROUTE_SPECS, ...BACKOFFICE_ROUTE_SPECS, ...PUBLIC_ROUTE_SPECS]
+export const MOCK_ROUTE_SPECS: readonly RouteSpec[] = [
+  ...ERP_ROUTE_SPECS,
+  ...BACKOFFICE_ROUTE_SPECS,
+  ...TOKENIZATION_ROUTE_SPECS,
+  ...CHAIN_ROUTE_SPECS,
+  ...PUBLIC_ROUTE_SPECS,
+  ...MARKETPLACE_DRAFT_ROUTE_SPECS,
+]
 
 /**
  * Rutas simuladas (método en mayúsculas y ruta con `:param`), p. ej. para un panel de desarrollo.
@@ -56,6 +78,11 @@ export interface MockHandlerOptions extends ErpHandlerOptions {
    * desde `public/mocks/uploads/`).
    */
   uploads?: 'placeholder' | 'passthrough'
+  /**
+   * `PUBLIC_API_BASE_URL` de los mocks (Ola 3): base del `token_uri` de los contratos que se
+   * desplieguen en la sesión. Por defecto, `http://localhost:4000` (como en los fixtures).
+   */
+  publicApiBaseUrl?: string
 }
 
 /**
@@ -63,8 +90,9 @@ export interface MockHandlerOptions extends ErpHandlerOptions {
  * memoria (`resetErpDb()`) y la sesión.
  */
 export function createErpHandlers(options: MockHandlerOptions = {}): HttpHandler[] {
-  const { appUrls, uploads = 'placeholder', ...rest } = options
+  const { appUrls, uploads = 'placeholder', publicApiBaseUrl, ...rest } = options
   if (appUrls) setMockAppUrls(appUrls)
+  if (publicApiBaseUrl !== undefined) setMockPublicApiBaseUrl(publicApiBaseUrl)
   return [...MOCK_ROUTE_SPECS.flatMap((spec) => buildHandlers(spec, rest)), ...(uploads === 'placeholder' ? buildMockFileHandlers() : []), ...buildFallbackHandlers(rest)]
 }
 
@@ -84,3 +112,8 @@ export { COLLECTIONS_DRAFT_CONTRACT, PUBLIC_LOOKUP_LIMIT, PUBLIC_RATE_LIMIT } fr
 export { mockAccessToken, type AuthContext } from './auth-context'
 export { expireAccessTokens, expireRefreshGrace, LOGIN_LOCK_POLICY, REFRESH_COOKIE, REFRESH_GRACE_SECONDS, resetSessions } from './sessions'
 export { BACKOFFICE_ROUTE_SPECS, getMockAppUrls, mockMailbox, setMockAppUrls, type MailboxFilter } from '../../backoffice/handlers'
+export { DEFAULT_PUBLIC_API_BASE_URL, getMockPublicApiBaseUrl, mockChain, setMockPublicApiBaseUrl, type ChainNetworkMode, type MockChain } from '../../chain/runtime'
+export { CHAIN_STEP_MS, TRANSIENT_CHAIN_ERRORS } from '../../chain/engine'
+export { MOCK_EXPLORER_BASE_URL } from '../../chain/views'
+export type { ChainState, ForcedChainFailure } from '../../chain/state'
+export type { MarketplaceState } from '../../marketplace/handlers'

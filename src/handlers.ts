@@ -4,7 +4,17 @@
 export {
   advanceMockClock,
   BACKOFFICE_ROUTE_SPECS,
+  CHAIN_ROUTE_SPECS,
+  CHAIN_STEP_MS,
   CLIENT_APP_HEADER,
+  DEFAULT_PUBLIC_API_BASE_URL,
+  getMockPublicApiBaseUrl,
+  MARKETPLACE_DRAFT_ROUTE_SPECS,
+  MOCK_EXPLORER_BASE_URL,
+  mockChain,
+  setMockPublicApiBaseUrl,
+  TOKENIZATION_ROUTE_SPECS,
+  TRANSIENT_CHAIN_ERRORS,
   createErpHandlers,
   createMockHandlers,
   ERP_ROUTE_SPECS,
@@ -33,6 +43,11 @@ export {
 export type {
   AuthContext,
   BackofficeState,
+  ChainNetworkMode,
+  ChainState,
+  ForcedChainFailure,
+  MarketplaceState,
+  MockChain,
   ErpDb,
   ErpHandlerOptions,
   MailboxFilter,
@@ -59,5 +74,7 @@ export {
 } from './shared/scenarios'
 export { DEMO_NEW_PASSWORD, DEMO_PASSWORD, demoStaff, demoUsers, type DemoUser } from './erp/fixtures'
 export { PASSPORT_CASES, SINGANI_CASE, type PassportCase } from './erp/trace/demo'
+export { CHAIN_SCENARIOS, DEMO_REVIEWERS, PREVENTA_CASE, SHORTFALL_SCENARIO_BOTTLES, type ChainScenarioName } from './tokenization/seed'
+export { MARKETPLACE_DRAFT_CONTRACT } from './marketplace/schemas'
 export { DEFAULT_APP_URLS, type AppUrls } from './backoffice/mail'
 export { DEMO_TOTP_SECRET, generateTotp, MOCK_TOTP_BYPASS_CODE } from './shared/totp'

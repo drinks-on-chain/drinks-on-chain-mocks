@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { DossierAnchorSchema } from '../../chain/schemas'
 import { IsoDateTimeSchema } from './common'
 import { BottlingBalanceSchema } from './bottling'
 import { PhytosanitaryStatusSchema } from './enums'
@@ -9,6 +10,7 @@ import {
   LotStageCodeSchema,
   LotSummarySchema,
   TraceActorSchema,
+  TraceDashboardTokenizationSchema,
 } from './lots'
 
 // Vistas, correcciones, adjuntos y expediente del lote (contrato de la Ola 2 §9–§11):
@@ -116,6 +118,8 @@ export const TraceDashboardSchema = z.object({
   readyToClose: z.array(LotSummarySchema),
   complianceIssuesOpen: z.number().int().min(0),
   unassignedHarvestBatches: z.number().int().min(0),
+  /** Tokenización de la bodega (Ola 3, aditivo). */
+  tokenization: TraceDashboardTokenizationSchema,
 })
 export type TraceDashboard = z.infer<typeof TraceDashboardSchema>
 
@@ -327,7 +331,7 @@ export type ChangeLotAttachmentVisibilityDto = z.infer<typeof ChangeLotAttachmen
 export const DOSSIER_SCHEMA_VERSION = 'doc-dossier/1'
 export const DOSSIER_HASH_ALGORITHM = 'sha256/jcs-rfc8785'
 
-/** Expediente del lote (`LotDossierDto`). `anchor` es `null` hasta la Ola 3. */
+/** Expediente del lote (`LotDossierDto`). `anchor` es `null` hasta que el lote certificado tiene su transacción de anclaje (Ola 3 §7.1). */
 export const LotDossierSchema = z.object({
   lotId: z.string(),
   schema: z.literal(DOSSIER_SCHEMA_VERSION),
@@ -338,7 +342,7 @@ export const LotDossierSchema = z.object({
   closedAt: IsoDateTimeSchema.nullable(),
   closedBy: TraceActorSchema.nullable(),
   bottleCodes: z.object({ count: z.number().int().min(0), merkleRoot: z.string(), algorithm: z.literal('sha256-merkle/serial-code-salt') }).nullable(),
-  anchor: z.null(),
+  anchor: DossierAnchorSchema.nullable(),
 })
 export type LotDossier = z.infer<typeof LotDossierSchema>
 

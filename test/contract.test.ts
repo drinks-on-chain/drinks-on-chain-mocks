@@ -6,8 +6,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { z } from 'zod'
 import * as pkg from '../src'
 import { RETIRED_INPUT_FIELDS } from '../src'
-import { backofficeFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp, publicFixtures, SINGANI_CASE } from '../src/fixtures'
-import { COLLECTIONS_DRAFT_CONTRACT, MOCK_ROUTE_SPECS, mockMailbox, resetScenario, setScenario } from '../src/handlers'
+import { backofficeFixtures, chainFixtures, DEMO_NEW_PASSWORD, DEMO_TOTP_SECRET, erpFixtures, generateTotp, PREVENTA_CASE, publicFixtures, SINGANI_CASE, tokenizationFixtures } from '../src/fixtures'
+import { COLLECTIONS_DRAFT_CONTRACT, getErpDb, MARKETPLACE_DRAFT_CONTRACT, MOCK_ROUTE_SPECS, mockChain, mockMailbox, resetScenario, setScenario } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
 import type { ErpDb } from '../src/erp/handlers/db'
 import { logView, treatmentView } from '../src/erp/handlers/views'
@@ -184,6 +184,11 @@ function responseSchema(key: string, status: number): { schema: Json | null; sou
   const content = spec.paths[path]?.[method.toLowerCase()]?.responses?.[String(status)]?.content
   // Una operación que solo responde CSV se comprueba por su cabecera; con JSON y CSV, por el JSON.
   if (content?.['text/csv'] && !content['application/json']) return { schema: { $csv: true }, source: 'openapi/erp.json' }
+  // Ola 3: `stellar.toml` (texto) y las imágenes de las colecciones (bytes) se comprueban por su tipo.
+  if (content && !content['application/json']) {
+    if (content['text/plain']) return { schema: { $text: true }, source: 'openapi/erp.json' }
+    if (Object.keys(content).every((type) => type.startsWith('image/'))) return { schema: { $binary: Object.keys(content) }, source: 'openapi/erp.json' }
+  }
   return { schema: content?.['application/json']?.schema ?? null, source: 'openapi/erp.json' }
 }
 
@@ -264,15 +269,24 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     expect([...ahead.keys(), ...changed.keys()].filter((op) => !routeOps.includes(op))).toEqual([])
   })
 
-  it('los borradores fuera del OpenAPI están declarados en la ruta y en pendientes.json (catálogo, contrato de la Ola 2 §17.1)', () => {
+  it('los borradores fuera del OpenAPI están declarados en la ruta y en pendientes.json (catálogo, contrato de la Ola 2 §17.1; Marketplace, contrato de la Ola 3 §13.1)', () => {
     // Exclusión explícita de la prueba estricta: el backend no implementa el catálogo en esta ola,
     // así que estas rutas solo se validan contra el esquema zod de los mocks (`$zod`).
     const drafts = MOCK_ROUTE_SPECS.filter((r) => r.draft).map((r) => opKey(r.method, r.path)).sort()
-    expect(drafts).toEqual(['GET /v1/public/collections', 'GET /v1/public/collections/{slug}'])
+    expect(drafts).toEqual([
+      'GET /v1/me/consumer',
+      'GET /v1/orders',
+      'GET /v1/orders/{id}',
+      'GET /v1/public/collections',
+      'GET /v1/public/collections/{slug}',
+      'POST /v1/orders',
+      'POST /v1/payments/test/{paymentId}/simulate',
+    ])
     expect(pending.adelantadas.filter((e) => e.borrador).map((e) => opKey(e.method, e.path)).sort()).toEqual(drafts)
     for (const r of MOCK_ROUTE_SPECS.filter((x) => x.draft)) {
-      expect(r.draft).toBe(COLLECTIONS_DRAFT_CONTRACT)
-      expect(ahead.get(opKey(r.method, r.path))?.contrato).toBe(COLLECTIONS_DRAFT_CONTRACT)
+      expect([COLLECTIONS_DRAFT_CONTRACT, MARKETPLACE_DRAFT_CONTRACT]).toContain(r.draft)
+      expect(r.draft).toBe(r.path.startsWith('/v1/public/collections') ? COLLECTIONS_DRAFT_CONTRACT : MARKETPLACE_DRAFT_CONTRACT)
+      expect(ahead.get(opKey(r.method, r.path))?.contrato).toBe(r.draft)
       expect(openApiOps.has(opKey(r.method, r.path))).toBe(false)
     }
     // Todo lo demás es del OpenAPI: no queda ninguna otra operación adelantada.
@@ -331,6 +345,22 @@ const FIXTURE_COMPONENTS: Array<[name: string, rows: unknown[], dto: string]> = 
   ['lot-dossiers.json', erpFixtures.lotDossiers, 'LotDossierDto'],
   ['public/passports.json', Object.values(publicFixtures.passports), 'PublicLotPassportDto'],
   ['public/wineries.json', publicFixtures.wineries, 'PublicWineryProfileDto'],
+  // Ola 3: cadena y tokenización (las vistas de `fixtures/chain/` y `fixtures/tokenization/`).
+  ['chain/identities.json', chainFixtures.identities, 'WineryChainIdentityDto'],
+  ['chain/transactions.json', chainFixtures.transactions, 'ChainTransactionDto'],
+  ['chain/platform-accounts.json', [chainFixtures.platformAccounts], 'PlatformChainAccountsDto'],
+  ['chain/alerts.json', chainFixtures.alerts, 'ChainAlertDto'],
+  ['chain/events.json', chainFixtures.events, 'ChainEventDto'],
+  ['chain/reconciliation-runs.json', chainFixtures.reconciliationRuns, 'ReconciliationRunDto'],
+  ['chain/registry.json', [chainFixtures.registry], 'PublicChainRegistryDto'],
+  ['chain/winery-accounts.json', Object.values(chainFixtures.wineryAccounts), 'WineryChainAccountViewDto'],
+  ['chain/verifications.json', Object.values(chainFixtures.verifications), 'PublicDossierVerificationDto'],
+  ['tokenization/requests.json', tokenizationFixtures.requests, 'PlatformTokenizationRequestDto'],
+  ['tokenization/collections.json', tokenizationFixtures.collections, 'CollectionDto'],
+  ['tokenization/tokens.json', tokenizationFixtures.tokens, 'TokenDto'],
+  ['tokenization/lot-closures.json', tokenizationFixtures.lotClosures, 'LotClosureDto'],
+  ['tokenization/lot-status.json', Object.values(tokenizationFixtures.lotStatus), 'LotTokenizationStatusDto'],
+  ['tokenization/nft-metadata.json', Object.values(tokenizationFixtures.nftMetadata), 'PublicNftMetadataDto'],
 ]
 
 describe('fixtures ⇄ esquemas del OpenAPI', () => {
@@ -429,6 +459,8 @@ interface Sample {
   csvHeader?: RegExp
   /** Respuesta JSON sin el envoltorio `data` (los bytes canónicos del expediente). */
   raw?: boolean
+  /** Envía `Idempotency-Key` (obligatoria en varias operaciones de la Ola 3). */
+  idem?: boolean
 }
 
 const SAMPLES: Record<string, Sample> = {
@@ -443,7 +475,8 @@ const SAMPLES: Record<string, Sample> = {
   'POST /v1/auth/logout-all': { as: 'altos_admin', url: '/v1/auth/logout-all', body: {}, status: 204 },
   'GET /v1/users/me': { as: 'ines', url: '/v1/users/me', status: 200 },
   'PATCH /v1/users/me': { as: 'altos_admin', url: '/v1/users/me', body: { fullName: 'Martín C.' }, status: 200 },
-  'GET /v1/users/me/wallet': { as: 'altos_admin', url: '/v1/users/me/wallet', status: 200 },
+  // Ola 3 (SE-02): el personal → 404 `CHN_WALLET_NOT_AVAILABLE`; el consumidor, su dirección derivada.
+  'GET /v1/users/me/wallet': { as: 'maria', url: '/v1/users/me/wallet', status: 200 },
   'GET /v1/wineries': { as: 'admin', url: '/v1/wineries', status: 200 },
   'GET /v1/wineries/my': { as: 'altos_admin', url: '/v1/wineries/my', status: 200 },
   'PATCH /v1/wineries/my': { as: 'altos_admin', url: '/v1/wineries/my', body: { address: 'Camino a Calamuchita km 9' }, status: 200 },
@@ -1087,8 +1120,242 @@ const WAITLIST_SAMPLES: Record<string, Sample> = {
     csvHeader: /^position,type,status,fullName,email,/,
   },
 }
+// ---------------------------------------------------------------------------
+// Ola 3 (plan/contratos/o3-tokenizacion.md): tokenización y cadena
+// ---------------------------------------------------------------------------
+
+const TF = tokenizationFixtures
+const requestBy = (lotName: string, status: string) => TF.requests.find((r) => r.lot.name === lotName && r.status === status)!
+const collectionBy = (name: string) => TF.collections.find((c) => c.name === name)!
+/** En revisión, con los datos completos (Cinti Viejo): se puede aprobar. */
+const reqInReview = requestBy('Singani El Molino 2026', 'IN_REVIEW')
+/** Con cambios pedidos (Altos): falta la portada. */
+const reqChanges = requestBy('Tannat La Angostura 2024', 'CHANGES_REQUESTED')
+/** Ampliación enviada sin tomar (Altos). */
+const reqSubmitted = requestBy('Singani El Portillo 2025', 'SUBMITTED')
+const colPreventa = collectionBy(PREVENTA_CASE.name)
+const colGranReserva = collectionBy(SINGANI_CASE.name)
+const colPortillo = collectionBy('Singani El Portillo 2025')
+const O3_REASON = 'Prueba de contrato de la Ola 3'
+const authHeaders = (as: string, idem?: string) => ({ Authorization: `Bearer mock.access.${as}`, 'Content-Type': 'application/json', ...(idem ? { 'Idempotency-Key': uid(`contract-setup:${idem}`) } : {}) })
+async function send<T = unknown>(as: string, method: string, url: string, body?: unknown, idem?: string): Promise<T> {
+  const res = await fetch(`${API}${url}`, { method, headers: authHeaders(as, idem), body: body === undefined ? undefined : JSON.stringify(body) })
+  const json = (await res.json()) as { success: boolean; data: T; error?: { code: string } }
+  if (!json.success) throw new Error(`setup ${method} ${url}: ${res.status} ${json.error?.code}`)
+  return json.data
+}
+/** Aplica un escenario de datos (lo hace la primera petición) y devuelve la base. */
+async function withScenario(name: Parameters<typeof setScenario>[0]) {
+  setScenario(name)
+  await send('soporte', 'GET', '/v1/platform/chain/accounts')
+  return getErpDb()
+}
+const newOrder = () => send<{ id: string; payment: { id: string } }>('maria', 'POST', '/v1/orders', { collectionId: colGranReserva.id, quantity: 2 })
+
+const OLA3_SAMPLES: Record<string, Sample> = {
+  // ERP: estado del lote y solicitudes
+  'GET /v1/lots/{id}/tokenization': { as: 'cvj_enologa', url: `/v1/lots/${originLot.id}/tokenization`, status: 200 },
+  'POST /v1/lots/{id}/tokenization-requests': {
+    as: 'cvj_admin',
+    idem: true,
+    url: `/v1/lots/${originLot.id}/tokenization-requests`,
+    body: { quantity: 300, commercial: { name: 'Singani Edición Aniversario 2026', description: 'Edición limitada por el aniversario de la destilería, en preventa.' }, notes: 'Preventa de aniversario', confirm: true },
+    status: 201,
+  },
+  'GET /v1/tokenization-requests': { as: 'cvj_enologa', url: '/v1/tokenization-requests?limit=50', status: 200 },
+  'GET /v1/tokenization-requests/{id}': { as: 'cvj_admin', url: `/v1/tokenization-requests/${reqInReview.id}`, status: 200 },
+  'PATCH /v1/tokenization-requests/{id}': {
+    as: 'altos_admin',
+    url: `/v1/tokenization-requests/${reqChanges.id}`,
+    body: { quantity: 1000, commercial: { imageKeys: [{ key: `org/${ALTOS.id}/collections/2026/tannat-la-angostura.jpg`, alt: 'Botella de Tannat La Angostura 2024', isCover: true }] }, notes: 'Añadida la portada' },
+    status: 200,
+  },
+  'POST /v1/tokenization-requests/{id}/resubmit': { as: 'altos_admin', idem: true, url: `/v1/tokenization-requests/${reqChanges.id}/resubmit`, body: { message: 'Ya está la portada' }, status: 200 },
+  'POST /v1/tokenization-requests/{id}/withdraw': { as: 'altos_admin', url: `/v1/tokenization-requests/${reqSubmitted.id}/withdraw`, body: { reason: O3_REASON }, status: 200 },
+  'GET /v1/collections': { as: 'cvj_admin', url: '/v1/collections', status: 200 },
+  'GET /v1/collections/{id}': { as: 'cvj_enologa', url: `/v1/collections/${colPreventa.id}`, status: 200 },
+  'GET /v1/collections/{id}/tokens': { as: 'cvj_admin', url: `/v1/collections/${colPreventa.id}/tokens?status=MINTED&fromNumber=10&toNumber=40&limit=5`, status: 200 },
+  'GET /v1/collections/{id}/closure': { as: 'cvj_admin', url: `/v1/collections/${colGranReserva.id}/closure`, status: 200 },
+  'GET /v1/organizations/current/chain-account': { as: 'cvj_operario', url: '/v1/organizations/current/chain-account', status: 200 },
+
+  // Back office: bandeja
+  'GET /v1/platform/tokenization-requests': { as: 'soporte', url: '/v1/platform/tokenization-requests?q=singani', status: 200 },
+  'GET /v1/platform/tokenization-requests/{id}': { as: 'soporte', url: `/v1/platform/tokenization-requests/${reqInReview.id}`, status: 200 },
+  'POST /v1/platform/tokenization-requests/{id}/take': { as: 'operaciones', url: `/v1/platform/tokenization-requests/${reqSubmitted.id}/take`, body: {}, status: 200 },
+  'POST /v1/platform/tokenization-requests/{id}/notes': { as: 'operaciones', url: `/v1/platform/tokenization-requests/${reqInReview.id}/notes`, body: { text: 'Nota de la prueba de contrato' }, status: 201 },
+  'PATCH /v1/platform/tokenization-requests/{id}': {
+    as: 'operaciones',
+    url: `/v1/platform/tokenization-requests/${reqInReview.id}`,
+    body: { commercial: { pairing: 'Con queso de cabra' }, price: { amountMinor: 21000, currency: 'BOB' }, reason: O3_REASON },
+    status: 200,
+  },
+  'POST /v1/platform/tokenization-requests/{id}/request-changes': {
+    as: 'operaciones',
+    url: `/v1/platform/tokenization-requests/${reqInReview.id}/request-changes`,
+    body: { message: 'Revisa la fecha estimada de canje', fields: ['commercial.estimatedRedeemDate'] },
+    status: 200,
+  },
+  'POST /v1/platform/tokenization-requests/{id}/approve': {
+    as: 'operaciones',
+    idem: true,
+    url: `/v1/platform/tokenization-requests/${reqInReview.id}/approve`,
+    body: { price: { amountMinor: 19500, currency: 'BOB' }, publishOnMint: true, reason: O3_REASON },
+    status: 201,
+  },
+  'POST /v1/platform/tokenization-requests/{id}/reject': { as: 'operaciones', url: `/v1/platform/tokenization-requests/${reqInReview.id}/reject`, body: { reason: O3_REASON }, status: 200 },
+
+  // Back office: colecciones y cierre
+  'GET /v1/platform/collections': { as: 'soporte', url: '/v1/platform/collections?status=PUBLISHED&saleState=PRESALE', status: 200 },
+  'GET /v1/platform/collections/{id}': { as: 'soporte', url: `/v1/platform/collections/${colGranReserva.id}`, status: 200 },
+  'PATCH /v1/platform/collections/{id}': {
+    as: 'operaciones',
+    url: `/v1/platform/collections/${colPortillo.id}`,
+    body: { commercial: { tastingNotes: 'Flor blanca y cítricos' }, price: { amountMinor: 16500, currency: 'BOB' }, estimatedRedeemDate: '2026-12-01', reason: O3_REASON },
+    status: 200,
+  },
+  'POST /v1/platform/collections/{id}/publish': { as: 'operaciones', idem: true, url: `/v1/platform/collections/${colPortillo.id}/publish`, body: {}, status: 200 },
+  'POST /v1/platform/collections/{id}/pause': { as: 'operaciones', idem: true, url: `/v1/platform/collections/${colPreventa.id}/pause`, body: { reason: O3_REASON }, status: 200 },
+  'POST /v1/platform/collections/{id}/resume': {
+    as: 'operaciones',
+    idem: true,
+    setup: async () => {
+      await send('operaciones', 'POST', `/v1/platform/collections/${colPreventa.id}/pause`, { reason: O3_REASON }, 'pause')
+      return {}
+    },
+    url: `/v1/platform/collections/${colPreventa.id}/resume`,
+    body: { reason: O3_REASON },
+    status: 200,
+  },
+  'POST /v1/platform/collections/{id}/close': { as: 'operaciones', url: `/v1/platform/collections/${colPortillo.id}/close`, body: { reason: O3_REASON }, status: 200 },
+  'GET /v1/platform/collections/{id}/tokens': { as: 'soporte', url: `/v1/platform/collections/${colPreventa.id}/tokens?limit=3`, status: 200 },
+  'GET /v1/platform/collections/{id}/transactions': { as: 'soporte', url: `/v1/platform/collections/${colPreventa.id}/transactions`, status: 200 },
+  'GET /v1/platform/collections/{id}/metrics': { as: 'soporte', url: `/v1/platform/collections/${colGranReserva.id}/metrics`, status: 200 },
+  'GET /v1/platform/lot-closures': { as: 'soporte', url: '/v1/platform/lot-closures?status=NO_SHORTFALL', status: 200 },
+  'GET /v1/platform/collections/{id}/closure': { as: 'soporte', url: `/v1/platform/collections/${colGranReserva.id}/closure`, status: 200 },
+  'POST /v1/platform/collections/{id}/closure/decide': {
+    as: 'bo_admin',
+    idem: true,
+    // El escenario rehace la colección de El Portillo (otro id) con 20 NFT más que botellas.
+    setup: async () => ({ id: (await withScenario('faltante-botellas')).chain.collections.find((c) => c.lotId === colPortillo.lotId)!.id }),
+    url: (v) => `/v1/platform/collections/${v.id}/closure/decide`,
+    body: { unsoldPolicy: 'KEEP_ON_SALE', reason: O3_REASON },
+    status: 200,
+  },
+  'POST /v1/platform/collections/{id}/closure/items/{tokenId}/resolve': {
+    as: 'operaciones',
+    // Faltante de 20 con solo 5 NFT sin vender: 15 vendidos se quedan sin botella (proceso manual, A-30).
+    setup: async () => {
+      const db = await withScenario('faltante-botellas')
+      const id = db.chain.collections.find((c) => c.lotId === colPortillo.lotId)!.id
+      const tokens = db.chain.tokens.filter((t) => t.collectionId === id).sort((a, b) => a.bottleNumber - b.bottleNumber)
+      tokens.slice(0, tokens.length - 5).forEach((t, i) => Object.assign(t, { status: 'SOLD', soldAt: new Date(Date.UTC(2026, 8, 20, 12, 0, i)).toISOString() }))
+      const closure = await send<{ items: { tokenId: number; status: string }[] }>('soporte', 'GET', `/v1/platform/collections/${id}/closure`)
+      return { id, tokenId: String(closure.items.find((i) => i.status === 'SOLD')!.tokenId) }
+    },
+    url: (v) => `/v1/platform/collections/${v.id}/closure/items/${v.tokenId}/resolve`,
+    body: { outcome: 'MANUAL_REFUND', note: 'Devolución acordada con el comprador' },
+    status: 200,
+  },
+
+  // Back office: cadena
+  'GET /v1/platform/chain/transactions': { as: 'soporte', url: '/v1/platform/chain/transactions?kind=MINT_BATCH&status=CONFIRMED&from=2026-09-01', status: 200 },
+  'GET /v1/platform/chain/transactions/{id}': { as: 'soporte', url: `/v1/platform/chain/transactions/${chainFixtures.transactions[0]!.id}`, status: 200 },
+  'POST /v1/platform/chain/transactions/{id}/retry': {
+    as: 'operaciones',
+    idem: true,
+    setup: async () => {
+      const db = await withScenario('emision-fallida')
+      return { id: db.chain.transactions.find((t) => t.status === 'FAILED')!.id }
+    },
+    url: (v) => `/v1/platform/chain/transactions/${v.id}/retry`,
+    body: { reason: O3_REASON },
+    status: 200,
+  },
+  'POST /v1/platform/chain/transactions/{id}/abandon': {
+    as: 'bo_admin',
+    // Una pausa del contrato que falla en la red sí se puede abandonar (una emisión o un anclaje, no).
+    setup: async () => {
+      mockChain.failNext({ kind: 'PAUSE_CONTRACT' })
+      await send('bo_admin', 'POST', `/v1/platform/wineries/${CINTI.id}/chain/pause`, { reason: O3_REASON }, 'pause-fail')
+      mockChain.settle()
+      return { id: getErpDb().chain.transactions.find((t) => t.kind === 'PAUSE_CONTRACT' && t.status === 'FAILED')!.id }
+    },
+    url: (v) => `/v1/platform/chain/transactions/${v.id}/abandon`,
+    body: { reason: O3_REASON },
+    status: 200,
+  },
+  'GET /v1/platform/chain/accounts': { as: 'soporte', url: '/v1/platform/chain/accounts', status: 200 },
+  'GET /v1/platform/chain/events': { as: 'soporte', url: '/v1/platform/chain/events?type=lot_minted&unmatched=false', status: 200 },
+  'GET /v1/platform/chain/reconciliation/runs': { as: 'soporte', url: '/v1/platform/chain/reconciliation/runs?status=OK', status: 200 },
+  'POST /v1/platform/chain/reconciliation/runs': { as: 'operaciones', url: '/v1/platform/chain/reconciliation/runs', body: { scope: 'ALL', depth: 'FULL' }, status: 202 },
+  'GET /v1/platform/chain/reconciliation/runs/{id}': {
+    as: 'soporte',
+    url: `/v1/platform/chain/reconciliation/runs/${chainFixtures.reconciliationRuns.find((r) => r.status === 'DIFFERENCES')!.id}`,
+    status: 200,
+  },
+  'GET /v1/platform/chain/alerts': { as: 'soporte', url: '/v1/platform/chain/alerts?status=open&level=WARNING', status: 200 },
+  'POST /v1/platform/chain/alerts/{id}/resolve': {
+    as: 'operaciones',
+    url: `/v1/platform/chain/alerts/${chainFixtures.alerts.find((a) => a.resolvedAt === null)!.id}/resolve`,
+    body: { note: 'Extensión de TTL lanzada a mano' },
+    status: 200,
+  },
+  'GET /v1/platform/wineries/{id}/chain-account': { as: 'soporte', url: `/v1/platform/wineries/${CINTI.id}/chain-account`, status: 200 },
+  'POST /v1/platform/wineries/{id}/chain/provision': {
+    as: 'operaciones',
+    setup: async () => {
+      await withScenario('identidad-preparandose')
+      return {}
+    },
+    url: `/v1/platform/wineries/${ALTOS.id}/chain/provision`,
+    body: { reason: O3_REASON },
+    status: 202,
+  },
+  'POST /v1/platform/wineries/{id}/chain/pause': { as: 'bo_admin', idem: true, url: `/v1/platform/wineries/${CINTI.id}/chain/pause`, body: { reason: O3_REASON }, status: 202 },
+  'POST /v1/platform/wineries/{id}/chain/unpause': {
+    as: 'bo_admin',
+    idem: true,
+    setup: async () => {
+      await send('bo_admin', 'POST', `/v1/platform/wineries/${CINTI.id}/chain/pause`, { reason: O3_REASON }, 'pause')
+      mockChain.settle()
+      return {}
+    },
+    url: `/v1/platform/wineries/${CINTI.id}/chain/unpause`,
+    body: { reason: O3_REASON },
+    status: 202,
+  },
+
+  // Público
+  'GET /.well-known/stellar.toml': { url: '/.well-known/stellar.toml', status: 200 },
+  'GET /v1/public/chain/registry': { url: '/v1/public/chain/registry', status: 200 },
+  'GET /v1/public/lots/{lotCode}/verification': { url: `/v1/public/lots/${CASE.lotCode}/verification`, status: 200 },
+  'GET /v1/public/nft/{winerySlug}/{tokenId}': { url: `/v1/public/nft/${colPreventa.winery.slug}/${TF.tokens.find((t) => t.collectionId === colPreventa.id)!.tokenId}`, status: 200 },
+  'GET /v1/public/collections/images/{imageId}': { url: `/v1/public/collections/images/${colPreventa.commercial.images[0]!.id}`, status: 200 },
+
+  // BORRADOR del Marketplace (§13.1): fuera del OpenAPI; se valida con el esquema zod de pendientes.json.
+  'GET /v1/me/consumer': { as: 'maria', url: '/v1/me/consumer', status: 200 },
+  'POST /v1/orders': { as: 'maria', idem: true, url: '/v1/orders', body: { collectionId: colGranReserva.id, quantity: 2 }, status: 201 },
+  'GET /v1/orders': {
+    as: 'maria',
+    setup: async () => {
+      await newOrder()
+      return {}
+    },
+    url: '/v1/orders',
+    status: 200,
+  },
+  'GET /v1/orders/{id}': { as: 'maria', setup: async () => ({ id: (await newOrder()).id }), url: (v) => `/v1/orders/${v.id}`, status: 200 },
+  'POST /v1/payments/test/{paymentId}/simulate': {
+    as: 'maria',
+    setup: async () => ({ paymentId: (await newOrder()).payment.id }),
+    url: (v) => `/v1/payments/test/${v.paymentId}/simulate`,
+    body: { outcome: 'APPROVE' },
+    status: 200,
+  },
+}
+
 Object.assign(OLA1_SAMPLES, WAITLIST_SAMPLES)
-Object.assign(SAMPLES, OLA1_SAMPLES, OLA2_SAMPLES)
+Object.assign(SAMPLES, OLA1_SAMPLES, OLA2_SAMPLES, OLA3_SAMPLES)
 
 describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
   it('hay una petición de ejemplo por cada RouteSpec', () => {
@@ -1102,6 +1369,7 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
     const headers: Record<string, string> = {}
     if (sample.as) headers.Authorization = `Bearer mock.access.${sample.as}`
     if (sample.cookie) headers.Cookie = sample.cookie
+    if (sample.idem) headers['Idempotency-Key'] = uid(`contract:${key}`)
     let body: BodyInit | undefined
     const rawBody = typeof sample.body === 'function' ? (sample.body as (v: Vars) => unknown)(vars) : sample.body
     if (sample.form) body = sample.form()
@@ -1129,6 +1397,17 @@ describe('respuestas de ejemplo ⇄ esquemas de respuesta', () => {
       expect(res.headers.get('content-type')).toMatch(/^application\/json/)
       if (!schema) throw new Error(`${key}: sin esquema de respuesta en el OpenAPI`)
       expectValid(schema, JSON.parse(text), `${key} ⇄ ${source}`)
+      return
+    }
+    if (schema?.$text) {
+      expect(res.headers.get('content-type')).toMatch(/^text\/plain/)
+      expect(text).toMatch(/NETWORK_PASSPHRASE=/)
+      return
+    }
+    if (schema?.$binary) {
+      expect(schema.$binary).toContain(res.headers.get('content-type'))
+      // Firma PNG.
+      expect(text.slice(1, 4)).toBe('PNG')
       return
     }
     if (schema?.$csv) {

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "48a60114-159f-5621-ab91-4e57a5f4144b",
+    "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
+    "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0",
+    "status": "NO_SHORTFALL",
+    "computedAt": "2026-09-25T06:00:00Z",
+    "bottles": 2950,
+    "minted": 60,
+    "sold": 0,
+    "reserved": 0,
+    "unsold": 60,
+    "shortfall": 0,
+    "unsoldToBurn": 0,
+    "soldWithoutBottle": 0,
+    "unsoldPolicy": null,
+    "decision": null,
+    "items": []
+  },
+  {
+    "id": "32d63503-aa4a-5768-9b2c-12d66d090202",
+    "lotId": "a9a5d323-2e45-57b5-9803-8b633c538f22",
+    "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45",
+    "status": "NO_SHORTFALL",
+    "computedAt": "2026-09-25T06:00:00Z",
+    "bottles": 1040,
+    "minted": 240,
+    "sold": 0,
+    "reserved": 0,
+    "unsold": 240,
+    "shortfall": 0,
+    "unsoldToBurn": 0,
+    "soldWithoutBottle": 0,
+    "unsoldPolicy": null,
+    "decision": null,
+    "items": []
+  }
+]

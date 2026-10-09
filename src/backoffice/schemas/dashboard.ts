@@ -1,6 +1,8 @@
 import { z } from 'zod'
 import { IsoDateTimeSchema } from '../../erp/schemas/common'
 import { MembershipRoleSchema } from '../../erp/schemas/organizations'
+import { DashboardChainSchema } from '../../chain/schemas'
+import { DashboardTokenizationSchema } from '../../tokenization/schemas'
 import { AuditEventSchema } from './audit'
 import { DashboardWaitlistSchema } from './waitlist'
 
@@ -42,6 +44,9 @@ export const DashboardSchema = z.object({
   }),
   /** Lista de espera (contrato O1b §2; aditivo desde mocks 0.4.1). */
   waitlist: DashboardWaitlistSchema,
+  /** Tokenización y cadena (contrato de la Ola 3 §11; aditivos desde mocks 0.6). */
+  tokenization: DashboardTokenizationSchema,
+  chain: DashboardChainSchema,
   alerts: z.array(DashboardAlertSchema),
   /** Los 5 eventos más recientes de la bitácora. */
   recentAudit: z.array(AuditEventSchema).max(5),

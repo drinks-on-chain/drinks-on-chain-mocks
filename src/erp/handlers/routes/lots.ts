@@ -1,3 +1,5 @@
+import { chainCtx } from '../../../chain/runtime'
+import { anchorDossier } from '../../../chain/service'
 import { recordAudit } from '../../../backoffice/handlers/support'
 import {
   ChangeLotAttachmentVisibilitySchema,
@@ -467,6 +469,8 @@ export const lotRoutes: RouteSpec[] = [
       await parseBody(request, CloseDossierSchema)
       tick()
       closeDossier(getErpDb(), traceCtx(auth), lot)
+      // Ola 3 §7.1 (`lot.certified`): el worker registra el anclaje del expediente; al confirmarse, el lote pasa a `ANCHORED`.
+      anchorDossier(getErpDb(), chainCtx(auth), lot)
       const dossier = dossierOf(getErpDb(), lot)
       audit(ctx, 'DOSSIER_CLOSED', lot, { type: 'lot', id: lot.id }, { hash: dossier.hash, bottleCodes: dossier.bottleCodes?.count ?? 0 })
       return ok(dossier)

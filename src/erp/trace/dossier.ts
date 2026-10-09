@@ -1,3 +1,4 @@
+import { dossierAnchorView } from '../../chain/views'
 import { canonicalJson, sha256Hex } from '../../shared/crypto'
 import type { ApiErrorDetail } from '../../shared/envelope'
 import { ApiError } from '../handlers/errors'
@@ -918,7 +919,7 @@ export function dossierPreview(state: TraceState, ctx: Pick<TraceCtx, 'lotPrefix
 export function dossierOf(state: TraceState, lot: Lot): LotDossier {
   const stored = lotDossier(state, lot.id)
   if (stored) {
-    const dossier: StoredDossier = { ...stored }
+    const dossier: StoredDossier = { ...stored, anchor: dossierAnchorView(state.chain, lot.id) }
     delete dossier.canonical
     return dossier
   }

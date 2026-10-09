@@ -1,0 +1,200 @@
+[
+  {
+    "id": "fd119b8f-76cd-5ef7-97fd-0d240cc6c4be",
+    "rpcEventId": "0001480002-0000000000",
+    "network": "TESTNET",
+    "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "ledger": 1480002,
+    "ledgerClosedAt": "2026-08-16T09:01:00Z",
+    "txHash": "874a2e020a88782bee20ce91d5db5dc27cfaa5d9ae8b09812f324f48db9ac498",
+    "type": "role_granted",
+    "topics": [
+      "role_granted"
+    ],
+    "data": {
+      "role": "operator",
+      "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
+    },
+    "matchedTransactionId": "48f22630-4b9a-56cb-9f8e-9b64330933e7",
+    "originatedBySystem": true,
+    "processedAt": "2026-08-16T09:01:00Z"
+  },
+  {
+    "id": "d83163f0-edf7-55a9-a142-4a1bab1cae9f",
+    "rpcEventId": "0001480004-0000000000",
+    "network": "TESTNET",
+    "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "ledger": 1480004,
+    "ledgerClosedAt": "2026-08-16T09:11:00Z",
+    "txHash": "b9ec9637ce5eae35afa2efd11321a1850589bdb7c8604f97b4e294a164fcdec5",
+    "type": "role_granted",
+    "topics": [
+      "role_granted"
+    ],
+    "data": {
+      "role": "operator",
+      "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
+    },
+    "matchedTransactionId": "38e43389-e58c-533c-8074-c050c5086f92",
+    "originatedBySystem": true,
+    "processedAt": "2026-08-16T09:11:00Z"
+  },
+  {
+    "id": "6bbbb41d-8c90-5e74-9b2c-24d45961be52",
+    "rpcEventId": "0001480006-0000000000",
+    "network": "TESTNET",
+    "contractAddress": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
+    "wineryId": "eac1f883-31c7-5032-8628-cac993ca5e48",
+    "ledger": 1480006,
+    "ledgerClosedAt": "2026-08-16T09:21:00Z",
+    "txHash": "ae10921dc63359e62471bd4e789128a67bf6b2ed51f13f63b82d3a73374425f6",
+    "type": "role_granted",
+    "topics": [
+      "role_granted"
+    ],
+    "data": {
+      "role": "operator",
+      "account": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V"
+    },
+    "matchedTransactionId": "c92ddc88-3856-50c8-ab22-af9a61d906c5",
+    "originatedBySystem": true,
+    "processedAt": "2026-08-16T09:21:00Z"
+  },
+  {
+    "id": "69a1fe95-6241-5215-9539-86365faf8c7e",
+    "rpcEventId": "0001560653-0000000000",
+    "network": "TESTNET",
+    "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "ledger": 1560653,
+    "ledgerClosedAt": "2026-09-05T16:01:00Z",
+    "txHash": "5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
+    "type": "consecutive_mint",
+    "topics": [
+      "consecutive_mint"
+    ],
+    "data": {
+      "to": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+      "fromTokenId": 0,
+      "toTokenId": 59
+    },
+    "matchedTransactionId": "b12fb83f-46a1-554a-8579-03d6dc55e9ac",
+    "originatedBySystem": true,
+    "processedAt": "2026-09-05T16:01:00Z"
+  },
+  {
+    "id": "11ce40a0-edeb-5110-89d8-3c222efef788",
+    "rpcEventId": "0001560653-0000000001",
+    "network": "TESTNET",
+    "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "ledger": 1560653,
+    "ledgerClosedAt": "2026-09-05T16:01:00Z",
+    "txHash": "5ed4586c11b2bebf2706862efe2fd565e19e065c9030a83fbeaa174f9a1df495",
+    "type": "lot_minted",
+    "topics": [
+      "lot_minted"
+    ],
+    "data": {
+      "lot": "CVJ-L2026-005",
+      "firstTokenId": 0,
+      "lastTokenId": 59,
+      "amount": 60
+    },
+    "matchedTransactionId": "b12fb83f-46a1-554a-8579-03d6dc55e9ac",
+    "originatedBySystem": true,
+    "processedAt": "2026-09-05T16:01:00Z"
+  },
+  {
+    "id": "7c001bef-0e95-5d50-ab07-6f58952ba8ed",
+    "rpcEventId": "0001768013-0000000000",
+    "network": "TESTNET",
+    "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "ledger": 1768013,
+    "ledgerClosedAt": "2026-09-17T16:01:00Z",
+    "txHash": "a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
+    "type": "consecutive_mint",
+    "topics": [
+      "consecutive_mint"
+    ],
+    "data": {
+      "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+      "fromTokenId": 0,
+      "toTokenId": 239
+    },
+    "matchedTransactionId": "296ac8c5-e1ae-5c21-994c-642b6ec0632d",
+    "originatedBySystem": true,
+    "processedAt": "2026-09-17T16:01:00Z"
+  },
+  {
+    "id": "f0d63647-abb7-5ae5-9024-433b4433a14d",
+    "rpcEventId": "0001768013-0000000001",
+    "network": "TESTNET",
+    "contractAddress": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "ledger": 1768013,
+    "ledgerClosedAt": "2026-09-17T16:01:00Z",
+    "txHash": "a8e8c70f3c5c7b708b689d47be66af13c0aad6d7395d5118b95e59163ccef987",
+    "type": "lot_minted",
+    "topics": [
+      "lot_minted"
+    ],
+    "data": {
+      "lot": "ALT-L2025-004",
+      "firstTokenId": 0,
+      "lastTokenId": 239,
+      "amount": 240
+    },
+    "matchedTransactionId": "296ac8c5-e1ae-5c21-994c-642b6ec0632d",
+    "originatedBySystem": true,
+    "processedAt": "2026-09-17T16:01:00Z"
+  },
+  {
+    "id": "d4c1658d-5ce8-530f-87e6-8ebe8161228f",
+    "rpcEventId": "0001869533-0000000000",
+    "network": "TESTNET",
+    "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "ledger": 1869533,
+    "ledgerClosedAt": "2026-09-23T13:01:00Z",
+    "txHash": "5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
+    "type": "consecutive_mint",
+    "topics": [
+      "consecutive_mint"
+    ],
+    "data": {
+      "to": "GB2RRBVVZLNYRA7GF7UTZ6EUWQI2GD64HXFY3KUKDNELEUI7OQHDTKTM",
+      "fromTokenId": 60,
+      "toTokenId": 159
+    },
+    "matchedTransactionId": "a739721c-9ab9-5bb3-b8ca-dedf16ad4506",
+    "originatedBySystem": true,
+    "processedAt": "2026-09-23T13:01:00Z"
+  },
+  {
+    "id": "64f91025-00b7-58ec-88a5-9eefa2e4c66c",
+    "rpcEventId": "0001869533-0000000001",
+    "network": "TESTNET",
+    "contractAddress": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "ledger": 1869533,
+    "ledgerClosedAt": "2026-09-23T13:01:00Z",
+    "txHash": "5f4423b738eba732979cadbed5ae11e8913893ceab364fd195deaf2d6ac0db9f",
+    "type": "lot_minted",
+    "topics": [
+      "lot_minted"
+    ],
+    "data": {
+      "lot": "CVJ-L2026-006",
+      "firstTokenId": 60,
+      "lastTokenId": 159,
+      "amount": 100
+    },
+    "matchedTransactionId": "a739721c-9ab9-5bb3-b8ca-dedf16ad4506",
+    "originatedBySystem": true,
+    "processedAt": "2026-09-23T13:01:00Z"
+  }
+]

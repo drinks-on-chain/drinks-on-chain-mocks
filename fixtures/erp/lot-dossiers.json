@@ -17,6 +17,31 @@
       "merkleRoot": "7a1caa0a457bbfaeea8f64c57adf82a85c5e7c1d454f6a21f53bd96f56914ff1",
       "algorithm": "sha256-merkle/serial-code-salt"
     },
-    "anchor": null
+    "anchor": {
+      "status": "ANCHORED",
+      "network": "TESTNET",
+      "account": "GCODFRQQCUPIEV6A3F6NQ23TXZNOI74Z42TAOSAA26ODC4YOZUKCRTP7",
+      "memoHashHex": "cc05144cfa9e60f63e38fadba5b5c30ec8cd30e52917ff54b62a4567c53e9b4d",
+      "memoHashBase64": "zAUUTPqeYPY+OPrbpbXDDsjNMOUpF/9UtipFZ8U+m00=",
+      "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+      "ledger": 1888265,
+      "anchoredAt": "2026-09-24T15:02:00Z",
+      "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+      "verifiedAt": "2026-09-24T15:02:00Z",
+      "transaction": {
+        "id": "dbc954ee-e00e-5c3a-9698-7d09f3100d26",
+        "kind": "ANCHOR_DOSSIER",
+        "status": "CONFIRMED",
+        "network": "TESTNET",
+        "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "explorerUrl": "https://stellar.expert/explorer/testnet/tx/d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
+        "ledger": 1888265,
+        "confirmedAt": "2026-09-24T15:02:00Z",
+        "attempts": 1,
+        "lastError": null,
+        "createdAt": "2026-09-24T15:01:00Z",
+        "updatedAt": "2026-09-24T15:02:00Z"
+      }
+    }
   }
 ]

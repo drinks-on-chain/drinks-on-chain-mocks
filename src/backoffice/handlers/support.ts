@@ -1,3 +1,4 @@
+import { onWineryActivated, onWineryStatusChanged } from '../../chain/runtime'
 import { PLATFORM_ORGANIZATION } from '../../erp/catalog'
 import { membershipsOf, type AuthContext } from '../../erp/handlers/auth-context'
 import { getErpDb, newId, nowStamp, tick, type BackofficeState } from '../../erp/handlers/db'
@@ -218,6 +219,8 @@ export function setWineryStatus(
     reason: opts.reason,
     actor: opts.actor,
   })
+  // Ola 3 §3.5: suspender o revocar pausa las colecciones publicadas de la bodega.
+  onWineryStatusChanged(winery.id, status)
 }
 
 /**
@@ -236,6 +239,8 @@ export function activateWinery(ctx: RouteContext | null, winery: WineryResponse,
   })
   profile.activatedAt = now()
   winery.approvedAt ??= profile.activatedAt
+  // Ola 3 §3.1: `winery.activated` aprovisiona la cuenta y el contrato de la bodega en la red.
+  onWineryActivated(winery.id)
 }
 
 /** Correo del dueño activo de una bodega (avisos EQP-10 y cambios de estado). */

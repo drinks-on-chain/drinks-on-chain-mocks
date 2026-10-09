@@ -38,6 +38,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-04T09:45:00Z",
     "updatedAt": "2026-09-12T00:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -223,6 +229,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-10T09:45:00Z",
     "updatedAt": "2026-03-01T00:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -394,6 +406,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-18T09:45:00Z",
     "updatedAt": "2026-02-10T00:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -565,6 +583,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-02-26T09:45:00Z",
     "updatedAt": "2026-09-20T00:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -711,6 +735,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-12T09:45:00Z",
     "updatedAt": "2026-03-12T09:45:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -851,6 +881,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-02T09:45:00Z",
     "updatedAt": "2025-11-03T10:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -999,6 +1035,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-09T09:45:00Z",
     "updatedAt": "2026-03-11T14:30:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -1144,6 +1186,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-20T09:45:00Z",
     "updatedAt": "2026-06-30T10:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -1292,6 +1340,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-06T09:45:00Z",
     "updatedAt": "2026-05-12T00:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -1442,6 +1496,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-15T09:45:00Z",
     "updatedAt": "2026-03-15T09:45:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -1571,6 +1631,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-22T09:45:00Z",
     "updatedAt": "2026-03-22T09:45:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -1700,6 +1766,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-09-24T09:45:00Z",
     "updatedAt": "2026-09-24T09:45:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": null,
     "targetAbvPercent": null,
@@ -1829,6 +1901,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-09-15T14:00:00Z",
     "updatedAt": "2026-09-15T14:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [
       "0a623529-957a-5edd-92de-9c0acccb8bfc"
     ],
@@ -1996,6 +2074,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-18T14:00:00Z",
     "updatedAt": "2026-09-22T13:00:00Z",
+    "tokenization": {
+      "state": "REQUESTED",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [
       "0a623529-957a-5edd-92de-9c0acccb8bfc"
     ],
@@ -2169,6 +2253,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-09-16T13:30:00Z",
     "updatedAt": "2026-09-24T22:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": 75,
     "targetAbvPercent": null,
@@ -2317,6 +2407,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-14T13:15:00Z",
     "updatedAt": "2026-09-17T15:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": 75,
     "targetAbvPercent": null,
@@ -2476,6 +2572,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2024-03-13T14:00:00Z",
     "updatedAt": "2025-08-06T16:00:00Z",
+    "tokenization": {
+      "state": "CHANGES_REQUESTED",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [],
     "plannedFormatCl": 75,
     "targetAbvPercent": null,
@@ -2643,6 +2745,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-12T14:00:00Z",
     "updatedAt": "2025-12-02T16:00:00Z",
+    "tokenization": {
+      "state": "READY",
+      "quota": 240,
+      "minted": 240,
+      "collectionId": "6d93ec05-4810-5477-a2ae-78a70eab7c45"
+    },
     "plannedTerroirIds": [
       "ceaf7563-9785-5331-93c3-f9f8193ff45f"
     ],
@@ -2835,6 +2943,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2024-03-07T14:00:00Z",
     "updatedAt": "2026-08-26T15:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [
       "e26c2890-b4e4-5973-aec2-0f092355ad3b"
     ],
@@ -3032,6 +3146,12 @@
     "complianceIssuesOpen": 0,
     "createdAt": "2025-03-12T14:00:00Z",
     "updatedAt": "2026-03-12T16:00:00Z",
+    "tokenization": {
+      "state": "NONE",
+      "quota": 0,
+      "minted": 0,
+      "collectionId": null
+    },
     "plannedTerroirIds": [
       "7e56480f-c3fb-5706-9723-54e4a4c1b5e6"
     ],
@@ -3203,8 +3323,8 @@
     "lotCode": "CVJ-2026-SINGANI-004",
     "name": "Singani Gran Reserva 2026",
     "productType": "SINGANI",
-    "stage": "CERTIFIED",
-    "stageChangedAt": "2026-09-24T15:00:00Z",
+    "stage": "ANCHORED",
+    "stageChangedAt": "2026-09-24T15:02:00Z",
     "awaitingBifurcation": false,
     "harvestYear": 2026,
     "estimatedBottles": 2950,
@@ -3221,7 +3341,13 @@
     "dossierStatus": "CLOSED",
     "complianceIssuesOpen": 0,
     "createdAt": "2026-03-07T14:00:00Z",
-    "updatedAt": "2026-09-24T15:00:00Z",
+    "updatedAt": "2026-09-24T15:02:00Z",
+    "tokenization": {
+      "state": "PUBLISHED",
+      "quota": 60,
+      "minted": 60,
+      "collectionId": "b2cae191-9e2f-5a4e-bfea-8e1ff140cdf0"
+    },
     "plannedTerroirIds": [
       "536b1e93-996e-5835-9794-02c12f1319c4"
     ],
@@ -3395,6 +3521,179 @@
       "userId": "673581e1-9df3-5160-970d-b6bfc72286ac",
       "fullName": "Lic. Lucía Rojas",
       "role": "ENOLOGIST"
+    }
+  },
+  {
+    "id": "aa3d8614-2fc6-5f53-94f9-e8cdb76f6986",
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "reference": "CVJ-L2026-006",
+    "lotCode": null,
+    "name": "Singani Preventa 2026",
+    "productType": "SINGANI",
+    "stage": "ORIGIN",
+    "stageChangedAt": "2026-09-19T14:00:00Z",
+    "awaitingBifurcation": false,
+    "harvestYear": 2026,
+    "estimatedBottles": 3000,
+    "projectedBottles": 3000,
+    "bottles": null,
+    "nextLock": null,
+    "phyto": {
+      "pending": 0,
+      "quarantine": 0,
+      "approved": 0,
+      "rejected": 0
+    },
+    "labStatus": "NOT_RECORDED",
+    "dossierStatus": "OPEN",
+    "complianceIssuesOpen": 0,
+    "createdAt": "2026-09-19T14:00:00Z",
+    "updatedAt": "2026-09-19T14:00:00Z",
+    "tokenization": {
+      "state": "PUBLISHED",
+      "quota": 100,
+      "minted": 100,
+      "collectionId": "20c275fc-7330-5935-911c-2c5800a0911a"
+    },
+    "plannedTerroirIds": [
+      "0a623529-957a-5edd-92de-9c0acccb8bfc"
+    ],
+    "plannedFormatCl": 75,
+    "targetAbvPercent": 40,
+    "targetReadyDate": null,
+    "estimatedReadyDate": null,
+    "estimatedReadyBasis": null,
+    "estimatedBottlesHistory": [
+      {
+        "value": 3000,
+        "at": "2026-09-19T14:00:00Z",
+        "by": {
+          "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+          "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+          "fullName": "Rosa Camargo",
+          "role": "OWNER"
+        },
+        "reason": null
+      }
+    ],
+    "locks": [],
+    "rules": {
+      "takenAt": "2026-09-19T14:00:00Z",
+      "origin": "LOT_CREATION",
+      "singani": {
+        "minAltitudeMasl": 1600,
+        "requiredVarieties": [
+          "Moscatel de Alejandría"
+        ],
+        "minRestDays": 180
+      },
+      "wine": {
+        "minAgingMonths": 0
+      },
+      "phytosanitary": {
+        "requireApproved": true
+      },
+      "bottling": {
+        "maxLossPercent": 5
+      },
+      "lab": {
+        "limits": {
+          "metanol": {
+            "unidad": "mg/100 ml a.a.",
+            "max": 200
+          },
+          "cobre": {
+            "unidad": "mg/l",
+            "max": 6
+          },
+          "acidezVolatil": {
+            "unidad": "g/l",
+            "max": 1.2
+          }
+        }
+      },
+      "legalExceptions": [],
+      "sources": {
+        "trazabilidad.singani.altitudMinimaMsnm": "GLOBAL",
+        "trazabilidad.singani.variedadesExigidas": "GLOBAL",
+        "trazabilidad.singani.reposoMinimoDias": "GLOBAL",
+        "trazabilidad.vino.crianzaMinimaMeses": "GLOBAL",
+        "trazabilidad.fitosanitario.exigirAprobado": "GLOBAL",
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": "GLOBAL",
+        "trazabilidad.excepcionMinimoLegal": "GLOBAL",
+        "trazabilidad.laboratorio.limites": "GLOBAL"
+      },
+      "values": {
+        "trazabilidad.singani.altitudMinimaMsnm": 1600,
+        "trazabilidad.singani.variedadesExigidas": [
+          "Moscatel de Alejandría"
+        ],
+        "trazabilidad.singani.reposoMinimoDias": 180,
+        "trazabilidad.vino.crianzaMinimaMeses": 0,
+        "trazabilidad.fitosanitario.exigirAprobado": true,
+        "trazabilidad.embotellado.mermaMaximaPorcentaje": 5,
+        "trazabilidad.excepcionMinimoLegal": false,
+        "trazabilidad.laboratorio.limites": {
+          "metanol": {
+            "max": 200,
+            "unidad": "mg/100 ml a.a."
+          },
+          "cobre": {
+            "max": 6,
+            "unidad": "mg/l"
+          },
+          "acidezVolatil": {
+            "max": 1.2,
+            "unidad": "g/l"
+          }
+        }
+      }
+    },
+    "denomination": {
+      "status": "ELIGIBLE",
+      "checks": [
+        {
+          "rule": "ALTITUDE",
+          "settingKey": "trazabilidad.singani.altitudMinimaMsnm",
+          "required": 1600,
+          "legalMinimum": 1600,
+          "actual": 2320,
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        },
+        {
+          "rule": "VARIETY",
+          "settingKey": "trazabilidad.singani.variedadesExigidas",
+          "required": [
+            "Moscatel de Alejandría"
+          ],
+          "legalMinimum": [
+            "Moscatel de Alejandría"
+          ],
+          "actual": "Moscatel de Alejandría",
+          "pass": true,
+          "terroirId": "0a623529-957a-5edd-92de-9c0acccb8bfc"
+        }
+      ],
+      "rulesSource": "LOT_SNAPSHOT",
+      "evaluatedAt": "2026-09-25T12:00:00Z"
+    },
+    "complianceIssues": [],
+    "links": {
+      "harvestBatchIds": [],
+      "tankIds": [],
+      "wineAgingBatchIds": [],
+      "productionBatchIds": [],
+      "bottlingBatchId": null,
+      "labAnalysisIds": []
+    },
+    "discarded": null,
+    "notes": "Lote de la preventa de 2026.",
+    "createdBy": {
+      "membershipId": "2b1fcc30-22ff-56cd-89d0-5862b6ec90f7",
+      "userId": "7e3203a2-5462-56f5-b3c6-54820da85f80",
+      "fullName": "Rosa Camargo",
+      "role": "OWNER"
     }
   }
 ]

@@ -2,6 +2,38 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.6.0-rc.1] · 2026-10-09
+
+**Ola 3 · tokenización y cadena** (`plan/contratos/o3-tokenizacion.md`). Pre-release sobre `dev`. El contrato es el OpenAPI de la apertura del backend (rama `feat/o3-be-apertura`, `157dee4`: 212 operaciones, 54 nuevas), que aún no está desplegado: ver `docs/CONTRATO.md` §13.1. Instalación: `pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.1/drinks-on-chain-mocks-0.6.0-rc.1.tgz`.
+
+### Añadido
+
+- **Dominios `tokenization` y `chain`** (entrada raíz): esquemas zod generados de los DTO del OpenAPI (`TokenizationRequestSchema`, `PlatformTokenizationRequestSchema`, `CollectionSchema`, `MintSchema`, `TokenSchema`, `LotClosureSchema`, `WineryLotClosureSchema`, `LotTokenizationStatusSchema`, `CollectionMetricsSchema`, `WineryChainIdentitySchema`, `WineryChainAccountViewSchema`, `ChainTxRefSchema`, `ChainTransactionSchema`, `DossierAnchorSchema`, `ChainEventSchema`, `ChainAlertSchema`, `ReconciliationRunSchema`, `PlatformChainAccountsSchema`, `PublicChainRegistrySchema`, `PublicDossierVerificationSchema`, `PublicNftMetadataSchema`… y los de entrada), sus tipos y enumeraciones (`CHAIN_TX_STATUSES`, `CHAIN_TX_KINDS`, `TOKENIZATION_REQUEST_STATUSES`, `TOKENIZATION_COLLECTION_STATUSES`, `TOKEN_STATUSES`, `LOT_TOKENIZATION_STATES`…) e `isValidStrKey`.
+- **Handlers de las 54 rutas nuevas** con las reglas del contrato (cuota, una solicitud abierta, solo el dueño, transiciones 409 y reglas 422, permisos) y una **red simulada**: las transacciones avanzan `PENDING → BUILDING → SUBMITTED → CONFIRMED`, la emisión crea los NFT al confirmarse, certificar un lote registra su anclaje y al confirmarse pasa a `ANCHORED`. Control con `mockChain` (`advance`, `settle`, `failNext`, `setMode`, `setMintEnabled`, `pending`; también en `window.__docMocks.chain`) y con `advanceMockClock`.
+- **Fixtures** `fixtures/chain/` y `fixtures/tokenization/` (`chainFixtures`, `tokenizationFixtures`): identidades, transacciones, cuentas de la plataforma, alertas, eventos, conciliaciones, registro, cuenta de cada bodega y verificaciones; solicitudes, colecciones, 400 NFT, cierres, estado por lote y metadatos. Lote nuevo «Singani Preventa 2026» (`PREVENTA_CASE`). Direcciones `G…`/`C…` y hashes con forma válida que no existen en testnet; `explorerUrl` siempre construido.
+- **Escenarios** `identidad-preparandose`, `emision-en-curso`, `emision-fallida`, `anclaje-pendiente`, `faltante-botellas`, `alerta-evento-inesperado` y `cambios-pedidos` (`CHAIN_SCENARIOS`).
+- **Público**: `GET /v1/public/chain/registry`, `/.well-known/stellar.toml`, `GET /v1/public/lots/{lotCode}/verification`, `GET /v1/public/nft/{winerySlug}/{tokenId}` y `GET /v1/public/collections/images/{imageId}`.
+- **Borrador `marketplace`** (contrato §13.1, fuera del OpenAPI, `X-Mock-Draft`): `GET /v1/me/consumer`, pedidos y pasarela de prueba (`ConsumerProfileSchema`, `OrderSchema`, `MARKETPLACE_DRAFT_CONTRACT`).
+- Opción `publicApiBaseUrl` de los handlers; `RouteSpec.idempotent: 'required'`.
+
+### Cambiado (revisa tu app)
+
+- **`LotSummary.tokenization`** (`state`, `quota`, `minted`, `collectionId`) es obligatorio, igual que `TraceDashboard.tokenization` y `Dashboard.tokenization` / `Dashboard.chain`. Las alertas abiertas de la cadena se suman a `Dashboard.alerts`.
+- **`ANCHORED` ya ocurre**: «Singani Gran Reserva 2026» está `ANCHORED` en los fixtures (antes `CERTIFIED`) y **ningún lote de la demo queda `CERTIFIED`** (salvo en el escenario `anclaje-pendiente`). Cerrar un expediente deja el lote `CERTIFIED` con `dossier.anchor.status = 'PENDING'` hasta que la red confirme (`mockChain.settle()`, o solo en el navegador).
+- **`LotDossier.anchor` y `PublicLotPassport.dossier.anchor`** dejan de ser siempre `null`: `DossierAnchorSchema` / `PublicDossierAnchorSchema`.
+- **Línea de tiempo**: tipos nuevos `TOKENIZATION_AUTHORIZED`, `NFT_MINTED`, `COLLECTION_PUBLISHED`, `DOSSIER_ANCHORED`, `TOKENS_REDEEMABLE`, `SHORTFALL_DETECTED` (los cuatro centrales, públicos: salen en el pasaporte).
+- **Lote nuevo en Cinti Viejo** (`CVJ-L2026-006`): el siguiente que se cree es `CVJ-L2026-007`, y el panel cuenta dos lotes en origen.
+- **`GET /v1/users/me/wallet`**: 404 `CHN_WALLET_NOT_AVAILABLE` para el personal; el consumidor recibe su dirección derivada.
+- **Bodegas**: `stellarPublicKey` es la cuenta real o `null`, `onchainProducerId` siempre `null`, `onchainRegisterTxHash` el hash de la creación de la cuenta o `null`.
+- **`PATCH /v1/lots/{id}`**: 422 `TOK_ESTIMATE_BELOW_MINTED` si la estimación baja de lo emitido.
+- **Matriz de permisos**: capacidades `tokenization`, `chain` y `chain.admin`.
+- **Catálogo (borrador)**: cada colección lleva `id`, `saleState` y `counts.available`; «Singani Preventa 2026» y «Singani Gran Reserva 2026» salen de su colección real (la segunda, 60 botellas a Bs 280).
+- El estado guardado en `localStorage` por 0.5 se descarta.
+
+### Pendiente (`rc.2`)
+
+Correos de la tokenización, más comprobaciones de la conciliación y del indexador, y el cierre con NFT vendidos sin botella como escenario (`docs/CONTRATO.md` §13.8).
+
 ## [0.5.0] · 2026-10-04
 
 **Ola 2 · ERP confiable y dominio público** (`plan/contratos/o2-erp-confiable.md`). Versión estable que reúne `rc.1`–`rc.3`. El contrato es el OpenAPI que sirve el backend desplegado (`b82beed`, su `v0.2.0`: 137 rutas, 158 operaciones, 266 esquemas, sin rutas legadas ni operaciones con 501), traído otra vez con `pnpm openapi:pull` desde el servidor: es idéntico al que `rc.3` fijó desde la rama de cierre. Los pasaportes públicos de los nueve lotes embotellados de los fixtures coinciden con los del servidor tras regenerar su semilla, salvo lo que se indica en «Fixtures». Detalle de cada candidata en sus entradas de abajo y en [docs/CONTRATO.md](docs/CONTRATO.md) §10–§12.

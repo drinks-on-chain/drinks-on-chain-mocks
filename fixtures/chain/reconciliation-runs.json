@@ -1,0 +1,41 @@
+[
+  {
+    "id": "c7c9634f-a7d7-53ba-81e4-18a8bc07da4a",
+    "scope": "ALL",
+    "subjectId": null,
+    "trigger": "SCHEDULED",
+    "depth": "FULL",
+    "status": "DIFFERENCES",
+    "startedAt": "2026-09-15T06:30:00Z",
+    "finishedAt": "2026-09-15T06:30:00Z",
+    "checks": 21,
+    "issuesOpened": 1,
+    "issuesAutoResolved": 0
+  },
+  {
+    "id": "90986b9c-79e7-591f-bd6c-0e5b3dca2dd1",
+    "scope": "ALL",
+    "subjectId": null,
+    "trigger": "SCHEDULED",
+    "depth": "FULL",
+    "status": "OK",
+    "startedAt": "2026-09-25T06:30:00Z",
+    "finishedAt": "2026-09-25T06:30:00Z",
+    "checks": 21,
+    "issuesOpened": 0,
+    "issuesAutoResolved": 0
+  },
+  {
+    "id": "6af91988-45fc-5615-9f0b-ff4ca994046a",
+    "scope": "ALL",
+    "subjectId": null,
+    "trigger": "SCHEDULED",
+    "depth": "LIGHT",
+    "status": "OK",
+    "startedAt": "2026-09-25T11:00:00Z",
+    "finishedAt": "2026-09-25T11:00:00Z",
+    "checks": 15,
+    "issuesOpened": 0,
+    "issuesAutoResolved": 0
+  }
+]
