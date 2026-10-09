@@ -126,6 +126,7 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] Fixtures `fixtures/chain/` y `fixtures/tokenization/` con «Singani Preventa 2026» y direcciones con forma válida; siete escenarios de `/__mocks` · 09-10-2026
 - [x] Borrador `marketplace` (§13.1): perfil del consumidor, pedidos y pasarela de prueba, fuera de la prueba de contrato · 09-10-2026
 - [x] Prueba de contrato estricta de lo nuevo, `test/tokenization.test.ts` y `test/chain-fixtures.test.ts`; `docs/CONTRATO.md` §13, CHANGELOG y README · 09-10-2026
+- [x] Etiqueta `v0.6.0-rc.1` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.6.0-rc.1.tgz`, instalado por URL y probado en un proyecto limpio · 09-10-2026
 - [ ] `rc.2`: correos de la tokenización, más comprobaciones de la conciliación y del indexador, cierre con NFT vendidos sin botella como escenario (`docs/CONTRATO.md` §13.8)
 - [ ] `pnpm openapi:pull` contra el servidor cuando el backend despliegue la apertura (debe dar las mismas 212 operaciones)
 - [ ] Etiqueta estable `v0.6.0` en `main` al cerrar la Ola 3 (coordinación), con el dominio `marketplace` regenerado desde el OpenAPI borrador de la Etapa 4
