@@ -1,5 +1,6 @@
 import type { MarketplaceState } from '../../marketplace/handlers'
 import { chainFixtures } from '../../chain/fixtures'
+import { upgradeChainState } from '../../chain/state'
 import { backofficeFixtures } from '../../backoffice/fixtures'
 import type {
   MemberBlock,
@@ -56,6 +57,8 @@ export interface BackofficeState {
   resetTokens: Record<string, { userId: string; expiresAt: number; usedAt: string | null }>
   /** Enlaces de verificación de correo (cuenta). */
   emailTokens: Record<string, { userId: string; usedAt: string | null }>
+  /** Consumidores con el correo aún sin verificar (alta del borrador de la Etapa 4). */
+  emailUnverified?: Record<string, true>
   /** Preferencias de perfil (IAM-09). */
   prefs: Record<string, { notificationPrefs: NotificationPrefs; promotionsConsent: boolean }>
   /** Motivo del bloqueo de la cuenta completa por persona. */
@@ -109,6 +112,7 @@ function createBackofficeState(): BackofficeState {
     mfaFailures: {},
     resetTokens: {},
     emailTokens: {},
+    emailUnverified: {},
     prefs: {},
     accountBlocks: {},
     accountBlockedAt: {},
@@ -176,7 +180,7 @@ export function traceFromFixtures(): Omit<TraceState, 'wineries'> {
     bottleExports: [],
     voidedRecords: voidedRecordsOf(f.corrections),
     uploads: {},
-    chain: structuredClone(chainFixtures.state),
+    chain: upgradeChainState(structuredClone(chainFixtures.state)),
   }
 }
 

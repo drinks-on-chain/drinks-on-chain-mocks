@@ -203,7 +203,7 @@
     "name": "Singani Preventa 2026 · Botella 1 de 100",
     "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
     "image": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
-    "external_url": "http://localhost:3005/colecciones/singani-preventa-2026",
+    "external_url": "http://localhost:3005/colecciones/destileria-cinti-viejo/singani-preventa-2026",
     "attributes": [
       {
         "trait_type": "Bodega",
@@ -253,7 +253,7 @@
     "name": "Singani Preventa 2026 · Botella 100 de 100",
     "description": "Preventa del singani de la vendimia 2026 de Destilería Cinti Viejo: Moscatel de Alejandría de los parrales de Camargo, destilado en alambique de cobre y con reposo de seis meses antes del embotellado.",
     "image": "/v1/public/collections/images/c81888a5-684d-5505-b9cb-3c7e2402b4a9",
-    "external_url": "http://localhost:3005/colecciones/singani-preventa-2026",
+    "external_url": "http://localhost:3005/colecciones/destileria-cinti-viejo/singani-preventa-2026",
     "attributes": [
       {
         "trait_type": "Bodega",
@@ -295,6 +295,106 @@
       "collectionSize": 100,
       "tokenId": 159,
       "contract": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "status": "MINTED",
+      "passportUrl": null
+    }
+  },
+  "altos-de-calamuchita/240": {
+    "name": "Singani Preventa 2026 · Botella 1 de 80",
+    "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+    "image": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+    "external_url": "http://localhost:3005/colecciones/altos-de-calamuchita/singani-preventa-2026",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Bodega Altos de Calamuchita"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "ALT-L2026-007"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2026
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 1
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani Preventa 2026"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotReference": "ALT-L2026-007",
+      "lotCode": null,
+      "bottleNumber": 1,
+      "collectionSize": 80,
+      "tokenId": 240,
+      "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "status": "MINTED",
+      "passportUrl": null
+    }
+  },
+  "altos-de-calamuchita/319": {
+    "name": "Singani Preventa 2026 · Botella 80 de 80",
+    "description": "Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.",
+    "image": "/v1/public/collections/images/28060672-bdb1-595b-a097-29341637aaa0",
+    "external_url": "http://localhost:3005/colecciones/altos-de-calamuchita/singani-preventa-2026",
+    "attributes": [
+      {
+        "trait_type": "Bodega",
+        "value": "Bodega Altos de Calamuchita"
+      },
+      {
+        "trait_type": "Lote",
+        "value": "ALT-L2026-007"
+      },
+      {
+        "trait_type": "Bebida",
+        "value": "Singani"
+      },
+      {
+        "trait_type": "Añada",
+        "value": 2026
+      },
+      {
+        "trait_type": "Botella n.º",
+        "value": 80
+      },
+      {
+        "trait_type": "Colección",
+        "value": "Singani Preventa 2026"
+      },
+      {
+        "trait_type": "Estado",
+        "value": "Emitido"
+      }
+    ],
+    "properties": {
+      "winery": {
+        "slug": "altos-de-calamuchita",
+        "tradeName": "Bodega Altos de Calamuchita"
+      },
+      "lotReference": "ALT-L2026-007",
+      "lotCode": null,
+      "bottleNumber": 80,
+      "collectionSize": 80,
+      "tokenId": 319,
+      "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
       "status": "MINTED",
       "passportUrl": null
     }

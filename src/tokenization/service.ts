@@ -1,5 +1,5 @@
 import { enqueueTx, publishBlocker, setCollectionStatus, type ChainCtx } from '../chain/engine'
-import { collectionOfLot, identityOf, isOpenRequest, mintsOf, openRequestOfLot, tokensOf, type StoredClosure, type StoredCollection, type StoredMint, type StoredRequest } from '../chain/state'
+import { collectionOfLot, identityOf, isOpenRequest, mintsOf, openRequestOfLot, pushNotice, tokensOf, type StoredClosure, type StoredCollection, type StoredMint, type StoredRequest } from '../chain/state'
 import type { UserRef } from '../chain/schemas'
 import { ApiError } from '../erp/handlers/errors'
 import type { ErrorDetail, Lot, TraceActor } from '../erp/schemas'
@@ -218,6 +218,7 @@ export function createRequest(state: TraceState, ctx: ChainCtx, lot: Lot, body: 
     data: { requestId: request.id, kind: request.kind, quantity: body.quantity, resultingQuota: request.resultingQuota },
     resource: { type: 'tokenization_request', id: request.id },
   })
+  pushNotice(state.chain, { type: 'REQUEST_SUBMITTED', wineryId: lot.wineryId, requestId: request.id })
   // S-11 (no acordado): sin aprobación obligatoria, la solicitud completa se aprueba sola al enviarse.
   if (!requiresApproval) {
     const complete = collection !== null || missingCommercial({ ...request.commercialDraft, images: request.commercialDraft.imageKeys.length }).length === 0
@@ -250,6 +251,7 @@ export function resubmitRequest(state: TraceState, ctx: ChainCtx, request: Store
   request.status = 'SUBMITTED'
   request.assignee = null
   pushHistory(request, ctx, actor.fullName, message?.trim() || null)
+  pushNotice(state.chain, { type: 'REQUEST_RESUBMITTED', wineryId: request.wineryId, requestId: request.id, message: message?.trim() || null })
   return request
 }
 
@@ -289,19 +291,21 @@ export function reviewRequest(_state: TraceState, ctx: ChainCtx, request: Stored
   return request
 }
 
-export function requestChanges(_state: TraceState, ctx: ChainCtx, request: StoredRequest, message: string, fields: string[] | undefined, by: UserRef): StoredRequest {
+export function requestChanges(state: TraceState, ctx: ChainCtx, request: StoredRequest, message: string, fields: string[] | undefined, by: UserRef): StoredRequest {
   if (request.status !== 'IN_REVIEW') throw invalidRequestTransition(request.status, 'CHANGES_REQUESTED')
   request.status = 'CHANGES_REQUESTED'
   request.changeRequests.push({ id: ctx.newId('tokenization-change'), at: ctx.now, by, message, fields: fields ?? [], resolvedAt: null })
   pushHistory(request, ctx, by.fullName, message)
+  pushNotice(state.chain, { type: 'CHANGES_REQUESTED', wineryId: request.wineryId, requestId: request.id, message })
   return request
 }
 
-export function rejectRequest(_state: TraceState, ctx: ChainCtx, request: StoredRequest, reason: string, by: UserRef | null): StoredRequest {
+export function rejectRequest(state: TraceState, ctx: ChainCtx, request: StoredRequest, reason: string, by: UserRef | null): StoredRequest {
   if (request.status !== 'IN_REVIEW' && !(by === null && isOpenRequest(request))) throw invalidRequestTransition(request.status, 'REJECTED')
   request.status = 'REJECTED'
   request.decision = { outcome: 'REJECTED', at: ctx.now, reason, by: { userId: by?.userId ?? null, fullName: by?.fullName ?? null, system: by === null } }
   pushHistory(request, ctx, by?.fullName ?? SYSTEM, reason)
+  pushNotice(state.chain, { type: 'REQUEST_REJECTED', wineryId: request.wineryId, requestId: request.id, message: reason })
   return request
 }
 
@@ -346,8 +350,9 @@ export function approveRequest(
   if (!collection) {
     const missing = missingCommercial({ ...draft, images: draft.imageKeys.length })
     if (missing.length > 0) throw ruleError('TOK_COMMERCIAL_DATA_INCOMPLETE', 'Faltan datos comerciales obligatorios para aprobar', missing)
+    // El `slug` es único **por bodega** (no global): dos bodegas pueden tener una colección con el mismo nombre.
     const slug = slugify(draft.name!)
-    if (chain.collections.some((c) => c.slug === slug)) {
+    if (chain.collections.some((c) => c.wineryId === lot.wineryId && c.slug === slug)) {
       throw stateError('TOK_SLUG_TAKEN', `Ya existe una colección con el nombre «${draft.name}»`, [detail('TOK_SLUG_TAKEN', 'Elige otro nombre', { field: 'commercial.name', meta: { slug } })])
     }
     const id = ctx.newId('collection')
@@ -421,6 +426,7 @@ export function approveRequest(
   request.publishOnMint = body.publishOnMint === true
   request.decision = { outcome: 'APPROVED', at: ctx.now, reason: body.reason ?? null, by: { userId: by?.userId ?? null, fullName: by?.fullName ?? null, system: by === null } }
   pushHistory(request, ctx, by?.fullName ?? SYSTEM, body.reason ?? null)
+  pushNotice(chain, { type: 'REQUEST_APPROVED', wineryId: request.wineryId, requestId: request.id, collectionId: collection.id, data: { quantity: request.quantity } })
   return { request, collection, mint }
 }
 
@@ -450,7 +456,7 @@ export function updateCollection(state: TraceState, ctx: ChainCtx, collection: S
     if (c.name !== undefined && c.name.trim() !== collection.commercial.name && !collection.publishedAt) {
       // El `slug` sigue al nombre solo hasta la primera publicación.
       const slug = slugify(c.name)
-      if (state.chain.collections.some((other) => other.id !== collection.id && other.slug === slug)) {
+      if (state.chain.collections.some((other) => other.id !== collection.id && other.wineryId === collection.wineryId && other.slug === slug)) {
         throw stateError('TOK_SLUG_TAKEN', `Ya existe una colección con el nombre «${c.name}»`, [detail('TOK_SLUG_TAKEN', 'Elige otro nombre', { field: 'commercial.name', meta: { slug } })])
       }
       collection.slug = slug
@@ -486,12 +492,14 @@ export function publishCollection(state: TraceState, ctx: ChainCtx, collection: 
     data: { collectionId: collection.id },
     resource: { type: 'collection', id: collection.id },
   })
+  pushNotice(state.chain, { type: 'COLLECTION_PUBLISHED', wineryId: collection.wineryId, collectionId: collection.id })
   return collection
 }
 
-export function pauseCollection(_state: TraceState, ctx: ChainCtx, collection: StoredCollection, by: UserRef | null, reason: string): StoredCollection {
+export function pauseCollection(state: TraceState, ctx: ChainCtx, collection: StoredCollection, by: UserRef | null, reason: string): StoredCollection {
   if (collection.status !== 'PUBLISHED') throw invalidCollectionTransition(collection.status, 'PAUSED')
   setCollectionStatus(collection, ctx, 'PAUSED', by?.fullName ?? SYSTEM, reason)
+  pushNotice(state.chain, { type: 'COLLECTION_PAUSED', wineryId: collection.wineryId, collectionId: collection.id, message: reason })
   return collection
 }
 
@@ -499,6 +507,7 @@ export function resumeCollection(state: TraceState, ctx: ChainCtx, collection: S
   if (collection.status !== 'PAUSED') throw invalidCollectionTransition(collection.status, 'PUBLISHED')
   assertPublishable(state, ctx, collection)
   setCollectionStatus(collection, ctx, 'PUBLISHED', by.fullName, reason)
+  pushNotice(state.chain, { type: 'COLLECTION_RESUMED', wineryId: collection.wineryId, collectionId: collection.id, message: reason })
   return collection
 }
 
@@ -556,7 +565,7 @@ export function closureOf(state: TraceState, ctx: ChainCtx, collection: StoredCo
     unsoldPolicy: null,
     decision: null,
     // Solo los NFT afectados: primero los no vendidos con el número de botella más alto (S-23).
-    items: affected.map((t) => ({ tokenId: t.tokenId, bottleNumber: t.bottleNumber, status: t.status, outcome: 'PENDING', burnTxId: null, resolvedAt: null, orderId: null, paidAt: t.soldAt, note: null })),
+    items: affected.map((t) => ({ tokenId: t.tokenId, bottleNumber: t.bottleNumber, status: t.status, outcome: 'PENDING', burnTxId: null, resolvedAt: null, orderId: t.orderId ?? null, paidAt: t.soldAt, note: null })),
   }
   if (stored) Object.assign(stored, closure)
   else {
@@ -570,6 +579,7 @@ export function closureOf(state: TraceState, ctx: ChainCtx, collection: StoredCo
         data: { collectionId: collection.id, bottles, minted: tokens.length, shortfall },
         resource: { type: 'collection', id: collection.id },
       })
+      pushNotice(chain, { type: 'SHORTFALL_DETECTED', wineryId: collection.wineryId, collectionId: collection.id, data: { bottles, minted: tokens.length, shortfall, soldWithoutBottle } })
     }
   }
   return stored ?? closure

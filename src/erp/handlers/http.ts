@@ -1,3 +1,4 @@
+import { flushChainNotices } from '../../chain/notices'
 import { syncChainNetwork } from '../../chain/runtime'
 import { delay, http, HttpResponse, type HttpHandler } from 'msw'
 import type { z } from 'zod'
@@ -314,6 +315,8 @@ function buildHandlerFor(pattern: string, spec: RouteSpec, options: ErpHandlerOp
         })
       }
       spec.afterSuccess?.(ctx, result)
+      // Ola 3: los avisos que dejó la operación (o la red al avanzar) salen por correo.
+      flushChainNotices()
       if (writes) persistErpDb()
       const extra = { ...(spec.deprecated ? deprecationHeaders(spec.deprecated) : {}), ...(spec.draft ? { 'X-Mock-Draft': spec.draft } : {}) }
       return successResponse(request, url, Object.keys(extra).length > 0 ? { ...result, headers: { ...result.headers, ...extra } } : result, correlationId)

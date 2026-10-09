@@ -20,6 +20,10 @@ export const MAIL_PATHS = {
   applicationVerify: (token: string) => `/unirse/verificar?token=${encodeURIComponent(token)}`,
   passwordReset: (token: string) => `/restablecer-contrasena?token=${encodeURIComponent(token)}`,
   emailVerify: (token: string) => `/verificar-correo?token=${encodeURIComponent(token)}`,
+  // Ola 3 (propuesta de los mocks, como las anteriores): la misma ruta en el ERP y en el back office.
+  tokenizationRequest: (requestId: string) => `/tokenizacion/solicitudes/${encodeURIComponent(requestId)}`,
+  collection: (collectionId: string) => `/tokenizacion/colecciones/${encodeURIComponent(collectionId)}`,
+  chainAlerts: () => '/cadena/alertas',
 } as const
 
 export interface MailDraft {
@@ -31,13 +35,15 @@ export interface MailDraft {
   path: string | null
   token: string | null
   cta?: string
+  /** Enlace absoluto fuera de las apps (p. ej. el contrato en el explorador): sustituye a `app` + `path`. */
+  url?: string
 }
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 /** Convierte un borrador en el correo guardado. */
 export function renderEmail(draft: MailDraft, id: string, createdAt: string, urls: AppUrls): MockEmail {
-  const link = draft.app && draft.path ? `${urls[draft.app].replace(/\/+$/, '')}${draft.path}` : null
+  const link = draft.url ?? (draft.app && draft.path ? `${urls[draft.app].replace(/\/+$/, '')}${draft.path}` : null)
   const text = [...draft.lines, ...(link ? ['', `${draft.cta ?? 'Abrir'}: ${link}`] : []), '', '— Drinks on Chain'].join('\n')
   const html = [
     '<div style="font-family:Georgia,serif;color:#1d1b16;background:#fdfcf5;padding:24px">',

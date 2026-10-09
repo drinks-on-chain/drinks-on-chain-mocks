@@ -67,19 +67,26 @@ export function sortCollections<T extends RankedCollection>(collections: readonl
   return [...collections].sort(order[sort])
 }
 
+/** Clave de una colección en el catálogo: su `slug` solo es único **dentro de su bodega**. */
+export const collectionKey = (winerySlug: string, slug: string): string => `${winerySlug}/${slug}`
+
 /**
  * @experimental Borrador (§17.1). Colecciones del catálogo público a partir de los lotes con tipo
  * de producto y botellas (embotelladas, proyectadas o estimadas) de las bodegas activas, en el
  * orden por defecto (`featured`). No se ofrece un lote cuyo análisis vigente no es conforme.
  */
 export function buildCollections(state: TraceState, wineryOf: WineryResolver, now: string, sold: Record<string, number> = {}): PublicCollection[] {
+  // `sold`: botellas apartadas o vendidas en la sesión de cada colección de demostración, por **id**.
   return rankedCollections(state, wineryOf, now, sold).map(({ createdAt: _createdAt, ...collection }) => collection)
 }
 
 /** Las colecciones en el orden por defecto, con la fecha de su lote para poder reordenarlas. */
 export function rankedCollections(state: TraceState, wineryOf: WineryResolver, now: string, sold: Record<string, number> = {}): RankedCollection[] {
   const today = now.slice(0, 10)
-  const slugs = new Set<string>()
+  // El `slug` es único por bodega (como en el backend desde la Etapa 3): dos bodegas pueden repetirlo.
+  const keys = new Set<string>()
+  /** `slug` ya usados por una colección de demostración (su id sale del `slug`; el de la segunda bodega, de bodega + `slug`). */
+  const demoSlugs = new Set<string>()
   const out: RankedCollection[] = []
   for (const lot of [...state.lots].sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id))) {
     const winery = wineryOf(lot.wineryId)
@@ -89,9 +96,11 @@ export function rankedCollections(state: TraceState, wineryOf: WineryResolver, n
     const total = bottled ? bottleCodesSummary(bottleLotOf(state, lot.id)).active : (lot.estimatedBottles ?? lotProjection(state, lot).bottles)
     if (!total) continue
     const name = collectionName(state, lot)
-    let slug = slugify(name)
-    if (slugs.has(slug)) slug = `${slug}-${winery.slug}`
-    slugs.add(slug)
+    const real = state.chain.collections.find((c) => c.lotId === lot.id && c.status === 'PUBLISHED')
+    let slug = real?.slug ?? slugify(name)
+    // Dos lotes de la misma bodega con el mismo nombre: el segundo lleva su referencia.
+    if (keys.has(collectionKey(winery.slug, slug))) slug = `${slug}-${lot.reference.toLowerCase()}`
+    keys.add(collectionKey(winery.slug, slug))
     const seed = hash(slug)
     const status: PublicCollectionStatus = !bottled ? 'PRESALE' : seed % 5 === 0 ? 'SOLD_OUT' : 'ON_SALE'
     const sold0 = status === 'SOLD_OUT' ? total : Math.floor((total * ((seed % 60) + (bottled ? 20 : 5))) / 100)
@@ -100,14 +109,11 @@ export function rankedCollections(state: TraceState, wineryOf: WineryResolver, n
     const view = toLotView(state, lot, { today, now })
     // Ola 3: si el lote tiene una colección real publicada, la ficha sale de ella (nombre, precio,
     // disponibilidad e imagen); el resto del catálogo sigue siendo de demostración.
-    const real = state.chain.collections.find((c) => c.lotId === lot.id && c.status === 'PUBLISHED')
     if (real) {
       const tokens = state.chain.tokens.filter((t) => t.collectionId === real.id)
       const available = tokens.filter((t) => t.status === 'MINTED').length
       const realStatus: PublicCollectionStatus = available === 0 ? 'SOLD_OUT' : real.redeemableSince ? 'ON_SALE' : 'PRESALE'
       const images = real.commercial.images
-      slugs.delete(slug)
-      slugs.add(real.slug)
       out.push({
         id: real.id,
         slug: real.slug,
@@ -133,10 +139,12 @@ export function rankedCollections(state: TraceState, wineryOf: WineryResolver, n
       })
       continue
     }
-    const available = Math.max(0, total - sold0 - (sold[slug] ?? 0))
+    const id = uid(demoSlugs.has(slug) ? `public-collection:${collectionKey(winery.slug, slug)}` : `public-collection:${slug}`)
+    demoSlugs.add(slug)
+    const available = Math.max(0, total - sold0 - (sold[id] ?? 0))
     const demoStatus: PublicCollectionStatus = available === 0 ? 'SOLD_OUT' : status
     out.push({
-      id: uid(`public-collection:${slug}`),
+      id,
       slug,
       name,
       productType: lot.productType,

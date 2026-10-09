@@ -4264,6 +4264,112 @@
     "corrected": false
   },
   {
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "id": "f5158538-e377-525e-ac78-875230a72cb6",
+    "seq": 1,
+    "type": "LOT_CREATED",
+    "occurredAt": "2026-09-21T10:00:00Z",
+    "recordedAt": "2026-09-21T10:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    },
+    "summary": "Lote ALT-L2026-007 creado: Singani Preventa 2026",
+    "data": {
+      "reference": "ALT-L2026-007",
+      "productType": "SINGANI",
+      "harvestYear": 2026,
+      "estimatedBottles": 800,
+      "rulesTakenAt": "2026-09-21T10:00:00Z"
+    },
+    "resource": {
+      "type": "lot",
+      "id": "e702d4c7-129a-54de-bc38-76747ab65bd8"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "id": "7fa907fb-9458-5eb8-b0a1-2094461b303b",
+    "seq": 2,
+    "type": "TOKENIZATION_AUTHORIZED",
+    "occurredAt": "2026-09-21T11:00:00Z",
+    "recordedAt": "2026-09-21T11:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": {
+      "membershipId": "91095a47-b57d-52ed-b9c7-44d6894951e4",
+      "userId": "9f325701-3edb-52c3-b959-c8f532dc3c15",
+      "fullName": "Martín Calamuchita",
+      "role": "OWNER"
+    },
+    "summary": "Tokenización autorizada: 80 botellas",
+    "data": {
+      "requestId": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3",
+      "kind": "INITIAL",
+      "quantity": 80,
+      "resultingQuota": 80
+    },
+    "resource": {
+      "type": "tokenization_request",
+      "id": "d0ea9dcf-6765-5e5a-9e4d-7bfacf4db4b3"
+    },
+    "visibility": "INTERNAL",
+    "corrected": false
+  },
+  {
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "id": "d4ce9a38-68f5-520b-a94c-c6471e2db25b",
+    "seq": 3,
+    "type": "NFT_MINTED",
+    "occurredAt": "2026-09-22T11:01:00Z",
+    "recordedAt": "2026-09-22T11:01:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": null,
+    "summary": "80 botellas en preventa",
+    "data": {
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde",
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "quantity": 80,
+      "firstBottleNumber": 1,
+      "lastBottleNumber": 80,
+      "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4"
+    },
+    "resource": {
+      "type": "collection",
+      "id": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
+    "lotId": "e702d4c7-129a-54de-bc38-76747ab65bd8",
+    "id": "4e5b284d-3319-5c69-ad64-df17293de106",
+    "seq": 4,
+    "type": "COLLECTION_PUBLISHED",
+    "occurredAt": "2026-09-22T12:00:00Z",
+    "recordedAt": "2026-09-22T12:00:00Z",
+    "lateEntry": false,
+    "stage": "ORIGIN",
+    "actor": null,
+    "summary": "Colección «Singani Preventa 2026» publicada",
+    "data": {
+      "collectionId": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+    },
+    "resource": {
+      "type": "collection",
+      "id": "87e89d6a-9371-5ac0-a350-6e948d399cde"
+    },
+    "visibility": "PUBLIC",
+    "corrected": false
+  },
+  {
     "lotId": "05b7584c-13e0-5770-9336-9071197e3259",
     "id": "09ddd099-62f1-5eb8-a75f-7510b7558d25",
     "seq": 1,

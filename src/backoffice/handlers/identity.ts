@@ -304,6 +304,8 @@ export const identityRoutes: RouteSpec[] = [
         throw domainError(422, 'AUTH_EMAIL_TOKEN_INVALID', 'El enlace de verificación no es válido o ya se usó', 'token')
       }
       entry.usedAt = now()
+      // Alta del borrador de la Etapa 4: `GET /v1/me/consumer` pasa a `emailVerified: true`.
+      if (bo().emailUnverified) delete bo().emailUnverified![user.id]
       recordAudit(ctx, { action: 'USER_EMAIL_VERIFIED', resource: { type: 'user', id: user.id }, organizationId: null, actor: personActor(user, null, null) })
       return noContent()
     },

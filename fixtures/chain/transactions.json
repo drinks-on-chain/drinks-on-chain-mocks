@@ -127,7 +127,8 @@
     "result": {
       "returnValue": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
       "contractEvents": [
-        "role_granted"
+        "role_granted",
+        "base_uri_updated"
       ]
     },
     "history": [
@@ -305,7 +306,8 @@
     "result": {
       "returnValue": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
       "contractEvents": [
-        "role_granted"
+        "role_granted",
+        "base_uri_updated"
       ]
     },
     "history": [
@@ -483,7 +485,8 @@
     "result": {
       "returnValue": "CA5YHBMG7Z5QLIOAVT37WA57PLSEPP2QPOEHAOWPXYUQKQEK6EZQZ7FH",
       "contractEvents": [
-        "role_granted"
+        "role_granted",
+        "base_uri_updated"
       ]
     },
     "history": [
@@ -894,6 +897,274 @@
         "at": "2026-09-24T15:02:00Z",
         "txHash": "d95c2e239afc13b13d6433e387fbb1c9f72618e73cb6afab092b0d2c01fb9e9d",
         "sequence": "933554430874",
+        "errorCode": null,
+        "detail": null
+      }
+    ],
+    "nextAttemptAt": null,
+    "requestedBy": {
+      "userId": null,
+      "fullName": null,
+      "source": "WORKER"
+    },
+    "abandoned": null,
+    "correlationId": null
+  },
+  {
+    "id": "8f93c8a4-51f2-56eb-816b-625b53e88d14",
+    "kind": "MINT_BATCH",
+    "status": "CONFIRMED",
+    "network": "TESTNET",
+    "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+    "explorerUrl": "https://stellar.expert/explorer/testnet/tx/c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+    "ledger": 1850813,
+    "confirmedAt": "2026-09-22T11:01:00Z",
+    "attempts": 1,
+    "lastError": null,
+    "createdAt": "2026-09-22T11:00:00Z",
+    "updatedAt": "2026-09-22T11:01:00Z",
+    "intentKey": "mint:c6e87fa2-d274-5b00-a5c3-f76c65fe7218:0",
+    "subject": {
+      "type": "MINT",
+      "id": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218"
+    },
+    "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153",
+    "intent": {
+      "mintId": "c6e87fa2-d274-5b00-a5c3-f76c65fe7218",
+      "chunk": 0,
+      "amount": 80,
+      "lot": "ALT-L2026-007",
+      "contract": "CBFMG2HCZVU6YLXNGVAZ7DPPKX4LMOQETGFMCEWUZBEMVQAGCYUUPXVR",
+      "to": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS"
+    },
+    "sourceAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+    "signers": [
+      {
+        "role": "OPERATIONS",
+        "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "wineryId": null
+      },
+      {
+        "role": "WINERY",
+        "address": "GA6ASTAZUIUJZM56QUZCHRSHIEMYQ7CO3S3JLLQVWANWIRHGPD6DUCNS",
+        "wineryId": "bd7bf10b-1768-51fa-aa4e-6299f374a153"
+      }
+    ],
+    "feeChargedStroops": "70000",
+    "rentFeeStroops": "42000",
+    "maxFeeStroops": "10000000",
+    "result": {
+      "returnValue": 319,
+      "contractEvents": [
+        "consecutive_mint",
+        "lot_minted"
+      ]
+    },
+    "history": [
+      {
+        "attempt": 1,
+        "status": "PENDING",
+        "at": "2026-09-22T11:00:00Z",
+        "txHash": null,
+        "sequence": null,
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "BUILDING",
+        "at": "2026-09-22T11:01:00Z",
+        "txHash": null,
+        "sequence": null,
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "SUBMITTED",
+        "at": "2026-09-22T11:01:00Z",
+        "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+        "sequence": "863313722198",
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "CONFIRMED",
+        "at": "2026-09-22T11:01:00Z",
+        "txHash": "c90181fb560ff1659f77141f49663512771c13408fb4b5a24ad0eae0de2b6de4",
+        "sequence": "863313722198",
+        "errorCode": null,
+        "detail": null
+      }
+    ],
+    "nextAttemptAt": null,
+    "requestedBy": {
+      "userId": "886f4172-f40e-5a9c-b20b-04742409ddfd",
+      "fullName": "Camila Torrez",
+      "source": "API"
+    },
+    "abandoned": null,
+    "correlationId": null
+  },
+  {
+    "id": "b9c58147-aad2-5840-8c75-30dbdd7c9d41",
+    "kind": "EXTEND_TTL",
+    "status": "CONFIRMED",
+    "network": "TESTNET",
+    "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+    "explorerUrl": "https://stellar.expert/explorer/testnet/tx/19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+    "ledger": 1813373,
+    "confirmedAt": "2026-09-20T07:01:00Z",
+    "attempts": 1,
+    "lastError": null,
+    "createdAt": "2026-09-20T07:00:00Z",
+    "updatedAt": "2026-09-20T07:01:00Z",
+    "intentKey": "ttl:CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS:2026-09-20T07:00:00Z",
+    "subject": {
+      "type": "CONTRACT",
+      "id": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS"
+    },
+    "wineryId": "04de1441-989d-5c3e-b06f-033f3961d19d",
+    "intent": {
+      "target": "CDJ3R4GQ3COXWXOBPPC4Q4Z2N6U5B343UZT46VQHNDZ5JD3MDA47QCTS",
+      "days": 30
+    },
+    "sourceAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+    "signers": [
+      {
+        "role": "OPERATIONS",
+        "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "wineryId": null
+      }
+    ],
+    "feeChargedStroops": "420000",
+    "rentFeeStroops": "252000",
+    "maxFeeStroops": "10000000",
+    "result": {
+      "returnValue": null,
+      "contractEvents": []
+    },
+    "history": [
+      {
+        "attempt": 1,
+        "status": "PENDING",
+        "at": "2026-09-20T07:00:00Z",
+        "txHash": null,
+        "sequence": null,
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "BUILDING",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": null,
+        "sequence": null,
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "SUBMITTED",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+        "sequence": "111349607857",
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "CONFIRMED",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": "19ecf42db12737bea34eedaee4c0bbef5cad9cf220308eac4c30740cc23bcb61",
+        "sequence": "111349607857",
+        "errorCode": null,
+        "detail": null
+      }
+    ],
+    "nextAttemptAt": null,
+    "requestedBy": {
+      "userId": null,
+      "fullName": null,
+      "source": "WORKER"
+    },
+    "abandoned": null,
+    "correlationId": null
+  },
+  {
+    "id": "c110b4a8-45fb-54b6-9389-2c017a0b461b",
+    "kind": "EXTEND_TTL",
+    "status": "CONFIRMED",
+    "network": "TESTNET",
+    "txHash": "0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+    "explorerUrl": "https://stellar.expert/explorer/testnet/tx/0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+    "ledger": 1813374,
+    "confirmedAt": "2026-09-20T07:01:00Z",
+    "attempts": 1,
+    "lastError": null,
+    "createdAt": "2026-09-20T07:01:00Z",
+    "updatedAt": "2026-09-20T07:01:00Z",
+    "intentKey": "ttl:code:2026-09-20T07:01:00Z",
+    "subject": {
+      "type": "PLATFORM",
+      "id": "WASM"
+    },
+    "wineryId": null,
+    "intent": {
+      "target": "CODE",
+      "wasmHash": "c489ad686b938e55016dfb5db3e4f4c10f8c11b3442e58cdfd5bfb03526da5fd",
+      "days": 30
+    },
+    "sourceAccount": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+    "signers": [
+      {
+        "role": "OPERATIONS",
+        "address": "GB2DBQXFHGVMII43NJDBPHSXUA76N6WF2XSCUH4JEGH23PECVBKC423V",
+        "wineryId": null
+      }
+    ],
+    "feeChargedStroops": "65000000",
+    "rentFeeStroops": "39000000",
+    "maxFeeStroops": "100000000",
+    "result": {
+      "returnValue": null,
+      "contractEvents": []
+    },
+    "history": [
+      {
+        "attempt": 1,
+        "status": "PENDING",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": null,
+        "sequence": null,
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "BUILDING",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": null,
+        "sequence": null,
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "SUBMITTED",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": "0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+        "sequence": "58804006397",
+        "errorCode": null,
+        "detail": null
+      },
+      {
+        "attempt": 1,
+        "status": "CONFIRMED",
+        "at": "2026-09-20T07:01:00Z",
+        "txHash": "0db0fdedfd3c5b66f209fa6b2c93703c3212e11c1be7b57b7a459d7d0dfcf650",
+        "sequence": "58804006397",
         "errorCode": null,
         "detail": null
       }

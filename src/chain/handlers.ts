@@ -1,13 +1,15 @@
 import { findWinery, recordAudit } from '../backoffice/handlers/support'
 import { platformRolesWith } from '../backoffice/permissions'
 import { platform, trace } from '../erp/handlers/auth-context'
-import { getErpDb, tick } from '../erp/handlers/db'
+import { getErpDb, nowStamp, tick } from '../erp/handlers/db'
 import { ApiError, fieldError, invalid } from '../erp/handlers/errors'
 import { accepted, boolParam, enumParam, listResult, ok, parseBody, strParam, type RouteContext, type RouteSpec } from '../erp/handlers/http'
-import { chainAccountView } from '../tokenization/views'
+import { getScenario } from '../shared/scenarios'
+import type { WineryChainAccountView } from '../tokenization/schemas'
+import { chainAccountView, tokenCounts } from '../tokenization/views'
 import { chainCtx, userRefOf } from './runtime'
 import { CHAIN_ALERT_LEVELS, CHAIN_SUBJECT_TYPES, CHAIN_TX_KINDS, CHAIN_TX_STATUSES, ChainActionSchema, RECONCILIATION_STATUSES, ResolveChainAlertSchema, StartReconciliationSchema, type ChainTransaction } from './schemas'
-import { abandonTx, platformAccounts, provisionIdentity, resolveAlert, retryTx, runDetail, runReconciliation, setContractPaused, txNotFound } from './service'
+import { abandonTx, assertChainEnabled, platformAccounts, provisionIdentity, resolveAlert, retryTx, runDetail, runReconciliation, setContractPaused, txNotFound } from './service'
 import { identityView } from './views'
 
 // Handlers del dominio `chain` (contrato de la Ola 3 §2.4, §3.4, §3.5 y §8): transacciones, cuentas
@@ -20,6 +22,16 @@ const OPERATORS = platform(platformRolesWith('chain', 'FULL'))
 const ADMINS = platform(platformRolesWith('chain.admin', 'FULL'))
 
 const chain = () => getErpDb().chain
+
+/**
+ * Cuenta de la bodega. En el escenario `empty` sale vacía: la identidad tal cual, sin NFT, sin
+ * lotes, sin transacciones recientes y sin costes (el estado vacío de la pantalla 1F).
+ */
+function chainAccount(ctx: RouteContext, wineryId: string): WineryChainAccountView {
+  const view = chainAccountView(getErpDb(), chainCtx(ctx.auth), wineryId)
+  if (getScenario() !== 'empty') return view
+  return { ...view, totals: tokenCounts([]), byLot: [], recentTransactions: [], chainCosts: { feesChargedXlm: '0.0000000', since: null } }
+}
 
 function findTx(id: string): ChainTransaction {
   const tx = chain().transactions.find((t) => t.id === id)
@@ -112,7 +124,7 @@ export const chainRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/platform/chain/accounts',
     access: READERS,
-    handle: () => ok(platformAccounts(getErpDb())),
+    handle: () => ok(platformAccounts(getErpDb(), nowStamp())),
   },
   {
     method: 'get',
@@ -218,9 +230,9 @@ export const chainRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/platform/wineries/:id/chain-account',
     access: READERS,
-    handle({ auth, params }) {
-      const winery = findWinery(params.id!)
-      return ok(chainAccountView(getErpDb(), chainCtx(auth), winery.id))
+    handle(ctx) {
+      const winery = findWinery(ctx.params.id!)
+      return ok(chainAccount(ctx, winery.id))
     },
   },
   {
@@ -231,6 +243,7 @@ export const chainRoutes: RouteSpec[] = [
       const { request, auth, params } = ctx
       const winery = findWinery(params.id!)
       const body = await parseBody(request, ChainActionSchema)
+      assertChainEnabled(getErpDb())
       tick()
       provisionIdentity(getErpDb(), chainCtx(auth), winery.id, userRefOf(auth))
       audit(ctx, 'WINERY_CHAIN_PROVISION_RETRIED', winery.id, { type: 'winery', id: winery.id }, null, body.reason)
@@ -247,6 +260,7 @@ export const chainRoutes: RouteSpec[] = [
         const { request, auth, params } = ctx
         const winery = findWinery(params.id!)
         const body = await parseBody(request, ChainActionSchema)
+        assertChainEnabled(getErpDb())
         const at = tick()
         setContractPaused(getErpDb(), chainCtx(auth), winery.id, action === 'pause', userRefOf(auth), at)
         audit(ctx, action === 'pause' ? 'CHAIN_CONTRACT_PAUSED' : 'CHAIN_CONTRACT_UNPAUSED', winery.id, { type: 'winery', id: winery.id }, null, body.reason)
@@ -260,10 +274,10 @@ export const chainRoutes: RouteSpec[] = [
     method: 'get',
     path: '/v1/organizations/current/chain-account',
     access: trace(null),
-    handle({ auth }) {
+    handle(ctx) {
       // El personal de plataforma la consulta con `?wineryId=`.
-      if (!auth.tenantId) throw invalid([fieldError('wineryId', 'Indica la bodega (?wineryId=)')])
-      return ok(chainAccountView(getErpDb(), chainCtx(auth), auth.tenantId))
+      if (!ctx.auth.tenantId) throw invalid([fieldError('wineryId', 'Indica la bodega (?wineryId=)')])
+      return ok(chainAccount(ctx, ctx.auth.tenantId))
     },
   },
 ]

@@ -18,7 +18,8 @@ import {
   WineryChainAccountViewSchema,
   WineryChainIdentitySchema,
 } from '../src'
-import { chainFixtures as C, erpFixtures as F, mockAccountAddress, mockContractAddress, mockTxHash, PREVENTA_CASE, publicFixtures, SINGANI_CASE, tokenizationFixtures as T } from '../src/fixtures'
+import { CHAIN_ALERT_CODES, CHAIN_ALERT_SUBJECT_TYPES } from '../src'
+import { chainFixtures as C, erpFixtures as F, mockAccountAddress, mockContractAddress, mockTxHash, PREVENTA_CASE, publicFixtures, SAME_SLUG_CASE, SINGANI_CASE, tokenizationFixtures as T } from '../src/fixtures'
 import { base64ToHex, hexToBase64 } from '../src/shared/strkey'
 
 // Fixtures de la Ola 3 (`fixtures/chain/` y `fixtures/tokenization/`): cada archivo valida con su
@@ -126,7 +127,12 @@ describe('coherencia de los fixtures de la Ola 3', () => {
       ['Singani Gran Reserva 2026', 'PUBLISHED', 'ON_SALE', 60],
       ['Singani El Portillo 2025', 'READY', null, 240],
       [PREVENTA_CASE.name, 'PUBLISHED', 'PRESALE', 100],
+      // rc.2: la misma preventa, con el mismo `slug`, en otra bodega (el `slug` es único por bodega).
+      [SAME_SLUG_CASE.name, 'PUBLISHED', 'PRESALE', SAME_SLUG_CASE.quota],
     ])
+    const sameSlug = T.collections.filter((c) => c.slug === SAME_SLUG_CASE.slug)
+    expect(sameSlug.map((c) => c.winery.slug).sort()).toEqual(['altos-de-calamuchita', 'destileria-cinti-viejo'])
+    expect(new Set(T.collections.map((c) => `${c.wineryId}/${c.slug}`)).size).toBe(T.collections.length)
     for (const collection of T.collections) {
       const tokens = T.tokens.filter((t) => t.collectionId === collection.id)
       expect(tokens).toHaveLength(collection.quota)
@@ -165,7 +171,7 @@ describe('coherencia de los fixtures de la Ola 3', () => {
   })
 
   it('bandeja: una solicitud en cada estado y una ampliación de cuota enviada', () => {
-    expect(T.requests.map((r) => r.status).sort()).toEqual(['APPROVED', 'APPROVED', 'APPROVED', 'CHANGES_REQUESTED', 'IN_REVIEW', 'REJECTED', 'SUBMITTED', 'WITHDRAWN'])
+    expect(T.requests.map((r) => r.status).sort()).toEqual(['APPROVED', 'APPROVED', 'APPROVED', 'APPROVED', 'CHANGES_REQUESTED', 'IN_REVIEW', 'REJECTED', 'SUBMITTED', 'WITHDRAWN'])
     expect(T.requests.find((r) => r.status === 'SUBMITTED')).toMatchObject({ kind: 'QUOTA_INCREASE', quantity: 500, resultingQuota: 740, limitsAtSubmission: { basis: 'BOTTLES', bottles: 1040, authorizedQuota: 240 } })
     // Una sola solicitud abierta por lote.
     const open = T.requests.filter((r) => ['SUBMITTED', 'IN_REVIEW', 'CHANGES_REQUESTED'].includes(r.status))
@@ -179,6 +185,7 @@ describe('coherencia de los fixtures de la Ola 3', () => {
       ['Singani El Molino 2026', 'REQUESTED'],
       ['Singani El Portillo 2025', 'READY'],
       ['Singani Gran Reserva 2026', 'PUBLISHED'],
+      ['Singani Preventa 2026', 'PUBLISHED'],
       ['Singani Preventa 2026', 'PUBLISHED'],
       ['Tannat La Angostura 2024', 'CHANGES_REQUESTED'],
     ])
@@ -209,10 +216,28 @@ describe('coherencia de los fixtures de la Ola 3', () => {
   it('conciliación y alertas: una diferencia antigua resuelta, un aviso abierto y saldos sobre el mínimo', () => {
     expect(C.platformAccounts).toMatchObject({ network: 'TESTNET', operations: { status: 'OK' }, anchor: { status: 'OK' } })
     expect(C.platformAccounts.wasmHash).toMatch(HASH)
-    expect(C.reconciliationRuns.map((r) => r.status)).toEqual(['DIFFERENCES', 'OK', 'OK'])
-    expect(C.alerts.map((a) => [a.code, a.level, a.resolvedAt === null])).toEqual([['LOW_BALANCE', 'WARNING', false], ['TTL_EXPIRING', 'WARNING', true]])
+    // rc.2: una ejecución abre una diferencia (`TTL_EXPIRING`) y la siguiente la cierra sola.
+    expect(C.reconciliationRuns.map((r) => [r.status, r.issuesOpened, r.issuesAutoResolved])).toEqual([['DIFFERENCES', 1, 0], ['DIFFERENCES', 1, 0], ['OK', 0, 1], ['OK', 0, 0], ['OK', 0, 0]])
+    expect(C.alerts.map((a) => [a.code, a.level, a.resolvedAt === null, a.resolution?.auto ?? null])).toEqual([
+      ['LOW_BALANCE', 'WARNING', false, false],
+      ['TTL_EXPIRING', 'WARNING', false, true],
+      ['TTL_EXPIRING', 'WARNING', true, null],
+    ])
+    const [opened, closed] = [C.reconciliationRuns[1]!, C.reconciliationRuns[2]!]
+    expect(C.alerts[1]).toMatchObject({ runId: opened.id, resolvedAt: closed.finishedAt, resolution: { by: 'Sistema', auto: true }, subject: { type: 'CONTRACT' }, actual: { days: 12 } })
+    // Entre las dos, la tarea de TTL alargó el contrato y el código (`EXTEND_TTL`, con su tope de comisión propio).
+    const extensions = C.transactions.filter((t) => t.kind === 'EXTEND_TTL')
+    expect(extensions.map((t) => [t.subject.type, t.maxFeeStroops])).toEqual([['CONTRACT', '10000000'], ['PLATFORM', '100000000']])
+    expect(extensions.every((t) => t.confirmedAt! > opened.finishedAt! && t.confirmedAt! < closed.startedAt)).toBe(true)
+    expect(C.platformAccounts.codeTtlDays).toBe(96)
+    expect(C.alerts.every((a) => (CHAIN_ALERT_SUBJECT_TYPES as readonly string[]).includes(a.subject.type) && (CHAIN_ALERT_CODES as readonly string[]).includes(a.code))).toBe(true)
     expect(C.events.every((e) => e.originatedBySystem && e.matchedTransactionId !== null)).toBe(true)
-    expect(C.events.filter((e) => e.type === 'lot_minted').map((e) => e.data.lot)).toEqual(['CVJ-L2026-005', 'ALT-L2025-004', 'CVJ-L2026-006'])
+    expect(C.events.filter((e) => e.type === 'lot_minted').map((e) => e.data.lot)).toEqual(['CVJ-L2026-005', 'ALT-L2025-004', 'ALT-L2026-007', 'CVJ-L2026-006'])
+    // Eventos del indexador: cada contrato nace con `role_granted` y `base_uri_updated`; los temas llevan los argumentos indexados.
+    expect(C.events.filter((e) => e.type === 'base_uri_updated')).toHaveLength(C.identities.length)
+    expect(C.events.find((e) => e.type === 'lot_minted')!.topics).toEqual(['lot_minted', 'CVJ-L2026-005', C.identities.find((i) => i.contract?.symbol === 'CVJ')!.account!.address])
+    expect(C.events.map((e) => e.rpcEventId)).toEqual([...C.events.map((e) => e.rpcEventId)].sort())
+    expect(C.state.indexer).toEqual({ lastLedger: C.state.ledger, lagSeconds: 12 })
     expect(T.lotClosures.map((c) => [c.status, c.shortfall])).toEqual([['NO_SHORTFALL', 0], ['NO_SHORTFALL', 0]])
   })
 })

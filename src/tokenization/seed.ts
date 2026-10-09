@@ -1,6 +1,6 @@
 import { advanceChain, raiseAlert, recordChainEvent, settleChain, type ChainCtx, type ChainEnv } from '../chain/engine'
-import { anchorDossier, provisionIdentity, runReconciliation } from '../chain/service'
-import { collectionOfLot, emptyChainState, identityOf, TESTNET_PASSPHRASE, type ChainState } from '../chain/state'
+import { anchorDossier, extendTtl, provisionIdentity, runReconciliation } from '../chain/service'
+import { collectionOfLot, emptyChainState, identityOf, TESTNET_PASSPHRASE, tokensOf, type ChainState, type StoredCollection } from '../chain/state'
 import type { UserRef } from '../chain/schemas'
 import type { Lot, TraceActor } from '../erp/schemas'
 import { actorOfMember } from '../erp/trace/backfill'
@@ -25,6 +25,19 @@ export const PREVENTA_CASE = {
   lotId: uid('demo:preventa-2026:lot'),
   /** Cuota de la solicitud inicial. */
   quota: 100,
+} as const
+
+/**
+ * Segunda bodega con una colección del **mismo `slug`** que otra (el `slug` es único por bodega, no
+ * global): «Singani Preventa 2026» de Bodega Altos de Calamuchita, en preventa a Bs 150.
+ */
+export const SAME_SLUG_CASE = {
+  name: PREVENTA_CASE.name,
+  slug: 'singani-preventa-2026',
+  wineryId: uid('winery:altos'),
+  lotId: uid('demo:altos-preventa-2026:lot'),
+  quota: 80,
+  priceMinor: 15_000,
 } as const
 
 /** Personal de operaciones y administración de los fixtures (quien revisa y aprueba). */
@@ -83,6 +96,31 @@ function seedPlatform(chain: ChainState, ctx: ChainCtx): void {
     networkPassphrase: TESTNET_PASSPHRASE,
   })
   chain.ledger = LEDGER_BASE
+  chain.indexer.lastLedger = LEDGER_BASE
+  // Al código le quedan 96 días de vida el día de referencia (baja con el reloj de los mocks).
+  chain.ttl.code = daysFrom(ctx, 96)
+}
+
+/** Fecha a `days` días del mediodía de hoy (vida del almacenamiento: `daysUntil` da `days` durante el día). */
+const daysFrom = (ctx: ChainCtx, days: number): string => isoSeconds(Date.parse(`${ctx.today}T12:00:00Z`) + days * DAY_MS + 12 * 3_600_000)
+
+/**
+ * Vende NFT de una colección a compradores de demostración (lo que hará la compra de la Ola 4): los
+ * primeros números de botella, con su fecha de pago y su pedido. `soldAt` crece con el número.
+ */
+export function sellDemoTokens(state: TraceState, ctx: ChainCtx, collection: StoredCollection, count: number, daysAgo = 4): void {
+  const base = Date.parse(`${ctx.today}T15:00:00Z`) - daysAgo * DAY_MS
+  const tokens = tokensOf(state.chain, collection.id)
+    .filter((t) => t.status === 'MINTED')
+    .sort((a, b) => a.bottleNumber - b.bottleNumber)
+    .slice(0, count)
+  tokens.forEach((t, i) => {
+    // Pedidos de dos botellas, uno por comprador de demostración.
+    const order = Math.floor(i / 2)
+    const soldAt = isoSeconds(base + order * 37 * 60_000)
+    Object.assign(t, { status: 'SOLD', owner: { kind: 'CONSUMER', address: mockAccountAddress(`demo-consumer:${collection.id}:${order}`) }, soldAt, orderId: uid(`demo-order:${collection.id}:${order}`) })
+    t.onchain = { owner: t.owner.address, burned: false, checkedAt: soldAt }
+  })
 }
 
 const PREVENTA_COMMERCIAL: CollectionCommercialInput = {
@@ -186,6 +224,31 @@ function resequenceLotEvents(state: TraceState, lotIds: readonly string[]): void
   }
 }
 
+/**
+ * Los pasos de la semilla no se ejecutan en orden cronológico (cada caso se siembra entero): al
+ * terminar, el ledger de cada transacción confirmada se recalcula por su fecha, para que ledgers y
+ * fechas crezcan juntos, y los eventos del indexador siguen a su transacción.
+ */
+function resequenceLedgers(chain: ChainState): void {
+  const confirmed = chain.transactions.filter((t) => t.ledger !== null && t.confirmedAt).sort((a, b) => a.confirmedAt!.localeCompare(b.confirmedAt!) || a.ledger! - b.ledger!)
+  let last = LEDGER_BASE
+  for (const tx of confirmed) {
+    last = Math.max(last + 1, ledgerAt(tx.confirmedAt!) + 1)
+    tx.ledger = last
+  }
+  const ledgerOfTx = new Map(confirmed.map((t) => [t.id, t.ledger!]))
+  const seen = new Map<number, number>()
+  for (const event of chain.events) {
+    const ledger = event.matchedTransactionId ? ledgerOfTx.get(event.matchedTransactionId) : undefined
+    if (ledger !== undefined) event.ledger = ledger
+    const index = seen.get(event.ledger) ?? 0
+    seen.set(event.ledger, index + 1)
+    event.rpcEventId = `${String(event.ledger).padStart(10, '0')}-${String(index).padStart(10, '0')}`
+  }
+  chain.events.sort((a, b) => a.rpcEventId.localeCompare(b.rpcEventId))
+  chain.ledger = Math.max(last, ledgerAt(confirmed.at(-1)?.confirmedAt ?? ''), chain.ledger)
+}
+
 /** Genera el estado de la Ola 3 sobre la trazabilidad ya sembrada (lotes de la Ola 2 incluidos). */
 export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
   state.chain = emptyChainState()
@@ -203,6 +266,15 @@ export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
     provisionIdentity(state, step, wineryId, null)
     settle(step)
   })
+
+  // Vida del almacenamiento de cada contrato (§8.3): la tarea de TTL la va alargando. Al de Altos le
+  // quedan 9 días (su alerta `TTL_EXPIRING` sigue abierta); el de Cinti Viejo bajó de 14 hace seis
+  // días y se alargó al día siguiente (paso 7).
+  const ttlDays: Record<string, number> = { [CVJ]: 6, [ALT]: 9, [CUR]: 25 }
+  for (const [wineryId, days] of Object.entries(ttlDays)) {
+    const contract = identityOf(chain, wineryId)?.contract
+    if (contract) chain.ttl.contracts[contract.address] = daysFrom(ctx, days)
+  }
 
   // 2. «Singani Gran Reserva 2026»: preventa de 60 botellas antes de certificarse (su anclaje, en el paso 4).
   const caseLot = state.lots.find((l) => l.id === SINGANI_CASE.lotId)
@@ -297,6 +369,40 @@ export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
     rejectRequest(state, at(28, 16), request, 'La bodega tiene documentación pendiente; podrá volver a pedirlo cuando se regularice.', DEMO_REVIEWERS.operations)
   }
 
+  // 5 bis. El `slug` es único por bodega: Altos tiene su propia «Singani Preventa 2026» (mismo
+  // `slug` que la de Cinti Viejo), en origen, con precio y publicada.
+  if (state.wineries.some((w) => w.id === ALT)) {
+    const owner = member(state, 'altos_admin')
+    const lot = createLot(
+      state,
+      { ...at(4, 10), actor: owner },
+      ALT,
+      { name: SAME_SLUG_CASE.name, harvestYear: Number(ctx.today.slice(0, 4)), productType: 'SINGANI', estimatedBottles: 800, plannedFormatCl: 75, targetAbvPercent: 40, notes: 'Primera preventa de singani de la bodega.' },
+      { id: SAME_SLUG_CASE.lotId },
+    )
+    const request = createRequest(
+      state,
+      at(4, 11),
+      lot,
+      {
+        quantity: SAME_SLUG_CASE.quota,
+        commercial: {
+          name: SAME_SLUG_CASE.name,
+          description: 'Preventa del singani de altura de Bodega Altos de Calamuchita: Moscatel de Alejandría de la vendimia 2026, destilado en la propia bodega.',
+          tastingNotes: 'Flores blancas y fruta de carozo; boca fresca, de final limpio.',
+          imageKeys: [{ key: imageKey(ALT, 'singani-preventa-2026.jpg'), alt: 'Botella de Singani Preventa 2026 de Altos de Calamuchita', isCover: true }],
+        },
+        confirm: true,
+      },
+      owner,
+    )
+    takeRequest(state, at(3, 10), request, DEMO_REVIEWERS.analyst)
+    const approved = at(3, 11)
+    const { collection } = approveRequest(state, approved, request, { price: { amountMinor: SAME_SLUG_CASE.priceMinor, currency: 'BOB' }, reason: 'Datos completos' }, DEMO_REVIEWERS.analyst)
+    settle(approved)
+    publishCollection(state, at(3, 12), collection, DEMO_REVIEWERS.analyst, 'Apertura de la preventa')
+  }
+
   // Los hechos de tokenización de los lotes ya avanzados se sembraron después que su trazabilidad:
   // la línea de tiempo de cada lote queda en orden cronológico.
   resequenceLotEvents(state, [caseLot?.id, portillo?.id].filter((id): id is string => Boolean(id)))
@@ -311,6 +417,16 @@ export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
   chain.platform.anchorBalanceXlm = '99.9998800'
   const low = chain.alerts.find((a) => a.runId === run.id)
   if (low) Object.assign(low, { resolvedAt: at(10, 13).now, resolution: { by: DEMO_REVIEWERS.admin.fullName, note: 'Cuenta de anclaje recargada con Friendbot.', auto: false } })
+  // Una diferencia que la propia conciliación abre y cierra: hace seis días al contrato de Cinti Viejo
+  // le quedaban 12 días de vida (`TTL_EXPIRING`); la tarea de TTL lo alargó esa madrugada
+  // (`EXTEND_TTL`) y la ejecución siguiente cerró sola la alerta (`resolution.auto`).
+  runReconciliation(state, at(6, 6, 30), { scope: 'ALL', depth: 'FULL' }, 'SCHEDULED')
+  const extension = at(5, 7)
+  extendTtl(state, extension, { wineryId: CVJ })
+  extendTtl(state, { ...extension, now: isoSeconds(Date.parse(extension.now) + 60_000) }, 'CODE')
+  settle(extension)
+  runReconciliation(state, at(5, 10, 30), { scope: 'ALL', depth: 'FULL' }, 'SCHEDULED')
+  // La tarea de TTL avisó hace dos días del contrato de Altos (sigue abierta: nadie lo ha alargado).
   raiseAlert(state, at(2, 7), {
     code: 'TTL_EXPIRING',
     level: 'WARNING',
@@ -322,6 +438,12 @@ export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
   })
   runReconciliation(state, at(0, 6, 30), { scope: 'ALL', depth: 'FULL' }, 'SCHEDULED')
   runReconciliation(state, at(0, 11), { scope: 'ALL', depth: 'LIGHT' }, 'SCHEDULED')
+  resequenceLedgers(chain)
+  // La extensión del código lo dejó con 30 días más; el día de referencia le quedan 96.
+  chain.ttl.code = daysFrom(ctx, 96)
+  chain.indexer = { lastLedger: chain.ledger, lagSeconds: chain.indexer.lagSeconds }
+  // Los avisos de la semilla no se envían: el buzón de los fixtures es el de la Ola 1.
+  chain.notices = []
 }
 
 // ---------------------------------------------------------------------------
@@ -369,11 +491,42 @@ export function purgeLotAnchor(state: TraceState, ctx: TraceCtx, lotId: string):
   if (lot) refreshLotStage(state, ctx, lot)
 }
 
-export const CHAIN_SCENARIOS = ['identidad-preparandose', 'emision-en-curso', 'emision-fallida', 'anclaje-pendiente', 'faltante-botellas', 'alerta-evento-inesperado', 'cambios-pedidos'] as const
+export const CHAIN_SCENARIOS = [
+  'identidad-preparandose',
+  'emision-en-curso',
+  'emision-fallida',
+  'anclaje-pendiente',
+  'faltante-botellas',
+  'alerta-evento-inesperado',
+  'cambios-pedidos',
+  // 0.6.0-rc.2
+  'faltante-vendidos',
+  'identidad-sin-aprovisionar',
+  'cadena-sin-configurar',
+] as const
 export type ChainScenarioName = (typeof CHAIN_SCENARIOS)[number]
 
-/** Botellas que faltan en el escenario `faltante-botellas`. */
+/** Botellas que faltan en los escenarios `faltante-botellas` y `faltante-vendidos`. */
 export const SHORTFALL_SCENARIO_BOTTLES = 20
+/** NFT que quedan sin vender en `faltante-vendidos`: el resto del faltante son NFT **vendidos** sin botella. */
+export const SHORTFALL_SCENARIO_UNSOLD = 10
+
+/** Deja una bodega sin identidad en la red (`NOT_PROVISIONED`): sin cuenta, sin contrato y sin nada emitido. */
+function dropIdentity(state: TraceState, wineryId: string): void {
+  const chain = state.chain
+  for (const lot of state.lots) if (lot.wineryId === wineryId && (collectionOfLot(chain, lot.id) || chain.requests.some((r) => r.lotId === lot.id))) purgeLotTokenization(state, lot.id)
+  const identity = identityOf(chain, wineryId)
+  const txIds = new Set(chain.transactions.filter((t) => t.wineryId === wineryId).map((t) => t.id))
+  for (const id of [identity?.accountTxId, identity?.contractTxId]) if (id) txIds.add(id)
+  if (identity?.contract) {
+    delete chain.ttl.contracts[identity.contract.address]
+    chain.events = chain.events.filter((e) => e.contractAddress !== identity.contract!.address)
+    chain.alerts = chain.alerts.filter((a) => a.subject.id !== identity.contract!.address)
+  }
+  dropTransactions(chain, txIds)
+  chain.identities = chain.identities.filter((i) => i.wineryId !== wineryId)
+  chain.alerts = chain.alerts.filter((a) => a.wineryId !== wineryId)
+}
 
 /**
  * Deja la base (recién cargada de los fixtures) en la situación del escenario. Las transacciones
@@ -395,6 +548,16 @@ export function applyChainScenario(state: TraceState, ctx: ChainCtx, name: Chain
       advanceChain(state, ctx)
       return
     }
+    case 'identidad-sin-aprovisionar':
+      // Altos sigue `ACTIVE` pero el relleno de identidades aún no la alcanzó: `NOT_PROVISIONED`, sin
+      // transacciones en vuelo. Operaciones la aprovisiona con `chain/provision`.
+      dropIdentity(state, ALT)
+      return
+    case 'cadena-sin-configurar':
+      // El entorno no tiene la cadena configurada: provision, pause y unpause → 409 `CHN_DISABLED`.
+      dropIdentity(state, ALT)
+      chain.enabled = false
+      return
     case 'emision-en-curso':
     case 'emision-fallida':
       purgeLotTokenization(state, PREVENTA_CASE.lotId)
@@ -411,7 +574,8 @@ export function applyChainScenario(state: TraceState, ctx: ChainCtx, name: Chain
       anchorDossier(state, ctx, lot)
       return
     }
-    case 'faltante-botellas': {
+    case 'faltante-botellas':
+    case 'faltante-vendidos': {
       // Se autorizó sobre la estimación y se embotelló menos: 20 NFT sin botella.
       const lot = state.lots.find((l) => l.wineryId === ALT && l.name === 'Singani El Portillo 2025')
       if (!lot) return
@@ -429,6 +593,9 @@ export function applyChainScenario(state: TraceState, ctx: ChainCtx, name: Chain
           imageKeys: [{ key: imageKey(ALT, 'singani-el-portillo-2025.jpg'), alt: 'Botella de Singani El Portillo 2025', isCover: true }],
         },
       })
+      // `faltante-vendidos`: la preventa se vendió casi entera; quedan 10 NFT sin vender, así que
+      // otros 10 **vendidos** se quedan sin botella (devolución o sustitución, ítem a ítem).
+      if (name === 'faltante-vendidos') sellDemoTokens(state, ctx, collection, bottles + SHORTFALL_SCENARIO_BOTTLES - SHORTFALL_SCENARIO_UNSOLD)
       closureOf(state, ctx, collection)
       return
     }

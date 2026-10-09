@@ -214,7 +214,10 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
         .map(([m]) => opKey(m, p)),
     )
     expect(inSpec).toEqual([])
-    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => opKey(r.method, r.path))).toEqual([])
+    // La única obsoleta de los mocks es un borrador fuera del OpenAPI: la ficha del catálogo por `slug`
+    // (rc.2: el `slug` es único por bodega; se retira en 0.6.0).
+    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated && !r.draft).map((r) => opKey(r.method, r.path))).toEqual([])
+    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated])).toEqual([['GET /v1/public/collections/{slug}', '/v1/public/collections/{winerySlug}/{slug}']])
   })
 
   it('lo retirado en el cierre H2 (contrato de la Ola 2 §16.2) no está en el OpenAPI ni en los mocks: rutas, DTO y campos de entrada', () => {
@@ -279,13 +282,16 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
       'GET /v1/orders/{id}',
       'GET /v1/public/collections',
       'GET /v1/public/collections/{slug}',
+      'GET /v1/public/collections/{winerySlug}/{slug}',
+      'GET /v1/public/purchase-settings',
       'POST /v1/orders',
       'POST /v1/payments/test/{paymentId}/simulate',
     ])
     expect(pending.adelantadas.filter((e) => e.borrador).map((e) => opKey(e.method, e.path)).sort()).toEqual(drafts)
     for (const r of MOCK_ROUTE_SPECS.filter((x) => x.draft)) {
       expect([COLLECTIONS_DRAFT_CONTRACT, MARKETPLACE_DRAFT_CONTRACT]).toContain(r.draft)
-      expect(r.draft).toBe(r.path.startsWith('/v1/public/collections') ? COLLECTIONS_DRAFT_CONTRACT : MARKETPLACE_DRAFT_CONTRACT)
+      // El catálogo de la Ola 2 (lista y ficha por `slug`) cita su contrato; lo demás, el §13.1 de la Ola 3.
+      expect(r.draft).toBe(['/v1/public/collections', '/v1/public/collections/:slug'].includes(r.path) ? COLLECTIONS_DRAFT_CONTRACT : MARKETPLACE_DRAFT_CONTRACT)
       expect(ahead.get(opKey(r.method, r.path))?.contrato).toBe(r.draft)
       expect(openApiOps.has(opKey(r.method, r.path))).toBe(false)
     }
@@ -1333,6 +1339,8 @@ const OLA3_SAMPLES: Record<string, Sample> = {
   'GET /v1/public/collections/images/{imageId}': { url: `/v1/public/collections/images/${colPreventa.commercial.images[0]!.id}`, status: 200 },
 
   // BORRADOR del Marketplace (§13.1): fuera del OpenAPI; se valida con el esquema zod de pendientes.json.
+  'GET /v1/public/collections/{winerySlug}/{slug}': { url: `/v1/public/collections/${colPreventa.winery.slug}/${colPreventa.slug}`, status: 200 },
+  'GET /v1/public/purchase-settings': { url: '/v1/public/purchase-settings', status: 200 },
   'GET /v1/me/consumer': { as: 'maria', url: '/v1/me/consumer', status: 200 },
   'POST /v1/orders': { as: 'maria', idem: true, url: '/v1/orders', body: { collectionId: colGranReserva.id, quantity: 2 }, status: 201 },
   'GET /v1/orders': {

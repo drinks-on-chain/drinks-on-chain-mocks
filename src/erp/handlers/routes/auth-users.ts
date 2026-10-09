@@ -1,4 +1,4 @@
-import { consumerAddressOf } from '../../../marketplace/handlers'
+import { consumerAddressOf, draftSignup, isDraftSignup } from '../../../marketplace/handlers'
 import {
   needsMfa,
   recordLogin,
@@ -297,10 +297,15 @@ export const authUserRoutes: RouteSpec[] = [
     method: 'post',
     path: '/v1/auth/signup',
     access: 'public',
-    async handle({ request, url }) {
+    async handle(ctx) {
+      const { request, url } = ctx
       // Solo consumidores: el registro de personal (`userRole`) se retiró en H1.
       const raw = await readJson(request)
       rejectRetiredFields(raw, ['userRole'])
+      // BORRADOR de la Etapa 4 (contrato de la Ola 3 §13.1): con `captchaToken` en el cuerpo, el alta
+      // responde 202 `VERIFICATION_SENT` y no abre sesión hasta verificar el correo. Sin él, el alta
+      // del OpenAPI vigente (201 con sesión).
+      if (isDraftSignup(raw)) return draftSignup(ctx, raw, { findByEmail: findUserByEmail, create: createUser })
       const body = validate(raw, SignupSchema)
       if (findUserByEmail(body.email)) throw conflict('El correo electrónico ya existe')
       const user = createUser(body)

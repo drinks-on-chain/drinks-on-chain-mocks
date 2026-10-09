@@ -12,6 +12,10 @@ export {
   MARKETPLACE_DRAFT_ROUTE_SPECS,
   MOCK_EXPLORER_BASE_URL,
   mockChain,
+  mockTokenization,
+  MINT_HOLD_CODES,
+  INDEXER_GAP_LEDGERS,
+  RECONCILED_ALERT_CODES,
   setMockPublicApiBaseUrl,
   TOKENIZATION_ROUTE_SPECS,
   TRANSIENT_CHAIN_ERRORS,
@@ -48,6 +52,11 @@ export type {
   ForcedChainFailure,
   MarketplaceState,
   MockChain,
+  MockTokenization,
+  ResubmitAsWineryOptions,
+  ChainDriftInput,
+  ChainDrift,
+  ChainNotice,
   ErpDb,
   ErpHandlerOptions,
   MailboxFilter,
@@ -59,6 +68,7 @@ export {
   getScenario,
   isDataScenario,
   isScenarioName,
+  PUBLIC_RESPONSE_SCENARIOS,
   resetScenario,
   RESPONSE_SCENARIOS,
   SCENARIO_DESCRIPTIONS,
@@ -74,7 +84,7 @@ export {
 } from './shared/scenarios'
 export { DEMO_NEW_PASSWORD, DEMO_PASSWORD, demoStaff, demoUsers, type DemoUser } from './erp/fixtures'
 export { PASSPORT_CASES, SINGANI_CASE, type PassportCase } from './erp/trace/demo'
-export { CHAIN_SCENARIOS, DEMO_REVIEWERS, PREVENTA_CASE, SHORTFALL_SCENARIO_BOTTLES, type ChainScenarioName } from './tokenization/seed'
-export { MARKETPLACE_DRAFT_CONTRACT } from './marketplace/schemas'
+export { CHAIN_SCENARIOS, DEMO_REVIEWERS, PREVENTA_CASE, SAME_SLUG_CASE, SHORTFALL_SCENARIO_BOTTLES, SHORTFALL_SCENARIO_UNSOLD, type ChainScenarioName } from './tokenization/seed'
+export { MARKETPLACE_DEMO_ACCOUNT, MARKETPLACE_DRAFT_CONTRACT } from './marketplace/schemas'
 export { DEFAULT_APP_URLS, type AppUrls } from './backoffice/mail'
 export { DEMO_TOTP_SECRET, generateTotp, MOCK_TOTP_BYPASS_CODE } from './shared/totp'

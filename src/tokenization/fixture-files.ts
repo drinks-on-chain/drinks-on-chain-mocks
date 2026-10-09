@@ -54,7 +54,7 @@ export function buildChainFixtureFiles(state: TraceState, ctx: ChainCtx): { chai
       'state.json': chain,
       'identities.json': chain.identities.map((i) => identityView(chain, i.wineryId)),
       'transactions.json': chain.transactions,
-      'platform-accounts.json': platformAccounts(state),
+      'platform-accounts.json': platformAccounts(state, ctx.now),
       'alerts.json': chain.alerts,
       'events.json': chain.events,
       'reconciliation-runs.json': chain.runs,

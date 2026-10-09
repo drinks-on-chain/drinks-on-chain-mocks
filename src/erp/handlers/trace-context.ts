@@ -115,7 +115,12 @@ function applyDataScenario(db: ErpDb, name: DataScenarioName | 'normal'): void {
     case 'faltante-botellas':
     case 'alerta-evento-inesperado':
     case 'cambios-pedidos':
+    case 'faltante-vendidos':
+    case 'identidad-sin-aprovisionar':
+    case 'cadena-sin-configurar':
       applyChainScenario(db, chainCtx(null), name)
+      // Los avisos que deja el escenario al rehacerse no se envían por correo.
+      db.chain.notices = []
       break
     case 'lote-con-incidencia':
       injectMigrationIssue(db, ctx)

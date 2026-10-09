@@ -3,7 +3,7 @@ import { appendLotEvent, lotBottling, refreshLotStage, type TraceCtx, type Trace
 import { mockTxHash } from '../shared/strkey'
 import { uid } from '../shared/uuid'
 import type { ChainAlert, ChainAlertLevel, ChainEvent, ChainSubject, ChainTransaction, ChainTxKind, ChainTxStatus } from './schemas'
-import { collectionOfLot, identityOf, mintsOf, tokensOf, txById, type ChainState, type ForcedChainFailure, type StoredCollection, type StoredToken } from './state'
+import { collectionOfLot, identityOf, mintsOf, pushNotice, tokensOf, TTL_EXTENSION_DAYS, txById, type ChainState, type ForcedChainFailure, type StoredCollection, type StoredToken } from './state'
 import { explorerTxUrl, isTxInFlight } from './views'
 
 // Red simulada de la Ola 3 (contrato §2.3): las rutas registran intenciones y un «worker» las hace
@@ -53,7 +53,11 @@ const ERROR_MESSAGES: Record<string, string> = {
   CHN_INSUFFICIENT_BALANCE: 'La cuenta de operaciones no tiene saldo suficiente',
   CHN_INTENT_REJECTED: 'La intención no cuadra con la base de datos: no se firmó',
   CHN_MINT_DISABLED: 'La emisión está desactivada en este entorno (CHAIN_MINT_ENABLED)',
+  CHN_WINERY_NOT_ACTIVE: 'La bodega no está activa: la emisión espera a que se reactive',
 }
+
+/** Códigos con los que una emisión espera en `PENDING` sin fallar (se reanuda sola al desaparecer la causa). */
+export const MINT_HOLD_CODES = ['CHN_MINT_DISABLED', 'CHN_WINERY_NOT_ACTIVE'] as const
 
 /** Comisión simulada por tipo (stroops), del orden de `docs/costes.md` del repo de contratos. */
 const FEES: Partial<Record<ChainTxKind, number>> = {
@@ -64,7 +68,11 @@ const FEES: Partial<Record<ChainTxKind, number>> = {
   PAUSE_CONTRACT: 65_000,
   UNPAUSE_CONTRACT: 65_000,
   BURN_UNSOLD: 80_000,
+  EXTEND_TTL: 420_000,
 }
+/** Extender el código cuesta ≈ 6,5 XLM por 30 días (precisiones de la apertura): tope propio de esa intención. */
+const EXTEND_CODE_FEE = 65_000_000
+const EXTEND_CODE_MAX_FEE = '100000000'
 const FIRST_MINT_FEE = 1_389_000
 
 /** Stroops → XLM con 7 decimales (`"0.1389000"`). */
@@ -123,7 +131,7 @@ export function enqueueTx(state: TraceState, ctx: ChainCtx, input: TxInput): Cha
     ],
     feeChargedStroops: null,
     rentFeeStroops: null,
-    maxFeeStroops: '10000000',
+    maxFeeStroops: input.kind === 'EXTEND_TTL' && input.intent.target === 'CODE' ? EXTEND_CODE_MAX_FEE : '10000000',
     result: null,
     history: [{ attempt: 1, status: 'PENDING', at: ctx.now, txHash: null, sequence: null, errorCode: null, detail: null }],
     nextAttemptAt: null,
@@ -163,7 +171,29 @@ export function raiseAlert(
     resolution: null,
   }
   state.chain.alerts.push(alert)
+  // §11: las alertas `CRITICAL` se avisan por correo a operaciones.
+  if (alert.level === 'CRITICAL') pushNotice(state.chain, { type: 'ALERT_CRITICAL', wineryId: alert.wineryId, alertId: alert.id, message: alert.message, data: { code: alert.code } })
   return alert
+}
+
+/** Temas del evento tal como los emite el contrato (el nombre y sus argumentos indexados). */
+function eventTopics(type: string, data: Record<string, unknown>): string[] {
+  const topic = (key: string) => (data[key] === undefined || data[key] === null ? [] : [String(data[key])])
+  switch (type) {
+    case 'role_granted':
+    case 'role_revoked':
+      return [type, ...topic('role'), ...topic('account')]
+    case 'consecutive_mint':
+      return [type, ...topic('to')]
+    case 'lot_minted':
+      return [type, ...topic('lot'), ...topic('to')]
+    case 'transfer':
+      return [type, ...topic('from'), ...topic('to')]
+    case 'burn':
+      return [type, ...topic('from')]
+    default:
+      return [type]
+  }
 }
 
 /** Evento de contrato que registra el indexador. */
@@ -185,13 +215,14 @@ export function recordChainEvent(
     ledgerClosedAt: ctx.now,
     txHash: input.tx?.txHash ?? input.txHash ?? mockTxHash(`event:${ledger}:${index}`),
     type: input.type,
-    topics: [input.type],
+    topics: eventTopics(input.type, input.data),
     data: input.data,
     matchedTransactionId: input.tx?.id ?? null,
     originatedBySystem: input.tx !== null,
     processedAt: ctx.now,
   }
   chain.events.push(event)
+  chain.indexer.lastLedger = Math.max(chain.indexer.lastLedger, ledger)
   return event
 }
 
@@ -234,6 +265,21 @@ function confirmMint(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
   const identity = collection && identityOf(chain, collection.wineryId)
   if (!mint || !collection || !identity?.contract || !identity.accountAddress) throw new Error('Red simulada: emisión sin colección o sin contrato')
   const amount = Number(tx.intent.amount)
+  if (takeMismatch(chain, 'MINT_BATCH')) {
+    // El valor devuelto y `lot_minted` no cuadran con lo pedido: no se registran los NFT ni se publica nada.
+    mint.status = 'FAILED'
+    tx.result = { returnValue: null, contractEvents: ['consecutive_mint'] }
+    raiseAlert(state, ctx, {
+      code: 'MINT_RANGE_MISMATCH',
+      level: 'CRITICAL',
+      subject: { type: 'MINT', id: mint.id },
+      wineryId: collection.wineryId,
+      message: 'La emisión se confirmó en la red pero su rango no cuadra: sin evento. No se registran sus NFT ni se publica la colección',
+      expected: { amount, lot: mint.lotArg, to: identity.accountAddress },
+      actual: { returnValue: null, event: null, txHash: tx.txHash },
+    })
+    return
+  }
   // Ids `u32` continuos entre los lotes del mismo contrato (DS-08).
   const firstTokenId = chain.tokens.filter((t) => t.wineryId === collection.wineryId).length
   const firstBottleNumber = tokensOf(chain, collection.id).length + 1
@@ -264,7 +310,7 @@ function confirmMint(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
   tx.result = { returnValue: range.lastTokenId, contractEvents: ['consecutive_mint', 'lot_minted'] }
   const contract = identity.contract.address
   recordChainEvent(state, ctx, { contractAddress: contract, wineryId: collection.wineryId, type: 'consecutive_mint', tx, data: { to: identity.accountAddress, fromTokenId: range.firstTokenId, toTokenId: range.lastTokenId } })
-  recordChainEvent(state, ctx, { contractAddress: contract, wineryId: collection.wineryId, type: 'lot_minted', tx, data: { lot: mint.lotArg, firstTokenId: range.firstTokenId, lastTokenId: range.lastTokenId, amount } })
+  recordChainEvent(state, ctx, { contractAddress: contract, wineryId: collection.wineryId, type: 'lot_minted', tx, data: { lot: mint.lotArg, to: identity.accountAddress, firstTokenId: range.firstTokenId, lastTokenId: range.lastTokenId, amount } })
   const all = mint.txIds.map((id) => txById(chain, id))
   if (!all.every((t) => t?.status === 'CONFIRMED')) {
     mint.status = 'IN_PROGRESS'
@@ -282,9 +328,11 @@ function confirmMint(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
     data: { collectionId: collection.id, mintId: mint.id, quantity: mint.quantity, firstBottleNumber: mint.ranges[0]!.firstBottleNumber, lastBottleNumber: range.lastBottleNumber, txHash: tx.txHash },
     resource: { type: 'collection', id: collection.id },
   })
+  pushNotice(chain, { type: 'NFT_MINTED', wineryId: collection.wineryId, collectionId: collection.id, data: { quantity: mint.quantity, sequence: mint.sequence, contract, txHash: tx.txHash } })
   if (collection.status !== 'MINTING') return
   if (collection.publishOnMint && !publishBlocker(state, ctx, collection)) {
     setCollectionStatus(collection, ctx, 'PUBLISHED', 'Sistema', 'Publicada al confirmarse la emisión')
+    pushNotice(chain, { type: 'COLLECTION_PUBLISHED', wineryId: collection.wineryId, collectionId: collection.id })
     appendLotEvent(state, ctx, lot, { type: 'COLLECTION_PUBLISHED', occurredAt: ctx.now, actor: null, summary: `Colección «${collection.commercial.name}» publicada`, data: { collectionId: collection.id }, resource: { type: 'collection', id: collection.id } })
   } else setCollectionStatus(collection, ctx, 'READY', 'Sistema', 'Emisión confirmada')
 }
@@ -293,9 +341,22 @@ function confirmAnchor(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): 
   const chain = state.chain
   const anchor = chain.anchors.find((a) => a.txId === tx.id)
   if (!anchor) throw new Error('Red simulada: anclaje sin registro')
-  // El servidor lee la transacción y comprueba memo y cuenta (aquí siempre coinciden).
-  anchor.verifiedAt = ctx.now
   const lot = lotOf(state, anchor.lotId)
+  // El servidor lee la transacción y comprueba memo y cuenta de origen.
+  if (takeMismatch(chain, 'ANCHOR_DOSSIER')) {
+    anchor.mismatch = true
+    raiseAlert(state, ctx, {
+      code: 'ANCHOR_MISMATCH',
+      level: 'CRITICAL',
+      subject: { type: 'LOT', id: lot.id },
+      wineryId: lot.wineryId,
+      message: 'La transacción de anclaje se confirmó, pero su memo o su cuenta de origen no son los esperados: el anclaje no se da por bueno',
+      expected: { memoHashHex: anchor.memoHashHex, account: chain.platform.anchorAddress },
+      actual: { memoHashHex: mockTxHash(`mismatch:${anchor.memoHashHex}`), account: chain.platform.anchorAddress, txHash: tx.txHash },
+    })
+    return
+  }
+  anchor.verifiedAt = ctx.now
   refreshLotStage(state, ctx, lot)
   appendLotEvent(state, ctx, lot, {
     type: 'DOSSIER_ANCHORED',
@@ -365,8 +426,11 @@ function onConfirmed(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
       identity.status = 'ACTIVE'
       identity.since = ctx.now
       identity.lastError = null
-      tx.result = { returnValue: identity.contract.address, contractEvents: ['role_granted'] }
-      recordChainEvent(state, ctx, { contractAddress: identity.contract.address, wineryId: identity.wineryId, type: 'role_granted', tx, data: { role: 'operator', account: chain.platform.operationsAddress } })
+      tx.result = { returnValue: identity.contract.address, contractEvents: ['role_granted', 'base_uri_updated'] }
+      recordChainEvent(state, ctx, { contractAddress: identity.contract.address, wineryId: identity.wineryId, type: 'role_granted', tx, data: { role: 'operator', account: chain.platform.operationsAddress, caller: identity.accountAddress } })
+      recordChainEvent(state, ctx, { contractAddress: identity.contract.address, wineryId: identity.wineryId, type: 'base_uri_updated', tx, data: { base_uri: identity.contract.baseUri } })
+      // Las entradas del contrato nacen con 30 días de vida (§8.3).
+      chain.ttl.contracts[identity.contract.address] = plusDays(ctx.now, TTL_EXTENSION_DAYS)
       return
     case 'MINT_BATCH':
       return confirmMint(state, ctx, tx)
@@ -383,8 +447,28 @@ function onConfirmed(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
     }
     case 'BURN_UNSOLD':
       return confirmBurn(state, ctx, tx)
+    case 'EXTEND_TTL': {
+      // La tarea `chain.ttl.extend` (03:00): alarga la vida del código o de las entradas de un contrato.
+      const target = String(tx.intent.target ?? 'CODE')
+      const days = Number(tx.intent.days ?? TTL_EXTENSION_DAYS)
+      const from = (current: string | null | undefined) => (current && current > ctx.now ? current : ctx.now)
+      if (target === 'CODE') chain.ttl.code = plusDays(from(chain.ttl.code), days)
+      else chain.ttl.contracts[target] = plusDays(from(chain.ttl.contracts[target]), days)
+      tx.result = { returnValue: null, contractEvents: [] }
+      return
+    }
     default:
   }
+}
+
+const plusDays = (iso: string, days: number): string => new Date(Date.parse(iso) + days * 86_400_000).toISOString().replace(/\.\d{3}Z$/, 'Z')
+
+/** ¿La siguiente confirmación de ese tipo no supera la comprobación del servidor? (la consume). */
+function takeMismatch(chain: ChainState, kind: ChainTxKind): boolean {
+  const index = chain.forcedMismatches.indexOf(kind)
+  if (index < 0) return false
+  chain.forcedMismatches.splice(index, 1)
+  return true
 }
 
 function onFailed(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): void {
@@ -398,14 +482,15 @@ function onFailed(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): void 
     const identity = tx.wineryId ? identityOf(chain, tx.wineryId) : null
     if (identity) Object.assign(identity, { status: 'FAILED', lastError: { code: error.code, message: error.message } })
   }
+  // Como el backend: una intención rechazada o una cuenta sin saldo tienen su propio código de alerta.
   raiseAlert(state, ctx, {
-    code: 'TX_FAILED',
-    level: ['CHN_AUTH_FAILED', 'CHN_INTENT_REJECTED'].includes(error.code) ? 'CRITICAL' : 'WARNING',
+    code: error.code === 'CHN_INTENT_REJECTED' ? 'CHN_INTENT_REJECTED' : error.code === 'CHN_INSUFFICIENT_BALANCE' ? 'LOW_BALANCE' : 'TX_FAILED',
+    level: ['CHN_AUTH_FAILED', 'CHN_INTENT_REJECTED', 'CHN_INSUFFICIENT_BALANCE'].includes(error.code) ? 'CRITICAL' : 'WARNING',
     subject: { type: 'TRANSACTION', id: tx.id },
     wineryId: tx.wineryId,
-    message: `La transacción ${tx.kind} falló: ${error.message} (${error.code})`,
+    message: `${tx.kind} falló (${error.code}): ${error.message}`,
     expected: 'CONFIRMED',
-    actual: { status: 'FAILED', code: error.code },
+    actual: { status: 'FAILED', code: error.code, detail: error.message },
   })
 }
 
@@ -427,12 +512,17 @@ function stepTx(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): void {
   switch (tx.status) {
     case 'PENDING':
     case 'RETRYING':
-      if (tx.kind === 'MINT_BATCH' && !chain.mintEnabled) {
-        // ADR-011: la intención espera en `PENDING` hasta que se active la emisión.
-        tx.lastError = { code: 'CHN_MINT_DISABLED', message: ERROR_MESSAGES.CHN_MINT_DISABLED!, retryable: true }
-        tx.updatedAt = ctx.now
-        delete chain.due[tx.id]
-        return
+      if (tx.kind === 'MINT_BATCH') {
+        // ADR-011: la intención espera en `PENDING` hasta que se active la emisión; igual con la
+        // bodega suspendida o revocada (`CHN_WINERY_NOT_ACTIVE`). No falla ni abre alerta.
+        const hold = mintHold(chain, ctx, tx)
+        if (hold) {
+          tx.status = 'PENDING'
+          tx.lastError = { code: hold, message: ERROR_MESSAGES[hold]!, retryable: true }
+          tx.updatedAt = ctx.now
+          delete chain.due[tx.id]
+          return
+        }
       }
       tx.attempts += 1
       tx.nextAttemptAt = null
@@ -463,7 +553,8 @@ function stepTx(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): void {
       tx.confirmedAt = ctx.now
       tx.lastError = null
       const firstMint = tx.kind === 'MINT_BATCH' && !chain.tokens.some((t) => t.wineryId === tx.wineryId)
-      tx.feeChargedStroops = String(firstMint ? FIRST_MINT_FEE : (FEES[tx.kind] ?? 50_000))
+      const extendCode = tx.kind === 'EXTEND_TTL' && tx.intent.target === 'CODE'
+      tx.feeChargedStroops = String(firstMint ? FIRST_MINT_FEE : extendCode ? EXTEND_CODE_FEE : (FEES[tx.kind] ?? 50_000))
       tx.rentFeeStroops = tx.kind === 'ANCHOR_DOSSIER' || tx.kind === 'CREATE_WINERY_ACCOUNT' ? '0' : String(Math.round(Number(tx.feeChargedStroops) * 0.6))
       setStatus(tx, ctx, 'CONFIRMED')
       delete chain.due[tx.id]
@@ -474,9 +565,31 @@ function stepTx(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): void {
   }
 }
 
+/** Motivo por el que una emisión debe esperar ahora, o `null`. */
+function mintHold(chain: ChainState, ctx: ChainCtx, tx: ChainTransaction): (typeof MINT_HOLD_CODES)[number] | null {
+  if (!chain.mintEnabled) return 'CHN_MINT_DISABLED'
+  if (tx.wineryId && ctx.env.winery(tx.wineryId).status !== 'ACTIVE') return 'CHN_WINERY_NOT_ACTIVE'
+  return null
+}
+
+/** Reanuda las emisiones que esperaban (`CHN_MINT_DISABLED`, `CHN_WINERY_NOT_ACTIVE`) cuando su causa desaparece. */
+export function resumeHeldMints(state: TraceState, ctx: ChainCtx): number {
+  const chain = state.chain
+  let resumed = 0
+  for (const tx of chain.transactions) {
+    if (tx.kind !== 'MINT_BATCH' || tx.status !== 'PENDING' || chain.due[tx.id] !== undefined) continue
+    if (!(MINT_HOLD_CODES as readonly string[]).includes(tx.lastError?.code ?? '') || mintHold(chain, ctx, tx)) continue
+    tx.lastError = null
+    chain.due[tx.id] = chain.elapsedMs + CHAIN_STEP_MS
+    resumed += 1
+  }
+  return resumed
+}
+
 /** Ejecuta los pasos que ya tocan según el reloj de la red. Devuelve cuántos dio. */
 export function processChain(state: TraceState, ctx: ChainCtx): number {
   const chain = state.chain
+  resumeHeldMints(state, ctx)
   let steps = 0
   while (steps < 100_000) {
     const due = Object.entries(chain.due)
@@ -503,6 +616,7 @@ export function advanceChain(state: TraceState, ctx: ChainCtx, ms: number = CHAI
 /** Adelanta la red hasta que no quede ninguna transacción en vuelo (confirmadas o fallidas). */
 export function settleChain(state: TraceState, ctx: ChainCtx): number {
   const chain = state.chain
+  resumeHeldMints(state, ctx)
   let steps = 0
   for (let guard = 0; guard < 10_000; guard++) {
     const pending = Object.values(chain.due)
@@ -535,14 +649,7 @@ export function requeueTx(state: TraceState, ctx: ChainCtx, tx: ChainTransaction
 }
 
 /** Activa o desactiva la emisión (`CHAIN_MINT_ENABLED`); al activarla, las emisiones en espera continúan. */
-export function setMintEnabled(state: TraceState, enabled: boolean): void {
-  const chain = state.chain
-  chain.mintEnabled = enabled
-  if (!enabled) return
-  for (const tx of chain.transactions) {
-    if (tx.kind === 'MINT_BATCH' && tx.status === 'PENDING' && chain.due[tx.id] === undefined) {
-      tx.lastError = null
-      chain.due[tx.id] = chain.elapsedMs + CHAIN_STEP_MS
-    }
-  }
+export function setMintEnabled(state: TraceState, ctx: ChainCtx, enabled: boolean): void {
+  state.chain.mintEnabled = enabled
+  if (enabled) resumeHeldMints(state, ctx)
 }

@@ -25,6 +25,45 @@ export const ConsumerProfileSchema = z.object({
 /** @experimental */
 export type ConsumerProfile = z.infer<typeof ConsumerProfileSchema>
 
+/**
+ * @experimental `POST /v1/auth/signup` del borrador (§13.1): alta del consumidor con captcha, campo
+ * trampa y verificación del correo. El OpenAPI vigente sigue declarando el alta sin captcha (201 con
+ * sesión): los mocks responden con esta forma **solo si el cuerpo trae `captchaToken`**.
+ */
+export const ConsumerSignupSchema = z.object({
+  email: z.email('El correo no es válido'),
+  password: z.string().min(1, 'La contraseña es obligatoria'),
+  fullName: z.string().trim().min(1, 'El nombre es obligatorio'),
+  phoneNumber: z.string().nullish(),
+  preferredLocale: z.string().nullish(),
+  acceptTerms: z.literal(true, 'Debes aceptar los términos'),
+  ageDeclaration: z.literal(true, 'Debes declarar que eres mayor de edad'),
+  captchaToken: z.string().min(1, 'Falta el captcha'),
+  /** Campo trampa: los navegadores lo dejan vacío; relleno → 202 sin crear nada. */
+  website: z.string().nullish(),
+})
+/** @experimental */
+export type ConsumerSignupDto = z.infer<typeof ConsumerSignupSchema>
+
+/** @experimental Respuesta 202 del alta del borrador: el correo de verificación va en camino. */
+export const ConsumerSignupAcceptedSchema = z.object({ status: z.literal('VERIFICATION_SENT') })
+/** @experimental */
+export type ConsumerSignupAccepted = z.infer<typeof ConsumerSignupAcceptedSchema>
+
+/** @experimental `GET /v1/public/purchase-settings` del borrador: lo que el Marketplace necesita saber antes de comprar. */
+export const PurchaseSettingsSchema = z.object({
+  /** `compra.maxBotellasPorCompra`: máximo de botellas por pedido (más → 422 `MKT_MAX_PER_ORDER`). */
+  maxBottlesPerOrder: z.number().int().min(1),
+  /** `compra.minutosReserva`: minutos que se guardan las botellas de un pedido sin pagar. */
+  reservationMinutes: z.number().int().min(1),
+  currency: z.literal('BOB'),
+})
+/** @experimental */
+export type PurchaseSettings = z.infer<typeof PurchaseSettingsSchema>
+
+/** Cuenta de consumidor de demostración con pedidos sembrados (`GET /v1/orders`). */
+export const MARKETPLACE_DEMO_ACCOUNT = { key: 'maria', email: 'maria@tribu.test' } as const
+
 export const ORDER_STATUSES = ['CREATED', 'AWAITING_PAYMENT', 'PAID', 'DELIVERING', 'COMPLETED', 'EXPIRED', 'PAYMENT_FAILED'] as const
 /** @experimental */
 export const OrderStatusSchema = z.enum(ORDER_STATUSES)

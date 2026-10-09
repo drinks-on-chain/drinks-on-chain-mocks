@@ -16,7 +16,7 @@ import {
   type Paged,
 } from '../src'
 import { erpFixtures, mockBottleCode, publicFixtures, SINGANI_CASE } from '../src/fixtures'
-import { advanceMockClock, COLLECTIONS_DRAFT_CONTRACT, getErpDb, PUBLIC_LOOKUP_LIMIT, PUBLIC_ROUTE_SPECS, resetScenario, setScenario } from '../src/handlers'
+import { advanceMockClock, COLLECTIONS_DRAFT_CONTRACT, getErpDb, MARKETPLACE_DRAFT_CONTRACT, PUBLIC_LOOKUP_LIMIT, PUBLIC_ROUTE_SPECS, resetScenario, setScenario } from '../src/handlers'
 import { resetErpDb, setupMockServer } from '../src/node'
 import { migratedLotId } from '../src/erp/trace/backfill'
 import { mockBottleSalt, merkleRoot } from '../src/erp/trace/bottle-code'
@@ -271,20 +271,24 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     // La fila no lleva la ficha.
     expect(page.items[0]).not.toHaveProperty('description')
     const slugs = async (query: string) => dataOf((await call<Paged<{ slug: string }>>(`/v1/public/collections?${query}`)).json).items.map((c) => c.slug)
-    expect(await slugs('status=PRESALE')).toEqual(['singani-preventa-2026', 'singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
+    // rc.2: el `slug` es único por bodega: hay dos «singani-preventa-2026» (Altos y Cinti Viejo).
+    expect(await slugs('status=PRESALE')).toEqual(['singani-preventa-2026', 'singani-preventa-2026', 'singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
+    expect(items.filter((c) => c.slug === 'singani-preventa-2026').map((c) => c.winery.slug)).toEqual(['altos-de-calamuchita', 'destileria-cinti-viejo'])
+    expect(new Set(items.map((c) => `${c.winery.slug}/${c.slug}`)).size).toBe(items.length)
+    expect(new Set(items.map((c) => c.id)).size).toBe(items.length)
     expect(await slugs('productType=WINE')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025'])
-    expect(await slugs('winery=altos-de-calamuchita')).toEqual(['vino-la-compania-2025', 'singani-el-portillo-2025'])
+    expect(await slugs('winery=altos-de-calamuchita')).toEqual(['singani-preventa-2026', 'vino-la-compania-2025', 'singani-el-portillo-2025'])
     expect(await slugs('q=gran reserva')).toEqual(['singani-gran-reserva-2026'])
     // Orden: por defecto las destacadas primero y, dentro, las más recientes.
-    expect(items.map((c) => c.featured)).toEqual([true, true, true, false, false, false, false, false, false])
+    expect(items.map((c) => c.featured)).toEqual([true, true, true, true, false, false, false, false, false, false])
     // Ola 3: las colecciones reales publicadas (la preventa y la del lote anclado) van destacadas.
-    expect(await slugs('featured=true')).toEqual(['singani-preventa-2026', 'singani-gran-reserva-2026', 'vino-la-compania-2025'])
+    expect(await slugs('featured=true')).toEqual(['singani-preventa-2026', 'singani-preventa-2026', 'singani-gran-reserva-2026', 'vino-la-compania-2025'])
     expect((await slugs('sort=featured')).join()).toBe(items.map((c) => c.slug).join())
     const byName = await slugs('sort=name')
     expect([byName.at(0), byName.at(-1)]).toEqual(['singani-canon-viejo-2025', 'vino-las-carreras-2025'])
-    expect((await slugs('sort=newest')).slice(0, 3)).toEqual(['singani-preventa-2026', 'singani-edicion-aniversario-2026', 'singani-el-molino-2026'])
+    expect((await slugs('sort=newest')).slice(0, 3)).toEqual(['singani-preventa-2026', 'singani-preventa-2026', 'singani-edicion-aniversario-2026'])
     // Por precio, las que aún no tienen precio van al final.
-    expect(await slugs('sort=price-asc')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025', 'singani-el-portillo-2025', 'singani-canon-viejo-2025', 'singani-el-molino-2026', 'singani-el-molino-2025', 'singani-gran-reserva-2026', 'singani-preventa-2026', 'singani-edicion-aniversario-2026'])
+    expect(await slugs('sort=price-asc')).toEqual(['vino-la-compania-2025', 'vino-las-carreras-2025', 'singani-preventa-2026', 'singani-el-portillo-2025', 'singani-canon-viejo-2025', 'singani-el-molino-2026', 'singani-el-molino-2025', 'singani-gran-reserva-2026', 'singani-preventa-2026', 'singani-edicion-aniversario-2026'])
     expect((await slugs('sort=price-desc')).at(0)).toBe('singani-gran-reserva-2026')
     expect((await slugs('sort=price-desc')).at(-1)).toBe('singani-edicion-aniversario-2026')
     expect((await call('/v1/public/collections?sort=caro')).status).toBe(422)
@@ -302,6 +306,23 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     const presale = PublicCollectionSchema.parse(dataOf((await call('/v1/public/collections/singani-el-molino-2026')).json))
     expect(presale).toMatchObject({ status: 'PRESALE', lotStage: 'DISTILLING', lot: { lotCode: null } })
     expect((await call('/v1/public/collections/no-existe')).status).toBe(404)
+
+    // rc.2: la ficha se resuelve por bodega (borrador del Marketplace); la ruta por `slug` queda obsoleta.
+    expect(detail.headers.get('deprecation')).toBe('true')
+    expect(detail.headers.get('link')).toBe('</v1/public/collections/{winerySlug}/{slug}>; rel="successor-version"')
+    const byWinery = await call('/v1/public/collections/destileria-cinti-viejo/singani-gran-reserva-2026')
+    expect(byWinery.headers.get('x-mock-draft')).toBe(MARKETPLACE_DRAFT_CONTRACT)
+    expect(byWinery.headers.get('deprecation')).toBeNull()
+    expect(PublicCollectionSchema.parse(dataOf(byWinery.json))).toStrictEqual(collection)
+    const [altos, cinti] = await Promise.all(['altos-de-calamuchita', 'destileria-cinti-viejo'].map(async (winery) => PublicCollectionSchema.parse(dataOf((await call(`/v1/public/collections/${winery}/singani-preventa-2026`)).json))))
+    expect(altos).toMatchObject({ slug: 'singani-preventa-2026', winery: { slug: 'altos-de-calamuchita' }, price: { amountMinor: 15000 }, availability: { total: 80, available: 80 } })
+    expect(cinti).toMatchObject({ slug: 'singani-preventa-2026', winery: { slug: 'destileria-cinti-viejo' }, price: null, availability: { total: 100 } })
+    expect(altos!.id).not.toBe(cinti!.id)
+    // La obsoleta, con un `slug` repetido, devuelve la primera del catálogo.
+    expect(dataOf((await call<{ id: string }>('/v1/public/collections/singani-preventa-2026')).json).id).toBe(altos!.id)
+    expect((await call('/v1/public/collections/altos-de-calamuchita/singani-gran-reserva-2026')).status).toBe(404)
+    // La ruta de las imágenes (dos segmentos también) no la tapa la ficha por bodega.
+    expect((await call(`/v1/public/collections/images/${uid('no-existe')}`)).json).toMatchObject({ error: { code: 'FILE_NOT_FOUND' } })
     // Las rutas del OpenAPI no llevan la cabecera.
     expect((await call('/v1/public/wineries')).headers.get('x-mock-draft')).toBeNull()
   })
