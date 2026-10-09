@@ -1,6 +1,6 @@
 # Contrato OpenAPI ↔ mocks
 
-Revisión del 25-09-2026, actualizada el 02-10-2026 con las **precisiones del backend de la Etapa 2** (mocks 0.5.0-rc.2: §11), el 01-10-2026 con el **ERP v2 y el dominio público de la Ola 2** (mocks 0.5.0-rc.1: §10), el 27-09-2026 con el **backend real de la Ola 1 completa** (mocks 0.4.0-rc.1: §7) y antes con el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro, §0 de este documento, con sus precisiones del §8), el OpenAPI del backend de la Ola 0 (O0-BE-2 y **O0-BE-4**: sesiones, membresías, estado `INVITED`) y el **contrato de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`, §6, con las precisiones del §11 bis). Comparado contra `openapi/erp.json` (el `openapi.json` de `drinks-on-chain-back` en `dev`, commit `eace713`, igual al de `https://136.243.223.39.sslip.io/docs-json` el 27-09-2026: 102 rutas, 119 operaciones, 144 esquemas; antes, el de O0-BE-4, commit `c224e0a`, 48 operaciones), contra los guards del backend (`AccessTokenGuard`, `AuthorizationGuard`, `TenantGuard`, `@Roles` de cada controlador) y `docs/arquitectura/identidad.md` de `drinks-on-chain-back` y contra respuestas reales del servidor sin credenciales (401, 400, 404). Complementa el doc 09 §8 de `drinks-on-chain-docsfront`. Regla: donde el catálogo o las guías del backend discrepan del OpenAPI, manda el OpenAPI.
+Revisión del 25-09-2026, actualizada el 09-10-2026 con la **apertura de la Ola 3: tokenización y cadena** (mocks 0.6.0-rc.1: §13), el 02-10-2026 con las **precisiones del backend de la Etapa 2** (mocks 0.5.0-rc.2: §11), el 01-10-2026 con el **ERP v2 y el dominio público de la Ola 2** (mocks 0.5.0-rc.1: §10), el 27-09-2026 con el **backend real de la Ola 1 completa** (mocks 0.4.0-rc.1: §7) y antes con el **contrato de la Ola 0** (`plan/contratos/o0-sesiones-y-estandares.md` del plan maestro, §0 de este documento, con sus precisiones del §8), el OpenAPI del backend de la Ola 0 (O0-BE-2 y **O0-BE-4**: sesiones, membresías, estado `INVITED`) y el **contrato de la Ola 1** (`plan/contratos/o1-backoffice-y-bodegas.md`, §6, con las precisiones del §11 bis). Comparado contra `openapi/erp.json` (el `openapi.json` de `drinks-on-chain-back` en `dev`, commit `eace713`, igual al de `https://136.243.223.39.sslip.io/docs-json` el 27-09-2026: 102 rutas, 119 operaciones, 144 esquemas; antes, el de O0-BE-4, commit `c224e0a`, 48 operaciones), contra los guards del backend (`AccessTokenGuard`, `AuthorizationGuard`, `TenantGuard`, `@Roles` de cada controlador) y `docs/arquitectura/identidad.md` de `drinks-on-chain-back` y contra respuestas reales del servidor sin credenciales (401, 400, 404). Complementa el doc 09 §8 de `drinks-on-chain-docsfront`. Regla: donde el catálogo o las guías del backend discrepan del OpenAPI, manda el OpenAPI.
 
 ## 0. Contrato de la Ola 0 (mocks 0.2, alineados con el backend O0-BE-4 en 0.3.0-rc.2)
 
@@ -430,3 +430,124 @@ Las tres correcciones de realismo del cierre (las mismas que la semilla del back
 Con ellas el backend puede copiar los fixtures de esta versión sin aplicar correcciones. Quedan 18 tanques y ninguno `COMPLETED`: para probar la crianza o la destilación hay que completar antes uno en fermentación (TK-04 y TK-10 del lote `ALT-L2026-001`, con destino vino; TK-15 de `ALT-L2026-005`, sin tipo decidido).
 
 Pendiente: el mosto de `CVJ-L2026-001` y `ALT-L2026-001` equivale a ~1,0 L por kilo de uva (lo habitual es 0,65–0,75). No incumple ninguna regla; ajustarlo cambia los volúmenes de toda su cadena.
+
+## 13. Ola 3 · tokenización y cadena (mocks 0.6.0-rc.1)
+
+Contrato `plan/contratos/o3-tokenizacion.md` (entero, con las «Precisiones de la apertura» del 08-10-2026) y el OpenAPI de la **apertura** del backend, rama `feat/o3-be-apertura` de `drinks-on-chain-back` (`157dee4`): 212 operaciones (54 nuevas, todas con sus DTO y con `501` donde aún no hay lógica) y 403 esquemas (137 nuevos; cambian `LotDto`, `LotSummaryDto`, `LotEventDto`, `PublicTimelineEventDto`, `LotDossierDto`, `PublicDossierDto`, `TraceDashboardDto`, `DashboardDto`, `WineryResponseDto` y `WalletResponseDto`). Los mocks implementan las 54 con las reglas del contrato y una red simulada.
+
+### 13.1 De dónde sale `openapi/erp.json` en esta versión (y cómo volver al servidor)
+
+La apertura **no está desplegada**: el servidor de desarrollo sigue sirviendo el OpenAPI de la Ola 2 (158 operaciones). `openapi/erp.json` se fijó desde la rama:
+
+```bash
+git -C ../drinks-on-chain-back show origin/feat/o3-be-apertura:openapi.json > /tmp/openapi-o3.json
+pnpm openapi:pull -- /tmp/openapi-o3.json
+```
+
+**No ejecutes `pnpm openapi:pull` contra el servidor mientras siga en la versión anterior** (quitaría las 54 operaciones y la prueba de contrato fallaría). Cuando el backend despliegue la apertura: `pnpm openapi:pull -- https://136.243.223.39.sslip.io/docs-json` y `pnpm test`; el resumen debe decir «Mismas operaciones que antes» (212).
+
+Los esquemas zod de `src/chain/schemas.ts` y `src/tokenization/schemas.ts` se generaron de los DTO de ese OpenAPI (mismos campos, mismos anulables; `XxxDto` = `XxxSchema` / tipo `Xxx`). La prueba de contrato valida de forma estricta, contra el OpenAPI, la respuesta de las 54 operaciones y los fixtures de `fixtures/chain/` y `fixtures/tokenization/`; `pendientes.json` solo lleva los borradores (catálogo y Marketplace).
+
+### 13.2 Contrato escrito ↔ OpenAPI de la apertura (manda el OpenAPI)
+
+| Tema | Contrato escrito | OpenAPI (y mocks) |
+|---|---|---|
+| `Idempotency-Key` | Sin cabecera → 422 `VALIDATION_ERROR` | 422 **`IDEMPOTENCY_KEY_REQUIRED`** con `details[0].field = 'Idempotency-Key'`. Obligatoria en: `POST /v1/lots/{id}/tokenization-requests`, `…/resubmit`, `…/approve`, `publish`, `pause` y `resume` de la colección, `closure/decide`, `transactions/{id}/retry` y `chain/pause`, `chain/unpause`. **No** en `withdraw`, `take`, `notes`, `request-changes`, `reject`, `close`, `abandon`, `chain/provision`, `alerts/{id}/resolve` ni al lanzar una conciliación |
+| Listas | Varias «devuelven la lista» | Todas son páginas `{ items, total, limit, offset }`, también `GET /v1/platform/collections/{id}/transactions`, los NFT, las alertas, los eventos y los cierres |
+| Códigos HTTP | — | `notes` y `approve` → 201; `chain/provision`, `chain/pause`, `chain/unpause` → **202** con `WineryChainIdentityDto`; lanzar una conciliación → 202 con `ReconciliationRunDto` |
+| Imágenes de la colección | `{ key, sha256, url, alt, isCover }` | `CollectionImageDto` lleva además `id`; los bytes se sirven por `GET /v1/public/collections/images/{imageId}` (`image/png\|jpeg\|webp\|gif`, 404 `FILE_NOT_FOUND`) |
+| Detalle de plataforma de una solicitud | `internalNotes?`, `priceSuggestion?` | `PlatformTokenizationRequestDto`: `internalNotes`, `priceSuggestion` y `review` **obligatorios** (la revisión va dentro de la solicitud); las rutas del back office que escriben devuelven esa misma forma |
+| Cierre visto desde el ERP | `LotClosure` «sin datos de pedidos» | `WineryLotClosureDto`: los ítems no llevan `orderId`, `paidAt` ni `note` |
+| Anulables | — | `explorerUrl` de la cuenta, del contrato y de la colección; `address`, `explorerUrl` y `checkedAt` de las cuentas de la plataforma; `wasmHash`, `codeTtlDays`; `operationsAccount`, `anchorAccount` y `officialAnchorAccount` (registro y verificación); `sourceAccount` y `maxFeeStroops` de la transacción; `productType` del lote de una solicitud; `chainCosts.since`; todo el borrador comercial de la solicitud (`CollectionCommercialDraftDto`) |
+| Plataforma en rutas del ERP | «Lectura» | Lee con `?wineryId=` (`GET /v1/collections`, `/v1/tokenization-requests`, `chain-account`); si escribe → 403 **`TRC_PLATFORM_READ_ONLY`** (la cantidad la autoriza la bodega, A-03) |
+| Lectores de la bodega | Dueño, enología («lectura») y contabilidad | `OWNER`, `ENOLOGIST`, `ACCOUNTANT` leen solicitudes y colecciones; NFT y cierre, `OWNER` y `ACCOUNTANT`; la cuenta de la bodega, todos los miembros |
+| Permisos de plataforma | Tabla del §10 | Capacidades nuevas en `GET /v1/platform/permissions`: `tokenization` (`FULL` superusuario, administración y operaciones; `READ` soporte), `chain` (igual) y `chain.admin` (`FULL` solo superusuario y administración: abandonar una transacción, pausar o reanudar un contrato). `chain/provision` es de `chain` `FULL` |
+| `GET /v1/users/me/wallet` | 404 al personal | 404 `CHN_WALLET_NOT_AVAILABLE` al personal (y a un consumidor sin dirección); al consumidor, `WalletResponseDto` con su dirección derivada |
+| Campos legados de la bodega | Datos reales o `null` | `stellarPublicKey` = cuenta real o `null`; `onchainProducerId` siempre `null`; `onchainRegisterTxHash` = hash de la creación de la cuenta o `null` |
+| Bloques nuevos | Aditivos | `LotDto.tokenization`, `LotSummaryDto.tokenization`, `TraceDashboardDto.tokenization` y `DashboardDto.tokenization` / `.chain` son **obligatorios** |
+| Nombres | `CollectionMintStatus`; `ChainAlert.subject.type` enumerado | `MintStatus`; `subject.type` es texto libre |
+| `stellar.toml` | Fuera de `/v1` | Declarado en el OpenAPI (`GET /.well-known/stellar.toml`, `text/plain`) |
+
+### 13.3 Reglas que aplican los handlers
+
+- **Cuota (§5.2)**: solo `OWNER`; lote con tipo (`TOK_LOT_PRODUCT_UNDEFINED`) y estimación (`TOK_LOT_ESTIMATE_MISSING`), en etapa anterior a `CERTIFIED` (409 `TOK_LOT_NOT_TOKENIZABLE` con `meta.stage`); una solicitud abierta por lote (409 `TOK_REQUEST_ALREADY_OPEN` con `meta.requestId`); límite sobre la estimación o, desde el embotellado, sobre los códigos activos (422 `TOK_QUOTA_EXCEEDS_ESTIMATE` / `TOK_QUOTA_EXCEEDS_BOTTLES` con `expected`, `actual` y `meta.maxQuantity`). El tipo lo deduce el servidor (`INITIAL` / `QUOTA_INCREASE`). Se revalida al editar, al reenviar y al aprobar. `PATCH /v1/lots/{id}` no baja la estimación de lo emitido (422 `TOK_ESTIMATE_BELOW_MINTED`).
+- **Solicitud**: `SUBMITTED → IN_REVIEW → CHANGES_REQUESTED → SUBMITTED … → APPROVED | REJECTED`, `WITHDRAWN` desde cualquier estado abierto; fuera de sitio → 409 `TOK_REQUEST_INVALID_TRANSITION` con `meta: { from, to }`. Aprobar exige bodega `ACTIVE` (409 `TOK_WINERY_NOT_ACTIVE`), identidad `ACTIVE` (409 `TOK_WINERY_CHAIN_NOT_READY`), nombre, descripción y portada (422 `TOK_COMMERCIAL_DATA_INCOMPLETE`, un detalle por campo: `commercial.name`, `commercial.description`, `commercial.imageKeys`) y un nombre que no repita `slug` (409 `TOK_SLUG_TAKEN`). El precio puede faltar.
+- **Colección**: `MINTING → READY → PUBLISHED ⇄ PAUSED → CLOSED` (409 `TOK_COLLECTION_INVALID_TRANSITION`); publicar o reanudar exige emisión confirmada (409 `TOK_MINT_NOT_CONFIRMED`), datos completos, bodega activa y contrato sin pausar (409 `CHN_CONTRACT_PAUSED`); con ventas el precio no cambia (409 `TOK_PRICE_LOCKED`); cerrar con un faltante sin resolver → 409 `TOK_CLOSURE_PENDING`.
+- **Cadena**: reintentar solo una transacción `FAILED` (409 `CHN_TX_NOT_RETRYABLE`); emisiones, anclajes e identidad no se abandonan (409 `CHN_TX_NOT_ABANDONABLE`); `CHN_CONTRACT_ALREADY_PAUSED` / `CHN_CONTRACT_NOT_PAUSED`; `CHN_IDENTITY_ALREADY_ACTIVE`; `CHN_ALERT_ALREADY_RESOLVED`; `CHN_TX_NOT_FOUND`.
+- **Hechos de otras olas**: activar una bodega aprovisiona su identidad; suspenderla o revocarla pausa sus colecciones publicadas (y, al revocar, rechaza sus solicitudes abiertas y pausa el contrato en la red); cerrar un expediente registra su anclaje y, al confirmarse, el lote pasa a `ANCHORED` (eventos `DOSSIER_ANCHORED` y `TOKENS_REDEEMABLE`, campos legados del embotellado, colección `redeemable` y `ON_SALE`).
+
+### 13.4 Red simulada y reloj
+
+Las rutas solo registran intenciones; la red las hace avanzar `PENDING → BUILDING → SUBMITTED → CONFIRMED`, un paso cada `CHAIN_STEP_MS` (3 s) **del reloj de la red**, y al confirmarse aplica los efectos (la emisión crea los NFT con ids `u32` continuos por contrato y números de botella continuos por colección; emisiones de más de 32.000 se parten en trozos).
+
+| Control | Qué hace |
+|---|---|
+| `mockChain.advance(ms?)` | Adelanta el reloj de la red (por defecto, un paso) |
+| `mockChain.settle()` | Hasta que no quede nada en vuelo |
+| `mockChain.failNext({ kind?, code? })` | La siguiente transacción (o la siguiente de ese tipo) falla: `CHN_AUTH_FAILED` por defecto (definitivo → `FAILED` y alerta `TX_FAILED`, se reintenta con `…/retry`); con un código transitorio (`CHN_RPC_UNAVAILABLE`, `CHN_TX_TIMEOUT`, `CHN_BAD_SEQUENCE`, `CHN_INSUFFICIENT_FEE`, `CHN_TRY_AGAIN_LATER`, `CHN_ARCHIVED_ENTRY`) pasa por `RETRYING` y se confirma en el intento siguiente |
+| `mockChain.setMode('auto' \| 'manual')` | `auto` (navegador): avanza con el tiempo real, como mucho un paso entre dos peticiones. `manual` (Node): solo con los controles |
+| `mockChain.setMintEnabled(false)` | `CHAIN_MINT_ENABLED` (ADR-011): las emisiones esperan en `PENDING` con `CHN_MINT_DISABLED` |
+| `mockChain.pending()` | Transacciones en vuelo |
+| `advanceMockClock(ms)` | Además del reloj de los mocks, adelanta el de la red |
+
+En el navegador, `window.__docMocks.chain` es `mockChain`.
+
+### 13.5 Decisiones y suposiciones de los mocks
+
+| Tema | Mocks |
+|---|---|
+| Direcciones y hashes | StrKey de 56 caracteres con versión y CRC16 correctos (`G…`, `C…`) y hashes hex de 64, derivados con SHA-256 de una clave propia de los mocks: tienen forma válida y **no existen en testnet** (`isValidStrKey`, `mockAccountAddress`, `mockContractAddress`, `mockTxHash`). El `wasmHash` tampoco es el de `deployments/testnet.json` |
+| `explorerUrl` | Siempre lo construye el mock (`https://stellar.expert/explorer/testnet/{tx\|account\|contract}/…`); `null` solo mientras una transacción aún no tiene hash |
+| URL de imágenes | `/v1/public/collections/images/{id}`, relativa como el resto de URL públicas de los mocks; se sirven desde que se aprueba la solicitud (el backend puede restringirlas hasta publicar). El archivo es un PNG de demostración |
+| `token_uri` | `{PUBLIC_API_BASE_URL}/v1/public/nft/{slug}/{id}` con `http://localhost:4000` (opción `publicApiBaseUrl`) |
+| Marca del lote | Con colección: `CLOSED`/`PAUSED`; si no, la última emisión (`MINT_FAILED`, `MINTING`); si no, `READY`/`PUBLISHED`. Sin colección: `REQUESTED` o `CHANGES_REQUESTED` |
+| Rechazar | Solo desde `IN_REVIEW` (como aprobar y pedir cambios) |
+| Reenviar | Vuelve a `SUBMITTED` sin persona asignada: hay que tomarla otra vez |
+| Portada | Sin ninguna imagen marcada `isCover`, la primera lo es |
+| `slug` | Sigue al nombre solo hasta la primera publicación |
+| Cerrar la colección | Permitido si el lote aún no tiene cierre calculado o si está `NO_SHORTFALL` / `RESOLVED` |
+| Cierre | Se calcula al consultarlo (lote embotellado o descartado) y se recalcula mientras no haya decisión. Decidir con faltante o con `BURN` exige `chain.admin` (403); sin faltante y `KEEP_ON_SALE` queda `RESOLVED` al momento |
+| Conciliación | Termina en la misma petición. Como la red es la propia base, solo detecta lo que la base ya sabe incoherente (`TOTAL_MINTED_MISMATCH`, `QUOTA_EXCEEDED`, `BOTTLES_SHORTFALL`, `TX_STUCK`, `LOW_BALANCE`) y cierra solas las `TX_STUCK` ya terminadas; nunca corrige datos |
+| `tokenizacion.requiereAprobacion = false` (S-11, no acordado) | La solicitud completa de una bodega con identidad `ACTIVE` se aprueba sola (`decision.by.system`) |
+| Tablero | Las alertas abiertas de la cadena se suman a `alerts`; `indexerLagSeconds` fijo |
+| `stellar.toml` | `ACCOUNTS`, `[DOCUMENTATION]` y una entrada `[[CURRENCIES]]` con `contract` por bodega |
+| Persistencia | El estado de la Ola 3 vive solo en memoria (como la trazabilidad): recargar vuelve a los fixtures o al escenario |
+| Línea de tiempo | Los hechos de tokenización de un lote ya avanzado se sembraron con su fecha: la línea de tiempo queda en orden cronológico |
+
+### 13.6 Datos de demo y escenarios
+
+| Dato | Para qué |
+|---|---|
+| Identidad `ACTIVE` de Cinti Viejo (`CVJ`), Altos (`ALT`) y Casa Uriondo (`CUR`); el resto, `NOT_PROVISIONED` | 1F, ficha de bodega, registro |
+| **«Singani Preventa 2026»** (`PREVENTA_CASE`, Cinti Viejo, `CVJ-L2026-006`, en origen, estimación 3.000): solicitud con un cambio pedido, aprobada sin precio, 100 NFT, colección `PUBLISHED` en `PRESALE` | Recorrido H3 |
+| «Singani Gran Reserva 2026»: `ANCHORED`, colección de 60 a Bs 280, `ON_SALE` y canjeable, cierre `NO_SHORTFALL` | Verificación 2E, compra 2C |
+| «Singani El Portillo 2025» (Altos, embotellado): colección `READY` de 240 y una ampliación `SUBMITTED` de 500 | Publicar, ampliación, límite por botellas |
+| Bandeja: «Singani El Molino 2026» `IN_REVIEW` con datos completos (y una retirada antes), «Tannat La Angostura 2024» `CHANGES_REQUESTED` (falta la portada), Casa Uriondo `REJECTED` | Bandeja 4C |
+| Alertas: `LOW_BALANCE` resuelta y `TTL_EXPIRING` abierta; tres conciliaciones | Cadena |
+
+| Escenario | Qué deja |
+|---|---|
+| `identidad-preparandose` | Altos recién activada: cuenta y contrato creándose; aprobar → `TOK_WINERY_CHAIN_NOT_READY` |
+| `emision-en-curso` | «Singani Preventa 2026» recién aprobada, con la emisión avanzando |
+| `emision-fallida` | La misma con la emisión `FAILED` (`CHN_AUTH_FAILED`) y su alerta; `…/retry` la confirma |
+| `anclaje-pendiente` | «Singani Gran Reserva 2026» `CERTIFIED` con el anclaje en la red; al confirmarse, `ANCHORED` (el estado `normal` es el anclaje confirmado) |
+| `faltante-botellas` | «Singani El Portillo 2025» con 20 NFT más que botellas (1.060 frente a 1.040): cierre `SHORTFALL_OPEN`. El escenario rehace la colección (otro id) |
+| `alerta-evento-inesperado` | Alerta `CRITICAL` `UNEXPECTED_EVENT` por un `role_granted` ajeno en el contrato de Cinti Viejo |
+| `cambios-pedidos` | «Singani Preventa 2026» en `CHANGES_REQUESTED` («falta la nota de cata») |
+
+Los escenarios de la Ola 2 que rehacen el caso del §18 retiran también su anclaje y su colección.
+
+### 13.7 Borrador del Marketplace (fuera de la prueba estricta)
+
+Contrato §13.1; **no está en el OpenAPI** y puede cambiar. `GET /v1/me/consumer`, `POST|GET /v1/orders`, `GET /v1/orders/{id}` y `POST /v1/payments/test/{paymentId}/simulate` llevan `draft` y responden `X-Mock-Draft: plan/contratos/o3-tokenizacion.md §13.1`; en `pendientes.json` están como `borrador` y se validan solo contra sus esquemas zod (`ConsumerProfileSchema`, `OrderSchema`, `@experimental`).
+
+- El catálogo (`/v1/public/collections`) añade `id`, `saleState` y `counts.available`; un lote con colección real **publicada** sale de ella (nombre, precio, disponibilidad, imagen), el resto sigue siendo de demostración.
+- Reglas: solo consumidores; precio definido (422 `MKT_PRICE_UNDEFINED`), máximo por pedido (422 `MKT_MAX_PER_ORDER`, `compra.maxBotellasPorCompra`), existencias (409 `MKT_NOT_ENOUGH_STOCK`); la reserva caduca a los `compra.minutosReserva` (`EXPIRED`). `simulate`: `APPROVE` → `PAID`, `REJECT` → `PAYMENT_FAILED`, `DELAY` → sigue esperando. Con una colección real el pedido mueve sus NFT (`MINTED → RESERVED → SOLD`, o `REDEEMABLE` si el lote ya está anclado).
+- No se adelanta: el alta con `202 VERIFICATION_SENT` (la ruta `POST /v1/auth/signup` es del OpenAPI vigente y se valida contra él), la entrega en la red (`transfer` queda en `null`) ni los estados `DELIVERING` y `COMPLETED`.
+
+### 13.8 Pendiente para `rc.2`
+
+- Correos de la tokenización en el buzón simulado (solicitud recibida, cambios pedidos, aprobada, rechazada, NFT emitidos, colección publicada, faltante).
+- Indexador y conciliación con más casos (`OWNER_MISMATCH`, `BURN_MISMATCH`, `PAUSE_MISMATCH`, `ANCHOR_MISMATCH`, `INDEXER_GAP`, `NETWORK_RESET`) y la tarea de TTL.
+- Cierre con faltante: escenario con NFT **vendidos** sin botella (hoy se prueba forzándolo en la base) y sus avisos.
+- Precisiones que anuncie el backend al implementar cada paso (3.1–3.6).
