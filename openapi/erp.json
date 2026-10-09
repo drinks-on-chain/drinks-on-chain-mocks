@@ -16,7 +16,7 @@
   "paths": {
     "/.well-known/stellar.toml": {
       "get": {
-        "description": "Contrato O3 §3.2: `text/plain` con `Access-Control-Allow-Origin: *` y caché de 5 min. Contenido: `VERSION`, `NETWORK_PASSPHRASE`, `ACCOUNTS` (operaciones, anclaje y la cuenta de cada bodega `ACTIVE`) y `[DOCUMENTATION]` (`ORG_NAME = \"Drinks on Chain\"`). Los errores llegan con el envoltorio JSON común.",
+        "description": "Contrato O3 §3.2: `text/plain` con `Access-Control-Allow-Origin: *` y caché de 5 min. Contenido: `VERSION`, `NETWORK_PASSPHRASE`, `ACCOUNTS` (operaciones, anclaje y la cuenta de cada bodega `ACTIVE`) y `[DOCUMENTATION]` (`ORG_NAME = \"Drinks on Chain\"`). Los contratos se publican en `GET /v1/public/chain/registry` (fuente canónica), no en `[[CURRENCIES]]` (S-7). Los errores llegan con el envoltorio JSON común.",
         "operationId": "StellarTomlController_stellarToml",
         "parameters": [],
         "responses": {
@@ -30,16 +30,6 @@
                 "example": "VERSION=\"2.7.0\"\nNETWORK_PASSPHRASE=\"Test SDF Network ; September 2015\"\nACCOUNTS=[]\n\n[DOCUMENTATION]\nORG_NAME=\"Drinks on Chain\"\n"
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.2 de la Etapa 3 (Identidad de la bodega)"
           }
         },
         "summary": "stellar.toml (SEP-1)",
@@ -1108,16 +1098,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -1175,16 +1155,6 @@
               }
             },
             "description": "TOK_COLLECTION_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -1411,16 +1381,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -5423,16 +5383,6 @@
               }
             },
             "description": "TRC_LOT_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -5530,16 +5480,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, TOK_LOT_PRODUCT_UNDEFINED, TOK_LOT_ESTIMATE_MISSING, TOK_QUOTA_INVALID, TOK_QUOTA_EXCEEDS_ESTIMATE (`expected`, `actual`, `meta.maxQuantity`), TOK_QUOTA_EXCEEDS_BOTTLES (`expected`, `actual`, `meta.maxQuantity`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -5880,7 +5820,7 @@
             },
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
           },
-          "501": {
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
@@ -5888,7 +5828,17 @@
                 }
               }
             },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
+            "description": "ORG_NOT_FOUND"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR, (personal de plataforma sin `wineryId`)"
           }
         },
         "security": [
@@ -7112,16 +7062,6 @@
               }
             },
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.1 de la Etapa 3 (Firmante y transacciones)"
           }
         },
         "security": [
@@ -7961,16 +7901,6 @@
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
           },
           "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "501": {
             "content": {
               "application/json": {
                 "schema": {
@@ -7978,7 +7908,7 @@
                 }
               }
             },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.1 de la Etapa 3 (Firmante y transacciones)"
+            "description": "VALIDATION_ERROR\n\nVALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100"
           }
         },
         "security": [
@@ -8036,16 +7966,6 @@
               }
             },
             "description": "CHN_TX_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.1 de la Etapa 3 (Firmante y transacciones)"
           }
         },
         "security": [
@@ -8122,7 +8042,7 @@
                 }
               }
             },
-            "description": "CHN_TX_NOT_ABANDONABLE (`MINT_BATCH`, `ANCHOR_DOSSIER`, `CREATE_WINERY_ACCOUNT`, `DEPLOY_WINERY_CONTRACT`; `meta.kind`)"
+            "description": "CHN_TX_NOT_ABANDONABLE (`MINT_BATCH`, `ANCHOR_DOSSIER`, `CREATE_WINERY_ACCOUNT`, `DEPLOY_WINERY_CONTRACT`, o estado distinto de `FAILED`; `meta.kind`, `meta.status`)"
           },
           "422": {
             "content": {
@@ -8133,16 +8053,6 @@
               }
             },
             "description": "VALIDATION_ERROR, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.1 de la Etapa 3 (Firmante y transacciones)"
           }
         },
         "security": [
@@ -8230,7 +8140,7 @@
                 }
               }
             },
-            "description": "CHN_TX_NOT_RETRYABLE (estado distinto de `FAILED`; `meta.status`), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
+            "description": "CHN_TX_NOT_RETRYABLE (estado distinto de `FAILED` o abandonada; `meta.status`), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
           },
           "422": {
             "content": {
@@ -8241,16 +8151,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.1 de la Etapa 3 (Firmante y transacciones)"
           }
         },
         "security": [
@@ -8397,16 +8297,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -8464,16 +8354,6 @@
               }
             },
             "description": "TOK_COLLECTION_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -8558,17 +8438,7 @@
                 }
               }
             },
-            "description": "VALIDATION_ERROR, (falta `reason`), TOK_PRICE_INVALID"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
+            "description": "VALIDATION_ERROR, (falta `reason`), TOK_PRICE_INVALID, TOK_COMMERCIAL_DATA_INCOMPLETE (imágenes sin portada)"
           }
         },
         "security": [
@@ -8657,16 +8527,6 @@
               }
             },
             "description": "VALIDATION_ERROR, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -9017,16 +8877,6 @@
               }
             },
             "description": "TOK_COLLECTION_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -9124,16 +8974,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -9232,16 +9072,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, TOK_COMMERCIAL_DATA_INCOMPLETE (un detalle por campo)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -9339,16 +9169,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, TOK_COMMERCIAL_DATA_INCOMPLETE (un detalle por campo)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -9498,16 +9318,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -9629,16 +9439,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "security": [
@@ -11126,16 +10926,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11193,16 +10983,6 @@
               }
             },
             "description": "TOK_REQUEST_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11288,16 +11068,6 @@
               }
             },
             "description": "VALIDATION_ERROR, TOK_PRICE_INVALID"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11395,16 +11165,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, TOK_COMMERCIAL_DATA_INCOMPLETE (un detalle por campo: `name`, `description`, imagen de portada), TOK_PRICE_INVALID, TOK_QUOTA_EXCEEDS_ESTIMATE, TOK_QUOTA_EXCEEDS_BOTTLES, TOK_LOT_ESTIMATE_MISSING, TOK_LOT_PRODUCT_UNDEFINED"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11482,16 +11242,6 @@
               }
             },
             "description": "VALIDATION_ERROR"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11579,16 +11329,6 @@
               }
             },
             "description": "VALIDATION_ERROR, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11677,16 +11417,6 @@
               }
             },
             "description": "VALIDATION_ERROR"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -11754,16 +11484,6 @@
               }
             },
             "description": "TOK_REQUEST_INVALID_TRANSITION (`meta.from`, `meta.to`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -13159,7 +12879,7 @@
     },
     "/v1/platform/wineries/{id}/chain-account": {
       "get": {
-        "description": "Contrato O3 §3.4: identidad (cuenta y contrato), NFT por lote, anclajes, últimas transacciones y lo pagado por la plataforma por esa bodega.",
+        "description": "Contrato O3 §3.4: identidad (cuenta y contrato), NFT por lote, anclajes, últimas transacciones y lo pagado por la plataforma por esa bodega. Las colecciones (`totals`, `byLot`) llegan con los pasos 3.4–3.6.",
         "operationId": "PlatformWineryChainController_chainAccount_v1",
         "parameters": [
           {
@@ -13201,16 +12921,6 @@
               }
             },
             "description": "ORG_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -13297,7 +13007,7 @@
                 }
               }
             },
-            "description": "CHN_CONTRACT_ALREADY_PAUSED, TOK_WINERY_CHAIN_NOT_READY (sin contrato; `meta.status`), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
+            "description": "CHN_CONTRACT_ALREADY_PAUSED, TOK_WINERY_CHAIN_NOT_READY (sin contrato; `meta.status`), CHN_DISABLED (cadena sin configurar), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
           },
           "422": {
             "content": {
@@ -13308,16 +13018,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.2 de la Etapa 3 (Identidad de la bodega)"
           }
         },
         "security": [
@@ -13395,7 +13095,7 @@
                 }
               }
             },
-            "description": "CHN_IDENTITY_ALREADY_ACTIVE, TOK_WINERY_NOT_ACTIVE (`meta.status`)"
+            "description": "CHN_IDENTITY_ALREADY_ACTIVE, TOK_WINERY_NOT_ACTIVE (`meta.status`), CHN_DISABLED (cadena sin configurar)"
           },
           "422": {
             "content": {
@@ -13406,16 +13106,6 @@
               }
             },
             "description": "VALIDATION_ERROR, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.2 de la Etapa 3 (Identidad de la bodega)"
           }
         },
         "security": [
@@ -13503,7 +13193,7 @@
                 }
               }
             },
-            "description": "CHN_CONTRACT_NOT_PAUSED, IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
+            "description": "CHN_CONTRACT_NOT_PAUSED, CHN_DISABLED (cadena sin configurar), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
           },
           "422": {
             "content": {
@@ -13514,16 +13204,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.2 de la Etapa 3 (Identidad de la bodega)"
           }
         },
         "security": [
@@ -15134,7 +14814,7 @@
     },
     "/v1/public/chain/registry": {
       "get": {
-        "description": "Contrato O3 §3.2: fuente canónica (JSON) de \"contratos oficiales\": red, código, cuentas de operaciones y de anclaje, y la cuenta y el contrato de cada bodega con identidad `ACTIVE`. Sin sesión. Mismo límite por IP real que el pasaporte (O2 §12.4) y respuesta cacheable.",
+        "description": "Contrato O3 §3.2: fuente canónica (JSON) de \"contratos oficiales\": red, código, cuentas de operaciones y de anclaje, y la cuenta y el contrato de cada bodega con identidad `ACTIVE` (o `PAUSED`, con `paused: true`). Con la cadena sin configurar, las cuentas son `null` y la lista, vacía. Sin sesión. Mismo límite por IP real que el pasaporte (O2 §12.4) y respuesta cacheable.",
         "operationId": "PublicChainController_registry_v1",
         "parameters": [],
         "responses": {
@@ -15147,16 +14827,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.2 de la Etapa 3 (Identidad de la bodega)"
           }
         },
         "summary": "Registro público de cuentas y contratos oficiales",
@@ -15221,16 +14891,6 @@
               }
             },
             "description": "FILE_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "summary": "Imagen pública de una colección",
@@ -15473,8 +15133,8 @@
     },
     "/v1/public/lots/{lotCode}/verification": {
       "get": {
-        "description": "Contrato O3 §7.3: huella del expediente, anclaje (memo y transacción) y las cuatro comprobaciones (`DOSSIER_CLOSED`, `ANCHOR_CONFIRMED`, `MEMO_MATCHES_HASH`, `ANCHOR_ACCOUNT_OFFICIAL`). El visor recalcula la huella en el navegador con los bytes de `GET /v1/public/lots/{lotCode}/dossier`. Lote `ANCHORED`: `max-age=3600`. Sin sesión. Mismo límite por IP real que el pasaporte (O2 §12.4) y respuesta cacheable.",
-        "operationId": "PublicChainController_verification_v1",
+        "description": "Contrato O3 §7.3: huella del expediente, anclaje (memo y transacción) y las cuatro comprobaciones (`DOSSIER_CLOSED`, `ANCHOR_CONFIRMED`, `MEMO_MATCHES_HASH`, `ANCHOR_ACCOUNT_OFFICIAL`; `pass: null` = aún no aplica). Un anclaje fallido o a medias se publica como `PENDING`, sin transacción (S-17). `verifiedOnChainAt` es cuándo el servidor leyó la transacción y comprobó memo y cuenta de origen. El visor recalcula la huella en el navegador con los bytes de `GET /v1/public/lots/{lotCode}/dossier`. Sin sesión; mismo límite por IP real que el pasaporte (O2 §12.4); anclado: `max-age=3600`.",
+        "operationId": "PublicVerificationController_verification_v1",
         "parameters": [
           {
             "name": "lotCode",
@@ -15499,44 +15159,42 @@
             }
           },
           "404": {
+            "description": "PUB_CODE_NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiErrorResponseDto"
                 }
               }
-            },
-            "description": "PUB_CODE_NOT_FOUND"
+            }
           },
           "422": {
+            "description": "PUB_CODE_MALFORMED",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiErrorResponseDto"
                 }
               }
-            },
-            "description": "PUB_CODE_MALFORMED"
+            }
           },
           "429": {
+            "description": "PUB_TOO_MANY_LOOKUPS",
+            "headers": {
+              "Retry-After": {
+                "description": "Segundos hasta poder reintentar",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiErrorResponseDto"
                 }
               }
-            },
-            "description": "PUB_TOO_MANY_LOOKUPS"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.5 de la Etapa 3 (Anclaje)"
+            }
           }
         },
         "summary": "Verificación pública del anclaje de un lote",
@@ -15601,16 +15259,6 @@
               }
             },
             "description": "TOO_MANY_REQUESTS"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.4 de la Etapa 3 (Emisión y preventa)"
           }
         },
         "summary": "Metadatos de un NFT (`token_uri`)",
@@ -16568,16 +16216,6 @@
                 }
               }
             }
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -16635,16 +16273,6 @@
               }
             },
             "description": "TOK_REQUEST_NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -16730,16 +16358,6 @@
               }
             },
             "description": "VALIDATION_ERROR, TOK_LOT_PRODUCT_UNDEFINED, TOK_LOT_ESTIMATE_MISSING, TOK_QUOTA_INVALID, TOK_QUOTA_EXCEEDS_ESTIMATE (`expected`, `actual`, `meta.maxQuantity`), TOK_QUOTA_EXCEEDS_BOTTLES (`expected`, `actual`, `meta.maxQuantity`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -16837,16 +16455,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, TOK_LOT_PRODUCT_UNDEFINED, TOK_LOT_ESTIMATE_MISSING, TOK_QUOTA_INVALID, TOK_QUOTA_EXCEEDS_ESTIMATE (`expected`, `actual`, `meta.maxQuantity`), TOK_QUOTA_EXCEEDS_BOTTLES (`expected`, `actual`, `meta.maxQuantity`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
@@ -16934,16 +16542,6 @@
               }
             },
             "description": "VALIDATION_ERROR, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.3 de la Etapa 3 (Solicitud de tokenización)"
           }
         },
         "security": [
