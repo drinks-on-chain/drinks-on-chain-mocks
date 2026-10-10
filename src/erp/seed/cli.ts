@@ -1,5 +1,6 @@
 import type { ChainCtx } from '../../chain/engine'
-import { buildChainFixtureFiles } from '../../tokenization/fixture-files'
+import type { ChainNotice } from '../../chain/state'
+import { buildChainFixtureFiles, withTokenizationMails } from '../../tokenization/fixture-files'
 import type { TraceState } from '../trace/state'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -29,9 +30,11 @@ function write(domain: string, set: object) {
 
 const base = generateErpFixtures()
 const backoffice = generateBackofficeFixtures(base)
-const capture: { state?: TraceState; ctx?: ChainCtx } = {}
+const capture: { state?: TraceState; ctx?: ChainCtx; notices?: ChainNotice[] } = {}
 const erp = buildErpFixtureFiles(base, backoffice, capture)
 const ola3 = buildChainFixtureFiles(capture.state!, capture.ctx!)
+// Los correos de la tokenización (Ola 3) se suman al buzón de la Ola 1.
+backoffice['mailbox.json'] = withTokenizationMails(backoffice['mailbox.json'], capture.notices ?? [], { chain: capture.state!.chain, wineries: capture.state!.wineries, lots: capture.state!.lots, users: base['users.json'] })
 write('erp', erp)
 write('backoffice', backoffice)
 write('chain', ola3.chain)

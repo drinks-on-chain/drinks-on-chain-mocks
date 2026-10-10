@@ -299,7 +299,11 @@ describe('red simulada: fallos forzados, reintento y espera de la emisión (§2.
     const board = await get<Dashboard>('/v1/platform/dashboard', ADMIN)
     expect(board.chain).toMatchObject({ network: 'TESTNET', failedTransactions: 1, openAlerts: { critical: 1, warning: 1 }, lastReconciliation: { status: 'OK' } })
     expect(board.tokenization).toMatchObject({ mintFailures: 1, collectionsMinting: 1, collectionsPublished: 2, submitted: 1, inReview: 1, changesRequested: 1 })
-    expect(board.alerts.some((a) => a.level === 'CRITICAL' && a.message.includes('MINT_BATCH'))).toBe(true)
+    // El tablero resume las alertas de la cadena en dos entradas fijas (backend, paso 3.6).
+    expect(board.alerts.filter((a) => a.id.startsWith('chain-alerts-'))).toMatchObject([
+      { id: 'chain-alerts-critical', level: 'CRITICAL', message: '1 alerta crítica de la cadena sin resolver: nada se corrige solo.', link: '/cadena/alertas' },
+      { id: 'chain-alerts-warning', level: 'WARNING', message: '1 aviso de la cadena sin resolver.', link: '/cadena/alertas' },
+    ])
 
     // Una emisión no se abandona; reintentar exige rol, motivo e Idempotency-Key.
     const url = `/v1/platform/chain/transactions/${failed[0]!.id}`
@@ -505,7 +509,7 @@ describe('cierre con faltante (§8.4), conciliación y alertas (§8.2)', () => {
   it('sin faltante: operaciones decide conservar a la venta; un lote sin embotellar no tiene cierre', async () => {
     const closure = await get<LotClosure>(`/v1/platform/collections/${portillo.id}/closure`, SUPPORT)
     expect(closure).toMatchObject({ status: 'NO_SHORTFALL', bottles: 1040, minted: 240, shortfall: 0, items: [] })
-    expect(dataOf((await post<LotClosure>(`/v1/platform/collections/${portillo.id}/closure/decide`, OPS, { unsoldPolicy: 'KEEP_ON_SALE', reason: 'Siguen a la venta' })).json)).toMatchObject({ status: 'RESOLVED', unsoldPolicy: 'KEEP_ON_SALE' })
+    expect(dataOf((await post<LotClosure>(`/v1/platform/collections/${portillo.id}/closure/decide`, OPS, { unsoldPolicy: 'KEEP_ON_SALE', reason: 'Siguen a la venta' })).json)).toMatchObject({ status: 'NO_SHORTFALL', unsoldPolicy: 'KEEP_ON_SALE', decision: { by: { fullName: 'Valeria Méndez' }, reason: 'Siguen a la venta' } })
     // Quemar los no vendidos con botella es de administración.
     expect(failure(await post(`/v1/platform/collections/${granReserva.id}/closure/decide`, OPS, { unsoldPolicy: 'BURN', reason: 'Se retira la colección' }))).toMatchObject({ status: 403 })
     expect(failure(await call(`/v1/platform/collections/${preventa.id}/closure`, { token: SUPPORT }))).toMatchObject({ status: 409, code: 'TOK_CLOSURE_NOT_APPLICABLE', details: [{ meta: { stage: 'ORIGIN' } }] })

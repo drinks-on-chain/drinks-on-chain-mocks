@@ -200,7 +200,7 @@ export function onWineryStatusChanged(wineryId: string, status: string): void {
     c.status = 'PAUSED'
     c.updatedAt = ctx.now
     c.statusHistory.push({ status: 'PAUSED', at: ctx.now, by: 'Sistema', reason })
-    pushNotice(db.chain, { type: 'COLLECTION_PAUSED', wineryId, collectionId: c.id, message: reason })
+    pushNotice(db.chain, { at: ctx.now, type: 'COLLECTION_PAUSED', wineryId, collectionId: c.id, message: reason })
   }
   if (status !== 'REVOKED') return
   // Revocar pausa además el contrato en la red (lo firma el operador; solo la bodega lo reanuda).

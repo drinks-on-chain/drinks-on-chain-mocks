@@ -125,7 +125,7 @@ function createBackofficeState(): BackofficeState {
 
 const STATE_KEY = 'doc-mocks:state'
 /** Cambia con los fixtures: un estado guardado con otros fixtures se descarta. */
-const STATE_VERSION = `0.6:${backofficeFixtures.audit.at(-1)?.hash.slice(0, 16) ?? ''}:${erpFixtures.users.length}`
+const STATE_VERSION = `0.6.0-rc.3:${backofficeFixtures.audit.at(-1)?.hash.slice(0, 16) ?? ''}:${erpFixtures.users.length}`
 
 interface PersistedState {
   version: string

@@ -1,5 +1,6 @@
 import type { ChainCtx } from '../../chain/engine'
 import { identityOf, txById } from '../../chain/state'
+import type { ChainNotice } from '../../chain/state'
 import { runChainSeed, seedChainEnv } from '../../tokenization/seed'
 import type { BackofficeFixtureSet } from '../../backoffice/seed/generate'
 import { REFERENCE_DAY } from '../../shared/dates'
@@ -126,12 +127,12 @@ export function seedChainCtx(backoffice: BackofficeFixtureSet, state: Pick<Trace
  * semilla de la Ola 3 (identidades, preventas, anclajes). `capture` devuelve el estado completo
  * para escribir `fixtures/chain/` y `fixtures/tokenization/`.
  */
-export function buildErpFixtureFiles(base: ErpFixtureSet, backoffice: BackofficeFixtureSet, capture?: { state?: TraceState; ctx?: ChainCtx }): ErpFixtureFiles {
+export function buildErpFixtureFiles(base: ErpFixtureSet, backoffice: BackofficeFixtureSet, capture?: { state?: TraceState; ctx?: ChainCtx; notices?: ChainNotice[] }): ErpFixtureFiles {
   const ctx = seedTraceCtx(backoffice)
   const state = buildTraceState(base, ctx)
   const chainCtx = seedChainCtx(backoffice, state, ctx)
-  runChainSeed(state, chainCtx)
-  if (capture) Object.assign(capture, { state, ctx: chainCtx })
+  const notices = runChainSeed(state, chainCtx)
+  if (capture) Object.assign(capture, { state, ctx: chainCtx, notices })
   // SE-02: los campos legados de la bodega ya no llevan direcciones simuladas (contrato O3 §3.3).
   const wineries = state.wineries.map((w) => {
     const identity = identityOf(state.chain, w.id)

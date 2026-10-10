@@ -34,6 +34,8 @@ export const SCENARIOS = [
   'cadena-sin-configurar',
   'huella-alterada',
   'verificacion-no-encontrada',
+  // 0.6.0-rc.3
+  'verificacion-no-coincide',
 ] as const
 export type ScenarioName = (typeof SCENARIOS)[number]
 
@@ -44,7 +46,7 @@ export const RESPONSE_SCENARIOS = ['normal', 'empty', 'error', 'slow', 'offline'
  * Escenarios que solo cambian cómo responden las **rutas públicas** del visor (sin tocar los datos):
  * el límite del pasaporte y, desde 0.6.0-rc.2, los dos de la verificación del anclaje.
  */
-export const PUBLIC_RESPONSE_SCENARIOS = ['pasaporte-saturado', 'huella-alterada', 'verificacion-no-encontrada'] as const satisfies readonly ScenarioName[]
+export const PUBLIC_RESPONSE_SCENARIOS = ['pasaporte-saturado', 'huella-alterada', 'verificacion-no-encontrada', 'verificacion-no-coincide'] as const satisfies readonly ScenarioName[]
 export type ResponseScenarioName = (typeof RESPONSE_SCENARIOS)[number]
 
 export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
@@ -69,6 +71,7 @@ export const SCENARIO_DESCRIPTIONS: Record<ScenarioName, string> = {
   'identidad-sin-aprovisionar': 'Bodega Altos de Calamuchita activa pero sin identidad en la red (NOT_PROVISIONED): operaciones la aprovisiona',
   'cadena-sin-configurar': 'Cadena sin configurar en el entorno: provision, pause y unpause → 409 CHN_DISABLED; el registro público, sin cuentas ni bodegas',
   'huella-alterada': 'Verificación pública: el expediente canónico que se descarga no coincide con la huella anclada (el visor debe avisar)',
+  'verificacion-no-coincide': 'Verificación pública: el anclaje está confirmado pero su memo no coincide con la huella del expediente (MEMO_MATCHES_HASH en false)',
   'verificacion-no-encontrada': 'Verificación pública: GET /v1/public/lots/{lotCode}/verification responde 404 PUB_CODE_NOT_FOUND (el pasaporte sí carga)',
 }
 

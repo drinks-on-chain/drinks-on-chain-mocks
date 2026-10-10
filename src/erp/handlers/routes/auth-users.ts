@@ -1,4 +1,4 @@
-import { consumerAddressOf, draftSignup, isDraftSignup } from '../../../marketplace/handlers'
+import { consumerAddressOf, draftSignup, isDraftSignup, isEmailVerified } from '../../../marketplace/handlers'
 import {
   needsMfa,
   recordLogin,
@@ -434,7 +434,7 @@ export const authUserRoutes: RouteSpec[] = [
       // Ola 3 §3.3 (SE-02): ya no hay billeteras simuladas. El personal → 404; el consumidor recibe su
       // dirección custodial derivada con la forma legada (se sustituye en la Ola 4).
       const wallet = getErpDb().wallets.find((w) => w.userId === auth.user.id && w.isPrimary)
-      if (auth.audience !== 'CONSUMER' || !wallet) throw new ApiError(404, 'CHN_WALLET_NOT_AVAILABLE', 'Esta cuenta no tiene una dirección en la red')
+      if (auth.audience !== 'CONSUMER' || !wallet || !isEmailVerified(auth.user.id)) throw new ApiError(404, 'CHN_WALLET_NOT_AVAILABLE', 'Esta cuenta no tiene una dirección en la red')
       return ok({ ...wallet, stellarPublicAddress: consumerAddressOf(auth.user.id) })
     },
   },

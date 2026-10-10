@@ -1,6 +1,6 @@
 import { advanceChain, raiseAlert, recordChainEvent, settleChain, type ChainCtx, type ChainEnv } from '../chain/engine'
 import { anchorDossier, extendTtl, provisionIdentity, runReconciliation } from '../chain/service'
-import { collectionOfLot, emptyChainState, identityOf, TESTNET_PASSPHRASE, tokensOf, type ChainState, type StoredCollection } from '../chain/state'
+import { collectionOfLot, emptyChainState, identityOf, TESTNET_PASSPHRASE, tokensOf, type ChainNotice, type ChainState, type StoredCollection } from '../chain/state'
 import type { UserRef } from '../chain/schemas'
 import type { Lot, TraceActor } from '../erp/schemas'
 import { actorOfMember } from '../erp/trace/backfill'
@@ -249,8 +249,12 @@ function resequenceLedgers(chain: ChainState): void {
   chain.ledger = Math.max(last, ledgerAt(confirmed.at(-1)?.confirmedAt ?? ''), chain.ledger)
 }
 
-/** Genera el estado de la Ola 3 sobre la trazabilidad ya sembrada (lotes de la Ola 2 incluidos). */
-export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
+/**
+ * Genera el estado de la Ola 3 sobre la trazabilidad ya sembrada (lotes de la Ola 2 incluidos).
+ * Devuelve los avisos que dejó (con su fecha): `pnpm seed` los convierte en los correos de la
+ * tokenización de `fixtures/backoffice/mailbox.json`.
+ */
+export function runChainSeed(state: TraceState, ctx: ChainCtx): ChainNotice[] {
   state.chain = emptyChainState()
   const chain = state.chain
   seedPlatform(chain, ctx)
@@ -442,8 +446,10 @@ export function runChainSeed(state: TraceState, ctx: ChainCtx): void {
   // La extensión del código lo dejó con 30 días más; el día de referencia le quedan 96.
   chain.ttl.code = daysFrom(ctx, 96)
   chain.indexer = { lastLedger: chain.ledger, lagSeconds: chain.indexer.lagSeconds }
-  // Los avisos de la semilla no se envían: el buzón de los fixtures es el de la Ola 1.
+  // Los avisos no se quedan en el estado: salen como correos del buzón de los fixtures.
+  const notices = chain.notices
   chain.notices = []
+  return notices
 }
 
 // ---------------------------------------------------------------------------
@@ -609,10 +615,10 @@ export function applyChainScenario(state: TraceState, ctx: ChainCtx, name: Chain
       raiseAlert(state, ctx, {
         code: 'UNEXPECTED_EVENT',
         level: 'CRITICAL',
-        subject: { type: 'CHAIN_EVENT', id: event.id },
+        subject: { type: 'EVENT', id: event.rpcEventId },
         wineryId: identity.wineryId,
         message: 'Evento `role_granted` en el contrato de Destilería Cinti Viejo que no originó el sistema',
-        expected: null,
+        expected: { originatedBySystem: true },
         actual: { type: 'role_granted', role: 'minter', account: intruder, txHash: event.txHash },
       })
       return

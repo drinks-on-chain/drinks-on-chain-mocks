@@ -1108,7 +1108,7 @@
     "intentKey": "ttl:code:2026-09-20T07:01:00Z",
     "subject": {
       "type": "PLATFORM",
-      "id": "WASM"
+      "id": "CODE"
     },
     "wineryId": null,
     "intent": {

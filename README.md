@@ -16,7 +16,7 @@ pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/downl
 # Estable de la Ola 2 (ERP v2 y dominio público)
 pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.5.0/drinks-on-chain-mocks-0.5.0.tgz
 # Pre-release de la Ola 3 (tokenización y cadena)
-pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.2/drinks-on-chain-mocks-0.6.0-rc.2.tgz
+pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.3/drinks-on-chain-mocks-0.6.0-rc.3.tgz
 pnpm add zod msw        # peer dependencies (msw solo si usas los handlers)
 ```
 
@@ -169,7 +169,7 @@ setScenario('lote-en-reposo')        // el lote de demostración, a 10 días de 
 advanceMockClock(10 * 86_400_000)    // pasan los 10 días: ya se puede embotellar SINGANI_CASE.lotId
 ```
 
-### Ola 3 · tokenización y cadena (`plan/contratos/o3-tokenizacion.md`, pre-release 0.6.0-rc.2)
+### Ola 3 · tokenización y cadena (`plan/contratos/o3-tokenizacion.md`, pre-release 0.6.0-rc.3)
 
 Las 54 rutas de la apertura de la Ola 3, con sus reglas y una red simulada (detalle, diferencias con el contrato escrito y suposiciones en [`docs/CONTRATO.md`](docs/CONTRATO.md) §13):
 
@@ -221,8 +221,8 @@ Las direcciones (`G…`, `C…`) y los hashes de los fixtures tienen **forma vá
 
 **Borrador del Marketplace** (contrato §13.1, fuera del OpenAPI, cabecera `X-Mock-Draft`): `GET /v1/me/consumer`, `POST /v1/orders`, `GET /v1/orders`, `GET /v1/orders/{id}` y `POST /v1/payments/test/{paymentId}/simulate` (`APPROVE`, `REJECT`, `DELAY`). Puede cambiar con el contrato de la Ola 4. Desde `rc.2`:
 
-- **Ficha por bodega**: `GET /v1/public/collections/{winerySlug}/{slug}` (la de `{slug}` solo queda obsoleta, con `Deprecation`).
-- **Alta con verificación**: `POST /v1/auth/signup` con `captchaToken`, `acceptTerms`, `ageDeclaration` y el campo trampa `website` → 202 `{ status: 'VERIFICATION_SENT' }` sin sesión; el correo `EMAIL_VERIFY` queda en el buzón (`mockMailbox.latest({ to, template: 'EMAIL_VERIFY' })`), `POST /v1/auth/verify-email` → 204 y después se inicia sesión. `GET /v1/me/consumer` devuelve `emailVerified: false` hasta entonces. Sin esos campos, el alta responde como el OpenAPI vigente (201 con sesión).
+- **Ficha por bodega**: `GET /v1/public/collections/{winerySlug}/{slug}` (la de `{slug}` a secas se retiró en `rc.3`).
+- **Alta con verificación**: `POST /v1/auth/signup` con `captchaToken`, `acceptTerms`, `ageDeclaration` y el campo trampa `website` → 202 `{ status: 'VERIFICATION_SENT' }` sin sesión; el correo `EMAIL_VERIFY` queda en el buzón (`mockMailbox.latest({ to, template: 'EMAIL_VERIFY' })`), `POST /v1/auth/verify-email` → 204 y después se inicia sesión. `GET /v1/me/consumer` devuelve `emailVerified: false` y `address: null` hasta entonces. Sin esos campos, el alta responde como el OpenAPI vigente (201 con sesión).
 - **Pedidos sembrados** para María (`MARKETPLACE_DEMO_ACCOUNT`, `maria@tribu.test`): dos pagados, uno con el pago rechazado y uno caducado.
 - **Máximo por compra**: `GET /v1/public/purchase-settings` → `{ maxBottlesPerOrder, reservationMinutes, currency }`.
 
@@ -236,7 +236,7 @@ Las direcciones (`G…`, `C…`) y los hashes de los fixtures tienen **forma vá
 
 ### Buzón simulado
 
-Los correos que el backend enviaría (invitaciones, verificación, recuperación, avisos y, desde 0.6.0-rc.2, los de la tokenización: solicitud recibida, cambios pedidos, aprobada, rechazada, NFT emitidos, colección publicada o pausada, faltante y, a operaciones, solicitud nueva o reenviada y alertas críticas; `TOKENIZATION_MAIL_TEMPLATES`) se guardan en un buzón, como Mailpit:
+Los correos que el backend enviaría (invitaciones, verificación, recuperación, avisos y, desde 0.6.0-rc.2, los de la tokenización: solicitud recibida, cambios pedidos, aprobada, rechazada, NFT emitidos, colección publicada o pausada, faltante y, a operaciones, solicitud nueva o reenviada y alertas críticas; `TOKENIZATION_MAIL_TEMPLATES`, también en `backofficeFixtures.mailbox`) se guardan en un buzón, como Mailpit:
 
 ```ts
 import { mockMailbox } from '@drinks-on-chain/mocks/handlers' // o /browser, /node
@@ -277,6 +277,7 @@ Todas las colecciones responden `data: { items, total, limit, offset }` (contrat
 | `cadena-sin-configurar` | Datos: cadena desactivada (`CHN_DISABLED`), registro público vacío |
 | `huella-alterada` | El expediente canónico público ya no da la huella anclada (el visor, que la recalcula, debe avisar) |
 | `verificacion-no-encontrada` | `GET /v1/public/lots/{lotCode}/verification` responde 404 `PUB_CODE_NOT_FOUND`; el pasaporte carga |
+| `verificacion-no-coincide` | La verificación devuelve `MEMO_MATCHES_HASH` en `false` con el anclaje confirmado |
 
 La lista crece con las olas: para un panel usa `SCENARIOS` y `SCENARIO_DESCRIPTIONS` (o `Partial<Record<ScenarioName, …>>`), no un `Record<ScenarioName, …>` escrito a mano. `lote-en-reposo`, `lote-listo`, `laboratorio-no-conforme`, `lote-con-incidencia` y los diez de la Ola 3 (`CHAIN_SCENARIOS`) son **escenarios de datos** (`DATA_SCENARIOS`): no cambian cómo responde el backend simulado sino en qué etapa está el lote de demostración. Al elegir uno, la trazabilidad se rehace desde los fixtures (lo creado en la sesión se descarta; la identidad y el back office, no); `normal` deja el lote certificado.
 

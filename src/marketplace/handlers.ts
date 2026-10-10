@@ -215,13 +215,14 @@ export const marketplaceDraftRoutes: RouteSpec[] = [
     handle({ auth }) {
       const { user } = consumer(auth)
       const prefs = prefsOf(user.id)
-      const address = consumerAddressOf(user.id)
+      // La dirección custodial se asigna al verificar el correo: hasta entonces, `address: null`.
+      const address = isEmailVerified(user.id) ? consumerAddressOf(user.id) : null
       const profile: ConsumerProfile = {
         userId: user.id,
         fullName: user.fullName,
         email: user.email,
         emailVerified: isEmailVerified(user.id),
-        address: { address, network: getErpDb().chain.network, explorerUrl: explorerAccountUrl(address), custodial: true },
+        address: address ? { address, network: getErpDb().chain.network, explorerUrl: explorerAccountUrl(address), custodial: true } : null,
         preferences: { lotProgress: true, redemptionReminders: true, promotions: prefs.promotionsConsent },
         createdAt: user.createdAt,
       }

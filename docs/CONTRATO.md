@@ -656,7 +656,46 @@ Sigue fuera del OpenAPI (§13.7). Añade:
 
 ### 14.8 Pendiente para `0.6.0`
 
+> Hecho en `0.6.0-rc.3` (§15), salvo el dominio `marketplace` de la Etapa 4.
+
 - `pnpm openapi:pull` contra el servidor cuando despliegue la Ola 3 (deben ser las mismas 212 operaciones) y las precisiones del paso 3.6 al implementarse: conciliación, alertas, eventos, TTL y cierre con faltante se apoyan en el contrato escrito.
 - Retirar `GET /v1/public/collections/{slug}`.
 - Dominio `marketplace` regenerado desde el OpenAPI borrador de la Etapa 4 (alta, verificación, pedidos, catálogo).
 - Correos de la tokenización en `fixtures/backoffice/mailbox.json` (hoy solo se generan en la sesión).
+
+## 15. Ola 3 · backend desplegado completo (mocks 0.6.0-rc.3)
+
+El backend de la Ola 3 está desplegado en desarrollo (`91f037e`, pasos 3.1–3.6; la cadena, aún sin configurar). `openapi/erp.json` vuelve a salir del servidor:
+
+```bash
+pnpm openapi:pull -- https://136.243.223.39.sslip.io/docs-json   # 212 operaciones, 403 esquemas, «Mismas operaciones que antes»
+```
+
+Respecto al documento de `rc.2` (§14.1) ningún DTO cambia: desaparece el `501` de las 11 rutas del paso 3.6 y se precisan cuatro respuestas (`CHN_DISABLED` y `subjectId` al lanzar una conciliación, `CHN_CONTRACT_PAUSED` al decidir un cierre, `CONFLICT` al resolver un ítem). **Ya no queda ninguna ruta por contrato escrito**: las 212 se validan, estrictas, contra el OpenAPI desplegado; `pendientes.json` solo lleva los borradores del catálogo y del Marketplace.
+
+### 15.1 Precisiones del paso 3.6
+
+| Tema | rc.2 | Backend desplegado (y mocks rc.3) |
+|---|---|---|
+| `ChainAlert.subject.type` | Texto libre con `CHAIN_EVENT` y `PLATFORM` | Sigue siendo `string` en el OpenAPI, pero el backend solo emite `CONTRACT`, `COLLECTION`, `LOT`, `MINT`, `TOKEN`, `TRANSACTION`, `EVENT`, `NETWORK`, `CODE` y `PLATFORM_ACCOUNT` (`CHAIN_ALERT_SUBJECT_TYPES`) |
+| Sujeto por código | — | `UNEXPECTED_EVENT` → `EVENT` (`rpcEventId`); `INDEXER_GAP` y `NETWORK_RESET` → `NETWORK` (la red), `CRITICAL`; `TTL_EXPIRING` → `CONTRACT` o `CODE` (hash del código), `WARNING`; `OWNER_MISMATCH`, `BURN_MISMATCH`, `PAUSE_MISMATCH`, `ROLE_MISMATCH` → `CONTRACT`; `TOTAL_MINTED_MISMATCH`, `QUOTA_EXCEEDED`, `BOTTLES_SHORTFALL` → `COLLECTION`; `MINT_RANGE_MISMATCH` → `MINT`; `ANCHOR_MISMATCH` → `LOT`; `TX_FAILED`, `TX_STUCK` → `TRANSACTION`; `LOW_BALANCE` → `PLATFORM_ACCOUNT` (`OPERATIONS` \| `ANCHOR`) |
+| Tablero | Una entrada por alerta abierta | Dos entradas fijas en `Dashboard.alerts`: `chain-alerts-critical` («N alertas críticas de la cadena sin resolver: nada se corrige solo.») y `chain-alerts-warning`, con `link: '/cadena/alertas'`; los recuentos siguen en `chain.openAlerts` |
+| Conciliación | — | Lanzarla sin cadena → 409 `CHN_DISABLED`; `subjectId` que no es un contrato o una colección existentes → 422 `VALIDATION_ERROR` en `subjectId` |
+| Cierre: cálculo | Se recalculaba entero mientras no hubiera decisión | Los ítems **solo se añaden**: los NFT vivos sin botella que ningún ítem cubre. Orden: no vendidos, **reservados** y vendidos (el pago más reciente primero); dentro, el número de botella más alto. Más botellas anuladas después reabren el cierre (`SHORTFALL_OPEN`) y suman a `shortfall` |
+| Cierre: decidir | `KEEP_ON_SALE` sin faltante → `RESOLVED` | Sin faltante ni quemas **sigue `NO_SHORTFALL`** con `unsoldPolicy` y `decision` (se puede volver a decidir). Con quemas: `DECIDED → RESOLVED` al confirmarse las quemas y resolverse los ítems vendidos. **Cualquier faltante** (o `BURN`) exige administración (403) y el contrato sin pausar (409 `CHN_CONTRACT_PAUSED`, `meta.status`). Ya decidido → 409 `CONFLICT` (`meta.closureStatus`) |
+| Cierre: resolver un ítem | Solo tras decidir | Vale en cualquier estado para un NFT vendido o reservado; ya resuelto o sin vender → 409 `CONFLICT`; no es un ítem → 404 `NOT_FOUND` |
+| Cierre visto por la bodega | Sin `orderId`, `paidAt`, `note` | Igual (`WineryLotClosureDto`) |
+| Evento `SHORTFALL_DETECTED` | `data: { collectionId, bottles, minted, shortfall }` | Añade `closureId`, `unsoldToBurn` y `soldWithoutBottle`; el correo del faltante va también a operaciones |
+| `codeTtlDays` | Calculado con el reloj | Igual: los días de la última lectura menos los transcurridos; `null` sin lectura (en el servidor, hoy `null`: la cadena no está configurada) |
+
+Diferencia que se mantiene: el backend identifica un contrato por el id de su fila (sujeto `CONTRACT` de las alertas y `subjectId` de la conciliación), que ningún DTO público expone; los mocks usan su dirección `C…`.
+
+### 15.2 Lo demás de rc.3
+
+- **Catálogo (borrador)**: se retira `GET /v1/public/collections/{slug}`; queda `GET /v1/public/collections` (contrato de la Ola 2 §17.1) y la ficha por bodega (§14.3).
+- **Buzón de los fixtures**: `fixtures/backoffice/mailbox.json` incluye los correos de la tokenización que deja la semilla de la Ola 3 (`withTokenizationMails`), por fecha.
+- **Marketplace (borrador)**: la dirección custodial se asigna al verificar el correo: un alta sin verificar tiene `address: null` (y 404 `CHN_WALLET_NOT_AVAILABLE` en `/v1/users/me/wallet`). Escenario `verificacion-no-coincide`: `MEMO_MATCHES_HASH` en `false` con el anclaje `ANCHORED` (la verificación del servidor; `huella-alterada` es la del navegador).
+
+### 15.3 Para la estable `0.6.0`
+
+Nada pendiente del contrato de la Ola 3. Queda fuera de la ola el dominio `marketplace` definitivo (contrato y OpenAPI de la Etapa 4).

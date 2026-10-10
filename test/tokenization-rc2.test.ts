@@ -1,5 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import {
+  CHAIN_ALERT_SUBJECT_TYPES,
   ChainAlertSchema,
   CollectionSchema,
   ConsumerProfileSchema,
@@ -250,9 +251,10 @@ describe('precisiones del backend (pasos 3.1–3.5)', () => {
     mockChain.indexerGap()
     await reconcile()
     const open = await alerts('status=open&limit=100')
-    expect(open.map((a) => `${a.code}:${a.subject.type}:${a.subject.id.length > 12 ? '…' : a.subject.id}`).sort()).toEqual(['TTL_EXPIRING:CONTRACT:…', 'TTL_EXPIRING:PLATFORM:WASM'])
+    expect(open.map((a) => `${a.code}:${a.subject.type}:${a.subject.id.length > 12 ? '…' : a.subject.id}`).sort()).toEqual(['TTL_EXPIRING:CODE:…', 'TTL_EXPIRING:CONTRACT:…'])
+    expect(open.every((a) => (CHAIN_ALERT_SUBJECT_TYPES as readonly string[]).includes(a.subject.type))).toBe(true)
     const resolved = await alerts('status=resolved&limit=100')
-    expect(resolved.map((a) => `${a.code}:${a.subject.type}`)).toEqual(expect.arrayContaining(['INDEXER_GAP:PLATFORM', 'LOW_BALANCE:PLATFORM_ACCOUNT', 'TTL_EXPIRING:CONTRACT']))
+    expect(resolved.map((a) => `${a.code}:${a.subject.type}`)).toEqual(expect.arrayContaining(['INDEXER_GAP:NETWORK', 'LOW_BALANCE:PLATFORM_ACCOUNT', 'TTL_EXPIRING:CONTRACT']))
   })
 })
 
@@ -350,11 +352,11 @@ describe('Backoffice: cierre con NFT vendidos sin botella, reenvío de la bodega
     expect(run).toMatchObject({ status: 'DIFFERENCES', issuesOpened: 3, issuesAutoResolved: 0, depth: 'FULL', trigger: 'MANUAL' })
     const detail = await get<{ alerts: ChainAlert[] }>(`/v1/platform/chain/reconciliation/runs/${run.id}`, SUPPORT)
     expect(detail.alerts.map((a) => [a.code, a.level, a.subject.type]).sort()).toEqual([
-      ['OWNER_MISMATCH', 'CRITICAL', 'COLLECTION'],
+      ['OWNER_MISMATCH', 'CRITICAL', 'CONTRACT'],
       ['PAUSE_MISMATCH', 'CRITICAL', 'CONTRACT'],
       ['ROLE_MISMATCH', 'CRITICAL', 'CONTRACT'],
     ])
-    expect(detail.alerts.find((a) => a.code === 'OWNER_MISMATCH')).toMatchObject({ subject: { id: preventa.id }, expected: { tokenId: token.tokenId, owner: token.owner.address }, actual: { tokens: 1 } })
+    expect(detail.alerts.find((a) => a.code === 'OWNER_MISMATCH')).toMatchObject({ subject: { id: preventa.contract.address }, actual: { mismatches: [{ tokenId: token.tokenId, database: token.owner.address }], total: 1 } })
     // Nunca corrige datos: el NFT sigue a nombre de la bodega en la base.
     expect((await get<Paged<{ owner: { address: string }; onchain: { owner: string } }>>(`/v1/platform/collections/${preventa.id}/tokens?limit=1`, SUPPORT)).items[0]).toMatchObject({ owner: { address: token.owner.address }, onchain: { owner: expect.not.stringMatching(token.owner.address) } })
     expect((await get<Paged<{ type: string }>>('/v1/platform/chain/events?unmatched=true', SUPPORT)).items.map((e) => e.type).sort()).toEqual(['paused', 'role_granted', 'transfer'])
@@ -369,7 +371,7 @@ describe('Backoffice: cierre con NFT vendidos sin botella, reenvío de la bodega
 
     // Indexador: se queda atrás → alerta y retraso visible; la conciliación lo pone al día.
     const gap = mockChain.indexerGap(300)
-    expect(gap).toMatchObject({ code: 'INDEXER_GAP', level: 'WARNING', subject: { type: 'PLATFORM', id: 'INDEXER' } })
+    expect(gap).toMatchObject({ code: 'INDEXER_GAP', level: 'CRITICAL', subject: { type: 'NETWORK', id: 'TESTNET' } })
     expect((await board()).indexerLagSeconds).toBe(1500)
     expect(await reconcile({ scope: 'ALL' })).toMatchObject({ issuesAutoResolved: 1 })
     expect((await board()).indexerLagSeconds).toBe(12)
@@ -379,8 +381,8 @@ describe('Backoffice: cierre con NFT vendidos sin botella, reenvío de la bodega
     advanceMockClock(85 * 86_400_000)
     expect((await accounts()).codeTtlDays).toBe(11)
     expect(await reconcile()).toMatchObject({ status: 'DIFFERENCES' })
-    const ttl = await alerts('status=open&code=TTL_EXPIRING&level=CRITICAL')
-    expect(ttl).toMatchObject([{ subject: { type: 'PLATFORM', id: 'WASM' }, expected: { minDays: 14 }, actual: { days: 11 } }])
+    const ttl = (await alerts('status=open&code=TTL_EXPIRING')).filter((a) => a.subject.type === 'CODE')
+    expect(ttl).toMatchObject([{ level: 'WARNING', subject: { type: 'CODE', id: chainFixtures.platformAccounts.wasmHash }, expected: { minDays: 14 }, actual: { days: 11 } }])
     const extension = mockChain.extendTtl('CODE')
     expect(extension).toMatchObject({ kind: 'EXTEND_TTL', status: 'PENDING' })
     for (const identity of chainFixtures.identities) mockChain.extendTtl({ wineryId: identity.wineryId }, 120)
@@ -503,9 +505,11 @@ describe('BORRADOR del Marketplace (§13.1), rc.2: alta con verificación, pedid
     const session = await login()
     expect(session.user.audience).toBe('CONSUMER')
     const profile = async () => ConsumerProfileSchema.parse(await get('/v1/me/consumer', session.tokens.accessToken))
-    expect(await profile()).toMatchObject({ email: NEW.email, emailVerified: false, address: { custodial: true } })
+    // rc.3: la dirección custodial se asigna al verificar; hasta entonces `address: null` (y sin billetera legada).
+    expect(await profile()).toMatchObject({ email: NEW.email, emailVerified: false, address: null })
+    expect(failure(await call('/v1/users/me/wallet', { token: session.tokens.accessToken }))).toMatchObject({ status: 404, code: 'CHN_WALLET_NOT_AVAILABLE' })
     expect((await call('/v1/auth/verify-email', { body: { token: mail.token } })).status).toBe(204)
-    expect((await profile()).emailVerified).toBe(true)
+    expect(await profile()).toMatchObject({ emailVerified: true, address: { custodial: true, network: 'TESTNET' } })
     expect(failure(await call('/v1/auth/verify-email', { body: { token: mail.token } }))).toMatchObject({ status: 422, code: 'AUTH_EMAIL_TOKEN_INVALID' })
     // Las cuentas de los fixtures ya están verificadas.
     expect(ConsumerProfileSchema.parse(await get('/v1/me/consumer', CONSUMER)).emailVerified).toBe(true)

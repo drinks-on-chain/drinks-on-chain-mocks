@@ -1127,7 +1127,7 @@
       "intentKey": "ttl:code:2026-09-20T07:01:00Z",
       "subject": {
         "type": "PLATFORM",
-        "id": "WASM"
+        "id": "CODE"
       },
       "wineryId": null,
       "intent": {
@@ -15318,7 +15318,7 @@
       "status": "DIFFERENCES",
       "startedAt": "2026-09-15T06:30:00Z",
       "finishedAt": "2026-09-15T06:30:00Z",
-      "checks": 33,
+      "checks": 31,
       "issuesOpened": 1,
       "issuesAutoResolved": 0
     },
@@ -15331,7 +15331,7 @@
       "status": "DIFFERENCES",
       "startedAt": "2026-09-19T06:30:00Z",
       "finishedAt": "2026-09-19T06:30:00Z",
-      "checks": 33,
+      "checks": 31,
       "issuesOpened": 1,
       "issuesAutoResolved": 0
     },
@@ -15344,7 +15344,7 @@
       "status": "OK",
       "startedAt": "2026-09-20T10:30:00Z",
       "finishedAt": "2026-09-20T10:30:00Z",
-      "checks": 33,
+      "checks": 31,
       "issuesOpened": 0,
       "issuesAutoResolved": 1
     },
@@ -15357,7 +15357,7 @@
       "status": "OK",
       "startedAt": "2026-09-25T06:30:00Z",
       "finishedAt": "2026-09-25T06:30:00Z",
-      "checks": 33,
+      "checks": 31,
       "issuesOpened": 0,
       "issuesAutoResolved": 0
     },

@@ -184,7 +184,7 @@ export function platformAccounts(state: TraceState, now: string = state.chain.pl
 export function extendTtl(state: TraceState, ctx: ChainCtx, target: 'CODE' | { wineryId: string }, days: number = TTL_EXTENSION_DAYS): ChainTransaction {
   const chain = state.chain
   if (target === 'CODE') {
-    return enqueueTx(state, ctx, { kind: 'EXTEND_TTL', intentKey: `ttl:code:${ctx.now}`, subject: { type: 'PLATFORM', id: 'WASM' }, wineryId: null, intent: { target: 'CODE', wasmHash: chain.platform.wasmHash, days } })
+    return enqueueTx(state, ctx, { kind: 'EXTEND_TTL', intentKey: `ttl:code:${ctx.now}`, subject: { type: 'PLATFORM', id: 'CODE' }, wineryId: null, intent: { target: 'CODE', wasmHash: chain.platform.wasmHash, days } })
   }
   const contract = identityOf(chain, target.wineryId)?.contract
   if (!contract) throw stateError('TOK_WINERY_CHAIN_NOT_READY', 'La bodega aún no tiene su contrato en la red')
@@ -209,12 +209,12 @@ export function simulateIndexerGap(state: TraceState, ctx: ChainCtx, ledgers = 2
     open ??
     raiseAlert(state, ctx, {
       code: 'INDEXER_GAP',
-      level: 'WARNING',
-      subject: { type: 'PLATFORM', id: 'INDEXER' },
+      level: 'CRITICAL',
+      subject: { type: 'NETWORK', id: chain.network },
       wineryId: null,
-      message: `El indexador de eventos lleva ${chain.ledger - chain.indexer.lastLedger} ledgers de retraso: puede haber eventos sin leer`,
-      expected: { ledger: chain.ledger },
-      actual: { lastIndexedLedger: chain.indexer.lastLedger, lagSeconds: chain.indexer.lagSeconds },
+      message: `El indexador debía leer desde el ledger ${chain.indexer.lastLedger + 1} y lleva ${chain.ledger - chain.indexer.lastLedger} de retraso: puede haber eventos sin indexar. Se lanza una conciliación completa`,
+      expected: { fromLedger: chain.indexer.lastLedger + 1 },
+      actual: { latestLedger: chain.ledger, lagSeconds: chain.indexer.lagSeconds, stale: false },
     })
   )
 }
@@ -287,7 +287,13 @@ export const RECONCILED_ALERT_CODES = ['TOTAL_MINTED_MISMATCH', 'QUOTA_EXCEEDED'
  */
 export function runReconciliation(state: TraceState, ctx: ChainCtx, body: StartReconciliation, trigger: ReconciliationRun['trigger'] = 'MANUAL'): ReconciliationRun {
   const chain = state.chain
-  const subjectId = body.subjectId ?? null
+  // Backend, paso 3.6: sin cadena configurada no hay red con la que comparar.
+  assertChainEnabled(state)
+  const subjectId = body.scope === 'ALL' ? null : (body.subjectId ?? null)
+  const known = body.scope === 'COLLECTION' ? chain.collections.some((c) => c.id === subjectId) : body.scope === 'CONTRACT' ? chain.identities.some((i) => i.contract?.address === subjectId && i.contract.deployedAt) : true
+  if (!known) {
+    throw new ApiError(422, 'VALIDATION_ERROR', 'Los datos enviados no son válidos', [{ field: 'subjectId', message: body.scope === 'COLLECTION' ? 'No es una colección existente' : 'No es un contrato existente' }])
+  }
   const running = chain.runs.find((r) => r.status === 'RUNNING' && r.scope === body.scope && r.subjectId === subjectId)
   if (running) {
     throw stateError('CHN_RECONCILIATION_RUNNING', 'Ya hay una conciliación en curso para ese alcance', [{ field: null, message: 'Conciliación en curso', code: 'CHN_RECONCILIATION_RUNNING', meta: { runId: running.id } }])
@@ -318,20 +324,22 @@ export function runReconciliation(state: TraceState, ctx: ChainCtx, body: StartR
     check('QUOTA_EXCEEDED', c.id, tokens.length > c.quota ? { ...base, level: 'CRITICAL', message: `${name}: hay más NFT emitidos que cuota aprobada`, expected: c.quota, actual: tokens.length } : null)
     const closure = chain.closures.find((x) => x.collectionId === c.id)
     check('BOTTLES_SHORTFALL', c.id, closure?.status === 'SHORTFALL_OPEN' ? { ...base, level: 'WARNING', message: `${name}: hay ${closure.shortfall} NFT más que botellas`, expected: closure.bottles, actual: closure.minted } : null)
-    if (!full) continue
-    // Profundidad completa: dueño y quema de cada NFT, leídos de la red.
-    const owners = tokens.filter((t) => t.status !== 'BURNED' && t.onchain.owner !== t.owner.address)
-    check('OWNER_MISMATCH', c.id, owners.length > 0 ? { ...base, level: 'CRITICAL', message: `${name}: ${owners.length} NFT con un dueño en la red distinto del que dice la base`, expected: { tokenId: owners[0]!.tokenId, owner: owners[0]!.owner.address }, actual: { tokenId: owners[0]!.tokenId, owner: owners[0]!.onchain.owner, tokens: owners.length } } : null)
-    const burns = tokens.filter((t) => (t.status === 'BURNED') !== t.onchain.burned)
-    check('BURN_MISMATCH', c.id, burns.length > 0 ? { ...base, level: 'CRITICAL', message: `${name}: ${burns.length} NFT quemados en la red o en la base, pero no en las dos`, expected: { tokenId: burns[0]!.tokenId, burned: burns[0]!.status === 'BURNED' }, actual: { tokenId: burns[0]!.tokenId, burned: burns[0]!.onchain.burned, tokens: burns.length } } : null)
   }
 
-  if (full && body.scope !== 'COLLECTION') {
+  // Con alcance `COLLECTION` se lee solo el contrato de esa colección.
+  const contractOfScope = body.scope === 'COLLECTION' ? identityOf(chain, collections[0]?.wineryId ?? '')?.contract?.address : subjectId
+  if (full) {
     for (const identity of chain.identities) {
       const contract = identity.contract
-      if (!contract?.deployedAt || (body.scope === 'CONTRACT' && contract.address !== subjectId)) continue
+      if (!contract?.deployedAt || (!all && contract.address !== contractOfScope)) continue
       const base = { subjectType: 'CONTRACT', wineryId: identity.wineryId }
       const tradeName = ctx.env.winery(identity.wineryId).tradeName
+      // Dueño y quema de cada NFT del contrato, leídos de la red.
+      const tokens = chain.tokens.filter((t) => t.wineryId === identity.wineryId)
+      const owners = tokens.filter((t) => t.status !== 'BURNED' && t.onchain.owner !== t.owner.address)
+      check('OWNER_MISMATCH', contract.address, owners.length > 0 ? { ...base, level: 'CRITICAL', message: `${owners.length} NFT de ${tradeName} tienen en la red un dueño distinto del de la base`, expected: { checked: tokens.length }, actual: { mismatches: owners.slice(0, 10).map((t) => ({ tokenId: t.tokenId, database: t.owner.address, network: t.onchain.owner })), total: owners.length } } : null)
+      const burns = tokens.filter((t) => (t.status === 'BURNED') !== t.onchain.burned)
+      check('BURN_MISMATCH', contract.address, burns.length > 0 ? { ...base, level: 'CRITICAL', message: `${burns.length} NFT de ${tradeName} están quemados en la red o en la base, pero no en las dos`, expected: { checked: tokens.length }, actual: { mismatches: burns.slice(0, 10).map((t) => ({ tokenId: t.tokenId, database: t.status === 'BURNED', network: t.onchain.burned })), total: burns.length } } : null)
       const onchainPaused = chain.drift.paused[contract.address] ?? contract.paused
       check('PAUSE_MISMATCH', contract.address, onchainPaused !== contract.paused ? { ...base, level: 'CRITICAL', message: `El contrato de ${tradeName} está ${onchainPaused ? 'pausado' : 'activo'} en la red y ${contract.paused ? 'pausado' : 'activo'} en la base`, expected: { paused: contract.paused }, actual: { paused: onchainPaused } } : null)
       const role = chain.drift.roles[contract.address]
@@ -363,11 +371,11 @@ export function runReconciliation(state: TraceState, ctx: ChainCtx, body: StartR
     if (full) {
       const codeDays = codeTtlDaysOf(chain, ctx.now)
       const extending = chain.transactions.some((t) => t.kind === 'EXTEND_TTL' && t.intent.target === 'CODE' && isTxInFlight(t))
-      check('TTL_EXPIRING', 'WASM', codeDays !== null && codeDays < TTL_MIN_DAYS && !extending ? { subjectType: 'PLATFORM', level: 'CRITICAL', wineryId: null, message: `Al código de los contratos le quedan menos de ${TTL_MIN_DAYS} días de vida y no hay extensión en curso`, expected: { minDays: TTL_MIN_DAYS }, actual: { days: codeDays } } : null)
+      check('TTL_EXPIRING', chain.platform.wasmHash, codeDays !== null && codeDays < TTL_MIN_DAYS && !extending ? { subjectType: 'CODE', level: 'WARNING', wineryId: null, message: `Al código del contrato NFT le quedan menos de ${TTL_MIN_DAYS} días de vida y no hay ninguna extensión en curso`, expected: { minDays: TTL_MIN_DAYS }, actual: { days: codeDays } } : null)
     }
     // El indexador: la conciliación relee el tramo pendiente y lo pone al día (§8.1).
     run.checks += 1
-    evaluated.add('INDEXER_GAP:INDEXER')
+    evaluated.add(`INDEXER_GAP:${chain.network}`)
     chain.indexer = { lastLedger: chain.ledger, lagSeconds: INDEXER_BASE_LAG_SECONDS }
   }
 
