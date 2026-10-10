@@ -1222,16 +1222,6 @@
               }
             },
             "description": "TOK_CLOSURE_NOT_APPLICABLE (lote sin embotellar ni descartar; `meta.stage`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -7196,16 +7186,6 @@
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
           },
           "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "501": {
             "content": {
               "application/json": {
                 "schema": {
@@ -7213,7 +7193,7 @@
                 }
               }
             },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
+            "description": "VALIDATION_ERROR\n\nVALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100"
           }
         },
         "security": [
@@ -7301,16 +7281,6 @@
               }
             },
             "description": "VALIDATION_ERROR"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -7464,16 +7434,6 @@
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
           },
           "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "501": {
             "content": {
               "application/json": {
                 "schema": {
@@ -7481,7 +7441,7 @@
                 }
               }
             },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
+            "description": "VALIDATION_ERROR\n\nVALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100"
           }
         },
         "security": [
@@ -7585,16 +7545,6 @@
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
           },
           "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "501": {
             "content": {
               "application/json": {
                 "schema": {
@@ -7602,7 +7552,7 @@
                 }
               }
             },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
+            "description": "VALIDATION_ERROR\n\nVALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100"
           }
         },
         "security": [
@@ -7658,7 +7608,7 @@
                 }
               }
             },
-            "description": "CHN_RECONCILIATION_RUNNING (ya hay una en curso para ese alcance; `meta.runId`)"
+            "description": "CHN_RECONCILIATION_RUNNING (ya hay una en curso para ese alcance; `meta.runId`), CHN_DISABLED (la cadena no está configurada en este entorno)"
           },
           "422": {
             "content": {
@@ -7668,17 +7618,7 @@
                 }
               }
             },
-            "description": "VALIDATION_ERROR"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
+            "description": "VALIDATION_ERROR, (`subjectId` no es un contrato o una colección existente)"
           }
         },
         "security": [
@@ -7735,16 +7675,6 @@
               }
             },
             "description": "NOT_FOUND"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -8595,16 +8525,6 @@
               }
             },
             "description": "TOK_CLOSURE_NOT_APPLICABLE (lote sin embotellar ni descartar; `meta.stage`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -8691,7 +8611,7 @@
                 }
               }
             },
-            "description": "TOK_CLOSURE_NOT_APPLICABLE, CONFLICT (cierre ya decidido), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
+            "description": "TOK_CLOSURE_NOT_APPLICABLE, CONFLICT (cierre ya decidido), CHN_CONTRACT_PAUSED (decisión con quemas y el contrato pausado en la red), IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS"
           },
           "422": {
             "content": {
@@ -8702,16 +8622,6 @@
               }
             },
             "description": "VALIDATION_ERROR, IDEMPOTENCY_KEY_REQUIRED, (falta `reason`)"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -8799,7 +8709,7 @@
                 }
               }
             },
-            "description": "CONFLICT (ítem ya resuelto)"
+            "description": "CONFLICT (ítem ya resuelto, o NFT sin vender: se quema), TOK_CLOSURE_NOT_APPLICABLE"
           },
           "422": {
             "content": {
@@ -8810,16 +8720,6 @@
               }
             },
             "description": "VALIDATION_ERROR"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
           }
         },
         "security": [
@@ -9592,16 +9492,6 @@
             "description": "AUTH_INSUFFICIENT_PERMISSIONS (rol)"
           },
           "422": {
-            "description": "VALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
-              }
-            }
-          },
-          "501": {
             "content": {
               "application/json": {
                 "schema": {
@@ -9609,7 +9499,7 @@
                 }
               }
             },
-            "description": "NOT_IMPLEMENTED: llega con el paso 3.6 de la Etapa 3 (Conciliación y cierre)"
+            "description": "VALIDATION_ERROR\n\nVALIDATION_ERROR: filtros inválidos o `limit` fuera de 1–100"
           }
         },
         "security": [
@@ -12879,7 +12769,7 @@
     },
     "/v1/platform/wineries/{id}/chain-account": {
       "get": {
-        "description": "Contrato O3 §3.4: identidad (cuenta y contrato), NFT por lote, anclajes, últimas transacciones y lo pagado por la plataforma por esa bodega. Las colecciones (`totals`, `byLot`) llegan con los pasos 3.4–3.6.",
+        "description": "Contrato O3 §3.4: identidad (cuenta y contrato), NFT por lote, anclajes, últimas transacciones y lo pagado por la plataforma por esa bodega (`totals` y `byLot` salen de sus colecciones).",
         "operationId": "PlatformWineryChainController_chainAccount_v1",
         "parameters": [
           {
