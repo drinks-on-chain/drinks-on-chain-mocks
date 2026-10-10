@@ -112,6 +112,8 @@ export interface ChainNotice {
     | 'COLLECTION_RESUMED'
     | 'SHORTFALL_DETECTED'
     | 'ALERT_CRITICAL'
+  /** Cuándo ocurrió (fecha del correo en los fixtures; en la sesión manda el reloj de los mocks). */
+  at?: string
   wineryId: string | null
   requestId?: string
   collectionId?: string

@@ -261,7 +261,7 @@ describe('directorio de bodegas y borrador del catálogo', () => {
   })
 
   it('catálogo (BORRADOR §17.1, fuera del OpenAPI): lista y ficha con la cabecera X-Mock-Draft', async () => {
-    expect(PUBLIC_ROUTE_SPECS.filter((r) => r.draft).map((r) => r.path)).toEqual(['/v1/public/collections', '/v1/public/collections/:slug'])
+    expect(PUBLIC_ROUTE_SPECS.filter((r) => r.draft).map((r) => r.path)).toEqual(['/v1/public/collections'])
     const res = await call<Paged<unknown>>('/v1/public/collections')
     expect(res.headers.get('x-mock-draft')).toBe(COLLECTIONS_DRAFT_CONTRACT)
     const page = dataOf(res.json)
@@ -296,20 +296,19 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     expect(items.map((c) => c.slug)).not.toContain('tannat-la-angostura-2024')
     expect(items.some((c) => c.winery.slug === 'casa-uriondo')).toBe(false)
 
-    const detail = await call('/v1/public/collections/singani-gran-reserva-2026')
-    expect(detail.headers.get('x-mock-draft')).toBe(COLLECTIONS_DRAFT_CONTRACT)
+    const detail = await call('/v1/public/collections/destileria-cinti-viejo/singani-gran-reserva-2026')
+    expect(detail.headers.get('x-mock-draft')).toBe(MARKETPLACE_DRAFT_CONTRACT)
     const collection = PublicCollectionSchema.parse(dataOf(detail.json))
     expect(collection).toStrictEqual(publicFixtures.collections.find((c) => c.slug === collection.slug))
     // Ola 3: la ficha sale de la colección real del lote (60 botellas tokenizadas, anclado → en venta).
     expect(collection).toMatchObject({ lotStage: 'ANCHORED', status: 'ON_SALE', saleState: 'ON_SALE', availability: { total: 60, available: 60 }, counts: { available: 60 }, price: { amountMinor: 28000, currency: 'BOB' }, lot: { lotCode: CASE_CODE } })
     // Preventa: lote en proceso, con su fecha estimada y sin código de lote todavía.
-    const presale = PublicCollectionSchema.parse(dataOf((await call('/v1/public/collections/singani-el-molino-2026')).json))
+    const presale = PublicCollectionSchema.parse(dataOf((await call('/v1/public/collections/destileria-cinti-viejo/singani-el-molino-2026')).json))
     expect(presale).toMatchObject({ status: 'PRESALE', lotStage: 'DISTILLING', lot: { lotCode: null } })
-    expect((await call('/v1/public/collections/no-existe')).status).toBe(404)
+    // rc.3: la ficha por `slug` a secas (obsoleta en rc.2) se retiró: el `slug` solo es único por bodega.
+    for (const slug of ['singani-gran-reserva-2026', 'singani-preventa-2026', 'no-existe']) expect((await call(`/v1/public/collections/${slug}`)).status).toBe(404)
+    expect((await call('/v1/public/collections/destileria-cinti-viejo/no-existe')).status).toBe(404)
 
-    // rc.2: la ficha se resuelve por bodega (borrador del Marketplace); la ruta por `slug` queda obsoleta.
-    expect(detail.headers.get('deprecation')).toBe('true')
-    expect(detail.headers.get('link')).toBe('</v1/public/collections/{winerySlug}/{slug}>; rel="successor-version"')
     const byWinery = await call('/v1/public/collections/destileria-cinti-viejo/singani-gran-reserva-2026')
     expect(byWinery.headers.get('x-mock-draft')).toBe(MARKETPLACE_DRAFT_CONTRACT)
     expect(byWinery.headers.get('deprecation')).toBeNull()
@@ -318,8 +317,6 @@ describe('directorio de bodegas y borrador del catálogo', () => {
     expect(altos).toMatchObject({ slug: 'singani-preventa-2026', winery: { slug: 'altos-de-calamuchita' }, price: { amountMinor: 15000 }, availability: { total: 80, available: 80 } })
     expect(cinti).toMatchObject({ slug: 'singani-preventa-2026', winery: { slug: 'destileria-cinti-viejo' }, price: null, availability: { total: 100 } })
     expect(altos!.id).not.toBe(cinti!.id)
-    // La obsoleta, con un `slug` repetido, devuelve la primera del catálogo.
-    expect(dataOf((await call<{ id: string }>('/v1/public/collections/singani-preventa-2026')).json).id).toBe(altos!.id)
     expect((await call('/v1/public/collections/altos-de-calamuchita/singani-gran-reserva-2026')).status).toBe(404)
     // La ruta de las imágenes (dos segmentos también) no la tapa la ficha por bodega.
     expect((await call(`/v1/public/collections/images/${uid('no-existe')}`)).json).toMatchObject({ error: { code: 'FILE_NOT_FOUND' } })

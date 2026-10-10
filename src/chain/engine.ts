@@ -172,7 +172,7 @@ export function raiseAlert(
   }
   state.chain.alerts.push(alert)
   // §11: las alertas `CRITICAL` se avisan por correo a operaciones.
-  if (alert.level === 'CRITICAL') pushNotice(state.chain, { type: 'ALERT_CRITICAL', wineryId: alert.wineryId, alertId: alert.id, message: alert.message, data: { code: alert.code } })
+  if (alert.level === 'CRITICAL') pushNotice(state.chain, { at: ctx.now, type: 'ALERT_CRITICAL', wineryId: alert.wineryId, alertId: alert.id, message: alert.message, data: { code: alert.code } })
   return alert
 }
 
@@ -328,11 +328,11 @@ function confirmMint(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
     data: { collectionId: collection.id, mintId: mint.id, quantity: mint.quantity, firstBottleNumber: mint.ranges[0]!.firstBottleNumber, lastBottleNumber: range.lastBottleNumber, txHash: tx.txHash },
     resource: { type: 'collection', id: collection.id },
   })
-  pushNotice(chain, { type: 'NFT_MINTED', wineryId: collection.wineryId, collectionId: collection.id, data: { quantity: mint.quantity, sequence: mint.sequence, contract, txHash: tx.txHash } })
+  pushNotice(chain, { at: ctx.now, type: 'NFT_MINTED', wineryId: collection.wineryId, collectionId: collection.id, data: { quantity: mint.quantity, sequence: mint.sequence, contract, txHash: tx.txHash } })
   if (collection.status !== 'MINTING') return
   if (collection.publishOnMint && !publishBlocker(state, ctx, collection)) {
     setCollectionStatus(collection, ctx, 'PUBLISHED', 'Sistema', 'Publicada al confirmarse la emisión')
-    pushNotice(chain, { type: 'COLLECTION_PUBLISHED', wineryId: collection.wineryId, collectionId: collection.id })
+    pushNotice(chain, { at: ctx.now, type: 'COLLECTION_PUBLISHED', wineryId: collection.wineryId, collectionId: collection.id })
     appendLotEvent(state, ctx, lot, { type: 'COLLECTION_PUBLISHED', occurredAt: ctx.now, actor: null, summary: `Colección «${collection.commercial.name}» publicada`, data: { collectionId: collection.id }, resource: { type: 'collection', id: collection.id } })
   } else setCollectionStatus(collection, ctx, 'READY', 'Sistema', 'Emisión confirmada')
 }
@@ -402,7 +402,7 @@ function confirmBurn(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): vo
   const item = closure?.items.find((i) => i.tokenId === token.tokenId)
   if (!closure || !item) return
   Object.assign(item, { status: 'BURNED', resolvedAt: ctx.now })
-  if (closure.status === 'DECIDED' && closure.items.every((i) => i.resolvedAt !== null)) closure.status = 'RESOLVED'
+  if (closure.status === 'DECIDED' && closure.items.every((i) => i.outcome !== 'PENDING' && i.resolvedAt !== null)) closure.status = 'RESOLVED'
 }
 
 function onConfirmed(state: TraceState, ctx: ChainCtx, tx: ChainTransaction): void {

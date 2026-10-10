@@ -214,10 +214,9 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
         .map(([m]) => opKey(m, p)),
     )
     expect(inSpec).toEqual([])
-    // La única obsoleta de los mocks es un borrador fuera del OpenAPI: la ficha del catálogo por `slug`
-    // (rc.2: el `slug` es único por bodega; se retira en 0.6.0).
-    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated && !r.draft).map((r) => opKey(r.method, r.path))).toEqual([])
-    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => [opKey(r.method, r.path), r.deprecated])).toEqual([['GET /v1/public/collections/{slug}', '/v1/public/collections/{winerySlug}/{slug}']])
+    // rc.3: la ficha del catálogo por `slug` a secas (borrador, obsoleta en rc.2) ya no existe.
+    expect(MOCK_ROUTE_SPECS.filter((r) => r.deprecated).map((r) => opKey(r.method, r.path))).toEqual([])
+    expect(routeOps).not.toContain('GET /v1/public/collections/{slug}')
   })
 
   it('lo retirado en el cierre H2 (contrato de la Ola 2 §16.2) no está en el OpenAPI ni en los mocks: rutas, DTO y campos de entrada', () => {
@@ -281,7 +280,6 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
       'GET /v1/orders',
       'GET /v1/orders/{id}',
       'GET /v1/public/collections',
-      'GET /v1/public/collections/{slug}',
       'GET /v1/public/collections/{winerySlug}/{slug}',
       'GET /v1/public/purchase-settings',
       'POST /v1/orders',
@@ -291,7 +289,7 @@ describe('operaciones: RouteSpec ⇄ OpenAPI', () => {
     for (const r of MOCK_ROUTE_SPECS.filter((x) => x.draft)) {
       expect([COLLECTIONS_DRAFT_CONTRACT, MARKETPLACE_DRAFT_CONTRACT]).toContain(r.draft)
       // El catálogo de la Ola 2 (lista y ficha por `slug`) cita su contrato; lo demás, el §13.1 de la Ola 3.
-      expect(r.draft).toBe(['/v1/public/collections', '/v1/public/collections/:slug'].includes(r.path) ? COLLECTIONS_DRAFT_CONTRACT : MARKETPLACE_DRAFT_CONTRACT)
+      expect(r.draft).toBe(r.path === '/v1/public/collections' ? COLLECTIONS_DRAFT_CONTRACT : MARKETPLACE_DRAFT_CONTRACT)
       expect(ahead.get(opKey(r.method, r.path))?.contrato).toBe(r.draft)
       expect(openApiOps.has(opKey(r.method, r.path))).toBe(false)
     }
@@ -753,7 +751,6 @@ const OLA2_SAMPLES: Record<string, Sample> = {
   'GET /v1/public/wineries': { url: '/v1/public/wineries?region=cinti', status: 200 },
   // Borrador del catálogo (§17.1): fuera del OpenAPI; se valida con el esquema zod de pendientes.json.
   'GET /v1/public/collections': { url: '/v1/public/collections?productType=SINGANI', status: 200 },
-  'GET /v1/public/collections/{slug}': { url: '/v1/public/collections/singani-gran-reserva-2026', status: 200 },
 }
 
 // ---------------------------------------------------------------------------
@@ -1249,12 +1246,10 @@ const OLA3_SAMPLES: Record<string, Sample> = {
   },
   'POST /v1/platform/collections/{id}/closure/items/{tokenId}/resolve': {
     as: 'operaciones',
-    // Faltante de 20 con solo 5 NFT sin vender: 15 vendidos se quedan sin botella (proceso manual, A-30).
+    // Faltante de 20 con solo 10 NFT sin vender: 10 vendidos se quedan sin botella (proceso manual, A-30).
     setup: async () => {
-      const db = await withScenario('faltante-botellas')
+      const db = await withScenario('faltante-vendidos')
       const id = db.chain.collections.find((c) => c.lotId === colPortillo.lotId)!.id
-      const tokens = db.chain.tokens.filter((t) => t.collectionId === id).sort((a, b) => a.bottleNumber - b.bottleNumber)
-      tokens.slice(0, tokens.length - 5).forEach((t, i) => Object.assign(t, { status: 'SOLD', soldAt: new Date(Date.UTC(2026, 8, 20, 12, 0, i)).toISOString() }))
       const closure = await send<{ items: { tokenId: number; status: string }[] }>('soporte', 'GET', `/v1/platform/collections/${id}/closure`)
       return { id, tokenId: String(closure.items.find((i) => i.status === 'SOLD')!.tokenId) }
     },

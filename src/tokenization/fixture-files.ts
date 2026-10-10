@@ -1,4 +1,9 @@
+import { DEFAULT_APP_URLS, renderEmail } from '../backoffice/mail'
+import type { MockEmail } from '../backoffice/schemas/mail'
 import type { ChainCtx } from '../chain/engine'
+import { noticeMails, type NoticeData } from '../chain/notice-mails'
+import type { ChainNotice } from '../chain/state'
+import { uid } from '../shared/uuid'
 import type { ChainAlert, ChainEvent, ChainTransaction, PlatformChainAccounts, PublicChainRegistry, PublicDossierVerification, ReconciliationRun, WineryChainIdentity } from '../chain/schemas'
 import { platformAccounts } from '../chain/service'
 import type { ChainState } from '../chain/state'
@@ -37,6 +42,16 @@ export interface TokenizationFixtureSet {
   'lot-status.json': Record<string, LotTokenizationStatus>
   /** Metadatos públicos del primer y del último NFT de cada colección, por `{slug}/{tokenId}`. */
   'nft-metadata.json': Record<string, PublicNftMetadata>
+}
+
+/**
+ * Buzón de los fixtures con los correos de la tokenización (contrato §11): los de la Ola 1 más los
+ * que dejó la semilla de la Ola 3, por fecha. Mismos textos y destinatarios que en la sesión.
+ */
+export function withTokenizationMails(mailbox: readonly MockEmail[], notices: readonly ChainNotice[], data: NoticeData): MockEmail[] {
+  const mails = notices.flatMap((notice) => noticeMails(notice, data).map((draft) => ({ draft, at: notice.at ?? '' })))
+  const rendered = mails.map((m, i) => renderEmail(m.draft, uid(`email:tokenization:${i + 1}`), m.at, DEFAULT_APP_URLS))
+  return [...mailbox, ...rendered].map((mail, i) => ({ mail, i })).sort((a, b) => a.mail.createdAt.localeCompare(b.mail.createdAt) || a.i - b.i).map(({ mail }) => mail)
 }
 
 export function buildChainFixtureFiles(state: TraceState, ctx: ChainCtx): { chain: ChainFixtureSet; tokenization: TokenizationFixtureSet } {

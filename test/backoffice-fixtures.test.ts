@@ -6,6 +6,7 @@ import {
   AuditEventSchema,
   DashboardAlertSchema,
   MockEmailSchema,
+  TOKENIZATION_MAIL_TEMPLATES,
   WaitlistEntrySchema,
   WineryDetailSchema,
   type AuditEvent,
@@ -65,7 +66,9 @@ describe('fixtures de la Ola 1: esquemas y generador', () => {
 
   it('están al día con el generador (pnpm seed) y el generador es determinista', () => {
     const set = generateBackofficeFixtures(generateErpFixtures())
-    for (const [name, data] of Object.entries(set)) expect(readJson(name), name).toStrictEqual(roundTrip(data))
+    // El buzón lleva además los correos de la tokenización, que añade la semilla de la Ola 3 (`pnpm seed`).
+    const ola1 = (name: string) => (name === 'mailbox.json' ? (readJson(name) as { template: string }[]).filter((m) => !(TOKENIZATION_MAIL_TEMPLATES as readonly string[]).includes(m.template)) : readJson(name))
+    for (const [name, data] of Object.entries(set)) expect(ola1(name), name).toStrictEqual(roundTrip(data))
     expect(roundTrip(generateBackofficeFixtures(generateErpFixtures()))).toStrictEqual(roundTrip(set))
   })
 })

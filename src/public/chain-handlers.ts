@@ -2,7 +2,9 @@ import { profileOf } from '../backoffice/handlers/support'
 import { chainCtx } from '../chain/runtime'
 import { getErpDb } from '../erp/handlers/db'
 import { ApiError } from '../erp/handlers/errors'
+import { sha256Hex } from '../shared/crypto'
 import { getScenario } from '../shared/scenarios'
+import { hexToBase64 } from '../shared/strkey'
 import { ok, type RouteSpec } from '../erp/handlers/http'
 import { demoBottlePng } from '../shared/png'
 import { publicChainRegistry, publicDossierVerification, publicNftMetadata } from '../tokenization/views'
@@ -59,6 +61,14 @@ export const publicChainRoutes: RouteSpec[] = [
       return lookup(ctx, () => {
         const lot = publicLot(ctx.params.lotCode!)
         const view = publicDossierVerification(getErpDb(), chainCtx(), lot, `/v1/public/lots/${encodeURIComponent(lot.lotCode!)}/dossier`)
+        // Escenario `verificacion-no-coincide`: el memo de la transacción anclada no es la huella del
+        // expediente, así que `MEMO_MATCHES_HASH` sale en `false` (las demás comprobaciones no cambian).
+        if (getScenario() === 'verificacion-no-coincide' && view.anchor?.status === 'ANCHORED') {
+          const memoHashHex = sha256Hex(`verificacion-no-coincide:${view.anchor.memoHashHex}`)
+          view.anchor = { ...view.anchor, memoHashHex, memoHashBase64: hexToBase64(memoHashHex) }
+          view.checks = view.checks.map((c) => (c.key === 'MEMO_MATCHES_HASH' ? { ...c, pass: false, message: 'El memo de la transacción no coincide con la huella del expediente' } : c))
+          return { ...ok(view), headers: { 'Cache-Control': 'no-store' } }
+        }
         return { ...ok(view), headers: { 'Cache-Control': `public, max-age=${view.anchor?.status === 'ANCHORED' ? 3600 : 60}` } }
       })
     },

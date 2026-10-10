@@ -2,8 +2,8 @@ import { wineryDetail } from '../backoffice/handlers/support'
 import { WINERY_CATEGORIES, type PublicWineryProfile } from '../backoffice/schemas'
 import { getErpDb, nowStamp } from '../erp/handlers/db'
 import { getScenario } from '../shared/scenarios'
-import { ApiError, notFound } from '../erp/handlers/errors'
-import { boolParam, enumParam, listResult, ok, strParam, type RouteContext, type RouteResult, type RouteSpec } from '../erp/handlers/http'
+import { ApiError } from '../erp/handlers/errors'
+import { boolParam, enumParam, listResult, strParam, type RouteContext, type RouteResult, type RouteSpec } from '../erp/handlers/http'
 import { LOT_PRODUCT_TYPES, type Lot } from '../erp/schemas'
 import { looksLikeBottleCode, isValidBottleCode, normalizeBottleCode } from '../erp/trace/bottle-code'
 import { findBottle } from '../erp/trace/bottling'
@@ -11,7 +11,7 @@ import { dossierCanonical, lotAttachments, signedFileUrl } from '../erp/trace/do
 import { lotDossier } from '../erp/trace/state'
 import { traceCtx } from '../erp/handlers/trace-context'
 import { sha256Hex } from '../shared/crypto'
-import { buildCollections, rankedCollections, sortCollections } from './collections'
+import { rankedCollections, sortCollections } from './collections'
 import { buildBottlePassport, buildLotPassport, findLotByCode, LOT_CODE_PATTERN, toPublicProfile, type PublicWineryInfo } from './passport'
 import { COLLECTION_SORTS, COLLECTION_STATUSES, type PublicCollectionSummary } from './schemas'
 
@@ -251,21 +251,6 @@ export const publicRoutes: RouteSpec[] = [
       const items: PublicCollectionSummary[] = (sort && sort !== 'featured' ? sortCollections(filtered, sort) : filtered)
         .map(({ description: _d, tastingNotes: _t, pairing: _p, gallery: _g, lot: _l, createdAt: _c, ...summary }) => summary)
       return listResult(items, query)
-    },
-  },
-  {
-    // Obsoleta desde 0.6.0-rc.2: el `slug` es único por bodega, así que la ficha se resuelve con
-    // `GET /v1/public/collections/{winerySlug}/{slug}`. Si dos bodegas comparten el `slug`,
-    // devuelve la primera del catálogo. Se retira en 0.6.0.
-    method: 'get',
-    path: '/v1/public/collections/:slug',
-    access: 'public',
-    draft: COLLECTIONS_DRAFT_CONTRACT,
-    deprecated: '/v1/public/collections/{winerySlug}/{slug}',
-    handle({ params }) {
-      const collection = buildCollections(getErpDb(), publicWineryOf, nowStamp(), getErpDb().marketplace.sold).find((c) => c.slug === params.slug)
-      if (!collection) throw notFound(`Colección "${params.slug}" no encontrada`)
-      return ok(collection)
     },
   },
 ]

@@ -44,16 +44,17 @@ export const CHAIN_ALERT_CODES = [
 export type ChainAlertCode = (typeof CHAIN_ALERT_CODES)[number]
 
 /**
- * Tipos de sujeto que llevan hoy las alertas. El OpenAPI declara `ChainAlertSubjectDto.type` como
- * **texto libre** (ejemplo `COLLECTION`), no como `ChainSubjectType`: esta lista es orientativa
- * (para etiquetas y enlaces) y el esquema acepta cualquier texto. `id` es el id del recurso salvo
- * en `PLATFORM_ACCOUNT` (`OPERATIONS` | `ANCHOR`), `PLATFORM` (`WASM`, `INDEXER`) y `CONTRACT` (su dirección `C…`).
+ * Tipos de sujeto de las alertas (backend, paso 3.6). El OpenAPI declara `ChainAlertSubjectDto.type`
+ * como texto, así que el esquema acepta cualquiera; estos son los que emite el backend. `id`:
+ * `CONTRACT` → el contrato; `COLLECTION`, `LOT`, `MINT`, `TOKEN`, `TRANSACTION` → el id del
+ * recurso; `EVENT` → su `rpcEventId`; `NETWORK` → la red (`TESTNET`); `CODE` → el hash del código;
+ * `PLATFORM_ACCOUNT` → `OPERATIONS` | `ANCHOR`. En los mocks el contrato se identifica por su dirección `C…`.
  */
-export const CHAIN_ALERT_SUBJECT_TYPES = ['TRANSACTION', 'COLLECTION', 'MINT', 'LOT', 'CONTRACT', 'PLATFORM_ACCOUNT', 'PLATFORM', 'CHAIN_EVENT'] as const
+export const CHAIN_ALERT_SUBJECT_TYPES = ['CONTRACT', 'COLLECTION', 'LOT', 'MINT', 'TOKEN', 'TRANSACTION', 'EVENT', 'NETWORK', 'CODE', 'PLATFORM_ACCOUNT'] as const
 export type ChainAlertSubjectType = (typeof CHAIN_ALERT_SUBJECT_TYPES)[number]
 
 export const ChainAlertSubjectSchema = z.object({
-  /** Texto libre en el OpenAPI; valores conocidos en `CHAIN_ALERT_SUBJECT_TYPES`. */
+  /** Texto en el OpenAPI; los valores que emite el backend están en `CHAIN_ALERT_SUBJECT_TYPES`. */
   type: z.string(),
   id: z.string(),
 })

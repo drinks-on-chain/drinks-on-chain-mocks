@@ -218,7 +218,7 @@ export function createRequest(state: TraceState, ctx: ChainCtx, lot: Lot, body: 
     data: { requestId: request.id, kind: request.kind, quantity: body.quantity, resultingQuota: request.resultingQuota },
     resource: { type: 'tokenization_request', id: request.id },
   })
-  pushNotice(state.chain, { type: 'REQUEST_SUBMITTED', wineryId: lot.wineryId, requestId: request.id })
+  pushNotice(state.chain, { at: ctx.now, type: 'REQUEST_SUBMITTED', wineryId: lot.wineryId, requestId: request.id })
   // S-11 (no acordado): sin aprobación obligatoria, la solicitud completa se aprueba sola al enviarse.
   if (!requiresApproval) {
     const complete = collection !== null || missingCommercial({ ...request.commercialDraft, images: request.commercialDraft.imageKeys.length }).length === 0
@@ -251,7 +251,7 @@ export function resubmitRequest(state: TraceState, ctx: ChainCtx, request: Store
   request.status = 'SUBMITTED'
   request.assignee = null
   pushHistory(request, ctx, actor.fullName, message?.trim() || null)
-  pushNotice(state.chain, { type: 'REQUEST_RESUBMITTED', wineryId: request.wineryId, requestId: request.id, message: message?.trim() || null })
+  pushNotice(state.chain, { at: ctx.now, type: 'REQUEST_RESUBMITTED', wineryId: request.wineryId, requestId: request.id, message: message?.trim() || null })
   return request
 }
 
@@ -296,7 +296,7 @@ export function requestChanges(state: TraceState, ctx: ChainCtx, request: Stored
   request.status = 'CHANGES_REQUESTED'
   request.changeRequests.push({ id: ctx.newId('tokenization-change'), at: ctx.now, by, message, fields: fields ?? [], resolvedAt: null })
   pushHistory(request, ctx, by.fullName, message)
-  pushNotice(state.chain, { type: 'CHANGES_REQUESTED', wineryId: request.wineryId, requestId: request.id, message })
+  pushNotice(state.chain, { at: ctx.now, type: 'CHANGES_REQUESTED', wineryId: request.wineryId, requestId: request.id, message })
   return request
 }
 
@@ -305,7 +305,7 @@ export function rejectRequest(state: TraceState, ctx: ChainCtx, request: StoredR
   request.status = 'REJECTED'
   request.decision = { outcome: 'REJECTED', at: ctx.now, reason, by: { userId: by?.userId ?? null, fullName: by?.fullName ?? null, system: by === null } }
   pushHistory(request, ctx, by?.fullName ?? SYSTEM, reason)
-  pushNotice(state.chain, { type: 'REQUEST_REJECTED', wineryId: request.wineryId, requestId: request.id, message: reason })
+  pushNotice(state.chain, { at: ctx.now, type: 'REQUEST_REJECTED', wineryId: request.wineryId, requestId: request.id, message: reason })
   return request
 }
 
@@ -426,7 +426,7 @@ export function approveRequest(
   request.publishOnMint = body.publishOnMint === true
   request.decision = { outcome: 'APPROVED', at: ctx.now, reason: body.reason ?? null, by: { userId: by?.userId ?? null, fullName: by?.fullName ?? null, system: by === null } }
   pushHistory(request, ctx, by?.fullName ?? SYSTEM, body.reason ?? null)
-  pushNotice(chain, { type: 'REQUEST_APPROVED', wineryId: request.wineryId, requestId: request.id, collectionId: collection.id, data: { quantity: request.quantity } })
+  pushNotice(chain, { at: ctx.now, type: 'REQUEST_APPROVED', wineryId: request.wineryId, requestId: request.id, collectionId: collection.id, data: { quantity: request.quantity } })
   return { request, collection, mint }
 }
 
@@ -492,14 +492,14 @@ export function publishCollection(state: TraceState, ctx: ChainCtx, collection: 
     data: { collectionId: collection.id },
     resource: { type: 'collection', id: collection.id },
   })
-  pushNotice(state.chain, { type: 'COLLECTION_PUBLISHED', wineryId: collection.wineryId, collectionId: collection.id })
+  pushNotice(state.chain, { at: ctx.now, type: 'COLLECTION_PUBLISHED', wineryId: collection.wineryId, collectionId: collection.id })
   return collection
 }
 
 export function pauseCollection(state: TraceState, ctx: ChainCtx, collection: StoredCollection, by: UserRef | null, reason: string): StoredCollection {
   if (collection.status !== 'PUBLISHED') throw invalidCollectionTransition(collection.status, 'PAUSED')
   setCollectionStatus(collection, ctx, 'PAUSED', by?.fullName ?? SYSTEM, reason)
-  pushNotice(state.chain, { type: 'COLLECTION_PAUSED', wineryId: collection.wineryId, collectionId: collection.id, message: reason })
+  pushNotice(state.chain, { at: ctx.now, type: 'COLLECTION_PAUSED', wineryId: collection.wineryId, collectionId: collection.id, message: reason })
   return collection
 }
 
@@ -507,7 +507,7 @@ export function resumeCollection(state: TraceState, ctx: ChainCtx, collection: S
   if (collection.status !== 'PAUSED') throw invalidCollectionTransition(collection.status, 'PUBLISHED')
   assertPublishable(state, ctx, collection)
   setCollectionStatus(collection, ctx, 'PUBLISHED', by.fullName, reason)
-  pushNotice(state.chain, { type: 'COLLECTION_RESUMED', wineryId: collection.wineryId, collectionId: collection.id, message: reason })
+  pushNotice(state.chain, { at: ctx.now, type: 'COLLECTION_RESUMED', wineryId: collection.wineryId, collectionId: collection.id, message: reason })
   return collection
 }
 
@@ -527,9 +527,28 @@ export function closeCollection(state: TraceState, ctx: ChainCtx, collection: St
 
 const SOLD_STATUSES = ['SOLD', 'REDEEMABLE', 'PASS_ACTIVE', 'REDEEMED', 'EXPIRED']
 
+/** Orden en que los NFT pierden su botella (S-23, A-30): no vendidos, reservados y vendidos (el pago más reciente primero); dentro, el número de botella más alto. */
+function shortfallOrder<T extends { status: string; soldAt: string | null; bottleNumber: number }>(tokens: readonly T[]): T[] {
+  const rank = (t: T) => (t.status === 'MINTED' ? 0 : t.status === 'RESERVED' ? 1 : 2)
+  return [...tokens].sort((x, y) => rank(x) - rank(y) || (rank(x) === 2 ? (y.soldAt ?? '').localeCompare(x.soldAt ?? '') : 0) || y.bottleNumber - x.bottleNumber)
+}
+
+/** ¿No queda nada por resolver en el cierre? */
+const closureSettled = (closure: StoredClosure): boolean => closure.items.every((i) => i.outcome !== 'PENDING' && i.resolvedAt !== null)
+
+/** Un cierre decidido pasa a `RESOLVED` cuando todas sus quemas están confirmadas y todos sus ítems resueltos. */
+export function settleClosure(closure: StoredClosure): void {
+  if (closure.status === 'DECIDED' && closureSettled(closure)) closure.status = 'RESOLVED'
+}
+
+const closureConflict = (message: string, meta: Record<string, unknown>) => new ApiError(409, 'CONFLICT', message, [detail('CONFLICT', message, { meta })])
+
 /**
- * Cierre de la colección de un lote embotellado o descartado (se calcula al consultarlo y se
- * recalcula mientras no haya decisión, p. ej. si se anulan códigos). `null` si aún no aplica.
+ * Cierre de la colección de un lote embotellado o descartado (como el backend, paso 3.6): se
+ * calcula al consultarlo y antes de decidirlo. `null` si aún no aplica. Los ítems **solo se
+ * añaden**: los NFT vivos que hoy no tienen botella y que ningún ítem cubre todavía, en el orden de
+ * `shortfallOrder`. Antes de decidirse, las cifras siguen a los datos; después quedan como
+ * constancia, salvo que falten más botellas (se reabre en `SHORTFALL_OPEN`).
  */
 export function closureOf(state: TraceState, ctx: ChainCtx, collection: StoredCollection): StoredClosure | null {
   const chain = state.chain
@@ -537,52 +556,66 @@ export function closureOf(state: TraceState, ctx: ChainCtx, collection: StoredCo
   const bottled = lotBottling(state, lot.id) !== null
   if (!bottled && lot.discarded === null) return null
   const stored = chain.closures.find((c) => c.collectionId === collection.id)
-  if (stored && (stored.status === 'DECIDED' || stored.status === 'RESOLVED')) return stored
   const tokens = tokensOf(chain, collection.id)
   const bottles = lot.discarded !== null ? 0 : (activeBottles(state, lot) ?? 0)
-  const burned = tokens.filter((t) => t.status === 'BURNED').length
-  const unsoldTokens = tokens.filter((t) => t.status === 'MINTED').sort((a, b) => b.bottleNumber - a.bottleNumber)
-  const soldTokens = tokens.filter((t) => SOLD_STATUSES.includes(t.status)).sort((a, b) => (b.soldAt ?? '').localeCompare(a.soldAt ?? ''))
-  const shortfall = Math.max(0, tokens.length - burned - bottles)
-  const unsoldToBurn = Math.min(shortfall, unsoldTokens.length)
-  const soldWithoutBottle = Math.min(shortfall - unsoldToBurn, soldTokens.length)
-  const affected = [...unsoldTokens.slice(0, unsoldToBurn), ...soldTokens.slice(0, soldWithoutBottle)]
-  const closure: StoredClosure = {
-    id: stored?.id ?? ctx.newId('lot-closure'),
-    wineryId: collection.wineryId,
-    lotId: lot.id,
-    collectionId: collection.id,
-    status: shortfall > 0 ? 'SHORTFALL_OPEN' : 'NO_SHORTFALL',
-    computedAt: stored && stored.shortfall === shortfall && stored.bottles === bottles ? stored.computedAt : ctx.now,
+  const alive = tokens.filter((t) => t.status !== 'BURNED')
+  const itemIds = new Set(stored?.items.map((i) => i.tokenId))
+  const need = Math.max(0, alive.length - bottles)
+  const extra = Math.max(0, need - alive.filter((t) => itemIds.has(t.tokenId)).length)
+  const added = shortfallOrder(alive.filter((t) => !itemIds.has(t.tokenId))).slice(0, extra)
+  const addedUnsold = added.filter((t) => t.status === 'MINTED').length
+  const figures = {
     bottles,
     minted: tokens.length,
-    sold: soldTokens.length,
+    sold: tokens.filter((t) => SOLD_STATUSES.includes(t.status)).length,
     reserved: tokens.filter((t) => t.status === 'RESERVED').length,
-    unsold: unsoldTokens.length,
-    shortfall,
-    unsoldToBurn,
-    soldWithoutBottle,
-    unsoldPolicy: null,
-    decision: null,
-    // Solo los NFT afectados: primero los no vendidos con el número de botella más alto (S-23).
-    items: affected.map((t) => ({ tokenId: t.tokenId, bottleNumber: t.bottleNumber, status: t.status, outcome: 'PENDING', burnTxId: null, resolvedAt: null, orderId: t.orderId ?? null, paidAt: t.soldAt, note: null })),
+    unsold: tokens.filter((t) => t.status === 'MINTED').length,
   }
-  if (stored) Object.assign(stored, closure)
-  else {
-    chain.closures.push(closure)
-    if (shortfall > 0) {
-      appendLotEvent(state, ctx, lot, {
-        type: 'SHORTFALL_DETECTED',
-        occurredAt: ctx.now,
-        actor: null,
-        summary: `Faltante: ${shortfall} botellas menos que NFT emitidos`,
-        data: { collectionId: collection.id, bottles, minted: tokens.length, shortfall },
-        resource: { type: 'collection', id: collection.id },
-      })
-      pushNotice(chain, { type: 'SHORTFALL_DETECTED', wineryId: collection.wineryId, collectionId: collection.id, data: { bottles, minted: tokens.length, shortfall, soldWithoutBottle } })
+  let closure: StoredClosure
+  let opened = false
+  if (!stored) {
+    closure = {
+      id: ctx.newId('lot-closure'),
+      wineryId: collection.wineryId,
+      lotId: lot.id,
+      collectionId: collection.id,
+      status: extra > 0 ? 'SHORTFALL_OPEN' : 'NO_SHORTFALL',
+      computedAt: ctx.now,
+      ...figures,
+      shortfall: extra,
+      unsoldToBurn: addedUnsold,
+      soldWithoutBottle: added.length - addedUnsold,
+      unsoldPolicy: null,
+      decision: null,
+      items: [],
     }
+    chain.closures.push(closure)
+    opened = extra > 0
+  } else {
+    closure = stored
+    if (extra > 0) {
+      // Más NFT sin botella que los que el cierre ya cubría: se reabre.
+      opened = stored.status !== 'SHORTFALL_OPEN'
+      Object.assign(stored, { status: 'SHORTFALL_OPEN', computedAt: ctx.now, ...figures, shortfall: stored.shortfall + extra, unsoldToBurn: stored.unsoldToBurn + addedUnsold, soldWithoutBottle: stored.soldWithoutBottle + added.length - addedUnsold })
+    } else if (stored.status === 'NO_SHORTFALL' || stored.status === 'SHORTFALL_OPEN') {
+      const changed = (Object.keys(figures) as (keyof typeof figures)[]).some((k) => stored[k] !== figures[k])
+      if (changed) Object.assign(stored, { computedAt: ctx.now, ...figures })
+    } else stored.bottles = bottles
   }
-  return stored ?? closure
+  // Solo los NFT afectados; `paidAt` y `orderId` (del pedido) no los ve la bodega.
+  for (const t of added) closure.items.push({ tokenId: t.tokenId, bottleNumber: t.bottleNumber, status: t.status, outcome: 'PENDING', burnTxId: null, resolvedAt: null, orderId: t.orderId ?? null, paidAt: t.soldAt, note: null })
+  if (opened) {
+    appendLotEvent(state, ctx, lot, {
+      type: 'SHORTFALL_DETECTED',
+      occurredAt: ctx.now,
+      actor: null,
+      summary: `Faltante: ${closure.shortfall} botellas menos que NFT emitidos`,
+      data: { closureId: closure.id, collectionId: collection.id, bottles, minted: tokens.length, shortfall: closure.shortfall, unsoldToBurn: closure.unsoldToBurn, soldWithoutBottle: closure.soldWithoutBottle },
+      resource: { type: 'lot_closure', id: closure.id },
+    })
+    pushNotice(chain, { at: ctx.now, type: 'SHORTFALL_DETECTED', wineryId: collection.wineryId, collectionId: collection.id, data: { bottles, minted: alive.length, shortfall: closure.shortfall, soldWithoutBottle: closure.soldWithoutBottle } })
+  }
+  return closure
 }
 
 export function closureNotApplicable(lot: Lot): ApiError {
@@ -590,29 +623,39 @@ export function closureNotApplicable(lot: Lot): ApiError {
 }
 
 /**
- * `POST …/closure/decide`. Con faltante o con `BURN` hacen falta quemas: solo administración
- * (`canBurn`); sin faltante y `KEEP_ON_SALE`, también operaciones.
+ * `POST …/closure/decide`. Con quemas (cualquier faltante, o `BURN`) solo decide administración
+ * (`canBurn`) y el contrato no puede estar pausado; operaciones, solo `KEEP_ON_SALE` sin faltante.
+ * Se quema cada NFT sin vender que pierde su botella (y, con `BURN`, los demás sin vender). Sin
+ * faltante y sin quemas el cierre **sigue `NO_SHORTFALL`**, con su `decision`; con ellas pasa a
+ * `DECIDED` y a `RESOLVED` cuando se confirman las quemas y se resuelven los ítems vendidos.
  */
 export function decideClosure(state: TraceState, ctx: ChainCtx, collection: StoredCollection, unsoldPolicy: UnsoldPolicy, reason: string, by: UserRef, canBurn: boolean): StoredClosure {
   const chain = state.chain
   const closure = closureOf(state, ctx, collection)
   if (!closure) throw closureNotApplicable(lotOfCollection(state, collection))
-  if (closure.status === 'DECIDED' || closure.status === 'RESOLVED') throw invalidCollectionTransition(closure.status, 'DECIDED')
-  const burns = closure.unsoldToBurn > 0 || unsoldPolicy === 'BURN'
-  if (burns && !canBurn) throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Solo administración puede decidir un cierre que quema NFT')
-  closure.unsoldPolicy = unsoldPolicy
-  closure.decision = { by, at: ctx.now, reason }
-  const tokens = tokensOf(chain, collection.id)
-  const toBurn = new Set(closure.items.filter((i) => i.status === 'MINTED').map((i) => i.tokenId))
-  if (unsoldPolicy === 'BURN') {
-    for (const t of tokens) {
-      if (t.status !== 'MINTED' || toBurn.has(t.tokenId)) continue
-      toBurn.add(t.tokenId)
-      closure.items.push({ tokenId: t.tokenId, bottleNumber: t.bottleNumber, status: t.status, outcome: 'PENDING', burnTxId: null, resolvedAt: null, orderId: null, paidAt: null, note: null })
+  if (closure.status === 'DECIDED' || closure.status === 'RESOLVED') throw closureConflict('El cierre del lote ya está decidido', { closureStatus: closure.status })
+  const withBurns = closure.shortfall > 0 || unsoldPolicy === 'BURN'
+  if (withBurns && !canBurn) throw new ApiError(403, 'AUTH_INSUFFICIENT_PERMISSIONS', 'Una decisión con quemas (faltante o quemar los no vendidos) solo la toma administración')
+  if (withBurns) {
+    const identity = identityOf(chain, collection.wineryId)
+    if (identity?.contract?.paused || identity?.status === 'PAUSED') {
+      throw stateError('CHN_CONTRACT_PAUSED', 'El contrato de la bodega está pausado en la red: reanúdalo antes de decidir un cierre con quemas', [
+        detail('CHN_CONTRACT_PAUSED', 'Las quemas no entran con el contrato pausado', { meta: { status: identity.status } }),
+      ])
     }
   }
-  for (const item of closure.items) {
-    if (!toBurn.has(item.tokenId)) continue
+  const tokens = tokensOf(chain, collection.id)
+  const statusOf = (tokenId: number) => tokens.find((t) => t.tokenId === tokenId)?.status
+  const toBurn = closure.items.filter((i) => i.outcome === 'PENDING' && statusOf(i.tokenId) === 'MINTED')
+  if (unsoldPolicy === 'BURN') {
+    const known = new Set(closure.items.map((i) => i.tokenId))
+    for (const t of tokens.filter((x) => x.status === 'MINTED' && !known.has(x.tokenId)).sort((x, y) => y.bottleNumber - x.bottleNumber)) {
+      const item = { tokenId: t.tokenId, bottleNumber: t.bottleNumber, status: t.status, outcome: 'PENDING' as const, burnTxId: null, resolvedAt: null, orderId: null, paidAt: null, note: null }
+      closure.items.push(item)
+      toBurn.push(closure.items.at(-1)!)
+    }
+  }
+  for (const item of toBurn) {
     const token = tokens.find((t) => t.tokenId === item.tokenId)!
     item.outcome = 'BURN_UNSOLD'
     item.burnTxId = enqueueTx(state, ctx, {
@@ -624,18 +667,26 @@ export function decideClosure(state: TraceState, ctx: ChainCtx, collection: Stor
       requestedBy: { userId: by.userId, fullName: by.fullName, source: 'API' },
     }).id
   }
-  closure.status = closure.items.every((i) => i.resolvedAt !== null) ? 'RESOLVED' : 'DECIDED'
+  closure.unsoldPolicy = unsoldPolicy
+  closure.decision = { by, at: ctx.now, reason }
+  // Sin faltante y sin quemas no hay nada que resolver: sigue `NO_SHORTFALL`.
+  if (!(closure.status === 'NO_SHORTFALL' && toBurn.length === 0)) {
+    closure.status = 'DECIDED'
+    settleClosure(closure)
+  }
   return closure
 }
 
-/** `POST …/closure/items/{tokenId}/resolve`: devolución o sustitución manual de un NFT vendido sin botella. */
+/** `POST …/closure/items/{tokenId}/resolve`: devolución o sustitución manual de un NFT vendido (o reservado) sin botella. */
 export function resolveClosureItem(state: TraceState, ctx: ChainCtx, collection: StoredCollection, tokenId: number, body: ResolveLotClosureItem): StoredClosure {
   const closure = closureOf(state, ctx, collection)
   if (!closure) throw closureNotApplicable(lotOfCollection(state, collection))
   const item = closure.items.find((i) => i.tokenId === tokenId)
-  if (!item) throw new ApiError(404, 'NOT_FOUND', 'Ese NFT no está entre los afectados por el cierre')
-  if (item.outcome !== 'PENDING' || item.status === 'MINTED') throw invalidCollectionTransition(item.outcome, body.outcome)
+  if (!item) throw new ApiError(404, 'NOT_FOUND', 'Ese NFT no es un ítem del cierre del lote')
+  if (item.outcome !== 'PENDING') throw closureConflict(item.outcome === 'BURN_UNSOLD' ? 'Ese NFT no se vendió: se quema, no se resuelve a mano' : 'El ítem ya está resuelto', { outcome: item.outcome })
+  const status = tokensOf(state.chain, collection.id).find((t) => t.tokenId === tokenId)?.status
+  if (status === 'MINTED') throw closureConflict('Ese NFT no se ha vendido: decide el cierre para que se queme', { tokenStatus: status })
   Object.assign(item, { outcome: body.outcome, note: body.note, resolvedAt: ctx.now })
-  if (closure.status === 'DECIDED' && closure.items.every((i) => i.resolvedAt !== null)) closure.status = 'RESOLVED'
+  settleClosure(closure)
   return closure
 }

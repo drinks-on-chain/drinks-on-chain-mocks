@@ -139,15 +139,24 @@ function dashboard(): Dashboard {
     },
     tokenization: dashboardTokenization(getErpDb().chain, nowIso),
     chain: dashboardChain(getErpDb().chain, nowIso),
-    // Las alertas abiertas de la cadena (conciliación, transacciones fallidas) se suman a las del tablero.
-    alerts: [
-      ...state.alerts,
-      ...getErpDb()
-        .chain.alerts.filter((a) => a.resolvedAt === null)
-        .map((a) => ({ id: a.id, level: a.level, message: a.message, createdAt: a.detectedAt, link: '/cadena/alertas' })),
-    ].sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
+    // Las alertas abiertas de la cadena se resumen en dos entradas fijas, como el backend
+    // (`chain-alerts-critical` y `chain-alerts-warning`); el detalle está en `/v1/platform/chain/alerts`.
+    alerts: [...state.alerts, ...chainDashboardAlerts(nowIso)].sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
     recentAudit: [...state.audit].sort(byNewest).slice(0, 5),
   }
+}
+
+const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`
+
+/** Resumen de las alertas abiertas de la cadena para el tablero (contrato O3 §8.2). */
+function chainDashboardAlerts(now: string) {
+  const open = getErpDb().chain.alerts.filter((a) => a.resolvedAt === null)
+  const critical = open.filter((a) => a.level === 'CRITICAL').length
+  const warning = open.filter((a) => a.level === 'WARNING').length
+  return [
+    ...(critical > 0 ? [{ id: 'chain-alerts-critical', level: 'CRITICAL' as const, message: `${plural(critical, 'alerta crítica de la cadena sin resolver', 'alertas críticas de la cadena sin resolver')}: nada se corrige solo.`, createdAt: now, link: '/cadena/alertas' }] : []),
+    ...(warning > 0 ? [{ id: 'chain-alerts-warning', level: 'WARNING' as const, message: `${plural(warning, 'aviso de la cadena sin resolver', 'avisos de la cadena sin resolver')}.`, createdAt: now, link: '/cadena/alertas' }] : []),
+  ]
 }
 
 export const auditRoutes: RouteSpec[] = [
