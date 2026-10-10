@@ -2,6 +2,32 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones [SemVer](https://semver.org/lang/es/).
 
+## [0.6.0-rc.3] · 2026-10-10
+
+**Ola 3 · candidata a la estable.** Pre-release sobre `dev`. `openapi/erp.json` vuelve a salir **del servidor** de desarrollo (`pnpm openapi:pull -- https://136.243.223.39.sslip.io/docs-json`, backend `91f037e`: pasos 3.1–3.6, 212 operaciones, 403 esquemas y **ninguna ruta con `501`**; ningún DTO cambia respecto a `rc.2`). Las 11 rutas del paso 3.6 (eventos, alertas y su resolución, conciliación, `lot-closures`, cierre de la colección, decidir, resolver ítems y cierre visto por la bodega) ya no van por contrato escrito: la prueba de contrato las valida, estricta, contra el OpenAPI desplegado. Detalle en `docs/CONTRATO.md` §15. Instalación: `pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.3/drinks-on-chain-mocks-0.6.0-rc.3.tgz`.
+
+### Cambios que rompen (respecto a `rc.2`)
+
+- **Marketplace**: se retira `GET /v1/public/collections/{slug}` (obsoleta en `rc.2`): ahora 404; la ficha es `GET /v1/public/collections/{winerySlug}/{slug}`. Un consumidor dado de alta por el borrador tiene **`address: null`** en `GET /v1/me/consumer` (y 404 en `/v1/users/me/wallet`) hasta verificar su correo; las cuentas de los fixtures no cambian.
+- **Backoffice**:
+  - `ChainAlert.subject.type` ∈ `CONTRACT`, `COLLECTION`, `LOT`, `MINT`, `TOKEN`, `TRANSACTION`, `EVENT`, `NETWORK`, `CODE`, `PLATFORM_ACCOUNT` (`CHAIN_ALERT_SUBJECT_TYPES`). Dejan de salir `CHAIN_EVENT` (→ `EVENT`, con `id` = `rpcEventId`) y `PLATFORM` (→ `CODE` con el hash del código para `TTL_EXPIRING`; `NETWORK` con la red para `INDEXER_GAP`, que pasa a `CRITICAL`). `OWNER_MISMATCH` y `BURN_MISMATCH` son por **contrato** (antes por colección) y su `actual` lleva `mismatches[]` y `total`. `TTL_EXPIRING` del código es `WARNING`.
+  - **Tablero**: las alertas de la cadena ya no salen una a una en `Dashboard.alerts`, sino resumidas en `chain-alerts-critical` y `chain-alerts-warning` (con `link: '/cadena/alertas'`).
+  - **Cierre**: decidir `KEEP_ON_SALE` sin faltante deja el cierre en **`NO_SHORTFALL`** con su `decision` (antes `RESOLVED`); decidir dos veces o resolver un ítem ya resuelto o sin vender → 409 **`CONFLICT`** (antes `TOK_COLLECTION_INVALID_TRANSITION`); **cualquier** faltante exige administración aunque no haya quemas; con el contrato pausado → 409 `CHN_CONTRACT_PAUSED`. Los ítems del cierre solo se añaden (un ítem vendido se puede resolver antes de decidir) y los NFT reservados ceden su botella antes que los vendidos.
+  - Lanzar una conciliación: 409 `CHN_DISABLED` sin cadena y 422 en `subjectId` si no es un contrato o una colección existentes.
+  - `fixtures/backoffice/mailbox.json` pasa de 13 a 66 correos (los de la tokenización).
+- **ERP**: nada que tocar. (El buzón de los fixtures trae los correos de la tokenización de sus bodegas.)
+
+### Añadido
+
+- Correos de la tokenización también en `fixtures/backoffice/mailbox.json` (los genera la semilla con los mismos textos que la sesión); el faltante avisa además a operaciones.
+- Escenario `verificacion-no-coincide`: la verificación pública devuelve `MEMO_MATCHES_HASH` en `false` con el anclaje confirmado.
+- `settleClosure`, `withTokenizationMails` y `noticeMails` (internos).
+
+### Sin cambio
+
+- `lastError.code = 'CHN_WINERY_NOT_ACTIVE'`, `MINT_RANGE_MISMATCH` (sujeto `MINT`), `CHN_DISABLED` en la identidad, `codeTtlDays` (días que le quedan al código según la última lectura, `null` sin lectura) y la vista del cierre para la bodega (sin `orderId`, `paidAt` ni `note`) ya estaban así en `rc.2`.
+- En los mocks un contrato se identifica por su dirección `C…` (sujeto de las alertas y `subjectId` de la conciliación); el backend usa el id de su fila, que ningún DTO expone.
+
 ## [0.6.0-rc.2] · 2026-10-09
 
 **Ola 3 · precisiones del backend y pedidos de las apps.** Pre-release sobre `dev`. El contrato es ahora el OpenAPI de la rama más avanzada del backend (`feat/o3-be-emision`, `66f33fd`: pasos 3.1–3.5 implementados; mismas 212 operaciones y 403 esquemas que la apertura, sin `501` en lo ya implementado), que sigue sin desplegar: ver `docs/CONTRATO.md` §14. Instalación: `pnpm add https://github.com/drinks-on-chain/drinks-on-chain-mocks/releases/download/v0.6.0-rc.2/drinks-on-chain-mocks-0.6.0-rc.2.tgz`.

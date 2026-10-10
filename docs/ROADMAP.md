@@ -131,9 +131,10 @@ Etapa 0.2 del roadmap del frontend (`drinks-on-chain-docsfront`, doc 03): paquet
 - [x] `rc.2`: pedidos del Backoffice (escenario `faltante-vendidos`, `mockTokenization.resubmitAsWinery`, coherencia emisión ⇄ transacciones documentada y probada), del ERP (`empty` vacía `chain-account`, `identidad-sin-aprovisionar`) y del Marketplace (alta 202 con captcha y verificación, `emailVerified`, pedidos sembrados, `huella-alterada`, `verificacion-no-encontrada`, `purchase-settings`) · 09-10-2026
 - [x] `rc.2`: correos de la tokenización en el buzón, conciliación que abre y cierra sola sus alertas, eventos del indexador con sus temas, `INDEXER_GAP` y `codeTtlDays` con el reloj · 09-10-2026
 - [x] Etiqueta `v0.6.0-rc.2` sobre `dev`: pre-release con `drinks-on-chain-mocks-0.6.0-rc.2.tgz`, instalado por URL y probado en un proyecto limpio · 09-10-2026
-- [ ] Precisiones del paso 3.6 del backend (conciliación, alertas, eventos, TTL y cierre: hoy `501` en su OpenAPI) y retirada de `GET /v1/public/collections/{slug}`
-- [ ] Correos de la tokenización también en `fixtures/backoffice/mailbox.json`
-- [ ] `pnpm openapi:pull` contra el servidor cuando el backend despliegue la Ola 3 (debe dar las mismas 212 operaciones)
+- [x] `rc.3`: `pnpm openapi:pull` contra el servidor con la Ola 3 desplegada (`91f037e`: mismas 212 operaciones, ninguna con `501`); las 11 rutas del paso 3.6 pasan a la prueba estricta (`docs/CONTRATO.md` §15) · 10-10-2026
+- [x] `rc.3`: precisiones del paso 3.6 (tipos de sujeto de las alertas, tablero `chain-alerts-*`, cierre con faltante como el backend, `CHN_DISABLED` y `subjectId` en la conciliación, `CHN_CONTRACT_PAUSED` al decidir) y retirada de `GET /v1/public/collections/{slug}` · 10-10-2026
+- [x] `rc.3`: correos de la tokenización en `fixtures/backoffice/mailbox.json`; consumidor con `address: null` y escenario `verificacion-no-coincide` · 10-10-2026
+- [x] Etiqueta `v0.6.0-rc.3` sobre `dev`: pre-release candidata a la estable, instalada por URL y probada en un proyecto limpio · 10-10-2026
 - [ ] Etiqueta estable `v0.6.0` en `main` al cerrar la Ola 3 (coordinación), con el dominio `marketplace` regenerado desde el OpenAPI borrador de la Etapa 4
 
 ## Más adelante
